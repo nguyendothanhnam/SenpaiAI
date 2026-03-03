@@ -4,7 +4,7 @@ import os
 
 class Settings(BaseSettings):
     # Database
-    database_url: str = "postgresql://senpai:senpai123@localhost:5432/senpai_db"
+    database_url: str = "postgresql://senpai:123456@localhost:5432/senpai_db"
     
     # Security
     secret_key: str = "your-secret-key-change-in-production"

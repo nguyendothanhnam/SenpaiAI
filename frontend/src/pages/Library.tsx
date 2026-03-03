@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useForm } from 'react-hook-form'
 import { 
-  Library, 
+  Library as LibraryIcon, 
   Search, 
   Filter, 
   BookOpen, 
@@ -96,7 +96,7 @@ export default function Library() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center space-x-3">
-        <Library className="h-8 w-8 text-primary-600" />
+        <LibraryIcon className="h-8 w-8 text-primary-600" />
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Learning Library</h1>
           <p className="text-sm text-gray-600">
@@ -274,7 +274,7 @@ export default function Library() {
           <div className="card">
             <div className="card-content">
               <div className="text-center py-8 text-gray-500">
-                <Library className="h-12 w-12 mx-auto mb-4 text-gray-400" />
+                <LibraryIcon className="h-12 w-12 mx-auto mb-4 text-gray-400" />
                 <p className="text-lg font-medium">No documents found</p>
                 <p className="text-sm">
                   {searchResults.length > 0 
