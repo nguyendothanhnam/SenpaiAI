@@ -47,9 +47,7 @@ def get_quiz():
 # 🔹 Tạo quiz thủ công (POST JSON)
 @router.post("/quiz/create")
 def create_quiz(data: QuizCreateRequest):
-    return {
-        "questions": data.questions
-    }
+    return game_service.create_quiz(data.questions)
 
 
 # 🔹 Upload Excel để tạo quiz
@@ -87,13 +85,14 @@ def submit_answer(data: AnswerRequest):
 
 @router.get("/flashcard")
 def get_flashcard():
-    return game_service.get_flashcard()
-
-@router.post("/quiz/create")
-def create_quiz(data: QuizCreateRequest):
-    return game_service.create_quiz(data.questions)
+    data = game_service.get_flashcard()
+    # Ensure we always return an array
+    if isinstance(data, list):
+        return {"cards": data}
+    return {"cards": [data]}
 
 
 @router.post("/flashcard/create")
 def create_flashcard(data: FlashcardCreate):
-    return game_service.create_flashcard(data.cards)
+    result = game_service.create_flashcard(data.cards)
+    return {"message": result.get("message", "Flashcards created"), "cards": data.cards}

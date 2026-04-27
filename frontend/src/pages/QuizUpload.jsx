@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createQuiz, uploadQuiz } from '../services/api.js'
+import { saveQuizList, getStoredQuizList } from '../utils/storage.js'
 
 function normalizeQuizQuestions(data) {
   if (Array.isArray(data)) {
@@ -24,6 +25,7 @@ export default function QuizUpload() {
   const [file, setFile] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
 
   const parseJsonFile = async (selectedFile) => {
     const text = await selectedFile.text()
@@ -48,6 +50,7 @@ export default function QuizUpload() {
 
     setIsSubmitting(true)
     setError('')
+    setSuccessMsg('')
 
     try {
       const isJson = file.name.toLowerCase().endsWith('.json') || file.type === 'application/json'
@@ -59,7 +62,13 @@ export default function QuizUpload() {
         throw new Error('No valid quiz questions found in uploaded file.')
       }
 
-      navigate('/quiz/play', { state: { questions } })
+      // Save to local storage (merges with existing)
+      const merged = saveQuizList(questions)
+      setSuccessMsg(`✓ Successfully loaded ${questions.length} question(s)!`)
+
+      setTimeout(() => {
+        navigate('/quiz/play', { state: { questions: merged } })
+      }, 500)
     } catch (err) {
       setError(err?.response?.data?.detail || err?.message || 'Upload failed. Please try again.')
     } finally {
@@ -79,7 +88,8 @@ export default function QuizUpload() {
       </div>
 
       <form onSubmit={handleUpload} className="space-y-5 px-6 py-8">
-        {error ? <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div> : null}
+        {error && <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
+        {successMsg && <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">{successMsg}</div>}
 
         <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-6">
           <label className="mb-3 block text-sm font-medium text-gray-700">Choose file</label>

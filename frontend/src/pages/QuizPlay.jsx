@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { getQuiz } from '../services/api.js'
+import { getStoredQuizList } from '../utils/storage.js'
 
 function normalizeQuizQuestions(data) {
   if (Array.isArray(data)) {
@@ -52,11 +53,25 @@ export default function QuizPlay() {
         const data = normalizeQuizQuestions(response.data)
 
         if (!data.length) {
+          // Fallback to local storage
+          const stored = getStoredQuizList()
+          if (stored.length) {
+            setQuestions(stored)
+            setIsLoading(false)
+            return
+          }
           setError('No quiz data available right now.')
+        } else {
+          setQuestions(data)
         }
-
-        setQuestions(data)
       } catch (err) {
+        // Fallback to local storage on API error
+        const stored = getStoredQuizList()
+        if (stored.length) {
+          setQuestions(stored)
+          setIsLoading(false)
+          return
+        }
         setError(err?.response?.data?.detail || 'Failed to load quiz data.')
       } finally {
         setIsLoading(false)
@@ -121,15 +136,20 @@ export default function QuizPlay() {
   }
 
   const isLast = currentIndex + 1 === total
+  const correctAnswer = getCorrectAnswer(currentQuestion)
 
   return (
     <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Quiz Play</p>
-          <h1 className="mt-1 text-2xl font-semibold text-gray-900">Question {currentIndex + 1} / {total}</h1>
+          <h1 className="mt-1 text-2xl font-semibold text-gray-900">
+            Question {currentIndex + 1} / {total}
+          </h1>
         </div>
-        <div className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white">Score: {score}</div>
+        <div className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm">
+          Score: {score} / {total}
+        </div>
       </div>
 
       <div className="mt-5 h-2 overflow-hidden rounded-full bg-gray-100">
@@ -137,6 +157,7 @@ export default function QuizPlay() {
           className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-400"
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
+          transition={{ type: 'spring', stiffness: 60 }}
         />
       </div>
 
@@ -151,7 +172,6 @@ export default function QuizPlay() {
           <h2 className="text-lg font-semibold text-gray-900">{currentQuestion.question}</h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {(currentQuestion.options || []).map((option, index) => {
-              const correctAnswer = getCorrectAnswer(currentQuestion)
               const isSelected = selected === option
               const isCorrect = option === correctAnswer
 
@@ -192,7 +212,7 @@ export default function QuizPlay() {
         ) : (
           <button
             onClick={handleRestart}
-            className="rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
+            className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:from-emerald-600 hover:to-green-600"
           >
             Restart Quiz
           </button>

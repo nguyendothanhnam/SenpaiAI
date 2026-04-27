@@ -1,4 +1,3 @@
-import random
 
 # =========================
 # 🧠 STORAGE (tạm)
@@ -27,8 +26,12 @@ def generate_quiz():
 
 def create_quiz(questions):
     global USER_QUIZ
-    USER_QUIZ = questions
-    return {"message": "Quiz created"}
+    # Merge: append to existing instead of overwriting
+    if isinstance(questions, list):
+        USER_QUIZ.extend(questions)
+    else:
+        USER_QUIZ.append(questions)
+    return {"message": "Quiz created", "count": len(USER_QUIZ), "questions": USER_QUIZ}
 
 # =========================
 # 🃏 FLASHCARD
@@ -36,14 +39,30 @@ def create_quiz(questions):
 
 def get_flashcard():
     if USER_FLASHCARD:
-        return random.choice(USER_FLASHCARD)
+        # Return all flashcards as a list
+        return USER_FLASHCARD
 
-    return {
-        "front": "犬",
-        "back": "chó"
-    }
+    # Return demo data as a list
+    return [
+        {
+            "front": "犬",
+            "back": "chó"
+        },
+        {
+            "front": "猫",
+            "back": "mèo"
+        },
+        {
+            "front": "木",
+            "back": "cây"
+        }
+    ]
 
 def create_flashcard(cards):
     global USER_FLASHCARD
-    USER_FLASHCARD = cards
-    return {"message": "Flashcard created"}
+    # Store as list, merge with existing
+    if isinstance(cards, list):
+        USER_FLASHCARD.extend(cards)
+    else:
+        USER_FLASHCARD.append(cards)
+    return {"message": "Flashcard created", "count": len(USER_FLASHCARD)}
