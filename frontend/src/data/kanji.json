@@ -1,0 +1,416 @@
+[
+  {
+    "kanji": "日",
+    "onyomi": ["ニチ", "ジツ"],
+    "kunyomi": ["ひ", "び", "か"],
+    "meaning_vi": "ngày, mặt trời",
+    "example": "今日は日曜日です。",
+    "example_reading": "きょう は にちようび です",
+    "romaji": "nichi / jitsu / hi"
+  },
+  {
+    "kanji": "月",
+    "onyomi": ["ゲツ", "ガツ"],
+    "kunyomi": ["つき"],
+    "meaning_vi": "tháng, mặt trăng",
+    "example": "来月東京へ行きます。",
+    "example_reading": "らいげつ とうきょう へ いきます",
+    "romaji": "getsu / gatsu / tsuki"
+  },
+  {
+    "kanji": "火",
+    "onyomi": ["カ"],
+    "kunyomi": ["ひ"],
+    "meaning_vi": "lửa",
+    "example": "火曜日にテストがあります。",
+    "example_reading": "かようび に てすと が あります",
+    "romaji": "ka / hi"
+  },
+  {
+    "kanji": "水",
+    "onyomi": ["スイ"],
+    "kunyomi": ["みず"],
+    "meaning_vi": "nước",
+    "example": "水を一杯ください。",
+    "example_reading": "みず を いっぱい ください",
+    "romaji": "sui / mizu"
+  },
+  {
+    "kanji": "木",
+    "onyomi": ["モク", "ボク"],
+    "kunyomi": ["き", "こ"],
+    "meaning_vi": "cây, gỗ",
+    "example": "公園に大きい木があります。",
+    "example_reading": "こうえん に おおきい き が あります",
+    "romaji": "moku / boku / ki"
+  },
+  {
+    "kanji": "金",
+    "onyomi": ["キン", "コン"],
+    "kunyomi": ["かね"],
+    "meaning_vi": "tiền, vàng",
+    "example": "金曜日は仕事が早く終わります。",
+    "example_reading": "きんようび は しごと が はやく おわります",
+    "romaji": "kin / kon / kane"
+  },
+  {
+    "kanji": "土",
+    "onyomi": ["ド", "ト"],
+    "kunyomi": ["つち"],
+    "meaning_vi": "đất",
+    "example": "庭に花の土を入れます。",
+    "example_reading": "にわ に はな の つち を いれます",
+    "romaji": "do / to / tsuchi"
+  },
+  {
+    "kanji": "山",
+    "onyomi": ["サン"],
+    "kunyomi": ["やま"],
+    "meaning_vi": "núi",
+    "example": "山の上は涼しいです。",
+    "example_reading": "やま の うえ は すずしい です",
+    "romaji": "san / yama"
+  },
+  {
+    "kanji": "川",
+    "onyomi": ["セン"],
+    "kunyomi": ["かわ"],
+    "meaning_vi": "sông",
+    "example": "この川はきれいです。",
+    "example_reading": "この かわ は きれい です",
+    "romaji": "sen / kawa"
+  },
+  {
+    "kanji": "田",
+    "onyomi": ["デン"],
+    "kunyomi": ["た"],
+    "meaning_vi": "ruộng",
+    "example": "田中さんは先生です。",
+    "example_reading": "たなか さん は せんせい です",
+    "romaji": "den / ta"
+  },
+  {
+    "kanji": "人",
+    "onyomi": ["ジン", "ニン"],
+    "kunyomi": ["ひと"],
+    "meaning_vi": "người",
+    "example": "あの人は私の友だちです。",
+    "example_reading": "あの ひと は わたし の ともだち です",
+    "romaji": "jin / nin / hito"
+  },
+  {
+    "kanji": "女",
+    "onyomi": ["ジョ", "ニョ"],
+    "kunyomi": ["おんな"],
+    "meaning_vi": "nữ, phụ nữ",
+    "example": "女の人は駅で待っています。",
+    "example_reading": "おんな の ひと は えき で まって います",
+    "romaji": "jo / nyo / onna"
+  },
+  {
+    "kanji": "男",
+    "onyomi": ["ダン", "ナン"],
+    "kunyomi": ["おとこ"],
+    "meaning_vi": "nam, đàn ông",
+    "example": "男の子は公園で遊んでいます。",
+    "example_reading": "おとこ の こ は こうえん で あそんで います",
+    "romaji": "dan / nan / otoko"
+  },
+  {
+    "kanji": "子",
+    "onyomi": ["シ", "ス"],
+    "kunyomi": ["こ"],
+    "meaning_vi": "trẻ em, con",
+    "example": "子どもはもう寝ました。",
+    "example_reading": "こども は もう ねました",
+    "romaji": "shi / su / ko"
+  },
+  {
+    "kanji": "学",
+    "onyomi": ["ガク"],
+    "kunyomi": ["まな.ぶ"],
+    "meaning_vi": "học",
+    "example": "毎日日本語を学びます。",
+    "example_reading": "まいにち にほんご を まなびます",
+    "romaji": "gaku / manabu"
+  },
+  {
+    "kanji": "生",
+    "onyomi": ["セイ", "ショウ"],
+    "kunyomi": ["い.きる", "う.まれる"],
+    "meaning_vi": "sống, sinh ra",
+    "example": "日本で生まれました。",
+    "example_reading": "にほん で うまれました",
+    "romaji": "sei / sho / ikiru / umareru"
+  },
+  {
+    "kanji": "先",
+    "onyomi": ["セン"],
+    "kunyomi": ["さき"],
+    "meaning_vi": "trước, trước tiên",
+    "example": "先にご飯を食べます。",
+    "example_reading": "さき に ごはん を たべます",
+    "romaji": "sen / saki"
+  },
+  {
+    "kanji": "年",
+    "onyomi": ["ネン"],
+    "kunyomi": ["とし"],
+    "meaning_vi": "năm",
+    "example": "来年日本へ行きたいです。",
+    "example_reading": "らいねん にほん へ いきたい です",
+    "romaji": "nen / toshi"
+  },
+  {
+    "kanji": "時",
+    "onyomi": ["ジ"],
+    "kunyomi": ["とき"],
+    "meaning_vi": "giờ, thời gian",
+    "example": "七時に起きます。",
+    "example_reading": "しちじ に おきます",
+    "romaji": "ji / toki"
+  },
+  {
+    "kanji": "分",
+    "onyomi": ["ブン", "フン", "プン"],
+    "kunyomi": ["わ.かる"],
+    "meaning_vi": "phút, hiểu",
+    "example": "その気持ちはよく分かります。",
+    "example_reading": "その きもち は よく わかります",
+    "romaji": "bun / fun / pun / wakaru"
+  },
+  {
+    "kanji": "半",
+    "onyomi": ["ハン"],
+    "kunyomi": ["なか.ば"],
+    "meaning_vi": "một nửa",
+    "example": "一時半に帰ります。",
+    "example_reading": "いちじ はん に かえります",
+    "romaji": "han / nakaba"
+  },
+  {
+    "kanji": "上",
+    "onyomi": ["ジョウ"],
+    "kunyomi": ["うえ", "あ.がる"],
+    "meaning_vi": "trên, lên",
+    "example": "机の上に本があります。",
+    "example_reading": "つくえ の うえ に ほん が あります",
+    "romaji": "jo / ue / agaru"
+  },
+  {
+    "kanji": "下",
+    "onyomi": ["カ", "ゲ"],
+    "kunyomi": ["した", "さ.がる"],
+    "meaning_vi": "dưới, xuống",
+    "example": "かばんは椅子の下です。",
+    "example_reading": "かばん は いす の した です",
+    "romaji": "ka / ge / shita / sagaru"
+  },
+  {
+    "kanji": "中",
+    "onyomi": ["チュウ"],
+    "kunyomi": ["なか"],
+    "meaning_vi": "trong, ở giữa",
+    "example": "箱の中に手紙があります。",
+    "example_reading": "はこ の なか に てがみ が あります",
+    "romaji": "chu / naka"
+  },
+  {
+    "kanji": "大",
+    "onyomi": ["ダイ", "タイ"],
+    "kunyomi": ["おお.きい"],
+    "meaning_vi": "to, lớn",
+    "example": "この部屋は大きいです。",
+    "example_reading": "この へや は おおきい です",
+    "romaji": "dai / tai / ookii"
+  },
+  {
+    "kanji": "小",
+    "onyomi": ["ショウ"],
+    "kunyomi": ["ちい.さい"],
+    "meaning_vi": "nhỏ",
+    "example": "小さい犬が好きです。",
+    "example_reading": "ちいさい いぬ が すき です",
+    "romaji": "sho / chiisai"
+  },
+  {
+    "kanji": "本",
+    "onyomi": ["ホン"],
+    "kunyomi": ["もと"],
+    "meaning_vi": "sách, gốc",
+    "example": "本を二冊買いました。",
+    "example_reading": "ほん を にさつ かいました",
+    "romaji": "hon / moto"
+  },
+  {
+    "kanji": "名",
+    "onyomi": ["メイ", "ミョウ"],
+    "kunyomi": ["な"],
+    "meaning_vi": "tên",
+    "example": "名前をここに書いてください。",
+    "example_reading": "なまえ を ここ に かいて ください",
+    "romaji": "mei / myo / na"
+  },
+  {
+    "kanji": "行",
+    "onyomi": ["コウ", "ギョウ"],
+    "kunyomi": ["い.く", "ゆ.く"],
+    "meaning_vi": "đi",
+    "example": "毎朝学校へ行きます。",
+    "example_reading": "まいあさ がっこう へ いきます",
+    "romaji": "ko / gyo / iku / yuku"
+  },
+  {
+    "kanji": "来",
+    "onyomi": ["ライ"],
+    "kunyomi": ["く.る"],
+    "meaning_vi": "đến",
+    "example": "友だちが家に来ます。",
+    "example_reading": "ともだち が いえ に きます",
+    "romaji": "rai / kuru"
+  },
+  {
+    "kanji": "見",
+    "onyomi": ["ケン"],
+    "kunyomi": ["み.る"],
+    "meaning_vi": "xem, nhìn",
+    "example": "テレビでニュースを見ます。",
+    "example_reading": "てれび で にゅーす を みます",
+    "romaji": "ken / miru"
+  },
+  {
+    "kanji": "食",
+    "onyomi": ["ショク"],
+    "kunyomi": ["た.べる"],
+    "meaning_vi": "ăn",
+    "example": "毎朝パンを食べます。",
+    "example_reading": "まいあさ ぱん を たべます",
+    "romaji": "shoku / taberu"
+  },
+  {
+    "kanji": "飲",
+    "onyomi": ["イン"],
+    "kunyomi": ["の.む"],
+    "meaning_vi": "uống",
+    "example": "水をたくさん飲んでください。",
+    "example_reading": "みず を たくさん のんで ください",
+    "romaji": "in / nomu"
+  },
+  {
+    "kanji": "話",
+    "onyomi": ["ワ"],
+    "kunyomi": ["はな.す"],
+    "meaning_vi": "nói chuyện",
+    "example": "日本語で話してください。",
+    "example_reading": "にほんご で はなして ください",
+    "romaji": "wa / hanasu"
+  },
+  {
+    "kanji": "聞",
+    "onyomi": ["ブン", "モン"],
+    "kunyomi": ["き.く"],
+    "meaning_vi": "nghe, hỏi",
+    "example": "先生の話をよく聞きます。",
+    "example_reading": "せんせい の はなし を よく ききます",
+    "romaji": "bun / mon / kiku"
+  },
+  {
+    "kanji": "読",
+    "onyomi": ["ドク", "トク"],
+    "kunyomi": ["よ.む"],
+    "meaning_vi": "đọc",
+    "example": "毎晩本を読みます。",
+    "example_reading": "まいばん ほん を よみます",
+    "romaji": "doku / toku / yomu"
+  },
+  {
+    "kanji": "書",
+    "onyomi": ["ショ"],
+    "kunyomi": ["か.く"],
+    "meaning_vi": "viết",
+    "example": "宿題をノートに書きます。",
+    "example_reading": "しゅくだい を のーと に かきます",
+    "romaji": "sho / kaku"
+  },
+  {
+    "kanji": "買",
+    "onyomi": ["バイ"],
+    "kunyomi": ["か.う"],
+    "meaning_vi": "mua",
+    "example": "スーパーで野菜を買います。",
+    "example_reading": "すーぱー で やさい を かいます",
+    "romaji": "bai / kau"
+  },
+  {
+    "kanji": "車",
+    "onyomi": ["シャ"],
+    "kunyomi": ["くるま"],
+    "meaning_vi": "xe",
+    "example": "車で会社へ行きます。",
+    "example_reading": "くるま で かいしゃ へ いきます",
+    "romaji": "sha / kuruma"
+  },
+  {
+    "kanji": "電",
+    "onyomi": ["デン"],
+    "kunyomi": [],
+    "meaning_vi": "điện",
+    "example": "電車で学校に通います。",
+    "example_reading": "でんしゃ で がっこう に かよいます",
+    "romaji": "den"
+  },
+  {
+    "kanji": "駅",
+    "onyomi": ["エキ"],
+    "kunyomi": [],
+    "meaning_vi": "ga",
+    "example": "駅で友だちに会いました。",
+    "example_reading": "えき で ともだち に あいました",
+    "romaji": "eki"
+  },
+  {
+    "kanji": "休",
+    "onyomi": ["キュウ"],
+    "kunyomi": ["やす.む"],
+    "meaning_vi": "nghỉ",
+    "example": "日曜日は家で休みます。",
+    "example_reading": "にちようび は いえ で やすみます",
+    "romaji": "kyu / yasumu"
+  },
+  {
+    "kanji": "友",
+    "onyomi": ["ユウ"],
+    "kunyomi": ["とも"],
+    "meaning_vi": "bạn",
+    "example": "友だちと映画を見ます。",
+    "example_reading": "ともだち と えいが を みます",
+    "romaji": "yu / tomo"
+  },
+  {
+    "kanji": "国",
+    "onyomi": ["コク"],
+    "kunyomi": ["くに"],
+    "meaning_vi": "đất nước",
+    "example": "日本はきれいな国です。",
+    "example_reading": "にほん は きれいな くに です",
+    "romaji": "koku / kuni"
+  },
+  {
+    "kanji": "会",
+    "onyomi": ["カイ", "エ"],
+    "kunyomi": ["あ.う"],
+    "meaning_vi": "gặp",
+    "example": "明日先生に会います。",
+    "example_reading": "あした せんせい に あいます",
+    "romaji": "kai / e / au"
+  },
+  {
+    "kanji": "社",
+    "onyomi": ["シャ"],
+    "kunyomi": ["やしろ"],
+    "meaning_vi": "công ty, đền",
+    "example": "兄は会社で働いています。",
+    "example_reading": "あに は かいしゃ で はたらいて います",
+    "romaji": "sha / yashiro"
+  }
+]

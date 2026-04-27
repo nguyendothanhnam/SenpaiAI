@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { 
   Library as LibraryIcon, 
   Search, 
-  Filter, 
   BookOpen, 
   Tag, 
   Calendar,
@@ -12,7 +11,7 @@ import {
   Loader2
 } from 'lucide-react'
 import { libraryAPI } from '../services/api'
-import { getJLPTColor, formatDate } from '../utils/helpers'
+import { formatDate } from '../utils/helpers'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 interface Document {
@@ -95,11 +94,13 @@ export default function Library() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center space-x-3">
-        <LibraryIcon className="h-8 w-8 text-primary-600" />
+      <div className="flex items-center space-x-4">
+        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
+          <LibraryIcon className="h-6 w-6 text-white" />
+        </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Learning Library</h1>
-          <p className="text-sm text-gray-600">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Learning Library</h1>
+          <p className="text-sm text-gray-600 mt-1">
             Browse and search Japanese learning materials
           </p>
         </div>
@@ -108,25 +109,29 @@ export default function Library() {
       {/* Stats */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="card">
+          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
             <div className="card-content">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-blue-600" />
+                <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                  <BookOpen className="h-6 w-6 text-orange-600" />
+                </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Total Documents</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.total_documents}</p>
+                  <p className="text-sm font-medium text-gray-600">Total Documents</p>
+                  <p className="text-2xl font-bold text-orange-900">{stats.total_documents}</p>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="card">
+          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
             <div className="card-content">
               <div className="flex items-center">
-                <Tag className="h-8 w-8 text-green-600" />
+                <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                  <Tag className="h-6 w-6 text-amber-600" />
+                </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Document Types</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-gray-600">Document Types</p>
+                  <p className="text-2xl font-bold text-amber-900">
                     {Object.keys(stats.documents_by_type).length}
                   </p>
                 </div>
@@ -134,13 +139,15 @@ export default function Library() {
             </div>
           </div>
           
-          <div className="card">
+          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
             <div className="card-content">
               <div className="flex items-center">
-                <Calendar className="h-8 w-8 text-purple-600" />
+                <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                  <Calendar className="h-6 w-6 text-orange-600" />
+                </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">JLPT Levels</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-gray-600">JLPT Levels</p>
+                  <p className="text-2xl font-bold text-orange-900">
                     {Object.keys(stats.documents_by_jlpt).length}
                   </p>
                 </div>
@@ -148,13 +155,15 @@ export default function Library() {
             </div>
           </div>
           
-          <div className="card">
+          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
             <div className="card-content">
               <div className="flex items-center">
-                <Search className="h-8 w-8 text-orange-600" />
+                <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                  <Search className="h-6 w-6 text-amber-600" />
+                </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Vector Chunks</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm font-medium text-gray-600">Vector Chunks</p>
+                  <p className="text-2xl font-bold text-amber-900">
                     {stats.vector_db_stats?.total_documents || 0}
                   </p>
                 </div>
@@ -165,10 +174,10 @@ export default function Library() {
       )}
 
       {/* Search */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">Search Documents</h2>
-          <p className="card-description">
+      <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+        <div className="card-header border-b border-orange-100">
+          <h2 className="card-title text-orange-900">Search Documents</h2>
+          <p className="card-description text-gray-600">
             Find specific learning materials using semantic search
           </p>
         </div>
@@ -176,24 +185,24 @@ export default function Library() {
           <form onSubmit={searchForm.handleSubmit(handleSearch)} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label htmlFor="query" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="query" className="block text-sm font-semibold text-gray-700 mb-2">
                   Search Query
                 </label>
                 <input
                   {...searchForm.register('query', { required: 'Search query is required' })}
                   type="text"
-                  className="input w-full"
+                  className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
                   placeholder="Search for topics, grammar, vocabulary..."
                 />
               </div>
               
               <div>
-                <label htmlFor="document_type" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="document_type" className="block text-sm font-semibold text-gray-700 mb-2">
                   Document Type
                 </label>
                 <select
                   {...searchForm.register('document_type')}
-                  className="input w-full"
+                  className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
                 >
                   <option value="">All Types</option>
                   {categories?.document_types.map((type: string) => (
@@ -205,12 +214,12 @@ export default function Library() {
               </div>
               
               <div>
-                <label htmlFor="jlpt_level" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="jlpt_level" className="block text-sm font-semibold text-gray-700 mb-2">
                   JLPT Level
                 </label>
                 <select
                   {...searchForm.register('jlpt_level')}
-                  className="input w-full"
+                  className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
                 >
                   <option value="">All Levels</option>
                   {categories?.jlpt_levels_ordered.map((level: string) => (
@@ -226,7 +235,7 @@ export default function Library() {
               <button
                 type="submit"
                 disabled={isSearching || !searchForm.watch('query')?.trim()}
-                className="btn btn-primary"
+                className="btn btn-primary bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-md hover:shadow-lg transition-all"
               >
                 {isSearching ? (
                   <>
@@ -245,7 +254,7 @@ export default function Library() {
                 <button
                   type="button"
                   onClick={clearSearch}
-                  className="btn btn-outline"
+                  className="btn btn-outline border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold"
                 >
                   Clear Search
                 </button>
@@ -271,12 +280,14 @@ export default function Library() {
             <LoadingSpinner size="lg" />
           </div>
         ) : displayDocuments.length === 0 ? (
-          <div className="card">
+          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
             <div className="card-content">
-              <div className="text-center py-8 text-gray-500">
-                <LibraryIcon className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-lg font-medium">No documents found</p>
-                <p className="text-sm">
+              <div className="text-center py-12 text-gray-500">
+                <div className="h-16 w-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+                  <LibraryIcon className="h-8 w-8 text-orange-400" />
+                </div>
+                <p className="text-lg font-semibold text-gray-700">No documents found</p>
+                <p className="text-sm text-gray-500 mt-1">
                   {searchResults.length > 0 
                     ? 'Try adjusting your search criteria'
                     : 'No documents available yet'
@@ -288,44 +299,44 @@ export default function Library() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayDocuments.map((document: Document) => (
-              <div key={document.id} className="card hover:shadow-lg transition-shadow">
-                <div className="card-header">
+              <div key={document.id} className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all">
+                <div className="card-header border-b border-orange-100">
                   <div className="flex items-start justify-between">
-                    <h3 className="card-title text-lg">{document.title}</h3>
+                    <h3 className="card-title text-lg text-orange-900">{document.title}</h3>
                     {document.source_url && (
                       <a
                         href={document.source_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-orange-400 hover:text-orange-600 transition-colors"
                       >
                         <ExternalLink className="h-4 w-4" />
                       </a>
                     )}
                   </div>
-                  <p className="card-description">
+                  <p className="card-description text-gray-600 font-medium">
                     {document.document_type.charAt(0).toUpperCase() + document.document_type.slice(1)}
                   </p>
                 </div>
                 
                 <div className="card-content">
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                  <p className="text-sm text-gray-700 mb-4 line-clamp-3 font-medium">
                     {document.content.substring(0, 150)}...
                   </p>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {document.jlpt_level && (
                       <div className="flex items-center space-x-2">
-                        <span className="text-xs font-medium text-gray-500">Level:</span>
-                        <span className={`jlpt-badge ${getJLPTColor(document.jlpt_level)}`}>
+                        <span className="text-xs font-semibold text-gray-600">Level:</span>
+                        <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">
                           {document.jlpt_level}
                         </span>
                       </div>
                     )}
                     
                     <div className="flex items-center space-x-2">
-                      <Calendar className="h-3 w-3 text-gray-400" />
-                      <span className="text-xs text-gray-500">
+                      <Calendar className="h-3 w-3 text-orange-400" />
+                      <span className="text-xs text-gray-600 font-medium">
                         {formatDate(document.created_at)}
                       </span>
                     </div>
@@ -335,13 +346,13 @@ export default function Library() {
                         {document.tags.slice(0, 3).map((tag, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800"
                           >
                             {tag}
                           </span>
                         ))}
                         {document.tags.length > 3 && (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-600 font-medium">
                             +{document.tags.length - 3} more
                           </span>
                         )}

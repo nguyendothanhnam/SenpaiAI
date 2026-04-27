@@ -8,31 +8,31 @@ const options = [
     description: 'Create your own questions with four options and answer keys.',
     to: '/quiz/manual',
     icon: PencilLine,
-    accent: 'from-rose-500 to-orange-400',
+    accent: 'from-orange-500 to-orange-400',
   },
   {
     title: 'Upload file',
     description: 'Upload an Excel or JSON file and auto-generate quiz rounds.',
     to: '/quiz/upload',
     icon: FileUp,
-    accent: 'from-sky-500 to-cyan-400',
+    accent: 'from-amber-500 to-amber-400',
   },
   {
     title: 'Play',
     description: 'Start now with AI or your existing saved quiz data.',
     to: '/quiz/play',
     icon: PlayCircle,
-    accent: 'from-emerald-500 to-lime-400',
+    accent: 'from-orange-500 to-amber-400',
   },
 ]
 
 export default function Quiz() {
   return (
-    <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
-      <div className="bg-gradient-to-r from-red-500 via-orange-500 to-sky-500 px-6 py-8 text-white">
+    <div className="overflow-hidden rounded-3xl border border-orange-200 bg-white shadow-sm">
+      <div className="bg-gradient-to-r from-orange-500 via-orange-400 to-amber-500 px-6 py-8 text-white">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-white/80">Quiz Arena</p>
-        <h1 className="mt-3 text-3xl font-semibold">Choose Your Quiz Flow</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-white/90">
+        <h1 className="mt-3 text-3xl font-bold">Choose Your Quiz Flow</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-white/95">
           Build questions manually, upload a file, or jump directly into play mode.
         </p>
       </div>
@@ -52,14 +52,14 @@ export default function Quiz() {
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-                  className="group h-full rounded-2xl border border-gray-200 bg-gradient-to-b from-white to-gray-50 p-5 shadow-sm"
+                  className="group h-full rounded-2xl border border-orange-200 bg-gradient-to-b from-white to-orange-50 p-5 shadow-sm hover:shadow-md hover:border-orange-300 transition-all"
                 >
                   <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${item.accent} text-white shadow-md`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <h2 className="mt-5 text-lg font-semibold text-gray-900">{item.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-gray-600">{item.description}</p>
-                  <p className="mt-5 text-sm font-semibold text-gray-900 transition group-hover:translate-x-1">
+                  <p className="mt-2 text-sm leading-6 text-gray-700">{item.description}</p>
+                  <p className="mt-5 text-sm font-semibold text-orange-600 transition group-hover:translate-x-1">
                     Open mode ->
                   </p>
                 </motion.div>
@@ -69,8 +69,8 @@ export default function Quiz() {
         })}
       </div>
 
-      <div className="px-6 pb-8 text-sm text-gray-500">
-        <div className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2">
+      <div className="px-6 pb-8 text-sm text-gray-600">
+        <div className="inline-flex items-center gap-2 rounded-xl border border-orange-200 bg-orange-50 px-4 py-2 text-orange-800 font-medium">
           <Brain className="h-4 w-4" />
           Tip: Uploading or manual creation can send you straight to play mode.
         </div>
