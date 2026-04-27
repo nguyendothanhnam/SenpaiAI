@@ -6,7 +6,7 @@ import os
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, analysis, library
+from .api import auth, chat, analysis, library, game
 
 # Create database tables
 @asynccontextmanager
@@ -21,7 +21,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="SenpaiAI - Japanese Learning Assistant",
     description="A comprehensive Japanese learning platform powered by LLM + RAG technology",
-    version="1.0.0",
+    version="1.1.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc"
@@ -47,6 +47,7 @@ app.include_router(auth.router)
 app.include_router(chat.router)
 app.include_router(analysis.router)
 app.include_router(library.router)
+app.include_router(game.router)
 
 @app.get("/")
 async def root():
@@ -62,6 +63,7 @@ async def root():
             "Grammar Analysis",
             "JLPT Level Prediction",
             "Japanese ↔ Vietnamese Translation",
+            "Mini Games (Quiz, Flashcard)",
             "Learning History",
             "Document Search"
         ]

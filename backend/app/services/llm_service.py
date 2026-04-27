@@ -1,8 +1,11 @@
-from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate, PromptTemplate
-from langchain.chains import LLMChain
-from langchain.schema import HumanMessage, SystemMessage
+try:
+    from langchain_community.chat_models import ChatOpenAI
+except ImportError:
+    # Fallback for older versions
+    from langchain.chat_models import ChatOpenAI
+
+from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from typing import Dict, List, Any, Optional
 import time
 import json
@@ -10,10 +13,11 @@ import re
 from ..core.config import settings
 from .ollama_service import ollama_service
 
+
 class JapaneseLearningService:
     def __init__(self):
         self.provider = settings.llm_provider
-        
+
         if self.provider == "ollama":
             self.service = ollama_service
         else:
@@ -28,7 +32,7 @@ class JapaneseLearningService:
 
     def _setup_prompts(self):
         """Setup all the prompt templates."""
-        
+
         # Chat prompt for general Q&A
         self.chat_prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content="""You are SenpaiAI, a helpful Japanese learning assistant. 
@@ -39,7 +43,7 @@ class JapaneseLearningService:
             Use polite, encouraging language and include cultural context when relevant."""),
             HumanMessage(content="{question}")
         ])
-        
+
         # Grammar analysis prompt
         self.grammar_prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content="""You are a Japanese grammar expert. Analyze the given Japanese text and provide:
@@ -47,7 +51,7 @@ class JapaneseLearningService:
             2. Grammar points with explanations
             3. Difficulty score (0-10)
             4. Learning suggestions
-            
+
             Format your response as JSON with these fields:
             - jlpt_level: string
             - grammar_points: array of objects with 'pattern', 'explanation', 'example'
@@ -55,7 +59,7 @@ class JapaneseLearningService:
             - suggestions: array of strings"""),
             HumanMessage(content="Analyze this Japanese text: {text}")
         ])
-        
+
         # Translation prompt
         self.translation_prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content="""You are a professional Japanese-Vietnamese translator.
@@ -65,7 +69,7 @@ class JapaneseLearningService:
             Include pronunciation guides (romaji) for Japanese text when helpful."""),
             HumanMessage(content="Translate this {source_lang} text to {target_lang}: {text}")
         ])
-        
+
         # JLPT level prediction prompt
         self.jlpt_prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content="""You are a JLPT level assessment expert. 
@@ -76,46 +80,46 @@ class JapaneseLearningService:
         ])
 
     async def chat_response(
-        self, 
-        question: str, 
-        context: Optional[str] = None,
-        jlpt_level: Optional[str] = None
+            self,
+            question: str,
+            context: Optional[str] = None,
+            jlpt_level: Optional[str] = None
     ) -> Dict[str, Any]:
         """Generate a chat response with RAG context."""
         if self.provider == "ollama":
             return await self.service.chat_response(question, context, jlpt_level)
-        
+
         # OpenAI implementation
         start_time = time.time()
-        
+
         try:
             # Prepare the question with context
             if context:
                 enhanced_question = f"Context: {context}\n\nQuestion: {question}"
             else:
                 enhanced_question = question
-            
+
             # Add JLPT level context if provided
             if jlpt_level:
                 enhanced_question = f"User's JLPT level: {jlpt_level}\n\n{enhanced_question}"
-            
+
             # Generate response
             messages = self.chat_prompt.format_messages(question=enhanced_question)
             response = await self.llm.agenerate([messages])
-            
+
             answer = response.generations[0][0].text.strip()
-            
+
             # Predict JLPT level of the response
             jlpt_prediction = await self.predict_jlpt_level(answer)
-            
+
             response_time = time.time() - start_time
-            
+
             return {
                 "answer": answer,
                 "jlpt_level": jlpt_prediction,
                 "response_time": response_time
             }
-            
+
         except Exception as e:
             return {
                 "answer": f"I apologize, but I encountered an error: {str(e)}",
@@ -127,17 +131,36 @@ class JapaneseLearningService:
         """Analyze Japanese grammar in the given text."""
         if self.provider == "ollama":
             return await self.service.analyze_grammar(text)
-        
+
         # OpenAI implementation
         try:
             messages = self.grammar_prompt.format_messages(text=text)
             response = await self.llm.agenerate([messages])
-            
+
             result_text = response.generations[0][0].text.strip()
-            
+
             # Try to parse JSON response
             try:
                 result = json.loads(result_text)
+
+                # Ensure grammar_points is always an array
+                if "grammar_points" in result:
+                    if not isinstance(result["grammar_points"], list):
+                        # If it's a single object, wrap it in an array
+                        if isinstance(result["grammar_points"], dict):
+                            result["grammar_points"] = [result["grammar_points"]]
+                        else:
+                            result["grammar_points"] = []
+                else:
+                    result["grammar_points"] = []
+
+                # Ensure suggestions is always an array
+                if "suggestions" in result:
+                    if not isinstance(result["suggestions"], list):
+                        result["suggestions"] = [str(result["suggestions"])] if result["suggestions"] else []
+                else:
+                    result["suggestions"] = []
+
             except json.JSONDecodeError:
                 # Fallback if JSON parsing fails
                 result = {
@@ -146,9 +169,9 @@ class JapaneseLearningService:
                     "difficulty_score": 5.0,
                     "suggestions": ["Review basic grammar patterns"]
                 }
-            
+
             return result
-            
+
         except Exception as e:
             return {
                 "jlpt_level": "N3",
@@ -158,15 +181,15 @@ class JapaneseLearningService:
             }
 
     async def translate_text(
-        self, 
-        text: str, 
-        source_lang: str, 
-        target_lang: str
+            self,
+            text: str,
+            source_lang: str,
+            target_lang: str
     ) -> Dict[str, Any]:
         """Translate text between Japanese and Vietnamese."""
         if self.provider == "ollama":
             return await self.service.translate_text(text, source_lang, target_lang)
-        
+
         # OpenAI implementation
         try:
             messages = self.translation_prompt.format_messages(
@@ -175,9 +198,9 @@ class JapaneseLearningService:
                 target_lang=target_lang
             )
             response = await self.llm.agenerate([messages])
-            
+
             translated_text = response.generations[0][0].text.strip()
-            
+
             return {
                 "original_text": text,
                 "translated_text": translated_text,
@@ -185,7 +208,7 @@ class JapaneseLearningService:
                 "target_lang": target_lang,
                 "confidence": 0.9  # Placeholder confidence score
             }
-            
+
         except Exception as e:
             return {
                 "original_text": text,
@@ -199,48 +222,49 @@ class JapaneseLearningService:
         """Predict the JLPT level of Japanese text."""
         if self.provider == "ollama":
             return await self.service.predict_jlpt_level(text)
-        
+
         # OpenAI implementation
         try:
             messages = self.jlpt_prompt.format_messages(text=text)
             response = await self.llm.agenerate([messages])
-            
+
             level = response.generations[0][0].text.strip()
-            
+
             # Validate JLPT level format
             if re.match(r'^N[1-5]$', level):
                 return level
             else:
                 return "N3"  # Default fallback
-                
+
         except Exception as e:
             return "N3"  # Default fallback
 
     async def generate_learning_suggestions(
-        self, 
-        user_level: str, 
-        weak_areas: List[str]
+            self,
+            user_level: str,
+            weak_areas: List[str]
     ) -> List[str]:
         """Generate personalized learning suggestions."""
         if self.provider == "ollama":
             return await self.service.generate_learning_suggestions(user_level, weak_areas)
-        
+
         # OpenAI implementation
         try:
             prompt = f"""Based on the user's JLPT level ({user_level}) and weak areas ({', '.join(weak_areas)}), 
             provide 5 specific learning suggestions. Focus on practical, actionable advice."""
-            
+
             messages = [HumanMessage(content=prompt)]
             response = await self.llm.agenerate([messages])
-            
+
             suggestions_text = response.generations[0][0].text.strip()
-            
+
             # Split into individual suggestions
             suggestions = [s.strip() for s in suggestions_text.split('\n') if s.strip()]
             return suggestions[:5]  # Limit to 5 suggestions
-            
+
         except Exception as e:
             return [f"Error generating suggestions: {str(e)}"]
+
 
 # Global instance
 japanese_service = JapaneseLearningService()

@@ -7,6 +7,15 @@ import Grammar from './pages/Grammar'
 import Library from './pages/Library'
 import Profile from './pages/Profile'
 import LoadingSpinner from './components/LoadingSpinner'
+import GameHub from './pages/GameHub'
+import Quiz from './pages/Quiz.jsx'
+import Kanji from './pages/Kanji.jsx'
+import QuizManual from './pages/QuizManual.jsx'
+import QuizUpload from './pages/QuizUpload.jsx'
+import QuizPlay from './pages/QuizPlay.jsx'
+import Flashcard from './pages/Flashcard.jsx'
+import FlashcardManual from './pages/FlashcardManual.jsx'
+import FlashcardPlay from './pages/FlashcardPlay.jsx'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -35,6 +44,15 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/grammar" element={<Grammar />} />
         <Route path="/library" element={<Library />} />
+        <Route path="/games" element={<GameHub />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/manual" element={<QuizManual />} />
+        <Route path="/quiz/upload" element={<QuizUpload />} />
+        <Route path="/quiz/play" element={<QuizPlay />} />
+        <Route path="/flashcard" element={<Flashcard />} />
+        <Route path="/flashcard/manual" element={<FlashcardManual />} />
+        <Route path="/flashcard/play" element={<FlashcardPlay />} />
+        <Route path="/kanji" element={<Kanji />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>

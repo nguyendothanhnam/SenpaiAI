@@ -186,4 +186,3 @@ class LearningSessionUpdate(BaseModel):
 class ErrorResponse(BaseModel):
     detail: str
     error_code: Optional[str] = None
-

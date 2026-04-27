@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../services/auth'
 import { cn } from '../utils/helpers'
+import { Gamepad2 } from 'lucide-react'
 
 interface LayoutProps {
   children: ReactNode
@@ -21,6 +22,7 @@ const navigation = [
   { name: 'Chat', href: '/chat', icon: MessageCircle },
   { name: 'Grammar', href: '/grammar', icon: BookOpen },
   { name: 'Library', href: '/library', icon: Library },
+  { name: 'Mini Games', href: '/games', icon: Gamepad2 },
   { name: 'Profile', href: '/profile', icon: User },
 ]
 
