@@ -1,6 +1,7 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime
+from typing import Literal
 
 
 # User Schemas
@@ -145,6 +146,146 @@ class DocumentUpdate(BaseModel):
     jlpt_level: Optional[str] = None
     tags: Optional[List[str]] = None
     source_url: Optional[str] = None
+
+
+JlptLevel = Literal["N5", "N4", "N3", "N2", "N1"]
+KanjiReadingType = Literal["onyomi", "kunyomi"]
+
+
+class KanjiReadingBase(BaseModel):
+    reading_type: KanjiReadingType
+    reading: str = Field(..., min_length=1)
+    romaji: Optional[str] = None
+
+
+class KanjiReadingCreate(KanjiReadingBase):
+    pass
+
+
+class KanjiReading(KanjiReadingBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class KanjiExampleBase(BaseModel):
+    sentence: str = Field(..., min_length=1)
+    reading: str = Field(..., min_length=1)
+    romaji: Optional[str] = None
+    meaning_vi: Optional[str] = None
+
+
+class KanjiExampleCreate(KanjiExampleBase):
+    pass
+
+
+class KanjiExample(KanjiExampleBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+class KanjiCreate(BaseModel):
+    character: str = Field(..., min_length=1, max_length=1)
+    meaning_vi: str = Field(..., min_length=1)
+    jlpt_level: JlptLevel
+    stroke_count: Optional[int] = Field(default=None, gt=0)
+    readings: List[KanjiReadingCreate] = Field(default_factory=list)
+    examples: List[KanjiExampleCreate] = Field(default_factory=list)
+
+
+class Kanji(BaseModel):
+    id: int
+    character: str
+    meaning_vi: str
+    jlpt_level: JlptLevel
+    stroke_count: Optional[int] = None
+    readings: List[KanjiReading] = Field(default_factory=list)
+    examples: List[KanjiExample] = Field(default_factory=list)
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class VocabularyKanjiBrief(BaseModel):
+    id: int
+    character: str
+    meaning_vi: str
+    jlpt_level: JlptLevel
+
+    class Config:
+        from_attributes = True
+
+
+class VocabularyCreate(BaseModel):
+    word: str = Field(..., min_length=1)
+    reading: str = Field(..., min_length=1)
+    romaji: Optional[str] = None
+    meaning_vi: str = Field(..., min_length=1)
+    jlpt_level: JlptLevel
+    part_of_speech: Optional[str] = None
+    example_sentences: List[Any] = Field(default_factory=list)
+    kanji_ids: List[int] = Field(default_factory=list)
+
+
+class Vocabulary(BaseModel):
+    id: int
+    word: str
+    reading: str
+    romaji: Optional[str] = None
+    meaning_vi: str
+    jlpt_level: JlptLevel
+    part_of_speech: Optional[str] = None
+    example_sentences: List[Any] = Field(default_factory=list)
+    related_kanji: List[VocabularyKanjiBrief] = Field(default_factory=list)
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+
+class VocabularyListResponse(BaseModel):
+    items: List[Vocabulary]
+    total: int
+    limit: int
+    offset: int
+
+
+class KanjiListResponse(BaseModel):
+    items: List[Kanji]
+    total: int
+    limit: int
+    offset: int
+
+
+class KanjiStrokePoint(BaseModel):
+    x: float
+    y: float
+    time: Optional[int] = None
+
+
+class KanjiRecognitionRequest(BaseModel):
+    image_base64: str = Field(..., min_length=1)
+    strokes: List[List[KanjiStrokePoint]] = Field(default_factory=list)
+    width: int = Field(..., gt=0)
+    height: int = Field(..., gt=0)
+
+
+class KanjiRecognitionPrediction(BaseModel):
+    kanji: str
+    confidence: float = Field(..., ge=0, le=1)
+    meaning: str
+    onyomi: Optional[str] = None
+    kunyomi: Optional[str] = None
+    strokes: Optional[int] = None
+
+
+class KanjiRecognitionResponse(BaseModel):
+    predictions: List[KanjiRecognitionPrediction]
+    engine: str
+    isDemo: bool = False
 
 
 class DocumentSearchResponse(BaseModel):

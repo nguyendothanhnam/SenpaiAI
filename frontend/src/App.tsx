@@ -16,6 +16,8 @@ import QuizPlay from './pages/QuizPlay.jsx'
 import Flashcard from './pages/Flashcard.jsx'
 import FlashcardManual from './pages/FlashcardManual.jsx'
 import FlashcardPlay from './pages/FlashcardPlay.jsx'
+import Analytics from './pages/Analytics.jsx'
+import KanjiMinigame from './pages/KanjiMinigame.jsx'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -45,6 +47,7 @@ function App() {
         <Route path="/grammar" element={<Grammar />} />
         <Route path="/library" element={<Library />} />
         <Route path="/games" element={<GameHub />} />
+        <Route path="/games/kanji" element={<KanjiMinigame />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/quiz/manual" element={<QuizManual />} />
         <Route path="/quiz/upload" element={<QuizUpload />} />
@@ -54,6 +57,7 @@ function App() {
         <Route path="/flashcard/play" element={<FlashcardPlay />} />
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/analytics" element={<Analytics />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Layout>
@@ -61,4 +65,3 @@ function App() {
 }
 
 export default App
-

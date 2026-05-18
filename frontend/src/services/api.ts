@@ -74,3 +74,8 @@ export const libraryAPI = {
   getStats: () => api.get('/library/stats'),
 }
 
+export const kanjiRecognitionAPI = {
+  recognize: (data: { image_base64: string; strokes: any[]; width: number; height: number }) =>
+    api.post('/api/kanji/recognize', data),
+}
+

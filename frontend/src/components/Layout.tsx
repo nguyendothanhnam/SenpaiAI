@@ -7,7 +7,9 @@ import {
   User, 
   Menu, 
   X,
-  LogOut
+  LogOut,
+  Brush,
+  Sparkles
 } from 'lucide-react'
 import { useAuth } from '../services/auth'
 import { cn } from '../utils/helpers'
@@ -21,7 +23,8 @@ const navigation = [
   { name: 'Chat', href: '/chat', icon: MessageCircle },
   { name: 'Grammar', href: '/grammar', icon: BookOpen },
   { name: 'Library', href: '/library', icon: Library },
-  { name: 'Mini Games', href: '/games', icon: Gamepad2 },
+  { name: 'Games', href: '/games', icon: Gamepad2 },
+  { name: 'Kanji Canvas', href: '/kanji', icon: Brush },
   { name: 'Profile', href: '/profile', icon: User },
 ]
 
@@ -31,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-violet-50">
       {/* Mobile sidebar */}
       <div className={cn(
         "fixed inset-0 z-50 lg:hidden",
@@ -39,8 +42,16 @@ export default function Layout({ children }: LayoutProps) {
       )}>
         <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)} />
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-white shadow-xl">
-          <div className="flex h-16 items-center justify-between px-4 bg-gradient-to-r from-orange-500 to-amber-500">
-            <h1 className="text-xl font-bold text-white">HineGoldAI</h1>
+          <div className="flex h-16 items-center justify-between px-4 bg-gradient-to-r from-orange-500 via-amber-500 to-violet-500">
+            <div className="flex items-center gap-2">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white/20 text-white shadow-sm">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold leading-tight text-white">SenpaiAI</h1>
+                <p className="text-[10px] font-medium text-white/80">HineGoldAI</p>
+              </div>
+            </div>
             <button
               onClick={() => setSidebarOpen(false)}
               className="text-gray-400 hover:text-gray-600"
@@ -98,8 +109,16 @@ export default function Layout({ children }: LayoutProps) {
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow bg-white border-r border-orange-100">
-          <div className="flex h-16 items-center px-4 bg-gradient-to-r from-orange-500 to-amber-500">
-            <h1 className="text-xl font-bold text-white">HineGoldAI</h1>
+          <div className="flex h-16 items-center px-4 bg-gradient-to-r from-orange-500 via-amber-500 to-violet-500">
+            <div className="flex items-center gap-2">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white/20 text-white shadow-sm">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold leading-tight text-white">SenpaiAI</h1>
+                <p className="text-[10px] font-medium text-white/80">HineGoldAI</p>
+              </div>
+            </div>
           </div>
           <nav className="flex-1 px-4 py-4">
             <div className="space-y-1">

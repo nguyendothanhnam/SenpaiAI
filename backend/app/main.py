@@ -6,7 +6,7 @@ import os
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, analysis, library, game
+from .api import auth, chat, analysis, library, game, kanji
 
 # Create database tables
 @asynccontextmanager
@@ -48,6 +48,7 @@ app.include_router(chat.router)
 app.include_router(analysis.router)
 app.include_router(library.router)
 app.include_router(game.router)
+app.include_router(kanji.router)
 
 @app.get("/")
 async def root():

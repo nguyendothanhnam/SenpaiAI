@@ -1,0 +1,120 @@
+[
+  {
+    "type": "kanji",
+    "title": "学",
+    "content": {
+      "kanji": "学",
+      "onyomi": ["ガク"],
+      "kunyomi": ["まなぶ"],
+      "meaning_vi": "học",
+      "example": "毎日日本語を学びます。",
+      "reading": "まいにち にほんご を まなびます"
+    },
+    "source": "JLPT N5"
+  },
+  {
+    "type": "vocab",
+    "title": "食べる",
+    "content": {
+      "word": "食べる",
+      "reading": "たべる",
+      "meaning_vi": "ăn",
+      "example": "毎日ご飯を食べます。"
+    },
+    "source": "Minna no Nihongo / JLPT N5"
+  },
+  {
+    "type": "kanji",
+    "title": "働",
+    "content": {
+      "kanji": "働",
+      "onyomi": ["ドウ"],
+      "kunyomi": ["はたらく"],
+      "meaning_vi": "làm việc",
+      "example": "父は毎日会社で働いています。",
+      "reading": "ちち は まいにち かいしゃ で はたらいています"
+    },
+    "source": "JLPT N5"
+  },
+  {
+    "type": "vocab",
+    "title": "友達",
+    "content": {
+      "word": "友達",
+      "reading": "ともだち",
+      "meaning_vi": "bạn bè",
+      "example": "あの人は私の友達です。"
+    },
+    "source": "Minna no Nihongo / JLPT N5"
+  },
+  {
+    "type": "grammar",
+    "title": "〜ている",
+    "content": {
+      "structure": "Vている",
+      "meaning_vi": "đang làm gì đó / đã hoàn thành (và còn hiệu lực)",
+      "usage": "diễn tả hành động đang diễn ra hoặc trạng thái kết quả của một hành động",
+      "example": "今勉強しています。"
+    },
+    "source": "Minna no Nihongo"
+  },
+  {
+    "type": "kanji",
+    "title": "書",
+    "content": {
+      "kanji": "書",
+      "onyomi": ["ショ"],
+      "kunyomi": ["かく"],
+      "meaning_vi": "viết",
+      "example": "毎日日記を書きます。",
+      "reading": "まいにち にっき を かきます"
+    },
+    "source": "JLPT N5"
+  },
+  {
+    "type": "vocab",
+    "title": "病院",
+    "content": {
+      "word": "病院",
+      "reading": "びょういん",
+      "meaning_vi": "bệnh viện",
+      "example": "病気の時は病院に行きます。"
+    },
+    "source": "JLPT N5"
+  },
+  {
+    "type": "grammar",
+    "title": "〜てください",
+    "content": {
+      "structure": "Vてください",
+      "meaning_vi": "vui lòng / hãy làm gì đó",
+      "usage": "yêu cầu hoặc mong muốn ai đó làm gì đó một cách lịch sự",
+      "example": "このドアを開けてください。"
+    },
+    "source": "Minna no Nihongo"
+  },
+  {
+    "type": "kanji",
+    "title": "来",
+    "content": {
+      "kanji": "来",
+      "onyomi": ["ライ"],
+      "kunyomi": ["くる"],
+      "meaning_vi": "đến, tới",
+      "example": "明日友達が来ます。",
+      "reading": "あした ともだち が きます"
+    },
+    "source": "JLPT N5"
+  },
+  {
+    "type": "vocab",
+    "title": "楽しい",
+    "content": {
+      "word": "楽しい",
+      "reading": "たのしい",
+      "meaning_vi": "vui vẻ",
+      "example": "日本への旅行は楽しかった。"
+    },
+    "source": "Minna no Nihongo / JLPT N5"
+  }
+]

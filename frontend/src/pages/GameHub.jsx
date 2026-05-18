@@ -22,7 +22,7 @@ const games = [
   {
     title: 'Kanji',
     description: 'Train recognition with bite-sized character study and repetition.',
-    to: '/kanji',
+    to: '/games/kanji',
     icon: BookOpen,
     accent: 'from-orange-500 via-orange-400 to-amber-400',
     glow: 'bg-orange-100',

@@ -60,7 +60,7 @@ export default function Quiz() {
                   <h2 className="mt-5 text-lg font-semibold text-gray-900">{item.title}</h2>
                   <p className="mt-2 text-sm leading-6 text-gray-700">{item.description}</p>
                   <p className="mt-5 text-sm font-semibold text-orange-600 transition group-hover:translate-x-1">
-                    Open mode ->
+                    Open mode &rarr;
                   </p>
                 </motion.div>
               </Link>

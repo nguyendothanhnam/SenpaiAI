@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Send, Bot, User, Loader2, Trash2, Search } from 'lucide-react'
+import { Send, Bot, User, Loader2, Trash2, Search, PenLine } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { chatAPI } from '../services/api'
 import { useAuth } from '../services/auth'
 import { formatRelativeTime } from '../utils/helpers'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '../components/LoadingSpinner'
+import HandwritingInputModal from '../components/kanji/HandwritingInputModal.jsx'
 
 interface ChatMessage {
   id: number
@@ -25,6 +26,7 @@ interface MessageFormData {
 
 export default function Chat() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [handwritingOpen, setHandwritingOpen] = useState(false)
   const { user } = useAuth()
   const queryClient = useQueryClient()
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -96,8 +98,22 @@ export default function Chat() {
     })
   }
 
+  const insertKanji = (kanji: string) => {
+    const currentMessage = form.getValues('message') || ''
+    form.setValue('message', `${currentMessage}${kanji}`, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
+    })
+  }
+
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col">
+      <HandwritingInputModal
+        open={handwritingOpen}
+        onClose={() => setHandwritingOpen(false)}
+        onSelect={insertKanji}
+      />
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -239,6 +255,15 @@ export default function Chat() {
             className="flex-1 input border-orange-200 focus:ring-orange-300 bg-orange-50"
             disabled={sendMessageMutation.isLoading}
           />
+          <button
+            type="button"
+            onClick={() => setHandwritingOpen(true)}
+            disabled={sendMessageMutation.isLoading}
+            className="btn btn-outline border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100"
+            aria-label="Open kanji handwriting input"
+          >
+            <PenLine className="h-4 w-4" />
+          </button>
           <button
             type="submit"
             disabled={sendMessageMutation.isLoading || !form.watch('message')?.trim()}

@@ -1,434 +1,218 @@
-import { useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { romkan } from 'romkan'
-import kanjiDataset from '../data/kanji.json'
+import { useMemo, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { BookOpen, Compass, PenLine, Search } from 'lucide-react'
+import KanjiCanvas from '../components/kanji/KanjiCanvas'
+import KanjiInfoPanel from '../components/kanji/KanjiInfoPanel'
+import PredictionResult from '../components/kanji/PredictionResult'
+import { kanjiRecognitionAPI } from '../services/api'
 
-function normalizeKana(value) {
-  return String(value || '')
-    .replace(/\./g, '')
-    .replace(/[\u30a1-\u30f6]/g, (char) => String.fromCharCode(char.charCodeAt(0) - 0x60))
-    .replace(/\s+/g, '')
-    .trim()
-}
+const practiceKanji = [
+  { kanji: '猫', meaning: 'cat', onyomi: 'ビョウ', kunyomi: 'ねこ', strokes: 11, jlpt: 'N4' },
+  { kanji: '水', meaning: 'water', onyomi: 'スイ', kunyomi: 'みず', strokes: 4, jlpt: 'N5' },
+  { kanji: '語', meaning: 'language', onyomi: 'ゴ', kunyomi: 'かたる', strokes: 14, jlpt: 'N5' },
+  { kanji: '書', meaning: 'write', onyomi: 'ショ', kunyomi: 'かく', strokes: 10, jlpt: 'N5' },
+  { kanji: '駅', meaning: 'station', onyomi: 'エキ', kunyomi: '-', strokes: 14, jlpt: 'N5' },
+  { kanji: '描', meaning: 'draw', onyomi: 'ビョウ', kunyomi: 'えがく', strokes: 11, jlpt: 'N2' },
+]
 
-function normalizeReadingInput(value) {
-  const raw = String(value || '').trim()
-  if (!raw) {
-    return ''
-  }
-
-  const hasLatin = /[a-zA-Z]/.test(raw)
-  const kana = hasLatin ? romkan(raw) : raw
-  return normalizeKana(kana)
-}
-
-function buildExpectedReadings(item) {
-  return [...item.onyomi, ...item.kunyomi]
-    .map((reading) => normalizeKana(reading))
-    .filter(Boolean)
-}
-
-function buildAudioText(item) {
-  const readings = [...item.onyomi, ...item.kunyomi]
-    .map((reading) => String(reading || '').replace(/\./g, '').trim())
-    .filter(Boolean)
-
-  return readings.join(' ')
-}
-
-function getRandomIndex(length, currentIndex) {
-  if (length <= 1) {
-    return 0
-  }
-
-  let nextIndex = currentIndex
-  while (nextIndex === currentIndex) {
-    nextIndex = Math.floor(Math.random() * length)
-  }
-
-  return nextIndex
-}
+const modes = [
+  { id: 'recognize', label: 'Recognize', icon: Search },
+  { id: 'practice', label: 'Practice', icon: PenLine },
+  { id: 'explore', label: 'Explore', icon: Compass },
+]
 
 export default function Kanji() {
-  const [mode, setMode] = useState('learn')
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [searchInput, setSearchInput] = useState('')
-  const [searchMessage, setSearchMessage] = useState('')
-  const [readingInput, setReadingInput] = useState('')
-  const [readingFeedback, setReadingFeedback] = useState(null)
-  const [testInput, setTestInput] = useState('')
-  const [testFeedback, setTestFeedback] = useState(null)
+  const canvasRef = useRef(null)
+  const [mode, setMode] = useState('recognize')
+  const [targetKanji, setTargetKanji] = useState(practiceKanji[0].kanji)
+  const [status, setStatus] = useState('idle')
+  const [predictions, setPredictions] = useState([])
+  const [recent, setRecent] = useState([])
+  const [error, setError] = useState('')
+  const [isDemo, setIsDemo] = useState(false)
+  const [practiceFeedback, setPracticeFeedback] = useState('')
 
-  const currentKanji = kanjiDataset[currentIndex]
+  const targetInfo = useMemo(
+    () => practiceKanji.find((item) => item.kanji === targetKanji) || practiceKanji[0],
+    [targetKanji]
+  )
 
-  const expectedReadings = useMemo(() => {
-    if (!currentKanji) {
-      return []
-    }
-    return buildExpectedReadings(currentKanji)
-  }, [currentKanji])
-
-  const progress = useMemo(() => {
-    if (!kanjiDataset.length) {
-      return 0
-    }
-    return ((currentIndex + 1) / kanjiDataset.length) * 100
-  }, [currentIndex])
-
-  const handleSearch = (event) => {
-    event.preventDefault()
-
-    const trimmed = searchInput.trim()
-    if (!trimmed) {
-      setSearchMessage('Vui lòng nhập một chữ Kanji')
+  const recognize = async () => {
+    if (!canvasRef.current || canvasRef.current.isEmpty()) {
+      setStatus('empty')
+      setPredictions([])
+      setError('')
       return
     }
 
-    const foundIndex = kanjiDataset.findIndex((item) => item.kanji === trimmed)
-
-    if (foundIndex < 0) {
-      setSearchMessage('Không có trong bộ học hiện tại')
+    if (mode === 'practice') {
+      const strokeCount = canvasRef.current.getStrokes().length
+      const difference = Math.abs(strokeCount - targetInfo.strokes)
+      setPracticeFeedback(
+        difference <= 2
+          ? `Good practice for ${targetInfo.kanji}. Stroke count looks close.`
+          : `Keep practicing ${targetInfo.kanji}. Try to use around ${targetInfo.strokes} strokes.`
+      )
       return
     }
 
-    setCurrentIndex(foundIndex)
-    setSearchMessage('')
-    setReadingInput('')
-    setReadingFeedback(null)
-    setTestInput('')
-    setTestFeedback(null)
-  }
+    setStatus('loading')
+    setError('')
+    setPracticeFeedback('')
 
-  const handlePlayAudio = () => {
-    if (!currentKanji || typeof window === 'undefined' || !window.speechSynthesis) {
-      return
-    }
-
-    const speech = buildAudioText(currentKanji)
-    if (!speech) {
-      return
-    }
-
-    const utterance = new SpeechSynthesisUtterance(speech)
-    utterance.lang = 'ja-JP'
-    utterance.rate = 0.85
-
-    window.speechSynthesis.cancel()
-    window.speechSynthesis.speak(utterance)
-  }
-
-  const handleCheckReading = () => {
-    const normalized = normalizeReadingInput(readingInput)
-
-    if (!normalized) {
-      setReadingFeedback({
-        type: 'error',
-        message: 'Vui lòng nhập cách đọc',
+    try {
+      const response = await kanjiRecognitionAPI.recognize({
+        image_base64: canvasRef.current.getImage(),
+        strokes: canvasRef.current.getStrokes(),
+        width: 720,
+        height: 520,
       })
-      return
+      const nextPredictions = response.data?.predictions || []
+
+      setIsDemo(Boolean(response.data?.isDemo))
+
+      if (!nextPredictions.length) {
+        setStatus('error')
+        setPredictions([])
+        setError('Kanji not recognized')
+        return
+      }
+
+      setPredictions(nextPredictions)
+      setRecent((items) => [nextPredictions[0], ...items].slice(0, 8))
+      setStatus('success')
+    } catch (requestError) {
+      setStatus('error')
+      setPredictions([])
+      setError(requestError?.response?.data?.detail || 'Kanji not recognized')
     }
-
-    const isCorrect = expectedReadings.includes(normalized)
-
-    setReadingFeedback({
-      type: isCorrect ? 'success' : 'error',
-      message: isCorrect ? 'Chính xác!' : 'Chưa đúng, hãy thử lại.',
-    })
   }
 
-  const handleNextKanji = () => {
-    if (!kanjiDataset.length) {
-      return
-    }
-
-    const nextIndex = getRandomIndex(kanjiDataset.length, currentIndex)
-    setCurrentIndex(nextIndex)
-    setSearchMessage('')
-    setReadingInput('')
-    setReadingFeedback(null)
-    setTestInput('')
-    setTestFeedback(null)
+  const selectPracticeKanji = (kanji) => {
+    setTargetKanji(kanji)
+    setMode('practice')
+    setPracticeFeedback('')
+    setStatus('idle')
+    setPredictions([])
+    requestAnimationFrame(() => canvasRef.current?.clear())
   }
 
-  const handleCheckTestReading = () => {
-    const normalized = normalizeReadingInput(testInput)
-
-    if (!normalized) {
-      setTestFeedback({
-        type: 'error',
-        message: 'Vui lòng nhập cách đọc',
-        isCorrect: false,
-      })
-      return
-    }
-
-    const isCorrect = expectedReadings.includes(normalized)
-
-    setTestFeedback({
-      type: isCorrect ? 'success' : 'error',
-      message: isCorrect ? '✅ Correct!' : '❌ Incorrect!',
-      isCorrect,
-    })
-  }
-
-  const handleSkipTest = () => {
-    handleNextKanji()
-  }
-
-    const handleSwitchMode = (nextMode) => {
-    setMode(nextMode)
-
-    // reset test
-    setTestInput('')
-    setTestFeedback(null)
-
-    // reset learn
-    setReadingInput('')
-    setReadingFeedback(null)
-
-    // reset search (QUAN TRỌNG)
-    setSearchInput('')
-    setSearchMessage('')
-    }
-
-  if (!currentKanji) {
-    return (
-      <div className="rounded-3xl border border-orange-200 bg-white p-8 text-sm text-gray-600 shadow-sm">
-        Không có dữ liệu Kanji.
-      </div>
-    )
-  }
+  const canvasMode = mode === 'practice' ? 'practice' : 'free'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="relative overflow-hidden rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 p-6 shadow-sm sm:p-8"
+      className="space-y-6"
     >
-      <div className="pointer-events-none absolute -left-20 -top-16 h-52 w-52 rounded-full bg-orange-200/50 blur-3xl" />
-      <div className="pointer-events-none absolute -right-12 bottom-0 h-48 w-48 rounded-full bg-amber-200/60 blur-3xl" />
-
-      <div className="relative space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="rounded-3xl border border-white bg-white/90 p-5 shadow-sm">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-orange-500">Kanji Learning</p>
-            <h1 className="mt-2 text-3xl font-semibold text-gray-900">
-              {mode === 'learn' ? 'Learn by Recognition and Reading' : 'Practice Reading Memory'}
-            </h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">HineGoldAI handwriting lab</p>
+            <h1 className="mt-2 text-3xl font-bold text-gray-950">Kanji Canvas</h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">
+              Recognize handwriting, practice a target kanji, or explore JLPT suggestions. Chat can open this as a compact handwriting input.
+            </p>
           </div>
-          <div className="flex items-center gap-2">
-            {mode === 'learn' ? (
-              <button
-                type="button"
-                onClick={() => handleSwitchMode('test')}
-                className="rounded-full border border-orange-200 bg-white px-4 py-2 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
-              >
-                Practice
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => handleSwitchMode('learn')}
-                className="rounded-full border border-orange-200 bg-white px-4 py-2 text-sm font-semibold text-orange-700 transition hover:bg-orange-50"
-              >
-                Back to Learn
-              </button>
-            )}
-            <div className="rounded-full border border-orange-200 bg-white/80 px-4 py-2 text-sm font-medium text-orange-700 backdrop-blur">
-              {currentIndex + 1} / {kanjiDataset.length}
-            </div>
+
+          <div className="grid grid-cols-3 gap-2 rounded-2xl bg-gray-100 p-1">
+            {modes.map((item) => {
+              const Icon = item.icon
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setMode(item.id)}
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition ${
+                    mode === item.id ? 'bg-white text-violet-700 shadow-sm' : 'text-gray-500'
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </button>
+              )
+            })}
           </div>
         </div>
+      </div>
 
-    {mode === 'learn' && (
-    <form onSubmit={handleSearch} className="rounded-2xl border border-orange-200 bg-white/90 p-4 sm:p-5">
-        <p className="text-sm font-medium text-gray-700">Search Kanji</p>
-        <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-        <input
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Ví dụ: 学 hoặc 国"
-            className="w-full rounded-xl border border-orange-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
-        />
-        <button
-            type="submit"
-            className="rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:from-orange-600 hover:to-amber-600"
-        >
-            Search
-        </button>
-        </div>
-        {searchMessage && <p className="mt-3 text-sm text-red-600">{searchMessage}</p>}
-    </form>
-    )}
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${currentKanji.kanji}-${currentIndex}`}
-            initial={{ opacity: 0, y: 16, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="space-y-6 rounded-3xl border border-orange-100 bg-white/90 p-6 shadow-[0_24px_45px_-28px_rgba(194,65,12,0.5)] backdrop-blur sm:p-8"
-          >
-            <div className="flex justify-center">
-              <div className="inline-flex min-h-44 min-w-44 items-center justify-center rounded-3xl border border-orange-100 bg-gradient-to-br from-white to-orange-50 px-10 py-6 text-center text-7xl font-bold text-gray-900 shadow-inner sm:min-h-52 sm:min-w-52 sm:text-8xl">
-                {currentKanji.kanji}
-              </div>
+      {mode === 'explore' ? (
+        <div className="rounded-3xl border border-white bg-white/90 p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <BookOpen className="h-6 w-6 text-violet-600" />
+            <div>
+              <h2 className="text-xl font-bold text-gray-950">Explore JLPT Kanji</h2>
+              <p className="text-sm text-gray-500">Select a card to practice it with a canvas template.</p>
             </div>
-
-            {mode === 'learn' ? (
-              <>
-                <div className="grid gap-3 rounded-2xl bg-orange-50/70 p-4 text-sm text-gray-700 sm:grid-cols-2">
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {practiceKanji.map((item) => (
+              <button
+                key={item.kanji}
+                type="button"
+                onClick={() => selectPracticeKanji(item.kanji)}
+                className="rounded-3xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:bg-violet-50"
+              >
+                <div className="flex items-start justify-between">
+                  <p className="font-japanese text-5xl font-bold text-gray-950">{item.kanji}</p>
+                  <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-orange-600">{item.jlpt}</span>
+                </div>
+                <p className="mt-4 text-sm font-bold text-gray-950">{item.meaning}</p>
+                <p className="mt-1 text-xs text-gray-500">
+                  {item.onyomi} · {item.kunyomi} · {item.strokes} strokes
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="grid gap-6 xl:grid-cols-[290px_minmax(0,1fr)_360px]">
+          <KanjiInfoPanel recent={recent} onSelectSuggested={selectPracticeKanji} />
+          <section className="space-y-4">
+            {mode === 'practice' ? (
+              <div className="rounded-3xl border border-violet-100 bg-violet-50/80 p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-500">Onyomi</p>
-                    <p className="mt-1 text-base font-medium text-gray-900">{currentKanji.onyomi.join(', ') || '-'}</p>
+                    <p className="text-sm font-bold text-violet-900">Practice target</p>
+                    <p className="mt-1 text-sm text-violet-700">
+                      {targetInfo.meaning} · {targetInfo.onyomi} · {targetInfo.kunyomi} · {targetInfo.strokes} strokes · {targetInfo.jlpt}
+                    </p>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-500">Kunyomi</p>
-                    <p className="mt-1 text-base font-medium text-gray-900">{currentKanji.kunyomi.join(', ') || '-'}</p>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-500">Meaning (Vietnamese)</p>
-                    <p className="mt-1 text-base font-medium text-gray-900">{currentKanji.meaning_vi || '-'}</p>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-500">Example sentence</p>
-                    <p className="mt-1 text-base font-medium text-gray-900">{currentKanji.example || '-'}</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={handlePlayAudio}
-                    className="inline-flex items-center rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800"
-                  >
-                    🔊 Play Audio
-                  </button>
-                </div>
-
-                <div className="space-y-3">
-                  <label htmlFor="reading" className="text-sm font-medium text-gray-700">
-                    Type reading
-                  </label>
-                  <div className="flex flex-col gap-3 sm:flex-row">
-                    <input
-                      id="reading"
-                      value={readingInput}
-                      onChange={(event) => setReadingInput(event.target.value)}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                          event.preventDefault()
-                          handleCheckReading()
-                        }
-                      }}
-                      placeholder="Nhập hiragana hoặc romaji"
-                      className="w-full rounded-xl border border-orange-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleCheckReading}
-                      className="rounded-xl border border-orange-200 bg-orange-100 px-4 py-3 text-sm font-semibold text-orange-800 transition hover:bg-orange-200"
-                    >
-                      Check Reading
-                    </button>
-                  </div>
-
-                  {readingFeedback && (
-                    <div
-                      className={`rounded-xl border px-4 py-3 text-sm font-medium ${
-                        readingFeedback.type === 'success'
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                          : 'border-red-200 bg-red-50 text-red-700'
-                      }`}
-                    >
-                      {readingFeedback.message}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={handleNextKanji}
-                    className="rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:from-orange-600 hover:to-amber-600"
-                  >
-                    Next Kanji
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-gray-800">Type the reading!</p>
-                </div>
-
-                <div className="space-y-3">
                   <input
-                    value={testInput}
-                    onChange={(event) => setTestInput(event.target.value)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter') {
-                        event.preventDefault()
-                        handleCheckTestReading()
-                      }
+                    value={targetKanji}
+                    onChange={(event) => {
+                      setTargetKanji(event.target.value.slice(0, 1) || targetInfo.kanji)
+                      setPracticeFeedback('')
                     }}
-                    placeholder="Enter reading (hiragana or romaji)"
-                    className="w-full rounded-xl border border-orange-200 bg-white px-4 py-3 text-gray-900 outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+                    className="h-12 w-24 rounded-2xl border border-violet-200 bg-white text-center font-japanese text-2xl font-bold text-gray-950 outline-none focus:ring-4 focus:ring-violet-100"
+                    aria-label="Practice kanji"
                   />
-
-                  <div className="flex flex-wrap justify-center gap-3">
-                    <button
-                      type="button"
-                      onClick={handleCheckTestReading}
-                      className="rounded-xl border border-orange-200 bg-orange-100 px-5 py-3 text-sm font-semibold text-orange-800 transition hover:bg-orange-200"
-                    >
-                      Check
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleSkipTest}
-                      className="rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                    >
-                      Skip
-                    </button>
-                    {testFeedback?.isCorrect && (
-                      <button
-                        type="button"
-                        onClick={handleNextKanji}
-                        className="rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:from-orange-600 hover:to-amber-600"
-                      >
-                        Next Kanji
-                      </button>
-                    )}
-                  </div>
                 </div>
-
-                {testFeedback && (
-                  <div
-                    className={`rounded-xl border px-4 py-4 text-sm ${
-                      testFeedback.type === 'success'
-                        ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                        : 'border-red-200 bg-red-50 text-red-700'
-                    }`}
-                  >
-                    <p className="font-semibold">{testFeedback.message}</p>
-                    <div className="mt-2 space-y-1 text-gray-800">
-                      {!testFeedback.isCorrect && <p className="font-medium">Correct answer:</p>}
-                      <p><span className="font-semibold">Onyomi:</span> {currentKanji.onyomi.join(', ') || '-'}</p>
-                      <p><span className="font-semibold">Kunyomi:</span> {currentKanji.kunyomi.join(', ') || '-'}</p>
-                      {testFeedback.isCorrect && (
-                        <p><span className="font-semibold">Meaning:</span> {currentKanji.meaning_vi || '-'}</p>
-                      )}
-                    </div>
+                {practiceFeedback && (
+                  <div className="mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-violet-800">
+                    {practiceFeedback}
                   </div>
                 )}
-              </>
+              </div>
+            ) : (
+              <div className="rounded-3xl border border-violet-100 bg-violet-50/80 px-5 py-4 text-sm font-medium text-violet-800">
+                Blank canvas recognition uses demo predictions until a real handwriting model is connected.
+              </div>
             )}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+
+            <KanjiCanvas
+              ref={canvasRef}
+              mode={canvasMode}
+              templateKanji={targetKanji}
+              disabled={status === 'loading'}
+              onRecognize={recognize}
+              onStrokeChange={() => status === 'empty' && setStatus('idle')}
+            />
+          </section>
+          <PredictionResult predictions={predictions} status={status} error={error} isDemo={isDemo} />
+        </div>
+      )}
     </motion.div>
   )
 }

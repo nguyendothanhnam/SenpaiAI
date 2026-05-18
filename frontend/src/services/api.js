@@ -88,6 +88,10 @@ export const gameAPI = {
   getKanji: () => api.get('/game/kanji'),
 }
 
+export const kanjiRecognitionAPI = {
+  recognize: (data) => api.post('/api/kanji/recognize', data),
+}
+
 export const getQuiz = () => gameAPI.getQuiz()
 export const uploadQuiz = (file) => gameAPI.uploadQuiz(file)
 export const createQuiz = (data) => gameAPI.createQuiz(data)
