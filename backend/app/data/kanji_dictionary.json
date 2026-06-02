@@ -1,0 +1,3412 @@
+[
+  {
+    "kanji": "日",
+    "meaning": "ngày, mặt trời",
+    "meaning_vi": "ngày, mặt trời",
+    "onyomi": [
+      "ニチ",
+      "ジツ"
+    ],
+    "kunyomi": [
+      "ひ",
+      "び",
+      "か"
+    ],
+    "jlpt": "N5",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "今日は日曜日です。",
+        "reading": "きょう は にちようび です",
+        "meaning": "ngày, mặt trời"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "一",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "国",
+    "meaning": "đất nước",
+    "meaning_vi": "đất nước",
+    "onyomi": [
+      "コク"
+    ],
+    "kunyomi": [
+      "くに"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "日本はきれいな国です。",
+        "reading": "にほん は きれいな くに です",
+        "meaning": "đất nước"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "人",
+    "meaning": "người",
+    "meaning_vi": "người",
+    "onyomi": [
+      "ジン",
+      "ニン"
+    ],
+    "kunyomi": [
+      "ひと"
+    ],
+    "jlpt": "N5",
+    "strokes": 2,
+    "stroke_count": 2,
+    "examples": [
+      {
+        "word": "あの人は私の友だちです。",
+        "reading": "あの ひと は わたし の ともだち です",
+        "meaning": "người"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "年",
+    "meaning": "năm",
+    "meaning_vi": "năm",
+    "onyomi": [
+      "ネン"
+    ],
+    "kunyomi": [
+      "とし"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "来年日本へ行きたいです。",
+        "reading": "らいねん にほん へ いきたい です",
+        "meaning": "năm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "大",
+    "meaning": "to, lớn",
+    "meaning_vi": "to, lớn",
+    "onyomi": [
+      "ダイ",
+      "タイ"
+    ],
+    "kunyomi": [
+      "おお.きい"
+    ],
+    "jlpt": "N5",
+    "strokes": 3,
+    "stroke_count": 3,
+    "examples": [
+      {
+        "word": "この部屋は大きいです。",
+        "reading": "この へや は おおきい です",
+        "meaning": "to, lớn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "十",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "二",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "本",
+    "meaning": "sách, gốc",
+    "meaning_vi": "sách, gốc",
+    "onyomi": [
+      "ホン"
+    ],
+    "kunyomi": [
+      "もと"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "本を二冊買いました。",
+        "reading": "ほん を にさつ かいました",
+        "meaning": "sách, gốc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "中",
+    "meaning": "trong, ở giữa",
+    "meaning_vi": "trong, ở giữa",
+    "onyomi": [
+      "チュウ"
+    ],
+    "kunyomi": [
+      "なか"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "箱の中に手紙があります。",
+        "reading": "はこ の なか に てがみ が あります",
+        "meaning": "trong, ở giữa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "長",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "出",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "三",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "時",
+    "meaning": "giờ, thời gian",
+    "meaning_vi": "giờ, thời gian",
+    "onyomi": [
+      "ジ"
+    ],
+    "kunyomi": [
+      "とき"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "七時に起きます。",
+        "reading": "しちじ に おきます",
+        "meaning": "giờ, thời gian"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "行",
+    "meaning": "đi",
+    "meaning_vi": "đi",
+    "onyomi": [
+      "コウ",
+      "ギョウ"
+    ],
+    "kunyomi": [
+      "い.く",
+      "ゆ.く"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "毎朝学校へ行きます。",
+        "reading": "まいあさ がっこう へ いきます",
+        "meaning": "đi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "見",
+    "meaning": "xem, nhìn",
+    "meaning_vi": "xem, nhìn",
+    "onyomi": [
+      "ケン"
+    ],
+    "kunyomi": [
+      "み.る"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "テレビでニュースを見ます。",
+        "reading": "てれび で にゅーす を みます",
+        "meaning": "xem, nhìn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "月",
+    "meaning": "tháng, mặt trăng",
+    "meaning_vi": "tháng, mặt trăng",
+    "onyomi": [
+      "ゲツ",
+      "ガツ"
+    ],
+    "kunyomi": [
+      "つき"
+    ],
+    "jlpt": "N5",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "来月東京へ行きます。",
+        "reading": "らいげつ とうきょう へ いきます",
+        "meaning": "tháng, mặt trăng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "後",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "前",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "生",
+    "meaning": "sống, sinh ra",
+    "meaning_vi": "sống, sinh ra",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "い.きる",
+      "う.まれる"
+    ],
+    "jlpt": "N5",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "日本で生まれました。",
+        "reading": "にほん で うまれました",
+        "meaning": "sống, sinh ra"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "五",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "間",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "上",
+    "meaning": "trên, lên",
+    "meaning_vi": "trên, lên",
+    "onyomi": [
+      "ジョウ"
+    ],
+    "kunyomi": [
+      "うえ",
+      "あ.がる"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "机の上に本があります。",
+        "reading": "つくえ の うえ に ほん が あります",
+        "meaning": "trên, lên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "東",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "四",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "今",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "金",
+    "meaning": "tiền, vàng",
+    "meaning_vi": "tiền, vàng",
+    "onyomi": [
+      "キン",
+      "コン"
+    ],
+    "kunyomi": [
+      "かね"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "金曜日は仕事が早く終わります。",
+        "reading": "きんようび は しごと が はやく おわります",
+        "meaning": "tiền, vàng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "九",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "入",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "学",
+    "meaning": "học",
+    "meaning_vi": "học",
+    "onyomi": [
+      "ガク"
+    ],
+    "kunyomi": [
+      "まな.ぶ"
+    ],
+    "jlpt": "N5",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "毎日日本語を学びます。",
+        "reading": "まいにち にほんご を まなびます",
+        "meaning": "học"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "高",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "円",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "子",
+    "meaning": "trẻ em, con",
+    "meaning_vi": "trẻ em, con",
+    "onyomi": [
+      "シ",
+      "ス"
+    ],
+    "kunyomi": [
+      "こ"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "子どもはもう寝ました。",
+        "reading": "こども は もう ねました",
+        "meaning": "trẻ em, con"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "外",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "八",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "六",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "下",
+    "meaning": "dưới, xuống",
+    "meaning_vi": "dưới, xuống",
+    "onyomi": [
+      "カ",
+      "ゲ"
+    ],
+    "kunyomi": [
+      "した",
+      "さ.がる"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "かばんは椅子の下です。",
+        "reading": "かばん は いす の した です",
+        "meaning": "dưới, xuống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "来",
+    "meaning": "đến",
+    "meaning_vi": "đến",
+    "onyomi": [
+      "ライ"
+    ],
+    "kunyomi": [
+      "く.る"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "友だちが家に来ます。",
+        "reading": "ともだち が いえ に きます",
+        "meaning": "đến"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "気",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "小",
+    "meaning": "nhỏ",
+    "meaning_vi": "nhỏ",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "ちい.さい"
+    ],
+    "jlpt": "N5",
+    "strokes": 3,
+    "stroke_count": 3,
+    "examples": [
+      {
+        "word": "小さい犬が好きです。",
+        "reading": "ちいさい いぬ が すき です",
+        "meaning": "nhỏ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "七",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "山",
+    "meaning": "núi",
+    "meaning_vi": "núi",
+    "onyomi": [
+      "サン"
+    ],
+    "kunyomi": [
+      "やま"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "山の上は涼しいです。",
+        "reading": "やま の うえ は すずしい です",
+        "meaning": "núi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "話",
+    "meaning": "nói chuyện",
+    "meaning_vi": "nói chuyện",
+    "onyomi": [
+      "ワ"
+    ],
+    "kunyomi": [
+      "はな.す"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "日本語で話してください。",
+        "reading": "にほんご で はなして ください",
+        "meaning": "nói chuyện"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "女",
+    "meaning": "nữ, phụ nữ",
+    "meaning_vi": "nữ, phụ nữ",
+    "onyomi": [
+      "ジョ",
+      "ニョ"
+    ],
+    "kunyomi": [
+      "おんな"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "女の人は駅で待っています。",
+        "reading": "おんな の ひと は えき で まって います",
+        "meaning": "nữ, phụ nữ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "北",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "午",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "百",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "書",
+    "meaning": "viết",
+    "meaning_vi": "viết",
+    "onyomi": [
+      "ショ"
+    ],
+    "kunyomi": [
+      "か.く"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "宿題をノートに書きます。",
+        "reading": "しゅくだい を のーと に かきます",
+        "meaning": "viết"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "先",
+    "meaning": "trước, trước tiên",
+    "meaning_vi": "trước, trước tiên",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "さき"
+    ],
+    "jlpt": "N5",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "先にご飯を食べます。",
+        "reading": "さき に ごはん を たべます",
+        "meaning": "trước, trước tiên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "名",
+    "meaning": "tên",
+    "meaning_vi": "tên",
+    "onyomi": [
+      "メイ",
+      "ミョウ"
+    ],
+    "kunyomi": [
+      "な"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "名前をここに書いてください。",
+        "reading": "なまえ を ここ に かいて ください",
+        "meaning": "tên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "川",
+    "meaning": "sông",
+    "meaning_vi": "sông",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "かわ"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "この川はきれいです。",
+        "reading": "この かわ は きれい です",
+        "meaning": "sông"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "千",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "水",
+    "meaning": "nước",
+    "meaning_vi": "nước",
+    "onyomi": [
+      "スイ"
+    ],
+    "kunyomi": [
+      "みず"
+    ],
+    "jlpt": "N5",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "水を一杯ください。",
+        "reading": "みず を いっぱい ください",
+        "meaning": "nước"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "半",
+    "meaning": "một nửa",
+    "meaning_vi": "một nửa",
+    "onyomi": [
+      "ハン"
+    ],
+    "kunyomi": [
+      "なか.ば"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "一時半に帰ります。",
+        "reading": "いちじ はん に かえります",
+        "meaning": "một nửa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "男",
+    "meaning": "nam, đàn ông",
+    "meaning_vi": "nam, đàn ông",
+    "onyomi": [
+      "ダン",
+      "ナン"
+    ],
+    "kunyomi": [
+      "おとこ"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "男の子は公園で遊んでいます。",
+        "reading": "おとこ の こ は こうえん で あそんで います",
+        "meaning": "nam, đàn ông"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "西",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "電",
+    "meaning": "điện",
+    "meaning_vi": "điện",
+    "onyomi": [
+      "デン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "電車で学校に通います。",
+        "reading": "でんしゃ で がっこう に かよいます",
+        "meaning": "điện"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "校",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "語",
+    "meaning": "language",
+    "meaning_vi": "language",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "土",
+    "meaning": "đất",
+    "meaning_vi": "đất",
+    "onyomi": [
+      "ド",
+      "ト"
+    ],
+    "kunyomi": [
+      "つち"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "庭に花の土を入れます。",
+        "reading": "にわ に はな の つち を いれます",
+        "meaning": "đất"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "木",
+    "meaning": "cây, gỗ",
+    "meaning_vi": "cây, gỗ",
+    "onyomi": [
+      "モク",
+      "ボク"
+    ],
+    "kunyomi": [
+      "き",
+      "こ"
+    ],
+    "jlpt": "N5",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "公園に大きい木があります。",
+        "reading": "こうえん に おおきい き が あります",
+        "meaning": "cây, gỗ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "聞",
+    "meaning": "nghe, hỏi",
+    "meaning_vi": "nghe, hỏi",
+    "onyomi": [
+      "ブン",
+      "モン"
+    ],
+    "kunyomi": [
+      "き.く"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "先生の話をよく聞きます。",
+        "reading": "せんせい の はなし を よく ききます",
+        "meaning": "nghe, hỏi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "食",
+    "meaning": "ăn",
+    "meaning_vi": "ăn",
+    "onyomi": [
+      "ショク"
+    ],
+    "kunyomi": [
+      "た.べる"
+    ],
+    "jlpt": "N5",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "毎朝パンを食べます。",
+        "reading": "まいあさ ぱん を たべます",
+        "meaning": "ăn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "車",
+    "meaning": "xe",
+    "meaning_vi": "xe",
+    "onyomi": [
+      "シャ"
+    ],
+    "kunyomi": [
+      "くるま"
+    ],
+    "jlpt": "N5",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "車で会社へ行きます。",
+        "reading": "くるま で かいしゃ へ いきます",
+        "meaning": "xe"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "何",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "南",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "万",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "毎",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "白",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "天",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "母",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "火",
+    "meaning": "lửa",
+    "meaning_vi": "lửa",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "ひ"
+    ],
+    "jlpt": "N5",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "火曜日にテストがあります。",
+        "reading": "かようび に てすと が あります",
+        "meaning": "lửa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "右",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "読",
+    "meaning": "đọc",
+    "meaning_vi": "đọc",
+    "onyomi": [
+      "ドク",
+      "トク"
+    ],
+    "kunyomi": [
+      "よ.む"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "毎晩本を読みます。",
+        "reading": "まいばん ほん を よみます",
+        "meaning": "đọc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "友",
+    "meaning": "bạn",
+    "meaning_vi": "bạn",
+    "onyomi": [
+      "ユウ"
+    ],
+    "kunyomi": [
+      "とも"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "友だちと映画を見ます。",
+        "reading": "ともだち と えいが を みます",
+        "meaning": "bạn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "左",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "休",
+    "meaning": "nghỉ",
+    "meaning_vi": "nghỉ",
+    "onyomi": [
+      "キュウ"
+    ],
+    "kunyomi": [
+      "やす.む"
+    ],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "日曜日は家で休みます。",
+        "reading": "にちようび は いえ で やすみます",
+        "meaning": "nghỉ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "父",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "雨",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N5",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "会",
+    "meaning": "gặp",
+    "meaning_vi": "gặp",
+    "onyomi": [
+      "カイ",
+      "エ"
+    ],
+    "kunyomi": [
+      "あ.う"
+    ],
+    "jlpt": "N4",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "明日先生に会います。",
+        "reading": "あした せんせい に あいます",
+        "meaning": "gặp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "同",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "事",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "自",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "社",
+    "meaning": "công ty, đền",
+    "meaning_vi": "công ty, đền",
+    "onyomi": [
+      "シャ"
+    ],
+    "kunyomi": [
+      "やしろ"
+    ],
+    "jlpt": "N4",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "兄は会社で働いています。",
+        "reading": "あに は かいしゃ で はたらいて います",
+        "meaning": "công ty, đền"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "発",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "者",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "地",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "業",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "方",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "新",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "場",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "員",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "立",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "開",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "手",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "力",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "問",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "代",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "明",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "動",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "京",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "目",
+    "meaning": "eye",
+    "meaning_vi": "eye",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "通",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "言",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "理",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "体",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "田",
+    "meaning": "ruộng",
+    "meaning_vi": "ruộng",
+    "onyomi": [
+      "デン"
+    ],
+    "kunyomi": [
+      "た"
+    ],
+    "jlpt": "N4",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "田中さんは先生です。",
+        "reading": "たなか さん は せんせい です",
+        "meaning": "ruộng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "主",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "題",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "意",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "不",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "作",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "用",
+    "meaning": "use",
+    "meaning_vi": "use",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "度",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "強",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "公",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "持",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "野",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "以",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "思",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "家",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "世",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "多",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "正",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "安",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "院",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "心",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "界",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "教",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "文",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "元",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "重",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "近",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "考",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "画",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "海",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "売",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "知",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "道",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "集",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "別",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "物",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "使",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "品",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "計",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "死",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "特",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "私",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "始",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "朝",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "運",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "終",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "台",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "広",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "住",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "真",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "有",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "口",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "少",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "町",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "料",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "工",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "建",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "空",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "急",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "止",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "送",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "切",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "転",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "研",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "足",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "究",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "楽",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "起",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "着",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "店",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "病",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "質",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "待",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "試",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "族",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "銀",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "早",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "映",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "親",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "験",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "英",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "医",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "仕",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "去",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "味",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "写",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "字",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "答",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "夜",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "音",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "注",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "帰",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "古",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "歌",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "買",
+    "meaning": "mua",
+    "meaning_vi": "mua",
+    "onyomi": [
+      "バイ"
+    ],
+    "kunyomi": [
+      "か.う"
+    ],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "スーパーで野菜を買います。",
+        "reading": "すーぱー で やさい を かいます",
+        "meaning": "mua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "悪",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "図",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "週",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "室",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "歩",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "風",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "紙",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "黒",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "花",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "春",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "赤",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "青",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "館",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "屋",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "色",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "走",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "秋",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "夏",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "習",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "駅",
+    "meaning": "ga",
+    "meaning_vi": "ga",
+    "onyomi": [
+      "エキ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "駅で友だちに会いました。",
+        "reading": "えき で ともだち に あいました",
+        "meaning": "ga"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "洋",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "旅",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "服",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "夕",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "借",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "曜",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "飲",
+    "meaning": "uống",
+    "meaning_vi": "uống",
+    "onyomi": [
+      "イン"
+    ],
+    "kunyomi": [
+      "の.む"
+    ],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [
+      {
+        "word": "水をたくさん飲んでください。",
+        "reading": "みず を たくさん のんで ください",
+        "meaning": "uống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "肉",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "貸",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "堂",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "鳥",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "飯",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "勉",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "冬",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "昼",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "茶",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "弟",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "牛",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "魚",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "兄",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "犬",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "妹",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "姉",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "漢",
+    "meaning": "",
+    "meaning_vi": "",
+    "onyomi": [],
+    "kunyomi": [],
+    "jlpt": "N4",
+    "strokes": null,
+    "stroke_count": null,
+    "examples": [],
+    "has_handwriting_data": false
+  }
+]

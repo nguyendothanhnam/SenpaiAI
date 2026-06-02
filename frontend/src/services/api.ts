@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -65,17 +65,45 @@ export const analysisAPI = {
 }
 
 export const libraryAPI = {
-  getDocuments: (documentType?: string, jlptLevel?: string, limit = 50, offset = 0) =>
-    api.get(`/library/documents?document_type=${documentType || ''}&jlpt_level=${jlptLevel || ''}&limit=${limit}&offset=${offset}`),
+  getDocuments: (params: { document_type?: string; jlpt_level?: string; tag?: string; sort?: string; limit?: number; offset?: number } = {}) =>
+    api.get('/library/documents', { params }),
   getDocument: (documentId: number) => api.get(`/library/documents/${documentId}`),
-  searchDocuments: (query: string, documentType?: string, jlptLevel?: string, limit = 10) =>
-    api.post('/library/search', { query, document_type: documentType, jlpt_level: jlptLevel, limit }),
+  createDocument: (data: any) => api.post('/library/documents', data),
+  updateDocument: (documentId: number, data: any) => api.put(`/library/documents/${documentId}`, data),
+  deleteDocument: (documentId: number) => api.delete(`/library/documents/${documentId}`),
+  fetchUrl: (url: string) => api.post('/library/fetch-url', { url }),
+  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; limit?: number; offset?: number }) =>
+    api.post('/library/search', data),
   getCategories: () => api.get('/library/categories'),
   getStats: () => api.get('/library/stats'),
+  quiz: (params: { mode?: string; jlpt?: string; count?: number } = {}) =>
+    api.get('/library/quiz', { params }),
 }
 
 export const kanjiRecognitionAPI = {
-  recognize: (data: { image_base64: string; strokes: any[]; width: number; height: number }) =>
-    api.post('/api/kanji/recognize', data),
+  recognize: (data: { image_data: string; strokes?: any[]; target_kanji?: string | null; jlpt_level?: string | null }) =>
+    api.post('/kanji/recognize', data),
+  correct: (data: { image_data: string; strokes?: any[]; predicted_kanji?: string | null; correct_kanji: string; jlpt_level?: string | null }) =>
+    api.post('/kanji/correction', data),
+  getModelInfo: () => api.get('/kanji/model-info'),
+}
+
+export const kanjiDataAPI = {
+  list: (params: { jlpt?: string; limit?: number; offset?: number; search?: string } = {}) =>
+    api.get('/kanji/list', { params }),
+  get: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}`),
+  quiz: (params: { mode?: string; jlpt?: string; count?: number } = {}) =>
+    api.get('/kanji/quiz', { params }),
+  matchingGrid: (params: { jlpt?: string; count?: number } = {}) =>
+    api.get('/kanji/matching-grid', { params }),
+  wordMatchingGrid: (params: { jlpt?: string; count?: number } = {}) =>
+    api.get('/kanji/word-matching-grid', { params }),
+  getDictionaryStatus: () => api.get('/kanji/dictionary-status'),
+  getSupported: () => api.get('/kanji/supported'),
+  getStrokeOrder: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}/stroke-order`),
+  getStrokes: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}/strokes`),
+  getMetadata: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}/metadata`),
+  getHandwritingSamples: (kanji: string, limit = 5) =>
+    api.get(`/kanji/${encodeURIComponent(kanji)}/handwriting-samples`, { params: { limit } }),
 }
 

@@ -48,7 +48,7 @@ export default function Layout({ children }: LayoutProps) {
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-lg font-bold leading-tight text-white">SenpaiAI</h1>
+                <h1 className="text-lg font-bold leading-tight text-white">HineGoldAI</h1>
                 <p className="text-[10px] font-medium text-white/80">HineGoldAI</p>
               </div>
             </div>
@@ -115,7 +115,7 @@ export default function Layout({ children }: LayoutProps) {
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-lg font-bold leading-tight text-white">SenpaiAI</h1>
+                <h1 className="text-lg font-bold leading-tight text-white">HineGoldAI</h1>
                 <p className="text-[10px] font-medium text-white/80">HineGoldAI</p>
               </div>
             </div>

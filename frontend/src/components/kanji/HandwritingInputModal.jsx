@@ -4,6 +4,25 @@ import KanjiCanvas from './KanjiCanvas'
 import PredictionResult from './PredictionResult'
 import { kanjiRecognitionAPI } from '../../services/api'
 
+function readableError(value, fallback = 'Kanji not recognized') {
+  if (!value) return fallback
+  if (typeof value === 'string') return value
+  if (Array.isArray(value)) {
+    return value.map((item) => readableError(item, '')).filter(Boolean).join('; ') || fallback
+  }
+  if (typeof value === 'object') {
+    if (typeof value.msg === 'string') return value.msg
+    if (typeof value.message === 'string') return value.message
+    if (typeof value.detail === 'string') return value.detail
+    try {
+      return JSON.stringify(value)
+    } catch {
+      return fallback
+    }
+  }
+  return String(value)
+}
+
 export default function HandwritingInputModal({ open, onClose, onSelect }) {
   const canvasRef = useRef(null)
   const [status, setStatus] = useState('idle')
@@ -26,10 +45,9 @@ export default function HandwritingInputModal({ open, onClose, onSelect }) {
 
     try {
       const response = await kanjiRecognitionAPI.recognize({
-        image_base64: canvasRef.current.getImage(),
-        strokes: canvasRef.current.getStrokes(),
-        width: 720,
-        height: 520,
+        image_data: canvasRef.current.getImage(),
+        strokes: canvasRef.current.getStrokes() || [],
+        target_kanji: null,
       })
       const nextPredictions = response.data?.predictions || []
       setIsDemo(Boolean(response.data?.isDemo))
@@ -45,7 +63,7 @@ export default function HandwritingInputModal({ open, onClose, onSelect }) {
     } catch (requestError) {
       setStatus('error')
       setPredictions([])
-      setError(requestError?.response?.data?.detail || 'Kanji not recognized')
+      setError(readableError(requestError?.response?.data?.detail || requestError?.message))
     }
   }
 

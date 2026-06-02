@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -53,13 +53,16 @@ export const analysisAPI = {
 }
 
 export const libraryAPI = {
-  getDocuments: (documentType, jlptLevel, limit = 50, offset = 0) =>
-    api.get(`/library/documents?document_type=${documentType || ''}&jlpt_level=${jlptLevel || ''}&limit=${limit}&offset=${offset}`),
+  getDocuments: (params = {}) => api.get('/library/documents', { params }),
   getDocument: (documentId) => api.get(`/library/documents/${documentId}`),
-  searchDocuments: (query, documentType, jlptLevel, limit = 10) =>
-    api.post('/library/search', { query, document_type: documentType, jlpt_level: jlptLevel, limit }),
+  createDocument: (data) => api.post('/library/documents', data),
+  updateDocument: (documentId, data) => api.put(`/library/documents/${documentId}`, data),
+  deleteDocument: (documentId) => api.delete(`/library/documents/${documentId}`),
+  fetchUrl: (url) => api.post('/library/fetch-url', { url }),
+  searchDocuments: (data) => api.post('/library/search', data),
   getCategories: () => api.get('/library/categories'),
   getStats: () => api.get('/library/stats'),
+  quiz: (params = {}) => api.get('/library/quiz', { params }),
 }
 
 export const gameAPI = {
@@ -89,7 +92,23 @@ export const gameAPI = {
 }
 
 export const kanjiRecognitionAPI = {
-  recognize: (data) => api.post('/api/kanji/recognize', data),
+  recognize: (data) => api.post('/kanji/recognize', data),
+  correct: (data) => api.post('/kanji/correction', data),
+  getModelInfo: () => api.get('/kanji/model-info'),
+}
+
+export const kanjiDataAPI = {
+  list: (params = {}) => api.get('/kanji/list', { params }),
+  get: (kanji) => api.get(`/kanji/${encodeURIComponent(kanji)}`),
+  quiz: (params = {}) => api.get('/kanji/quiz', { params }),
+  matchingGrid: (params = {}) => api.get('/kanji/matching-grid', { params }),
+  wordMatchingGrid: (params = {}) => api.get('/kanji/word-matching-grid', { params }),
+  getDictionaryStatus: () => api.get('/kanji/dictionary-status'),
+  getSupported: () => api.get('/kanji/supported'),
+  getStrokeOrder: (kanji) => api.get(`/kanji/${encodeURIComponent(kanji)}/stroke-order`),
+  getStrokes: (kanji) => api.get(`/kanji/${encodeURIComponent(kanji)}/strokes`),
+  getMetadata: (kanji) => api.get(`/kanji/${encodeURIComponent(kanji)}/metadata`),
+  getHandwritingSamples: (kanji, limit = 5) => api.get(`/kanji/${encodeURIComponent(kanji)}/handwriting-samples`, { params: { limit } }),
 }
 
 export const getQuiz = () => gameAPI.getQuiz()

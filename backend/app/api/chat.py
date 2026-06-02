@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import time
+import re
 
 from ..core.database import get_db
 from ..core.auth import get_current_active_user
@@ -13,9 +14,39 @@ from ..models.schemas import (
     ErrorResponse
 )
 from ..services.llm_service import japanese_service
+from ..services import vocab_mcq_service
+from ..services.kanji_dictionary_service import kanji_dictionary_service
 from ..services.vector_db import chroma_service
 
 router = APIRouter(prefix="/chat", tags=["chat"])
+
+
+def find_single_kanji_request(text: str) -> str | None:
+    if not re.search(r"\bkanji\b|漢字|chữ", text, re.IGNORECASE):
+        return None
+    matches = re.findall(r"[\u4e00-\u9fff]", text)
+    return matches[0] if len(set(matches)) == 1 else None
+
+
+def build_kanji_answer(entry: dict) -> str:
+    examples = entry.get("examples") or []
+    example_lines = []
+    for example in examples[:3]:
+        word = example.get("word") or ""
+        reading = example.get("reading") or ""
+        meaning = example.get("meaning") or ""
+        example_lines.append(f"- {word} ({reading}): {meaning}".strip())
+    examples_text = "\n".join(example_lines) if example_lines else "- Chưa có ví dụ trong từ điển cục bộ."
+    return (
+        f"Kanji {entry['kanji']}\n"
+        f"Nghĩa: {entry.get('meaning') or entry.get('meaning_vi') or 'Chưa có dữ liệu'}\n"
+        f"Onyomi: {', '.join(entry.get('onyomi') or []) or '-'}\n"
+        f"Kunyomi: {', '.join(entry.get('kunyomi') or []) or '-'}\n"
+        f"JLPT: {entry.get('jlpt') or '-'}\n"
+        f"Số nét: {entry.get('strokes') or entry.get('stroke_count') or '-'}\n"
+        f"Ví dụ:\n{examples_text}\n\n"
+        "Dữ liệu trên lấy từ từ điển Kanji cục bộ, không phải do LLM tự đoán."
+    )
 
 @router.post("/message", response_model=ChatResponse)
 async def send_message(
@@ -27,6 +58,57 @@ async def send_message(
     
     try:
         start_time = time.time()
+
+        requested_kanji = find_single_kanji_request(message.message)
+        if requested_kanji:
+            entry = kanji_dictionary_service.get_entry(requested_kanji)
+            if entry:
+                answer = build_kanji_answer(entry)
+                sources = [{"title": "Local Kanji dictionary", "type": "kanji_dictionary", "relevance": 1.0}]
+                chat_entry = ChatHistory(
+                    user_id=current_user.id,
+                    question=message.message,
+                    answer=answer,
+                    jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                    grammar_points=[],
+                    translation=None,
+                    sources=sources
+                )
+                db.add(chat_entry)
+                db.commit()
+                return ChatResponse(
+                    answer=answer,
+                    jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                    grammar_points=[],
+                    translation=None,
+                    sources=sources,
+                    response_time=time.time() - start_time
+                )
+
+        mcq_answer = vocab_mcq_service.try_answer(message.message)
+        if mcq_answer:
+            sources = [{"title": "Local JLPT vocabulary dictionary", "type": mcq_answer.intent, "relevance": 1.0}]
+            chat_entry = ChatHistory(
+                user_id=current_user.id,
+                question=message.message,
+                answer=mcq_answer.answer,
+                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=sources
+            )
+
+            db.add(chat_entry)
+            db.commit()
+
+            return ChatResponse(
+                answer=mcq_answer.answer,
+                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=sources,
+                response_time=time.time() - start_time
+            )
         
         # Get relevant context using RAG
         context = chroma_service.get_relevant_context(

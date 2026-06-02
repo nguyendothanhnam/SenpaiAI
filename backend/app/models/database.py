@@ -76,6 +76,7 @@ class Document(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
+    description = Column(Text)
     content = Column(Text, nullable=False)
     document_type = Column(String, nullable=False)  # "grammar", "vocabulary", "lesson", "example"
     jlpt_level = Column(String)  # N5-N1

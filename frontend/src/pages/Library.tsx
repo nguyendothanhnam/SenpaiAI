@@ -1,371 +1,651 @@
-import { useState } from 'react'
-import { useQuery } from 'react-query'
-import { useForm } from 'react-hook-form'
-import { 
-  Library as LibraryIcon, 
-  Search, 
-  BookOpen, 
-  Tag, 
+import { useEffect, useMemo, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  AlertTriangle,
+  ArrowDownAZ,
+  BookOpen,
   Calendar,
+  Database,
   ExternalLink,
-  Loader2
+  FilePlus2,
+  Layers3,
+  Library as LibraryIcon,
+  Pencil,
+  Search,
+  Tags,
+  Trash2,
+  X,
 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { libraryAPI } from '../services/api'
 import { formatDate } from '../utils/helpers'
-import LoadingSpinner from '../components/LoadingSpinner'
 
-interface Document {
+interface LibraryDocument {
   id: number
   title: string
+  description?: string | null
   content: string
   document_type: string
-  jlpt_level?: string
+  jlpt_level?: string | null
   tags: string[]
-  source_url?: string
+  source_url?: string | null
   created_at: string
+  updated_at?: string | null
+  relevance_score?: number | null
 }
 
-interface SearchFormData {
-  query: string
-  document_type: string
-  jlpt_level: string
+interface DocumentListResponse {
+  items: LibraryDocument[]
+  total: number
+  limit: number
+  offset: number
 }
 
-export default function Library() {
-  const [searchResults, setSearchResults] = useState<Document[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  
-  const searchForm = useForm<SearchFormData>({
-    defaultValues: {
-      document_type: '',
-      jlpt_level: '',
-    }
-  })
+interface SearchResponse {
+  results: LibraryDocument[]
+}
 
-  const { data: documents, isLoading: isLoadingDocuments } = useQuery(
-    ['documents'],
-    () => libraryAPI.getDocuments().then(res => res.data),
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
+interface LibraryStats {
+  total_documents: number
+  document_types: Record<string, number> | number
+  jlpt_levels: Record<string, number> | number
+  vector_chunks: number
+}
 
-  const { data: categories } = useQuery(
-    ['categories'],
-    () => libraryAPI.getCategories().then(res => res.data),
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
+interface Categories {
+  document_types: string[]
+  jlpt_levels: string[]
+}
 
-  const { data: stats } = useQuery(
-    ['libraryStats'],
-    () => libraryAPI.getStats().then(res => res.data),
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
+const PAGE_SIZE = 12
+const fallbackTypes = ['vocabulary', 'grammar', 'lesson', 'culture', 'example']
+const fallbackJlpt = ['N5', 'N4', 'N3', 'N2', 'N1']
 
-  const handleSearch = async (data: SearchFormData) => {
-    if (!data.query.trim()) return
-    
-    setIsSearching(true)
+const emptyForm = {
+  title: '',
+  document_type: 'grammar',
+  jlpt_level: '',
+  tags: '',
+  source_url: '',
+  content: '',
+}
+
+type DocumentForm = typeof emptyForm
+
+function parseTags(tags: string) {
+  return tags
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter(Boolean)
+}
+
+function validateDocument(form: DocumentForm) {
+  const errors: Partial<Record<keyof DocumentForm, string>> = {}
+  if (!form.title.trim()) errors.title = 'Title is required'
+  if (!form.document_type.trim()) errors.document_type = 'Document type is required'
+  if (!form.content.trim()) errors.content = 'Content is required'
+  if (form.source_url.trim()) {
     try {
-      const response = await libraryAPI.searchDocuments(
-        data.query,
-        data.document_type || undefined,
-        data.jlpt_level || undefined
-      )
-      setSearchResults(response.data.documents)
-    } catch (error) {
-      console.error('Search failed:', error)
-    } finally {
-      setIsSearching(false)
+      const parsed = new URL(form.source_url.trim())
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
+        throw new Error('Unsupported protocol')
+      }
+    } catch {
+      errors.source_url = 'Source URL must start with http:// or https://'
     }
   }
+  return { success: Object.keys(errors).length === 0, errors }
+}
 
-  const clearSearch = () => {
-    setSearchResults([])
-    searchForm.reset()
+function buildPayload(form: DocumentForm) {
+  return {
+    title: form.title.trim(),
+    document_type: form.document_type.trim(),
+    jlpt_level: form.jlpt_level || null,
+    tags: parseTags(form.tags),
+    source_url: form.source_url.trim() || null,
+    content: form.content.trim(),
   }
+}
 
-  const displayDocuments = searchResults.length > 0 ? searchResults : documents || []
+function useDebouncedValue<T>(value: T, delay = 400) {
+  const [debounced, setDebounced] = useState(value)
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebounced(value), delay)
+    return () => window.clearTimeout(timer)
+  }, [value, delay])
+  return debounced
+}
 
+function SkeletonCard() {
+  return <div className="h-28 animate-pulse rounded-2xl border border-violet-100 bg-white/70" />
+}
+
+function StatCard({ label, value, icon: Icon, loading }: { label: string; value: number; icon: any; loading: boolean }) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center space-x-4">
-        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
-          <LibraryIcon className="h-6 w-6 text-white" />
-        </div>
+    <motion.div whileHover={{ y: -3 }} className="rounded-2xl border border-white/70 bg-white/75 p-5 shadow-sm backdrop-blur">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Learning Library</h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Browse and search Japanese learning materials
-          </p>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-violet-600">{label}</p>
+          {loading ? <div className="mt-3 h-8 w-20 animate-pulse rounded-lg bg-violet-100" /> : <p className="mt-2 text-3xl font-bold text-gray-950">{value.toLocaleString()}</p>}
+        </div>
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-700">
+          <Icon className="h-5 w-5" />
         </div>
       </div>
+    </motion.div>
+  )
+}
 
-      {/* Stats */}
-      {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="card-content">
-              <div className="flex items-center">
-                <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                  <BookOpen className="h-6 w-6 text-orange-600" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-600">Total Documents</p>
-                  <p className="text-2xl font-bold text-orange-900">{stats.total_documents}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="card-content">
-              <div className="flex items-center">
-                <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                  <Tag className="h-6 w-6 text-amber-600" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-600">Document Types</p>
-                  <p className="text-2xl font-bold text-amber-900">
-                    {Object.keys(stats.documents_by_type).length}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="card-content">
-              <div className="flex items-center">
-                <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                  <Calendar className="h-6 w-6 text-orange-600" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-600">JLPT Levels</p>
-                  <p className="text-2xl font-bold text-orange-900">
-                    {Object.keys(stats.documents_by_jlpt).length}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="card-content">
-              <div className="flex items-center">
-                <div className="h-12 w-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                  <Search className="h-6 w-6 text-amber-600" />
-                </div>
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-600">Vector Chunks</p>
-                  <p className="text-2xl font-bold text-amber-900">
-                    {stats.vector_db_stats?.total_documents || 0}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+function statCount(value: Record<string, number> | number | undefined) {
+  if (typeof value === 'number') return value
+  if (value && typeof value === 'object') return Object.keys(value).length
+  return 0
+}
 
-      {/* Search */}
-      <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-        <div className="card-header border-b border-orange-100">
-          <h2 className="card-title text-orange-900">Search Documents</h2>
-          <p className="card-description text-gray-600">
-            Find specific learning materials using semantic search
-          </p>
-        </div>
-        <div className="card-content">
-          <form onSubmit={searchForm.handleSubmit(handleSearch)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label htmlFor="query" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Search Query
-                </label>
-                <input
-                  {...searchForm.register('query', { required: 'Search query is required' })}
-                  type="text"
-                  className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
-                  placeholder="Search for topics, grammar, vocabulary..."
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="document_type" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Document Type
-                </label>
-                <select
-                  {...searchForm.register('document_type')}
-                  className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
-                >
-                  <option value="">All Types</option>
-                  {categories?.document_types.map((type: string) => (
-                    <option key={type} value={type}>
-                      {type.charAt(0).toUpperCase() + type.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label htmlFor="jlpt_level" className="block text-sm font-semibold text-gray-700 mb-2">
-                  JLPT Level
-                </label>
-                <select
-                  {...searchForm.register('jlpt_level')}
-                  className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
-                >
-                  <option value="">All Levels</option>
-                  {categories?.jlpt_levels_ordered.map((level: string) => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            
-            <div className="flex space-x-2">
-              <button
-                type="submit"
-                disabled={isSearching || !searchForm.watch('query')?.trim()}
-                className="btn btn-primary bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-md hover:shadow-lg transition-all"
-              >
-                {isSearching ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Searching...
-                  </>
-                ) : (
-                  <>
-                    <Search className="mr-2 h-4 w-4" />
-                    Search
-                  </>
-                )}
-              </button>
-              
-              {searchResults.length > 0 && (
-                <button
-                  type="button"
-                  onClick={clearSearch}
-                  className="btn btn-outline border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold"
-                >
-                  Clear Search
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
-      </div>
+function Badge({ children, tone = 'violet' }: { children: React.ReactNode; tone?: 'violet' | 'gray' | 'amber' }) {
+  const styles = {
+    violet: 'bg-violet-50 text-violet-700',
+    gray: 'bg-gray-100 text-gray-700',
+    amber: 'bg-amber-50 text-amber-700',
+  }
+  return <span className={`rounded-full px-3 py-1 text-xs font-bold ${styles[tone]}`}>{children}</span>
+}
 
-      {/* Documents List */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">
-            {searchResults.length > 0 ? 'Search Results' : 'All Documents'}
-          </h2>
-          <span className="text-sm text-gray-500">
-            {displayDocuments.length} document{displayDocuments.length !== 1 ? 's' : ''}
-          </span>
-        </div>
-
-        {isLoadingDocuments ? (
-          <div className="flex justify-center py-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        ) : displayDocuments.length === 0 ? (
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
-            <div className="card-content">
-              <div className="text-center py-12 text-gray-500">
-                <div className="h-16 w-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
-                  <LibraryIcon className="h-8 w-8 text-orange-400" />
-                </div>
-                <p className="text-lg font-semibold text-gray-700">No documents found</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {searchResults.length > 0 
-                    ? 'Try adjusting your search criteria'
-                    : 'No documents available yet'
-                  }
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayDocuments.map((document: Document) => (
-              <div key={document.id} className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all">
-                <div className="card-header border-b border-orange-100">
-                  <div className="flex items-start justify-between">
-                    <h3 className="card-title text-lg text-orange-900">{document.title}</h3>
-                    {document.source_url && (
-                      <a
-                        href={document.source_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-orange-400 hover:text-orange-600 transition-colors"
-                      >
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
-                    )}
-                  </div>
-                  <p className="card-description text-gray-600 font-medium">
-                    {document.document_type.charAt(0).toUpperCase() + document.document_type.slice(1)}
-                  </p>
-                </div>
-                
-                <div className="card-content">
-                  <p className="text-sm text-gray-700 mb-4 line-clamp-3 font-medium">
-                    {document.content.substring(0, 150)}...
-                  </p>
-                  
-                  <div className="space-y-3">
-                    {document.jlpt_level && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs font-semibold text-gray-600">Level:</span>
-                        <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">
-                          {document.jlpt_level}
-                        </span>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="h-3 w-3 text-orange-400" />
-                      <span className="text-xs text-gray-600 font-medium">
-                        {formatDate(document.created_at)}
-                      </span>
-                    </div>
-                    
-                    {document.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {document.tags.slice(0, 3).map((tag, index) => (
-                          <span
-                            key={index}
-                            className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {document.tags.length > 3 && (
-                          <span className="text-xs text-gray-600 font-medium">
-                            +{document.tags.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-gray-950/45 p-4 backdrop-blur-sm">
+      <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.98 }} className="max-h-[92vh] w-full max-w-3xl overflow-auto rounded-2xl bg-white shadow-2xl">
+        <button type="button" onClick={onClose} className="absolute right-5 top-5 rounded-full bg-white/90 p-2 text-gray-500 shadow-sm hover:text-gray-900">
+          <X className="h-5 w-5" />
+        </button>
+        {children}
+      </motion.div>
     </div>
   )
 }
 
+function DocumentFormModal({
+  categories,
+  initial,
+  saving,
+  onClose,
+  onSubmit,
+}: {
+  categories?: Categories
+  initial?: LibraryDocument | null
+  saving: boolean
+  onClose: () => void
+  onSubmit: (payload: any) => void
+}) {
+  const [form, setForm] = useState<DocumentForm>(
+    initial
+      ? {
+          title: initial.title,
+          document_type: initial.document_type,
+          jlpt_level: initial.jlpt_level || '',
+          tags: initial.tags?.join(', ') || '',
+          source_url: initial.source_url || '',
+          content: initial.content,
+        }
+      : emptyForm
+  )
+  const [errors, setErrors] = useState<Partial<Record<keyof DocumentForm, string>>>({})
+  const [fetchError, setFetchError] = useState('')
+  const types = categories?.document_types?.length ? categories.document_types : fallbackTypes
+  const levels = categories?.jlpt_levels?.length ? categories.jlpt_levels : fallbackJlpt
+  const fetchUrlMutation = useMutation((url: string) => libraryAPI.fetchUrl(url), {
+    onSuccess: (response) => {
+      const data = response.data as { title: string; content: string; source_url: string }
+      setForm((current) => ({
+        ...current,
+        title: current.title.trim() ? current.title : data.title,
+        content: data.content,
+      }))
+      setErrors((current) => ({ ...current, source_url: undefined, content: undefined, title: undefined }))
+      setFetchError('')
+      toast.success('Page content fetched.')
+    },
+    onError: (error: any) => {
+      const detail = error.response?.data?.detail || 'Could not read that URL. Check the address and try again.'
+      setFetchError(detail)
+      toast.error(detail)
+    },
+  })
+
+  const submit = (event: React.FormEvent) => {
+    event.preventDefault()
+    const result = validateDocument(form)
+    setErrors(result.errors)
+    if (!result.success) return
+    onSubmit(buildPayload(form))
+  }
+
+  const fetchFromUrl = () => {
+    const sourceUrl = form.source_url.trim()
+    setFetchError('')
+    if (!sourceUrl) {
+      setErrors((current) => ({ ...current, source_url: 'Enter a URL before fetching' }))
+      return
+    }
+    try {
+      const parsed = new URL(sourceUrl)
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
+        throw new Error('Unsupported protocol')
+      }
+    } catch {
+      setErrors((current) => ({ ...current, source_url: 'Source URL must start with http:// or https://' }))
+      return
+    }
+    fetchUrlMutation.mutate(sourceUrl)
+  }
+
+  return (
+    <Modal onClose={onClose}>
+      <form onSubmit={submit} className="p-6">
+        <div className="pr-12">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">{initial ? 'Edit document' : 'Add new document'}</p>
+          <h2 className="mt-2 text-2xl font-bold text-gray-950">{initial ? initial.title : 'Create library document'}</h2>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <label className="space-y-1">
+            <span className="text-sm font-bold text-gray-700">Title *</span>
+            <input value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} className="input border-violet-200 focus:ring-violet-200" />
+            {errors.title && <span className="text-xs font-semibold text-red-600">{errors.title}</span>}
+          </label>
+          <label className="space-y-1">
+            <span className="text-sm font-bold text-gray-700">Document Type *</span>
+            <select value={form.document_type} onChange={(event) => setForm((current) => ({ ...current, document_type: event.target.value }))} className="input border-violet-200 focus:ring-violet-200">
+              {types.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </label>
+          <label className="space-y-1">
+            <span className="text-sm font-bold text-gray-700">JLPT Level</span>
+            <select value={form.jlpt_level} onChange={(event) => setForm((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-violet-200 focus:ring-violet-200">
+              <option value="">No level</option>
+              {levels.map((level) => (
+                <option key={level} value={level}>{level}</option>
+              ))}
+            </select>
+          </label>
+          <label className="space-y-1">
+            <span className="text-sm font-bold text-gray-700">Tags</span>
+            <input value={form.tags} onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))} placeholder="grammar, particles, n5" className="input border-violet-200 focus:ring-violet-200" />
+          </label>
+          <label className="space-y-1 md:col-span-2">
+            <span className="text-sm font-bold text-gray-700">Source URL</span>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input value={form.source_url} onChange={(event) => setForm((current) => ({ ...current, source_url: event.target.value }))} placeholder="https://..." className="input min-w-0 flex-1 border-violet-200 focus:ring-violet-200" />
+              <button
+                type="button"
+                onClick={fetchFromUrl}
+                disabled={fetchUrlMutation.isLoading}
+                className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-60"
+              >
+                {fetchUrlMutation.isLoading ? 'Fetching...' : 'Fetch from URL'}
+              </button>
+            </div>
+            {errors.source_url && <span className="text-xs font-semibold text-red-600">{errors.source_url}</span>}
+            {fetchError && <span className="text-xs font-semibold text-red-600">{fetchError}</span>}
+          </label>
+        </div>
+
+        <label className="mt-4 block space-y-1">
+          <span className="text-sm font-bold text-gray-700">Content *</span>
+          <textarea value={form.content} onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))} rows={11} placeholder="Paste grammar notes, vocabulary explanations, examples, or lesson content..." className="input h-auto border-violet-200 font-japanese leading-7 focus:ring-violet-200" />
+          {errors.content && <span className="text-xs font-semibold text-red-600">{errors.content}</span>}
+        </label>
+
+        <div className="mt-6 flex flex-wrap justify-end gap-3">
+          <button type="button" onClick={onClose} className="btn btn-outline rounded-xl border-gray-200 px-5">Cancel</button>
+          <button type="submit" disabled={saving} className="btn btn-primary rounded-xl px-5 text-white disabled:opacity-60">
+            {saving ? 'Saving...' : initial ? 'Save Changes' : 'Add Document'}
+          </button>
+        </div>
+      </form>
+    </Modal>
+  )
+}
+
+export default function Library() {
+  const queryClient = useQueryClient()
+  const [filters, setFilters] = useState({ query: '', document_type: '', jlpt_level: '' })
+  const [searchPayload, setSearchPayload] = useState({ query: '', document_type: '', jlpt_level: '' })
+  const [sort, setSort] = useState<'newest' | 'relevance' | 'alphabetical'>('newest')
+  const [page, setPage] = useState(1)
+  const [selected, setSelected] = useState<LibraryDocument | null>(null)
+  const [editing, setEditing] = useState<LibraryDocument | null>(null)
+  const [formOpen, setFormOpen] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<LibraryDocument | null>(null)
+  const debouncedQuery = useDebouncedValue(filters.query)
+  const offset = (page - 1) * PAGE_SIZE
+  const hasSearch = Boolean(searchPayload.query.trim())
+
+  const statsQuery = useQuery('libraryStats', () => libraryAPI.getStats().then((res) => res.data as LibraryStats), {
+    refetchInterval: 30000,
+    refetchOnWindowFocus: false,
+  })
+
+  const categoriesQuery = useQuery('libraryCategories', () => libraryAPI.getCategories().then((res) => res.data as Categories), {
+    refetchOnWindowFocus: false,
+  })
+
+  const documentsQuery = useQuery(
+    ['libraryDocuments', filters.document_type, filters.jlpt_level, sort, page],
+    () =>
+      libraryAPI
+        .getDocuments({
+          document_type: filters.document_type || undefined,
+          jlpt_level: filters.jlpt_level || undefined,
+          sort,
+          limit: PAGE_SIZE,
+          offset,
+        })
+        .then((res) => res.data as DocumentListResponse),
+    { enabled: !hasSearch, keepPreviousData: true, refetchOnWindowFocus: false }
+  )
+
+  const searchQuery = useQuery(
+    ['librarySearch', searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, page],
+    () =>
+      libraryAPI
+        .searchDocuments({
+          query: searchPayload.query,
+          document_type: searchPayload.document_type || null,
+          jlpt_level: searchPayload.jlpt_level || null,
+          limit: PAGE_SIZE,
+          offset,
+        })
+        .then((res) => {
+          const data = res.data as SearchResponse
+          return { items: data.results, total: data.results.length, limit: PAGE_SIZE, offset } as DocumentListResponse
+        }),
+    { enabled: hasSearch, keepPreviousData: true, refetchOnWindowFocus: false }
+  )
+
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setSearchPayload({ query: '', document_type: '', jlpt_level: '' })
+    }
+  }, [debouncedQuery])
+
+  useEffect(() => setPage(1), [searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, filters.document_type, filters.jlpt_level, sort])
+
+  const createMutation = useMutation((payload: any) => libraryAPI.createDocument(payload), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('libraryStats')
+      queryClient.invalidateQueries('libraryCategories')
+      queryClient.invalidateQueries('libraryDocuments')
+      queryClient.invalidateQueries('librarySearch')
+      setFormOpen(false)
+      toast.success('Document added successfully.')
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.detail || 'Failed to add document')
+    },
+  })
+
+  const updateMutation = useMutation(({ id, payload }: { id: number; payload: any }) => libraryAPI.updateDocument(id, payload), {
+    onSuccess: (response) => {
+      queryClient.invalidateQueries('libraryStats')
+      queryClient.invalidateQueries('libraryCategories')
+      queryClient.invalidateQueries('libraryDocuments')
+      queryClient.invalidateQueries('librarySearch')
+      setSelected(response.data)
+      setEditing(null)
+      toast.success('Document updated successfully')
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.detail || 'Failed to update document')
+    },
+  })
+
+  const deleteMutation = useMutation((id: number) => libraryAPI.deleteDocument(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('libraryStats')
+      queryClient.invalidateQueries('libraryCategories')
+      queryClient.invalidateQueries('libraryDocuments')
+      queryClient.invalidateQueries('librarySearch')
+      setSelected(null)
+      setDeleteTarget(null)
+      toast.success('Document deleted')
+    },
+    onError: () => {
+      toast.error('Failed to delete document')
+    },
+  })
+
+  const activeData = hasSearch ? searchQuery.data : documentsQuery.data
+  const loading = hasSearch ? searchQuery.isLoading || searchQuery.isFetching : documentsQuery.isLoading || documentsQuery.isFetching
+  const errored = hasSearch ? searchQuery.isError : documentsQuery.isError
+  const documents = useMemo(() => {
+    const items = activeData?.items || []
+    if (sort !== 'relevance' || !hasSearch) return items
+    return [...items].sort((a, b) => (b.relevance_score || 0) - (a.relevance_score || 0))
+  }, [activeData?.items, hasSearch, sort])
+  const total = activeData?.total || 0
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  const types = categoriesQuery.data?.document_types?.length ? fallbackTypes.filter((type) => categoriesQuery.data?.document_types.includes(type)) : fallbackTypes
+  const levels = categoriesQuery.data?.jlpt_levels?.length ? categoriesQuery.data.jlpt_levels : fallbackJlpt
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex items-center gap-4">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 shadow-lg shadow-violet-200">
+            <LibraryIcon className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-950">JLPT Document Library</h1>
+            <p className="mt-1 text-sm text-gray-600">Search, manage, and index Japanese learning material with semantic retrieval.</p>
+          </div>
+        </div>
+        <button type="button" onClick={() => setFormOpen(true)} className="btn btn-primary rounded-xl px-5 py-3 text-white shadow-md shadow-violet-200">
+          <FilePlus2 className="mr-2 h-4 w-4" />
+          Add New Document
+        </button>
+      </div>
+
+      {statsQuery.isError ? (
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-4 text-sm font-semibold text-red-700">Unable to load library statistics.</div>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard label="Total Documents" value={statsQuery.data?.total_documents || 0} icon={BookOpen} loading={statsQuery.isLoading} />
+          <StatCard label="Document Types" value={statCount(statsQuery.data?.document_types)} icon={Layers3} loading={statsQuery.isLoading} />
+          <StatCard label="JLPT Levels" value={statCount(statsQuery.data?.jlpt_levels)} icon={Tags} loading={statsQuery.isLoading} />
+          <StatCard label="Vector Chunks" value={statsQuery.data?.vector_chunks || 0} icon={Database} loading={statsQuery.isLoading} />
+        </div>
+      )}
+
+      <div className="rounded-2xl border border-violet-100 bg-white/90 p-4 shadow-sm">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_auto]">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
+            <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder="Search documents by meaning or keyword..." className="input w-full border-violet-200 bg-violet-50/60 pl-10 focus:ring-violet-200" />
+          </div>
+          <select value={filters.document_type} onChange={(event) => setFilters((current) => ({ ...current, document_type: event.target.value }))} className="input border-violet-200 bg-violet-50/60">
+            <option value="">All Types</option>
+            {types.map((type) => <option key={type} value={type}>{type}</option>)}
+          </select>
+          <select value={filters.jlpt_level} onChange={(event) => setFilters((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-violet-200 bg-violet-50/60">
+            <option value="">All Levels</option>
+            {levels.map((level) => <option key={level} value={level}>{level}</option>)}
+          </select>
+          <select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="input border-violet-200 bg-violet-50/60">
+            <option value="newest">newest</option>
+            <option value="relevance">relevance</option>
+            <option value="alphabetical">alphabetical</option>
+          </select>
+          <button
+            type="button"
+            onClick={() => {
+              if (filters.query.trim()) {
+                setSearchPayload({
+                  query: filters.query.trim(),
+                  document_type: filters.document_type,
+                  jlpt_level: filters.jlpt_level,
+                })
+              } else {
+                setSearchPayload({ query: '', document_type: '', jlpt_level: '' })
+                queryClient.invalidateQueries('libraryDocuments')
+              }
+            }}
+            className="btn btn-primary rounded-xl px-4 text-white"
+          >
+            <Search className="mr-2 h-4 w-4" />
+            Search
+          </button>
+        </div>
+      </div>
+
+      <section className="space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-bold text-gray-950">{hasSearch ? 'Semantic Search Results' : 'Document Grid'}</h2>
+            <p className="mt-1 text-sm text-gray-500">{total} document{total === 1 ? '' : 's'} found</p>
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-gray-600 shadow-sm">
+            <ArrowDownAZ className="h-4 w-4 text-violet-500" />
+            {sort}
+          </div>
+        </div>
+
+        {errored ? (
+          <div className="rounded-2xl border border-red-100 bg-red-50 p-8 text-center text-red-700">
+            <AlertTriangle className="mx-auto h-8 w-8" />
+            <p className="mt-3 font-bold">Unable to load documents</p>
+          </div>
+        ) : loading ? (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)}
+          </div>
+        ) : documents.length === 0 ? (
+          <div className="rounded-2xl border border-violet-100 bg-white p-10 text-center text-gray-500 shadow-sm">
+            <BookOpen className="mx-auto h-10 w-10 text-violet-300" />
+            <p className="mt-3 font-semibold">No documents found</p>
+            <p className="mt-1 text-sm">Add a document or adjust your search filters.</p>
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {documents.map((document) => (
+              <motion.article key={document.id} whileHover={{ y: -4 }} className="rounded-2xl border border-violet-100 bg-white p-5 shadow-sm transition hover:shadow-md">
+                <button type="button" onClick={() => setSelected(document)} className="block w-full text-left">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-lg font-bold leading-6 text-gray-950">{document.title}</h3>
+                    {document.source_url && (
+                      <a href={document.source_url} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} className="shrink-0 rounded-full p-2 text-gray-400 hover:bg-violet-50 hover:text-violet-700">
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Badge>{document.document_type}</Badge>
+                    {document.jlpt_level && <Badge tone="amber">{document.jlpt_level}</Badge>}
+                    {document.relevance_score !== undefined && document.relevance_score !== null && <Badge tone="gray">{Math.round(document.relevance_score * 100)}% relevant</Badge>}
+                  </div>
+                  <p className="mt-4 line-clamp-4 text-sm leading-6 text-gray-700">{(document as any).content_preview || document.content.slice(0, 150)}{document.content.length > 150 ? '...' : ''}</p>
+                </button>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {document.tags?.slice(0, 4).map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
+                </div>
+                <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-gray-500">
+                  <Calendar className="h-4 w-4" />
+                  {formatDate(document.created_at)}
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <button type="button" disabled={page === 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">Previous</button>
+            <span className="text-sm font-bold text-gray-600">Page {page} / {totalPages}</span>
+            <button type="button" disabled={page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">Next</button>
+          </div>
+        )}
+      </section>
+
+      <AnimatePresence>
+        {formOpen && (
+          <DocumentFormModal
+            categories={categoriesQuery.data}
+            saving={createMutation.isLoading}
+            onClose={() => setFormOpen(false)}
+            onSubmit={(payload) => createMutation.mutate(payload)}
+          />
+        )}
+        {editing && (
+          <DocumentFormModal
+            initial={editing}
+            categories={categoriesQuery.data}
+            saving={updateMutation.isLoading}
+            onClose={() => setEditing(null)}
+            onSubmit={(payload) => updateMutation.mutate({ id: editing.id, payload })}
+          />
+        )}
+        {selected && (
+          <Modal onClose={() => setSelected(null)}>
+            <div className="p-6">
+              <div className="pr-12">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Document detail</p>
+                <h2 className="mt-2 text-2xl font-bold text-gray-950">{selected.title}</h2>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Badge>{selected.document_type}</Badge>
+                {selected.jlpt_level && <Badge tone="amber">{selected.jlpt_level}</Badge>}
+                {selected.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
+              </div>
+              {selected.source_url && (
+                <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-violet-700 hover:text-violet-900">
+                  <ExternalLink className="h-4 w-4" />
+                  Source URL
+                </a>
+              )}
+              <p className="mt-4 text-xs font-semibold text-gray-500">Created {formatDate(selected.created_at)}</p>
+              <p className="mt-1 text-xs font-semibold text-gray-500">Updated {selected.updated_at ? formatDate(selected.updated_at) : 'Not updated yet'}</p>
+              <div className="mt-5 rounded-2xl bg-gray-50 p-4">
+                <p className="whitespace-pre-wrap font-japanese text-sm leading-7 text-gray-800">{selected.content}</p>
+              </div>
+              <div className="mt-6 flex flex-wrap justify-end gap-3">
+                <button type="button" onClick={() => setEditing(selected)} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Edit
+                </button>
+                <button type="button" onClick={() => setDeleteTarget(selected)} className="btn btn-outline rounded-xl border-red-200 px-4 text-red-600">
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+        {deleteTarget && (
+          <Modal onClose={() => setDeleteTarget(null)}>
+            <div className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="grid h-11 w-11 place-items-center rounded-2xl bg-red-50 text-red-600">
+                  <Trash2 className="h-5 w-5" />
+                </div>
+                <div className="pr-10">
+                  <h2 className="text-xl font-bold text-gray-950">Delete document?</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">This removes the PostgreSQL record and all ChromaDB vector chunks for “{deleteTarget.title}”.</p>
+                </div>
+              </div>
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={() => setDeleteTarget(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">Cancel</button>
+                <button type="button" disabled={deleteMutation.isLoading} onClick={() => deleteMutation.mutate(deleteTarget.id)} className="btn rounded-xl bg-red-600 px-4 text-white hover:bg-red-700 disabled:opacity-60">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}

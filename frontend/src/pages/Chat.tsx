@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Send, Bot, User, Loader2, Trash2, Search, PenLine } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { useLocation } from 'react-router-dom'
 import { chatAPI } from '../services/api'
 import { useAuth } from '../services/auth'
 import { formatRelativeTime } from '../utils/helpers'
@@ -28,6 +29,7 @@ export default function Chat() {
   const [searchQuery, setSearchQuery] = useState('')
   const [handwritingOpen, setHandwritingOpen] = useState(false)
   const { user } = useAuth()
+  const location = useLocation()
   const queryClient = useQueryClient()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const form = useForm<MessageFormData>()
@@ -71,6 +73,7 @@ export default function Chat() {
     () => chatAPI.clearHistory(),
     {
       onSuccess: () => {
+        queryClient.setQueryData(['chatHistory'], [])
         queryClient.invalidateQueries(['chatHistory'])
         toast.success('Chat history cleared')
       },
@@ -88,6 +91,17 @@ export default function Chat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [chatHistory])
+
+  useEffect(() => {
+    const state = location.state as { prefillMessage?: string } | null
+    if (state?.prefillMessage) {
+      form.setValue('message', state.prefillMessage, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true,
+      })
+    }
+  }, [location.state, form])
 
   const handleSubmit = (data: MessageFormData) => {
     if (!data.message.trim()) return

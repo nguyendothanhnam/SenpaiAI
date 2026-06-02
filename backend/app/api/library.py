@@ -1,171 +1,171 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from typing import List, Optional
+import logging
+from typing import Optional
 
-from ..core.database import get_db
+from fastapi import APIRouter, Depends, status
+from fastapi import Query
+from sqlalchemy.orm import Session
+
 from ..core.auth import get_current_active_user
-from ..models.database import User, Document
+from ..core.database import get_db
+from ..models.database import User
 from ..models.schemas import (
     Document as DocumentSchema,
+    DocumentCreate,
+    DocumentFetchUrlRequest,
+    DocumentFetchUrlResponse,
+    DocumentListResponse,
     DocumentSearchRequest,
-    DocumentSearchResponse,
-    ErrorResponse
+    DocumentUpdate,
+    LibraryCategoriesResponse,
+    LibrarySearchResponse,
+    LibraryStatsResponse,
 )
-from ..services.vector_db import chroma_service
+from ..services.library_service import library_service
 
 router = APIRouter(prefix="/library", tags=["library"])
+api_router = APIRouter(prefix="/api/library", tags=["library"])
+logger = logging.getLogger(__name__)
 
-@router.get("/documents", response_model=List[DocumentSchema])
+
+def _current_user_dependency(current_user: User = Depends(get_current_active_user)) -> User:
+    return current_user
+
+
+@router.get("/quiz")
+async def get_library_quiz(
+    mode: str = Query(default="vocabulary_matching_grid", pattern="^vocabulary_matching_grid$"),
+    jlpt: str = Query(default="all", pattern="^(N5|N4|N3|N2|N1|all|ALL|n5|n4|n3|n2|n1)$"),
+    count: int = Query(default=6, ge=2, le=12),
+    db: Session = Depends(get_db),
+):
+    """Return library vocabulary pairs for card matching minigames."""
+    del mode
+    return {"pairs": library_service.vocabulary_matching_pairs(db, jlpt_level=jlpt, count=count)}
+
+
+@api_router.post("/fetch-url", response_model=DocumentFetchUrlResponse)
+async def fetch_document_url(
+    payload: DocumentFetchUrlRequest,
+    current_user: User = Depends(_current_user_dependency),
+):
+    """Fetch a URL and return readable text for the Add Document form."""
+    del current_user
+    return library_service.fetch_url_content(payload.url)
+
+
+@router.get("/documents", response_model=DocumentListResponse)
+@api_router.get("/documents", response_model=DocumentListResponse)
 async def get_documents(
     document_type: Optional[str] = None,
     jlpt_level: Optional[str] = None,
-    limit: int = 50,
+    tag: Optional[str] = None,
+    sort: str = "newest",
+    limit: int = 24,
     offset: int = 0,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
 ):
-    """Get documents with optional filtering."""
-    
-    query = db.query(Document)
-    
-    if document_type:
-        query = query.filter(Document.document_type == document_type)
-    
-    if jlpt_level:
-        query = query.filter(Document.jlpt_level == jlpt_level)
-    
-    documents = query.order_by(Document.created_at.desc())\
-        .offset(offset)\
-        .limit(limit)\
-        .all()
-    
-    return documents
+    """List PostgreSQL documents with filters, sorting, and pagination."""
+    try:
+        documents, total = library_service.list_documents(
+            db,
+            document_type=document_type,
+            jlpt_level=jlpt_level,
+            tag=tag,
+            sort=sort,
+            limit=limit,
+            offset=offset,
+        )
+    except Exception as exc:
+        logger.exception("[Library] failed to load documents: %s", exc)
+        documents, total = [], 0
+    return DocumentListResponse(items=documents, total=total, limit=limit, offset=offset)
+
 
 @router.get("/documents/{document_id}", response_model=DocumentSchema)
+@api_router.get("/documents/{document_id}", response_model=DocumentSchema)
 async def get_document(
     document_id: int,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
 ):
-    """Get a specific document by ID."""
-    
-    document = db.query(Document).filter(Document.id == document_id).first()
-    
-    if not document:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Document not found"
-        )
-    
-    return document
+    """Get one document from PostgreSQL."""
+    return library_service.get_document(db, document_id)
 
-@router.post("/search", response_model=DocumentSearchResponse)
+
+@router.post("/documents", response_model=DocumentSchema, status_code=status.HTTP_201_CREATED)
+@api_router.post("/documents", response_model=DocumentSchema, status_code=status.HTTP_201_CREATED)
+async def create_document(
+    payload: DocumentCreate,
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
+):
+    """Create a document, then chunk and index it in ChromaDB."""
+    return library_service.create_document(db, payload)
+
+
+@router.put("/documents/{document_id}", response_model=DocumentSchema)
+@api_router.put("/documents/{document_id}", response_model=DocumentSchema)
+async def update_document(
+    document_id: int,
+    payload: DocumentUpdate,
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
+):
+    """Update PostgreSQL document data and refresh ChromaDB chunks."""
+    return library_service.update_document(db, document_id, payload)
+
+
+@router.delete("/documents/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/documents/{document_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_document(
+    document_id: int,
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
+):
+    """Delete a document and all ChromaDB chunks."""
+    library_service.delete_document(db, document_id)
+    return None
+
+
+@router.post("/search", response_model=LibrarySearchResponse)
+@api_router.post("/search", response_model=LibrarySearchResponse)
 async def search_documents(
     request: DocumentSearchRequest,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
 ):
-    """Search documents using semantic similarity."""
-    
-    try:
-        # Prepare filter for ChromaDB
-        filter_dict = {}
-        if request.document_type:
-            filter_dict["document_type"] = request.document_type
-        if request.jlpt_level:
-            filter_dict["jlpt_level"] = request.jlpt_level
-        
-        # Search using ChromaDB
-        search_results = chroma_service.search_documents(
-            query=request.query,
-            n_results=request.limit,
-            filter_dict=filter_dict if filter_dict else None
-        )
-        
-        # Get document IDs from search results
-        document_ids = []
-        for result in search_results:
-            # Extract document ID from metadata
-            title = result["metadata"].get("title", "")
-            if title:
-                try:
-                    doc_id = int(title.split("_")[0])
-                    document_ids.append(doc_id)
-                except (ValueError, IndexError):
-                    continue
-        
-        # Get full document objects
-        documents = []
-        if document_ids:
-            documents = db.query(Document)\
-                .filter(Document.id.in_(document_ids))\
-                .all()
-        
-        return DocumentSearchResponse(
-            documents=documents,
-            total_count=len(documents),
-            query=request.query
-        )
-        
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error searching documents: {str(e)}"
-        )
+    """Semantic document search backed by ChromaDB, with keyword fallback."""
+    results = library_service.search_documents(
+        db,
+        query=request.query,
+        document_type=request.document_type,
+        jlpt_level=request.jlpt_level,
+        limit=request.limit,
+        offset=request.offset,
+    )
+    return LibrarySearchResponse(results=results)
 
-@router.get("/categories")
+
+@router.get("/categories", response_model=LibraryCategoriesResponse)
+@api_router.get("/categories", response_model=LibraryCategoriesResponse)
 async def get_document_categories(
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
 ):
-    """Get available document categories and JLPT levels."""
-    
-    # Get unique document types
-    document_types = db.query(Document.document_type)\
-        .distinct()\
-        .all()
-    
-    # Get unique JLPT levels
-    jlpt_levels = db.query(Document.jlpt_level)\
-        .filter(Document.jlpt_level.isnot(None))\
-        .distinct()\
-        .all()
-    
-    return {
-        "document_types": [dt[0] for dt in document_types],
-        "jlpt_levels": [jl[0] for jl in jlpt_levels],
-        "jlpt_levels_ordered": ["N5", "N4", "N3", "N2", "N1"]
-    }
+    """Return dynamic document type and JLPT filter values."""
+    return library_service.categories(db)
 
-@router.get("/stats")
+
+@router.get("/stats", response_model=LibraryStatsResponse)
+@api_router.get("/stats", response_model=LibraryStatsResponse)
 async def get_library_stats(
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
 ):
-    """Get library statistics."""
-    
-    # Count documents by type
-    doc_type_counts = db.query(
-        Document.document_type,
-        db.func.count(Document.id)
-    ).group_by(Document.document_type).all()
-    
-    # Count documents by JLPT level
-    jlpt_counts = db.query(
-        Document.jlpt_level,
-        db.func.count(Document.id)
-    ).group_by(Document.jlpt_level).all()
-    
-    # Total document count
-    total_docs = db.query(Document).count()
-    
-    # ChromaDB stats
-    chroma_stats = chroma_service.get_collection_stats()
-    
-    return {
-        "total_documents": total_docs,
-        "documents_by_type": {dt: count for dt, count in doc_type_counts},
-        "documents_by_jlpt": {jlpt: count for jlpt, count in jlpt_counts if jlpt},
-        "vector_db_stats": chroma_stats
-    }
-
+    """Return dashboard stats from PostgreSQL and ChromaDB."""
+    try:
+        return library_service.stats(db)
+    except Exception as exc:
+        logger.exception("[Library] failed to load stats: %s", exc)
+        return library_service.empty_stats()
