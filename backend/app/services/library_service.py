@@ -57,7 +57,6 @@ class LibraryService:
         self._validate_payload(payload.title, payload.content, payload.document_type, payload.jlpt_level)
         document = Document(
             title=payload.title.strip(),
-            description=(payload.description or "").strip() or None,
             content=payload.content.strip(),
             document_type=payload.document_type.strip(),
             jlpt_level=payload.jlpt_level,
@@ -67,7 +66,9 @@ class LibraryService:
         db.add(document)
         db.commit()
         db.refresh(document)
-        self._index_document(document)
+        indexing_warning = self._index_document(db, document)
+        if indexing_warning:
+            document.indexing_warning = indexing_warning
         return document
 
     def update_document(self, db: Session, document_id: int, payload: schemas.DocumentUpdate) -> Document:
@@ -85,11 +86,13 @@ class LibraryService:
         for key, value in update_data.items():
             if isinstance(value, str):
                 value = value.strip()
-            setattr(document, key, value or None if key in {"description", "source_url", "jlpt_level"} else value)
+            setattr(document, key, value or None if key in {"source_url", "jlpt_level"} else value)
 
         db.commit()
         db.refresh(document)
-        self._index_document(document)
+        indexing_warning = self._index_document(db, document)
+        if indexing_warning:
+            document.indexing_warning = indexing_warning
         return document
 
     def delete_document(self, db: Session, document_id: int) -> None:
@@ -161,6 +164,8 @@ class LibraryService:
                     source_url=document.source_url,
                     created_at=document.created_at,
                     updated_at=document.updated_at,
+                    embedding_id=document.embedding_id,
+                    chunk_index=document.chunk_index,
                     relevance_score=round(relevance_by_id.get(document_id, 0), 4),
                 )
             )
@@ -317,18 +322,16 @@ class LibraryService:
         limit: int,
     ) -> list[int]:
         pattern = f"%{query}%"
-        db_query = db.query(Document.id).filter(
-            or_(Document.title.ilike(pattern), Document.description.ilike(pattern), Document.content.ilike(pattern))
-        )
+        db_query = db.query(Document.id).filter(or_(Document.title.ilike(pattern), Document.content.ilike(pattern)))
         if document_type:
             db_query = db_query.filter(Document.document_type == document_type)
         if jlpt_level:
             db_query = db_query.filter(Document.jlpt_level == jlpt_level)
         return [row[0] for row in db_query.order_by(Document.created_at.desc()).limit(limit).all()]
 
-    def _index_document(self, document: Document) -> None:
+    def _index_document(self, db: Session, document: Document) -> str | None:
         try:
-            chroma_service.add_documents(
+            chunk_ids = chroma_service.add_documents(
                 [
                     {
                         "id": document.id,
@@ -341,8 +344,16 @@ class LibraryService:
                     }
                 ]
             )
+            if not chunk_ids:
+                return "ChromaDB indexing failed but document was saved"
+            document.embedding_id = chunk_ids[0]
+            document.chunk_index = 0
+            db.commit()
+            db.refresh(document)
+            return None
         except Exception as exc:
-            print(f"Warning: failed to index document {document.id}: {exc}")
+            logger.warning("[Library] failed to index document %s: %s", document.id, exc)
+            return "ChromaDB indexing failed but document was saved"
 
     def _normalize_tags(self, tags: list[str] | None) -> list[str]:
         normalized = []

@@ -43,6 +43,7 @@ async def get_library_quiz(
     return {"pairs": library_service.vocabulary_matching_pairs(db, jlpt_level=jlpt, count=count)}
 
 
+@router.post("/fetch-url", response_model=DocumentFetchUrlResponse)
 @api_router.post("/fetch-url", response_model=DocumentFetchUrlResponse)
 async def fetch_document_url(
     payload: DocumentFetchUrlRequest,

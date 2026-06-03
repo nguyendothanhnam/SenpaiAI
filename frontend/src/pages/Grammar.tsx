@@ -13,6 +13,17 @@ interface GrammarFormData {
 interface GrammarAnalysis {
   text: string
   jlpt_level: string
+  sentence_meaning?: string
+  vocabulary: Array<{
+    term: string
+    meaning: string
+    jlpt_level?: string
+  }>
+  grammar_patterns: Array<{
+    pattern: string
+    explanation: string
+    example: string
+  }>
   grammar_points: Array<{
     pattern: string
     explanation: string
@@ -135,11 +146,11 @@ export default function Grammar() {
               {/* Basic Info */}
               <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                 <div className="card-header border-b border-orange-100">
-                  <h3 className="card-title text-orange-900">Analysis Results</h3>
+                  <h3 className="card-title text-orange-900">JLPT Level</h3>
                 </div>
                 <div className="card-content space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">JLPT Level:</span>
+                    <span className="text-sm font-semibold text-gray-700">Level:</span>
                     <span className={`jlpt-badge bg-orange-100 text-orange-700`}>
                       {analysis.jlpt_level}
                     </span>
@@ -165,28 +176,59 @@ export default function Grammar() {
                       </span>
                     </div>
                   </div>
-
-                  {analysis.translation && (
-                    <div className="p-3 bg-orange-50 rounded-xl border-l-4 border-orange-400">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <Languages className="h-4 w-4 text-orange-600" />
-                        <span className="text-sm font-semibold text-orange-800">Translation</span>
-                      </div>
-                      <p className="text-sm text-orange-900">{analysis.translation}</p>
-                    </div>
-                  )}
                 </div>
               </div>
 
-              {/* Grammar Points */}
-              {analysis.grammar_points.length > 0 && (
+              {/* Sentence Meaning */}
+              {(analysis.sentence_meaning || analysis.translation) && (
                 <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                   <div className="card-header border-b border-orange-100">
-                    <h3 className="card-title text-orange-900">Grammar Points</h3>
+                    <h3 className="card-title text-orange-900">Sentence Meaning</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="flex items-start space-x-2 p-3 bg-orange-50 rounded-xl border-l-4 border-orange-400">
+                      <Languages className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-orange-900">{analysis.sentence_meaning || analysis.translation}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Vocabulary */}
+              {analysis.vocabulary?.length > 0 && (
+                <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
+                  <div className="card-header border-b border-orange-100">
+                    <h3 className="card-title text-orange-900">Vocabulary</h3>
                   </div>
                   <div className="card-content">
                     <div className="space-y-3">
-                      {analysis.grammar_points.map((point, index) => (
+                      {analysis.vocabulary.map((item, index) => (
+                        <div key={`${item.term}-${index}`} className="border border-orange-100 rounded-xl p-4 bg-gradient-to-br from-orange-50 to-white">
+                          <div className="flex items-center justify-between gap-3">
+                            <h4 className="text-sm font-semibold text-orange-900 japanese-text">
+                              {item.term}
+                            </h4>
+                            {item.jlpt_level && (
+                              <span className="jlpt-badge bg-orange-100 text-orange-700">{item.jlpt_level}</span>
+                            )}
+                          </div>
+                          <p className="mt-2 text-sm text-gray-700">{item.meaning}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Grammar Patterns */}
+              {(analysis.grammar_patterns?.length || analysis.grammar_points.length) > 0 && (
+                <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
+                  <div className="card-header border-b border-orange-100">
+                    <h3 className="card-title text-orange-900">Grammar Patterns</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="space-y-3">
+                      {(analysis.grammar_patterns?.length ? analysis.grammar_patterns : analysis.grammar_points).map((point, index) => (
                         <div key={index} className="border border-orange-100 rounded-xl p-4 bg-gradient-to-br from-orange-50 to-white hover:shadow-md transition-shadow">
                           <div className="flex items-start space-x-3">
                             <div className="flex-shrink-0">

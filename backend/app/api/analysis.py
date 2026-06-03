@@ -12,6 +12,7 @@ from ..models.schemas import (
     ErrorResponse
 )
 from ..services.llm_service import japanese_service
+from ..services.grammar_analyzer import sanitize_grammar_analysis
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
@@ -23,32 +24,26 @@ async def analyze_grammar(
     """Analyze Japanese grammar in the given text."""
     
     try:
-        # Perform grammar analysis
-        analysis_result = await japanese_service.analyze_grammar(request.text)
-        
-        # Generate translation if requested
-        translation = None
-        if request.include_translation:
-            translation_result = await japanese_service.translate_text(
-                text=request.text,
-                source_lang="ja",
-                target_lang="vi"
-            )
-            translation = translation_result["translated_text"]
-        
-        # Generate learning suggestions based on analysis
-        suggestions = await japanese_service.generate_learning_suggestions(
-            user_level=current_user.current_jlpt_level,
-            weak_areas=[point.get("pattern", "") for point in analysis_result.get("grammar_points", [])]
+        analysis_result = await japanese_service.analyze_grammar(
+            request.text,
+            include_vietnamese=request.include_translation,
+        )
+        analysis_result = sanitize_grammar_analysis(
+            request.text,
+            analysis_result,
+            include_vietnamese=request.include_translation,
         )
         
         return GrammarAnalysisResponse(
             text=request.text,
             jlpt_level=analysis_result.get("jlpt_level", "N3"),
+            sentence_meaning=analysis_result.get("sentence_meaning"),
+            vocabulary=analysis_result.get("vocabulary", []),
+            grammar_patterns=analysis_result.get("grammar_patterns", []),
             grammar_points=analysis_result.get("grammar_points", []),
-            translation=translation,
+            translation=analysis_result.get("translation"),
             difficulty_score=analysis_result.get("difficulty_score", 5.0),
-            suggestions=suggestions
+            suggestions=analysis_result.get("suggestions", [])
         )
         
     except Exception as e:

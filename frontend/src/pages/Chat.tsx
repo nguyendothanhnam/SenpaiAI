@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { Send, Bot, User, Loader2, Trash2, Search, PenLine } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
@@ -31,7 +31,7 @@ export default function Chat() {
   const { user } = useAuth()
   const location = useLocation()
   const queryClient = useQueryClient()
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const bottomRef = useRef<HTMLDivElement | null>(null)
   const form = useForm<MessageFormData>()
 
   const { data: chatHistory, isLoading: isLoadingHistory } = useQuery(
@@ -83,14 +83,28 @@ export default function Chat() {
     }
   )
 
-  const filteredHistory = chatHistory?.filter((message: ChatMessage) =>
-    message.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    message.answer.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || []
+  const sortedMessages = useMemo(() => {
+    return [...(chatHistory || [])].sort(
+      (a: ChatMessage, b: ChatMessage) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
+  }, [chatHistory])
+
+  const displayedMessages = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase()
+    if (!query) {
+      return sortedMessages
+    }
+
+    return sortedMessages.filter((message: ChatMessage) =>
+      message.question.toLowerCase().includes(query) ||
+      message.answer.toLowerCase().includes(query)
+    )
+  }, [searchQuery, sortedMessages])
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [chatHistory])
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [displayedMessages])
 
   useEffect(() => {
     const state = location.state as { prefillMessage?: string } | null
@@ -163,14 +177,14 @@ export default function Chat() {
           <div className="flex justify-center py-8">
             <LoadingSpinner size="lg" />
           </div>
-        ) : filteredHistory.length === 0 ? (
+        ) : displayedMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-gray-500">
             <Bot className="h-12 w-12 mb-4" />
             <p className="text-lg font-medium">No messages yet</p>
             <p className="text-sm">Start a conversation by asking a question below</p>
           </div>
         ) : (
-          filteredHistory.map((message: ChatMessage) => (
+          displayedMessages.map((message: ChatMessage) => (
             <div key={message.id} className="space-y-3 animate-fadeIn">
               {/* User Question */}
               <div className="flex items-start space-x-3">
@@ -205,7 +219,7 @@ export default function Chat() {
                 </div>
                 <div className="flex-1 space-y-2">
                   <div className="bg-white border border-orange-100 rounded-2xl p-4 shadow-sm">
-                    <p className="text-sm text-gray-900 japanese-text leading-relaxed">{message.answer}</p>
+                    <p className="whitespace-pre-wrap text-sm text-gray-900 japanese-text leading-relaxed">{message.answer}</p>
                     
                     {message.jlpt_level && (
                       <div className="mt-3">
@@ -256,7 +270,7 @@ export default function Chat() {
             </div>
           ))
         )}
-        <div ref={messagesEndRef} />
+        <div ref={bottomRef} />
       </div>
 
       {/* Message Input */}

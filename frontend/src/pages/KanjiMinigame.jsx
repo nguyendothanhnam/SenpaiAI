@@ -18,19 +18,10 @@ const kanjiModes = [
   { value: 'study', label: 'Kanji Study' },
   { value: 'quiz', label: 'Kanji Quiz' },
   { value: 'search', label: 'Kanji Search' },
-  { value: 'vocabulary', label: 'Vocabulary Grid' },
+  { value: 'vocabulary', label: 'Kanji Matching Game' },
 ]
 
 const jlptLevels = ['all', 'N5', 'N4', 'N3', 'N2', 'N1']
-
-const vocabularyModes = [
-  { value: 'word_meaning', label: 'Word - Meaning' },
-  { value: 'word_reading', label: 'Word - Reading' },
-  { value: 'reading_meaning', label: 'Reading - Meaning' },
-  { value: 'kanji_meaning', label: 'Kanji - Meaning' },
-  { value: 'kanji_reading', label: 'Kanji - Reading' },
-  { value: 'sentence_translation', label: 'Sentence - Translation' },
-]
 
 function shuffle(items) {
   return [...items].sort(() => Math.random() - 0.5)
@@ -363,68 +354,37 @@ function QuizMode({ items, currentItem }) {
   )
 }
 
-function buildVocabularyItems(kanjiItems, libraryPairs, mode) {
-  const fromExamples = kanjiItems.flatMap((item) =>
-    item.examples.map((example, index) => ({
-      id: `${item.kanji}-${example.word || index}-${mode}`,
-      kanji: item.kanji,
-      word: example.word || item.kanji,
-      reading: example.reading || toHiragana(item.onyomi[0] || item.kunyomi[0] || ''),
-      meaning: example.meaning_vi || getItemMeaning(item),
-      sentence: example.sentence || example.word || item.kanji,
-      translation: example.meaning_vi || getItemMeaning(item),
+function buildKanjiMatchingItems(kanjiItems) {
+  return shuffle(kanjiItems)
+    .slice(0, 8)
+    .map((item) => ({
+      id: item.kanji,
+      left: item.kanji,
+      right: getItemMeaning(item),
     }))
-  )
-  const fromLibrary = libraryPairs.map((pair, index) => ({
-    id: `library-${pair.id || index}-${mode}`,
-    word: pair.left,
-    reading: pair.reading || '',
-    meaning: pair.meaning || pair.right,
-    sentence: pair.left,
-    translation: pair.meaning || pair.right,
-    kanji: pair.left,
-  }))
-  return shuffle([...fromLibrary, ...fromExamples]).slice(0, 8).map((item) => {
-    const fields = {
-      word_meaning: [item.word, item.meaning],
-      word_reading: [item.word, item.reading],
-      reading_meaning: [item.reading, item.meaning],
-      kanji_meaning: [item.kanji, item.meaning],
-      kanji_reading: [item.kanji, item.reading],
-      sentence_translation: [item.sentence, item.translation],
-    }
-    const [left, right] = fields[mode] || fields.word_meaning
-    return { ...item, left, right }
-  }).filter((item) => item.left && item.right)
+    .filter((item) => item.left && item.right)
 }
 
-function VocabularyGrid({ jlpt, kanjiItems }) {
-  const [gridMode, setGridMode] = useState('word_meaning')
-  const [cards, setCards] = useState([])
-  const [selected, setSelected] = useState([])
+function VocabularyGrid({ kanjiItems }) {
+  const [leftItems, setLeftItems] = useState([])
+  const [rightItems, setRightItems] = useState([])
+  const [selectedLeft, setSelectedLeft] = useState(null)
+  const [selectedRight, setSelectedRight] = useState(null)
   const [matchedIds, setMatchedIds] = useState([])
   const [wrongIds, setWrongIds] = useState([])
   const [feedback, setFeedback] = useState('')
   const [attempts, setAttempts] = useState({ correct: 0, wrong: 0, streak: 0 })
 
-  const query = useQuery(
-    ['vocabularyGridPairs', jlpt],
-    () => libraryAPI.quiz({ mode: 'vocabulary_matching_grid', jlpt, count: 8 }).then((response) => response.data),
-    { staleTime: 1000 * 30, retry: false }
-  )
-
   const pairs = useMemo(
-    () => buildVocabularyItems(kanjiItems, query.data?.pairs || [], gridMode),
-    [kanjiItems, query.data?.pairs, gridMode]
+    () => buildKanjiMatchingItems(kanjiItems),
+    [kanjiItems]
   )
 
   const reset = () => {
-    const deck = shuffle(pairs.flatMap((pair) => [
-      { id: `${pair.id}:left`, pairId: pair.id, text: pair.left, type: 'left', pair },
-      { id: `${pair.id}:right`, pairId: pair.id, text: pair.right, type: 'right', pair },
-    ]))
-    setCards(deck)
-    setSelected([])
+    setLeftItems(shuffle(pairs.map((pair) => ({ id: `${pair.id}:left`, pairId: pair.id, text: pair.left, type: 'left', pair }))))
+    setRightItems(shuffle(pairs.map((pair) => ({ id: `${pair.id}:right`, pairId: pair.id, text: pair.right, type: 'right', pair }))))
+    setSelectedLeft(null)
+    setSelectedRight(null)
     setMatchedIds([])
     setWrongIds([])
     setFeedback('')
@@ -435,46 +395,59 @@ function VocabularyGrid({ jlpt, kanjiItems }) {
     reset()
   }, [pairs])
 
-  const chooseCard = (card) => {
-    if (selected.some((item) => item.id === card.id) || matchedIds.includes(card.pairId) || selected.length >= 2) return
-    const nextSelected = [...selected, card]
-    setSelected(nextSelected)
+  const checkPair = (left, right) => {
     setFeedback('')
-    if (nextSelected.length !== 2) return
 
-    const [first, second] = nextSelected
-    if (first.pairId === second.pairId && first.type !== second.type) {
-      setMatchedIds((items) => [...items, first.pairId])
+    if (left.pairId === right.pairId) {
+      setMatchedIds((items) => [...items, left.pairId])
       setAttempts((current) => ({ ...current, correct: current.correct + 1, streak: current.streak + 1 }))
       setFeedback('Correct')
-      setSelected([])
+      setSelectedLeft(null)
+      setSelectedRight(null)
       return
     }
 
-    setWrongIds([first.id, second.id])
+    setWrongIds([left.id, right.id])
     setAttempts((current) => ({ ...current, wrong: current.wrong + 1, streak: 0 }))
     setFeedback('Wrong')
     window.setTimeout(() => {
-      setSelected([])
+      setSelectedLeft(null)
+      setSelectedRight(null)
       setWrongIds([])
     }, 750)
   }
 
+  const chooseLeft = (item) => {
+    if (matchedIds.includes(item.pairId) || wrongIds.length) return
+    setSelectedLeft(item)
+    if (selectedRight) checkPair(item, selectedRight)
+  }
+
+  const chooseRight = (item) => {
+    if (matchedIds.includes(item.pairId) || wrongIds.length) return
+    setSelectedRight(item)
+    if (selectedLeft) checkPair(selectedLeft, item)
+  }
+
   const totalAttempts = attempts.correct + attempts.wrong
   const accuracy = totalAttempts ? Math.round((attempts.correct / totalAttempts) * 100) : 0
+
+  const cardClass = (item, selected) => {
+    if (matchedIds.includes(item.pairId)) return 'border-emerald-300 bg-emerald-50 text-emerald-800 opacity-80'
+    if (wrongIds.includes(item.id)) return 'border-red-300 bg-red-50 text-red-700'
+    if (selected?.id === item.id) return 'border-orange-400 bg-orange-50 text-orange-900 ring-2 ring-orange-200'
+    return 'border-orange-100 bg-white text-gray-900 hover:-translate-y-0.5 hover:bg-orange-50 hover:shadow-md'
+  }
 
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-orange-100 bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-lg font-black text-gray-950">Vocabulary Grid</h2>
+            <h2 className="text-lg font-black text-gray-950">Kanji Matching Game</h2>
             <p className="text-sm text-gray-500">Correct {attempts.correct} · Wrong {attempts.wrong} · Accuracy {accuracy}% · Streak {attempts.streak}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <select value={gridMode} onChange={(event) => setGridMode(event.target.value)} className="rounded-full border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
-              {vocabularyModes.map((mode) => <option key={mode.value} value={mode.value}>{mode.label}</option>)}
-            </select>
             <button type="button" onClick={reset} className="inline-flex items-center rounded-full border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
               <RotateCcw className="mr-2 h-4 w-4" /> Reset
             </button>
@@ -482,32 +455,43 @@ function VocabularyGrid({ jlpt, kanjiItems }) {
         </div>
       </div>
 
-      {!cards.length ? (
+      {!leftItems.length || !rightItems.length ? (
         <div className="rounded-2xl bg-white p-8 text-center text-sm font-semibold text-gray-600">No kanji found for current filter.</div>
       ) : (
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {cards.map((card) => {
-            const visible = selected.some((item) => item.id === card.id) || matchedIds.includes(card.pairId) || wrongIds.includes(card.id)
-            return (
-              <button
-                key={card.id}
-                type="button"
-                onClick={() => chooseCard(card)}
-                disabled={matchedIds.includes(card.pairId)}
-                className={`min-h-[118px] rounded-2xl border bg-white p-4 text-center shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${
-                  matchedIds.includes(card.pairId) ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : wrongIds.includes(card.id) ? 'border-red-300 bg-red-50 text-red-700' : 'border-orange-100'
-                }`}
-              >
-                {visible ? (
-                  <span className={`${card.type === 'left' ? 'font-japanese text-2xl font-black' : 'text-base font-semibold'} leading-snug text-gray-900`}>
-                    {card.text}
-                  </span>
-                ) : (
-                  <span className="text-2xl font-black text-orange-300">?</span>
-                )}
-              </button>
-            )
-          })}
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div className="rounded-2xl border border-orange-100 bg-white p-3 shadow-sm">
+            <p className="px-2 pb-3 text-xs font-black uppercase tracking-[0.16em] text-orange-500">Kanji</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {leftItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => chooseLeft(item)}
+                  disabled={matchedIds.includes(item.pairId) || wrongIds.length > 0}
+                  className={`min-h-[96px] rounded-2xl border p-4 text-center shadow-sm transition ${cardClass(item, selectedLeft)} disabled:cursor-not-allowed`}
+                >
+                  <span className="font-japanese text-2xl font-black leading-snug">{item.text}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-orange-100 bg-white p-3 shadow-sm">
+            <p className="px-2 pb-3 text-xs font-black uppercase tracking-[0.16em] text-orange-500">Vietnamese meaning</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {rightItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => chooseRight(item)}
+                  disabled={matchedIds.includes(item.pairId) || wrongIds.length > 0}
+                  className={`min-h-[96px] rounded-2xl border p-4 text-center text-base font-semibold leading-snug shadow-sm transition ${cardClass(item, selectedRight)} disabled:cursor-not-allowed`}
+                >
+                  {item.text}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       )}
       {feedback && <div className={`rounded-2xl px-4 py-3 text-sm font-bold ${feedback === 'Correct' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'}`}>{feedback}</div>}
@@ -664,7 +648,7 @@ export default function KanjiMinigame() {
       )}
       {mode === 'quiz' && currentItem && <QuizMode items={visibleKanji} currentItem={currentItem} />}
       {mode === 'search' && <SearchMode items={visibleKanji} />}
-      {mode === 'vocabulary' && <VocabularyGrid jlpt={jlpt} kanjiItems={visibleKanji.length ? visibleKanji : filteredByJlpt} />}
+      {mode === 'vocabulary' && <VocabularyGrid kanjiItems={visibleKanji.length ? visibleKanji : filteredByJlpt} />}
 
       {dictionaryQuery.isError && (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">

@@ -12,6 +12,8 @@ import json
 import re
 from ..core.config import settings
 from .ollama_service import ollama_service
+from .grammar_analyzer import sanitize_grammar_analysis
+from .chat_prompt import CHAT_SYSTEM_PROMPT
 
 
 class JapaneseLearningService:
@@ -35,34 +37,27 @@ class JapaneseLearningService:
 
         # Chat prompt for general Q&A
         self.chat_prompt = ChatPromptTemplate.from_messages([
-            SystemMessage(content="""You are HineGoldAI, a helpful Japanese learning assistant. 
-            You provide accurate, educational responses about Japanese language, culture, and grammar.
-            Always include relevant examples and explanations suitable for the user's JLPT level.
-            If asked about grammar, provide detailed explanations with usage patterns.
-            If asked for translations, provide both literal and natural translations.
-            Answer the exact current question first, before adding related context.
-            For multiple-choice questions, choose one option first, then explain briefly.
-            Never replace the user's target Japanese word with a similar word.
-            If you are unsure, say you are unsure instead of guessing.
-            Retrieved context is supporting material only; it must not override the user's current question.
-            Use polite, encouraging language and include cultural context when relevant."""),
+            SystemMessage(content=CHAT_SYSTEM_PROMPT),
             HumanMessage(content="{question}")
         ])
 
         # Grammar analysis prompt
         self.grammar_prompt = ChatPromptTemplate.from_messages([
-            SystemMessage(content="""You are a Japanese grammar expert. Analyze the given Japanese text and provide:
-            1. JLPT level assessment (N5-N1)
-            2. Grammar points with explanations
-            3. Difficulty score (0-10)
-            4. Learning suggestions
+            SystemMessage(content="""You are HineGoldAI, a Japanese grammar expert for Vietnamese learners.
+            Analyze only the given Japanese text. Never invent meanings. If a word is uncertain, write "Chưa chắc chắn về từ này".
+            Do not treat vocabulary items as grammar patterns.
+            If Vietnamese is requested, use Vietnamese for all explanations and suggestions. Do not use English unless requested.
+            Difficulty score must match JLPT level: N5 simple questions 2-3/10, N4 4/10, N3 5-6/10, N2 7-8/10, N1 9-10/10.
 
             Format your response as JSON with these fields:
+            - sentence_meaning: string
+            - vocabulary: array of objects with 'term', 'meaning', 'jlpt_level'
+            - grammar_patterns: array of objects with 'pattern', 'explanation', 'example'
+            - grammar_points: same array as grammar_patterns
             - jlpt_level: string
-            - grammar_points: array of objects with 'pattern', 'explanation', 'example'
             - difficulty_score: number
-            - suggestions: array of strings"""),
-            HumanMessage(content="Analyze this Japanese text: {text}")
+            - suggestions: array of Japanese-learning suggestions related to the text"""),
+            HumanMessage(content="Vietnamese requested: {include_vietnamese}\nAnalyze this Japanese text: {text}")
         ])
 
         # Translation prompt
@@ -127,19 +122,19 @@ class JapaneseLearningService:
 
         except Exception as e:
             return {
-                "answer": f"I apologize, but I encountered an error: {str(e)}",
+                "answer": f"Xin lỗi, mình gặp lỗi khi xử lý câu hỏi: {str(e)}",
                 "jlpt_level": None,
                 "response_time": time.time() - start_time
             }
 
-    async def analyze_grammar(self, text: str) -> Dict[str, Any]:
+    async def analyze_grammar(self, text: str, include_vietnamese: bool = False) -> Dict[str, Any]:
         """Analyze Japanese grammar in the given text."""
         if self.provider == "ollama":
-            return await self.service.analyze_grammar(text)
+            return await self.service.analyze_grammar(text, include_vietnamese=include_vietnamese)
 
         # OpenAI implementation
         try:
-            messages = self.grammar_prompt.format_messages(text=text)
+            messages = self.grammar_prompt.format_messages(text=text, include_vietnamese=include_vietnamese)
             response = await self.llm.agenerate([messages])
 
             result_text = response.generations[0][0].text.strip()
@@ -170,20 +165,21 @@ class JapaneseLearningService:
                 # Fallback if JSON parsing fails
                 result = {
                     "jlpt_level": "N3",
-                    "grammar_points": [{"pattern": "Unknown", "explanation": result_text, "example": ""}],
+                    "grammar_points": [],
+                    "grammar_patterns": [],
                     "difficulty_score": 5.0,
-                    "suggestions": ["Review basic grammar patterns"]
+                    "suggestions": ["Ôn lại các mẫu ngữ pháp xuất hiện trong câu"]
                 }
 
-            return result
+            return sanitize_grammar_analysis(text, result, include_vietnamese=include_vietnamese)
 
         except Exception as e:
-            return {
+            return sanitize_grammar_analysis(text, {
                 "jlpt_level": "N3",
                 "grammar_points": [],
                 "difficulty_score": 5.0,
-                "suggestions": [f"Error in analysis: {str(e)}"]
-            }
+                "suggestions": []
+            }, include_vietnamese=include_vietnamese)
 
     async def translate_text(
             self,

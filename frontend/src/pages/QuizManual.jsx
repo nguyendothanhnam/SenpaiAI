@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Trash2 } from 'lucide-react'
 import { createQuiz } from '../services/api.js'
+import { saveQuizSet } from '../utils/storage.js'
 
 const initialQuestion = { question: '', options: ['', '', '', ''], answer: '' }
 
@@ -74,10 +75,15 @@ export default function QuizManual() {
     try {
       const response = await createQuiz(payload)
       const savedQuestions = response?.data?.questions || payload.questions
+      const quizSet = saveQuizSet({
+        title: `Manual quiz ${new Date().toLocaleDateString()}`,
+        questions: savedQuestions,
+        source: 'manual',
+      })
       setSuccessMsg('✅ Saved successfully!')
       setTimeout(() => {
         setSuccessMsg('')
-        navigate('/quiz/play', { state: { questions: savedQuestions } })
+        navigate('/quiz/play', { state: { quizSet } })
       }, 500)
     } catch (err) {
       setError(err?.response?.data?.detail || 'Failed to create quiz. Please try again.')

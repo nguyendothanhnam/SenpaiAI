@@ -87,6 +87,9 @@ class GrammarAnalysisRequest(BaseModel):
 class GrammarAnalysisResponse(BaseModel):
     text: str
     jlpt_level: str
+    sentence_meaning: Optional[str] = None
+    vocabulary: List[Dict[str, Any]] = Field(default_factory=list)
+    grammar_patterns: List[Dict[str, Any]] = Field(default_factory=list)
     grammar_points: List[Dict[str, Any]]
     translation: Optional[str] = None
     difficulty_score: float
@@ -112,7 +115,6 @@ class TranslationResponse(BaseModel):
 class Document(BaseModel):
     id: int
     title: str
-    description: Optional[str] = None
     content: str
     document_type: str
     jlpt_level: Optional[str]
@@ -120,7 +122,10 @@ class Document(BaseModel):
     source_url: Optional[str]
     created_at: datetime
     updated_at: Optional[datetime] = None
+    embedding_id: Optional[str] = None
+    chunk_index: Optional[int] = None
     relevance_score: Optional[float] = None
+    indexing_warning: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -145,6 +150,8 @@ class DocumentSearchResult(BaseModel):
     source_url: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
+    embedding_id: Optional[str] = None
+    chunk_index: Optional[int] = None
     relevance_score: float = Field(..., ge=0, le=1)
 
 
@@ -183,7 +190,6 @@ class DocumentFetchUrlResponse(BaseModel):
 
 class DocumentCreate(BaseModel):
     title: str
-    description: Optional[str] = None
     content: str
     document_type: str
     jlpt_level: Optional[str] = None
@@ -210,7 +216,6 @@ class DocumentCreate(BaseModel):
 
 class DocumentUpdate(BaseModel):
     title: Optional[str] = None
-    description: Optional[str] = None
     content: Optional[str] = None
     document_type: Optional[str] = None
     jlpt_level: Optional[str] = None

@@ -24,7 +24,6 @@ import { formatDate } from '../utils/helpers'
 interface LibraryDocument {
   id: number
   title: string
-  description?: string | null
   content: string
   document_type: string
   jlpt_level?: string | null
@@ -32,7 +31,10 @@ interface LibraryDocument {
   source_url?: string | null
   created_at: string
   updated_at?: string | null
+  embedding_id?: string | null
+  chunk_index?: number | null
   relevance_score?: number | null
+  indexing_warning?: string | null
 }
 
 interface DocumentListResponse {
@@ -107,15 +109,6 @@ function buildPayload(form: DocumentForm) {
     source_url: form.source_url.trim() || null,
     content: form.content.trim(),
   }
-}
-
-function useDebouncedValue<T>(value: T, delay = 400) {
-  const [debounced, setDebounced] = useState(value)
-  useEffect(() => {
-    const timer = window.setTimeout(() => setDebounced(value), delay)
-    return () => window.clearTimeout(timer)
-  }, [value, delay])
-  return debounced
 }
 
 function SkeletonCard() {
@@ -321,7 +314,6 @@ export default function Library() {
   const [editing, setEditing] = useState<LibraryDocument | null>(null)
   const [formOpen, setFormOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<LibraryDocument | null>(null)
-  const debouncedQuery = useDebouncedValue(filters.query)
   const offset = (page - 1) * PAGE_SIZE
   const hasSearch = Boolean(searchPayload.query.trim())
 
@@ -364,28 +356,31 @@ export default function Library() {
           const data = res.data as SearchResponse
           return { items: data.results, total: data.results.length, limit: PAGE_SIZE, offset } as DocumentListResponse
         }),
-    { enabled: hasSearch, keepPreviousData: true, refetchOnWindowFocus: false }
-  )
-
-  useEffect(() => {
-    if (!debouncedQuery.trim()) {
-      setSearchPayload({ query: '', document_type: '', jlpt_level: '' })
+    {
+      enabled: hasSearch,
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      onError: () => toast.error('Failed to search documents'),
     }
-  }, [debouncedQuery])
+  )
 
   useEffect(() => setPage(1), [searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, filters.document_type, filters.jlpt_level, sort])
 
   const createMutation = useMutation((payload: any) => libraryAPI.createDocument(payload), {
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries('libraryStats')
       queryClient.invalidateQueries('libraryCategories')
       queryClient.invalidateQueries('libraryDocuments')
       queryClient.invalidateQueries('librarySearch')
       setFormOpen(false)
-      toast.success('Document added successfully.')
+      if (response.data?.indexing_warning) {
+        toast(response.data.indexing_warning)
+      } else {
+        toast.success('Document added successfully.')
+      }
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.detail || 'Failed to add document')
+      toast.error(error.response?.data?.detail || 'Failed to save document')
     },
   })
 
@@ -397,10 +392,14 @@ export default function Library() {
       queryClient.invalidateQueries('librarySearch')
       setSelected(response.data)
       setEditing(null)
-      toast.success('Document updated successfully')
+      if (response.data?.indexing_warning) {
+        toast(response.data.indexing_warning)
+      } else {
+        toast.success('Document updated successfully')
+      }
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.detail || 'Failed to update document')
+      toast.error(error.response?.data?.detail || 'Failed to save document')
     },
   })
 
@@ -462,7 +461,7 @@ export default function Library() {
       )}
 
       <div className="rounded-2xl border border-violet-100 bg-white/90 p-4 shadow-sm">
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_auto]">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_auto_auto]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
             <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder="Search documents by meaning or keyword..." className="input w-full border-violet-200 bg-violet-50/60 pl-10 focus:ring-violet-200" />
@@ -490,14 +489,24 @@ export default function Library() {
                   jlpt_level: filters.jlpt_level,
                 })
               } else {
-                setSearchPayload({ query: '', document_type: '', jlpt_level: '' })
-                queryClient.invalidateQueries('libraryDocuments')
+                toast.error('Enter a query before searching')
               }
             }}
             className="btn btn-primary rounded-xl px-4 text-white"
           >
             <Search className="mr-2 h-4 w-4" />
             Search
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setFilters({ query: '', document_type: '', jlpt_level: '' })
+              setSearchPayload({ query: '', document_type: '', jlpt_level: '' })
+              setPage(1)
+            }}
+            className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700"
+          >
+            Clear Search
           </button>
         </div>
       </div>
@@ -556,6 +565,19 @@ export default function Library() {
                   <Calendar className="h-4 w-4" />
                   {formatDate(document.created_at)}
                 </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <button type="button" onClick={() => setSelected(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
+                    View Detail
+                  </button>
+                  <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
+                    <Pencil className="mr-1 h-3.5 w-3.5" />
+                    Edit
+                  </button>
+                  <button type="button" onClick={() => setDeleteTarget(document)} className="btn btn-outline rounded-xl border-red-200 px-3 py-2 text-xs font-bold text-red-600">
+                    <Trash2 className="mr-1 h-3.5 w-3.5" />
+                    Delete
+                  </button>
+                </div>
               </motion.article>
             ))}
           </div>
@@ -612,6 +634,9 @@ export default function Library() {
                 <p className="whitespace-pre-wrap font-japanese text-sm leading-7 text-gray-800">{selected.content}</p>
               </div>
               <div className="mt-6 flex flex-wrap justify-end gap-3">
+                <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">
+                  Close
+                </button>
                 <button type="button" onClick={() => setEditing(selected)} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">
                   <Pencil className="mr-2 h-4 w-4" />
                   Edit
@@ -633,7 +658,7 @@ export default function Library() {
                 </div>
                 <div className="pr-10">
                   <h2 className="text-xl font-bold text-gray-950">Delete document?</h2>
-                  <p className="mt-2 text-sm leading-6 text-gray-600">This removes the PostgreSQL record and all ChromaDB vector chunks for “{deleteTarget.title}”.</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">This removes the PostgreSQL record and all ChromaDB vector chunks for "{deleteTarget.title}".</p>
                 </div>
               </div>
               <div className="mt-6 flex justify-end gap-3">
