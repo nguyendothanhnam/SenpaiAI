@@ -1,4 +1,4 @@
-# HUONG DAN BAO VE DO AN: HineGoldAI - Japanese Learning Assistant
+# GIOI THIEU VE DO AN: HineGoldAI - Japanese Learning Assistant
 
 Tai lieu nay duoc tong hop tu ma nguon hien co cua du an. Cac mo ta ben duoi chi dua tren logic dang co trong repo, khong mo rong sang chuc nang chua duoc cai dat.
 
