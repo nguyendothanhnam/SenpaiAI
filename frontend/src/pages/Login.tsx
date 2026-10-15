@@ -66,7 +66,7 @@ export default function Login() {
         <div className="w-full space-y-6 rounded-3xl border border-white/70 bg-white/80 p-8 shadow-2xl backdrop-blur-md">
           <div className="space-y-2 text-center">
             <h1 className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
-              HineGoldAI
+              SenpaiAI
             </h1>
             <p className="text-sm text-gray-600">Learn Japanese smarter</p>
           </div>

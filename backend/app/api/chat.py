@@ -121,7 +121,7 @@ async def send_message(
 
         deterministic_answer = deterministic_chat_answer(message.message)
         if deterministic_answer:
-            sources = [{"title": "HineGoldAI intent rules", "type": "deterministic_chat", "relevance": 1.0}]
+            sources = [{"title": "SenpaiAI intent rules", "type": "deterministic_chat", "relevance": 1.0}]
             chat_entry = ChatHistory(
                 user_id=current_user.id,
                 question=message.message,

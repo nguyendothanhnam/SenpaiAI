@@ -75,11 +75,11 @@ export default function Profile() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center space-x-4">
-        <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
-          <User className="h-6 w-6 text-white" />
+        <div className="h-12 w-12 rounded-2xl bg-[color:var(--primary)] flex items-center justify-center shadow-lg">
+          <User className="h-6 w-6 text-[color:var(--primary-contrast)]" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Profile</h1>
+          <h1 className="text-3xl font-bold text-[color:var(--primary)]">Profile</h1>
           <p className="text-sm text-gray-600 mt-1">
             Manage your account settings and learning preferences
           </p>
@@ -231,8 +231,8 @@ export default function Profile() {
             </div>
             <div className="card-content space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center shadow-md">
-                  <span className="text-lg font-bold text-white">
+                <div className="h-12 w-12 rounded-full bg-[color:var(--primary)] flex items-center justify-center shadow-md">
+                  <span className="text-lg font-bold text-[color:var(--primary-contrast)]">
                     {user?.username?.charAt(0).toUpperCase()}
                   </span>
                 </div>

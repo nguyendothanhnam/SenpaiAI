@@ -18,6 +18,7 @@ import FlashcardManual from './pages/FlashcardManual.jsx'
 import FlashcardPlay from './pages/FlashcardPlay.jsx'
 import Analytics from './pages/Analytics.jsx'
 import KanjiMinigame from './pages/KanjiMinigame.jsx'
+import Settings from './pages/Settings'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -58,6 +59,7 @@ function App() {
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Layout>

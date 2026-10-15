@@ -339,7 +339,7 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
             <Eraser className="h-4 w-4" />
             Clear
           </button>
-          <button type="button" onClick={onRecognize} disabled={disabled || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-500 px-4 text-sm font-semibold text-white shadow-lg shadow-violet-200 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" onClick={onRecognize} disabled={disabled || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-4 text-sm font-semibold text-[color:var(--text)] shadow-sm transition hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)] disabled:cursor-not-allowed disabled:opacity-60">
             {disabled ? <Sparkles className="h-4 w-4 animate-pulse" /> : <Search className="h-4 w-4" />}
             {mode === 'practice' ? 'Check' : 'Recognize'}
           </button>
@@ -354,7 +354,7 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
         onPointerMove={draw}
         onPointerUp={stopDrawing}
         onPointerCancel={stopDrawing}
-        className="aspect-square w-full touch-none rounded-2xl border border-gray-100 bg-white [cursor:crosshair]"
+        className="theme-writing-surface aspect-square w-full touch-none rounded-2xl border border-gray-100 bg-white [cursor:crosshair]"
         aria-label="Kanji handwriting canvas"
       />
     </div>

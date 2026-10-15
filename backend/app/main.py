@@ -39,7 +39,7 @@ async def lifespan(app: FastAPI):
 
 # Create FastAPI app
 app = FastAPI(
-    title="HineGoldAI - Japanese Learning Assistant",
+    title="SenpaiAI - Japanese Learning Assistant",
     description="A comprehensive Japanese learning platform powered by LLM + RAG technology",
     version="1.1.0",
     lifespan=lifespan,

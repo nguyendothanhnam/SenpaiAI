@@ -15,7 +15,7 @@ Dự án tập trung vào các nhu cầu chính:
 | Kanji Canvas | Nhận dạng chữ kanji viết tay bằng CNN, luyện viết và xem dữ liệu nét |
 | Hồ sơ học tập | Quản lý tài khoản, lịch sử chat và phiên học |
 
-Tên trong README là `SenpaiAI`, trong metadata backend hiện có tên `HineGoldAI - Japanese Learning Assistant`. Về bản chất, đây là cùng một ứng dụng học tiếng Nhật.
+Tên ứng dụng được thống nhất là `SenpaiAI - Japanese Learning Assistant` trên giao diện, backend và tài liệu dự án.
 
 ## 2. Công nghệ sử dụng
 

@@ -18,7 +18,7 @@ export default function KanjiStrokeOrder({ kanji, strokes: providedStrokes, step
 
   if (!strokes?.length) {
     return (
-      <div className="grid min-h-[420px] place-items-center rounded-3xl border border-violet-100 bg-white p-5">
+      <div className="theme-writing-surface grid min-h-[420px] place-items-center rounded-3xl border border-violet-100 bg-white p-5">
         <div className="max-w-md text-center">
           <p className="font-japanese text-7xl font-bold text-gray-300">{kanji}</p>
           <p className="mt-5 text-base font-bold text-gray-950">{data?.message || 'Stroke order data is not available for this Kanji.'}</p>
@@ -31,7 +31,7 @@ export default function KanjiStrokeOrder({ kanji, strokes: providedStrokes, step
   const visible = strokes.slice(0, step)
 
   return (
-    <div className="grid min-h-[420px] place-items-center rounded-3xl border border-violet-100 bg-white p-5">
+    <div className="theme-writing-surface grid min-h-[420px] place-items-center rounded-3xl border border-violet-100 bg-white p-5">
       <svg className="h-full max-h-[420px] w-full max-w-[420px]" viewBox={viewBox} role="img" aria-label={`${kanji} stroke order from KanjiVG`}>
         <rect x="0" y="0" width="109" height="109" fill="white" />
         <path d="M0,0 H109 M0,54.5 H109 M0,109 H109 M0,0 V109 M54.5,0 V109 M109,0 V109" stroke="#F3E8FF" strokeWidth="0.5" fill="none" />

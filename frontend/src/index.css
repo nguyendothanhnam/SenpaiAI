@@ -7,6 +7,18 @@
 
 @layer base {
   :root {
+    --bg: #e8f5ef;
+    --bg-elevated: #f5fbf7;
+    --card-glass: rgb(248 255 251 / 88%);
+    --text: #17352f;
+    --text-muted: #526e66;
+    --shadow-card: 0 12px 36px rgb(24 54 48 / 12%);
+    --radius-card: 1.25rem;
+    --radius-pill: 9999px;
+    --font-heading: Inter, 'Noto Sans JP', system-ui, sans-serif;
+    --font-body: Inter, 'Noto Sans JP', system-ui, sans-serif;
+    --bg-image: linear-gradient(135deg, #dff3e8 0%, #f8f5df 55%, #d8eee5 100%);
+    --bg-overlay: rgb(232 245 239 / 48%);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -55,7 +67,9 @@
   }
   
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply font-sans;
+    background-color: var(--bg);
+    color: var(--text);
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -69,11 +83,19 @@
   }
   
   .btn-primary {
-    @apply bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition-all duration-200;
+    @apply transition-all duration-200;
+    background-color: var(--primary);
+    color: var(--primary-contrast);
   }
   
   .btn-secondary {
-    @apply bg-amber-500 text-white hover:bg-amber-600 transition-all duration-200;
+    @apply transition-all duration-200;
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+  }
+
+  .btn-primary:hover, .btn-secondary:hover {
+    filter: brightness(0.94);
   }
   
   .btn-outline {
@@ -97,9 +119,43 @@
   }
   
   .card {
-    @apply rounded-2xl border border-orange-100 bg-white text-card-foreground shadow-md hover:shadow-lg transition-shadow duration-200;
+    @apply rounded-2xl border border-orange-100 bg-white text-card-foreground shadow-md transition-shadow duration-200 hover:shadow-lg;
   }
-  
+
+  .theme-card {
+    @apply border backdrop-blur-xl transition-shadow duration-200;
+    border-radius: var(--radius-card);
+    border-color: var(--border);
+    background: var(--card-glass);
+    color: var(--text);
+    box-shadow: var(--shadow-card);
+  }
+
+  .theme-shell {
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-attachment: fixed;
+  }
+
+  .theme-sidebar {
+    background: var(--card-glass);
+    color: var(--text);
+    backdrop-filter: blur(18px);
+  }
+
+  .theme-brand {
+    background: var(--primary);
+    color: var(--primary-contrast);
+  }
+
+  .theme-topbar {
+    background-color: color-mix(in srgb, var(--card) 82%, transparent);
+  }
+
+  .dark .theme-topbar {
+    background-color: color-mix(in srgb, var(--card) 88%, transparent);
+  }
+
   .card-header {
     @apply flex flex-col space-y-1.5 p-6;
   }
@@ -122,6 +178,167 @@
 }
 
 @layer utilities {
+  /* Keep legacy orange UI utilities aligned with the selected theme tokens. */
+  .theme-shell :is(button, a)[class~="bg-orange-400"],
+  .theme-shell :is(button, a)[class~="bg-orange-500"],
+  .theme-shell :is(button, a)[class~="bg-orange-600"],
+  .theme-shell :is(button, a)[class~="from-orange-400"],
+  .theme-shell :is(button, a)[class~="from-orange-500"],
+  .theme-shell :is(button, a)[class~="from-orange-600"] {
+    background-image: none;
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+  }
+
+  .theme-shell [class~="bg-orange-50"],
+  .theme-shell [class~="bg-orange-100"],
+  .theme-shell [class~="bg-amber-50"],
+  .theme-shell [class~="bg-amber-100"] {
+    background-color: var(--accent);
+  }
+
+  .theme-shell [class~="text-orange-400"],
+  .theme-shell [class~="text-orange-500"],
+  .theme-shell [class~="text-orange-600"],
+  .theme-shell [class~="text-orange-700"],
+  .theme-shell [class~="text-orange-800"],
+  .theme-shell [class~="text-orange-900"],
+  .theme-shell [class~="text-amber-600"],
+  .theme-shell [class~="text-amber-400"],
+  .theme-shell [class~="text-amber-500"],
+  .theme-shell [class~="text-amber-700"],
+  .theme-shell [class~="text-amber-800"],
+  .theme-shell [class~="text-amber-900"] {
+    color: var(--primary);
+  }
+
+  .theme-shell [class~="border-orange-100"],
+  .theme-shell [class~="border-orange-200"],
+  .theme-shell [class~="border-orange-300"],
+  .theme-shell [class~="border-amber-100"],
+  .theme-shell [class~="border-amber-200"] {
+    border-color: var(--border);
+  }
+
+  .theme-shell .card {
+    border-color: var(--border);
+    background: var(--card-glass);
+    color: var(--text);
+    backdrop-filter: blur(16px);
+  }
+
+  .theme-shell .input,
+  .theme-shell input:not([type="checkbox"]),
+  .theme-shell textarea,
+  .theme-shell select {
+    border-color: var(--border);
+    background-color: var(--bg-elevated);
+    color: var(--text);
+  }
+
+  .theme-shell .input::placeholder,
+  .theme-shell input::placeholder,
+  .theme-shell textarea::placeholder {
+    color: var(--text-muted);
+    opacity: 1;
+  }
+
+  .theme-shell option {
+    background-color: var(--bg-elevated);
+    color: var(--text);
+  }
+
+  .theme-shell .btn-primary,
+  .theme-shell .btn-secondary {
+    background-image: none;
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+  }
+
+  .theme-shell .kanji-page .btn-primary {
+    background-image: none;
+    background-color: var(--accent);
+    color: var(--text);
+    box-shadow: none;
+  }
+
+  .theme-shell .kanji-page .btn-primary:hover {
+    background-color: var(--primary);
+    color: var(--primary-contrast);
+  }
+
+  .theme-shell .text-orange-900,
+  .theme-shell .text-gray-950,
+  .theme-shell .text-gray-900,
+  .theme-shell .text-gray-800 {
+    color: var(--text);
+  }
+
+  .theme-shell .text-gray-700,
+  .theme-shell .text-gray-600,
+  .theme-shell .text-gray-500 {
+    color: var(--text-muted);
+  }
+
+  .theme-shell .text-violet-900,
+  .theme-shell .text-violet-800,
+  .theme-shell .text-violet-700,
+  .theme-shell .text-violet-600,
+  .theme-shell .text-violet-500 {
+    color: var(--primary);
+  }
+
+  .theme-shell .bg-violet-50,
+  .theme-shell .bg-violet-100,
+  .theme-shell .bg-orange-50,
+  .theme-shell .bg-orange-100 {
+    background-color: var(--accent);
+  }
+
+  .theme-shell .border-violet-100,
+  .theme-shell .border-violet-200,
+  .theme-shell .border-orange-100,
+  .theme-shell .border-orange-200 {
+    border-color: var(--border);
+  }
+
+  .dark .theme-shell [class~="bg-white"],
+  .dark .theme-shell [class*="bg-white/"] {
+    background-color: var(--card-glass);
+  }
+
+  .dark .theme-shell .theme-writing-surface {
+    background-color: #fff;
+    color: #17352f;
+  }
+
+  .dark .theme-shell [class~="bg-gray-50"],
+  .dark .theme-shell [class~="bg-gray-100"] {
+    background-color: var(--bg-elevated);
+  }
+
+  .dark .theme-shell [class~="border-gray-100"],
+  .dark .theme-shell [class~="border-gray-200"],
+  .dark .theme-shell [class~="border-gray-300"] {
+    border-color: var(--border);
+  }
+
+  .dark .theme-shell .text-gray-300,
+  .dark .theme-shell .text-gray-400 {
+    color: var(--text-muted);
+  }
+
+  .theme-shell [class~="from-orange-600"][class~="to-amber-600"][class~="text-transparent"] {
+    background-image: none;
+    background-clip: initial;
+    color: var(--primary);
+    -webkit-text-fill-color: var(--primary);
+  }
+
+  .theme-shell [class~="from-violet-600"][class~="to-fuchsia-500"] {
+    background-image: linear-gradient(135deg, var(--primary), var(--accent));
+  }
+
   .text-balance {
     text-wrap: balance;
   }

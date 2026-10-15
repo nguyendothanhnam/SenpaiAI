@@ -43,7 +43,7 @@ class JapaneseLearningService:
 
         # Grammar analysis prompt
         self.grammar_prompt = ChatPromptTemplate.from_messages([
-            SystemMessage(content="""You are HineGoldAI, a Japanese grammar expert for Vietnamese learners.
+            SystemMessage(content="""You are SenpaiAI, a Japanese grammar expert for Vietnamese learners.
             Analyze only the given Japanese text. Never invent meanings. If a word is uncertain, write "Chưa chắc chắn về từ này".
             Do not treat vocabulary items as grammar patterns.
             If Vietnamese is requested, use Vietnamese for all explanations and suggestions. Do not use English unless requested.

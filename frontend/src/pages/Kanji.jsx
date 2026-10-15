@@ -308,7 +308,7 @@ function StrokeOrderViewer({ info, step, setStep }) {
           <button type="button" onClick={() => setStep(Math.min(maxStep, step + 1))} disabled={!maxStep || step >= maxStep} className="btn btn-outline rounded-xl border-violet-200 px-3 text-violet-700">
             <SkipForward className="mr-2 h-4 w-4" /> Next Stroke
           </button>
-          <button type="button" onClick={play} disabled={!maxStep || playing} className="btn btn-primary rounded-xl px-3 text-white">
+          <button type="button" onClick={play} disabled={!maxStep || playing} className="btn btn-primary rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-3 text-[color:var(--text)] shadow-sm hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)]">
             <Play className="mr-2 h-4 w-4" /> Auto Play
           </button>
           <button type="button" onClick={pause} disabled={!playing} className="btn btn-outline rounded-xl border-gray-200 px-3">
@@ -410,7 +410,7 @@ function MiniDictionary({ info, onAsk, onPractice, onStroke }) {
         </div>
       </div>
       <div className="mt-5 grid gap-2">
-        <button type="button" onClick={onAsk} className="btn btn-primary rounded-xl px-4 text-white">
+        <button type="button" onClick={onAsk} className="btn btn-primary rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-4 text-[color:var(--text)] shadow-sm hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)]">
           <MessageCircle className="mr-2 h-4 w-4" /> Ask in Chat
         </button>
         <button type="button" onClick={onPractice} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">Practice this Kanji</button>
@@ -688,11 +688,11 @@ export default function Kanji() {
     )
 
   return (
-    <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: 'easeOut' }} className="space-y-6">
+    <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: 'easeOut' }} className="kanji-page space-y-6">
       <div className="rounded-3xl border border-white bg-white/90 p-5 shadow-sm">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">HineGoldAI handwriting lab</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">SenpaiAI handwriting lab</p>
             <h1 className="mt-2 text-3xl font-bold text-gray-950">Kanji Canvas</h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">Recognize handwriting, practice with feedback, explore kanji, and study verified stroke order.</p>
           </div>
@@ -853,7 +853,7 @@ export default function Kanji() {
                 )}
               </div>
             ) : (
-              <div className="rounded-2xl border border-violet-100 bg-violet-50/80 px-5 py-4 text-sm font-medium text-violet-800">
+              <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-5 py-4 text-sm font-medium text-[color:var(--text)] shadow-sm">
                 {modelInfoQuery.data?.message || `Recognition uses the custom CNN model plus stroke count and JLPT re-ranking. Model: ${modelInfoQuery.data?.model_loaded ? 'loaded' : 'not loaded'}; supports ${(modelInfoQuery.data?.supported_jlpt || ['N5', 'N4']).join('-')} (${modelInfoQuery.data?.total_classes ?? modelInfoQuery.data?.classes_count ?? 0} classes).`}
               </div>
             )}

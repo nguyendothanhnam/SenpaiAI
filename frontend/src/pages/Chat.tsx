@@ -145,25 +145,25 @@ export default function Chat() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Chat with HineGoldAI</h1>
-          <p className="text-sm text-gray-600 mt-1">
+          <h1 className="font-heading text-3xl font-bold text-[color:var(--text)]">Chat with SenpaiAI</h1>
+          <p className="mt-1 text-sm text-[color:var(--text-muted)]">
             Ask questions about Japanese language, grammar, or culture
           </p>
         </div>
         <div className="flex items-center gap-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-orange-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]" />
             <input
               type="text"
               placeholder="Search chat history..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-orange-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-transparent bg-orange-50"
+              className="rounded-pill border border-[color:var(--border)] bg-[color:var(--card-glass)] py-2 pl-10 pr-4 text-sm text-[color:var(--text)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary)]"
             />
           </div>
           <button
             onClick={() => clearHistoryMutation.mutate()}
-            className="btn btn-outline btn-sm hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+            className="btn btn-outline btn-sm text-[color:var(--text-muted)] hover:bg-red-50 hover:text-red-600 hover:border-red-200"
             disabled={clearHistoryMutation.isLoading}
           >
             <Trash2 className="h-4 w-4" />
@@ -172,13 +172,13 @@ export default function Chat() {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto border border-orange-100 rounded-2xl bg-white/80 backdrop-blur p-4 space-y-4">
+      <div className="theme-card flex-1 space-y-4 overflow-y-auto p-4">
         {isLoadingHistory ? (
           <div className="flex justify-center py-8">
             <LoadingSpinner size="lg" />
           </div>
         ) : displayedMessages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+          <div className="flex flex-col items-center justify-center py-12 text-[color:var(--text-muted)]">
             <Bot className="h-12 w-12 mb-4" />
             <p className="text-lg font-medium">No messages yet</p>
             <p className="text-sm">Start a conversation by asking a question below</p>
@@ -189,15 +189,15 @@ export default function Chat() {
               {/* User Question */}
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center shadow-md">
-                    <User className="h-4 w-4 text-white" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--primary)] shadow-md">
+                    <User className="h-4 w-4 text-[color:var(--primary-contrast)]" />
                   </div>
                 </div>
                 <div className="flex-1">
-                  <div className="bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 rounded-2xl p-4">
-                    <p className="text-sm text-gray-900 font-medium">{message.question}</p>
+                  <div className="theme-card rounded-card p-4">
+                    <p className="text-sm font-medium text-[color:var(--text)]">{message.question}</p>
                   </div>
-                  <p className="mt-2 text-xs text-gray-500 font-medium">
+                  <p className="mt-2 text-xs font-medium text-[color:var(--text-muted)]">
                     {formatRelativeTime(message.created_at)}
                   </p>
                 </div>
@@ -213,36 +213,36 @@ export default function Chat() {
               {/* AI Response */}
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 flex items-center justify-center shadow-md">
-                    <Bot className="h-4 w-4 text-white" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--accent)] shadow-md">
+                    <Bot className="h-4 w-4 text-[color:var(--primary)]" />
                   </div>
                 </div>
                 <div className="flex-1 space-y-2">
-                  <div className="bg-white border border-orange-100 rounded-2xl p-4 shadow-sm">
-                    <p className="whitespace-pre-wrap text-sm text-gray-900 japanese-text leading-relaxed">{message.answer}</p>
+                  <div className="theme-card rounded-card p-4">
+                    <p className="japanese-text whitespace-pre-wrap text-sm leading-relaxed text-[color:var(--text)]">{message.answer}</p>
                     
                     {message.jlpt_level && (
                       <div className="mt-3">
-                        <span className={`jlpt-badge bg-orange-100 text-orange-700`}>
+                          <span className="jlpt-badge bg-[color:var(--accent)] text-[color:var(--primary)]">
                           {message.jlpt_level}
                         </span>
                       </div>
                     )}
                     
                     {message.translation && (
-                      <div className="mt-3 p-3 bg-orange-50 rounded-lg border-l-4 border-orange-400">
-                        <p className="text-xs text-orange-800 font-semibold">Translation:</p>
-                        <p className="text-sm text-orange-900 mt-1">{message.translation}</p>
+                      <div className="mt-3 rounded-lg border-l-4 border-[color:var(--primary)] bg-[color:var(--accent)] p-3">
+                        <p className="text-xs font-semibold text-[color:var(--primary)]">Translation:</p>
+                        <p className="mt-1 text-sm text-[color:var(--text)]">{message.translation}</p>
                       </div>
                     )}
                     
                     {message.grammar_points && message.grammar_points.length > 0 && (
                       <div className="mt-3">
-                        <p className="text-xs font-semibold text-gray-700 mb-2">Grammar Points:</p>
+                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">Grammar Points:</p>
                         <div className="space-y-2">
                           {message.grammar_points.map((point, index) => (
-                            <div key={index} className="text-xs text-gray-700 bg-orange-50 p-2 rounded-lg">
-                              <span className="font-semibold text-orange-600">{point.pattern}:</span> {point.explanation}
+                            <div key={index} className="rounded-lg bg-[color:var(--accent)] p-2 text-xs text-[color:var(--text)]">
+                              <span className="font-semibold text-[color:var(--primary)]">{point.pattern}:</span> {point.explanation}
                             </div>
                           ))}
                         </div>
@@ -251,10 +251,10 @@ export default function Chat() {
                     
                     {message.sources && message.sources.length > 0 && (
                       <div className="mt-3">
-                        <p className="text-xs font-semibold text-gray-700 mb-2">Sources:</p>
+                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">Sources:</p>
                         <div className="space-y-1">
                           {message.sources.map((source, index) => (
-                            <div key={index} className="text-xs text-orange-600 hover:text-orange-700 font-medium">
+                            <div key={index} className="text-xs font-medium text-[color:var(--primary)]">
                               📚 {source.title}
                             </div>
                           ))}
@@ -262,7 +262,7 @@ export default function Chat() {
                       </div>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 font-medium">
+                  <p className="text-xs font-medium text-[color:var(--text-muted)]">
                     {formatRelativeTime(message.created_at)}
                   </p>
                 </div>
@@ -280,14 +280,14 @@ export default function Chat() {
             {...form.register('message', { required: 'Message is required' })}
             type="text"
             placeholder="Ask a question about Japanese..."
-            className="flex-1 input border-orange-200 focus:ring-orange-300 bg-orange-50"
+            className="input flex-1 border-[color:var(--border)] bg-[color:var(--card-glass)] text-[color:var(--text)] placeholder:text-[color:var(--text-muted)] focus:ring-[color:var(--primary)]"
             disabled={sendMessageMutation.isLoading}
           />
           <button
             type="button"
             onClick={() => setHandwritingOpen(true)}
             disabled={sendMessageMutation.isLoading}
-            className="btn btn-outline border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-100"
+            className="btn btn-outline border-[color:var(--border)] bg-[color:var(--card-glass)] text-[color:var(--primary)] hover:bg-[color:var(--accent)]"
             aria-label="Open kanji handwriting input"
           >
             <PenLine className="h-4 w-4" />
@@ -295,7 +295,7 @@ export default function Chat() {
           <button
             type="submit"
             disabled={sendMessageMutation.isLoading || !form.watch('message')?.trim()}
-            className="btn btn-primary bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-md hover:shadow-lg transition-all"
+            className="btn rounded-pill bg-[color:var(--primary)] px-4 font-semibold text-[color:var(--primary-contrast)] shadow-md transition-all hover:opacity-90 hover:shadow-lg"
           >
             {sendMessageMutation.isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

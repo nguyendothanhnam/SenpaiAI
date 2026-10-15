@@ -120,7 +120,7 @@ class OllamaJapaneseLearningService:
     async def analyze_grammar(self, text: str, include_vietnamese: bool = False) -> Dict[str, Any]:
         """Analyze Japanese grammar in the given text."""
         try:
-            system_prompt = """You are HineGoldAI, a Japanese grammar expert for Vietnamese learners.
+            system_prompt = """You are SenpaiAI, a Japanese grammar expert for Vietnamese learners.
             Analyze only the given Japanese text. Never invent meanings. If a word is uncertain, write "Chưa chắc chắn về từ này".
             Common JLPT vocabulary must be recognized accurately:
             - がくせい / 学生 = học sinh, sinh viên

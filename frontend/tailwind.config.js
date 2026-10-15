@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -8,6 +9,8 @@ export default {
     extend: {
       colors: {
         primary: {
+          DEFAULT: 'var(--primary)',
+          contrast: 'var(--primary-contrast)',
           50: '#fff7ed',
           100: '#ffedd5',
           200: '#fed7aa',
@@ -36,11 +39,16 @@ export default {
           white: '#FFFFFF',
           black: '#000000',
         },
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        background: 'var(--bg)',
+        foreground: 'var(--text)',
+        'bg-elevated': 'var(--bg-elevated)',
+        'card-glass': 'var(--card-glass)',
+        'text-muted': 'var(--text-muted)',
+        surface: 'var(--card)',
+        'primary-contrast': 'var(--primary-contrast)',
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: 'var(--card)',
+          foreground: 'var(--text)',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
@@ -51,20 +59,28 @@ export default {
           foreground: 'hsl(var(--muted-foreground))',
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
+          DEFAULT: 'var(--accent)',
           foreground: 'hsl(var(--accent-foreground))',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
-        border: 'hsl(var(--border))',
+        border: 'var(--border)',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-heading)', 'system-ui', 'sans-serif'],
         japanese: ['Noto Sans JP', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        card: 'var(--radius-card)',
+        pill: 'var(--radius-pill)',
+      },
+      boxShadow: {
+        card: 'var(--shadow-card)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

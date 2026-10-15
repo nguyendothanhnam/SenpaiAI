@@ -1,10 +1,10 @@
-# HUONG DAN BAO VE DO AN: HineGoldAI - Japanese Learning Assistant
+# HUONG DAN BAO VE DO AN: SenpaiAI - Japanese Learning Assistant
 
 Tai lieu nay duoc tong hop tu ma nguon hien co cua du an. Cac mo ta ben duoi chi dua tren logic dang co trong repo, khong mo rong sang chuc nang chua duoc cai dat.
 
 ## 1. Gioi thieu de tai
 
-HineGoldAI la ung dung web ho tro nguoi Viet hoc tieng Nhat theo dinh huong JLPT. He thong ket hop giao dien React, backend FastAPI, co so du lieu PostgreSQL, tim kiem ngu nghia bang ChromaDB, LLM cuc bo qua Ollama va mo hinh CNN nhan dang chu Kanji viet tay.
+SenpaiAI la ung dung web ho tro nguoi Viet hoc tieng Nhat theo dinh huong JLPT. He thong ket hop giao dien React, backend FastAPI, co so du lieu PostgreSQL, tim kiem ngu nghia bang ChromaDB, LLM cuc bo qua Ollama va mo hinh CNN nhan dang chu Kanji viet tay.
 
 Muc tieu chinh cua de tai:
 
@@ -15,7 +15,7 @@ Muc tieu chinh cua de tai:
 - Cung cap cac minigame, quiz va flashcard de on tap.
 - Quan ly tai khoan, lich su chat va mot phan tien do hoc tap.
 
-Ten ung dung trong backend la `HineGoldAI - Japanese Learning Assistant` o `backend/app/main.py`. Mot so thong diep goc con dung ten `SenpaiAI`; khi bao ve co the trinh bay day la ten cu trong metadata/bao cao, con chuc nang hien tai la cung mot ung dung hoc tieng Nhat.
+Ten ung dung hien duoc thong nhat la `SenpaiAI - Japanese Learning Assistant` trong giao dien, backend va thong diep cua tro ly AI.
 
 ## 2. Phan tich thiet ke he thong
 
@@ -264,7 +264,7 @@ Frontend dung `frontend/src/services/api.ts` va `api.js` de goi API voi base URL
 
 #### `backend/app/services/chat_prompt.py`
 
-- Vai tro: System prompt cho HineGoldAI.
+- Vai tro: System prompt cho SenpaiAI.
 - Noi dung chinh: phan loai intent, tieng Viet la ngon ngu giai thich chinh, khong tra loi chi bang tieng Nhat, format rieng cho quiz/conversation/vocab/grammar/translation/kanji/sentence analysis.
 
 #### `backend/app/services/grammar_analyzer.py`
