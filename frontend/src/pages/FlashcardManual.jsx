@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Trash2 } from 'lucide-react'
 import { createFlashcard } from '../services/api.js'
 import { getStoredFlashcardSets, saveFlashcardSet, updateFlashcardSet } from '../utils/storage.js'
@@ -77,6 +78,10 @@ export default function FlashcardManual() {
   }
 
   return (
+    <div className="space-y-4">
+    <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+      <ArrowLeft className="h-4 w-4" /> Back to Games
+    </Link>
     <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
       <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400 px-6 py-8 text-white">
         <h1 className="text-3xl font-semibold">{existingSet ? 'Edit Flashcard Set' : 'Create Flashcard Set'}</h1>
@@ -139,5 +144,6 @@ export default function FlashcardManual() {
         </div>
       </form>
     </motion.div>
+    </div>
   )
 }

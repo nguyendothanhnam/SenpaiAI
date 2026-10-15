@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { Copy, FileUp, PencilLine, PlayCircle, Plus, Search, Trash2 } from 'lucide-react'
+import { ArrowLeft, Copy, FileUp, PencilLine, PlayCircle, Plus, Search, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { importFlashcard } from '../services/api.js'
 import {
   deleteFlashcardSet,
@@ -85,6 +85,10 @@ export default function Flashcard() {
   }
 
   return (
+    <div className="space-y-4">
+      <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+        <ArrowLeft className="h-4 w-4" /> Back to Games
+      </Link>
     <div className="space-y-4 rounded-2xl border border-orange-100 bg-orange-50 p-4 shadow-sm sm:p-5">
       <section className="rounded-2xl border border-orange-100 bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
@@ -178,6 +182,7 @@ export default function Flashcard() {
           <div className="rounded-2xl bg-white p-8 text-center text-sm font-semibold text-gray-600 lg:col-span-2">No flashcard sets match the current filters.</div>
         )}
       </section>
+    </div>
     </div>
   )
 }

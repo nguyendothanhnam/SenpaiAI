@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { defaultThemeId, ThemeMode, themeBackgrounds, themes } from './themes'
+import { isBackgroundUnlocked, isThemeUnlocked } from './themeAccess'
 
 interface ThemeContextValue {
   mode: ThemeMode
@@ -17,11 +18,16 @@ const STORAGE_KEY = 'senpai-ai-theme-v2'
 function getSavedPreferences(): { mode: ThemeMode; themeId: string; backgroundId: string | null } {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-    const themeId = themes[saved.themeId] ? saved.themeId : defaultThemeId
+    const savedThemeIsUnlocked = Boolean(themes[saved.themeId] && isThemeUnlocked(saved.themeId))
+    const themeId = savedThemeIsUnlocked ? saved.themeId : defaultThemeId
+    const savedBackgroundIsAvailable = themeBackgrounds.some((background) => background.id === saved.backgroundId)
+    const backgroundId = savedThemeIsUnlocked && savedBackgroundIsAvailable && isBackgroundUnlocked(saved.backgroundId)
+      ? saved.backgroundId
+      : null
     return {
       mode: ['light', 'dark', 'system'].includes(saved.mode) ? saved.mode : 'light',
       themeId,
-      backgroundId: themeBackgrounds.some((background) => background.id === saved.backgroundId) ? saved.backgroundId : null,
+      backgroundId,
     }
   } catch {
     return { mode: 'light', themeId: defaultThemeId, backgroundId: null }
@@ -55,6 +61,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       '--text-muted': values.textMuted,
       '--border': values.border,
       '--primary': values.primary,
+      '--primary-gradient': values.primaryGradient,
       '--primary-contrast': values.primaryContrast,
       '--accent': values.accent,
       '--shadow-card': values.shadowCard,
@@ -79,10 +86,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     backgroundId: preferences.backgroundId,
     setMode: (mode) => setPreferences((current) => ({ ...current, mode })),
     setTheme: (themeId) => {
-      if (themes[themeId]) setPreferences((current) => ({ ...current, themeId, backgroundId: null }))
+      if (themes[themeId] && isThemeUnlocked(themeId)) setPreferences((current) => ({ ...current, themeId, backgroundId: null }))
     },
     setBackground: (backgroundId) => {
-      if (backgroundId === null || themeBackgrounds.some((background) => background.id === backgroundId)) {
+      if (backgroundId === null || (themeBackgrounds.some((background) => background.id === backgroundId) && isBackgroundUnlocked(backgroundId))) {
         setPreferences((current) => ({ ...current, backgroundId }))
       }
     },

@@ -1,12 +1,16 @@
-import { Moon, Monitor, Sun } from 'lucide-react'
+import { Lock, Moon, Monitor, Sun } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { useTheme } from '../themes/ThemeProvider'
 import { ThemeMode, themeBackgrounds, themes } from '../themes/themes'
+import { isBackgroundUnlocked, isThemeUnlocked } from '../themes/themeAccess'
 
 const modes: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
-  { value: 'light', label: 'Light', icon: Sun },
-  { value: 'dark', label: 'Dark', icon: Moon },
-  { value: 'system', label: 'System', icon: Monitor },
+  { value: 'light', label: 'Sáng', icon: Sun },
+  { value: 'dark', label: 'Tối', icon: Moon },
+  { value: 'system', label: 'Theo thiết bị', icon: Monitor },
 ]
+
+const lockedMessage = 'Làm bài tập hằng ngày để kiếm điểm và mở khóa giao diện này'
 
 export default function Settings() {
   const { mode, resolvedMode, themeId, backgroundId, setMode, setTheme, setBackground } = useTheme()
@@ -16,13 +20,13 @@ export default function Settings() {
   return (
     <section className="mx-auto max-w-4xl space-y-8 text-[color:var(--text)]">
       <header>
-        <h1 className="font-heading text-3xl font-bold">Appearance</h1>
-        <p className="mt-2 text-sm text-[color:var(--text-muted)]">Customize SenpaiAI’s colors and visual style.</p>
+        <h1 className="font-heading text-3xl font-bold">Giao diện</h1>
+        <p className="mt-2 text-sm text-[color:var(--text-muted)]">Tùy chỉnh màu sắc và phong cách hiển thị của SenpaiAI.</p>
       </header>
 
       <section className="theme-card p-6">
-        <h2 className="text-lg font-semibold">Display mode</h2>
-        <p className="mt-1 text-sm text-[color:var(--text-muted)]">Choose light, dark, or follow your device settings.</p>
+        <h2 className="text-lg font-semibold">Chế độ hiển thị</h2>
+        <p className="mt-1 text-sm text-[color:var(--text-muted)]">Chọn giao diện sáng, tối hoặc theo thiết bị.</p>
         <div className="mt-4 flex flex-wrap gap-3">
           {modes.map(({ value, label, icon: Icon }) => (
             <button key={value} type="button" onClick={() => setMode(value)} aria-pressed={mode === value}
@@ -34,44 +38,77 @@ export default function Settings() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold">Themes</h2>
-        <p className="mt-1 text-sm text-[color:var(--text-muted)]">Theme selection is available for preview. Point costs and lock status are ready for a future theme shop.</p>
+        <h2 className="text-lg font-semibold">Chủ đề</h2>
+        <p className="mt-1 text-sm text-[color:var(--text-muted)]">Chế độ sáng và tối luôn miễn phí cho mọi chủ đề.</p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {Object.values(themes).map((theme) => (
-            <button key={theme.id} type="button" onClick={() => setTheme(theme.id)} aria-pressed={themeId === theme.id}
-              className={`theme-card overflow-hidden text-left transition-all ${themeId === theme.id ? 'ring-2 ring-[color:var(--primary)]' : 'hover:-translate-y-0.5'}`}>
-              <img src={theme.background.light} alt="" loading="lazy" className="h-28 w-full object-cover" />
-              <div className="p-4">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-semibold">{theme.name}</h3>
-                  <span className="text-xs text-[color:var(--text-muted)]">{theme.locked ? 'Locked' : `${theme.points} points`}</span>
+          {Object.values(themes).map((theme) => {
+            const unlocked = isThemeUnlocked(theme.id)
+            const status = !unlocked
+              ? `Khóa • ${theme.points} điểm`
+              : theme.points === 0
+                ? 'Miễn phí'
+                : 'Đã mở khóa'
+            return (
+              <button key={theme.id} type="button" onClick={() => {
+                if (!unlocked) {
+                  toast(lockedMessage)
+                  return
+                }
+                setTheme(theme.id)
+              }} aria-pressed={themeId === theme.id}
+                className={`theme-card overflow-hidden text-left transition-all ${!unlocked ? 'cursor-not-allowed opacity-70' : 'hover:-translate-y-0.5'} ${themeId === theme.id ? 'ring-2 ring-[color:var(--primary)]' : ''}`}>
+                {theme.background.light ? (
+                  <img src={theme.background.light} alt="" loading="lazy" className="h-28 w-full object-cover" />
+                ) : (
+                  <div aria-hidden="true" className="h-28 w-full" style={{ backgroundImage: theme.palettes.light.bgImage }} />
+                )}
+                <div className="p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-semibold">{theme.name}</h3>
+                    <span className="inline-flex items-center gap-1 text-xs text-[color:var(--text-muted)]">
+                      {!unlocked && <Lock aria-hidden="true" className="h-3.5 w-3.5" />}{status}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-[color:var(--text-muted)]">{theme.description}</p>
                 </div>
-                <p className="mt-1 text-sm text-[color:var(--text-muted)]">{theme.description}</p>
-              </div>
-            </button>
-          ))}
+              </button>
+            )
+          })}
         </div>
       </section>
 
       <section>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold">Backgrounds</h2>
-            <p className="mt-1 text-sm text-[color:var(--text-muted)]">Choose a scene for the current theme. The same scene works in light and dark mode.</p>
+            <h2 className="text-lg font-semibold">Hình nền</h2>
+            <p className="mt-1 text-sm text-[color:var(--text-muted)]">Chọn khung cảnh cho giao diện, dùng được ở cả chế độ sáng và tối.</p>
           </div>
           <button type="button" onClick={() => setBackground(null)} aria-pressed={!backgroundId}
             className={`rounded-pill border px-4 py-2 text-sm font-semibold transition-colors ${!backgroundId ? 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--text)]' : 'border-[color:var(--border)] hover:bg-[color:var(--accent)]'}`}>
-            Theme default
+            Nền mặc định
           </button>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {themeBackgrounds.map((background) => {
             const selected = backgroundId ? backgroundId === background.id : defaultBackground === background.image
+            const unlocked = isBackgroundUnlocked(background.id)
+            const status = unlocked ? 'Đã mở khóa' : `Khóa • ${background.points} điểm`
             return (
-              <button key={background.id} type="button" onClick={() => setBackground(background.id)} aria-pressed={selected}
-                className={`theme-card overflow-hidden text-left transition-all ${selected ? 'ring-2 ring-[color:var(--primary)]' : 'hover:-translate-y-0.5'}`}>
+              <button key={background.id} type="button" onClick={() => {
+                if (!unlocked) {
+                  toast(lockedMessage)
+                  return
+                }
+                setBackground(background.id)
+              }} aria-pressed={selected}
+                className={`theme-card overflow-hidden text-left transition-all ${!unlocked ? 'cursor-not-allowed opacity-70' : 'hover:-translate-y-0.5'} ${selected ? 'ring-2 ring-[color:var(--primary)]' : ''}`}>
                 <img src={background.image} alt="" loading="lazy" className="h-24 w-full object-cover sm:h-28" />
-                <span className="block px-3 py-2 text-sm font-medium">{background.name}</span>
+                <span className="flex items-center justify-between gap-2 px-3 py-2 text-sm font-medium">
+                  <span>{background.name}</span>
+                  <span className="inline-flex shrink-0 items-center gap-1 text-xs text-[color:var(--text-muted)]">
+                    {!unlocked && <Lock aria-hidden="true" className="h-3.5 w-3.5" />}{status}
+                  </span>
+                </span>
               </button>
             )
           })}

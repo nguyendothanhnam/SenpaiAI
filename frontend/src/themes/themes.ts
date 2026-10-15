@@ -9,6 +9,7 @@ export interface ThemePalette {
   textMuted: string
   border: string
   primary: string
+  primaryGradient: string
   primaryContrast: string
   accent: string
   shadowCard: string
@@ -26,7 +27,7 @@ export interface ThemeDefinition {
   description: string
   points: number
   locked: boolean
-  mascot: string
+  mascot: string | null
   background: Record<'light' | 'dark', string>
   palettes: Record<'light' | 'dark', ThemePalette>
 }
@@ -35,26 +36,29 @@ export interface ThemeBackground {
   id: string
   name: string
   image: string
+  points: number
+  locked: boolean
 }
 
 export const themeBackgrounds: ThemeBackground[] = [
-  { id: 'fuji-reading', name: 'Fuji Reading', image: '/themes/background1.webp' },
-  { id: 'hydrangea-garden', name: 'Hydrangea Garden', image: '/themes/background2.webp' },
-  { id: 'zen-samurai', name: 'Zen Samurai', image: '/themes/background3.webp' },
-  { id: 'bamboo-shrine', name: 'Bamboo Shrine', image: '/themes/background4.webp' },
-  { id: 'bamboo-night', name: 'Bamboo Night', image: '/themes/background5.webp' },
-  { id: 'sakura-shrine', name: 'Sakura Shrine', image: '/themes/background6.webp' },
-  { id: 'bamboo-path', name: 'Bamboo Path', image: '/themes/background7.webp' },
-  { id: 'bonsai-tea', name: 'Bonsai Tea Garden', image: '/themes/background8.webp' },
-  { id: 'spring-koinobori', name: 'Spring Koinobori', image: '/themes/background9.webp' },
-  { id: 'sakura-picnic', name: 'Sakura Picnic', image: '/themes/background10.webp' },
-  { id: 'cherry-torii', name: 'Cherry Blossom Torii', image: '/themes/background11.webp' },
-  { id: 'calligraphy-cat', name: 'Calligraphy Cat', image: '/themes/background12.webp' },
-  { id: 'sakura-path', name: 'Sakura Path', image: '/themes/background13.webp' },
+  { id: 'fuji-reading', name: 'Đọc sách dưới núi Phú Sĩ', image: '/themes/background1.webp', points: 100, locked: true },
+  { id: 'hydrangea-garden', name: 'Vườn cẩm tú cầu', image: '/themes/background2.webp', points: 100, locked: true },
+  { id: 'zen-samurai', name: 'Vườn thiền Samurai', image: '/themes/background3.webp', points: 100, locked: true },
+  { id: 'bamboo-shrine', name: 'Đền giữa rừng trúc', image: '/themes/background4.webp', points: 100, locked: true },
+  { id: 'bamboo-night', name: 'Rừng trúc đêm', image: '/themes/background5.webp', points: 100, locked: true },
+  { id: 'sakura-shrine', name: 'Đền hoa anh đào', image: '/themes/background6.webp', points: 100, locked: true },
+  { id: 'bamboo-path', name: 'Lối đi rừng trúc', image: '/themes/background7.webp', points: 100, locked: true },
+  { id: 'bonsai-tea', name: 'Vườn bonsai và trà', image: '/themes/background8.webp', points: 100, locked: true },
+  { id: 'spring-koinobori', name: 'Cờ cá chép mùa xuân', image: '/themes/background9.webp', points: 100, locked: true },
+  { id: 'sakura-picnic', name: 'Dã ngoại dưới hoa anh đào', image: '/themes/background10.webp', points: 100, locked: true },
+  { id: 'cherry-torii', name: 'Cổng Torii mùa hoa', image: '/themes/background11.webp', points: 100, locked: true },
+  { id: 'calligraphy-cat', name: 'Mèo luyện thư pháp', image: '/themes/background12.webp', points: 100, locked: true },
+  { id: 'sakura-path', name: 'Đường hoa anh đào', image: '/themes/background13.webp', points: 100, locked: true },
 ]
 
-const palette = (values: Omit<ThemePalette, 'bgImage' | 'bgOverlay'>, bgImage: string, bgOverlay: string): ThemePalette => ({
+const palette = (values: Omit<ThemePalette, 'bgImage' | 'bgOverlay' | 'primaryGradient'>, bgImage: string, bgOverlay: string, primaryGradient = values.primary): ThemePalette => ({
   ...values,
+  primaryGradient,
   bgImage,
   bgOverlay,
 })
@@ -68,12 +72,25 @@ const shared = {
 }
 
 export const themes: Record<string, ThemeDefinition> = {
+  classic: {
+    id: 'classic',
+    name: 'Cổ điển',
+    description: 'Phong cách SenpaiAI nguyên bản với sắc cam ấm và tím dịu.',
+    points: 0,
+    locked: false,
+    mascot: null,
+    background: { light: '', dark: '' },
+    palettes: {
+      light: palette({ ...shared, bg: '#fff7ed', bgElevated: '#ffffff', card: '#ffffff', cardGlass: 'rgb(255 255 255 / 85%)', text: '#111827', textMuted: '#4b5563', border: '#ffedd5', primary: '#ea580c', primaryContrast: '#ffffff', accent: '#ffedd5' }, 'linear-gradient(135deg, #fff7ed 0%, #ffffff 50%, #f5f3ff 100%)', 'transparent', 'linear-gradient(90deg, #f97316, #f59e0b, #8b5cf6)'),
+      dark: palette({ ...shared, shadowCard: '0 12px 36px rgb(0 0 0 / 35%)', bg: '#1c1410', bgElevated: '#261b15', card: '#2f221a', cardGlass: 'rgb(38 27 21 / 88%)', text: '#fdf2e9', textMuted: '#d6bfae', border: '#4a3426', primary: '#fb923c', primaryContrast: '#1c1410', accent: '#3d2a1d' }, 'linear-gradient(135deg, #1c1410 0%, #261b15 55%, #2a1c14 100%)', 'transparent', 'linear-gradient(90deg, #ea580c, #f59e0b)'),
+    },
+  },
   'than-khe': {
     id: 'than-khe',
     name: 'Thần Khê',
     description: 'Sắc mint dịu nhẹ, lấy cảm hứng từ khu vườn Nhật Bản.',
-    points: 0,
-    locked: false,
+    points: 300,
+    locked: true,
     mascot: '/themes/than-khe/cat.webp',
     background: {
       light: '/themes/background4.webp',
@@ -88,8 +105,8 @@ export const themes: Record<string, ThemeDefinition> = {
     id: 'sakura',
     name: 'Sakura',
     description: 'Tông hồng hoa anh đào nhẹ nhàng, ấm áp.',
-    points: 0,
-    locked: false,
+    points: 300,
+    locked: true,
     mascot: '/themes/sakura/cat.webp',
     background: {
       light: '/themes/background10.webp',
@@ -102,4 +119,4 @@ export const themes: Record<string, ThemeDefinition> = {
   },
 }
 
-export const defaultThemeId = 'than-khe'
+export const defaultThemeId = 'classic'

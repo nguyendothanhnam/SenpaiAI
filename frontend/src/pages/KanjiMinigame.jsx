@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { motion } from 'framer-motion'
-import { CheckCircle2, ChevronLeft, ChevronRight, RotateCcw, Search, Shuffle, Volume2, XCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, RotateCcw, Search, Shuffle, Volume2, XCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { kanjiDataAPI, libraryAPI } from '../services/api'
 import {
   builtInKanjiDataset,
@@ -589,6 +590,9 @@ export default function KanjiMinigame() {
       transition={{ duration: 0.35, ease: 'easeOut' }}
       className="space-y-4 rounded-2xl border border-orange-100 bg-orange-50 p-4 shadow-sm sm:p-5"
     >
+      <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+        <ArrowLeft className="h-4 w-4" /> Back to Games
+      </Link>
       <div className="rounded-2xl border border-orange-100 bg-white p-4 shadow-sm">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
           <div>

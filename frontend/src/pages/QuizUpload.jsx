@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { uploadQuiz } from '../services/api.js'
 import { saveQuizSet } from '../utils/storage.js'
 import { normalizeAnswer } from '../utils/quizAnswers.js'
@@ -136,39 +137,44 @@ export default function QuizUpload() {
   }
 
   return (
+    <div className="space-y-4">
+    <Link to="/quiz" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+      <ArrowLeft className="h-4 w-4" /> Back to Quiz
+    </Link>
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm"
+      className="theme-card overflow-hidden rounded-3xl shadow-sm"
     >
-      <div className="bg-gradient-to-r from-sky-500 via-cyan-500 to-teal-400 px-6 py-8 text-white">
+      <div className="px-6 py-8" style={{ backgroundImage: 'var(--primary-gradient)', color: 'var(--primary-contrast)' }}>
         <h1 className="text-3xl font-semibold">Upload Quiz File</h1>
-        <p className="mt-2 text-sm text-white/90">Upload Excel or JSON and save it as a quiz set.</p>
+        <p className="mt-2 text-sm opacity-90">Upload Excel or JSON and save it as a quiz set.</p>
       </div>
 
-      <form onSubmit={handleUpload} className="space-y-5 px-6 py-8">
+      <form onSubmit={handleUpload} className="space-y-5 px-6 py-8 text-[color:var(--text)]">
         {error && <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
         {successMsg && <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">{successMsg}</div>}
 
-        <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-6">
-          <label className="mb-3 block text-sm font-medium text-gray-700">Choose file</label>
+        <div className="rounded-2xl border border-dashed border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-6">
+          <label className="mb-3 block text-sm font-medium text-[color:var(--text)]">Choose file</label>
           <input
             type="file"
             accept=".xlsx,.xls,.json"
             onChange={(event) => setFile(event.target.files?.[0] || null)}
-            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm"
+            className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm text-[color:var(--text)]"
           />
-          <p className="mt-3 text-xs text-gray-500">Supported columns: question, option_a-d, correct_answer, explanation, jlpt_level, category.</p>
+          <p className="mt-3 text-xs text-[color:var(--text-muted)]">Supported columns: question, option_a-d, correct_answer, explanation, jlpt_level, category.</p>
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn btn-primary rounded-xl px-5 py-3 text-sm font-semibold shadow-sm disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? 'Uploading...' : 'Upload And Play'}
         </button>
       </form>
     </motion.div>
+    </div>
   )
 }

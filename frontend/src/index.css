@@ -84,13 +84,13 @@
   
   .btn-primary {
     @apply transition-all duration-200;
-    background-color: var(--primary);
+    background: var(--primary-gradient);
     color: var(--primary-contrast);
   }
   
   .btn-secondary {
     @apply transition-all duration-200;
-    background-color: var(--primary);
+    background: var(--primary-gradient);
     color: var(--primary-contrast);
   }
 
@@ -144,7 +144,7 @@
   }
 
   .theme-brand {
-    background: var(--primary);
+    background: var(--primary-gradient);
     color: var(--primary-contrast);
   }
 
@@ -179,12 +179,12 @@
 
 @layer utilities {
   /* Keep legacy orange UI utilities aligned with the selected theme tokens. */
-  .theme-shell :is(button, a)[class~="bg-orange-400"],
-  .theme-shell :is(button, a)[class~="bg-orange-500"],
-  .theme-shell :is(button, a)[class~="bg-orange-600"],
-  .theme-shell :is(button, a)[class~="from-orange-400"],
-  .theme-shell :is(button, a)[class~="from-orange-500"],
-  .theme-shell :is(button, a)[class~="from-orange-600"] {
+  html:not([data-theme='classic']) .theme-shell :is(button, a)[class~="bg-orange-400"],
+  html:not([data-theme='classic']) .theme-shell :is(button, a)[class~="bg-orange-500"],
+  html:not([data-theme='classic']) .theme-shell :is(button, a)[class~="bg-orange-600"],
+  html:not([data-theme='classic']) .theme-shell :is(button, a)[class~="from-orange-400"],
+  html:not([data-theme='classic']) .theme-shell :is(button, a)[class~="from-orange-500"],
+  html:not([data-theme='classic']) .theme-shell :is(button, a)[class~="from-orange-600"] {
     background-image: none;
     background-color: var(--primary);
     color: var(--primary-contrast);
@@ -250,19 +250,18 @@
 
   .theme-shell .btn-primary,
   .theme-shell .btn-secondary {
-    background-image: none;
-    background-color: var(--primary);
+    background: var(--primary-gradient);
     color: var(--primary-contrast);
   }
 
-  .theme-shell .kanji-page .btn-primary {
+  html:not([data-theme='classic']) .theme-shell .kanji-page .btn-primary {
     background-image: none;
     background-color: var(--accent);
     color: var(--text);
     box-shadow: none;
   }
 
-  .theme-shell .kanji-page .btn-primary:hover {
+  html:not([data-theme='classic']) .theme-shell .kanji-page .btn-primary:hover {
     background-color: var(--primary);
     color: var(--primary-contrast);
   }
@@ -328,7 +327,7 @@
     color: var(--text-muted);
   }
 
-  .theme-shell [class~="from-orange-600"][class~="to-amber-600"][class~="text-transparent"] {
+  html:not([data-theme='classic']) .theme-shell [class~="from-orange-600"][class~="to-amber-600"][class~="text-transparent"] {
     background-image: none;
     background-clip: initial;
     color: var(--primary);

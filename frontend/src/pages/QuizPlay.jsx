@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { PlayCircle, Trash2 } from 'lucide-react'
+import { ArrowLeft, PlayCircle, Trash2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getQuiz } from '../services/api.js'
 import { deleteQuizSet, getStoredQuizSets } from '../utils/storage.js'
 import { getOptionKey, getQuestionCorrectAnswer, isCorrectQuizAnswer, normalizeAnswer } from '../utils/quizAnswers.js'
@@ -202,15 +202,18 @@ export default function QuizPlay() {
 
   return (
     <div className="space-y-6">
-      <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+      <Link to="/quiz" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+        <ArrowLeft className="h-4 w-4" /> Back to Quiz
+      </Link>
+      <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="theme-card rounded-3xl p-6 shadow-sm">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Saved Quiz Sets</p>
-            <h1 className="mt-1 text-2xl font-semibold text-gray-900">Uploaded And Manual Quizzes</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">Saved Quiz Sets</p>
+            <h1 className="mt-1 text-2xl font-semibold text-[color:var(--text)]">Uploaded And Manual Quizzes</h1>
           </div>
           <button
             onClick={() => navigate('/quiz/upload')}
-            className="rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800"
+            className="btn btn-primary rounded-xl px-4 py-2 text-sm font-semibold"
           >
             Upload New Set
           </button>
@@ -220,7 +223,7 @@ export default function QuizPlay() {
           <select
             value={filters.jlpt}
             onChange={(event) => setFilters((current) => ({ ...current, jlpt: event.target.value }))}
-            className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700"
+            className="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-3 py-2 text-sm text-[color:var(--text)]"
           >
             <option value="all">All JLPT levels</option>
             {filterOptions.levels.map((level) => (
@@ -230,7 +233,7 @@ export default function QuizPlay() {
           <select
             value={filters.category}
             onChange={(event) => setFilters((current) => ({ ...current, category: event.target.value }))}
-            className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700"
+            className="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-3 py-2 text-sm text-[color:var(--text)]"
           >
             <option value="all">All categories</option>
             {filterOptions.categories.map((category) => (
@@ -241,45 +244,45 @@ export default function QuizPlay() {
             value={filters.fileName}
             onChange={(event) => setFilters((current) => ({ ...current, fileName: event.target.value }))}
             placeholder="Filter by uploaded file name"
-            className="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700"
+            className="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-3 py-2 text-sm text-[color:var(--text)]"
           />
         </div>
 
         <div className="mt-5 grid gap-4 lg:grid-cols-2">
           {filteredSets.length ? filteredSets.map((quizSet) => (
-            <div key={quizSet.id} className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+            <div key={quizSet.id} className="theme-card rounded-2xl p-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <h2 className="text-base font-semibold text-gray-900">{quizSet.title}</h2>
-                  <p className="mt-1 text-xs text-gray-500">{quizSet.file_name || quizSet.source || 'Saved quiz set'}</p>
+                  <h2 className="text-base font-semibold text-[color:var(--text)]">{quizSet.title}</h2>
+                  <p className="mt-1 text-xs text-[color:var(--text-muted)]">{quizSet.file_name || quizSet.source || 'Saved quiz set'}</p>
                 </div>
-                <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-700 shadow-sm">{quizSet.jlpt_level || 'Mixed'}</span>
+                <span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-semibold text-[color:var(--text)]">{quizSet.jlpt_level || 'Mixed'}</span>
               </div>
-              <div className="mt-4 grid grid-cols-3 gap-2 text-xs text-gray-600">
+              <div className="mt-4 grid grid-cols-3 gap-2 text-xs text-[color:var(--text-muted)]">
                 <div>
-                  <p className="font-semibold text-gray-900">{quizSet.questions?.length || 0}</p>
+                  <p className="font-semibold text-[color:var(--text)]">{quizSet.questions?.length || 0}</p>
                   <p>Questions</p>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">{quizSet.category || 'General'}</p>
+                  <p className="font-semibold text-[color:var(--text)]">{quizSet.category || 'General'}</p>
                   <p>Category</p>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">{formatDate(quizSet.created_at)}</p>
+                  <p className="font-semibold text-[color:var(--text)]">{formatDate(quizSet.created_at)}</p>
                   <p>Created</p>
                 </div>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   onClick={() => startQuiz(quizSet)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                  className="btn btn-primary inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold"
                 >
                   <PlayCircle className="h-4 w-4" />
                   Play
                 </button>
                 <button
                   onClick={() => handleDeleteSet(quizSet)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                  className="inline-flex items-center gap-2 rounded-xl border border-red-300 bg-[color:var(--card)] px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50"
                 >
                   <Trash2 className="h-4 w-4" />
                   Delete
@@ -287,7 +290,7 @@ export default function QuizPlay() {
               </div>
             </div>
           )) : (
-            <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-5 text-sm text-gray-600">
+            <div className="rounded-2xl border border-dashed border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-5 text-sm text-[color:var(--text-muted)]">
               No saved quiz sets match the current filters.
             </div>
           )}
@@ -295,7 +298,7 @@ export default function QuizPlay() {
       </motion.section>
 
       {isLoading && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">Loading quiz...</div>
+        <div className="theme-card rounded-2xl p-6 text-sm text-[color:var(--text-muted)]">Loading quiz...</div>
       )}
 
       {!isLoading && error && (
@@ -303,26 +306,26 @@ export default function QuizPlay() {
       )}
 
       {!isLoading && !error && !currentQuestion && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">Choose a saved quiz set or upload a new one.</div>
+        <div className="theme-card rounded-2xl p-6 text-sm text-[color:var(--text-muted)]">Choose a saved quiz set or upload a new one.</div>
       )}
 
       {!isLoading && !error && currentQuestion && (
-        <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+        <motion.section initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="theme-card rounded-3xl p-6 shadow-sm sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">{activeSet?.source === 'generated' ? 'Default Generated Quiz' : 'Saved Quiz Play'}</p>
-              <h1 className="mt-1 text-2xl font-semibold text-gray-900">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)]">{activeSet?.source === 'generated' ? 'Default Generated Quiz' : 'Saved Quiz Play'}</p>
+              <h1 className="mt-1 text-2xl font-semibold text-[color:var(--text)]">
                 {activeSet?.title || 'Quiz'}: Question {currentIndex + 1} / {total}
               </h1>
             </div>
-            <div className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 px-4 py-2 text-sm font-semibold text-white shadow-sm">
+            <div className="rounded-xl bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-contrast)] shadow-sm">
               Score: {score} / {total}
             </div>
           </div>
 
-          <div className="mt-5 h-2 overflow-hidden rounded-full bg-gray-100">
+          <div className="mt-5 h-2 overflow-hidden rounded-full bg-[color:var(--accent)]">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-sky-500 to-emerald-400"
+              className="h-full rounded-full bg-[color:var(--primary)]"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ type: 'spring', stiffness: 60 }}
@@ -335,19 +338,19 @@ export default function QuizPlay() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-6"
+              className="theme-card mt-6 rounded-2xl p-6"
             >
-              <h2 className="text-lg font-semibold text-gray-900">{currentQuestion.question}</h2>
+              <h2 className="text-lg font-semibold text-[color:var(--text)]">{currentQuestion.question}</h2>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {(currentQuestion.options || []).map((option, index) => {
                   const optionKey = getOptionKey(index)
                   const isSelected = selected === optionKey
                   const isCorrect = isCorrectQuizAnswer(currentQuestion, optionKey)
 
-                  let colorClass = 'border-gray-200 bg-white text-gray-800 hover:border-sky-400'
+                  let colorClass = 'border-[color:var(--border)] bg-[color:var(--bg-elevated)] text-[color:var(--text)] hover:border-[color:var(--primary)]'
 
                   if (showResult && isCorrect) {
-                    colorClass = 'border-green-200 bg-green-50 text-green-700'
+                    colorClass = 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--text)]'
                   } else if (showResult && isSelected && !isCorrect) {
                     colorClass = 'border-red-200 bg-red-50 text-red-700'
                   }
@@ -367,10 +370,10 @@ export default function QuizPlay() {
                 })}
               </div>
               {showResult && !['A', 'B', 'C', 'D'].includes(normalizedCorrectAnswer) && (
-                <p className="mt-3 text-xs text-gray-500">Correct answer: {correctAnswer}</p>
+                <p className="mt-3 text-xs text-[color:var(--text-muted)]">Correct answer: {correctAnswer}</p>
               )}
               {showResult && currentQuestion.explanation && (
-                <div className="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-3 text-sm text-blue-800">
+                <div className="theme-card mt-4 rounded-xl p-3 text-sm text-[color:var(--text)]">
                   {currentQuestion.explanation}
                 </div>
               )}
@@ -382,21 +385,21 @@ export default function QuizPlay() {
               <button
                 onClick={handleNext}
                 disabled={!showResult}
-                className="rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="btn btn-primary rounded-xl px-5 py-3 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Next Question
               </button>
             ) : (
               <button
                 onClick={handleRestart}
-                className="rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:from-emerald-600 hover:to-green-600"
+                className="btn btn-primary rounded-xl px-5 py-3 text-sm font-semibold shadow-sm"
               >
                 Restart Quiz
               </button>
             )}
             <button
               onClick={() => navigate('/quiz')}
-              className="rounded-xl border border-gray-300 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+              className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-5 py-3 text-sm font-semibold text-[color:var(--text)] transition hover:bg-[color:var(--accent)]"
             >
               Back To Setup
             </button>

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Trash2 } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 import { createQuiz } from '../services/api.js'
 import { saveQuizSet } from '../utils/storage.js'
 
@@ -93,6 +93,10 @@ export default function QuizManual() {
   }
 
   return (
+    <div className="space-y-4">
+      <Link to="/quiz" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+        <ArrowLeft className="h-4 w-4" /> Back to Quiz
+      </Link>
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
@@ -191,5 +195,6 @@ export default function QuizManual() {
 
       </form>
     </motion.div>
+    </div>
   )
 }

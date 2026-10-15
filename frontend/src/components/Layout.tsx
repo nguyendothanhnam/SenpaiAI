@@ -16,7 +16,7 @@ import {
 import { useAuth } from '../services/auth'
 import { cn } from '../utils/helpers'
 import { Gamepad2 } from 'lucide-react'
-import catImage from "../img/cat-logo.png";
+import catImage from "../img/cat-logo.webp";
 import { useTheme } from '../themes/ThemeProvider'
 import { themeBackgrounds, themes } from '../themes/themes'
 
@@ -42,12 +42,13 @@ export default function Layout({ children }: LayoutProps) {
   const theme = themes[themeId]
   const isDark = resolvedMode === 'dark'
   const palette = theme.palettes[isDark ? 'dark' : 'light']
+  const mascot = theme.mascot || catImage
   const background = themeBackgrounds.find((item) => item.id === backgroundId)?.image || theme.background[isDark ? 'dark' : 'light']
   const toggleMode = () => setMode(isDark ? 'light' : 'dark')
 
   return (
       <div className="theme-shell relative isolate min-h-screen bg-[color:var(--bg)] text-[color:var(--text)]">
-      <img src={background} alt="" aria-hidden="true" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none' }} className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover opacity-60" />
+      {background && <img src={background} alt="" aria-hidden="true" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none' }} className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover opacity-60" />}
       <div aria-hidden="true" className="theme-overlay pointer-events-none fixed inset-0 z-0" style={{ backgroundColor: palette.bgOverlay }} />
       <div className="relative z-10 min-h-screen">
       {/* Mobile sidebar */}
@@ -60,7 +61,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="theme-brand flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-2">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/20 shadow-sm">
-                <img src={theme.mascot} onError={(event) => { event.currentTarget.src = catImage }} alt="SenpaiAI Cat" className="h-11 w-11 object-contain" />
+                <img src={mascot} onError={(event) => { event.currentTarget.src = catImage }} alt="SenpaiAI Cat" className="h-11 w-11 object-contain" />
               </div>
               <div>
                 <h1 className="text-lg font-bold leading-tight text-[color:var(--primary-contrast)]">SenpaiAI</h1>
@@ -128,7 +129,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center gap-2">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/20 shadow-sm">
                 <img
-                  src={theme.mascot}
+                  src={mascot}
                   onError={(event) => { event.currentTarget.src = catImage }}
                   alt="SenpaiAI Cat"
                   className="h-11 w-11 object-contain"

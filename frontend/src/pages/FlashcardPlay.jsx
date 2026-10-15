@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { CheckCircle2, ChevronLeft, ChevronRight, RotateCcw, XCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, ChevronLeft, ChevronRight, RotateCcw, XCircle } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { getStoredFlashcardSets, recordFlashcardStudyResult } from '../utils/storage.js'
 
 export default function FlashcardPlay() {
@@ -18,6 +18,11 @@ export default function FlashcardPlay() {
   const total = cards.length
   const currentCard = cards[currentIndex]
   const stats = activeSet?.stats || { correct: 0, wrong: 0, streak: 0, accuracy: 0 }
+  const backToGames = (
+    <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
+      <ArrowLeft className="h-4 w-4" /> Back to Games
+    </Link>
+  )
 
   const changeSet = (setId) => {
     setActiveSetId(setId)
@@ -52,19 +57,25 @@ export default function FlashcardPlay() {
 
   if (!sets.length) {
     return (
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
-        No flashcard sets found. Create or import a set first.
+      <div className="space-y-4">
+        {backToGames}
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
+          No flashcard sets found. Create or import a set first.
+        </div>
       </div>
     )
   }
 
   if (!currentCard) {
     return (
-      <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
-        <select value={activeSetId} onChange={(event) => changeSet(event.target.value)} className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
-          {sets.map((set) => <option key={set.id} value={set.id}>{set.name}</option>)}
-        </select>
-        <p>This flashcard set has no cards.</p>
+      <div className="space-y-4">
+        {backToGames}
+        <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-6 text-sm text-gray-600">
+          <select value={activeSetId} onChange={(event) => changeSet(event.target.value)} className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
+            {sets.map((set) => <option key={set.id} value={set.id}>{set.name}</option>)}
+          </select>
+          <p>This flashcard set has no cards.</p>
+        </div>
       </div>
     )
   }
@@ -73,6 +84,8 @@ export default function FlashcardPlay() {
   const canGoNext = currentIndex < total - 1
 
   return (
+    <div className="space-y-4">
+    {backToGames}
     <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="rounded-3xl border border-orange-100 bg-white p-6 shadow-sm sm:p-8">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
@@ -133,5 +146,6 @@ export default function FlashcardPlay() {
         </button>
       </div>
     </motion.div>
+    </div>
   )
 }
