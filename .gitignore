@@ -273,3 +273,4 @@ temp/
 ehthumbs.db
 Thumbs.db
 
+!frontend/public/
