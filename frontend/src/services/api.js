@@ -36,6 +36,21 @@ export const authAPI = {
   updateMe: (data) => api.put('/auth/me', data),
 }
 
+export const rewardsAPI = {
+  getMe: () => api.get('/rewards/me'),
+  getShop: () => api.get('/rewards/shop'),
+  getTransactions: (limit = 50) => api.get('/rewards/transactions', { params: { limit } }),
+  purchase: (data) => api.post('/rewards/shop/purchase', { equip: true, ...data }),
+  equip: (data) => api.put('/rewards/equip', data),
+}
+
+export const dailyAPI = {
+  getToday: () => api.get('/daily/today'),
+  answer: (itemId, data) => api.post(`/daily/items/${itemId}/answer`, data),
+  complete: () => api.post('/daily/complete'),
+  getHistory: (days = 30) => api.get('/daily/history', { params: { days } }),
+}
+
 export const chatAPI = {
   sendMessage: (message, context, jlpt_level) => api.post('/chat/message', { message, context, jlpt_level }),
   getHistory: (limit = 50, offset = 0) => api.get(`/chat/history?limit=${limit}&offset=${offset}`),
@@ -50,6 +65,19 @@ export const analysisAPI = {
   translate: (text, sourceLang, targetLang) =>
     api.post('/analysis/translate', { text, source_lang: sourceLang, target_lang: targetLang }),
   predictJLPT: (text) => api.post('/analysis/jlpt-level', text),
+}
+
+// Vite resolves extensionless imports to api.js before api.ts, so keep this
+// endpoint available here as well as in the typed api.ts module.
+export const grammarPracticeAPI = {
+  getPatterns: (jlpt_level) =>
+    api.get('/grammar-practice/patterns', { params: { jlpt_level } }),
+  createSession: (data) => api.post('/grammar-practice/sessions', data),
+  answer: (sessionId, data) =>
+    api.post(`/grammar-practice/sessions/${sessionId}/answer`, data),
+  finish: (sessionId) =>
+    api.post(`/grammar-practice/sessions/${sessionId}/finish`),
+  generate: (data) => api.post('/grammar-practice/generate', data),
 }
 
 export const libraryAPI = {

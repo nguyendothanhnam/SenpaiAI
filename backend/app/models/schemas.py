@@ -24,6 +24,7 @@ class User(UserBase):
     is_active: bool
     current_jlpt_level: str
     learning_goals: List[str]
+    exercise_points: int
     created_at: datetime
     updated_at: Optional[datetime] = None
 

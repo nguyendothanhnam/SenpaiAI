@@ -8,12 +8,17 @@ import {
   Target, 
   Trophy,
   BookOpen,
-  MessageCircle
+  MessageCircle,
+  Coins,
+  Flame,
+  CalendarDays
 } from 'lucide-react'
-import { authAPI } from '../services/api'
+import { authAPI, dailyAPI } from '../services/api'
 import { useAuth } from '../services/auth'
 import { formatDate, getJLPTDescription } from '../utils/helpers'
 import toast from 'react-hot-toast'
+import { useQuery } from 'react-query'
+import { useRewardsMe } from '../services/rewards'
 
 interface ProfileFormData {
   username: string
@@ -25,6 +30,15 @@ const JLPT_LEVELS = ['N5', 'N4', 'N3', 'N2', 'N1']
 
 export default function Profile() {
   const { user } = useAuth()
+  const { data: rewardProfile } = useRewardsMe(user?.id)
+  const { data: historyResult } = useQuery(['daily', 'history', user?.id, 30], async () => {
+    const response = await dailyAPI.getHistory(30)
+    const serverInstant = response.headers.date ? new Date(response.headers.date) : null
+    const parts = serverInstant ? new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(serverInstant) : []
+    const serverDate = parts.length ? `${parts.find((part) => part.type === 'year')?.value}-${parts.find((part) => part.type === 'month')?.value}-${parts.find((part) => part.type === 'day')?.value}` : null
+    return { entries: response.data, serverDate }
+  }, { enabled: Boolean(user?.id), retry: 1 })
+  const dailyHistory = historyResult?.entries || []
   const queryClient = useQueryClient()
   const [newGoal, setNewGoal] = useState('')
 
@@ -71,8 +85,35 @@ export default function Profile() {
     form.setValue('learning_goals', currentGoals.filter((_, i) => i !== index))
   }
 
+  const calendarEnd = historyResult?.serverDate || rewardProfile?.last_completed_date || dailyHistory[0]?.date
+  const calendarDates = calendarEnd ? Array.from({ length: 30 }, (_, index) => {
+    const [year, month, day] = calendarEnd.split('-').map(Number)
+    const date = new Date(Date.UTC(year, month - 1, day))
+    date.setUTCDate(date.getUTCDate() - 29 + index)
+    return date.toISOString().slice(0, 10)
+  }) : []
+  const historyMap = new Map(dailyHistory.map((entry) => [entry.date, entry]))
+
   return (
     <div className="space-y-6">
+      <section className="theme-card rounded-3xl p-5 shadow-[var(--shadow-card)] sm:p-7">
+        <div className="flex items-start gap-3">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)]"><Trophy className="h-5 w-5 text-[color:var(--primary)]" /></div>
+          <div><h2 className="text-xl font-bold text-[color:var(--text)]">Điểm & chuỗi ngày học</h2><p className="mt-1 text-sm text-[color:var(--text-muted)]">Thành tích đồng bộ với tài khoản của bạn.</p></div>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><Coins className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">Điểm hiện có</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.points_balance ?? '—'}</p></div></div>
+          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><Flame className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">Streak hiện tại</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.current_streak ?? 0} ngày</p></div></div>
+          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><CalendarDays className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">Streak dài nhất</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.longest_streak ?? 0} ngày</p></div></div>
+        </div>
+        <div className="mt-6">
+          <h3 className="mb-3 text-sm font-bold text-[color:var(--text)]">Lịch hoạt động 30 ngày gần nhất</h3>
+          {calendarDates.length ? <div className="grid grid-cols-6 gap-2 sm:grid-cols-10">{calendarDates.map((date) => {
+            const entry = historyMap.get(date)
+            return <div key={date} title={`${date}${entry ? ` · ${entry.points_awarded} điểm` : ''}`} className={`grid aspect-square place-items-center rounded-xl border text-[10px] font-semibold sm:text-xs ${entry ? 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--primary)]' : 'border-[color:var(--border)] bg-[color:var(--bg-elevated)] text-[color:var(--text-muted)]'}`}><span>{Number(date.slice(-2))}</span>{entry && <Flame className="h-3 w-3" />}</div>
+          })}</div> : <p className="rounded-xl bg-[color:var(--bg-elevated)] p-4 text-sm text-[color:var(--text-muted)]">Lịch sẽ hiển thị sau khi có ngày học hoàn thành đầu tiên.</p>}
+        </div>
+      </section>
       {/* Header */}
       <div className="flex items-center space-x-4">
         <div className="h-12 w-12 rounded-2xl bg-[color:var(--primary)] flex items-center justify-center shadow-lg">

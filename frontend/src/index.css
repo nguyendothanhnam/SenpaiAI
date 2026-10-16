@@ -148,6 +148,11 @@
     color: var(--primary-contrast);
   }
 
+  .theme-brand-mark {
+    background: var(--primary-gradient);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+
   .theme-topbar {
     background-color: color-mix(in srgb, var(--card) 82%, transparent);
   }
@@ -192,8 +197,12 @@
 
   .theme-shell [class~="bg-orange-50"],
   .theme-shell [class~="bg-orange-100"],
+  .theme-shell [class~="bg-orange-50/80"],
   .theme-shell [class~="bg-amber-50"],
-  .theme-shell [class~="bg-amber-100"] {
+  .theme-shell [class~="bg-amber-100"],
+  .theme-shell [class~="bg-violet-50"],
+  .theme-shell [class~="bg-violet-50/80"],
+  .theme-shell [class~="bg-violet-100"] {
     background-color: var(--accent);
   }
 
@@ -296,14 +305,22 @@
 
   .theme-shell .border-violet-100,
   .theme-shell .border-violet-200,
+  .theme-shell .border-violet-300,
   .theme-shell .border-orange-100,
   .theme-shell .border-orange-200 {
     border-color: var(--border);
   }
 
   .dark .theme-shell [class~="bg-white"],
-  .dark .theme-shell [class*="bg-white/"] {
+  .theme-shell [class*="bg-white/"],
+  .dark .theme-shell [class~="bg-white"] {
     background-color: var(--card-glass);
+  }
+
+  .theme-shell [class~="bg-gray-50"],
+  .theme-shell [class~="bg-gray-50/80"],
+  .theme-shell [class~="bg-gray-100"] {
+    background-color: var(--accent);
   }
 
   .dark .theme-shell .theme-writing-surface {

@@ -75,13 +75,13 @@ export const themes: Record<string, ThemeDefinition> = {
   classic: {
     id: 'classic',
     name: 'Cổ điển',
-    description: 'Phong cách SenpaiAI nguyên bản với sắc cam ấm và tím dịu.',
+    description: 'Phong cách SenpaiAI nguyên bản với sắc cam ấm.',
     points: 0,
     locked: false,
     mascot: null,
     background: { light: '', dark: '' },
     palettes: {
-      light: palette({ ...shared, bg: '#fff7ed', bgElevated: '#ffffff', card: '#ffffff', cardGlass: 'rgb(255 255 255 / 85%)', text: '#111827', textMuted: '#4b5563', border: '#ffedd5', primary: '#ea580c', primaryContrast: '#ffffff', accent: '#ffedd5' }, 'linear-gradient(135deg, #fff7ed 0%, #ffffff 50%, #f5f3ff 100%)', 'transparent', 'linear-gradient(90deg, #f97316, #f59e0b, #8b5cf6)'),
+      light: palette({ ...shared, bg: '#fff7ed', bgElevated: '#ffffff', card: '#ffffff', cardGlass: 'rgb(255 255 255 / 85%)', text: '#111827', textMuted: '#4b5563', border: '#ffedd5', primary: '#ea580c', primaryContrast: '#ffffff', accent: '#ffedd5' }, 'linear-gradient(135deg, #fff7ed 0%, #ffffff 55%, #ffedd5 100%)', 'transparent', 'linear-gradient(90deg, #f97316, #f59e0b, #ea580c)'),
       dark: palette({ ...shared, shadowCard: '0 12px 36px rgb(0 0 0 / 35%)', bg: '#1c1410', bgElevated: '#261b15', card: '#2f221a', cardGlass: 'rgb(38 27 21 / 88%)', text: '#fdf2e9', textMuted: '#d6bfae', border: '#4a3426', primary: '#fb923c', primaryContrast: '#1c1410', accent: '#3d2a1d' }, 'linear-gradient(135deg, #1c1410 0%, #261b15 55%, #2a1c14 100%)', 'transparent', 'linear-gradient(90deg, #ea580c, #f59e0b)'),
     },
   },

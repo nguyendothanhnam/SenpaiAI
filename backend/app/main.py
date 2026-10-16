@@ -8,7 +8,7 @@ import logging
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, analysis, library, game, kanji
+from .api import auth, chat, analysis, library, game, kanji, grammar_practice, rewards, daily
 from .services.kanji_dictionary_service import kanji_dictionary_service
 
 try:
@@ -84,6 +84,12 @@ app.include_router(game.router)
 app.include_router(game.router, prefix="/api")
 app.include_router(kanji.router)
 app.include_router(kanji.router, prefix="/api")
+app.include_router(grammar_practice.router)
+app.include_router(grammar_practice.router, prefix="/api")
+app.include_router(rewards.router)
+app.include_router(rewards.router, prefix="/api")
+app.include_router(daily.router)
+app.include_router(daily.router, prefix="/api")
 
 @app.get("/")
 async def root():

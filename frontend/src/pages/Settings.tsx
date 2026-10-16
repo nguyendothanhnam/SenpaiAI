@@ -1,5 +1,6 @@
 import { Lock, Moon, Monitor, Sun } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTheme } from '../themes/ThemeProvider'
 import { ThemeMode, themeBackgrounds, themes } from '../themes/themes'
 import { isBackgroundUnlocked, isThemeUnlocked } from '../themes/themeAccess'
@@ -10,10 +11,11 @@ const modes: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
   { value: 'system', label: 'Theo thiết bị', icon: Monitor },
 ]
 
-const lockedMessage = 'Làm bài tập hằng ngày để kiếm điểm và mở khóa giao diện này'
+const lockedMessage = 'Mục này đang khóa. Mở cửa hàng để xem giá và mua bằng điểm.'
 
 export default function Settings() {
   const { mode, resolvedMode, themeId, backgroundId, setMode, setTheme, setBackground } = useTheme()
+  const navigate = useNavigate()
   const activeTheme = themes[themeId]
   const defaultBackground = activeTheme.background[resolvedMode]
 
@@ -38,8 +40,13 @@ export default function Settings() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold">Chủ đề</h2>
-        <p className="mt-1 text-sm text-[color:var(--text-muted)]">Chế độ sáng và tối luôn miễn phí cho mọi chủ đề.</p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold">Chủ đề</h2>
+            <p className="mt-1 text-sm text-[color:var(--text-muted)]">Chế độ sáng và tối luôn miễn phí cho mọi chủ đề.</p>
+          </div>
+          <Link to="/shop" className="text-sm font-semibold text-[color:var(--primary)] hover:underline">Cửa hàng giao diện</Link>
+        </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {Object.values(themes).map((theme) => {
             const unlocked = isThemeUnlocked(theme.id)
@@ -52,6 +59,7 @@ export default function Settings() {
               <button key={theme.id} type="button" onClick={() => {
                 if (!unlocked) {
                   toast(lockedMessage)
+                  navigate('/shop')
                   return
                 }
                 setTheme(theme.id)
@@ -97,6 +105,7 @@ export default function Settings() {
               <button key={background.id} type="button" onClick={() => {
                 if (!unlocked) {
                   toast(lockedMessage)
+                  navigate('/shop')
                   return
                 }
                 setBackground(background.id)

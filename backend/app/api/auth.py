@@ -175,6 +175,16 @@ async def export_user_data(
             .order_by(LearningSession.created_at.desc()) \
             .all()
 
+        from ..models.database import DailyTask
+        recent_daily_tasks = db.query(DailyTask).filter(DailyTask.user_id == current_user.id) \
+            .order_by(DailyTask.task_date.desc()).limit(30).all()
+
+        from ..models.database import PointTransaction, UserGameProfile, UserUnlockedItem
+        rewards_profile = db.query(UserGameProfile).filter(UserGameProfile.user_id == current_user.id).first()
+        point_transactions = db.query(PointTransaction).filter(PointTransaction.user_id == current_user.id) \
+            .order_by(PointTransaction.created_at.desc(), PointTransaction.id.desc()).limit(100).all()
+        unlocked_items = db.query(UserUnlockedItem).filter(UserUnlockedItem.user_id == current_user.id).all()
+
         # Format data for export
         export_data = {
             "user_profile": {
@@ -211,6 +221,33 @@ async def export_user_data(
                 }
                 for session in learning_sessions
             ],
+            "recent_daily_tasks": [
+                {"date": task.task_date.isoformat(), "status": task.status,
+                 "total_items": task.total_items, "correct_count": task.correct_count,
+                 "points_awarded": task.points_awarded, "streak_after": task.streak_after,
+                 "completed_at": task.completed_at.isoformat() if task.completed_at else None}
+                for task in recent_daily_tasks
+            ],
+            "rewards": {
+                "profile": ({"points_balance": rewards_profile.points_balance,
+                             "current_streak": rewards_profile.current_streak,
+                             "longest_streak": rewards_profile.longest_streak,
+                             "last_completed_date": rewards_profile.last_completed_date.isoformat() if rewards_profile.last_completed_date else None,
+                             "active_theme_id": rewards_profile.active_theme_id,
+                             "active_background_id": rewards_profile.active_background_id}
+                            if rewards_profile else None),
+                "recent_transactions": [
+                    {"id": t.id, "amount": t.amount, "reason": t.reason, "ref_type": t.ref_type,
+                     "ref_id": t.ref_id, "balance_after": t.balance_after,
+                     "created_at": t.created_at.isoformat() if t.created_at else None}
+                    for t in point_transactions
+                ],
+                "unlocked_items": [
+                    {"item_type": x.item_type, "item_id": x.item_id, "price_paid": x.price_paid,
+                     "unlocked_at": x.unlocked_at.isoformat() if x.unlocked_at else None}
+                    for x in unlocked_items
+                ],
+            },
             "export_date": datetime.utcnow().isoformat(),
             "total_chat_messages": len(chat_history),
             "total_learning_sessions": len(learning_sessions),
@@ -231,14 +268,19 @@ async def reset_user_progress(
         db: Session = Depends(get_db)
 ):
     """Reset user's learning progress (chat history, learning sessions)."""
-    from ..models.database import ChatHistory, LearningSession
+    from ..models.database import ChatHistory, LearningSession, GrammarPracticeAttempt
 
     try:
         # Delete chat history
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
 
+        # Explicit deletion also supports databases where FK cascade enforcement is disabled.
+        db.query(GrammarPracticeAttempt).filter(GrammarPracticeAttempt.user_id == current_user.id).delete(synchronize_session=False)
+
         # Delete learning sessions
         db.query(LearningSession).filter(LearningSession.user_id == current_user.id).delete()
+
+        # Keep rewards progress: resetting lessons must not allow users to replay them for points.
 
         # Reset learning goals (optional - you can keep them or reset)
         # current_user.learning_goals = []
@@ -247,7 +289,9 @@ async def reset_user_progress(
 
         return {
             "message": "Progress reset successfully",
-            "reset_items": ["chat_history", "learning_sessions"]
+            "reset_items": ["chat_history", "learning_sessions", "grammar_practice_attempts"],
+            "preserved_items": ["rewards", "daily_tasks", "study_item_stats"],
+            "preserved_reason": "Giữ điểm, nhiệm vụ và thống kê học để tránh làm lại nhằm nhận điểm lần nữa.",
         }
 
     except Exception as e:
@@ -265,11 +309,22 @@ async def delete_current_user(
 ):
     """Delete current user account."""
     try:
-        from ..models.database import ChatHistory, LearningSession
+        from ..models.database import (ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction,
+                                       UserGameProfile, UserUnlockedItem, DailyTask, DailyTaskItem, StudyItemStat)
 
         # Delete related data first
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
+        db.query(GrammarPracticeAttempt).filter(GrammarPracticeAttempt.user_id == current_user.id).delete(synchronize_session=False)
         db.query(LearningSession).filter(LearningSession.user_id == current_user.id).delete()
+
+        # Explicitly remove reward rows for databases with FK cascade enforcement disabled.
+        db.query(PointTransaction).filter(PointTransaction.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(UserUnlockedItem).filter(UserUnlockedItem.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(UserGameProfile).filter(UserGameProfile.user_id == current_user.id).delete(synchronize_session=False)
+        task_ids = db.query(DailyTask.id).filter(DailyTask.user_id == current_user.id)
+        db.query(DailyTaskItem).filter(DailyTaskItem.daily_task_id.in_(task_ids)).delete(synchronize_session=False)
+        db.query(DailyTask).filter(DailyTask.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(StudyItemStat).filter(StudyItemStat.user_id == current_user.id).delete(synchronize_session=False)
 
         # Delete user
         db.delete(current_user)

@@ -435,15 +435,15 @@ export default function Library() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-4">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 shadow-lg shadow-violet-200">
-            <LibraryIcon className="h-6 w-6 text-white" />
+          <div className="theme-brand-mark grid h-12 w-12 place-items-center rounded-2xl">
+            <LibraryIcon className="h-6 w-6 text-[color:var(--primary-contrast)]" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-gray-950">JLPT Document Library</h1>
             <p className="mt-1 text-sm text-gray-600">Search, manage, and index Japanese learning material with semantic retrieval.</p>
           </div>
         </div>
-        <button type="button" onClick={() => setFormOpen(true)} className="btn btn-primary rounded-xl px-5 py-3 text-white shadow-md shadow-violet-200">
+        <button type="button" onClick={() => setFormOpen(true)} className="btn btn-primary rounded-xl px-5 py-3 shadow-md">
           <FilePlus2 className="mr-2 h-4 w-4" />
           Add New Document
         </button>

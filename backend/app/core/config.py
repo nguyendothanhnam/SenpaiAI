@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     
     # Rate Limiting
     rate_limit_per_minute: int = 60
+
+    # Application calendar and development-only reward tools
+    app_timezone: str = "Asia/Ho_Chi_Minh"
+    enable_dev_rewards: bool = False
     
     class Config:
         env_file = ".env"

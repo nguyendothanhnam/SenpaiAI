@@ -2,8 +2,10 @@ from sqlalchemy import (
     CheckConstraint,
     Column,
     DateTime,
+    Date,
     Float,
     ForeignKey,
+    Index,
     Integer,
     JSON,
     Boolean,
@@ -30,10 +32,116 @@ class User(Base):
     # User preferences
     current_jlpt_level = Column(String, default="N5")  # N5, N4, N3, N2, N1
     learning_goals = Column(JSON, default=list)
+    exercise_points = Column(Integer, default=0, server_default="0", nullable=False)
 
     # Relationships
     chat_history = relationship("ChatHistory", back_populates="user")
     learning_sessions = relationship("LearningSession", back_populates="user")
+
+
+class UserGameProfile(Base):
+    __tablename__ = "user_game_profiles"
+    __table_args__ = (CheckConstraint("points_balance >= 0", name="ck_user_game_profiles_balance_nonnegative"),)
+
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    points_balance = Column(Integer, nullable=False, default=0, server_default="0")
+    current_streak = Column(Integer, nullable=False, default=0, server_default="0")
+    longest_streak = Column(Integer, nullable=False, default=0, server_default="0")
+    last_completed_date = Column(Date, nullable=True)
+    active_theme_id = Column(String, nullable=False, default="classic", server_default="classic")
+    active_background_id = Column(String, nullable=True)
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+
+
+class PointTransaction(Base):
+    __tablename__ = "point_transactions"
+    __table_args__ = (
+        CheckConstraint("amount <> 0", name="ck_point_transactions_amount_nonzero"),
+        UniqueConstraint("idempotency_key", name="uq_point_transactions_idempotency_key"),
+        Index("ix_point_transactions_user_created", "user_id", "created_at"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    amount = Column(Integer, nullable=False)
+    reason = Column(String, nullable=False)
+    ref_type = Column(String, nullable=True)
+    ref_id = Column(String, nullable=True)
+    idempotency_key = Column(String, nullable=False)
+    balance_after = Column(Integer, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+class UserUnlockedItem(Base):
+    __tablename__ = "user_unlocked_items"
+    __table_args__ = (
+        CheckConstraint("item_type IN ('theme', 'background')", name="ck_user_unlocked_items_type"),
+        UniqueConstraint("user_id", "item_type", "item_id", name="uq_user_unlocked_item"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    item_type = Column(String, nullable=False)
+    item_id = Column(String, nullable=False)
+    price_paid = Column(Integer, nullable=False)
+    unlocked_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+class DailyTask(Base):
+    __tablename__ = "daily_tasks"
+    __table_args__ = (
+        CheckConstraint("status IN ('in_progress', 'completed')", name="ck_daily_tasks_status"),
+        UniqueConstraint("user_id", "task_date", name="uq_daily_tasks_user_date"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    task_date = Column(Date, nullable=False)
+    status = Column(String(20), nullable=False, default="in_progress", server_default="in_progress")
+    total_items = Column(Integer, nullable=False)
+    correct_count = Column(Integer, nullable=False, default=0, server_default="0")
+    points_awarded = Column(Integer, nullable=False, default=0, server_default="0")
+    streak_after = Column(Integer, nullable=False, default=0, server_default="0")
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class DailyTaskItem(Base):
+    __tablename__ = "daily_task_items"
+    __table_args__ = (
+        CheckConstraint("item_type IN ('grammar', 'kanji', 'vocab', 'flashcard')", name="ck_daily_task_items_type"),
+        UniqueConstraint("daily_task_id", "position", name="uq_daily_task_item_position"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    daily_task_id = Column(Integer, ForeignKey("daily_tasks.id", ondelete="CASCADE"), nullable=False, index=True)
+    position = Column(Integer, nullable=False)
+    item_type = Column(String(20), nullable=False)
+    source_id = Column(String, nullable=False)
+    question_type = Column(String(30), nullable=False)
+    payload = Column(JSON, nullable=False)
+    answer_key = Column(JSON, nullable=False)
+    user_answer = Column(JSON, nullable=True)
+    is_correct = Column(Boolean, nullable=True)
+    time_spent_ms = Column(Integer, nullable=False, default=0, server_default="0")
+    answered_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class StudyItemStat(Base):
+    __tablename__ = "study_item_stats"
+    __table_args__ = (
+        CheckConstraint("item_type IN ('kanji', 'vocab')", name="ck_study_item_stats_type"),
+        UniqueConstraint("user_id", "item_type", "item_id", name="uq_study_item_stat"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    item_type = Column(String(10), nullable=False)
+    item_id = Column(String, nullable=False)
+    attempts = Column(Integer, nullable=False, default=0, server_default="0")
+    wrong_count = Column(Integer, nullable=False, default=0, server_default="0")
+    last_wrong_at = Column(DateTime(timezone=True), nullable=True)
+    last_seen_at = Column(DateTime(timezone=True), nullable=True)
 
 
 class ChatHistory(Base):
@@ -101,6 +209,51 @@ class GrammarRule(Base):
     jlpt_level = Column(String, nullable=False)
     difficulty_score = Column(Float, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class GrammarQuestion(Base):
+    __tablename__ = "grammar_questions"
+    __table_args__ = (
+        CheckConstraint("question_type IN ('fill_blank', 'reorder', 'true_false', 'conjugation')", name="ck_grammar_question_type"),
+        CheckConstraint("source IN ('seed', 'ai', 'manual')", name="ck_grammar_question_source"),
+        UniqueConstraint("question_type", "prompt", name="uq_grammar_question_type_prompt"),
+        Index("ix_grammar_questions_bank", "jlpt_level", "question_type", "grammar_rule_id"),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    grammar_rule_id = Column(Integer, ForeignKey("grammar_rules.id", ondelete="SET NULL"), nullable=True)
+    jlpt_level = Column(String(2), nullable=False)
+    question_type = Column(String(20), nullable=False)
+    prompt = Column(Text, nullable=False)
+    payload = Column(JSON, nullable=False, default=dict)
+    correct_answer = Column(JSON, nullable=False)
+    accepted_answers = Column(JSON)
+    explanation_vi = Column(Text, nullable=False)
+    examples = Column(JSON, nullable=False, default=list)
+    source = Column(String(10), nullable=False, default="manual")
+    is_active = Column(Boolean, nullable=False, default=True, server_default="true")
+    created_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    grammar_rule = relationship("GrammarRule")
+
+
+class GrammarPracticeAttempt(Base):
+    __tablename__ = "grammar_practice_attempts"
+    __table_args__ = (Index("ix_grammar_practice_attempts_user_created", "user_id", "created_at"),)
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    learning_session_id = Column(Integer, ForeignKey("learning_sessions.id", ondelete="CASCADE"), nullable=False)
+    question_id = Column(Integer, ForeignKey("grammar_questions.id", ondelete="SET NULL"), nullable=True)
+    grammar_rule_id = Column(Integer, ForeignKey("grammar_rules.id", ondelete="SET NULL"), nullable=True)
+    jlpt_level = Column(String(2), nullable=False)
+    question_type = Column(String(20), nullable=False)
+    user_answer = Column(JSON, nullable=False)
+    is_correct = Column(Boolean, nullable=False)
+    time_spent_ms = Column(Integer, nullable=False, default=0)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    grammar_rule = relationship("GrammarRule")
+    question = relationship("GrammarQuestion")
 
 
 class Kanji(Base):

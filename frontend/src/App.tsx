@@ -19,6 +19,9 @@ import FlashcardPlay from './pages/FlashcardPlay.jsx'
 import Analytics from './pages/Analytics.jsx'
 import KanjiMinigame from './pages/KanjiMinigame.jsx'
 import Settings from './pages/Settings'
+import GrammarPractice from './pages/GrammarPractice'
+import ThemeShop from './pages/ThemeShop'
+import DailyChallenge from './pages/DailyChallenge'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -46,6 +49,7 @@ function App() {
         <Route path="/" element={<Navigate to="/chat" replace />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/grammar" element={<Grammar />} />
+        <Route path="/grammar/practice" element={<GrammarPractice />} />
         <Route path="/library" element={<Library />} />
         <Route path="/games" element={<GameHub />} />
         <Route path="/games/kanji" element={<KanjiMinigame />} />
@@ -60,6 +64,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/shop" element={<ThemeShop />} />
+        <Route path="/daily" element={<DailyChallenge />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Layout>

@@ -8,6 +8,7 @@ interface User {
   is_active: boolean
   current_jlpt_level: string
   learning_goals: string[]
+  exercise_points: number
   created_at: string
 }
 
