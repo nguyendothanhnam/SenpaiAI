@@ -23,8 +23,6 @@ export interface ThemePalette {
 
 export interface ThemeDefinition {
   id: string
-  name: string
-  description: string
   points: number
   locked: boolean
   mascot: string | null
@@ -34,26 +32,25 @@ export interface ThemeDefinition {
 
 export interface ThemeBackground {
   id: string
-  name: string
   image: string
   points: number
   locked: boolean
 }
 
 export const themeBackgrounds: ThemeBackground[] = [
-  { id: 'fuji-reading', name: 'Đọc sách dưới núi Phú Sĩ', image: '/themes/background1.webp', points: 100, locked: true },
-  { id: 'hydrangea-garden', name: 'Vườn cẩm tú cầu', image: '/themes/background2.webp', points: 100, locked: true },
-  { id: 'zen-samurai', name: 'Vườn thiền Samurai', image: '/themes/background3.webp', points: 100, locked: true },
-  { id: 'bamboo-shrine', name: 'Đền giữa rừng trúc', image: '/themes/background4.webp', points: 100, locked: true },
-  { id: 'bamboo-night', name: 'Rừng trúc đêm', image: '/themes/background5.webp', points: 100, locked: true },
-  { id: 'sakura-shrine', name: 'Đền hoa anh đào', image: '/themes/background6.webp', points: 100, locked: true },
-  { id: 'bamboo-path', name: 'Lối đi rừng trúc', image: '/themes/background7.webp', points: 100, locked: true },
-  { id: 'bonsai-tea', name: 'Vườn bonsai và trà', image: '/themes/background8.webp', points: 100, locked: true },
-  { id: 'spring-koinobori', name: 'Cờ cá chép mùa xuân', image: '/themes/background9.webp', points: 100, locked: true },
-  { id: 'sakura-picnic', name: 'Dã ngoại dưới hoa anh đào', image: '/themes/background10.webp', points: 100, locked: true },
-  { id: 'cherry-torii', name: 'Cổng Torii mùa hoa', image: '/themes/background11.webp', points: 100, locked: true },
-  { id: 'calligraphy-cat', name: 'Mèo luyện thư pháp', image: '/themes/background12.webp', points: 100, locked: true },
-  { id: 'sakura-path', name: 'Đường hoa anh đào', image: '/themes/background13.webp', points: 100, locked: true },
+  { id: 'fuji-reading', image: '/themes/background1.webp', points: 100, locked: true },
+  { id: 'hydrangea-garden', image: '/themes/background2.webp', points: 100, locked: true },
+  { id: 'zen-samurai', image: '/themes/background3.webp', points: 100, locked: true },
+  { id: 'bamboo-shrine', image: '/themes/background4.webp', points: 100, locked: true },
+  { id: 'bamboo-night', image: '/themes/background5.webp', points: 100, locked: true },
+  { id: 'sakura-shrine', image: '/themes/background6.webp', points: 100, locked: true },
+  { id: 'bamboo-path', image: '/themes/background7.webp', points: 100, locked: true },
+  { id: 'bonsai-tea', image: '/themes/background8.webp', points: 100, locked: true },
+  { id: 'spring-koinobori', image: '/themes/background9.webp', points: 100, locked: true },
+  { id: 'sakura-picnic', image: '/themes/background10.webp', points: 100, locked: true },
+  { id: 'cherry-torii', image: '/themes/background11.webp', points: 100, locked: true },
+  { id: 'calligraphy-cat', image: '/themes/background12.webp', points: 100, locked: true },
+  { id: 'sakura-path', image: '/themes/background13.webp', points: 100, locked: true },
 ]
 
 const palette = (values: Omit<ThemePalette, 'bgImage' | 'bgOverlay' | 'primaryGradient'>, bgImage: string, bgOverlay: string, primaryGradient = values.primary): ThemePalette => ({
@@ -74,8 +71,6 @@ const shared = {
 export const themes: Record<string, ThemeDefinition> = {
   classic: {
     id: 'classic',
-    name: 'Cổ điển',
-    description: 'Phong cách SenpaiAI nguyên bản với sắc cam ấm.',
     points: 0,
     locked: false,
     mascot: null,
@@ -87,8 +82,6 @@ export const themes: Record<string, ThemeDefinition> = {
   },
   'than-khe': {
     id: 'than-khe',
-    name: 'Thần Khê',
-    description: 'Sắc mint dịu nhẹ, lấy cảm hứng từ khu vườn Nhật Bản.',
     points: 300,
     locked: true,
     mascot: '/themes/than-khe/cat.webp',
@@ -103,8 +96,6 @@ export const themes: Record<string, ThemeDefinition> = {
   },
   sakura: {
     id: 'sakura',
-    name: 'Sakura',
-    description: 'Tông hồng hoa anh đào nhẹ nhàng, ấm áp.',
     points: 300,
     locked: true,
     mascot: '/themes/sakura/cat.webp',

@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 
 const locales = new URL('../src/i18n/locales/', import.meta.url)
-const namespaces = ['common', 'nav', 'auth', 'profile', 'settings', 'errors']
+const namespaces = ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar']
 function flatten(value, prefix = '') {
   return Object.entries(value).flatMap(([key, child]) => {
     const path = prefix ? `${prefix}.${key}` : key

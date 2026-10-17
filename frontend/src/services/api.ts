@@ -146,6 +146,7 @@ export interface DailyTaskItem {
   item_type: DailyItemType
   question_type: string
   payload: Record<string, any>
+  level?: string
   answered: boolean
   user_answer?: unknown
   is_correct?: boolean | null

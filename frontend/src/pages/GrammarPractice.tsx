@@ -10,6 +10,8 @@ import QuestionConjugation from '../components/grammar/QuestionConjugation'
 import FeedbackPanel from '../components/grammar/FeedbackPanel'
 import SessionResult from '../components/grammar/SessionResult'
 import GrammarTabs from '../components/layout/GrammarTabs'
+import { useAuth } from '../services/auth'
+import { useTranslation } from 'react-i18next'
 import { grammarPracticeAPI } from '../services/api'
 import type {
   GrammarAnswerResult, GrammarPattern, GrammarPracticeMode,
@@ -34,7 +36,10 @@ function errorMessage(error: any, fallback: string) {
 
 export default function GrammarPractice() {
   const [screen, setScreen] = useState<Screen>('setup')
-  const [level, setLevel] = useState<JlptLevel>('N5')
+  const { user } = useAuth()
+  const { t: tGrammar } = useTranslation('grammarStatus')
+  const [level, setLevel] = useState<JlptLevel>((user?.current_jlpt_level as JlptLevel) || 'N5')
+  const [isAutomaticFallback, setIsAutomaticFallback] = useState(false)
   const [ruleId, setRuleId] = useState<number | null>(null)
   const [questionTypes, setQuestionTypes] = useState<GrammarQuestionType[]>(['fill_blank', 'reorder', 'true_false', 'conjugation'])
   const [count, setCount] = useState<Count>(5)
@@ -55,11 +60,16 @@ export default function GrammarPractice() {
   const activeSessionRef = useRef(activeSession)
   activeSessionRef.current = activeSession
 
-  const patternsQuery = useQuery(
-    ['grammarPracticePatterns', level],
-    () => grammarPracticeAPI.getPatterns(level).then((response) => response.data.patterns as GrammarPattern[]),
-  )
-  const patterns = patternsQuery.data || []
+  const levels = ['N5', 'N4', 'N3', 'N2', 'N1'] as JlptLevel[]
+  const patternsQuery = useQuery(['grammarPracticePatterns', 'all-levels'], async () => Object.fromEntries(await Promise.all(
+    levels.map(async (itemLevel) => [itemLevel, (await grammarPracticeAPI.getPatterns(itemLevel)).data.patterns as GrammarPattern[]]),
+  )) as Record<JlptLevel, GrammarPattern[]>)
+  const patternsByLevel = patternsQuery.data || {} as Record<JlptLevel, GrammarPattern[]>
+  const availableLevels = levels.filter((itemLevel) => (patternsByLevel[itemLevel] || []).length > 0)
+  const fallbackLevel = [level, ...levels.filter((itemLevel) => levels.indexOf(itemLevel) < levels.indexOf(level)).reverse(), ...levels.filter((itemLevel) => levels.indexOf(itemLevel) > levels.indexOf(level))]
+    .find((itemLevel) => availableLevels.includes(itemLevel))
+  const effectiveLevel = fallbackLevel || level
+  const patterns = patternsByLevel[effectiveLevel] || []
 
   useEffect(() => {
     if (ruleId !== null && !patterns.some((pattern) => pattern.id === ruleId)) setRuleId(null)
@@ -68,6 +78,20 @@ export default function GrammarPractice() {
   useEffect(() => {
     if (patternsQuery.isError) toast.error('Không tải được mẫu ngữ pháp. Kiểm tra kết nối rồi thử tải lại trang.')
   }, [patternsQuery.isError])
+
+  useEffect(() => {
+    if (!patternsQuery.isLoading && fallbackLevel && fallbackLevel !== level) {
+      setIsAutomaticFallback(level === user?.current_jlpt_level)
+      setLevel(fallbackLevel)
+    }
+  }, [patternsQuery.isLoading, fallbackLevel, level, user?.current_jlpt_level])
+
+  useEffect(() => {
+    if (user?.current_jlpt_level) {
+      setLevel(user.current_jlpt_level as JlptLevel)
+      setIsAutomaticFallback(false)
+    }
+  }, [user?.current_jlpt_level])
 
   const startMutation = useMutation(
     (payload: SessionConfig & { question_ids?: number[] }) => grammarPracticeAPI.createSession(payload).then((response) => response.data),
@@ -239,9 +263,10 @@ export default function GrammarPractice() {
       </header>
 
       {screen === 'setup' && <>
-        {!patternsQuery.isLoading && !patternsQuery.isError && patterns.length === 0 && <div className="theme-card flex gap-3 rounded-2xl p-4 text-sm text-[color:var(--text-muted)]"><HelpCircle className="h-5 w-5 shrink-0 text-[color:var(--primary)]" /><p>Cấp độ này chưa có mẫu ngữ pháp trong ngân hàng. Chọn cấp độ khác hoặc bổ sung mẫu trước khi bắt đầu.</p></div>}
+        {!patternsQuery.isLoading && availableLevels.length > 0 && isAutomaticFallback && <p className="theme-card rounded-xl px-4 py-3 text-sm text-[color:var(--text-muted)]">{tGrammar('fallbackNotice', { requested: user?.current_jlpt_level, selected: level })}</p>}
+        {!patternsQuery.isLoading && !patternsQuery.isError && patterns.length === 0 && <div className="theme-card flex gap-3 rounded-2xl p-4 text-sm text-[color:var(--text-muted)]"><HelpCircle className="h-5 w-5 shrink-0 text-[color:var(--primary)]" /><p>{tGrammar('emptyLevel', { level })}</p></div>}
         <SessionSetup
-          level={level} onLevelChange={setLevel} patterns={patterns} patternsLoading={patternsQuery.isLoading} patternsError={patternsQuery.isError}
+          level={level} onLevelChange={(nextLevel) => { setLevel(nextLevel); setIsAutomaticFallback(false) }} patterns={patterns} jlptLevels={availableLevels} patternsLoading={patternsQuery.isLoading} patternsError={patternsQuery.isError}
           ruleId={ruleId} onRuleChange={setRuleId} questionTypes={questionTypes} onQuestionTypesChange={setQuestionTypes}
           count={count} onCountChange={setCount} mode={mode} onModeChange={setMode} loading={startMutation.isLoading} onStart={handleStart}
         />

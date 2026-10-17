@@ -2,14 +2,16 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import i18n from '../i18n'
 
-const intlLocale = () => i18n.resolvedLanguage === 'en' ? 'en-US' : 'vi-VN'
+export type UiLanguage = 'vi' | 'en'
+const currentLanguage = (): UiLanguage => i18n.resolvedLanguage === 'en' ? 'en' : 'vi'
+const intlLocale = (language: UiLanguage = currentLanguage()) => language === 'en' ? 'en-US' : 'vi-VN'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatDate(date: string | Date) {
-  return new Intl.DateTimeFormat(intlLocale(), {
+export function formatDate(date: string | Date, language?: UiLanguage) {
+  return new Intl.DateTimeFormat(intlLocale(language), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -18,15 +20,15 @@ export function formatDate(date: string | Date) {
   }).format(new Date(date))
 }
 
-export function formatNumber(value: number, options?: Intl.NumberFormatOptions) {
-  return new Intl.NumberFormat(intlLocale(), options).format(value)
+export function formatNumber(value: number, options?: Intl.NumberFormatOptions, language?: UiLanguage) {
+  return new Intl.NumberFormat(intlLocale(language), options).format(value)
 }
 
-export function formatTime(date: string | Date) {
-  return new Intl.DateTimeFormat(intlLocale(), { hour: '2-digit', minute: '2-digit' }).format(new Date(date))
+export function formatTime(date: string | Date, language?: UiLanguage) {
+  return new Intl.DateTimeFormat(intlLocale(language), { hour: '2-digit', minute: '2-digit' }).format(new Date(date))
 }
 
-export function formatRelativeTime(date: string | Date) {
+export function formatRelativeTime(date: string | Date, language: UiLanguage = currentLanguage()) {
   const now = new Date()
   const targetDate = new Date(date)
   const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000)
@@ -39,7 +41,7 @@ export function formatRelativeTime(date: string | Date) {
     amount /= seconds[index]
     unit = units[index + 1]
   }
-  return new Intl.RelativeTimeFormat(intlLocale(), { numeric: 'auto' }).format(Math.round(amount), unit)
+  return new Intl.RelativeTimeFormat(intlLocale(language), { numeric: 'auto' }).format(Math.round(amount), unit)
 }
 
 export function getJLPTColor(level: string) {

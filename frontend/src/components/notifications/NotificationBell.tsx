@@ -8,7 +8,8 @@ import { formatRelativeTime } from '../../utils/helpers'
 import toast from 'react-hot-toast'
 
 export default function NotificationBell() {
-  const { t } = useTranslation('common')
+  const { t, i18n } = useTranslation('common')
+  const language = i18n.resolvedLanguage === 'en' ? 'en' : 'vi'
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -35,7 +36,13 @@ export default function NotificationBell() {
     {open && <div className="theme-card absolute right-0 top-full z-[60] mt-2 w-[min(22rem,calc(100vw-1.5rem))] overflow-hidden rounded-2xl shadow-xl">
       <div className="flex items-center justify-between border-b border-[color:var(--border)] px-4 py-3"><h2 className="font-semibold">{t('notifications.title')}</h2><button type="button" disabled={!countData?.unread_count || markAll.isLoading} onClick={() => markAll.mutate()} className="inline-flex items-center gap-1 text-xs font-semibold text-[color:var(--primary)] disabled:opacity-50"><CheckCheck className="h-4 w-4" />{t('notifications.markAll')}</button></div>
       <div className="max-h-[65vh] overflow-y-auto">
-        {isLoading ? <div className="flex justify-center p-6"><Loader2 className="h-5 w-5 animate-spin" /></div> : notifications.length === 0 ? <p className="p-5 text-sm text-[color:var(--text-muted)]">{t('notifications.empty')}</p> : notifications.map((item) => <button type="button" key={item.id} onClick={() => openNotification(item)} className={`block w-full border-b border-[color:var(--border)] px-4 py-3 text-left transition hover:bg-[color:var(--accent)] ${item.read_at ? 'opacity-70' : ''}`}><span className="flex items-start gap-2"><span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${item.read_at ? 'bg-transparent' : 'bg-[color:var(--primary)]'}`} /><span className="min-w-0"><span className="block text-sm font-semibold">{item.title}</span><span className="mt-1 block text-xs text-[color:var(--text-muted)]">{item.body}</span><span className="mt-1 block text-[10px] text-[color:var(--text-muted)]">{formatRelativeTime(item.created_at)}</span></span></span></button>)}
+        {isLoading ? <div className="flex justify-center p-6"><Loader2 className="h-5 w-5 animate-spin" /></div> : notifications.length === 0 ? <p className="p-5 text-sm text-[color:var(--text-muted)]">{t('notifications.empty')}</p> : notifications.map((item) => {
+          const kind = ['daily_task', 'streak_risk', 'review_due'].includes(item.type) ? item.type : 'unknown'
+          const data = item.data as Record<string, string | number | undefined>
+          const streak = Number(data.streak ?? 0)
+          const reviewCount = Number(data.review_count ?? 0)
+          return <button type="button" key={item.id} onClick={() => openNotification(item)} className={`block w-full border-b border-[color:var(--border)] px-4 py-3 text-left transition hover:bg-[color:var(--accent)] ${item.read_at ? 'opacity-70' : ''}`}><span className="flex items-start gap-2"><span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${item.read_at ? 'bg-transparent' : 'bg-[color:var(--primary)]'}`} /><span className="min-w-0"><span className="block text-sm font-semibold">{t(`notificationTypes.${kind}.title`, { streak, count: reviewCount })}</span><span className="mt-1 block text-xs text-[color:var(--text-muted)]">{t(`notificationTypes.${kind}.body`, { streak, count: reviewCount })}</span><span className="mt-1 block text-[10px] text-[color:var(--text-muted)]">{formatRelativeTime(item.created_at, language)}</span></span></span></button>
+        })}
       </div>
     </div>}
   </div>

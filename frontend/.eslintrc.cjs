@@ -3,7 +3,6 @@ module.exports = {
   env: { browser: true, es2020: true },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
@@ -15,4 +14,10 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      files: ['**/*.jsx', '**/*.js'],
+      rules: { 'no-undef': 'error' },
+    },
+  ],
 }

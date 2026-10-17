@@ -6,6 +6,7 @@ interface Props {
   level: JlptLevel
   onLevelChange: (level: JlptLevel) => void
   patterns: GrammarPattern[]
+  jlptLevels: JlptLevel[]
   patternsLoading: boolean
   patternsError: boolean
   ruleId: number | null
@@ -55,7 +56,7 @@ export default function SessionSetup(props: Props) {
         <label className="block">
           <span className="mb-2 block text-sm font-bold text-[color:var(--text)]">Cấp độ JLPT</span>
           <select value={props.level} onChange={(event) => props.onLevelChange(event.target.value as JlptLevel)} className="h-12 w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-3 text-[color:var(--text)] outline-none focus:border-[color:var(--primary)]">
-            {(['N5', 'N4', 'N3', 'N2', 'N1'] as JlptLevel[]).map((level) => <option key={level}>{level}</option>)}
+            {(props.jlptLevels.length ? props.jlptLevels : [props.level]).map((level) => <option key={level}>{level}</option>)}
           </select>
         </label>
         <label className="block">

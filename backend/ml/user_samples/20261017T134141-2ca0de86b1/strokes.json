@@ -1,0 +1,90 @@
+[
+  [
+    {
+      "x": 82.0,
+      "y": 34.0,
+      "timestamp": 0,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 1
+    },
+    {
+      "x": 80.0,
+      "y": 92.0,
+      "timestamp": 1,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 1
+    },
+    {
+      "x": 70.0,
+      "y": 205.0,
+      "timestamp": 2,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 1
+    }
+  ],
+  [
+    {
+      "x": 88.0,
+      "y": 38.0,
+      "timestamp": 0,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 2
+    },
+    {
+      "x": 178.0,
+      "y": 30.0,
+      "timestamp": 1,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 2
+    },
+    {
+      "x": 180.0,
+      "y": 212.0,
+      "timestamp": 2,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 2
+    }
+  ],
+  [
+    {
+      "x": 88.0,
+      "y": 86.0,
+      "timestamp": 0,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 3
+    },
+    {
+      "x": 176.0,
+      "y": 76.0,
+      "timestamp": 1,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 3
+    }
+  ],
+  [
+    {
+      "x": 86.0,
+      "y": 142.0,
+      "timestamp": 0,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 4
+    },
+    {
+      "x": 176.0,
+      "y": 132.0,
+      "timestamp": 1,
+      "time": null,
+      "pressure": 0.5,
+      "strokeId": 4
+    }
+  ]
+]

@@ -208,7 +208,7 @@ class KanjiRecognitionService:
         if not candidate_level:
             return 0.8
         if not requested_level:
-            return 1.0 if candidate_level in {"N5", "N4"} else 0.5
+            return 1.0 if candidate_level in {"N5", "N4", "N3"} else 0.5
         return self._jlpt_score(candidate_level, requested_level)
 
     def _clean_strokes(self, strokes: Sequence[Sequence[Point]]) -> List[List[Point]]:

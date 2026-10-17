@@ -14,7 +14,7 @@ from kanji_labels import SUPPORTED_KANJI  # noqa: E402
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate synthetic JLPT N5/N4 kanji images.")
+    parser = argparse.ArgumentParser(description="Generate synthetic N5-N3 kanji images from the backend dictionary labels.")
     parser.add_argument("--output", type=Path, default=DEFAULT_SYNTHETIC_DIR)
     parser.add_argument("--samples-per-class", type=int, default=350)
     parser.add_argument("--image-size", type=int, default=64, choices=[64, 128])

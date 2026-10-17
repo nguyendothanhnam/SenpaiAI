@@ -97,6 +97,7 @@ Thumbs.db
 # Python
 __pycache__/
 *.py[cod]
+*.bak-*
 *$py.class
 *.so
 .Python

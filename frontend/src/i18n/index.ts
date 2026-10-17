@@ -8,6 +8,9 @@ import profileVi from './locales/vi/profile.json'
 import settingsVi from './locales/vi/settings.json'
 import errorsVi from './locales/vi/errors.json'
 import grammarVi from './locales/vi/grammar.json'
+import dailyStatusVi from './locales/vi/daily-status.json'
+import grammarStatusVi from './locales/vi/grammar-status.json'
+import kanjiStatusVi from './locales/vi/kanji-status.json'
 import commonEn from './locales/en/common.json'
 import navEn from './locales/en/nav.json'
 import authEn from './locales/en/auth.json'
@@ -15,6 +18,9 @@ import profileEn from './locales/en/profile.json'
 import settingsEn from './locales/en/settings.json'
 import errorsEn from './locales/en/errors.json'
 import grammarEn from './locales/en/grammar.json'
+import dailyStatusEn from './locales/en/daily-status.json'
+import grammarStatusEn from './locales/en/grammar-status.json'
+import kanjiStatusEn from './locales/en/kanji-status.json'
 
 export const LANGUAGE_STORAGE_KEY = 'senpai-ai-language'
 export const supportedLanguages = ['vi', 'en'] as const
@@ -27,13 +33,13 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      vi: { common: commonVi, nav: navVi, auth: authVi, profile: profileVi, settings: settingsVi, errors: errorsVi, grammar: grammarVi },
-      en: { common: commonEn, nav: navEn, auth: authEn, profile: profileEn, settings: settingsEn, errors: errorsEn, grammar: grammarEn },
+      vi: { common: commonVi, nav: navVi, auth: authVi, profile: profileVi, settings: settingsVi, errors: errorsVi, grammar: grammarVi, dailyStatus: dailyStatusVi, grammarStatus: grammarStatusVi, kanjiStatus: kanjiStatusVi },
+      en: { common: commonEn, nav: navEn, auth: authEn, profile: profileEn, settings: settingsEn, errors: errorsEn, grammar: grammarEn, dailyStatus: dailyStatusEn, grammarStatus: grammarStatusEn, kanjiStatus: kanjiStatusEn },
     },
     supportedLngs: [...supportedLanguages],
     fallbackLng: 'vi',
     defaultNS: 'common',
-    ns: ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar'],
+    ns: ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar', 'dailyStatus', 'grammarStatus', 'kanjiStatus'],
     load: 'languageOnly',
     detection: {
       order: ['localStorage', 'navigator'],

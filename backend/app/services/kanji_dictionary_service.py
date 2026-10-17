@@ -6,6 +6,8 @@ import base64
 from pathlib import Path
 from typing import Any
 
+from . import kanjivg_service
+
 
 APP_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_DICTIONARY_PATH = APP_DIR / "data" / "kanji_dictionary.json"
@@ -207,15 +209,21 @@ class KanjiDictionaryService:
                 missing.append("readings")
             if not isinstance(entry.get("strokes"), int) or entry.get("strokes") <= 0:
                 missing.append("strokes")
-            if entry.get("jlpt") not in {"N5", "N4"}:
+            if entry.get("jlpt") not in {"N5", "N4", "N3"}:
                 missing.append("jlpt")
             if missing:
                 missing_metadata.append({"kanji": kanji, "missing": missing})
             else:
                 valid_entries += 1
+        level_counts: dict[str, int] = {}
+        for row in rows:
+            if isinstance(row, dict):
+                level = str(row.get("jlpt") or "").upper()
+                level_counts[level] = level_counts.get(level, 0) + 1
         return {
             "total_entries": len(rows),
             "valid_entries": valid_entries,
+            "jlpt_counts": level_counts,
             "missing_metadata": missing_metadata,
             "missing_metadata_count": len(missing_metadata),
             "duplicate_kanji": duplicates,
@@ -266,6 +274,7 @@ class KanjiDictionaryService:
             "stroke_count": strokes,
             "examples": [example for example in examples if isinstance(example, dict)],
         }
+        entry["has_stroke_data"] = kanjivg_service.has_stroke_data(kanji)
         entry["has_handwriting_data"] = bool(
             item.get("has_handwriting_data") or (kanji and (self.etl10_dir / kanji).is_dir())
         )

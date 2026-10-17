@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form'
 import { Send, Bot, User, Loader2, Trash2, Search, PenLine, Mic } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { chatAPI } from '../services/api'
 import { useAuth } from '../services/auth'
 import { formatRelativeTime } from '../utils/helpers'
 import toast from 'react-hot-toast'
+import { getErrorMessage } from '../utils/getErrorMessage'
 import LoadingSpinner from '../components/LoadingSpinner'
 import HandwritingInputModal from '../components/kanji/HandwritingInputModal.jsx'
 import VoiceChatPanel from '../components/chat/VoiceChatPanel'
@@ -28,6 +30,8 @@ interface MessageFormData {
 }
 
 export default function Chat() {
+  const { t, i18n } = useTranslation('common')
+  const language = i18n.resolvedLanguage === 'en' ? 'en' : 'vi'
   const [searchQuery, setSearchQuery] = useState('')
   const [handwritingOpen, setHandwritingOpen] = useState(false)
   const [voiceOpen, setVoiceOpen] = useState(false)
@@ -54,7 +58,7 @@ export default function Chat() {
         form.reset()
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.detail || 'Failed to send message')
+        toast.error(getErrorMessage(error))
       },
     }
   )
@@ -64,10 +68,10 @@ export default function Chat() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['chatHistory'])
-        toast.success('Message deleted')
+        toast.success(t('chat.messageDeleted'))
       },
-      onError: () => {
-        toast.error('Failed to delete message')
+      onError: (error: unknown) => {
+        toast.error(getErrorMessage(error))
       },
     }
   )
@@ -78,10 +82,10 @@ export default function Chat() {
       onSuccess: () => {
         queryClient.setQueryData(['chatHistory'], [])
         queryClient.invalidateQueries(['chatHistory'])
-        toast.success('Chat history cleared')
+        toast.success(t('chat.historyCleared'))
       },
-      onError: () => {
-        toast.error('Failed to clear history')
+      onError: (error: unknown) => {
+        toast.error(getErrorMessage(error))
       },
     }
   )
@@ -149,20 +153,20 @@ export default function Chat() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="font-heading text-3xl font-bold text-[color:var(--text)]">Chat with SenpaiAI</h1>
+          <h1 className="font-heading text-3xl font-bold text-[color:var(--text)]">{t('chat.title')}</h1>
           <p className="mt-1 text-sm text-[color:var(--text-muted)]">
-            Ask questions about Japanese language, grammar, or culture
+            {t('chat.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setVoiceOpen(true)} className="btn btn-outline btn-sm inline-flex items-center gap-2" aria-label="Mở hội thoại giọng nói">
-            <Mic className="h-4 w-4" /><span className="hidden sm:inline">Hội thoại giọng nói</span>
+          <button type="button" onClick={() => setVoiceOpen(true)} className="btn btn-outline btn-sm inline-flex items-center gap-2" aria-label={t('chat.voiceChat')}>
+            <Mic className="h-4 w-4" /><span className="hidden sm:inline">{t('chat.voiceChat')}</span>
           </button>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]" />
             <input
               type="text"
-              placeholder="Search chat history..."
+              placeholder={t('chat.searchHistory')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="rounded-pill border border-[color:var(--border)] bg-[color:var(--card-glass)] py-2 pl-10 pr-4 text-sm text-[color:var(--text)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary)]"
@@ -172,6 +176,7 @@ export default function Chat() {
             onClick={() => clearHistoryMutation.mutate()}
             className="btn btn-outline btn-sm text-[color:var(--text-muted)] hover:bg-red-50 hover:text-red-600 hover:border-red-200"
             disabled={clearHistoryMutation.isLoading}
+            aria-label={t('chat.clearHistory')}
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -187,8 +192,8 @@ export default function Chat() {
         ) : displayedMessages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-[color:var(--text-muted)]">
             <Bot className="h-12 w-12 mb-4" />
-            <p className="text-lg font-medium">No messages yet</p>
-            <p className="text-sm">Start a conversation by asking a question below</p>
+            <p className="text-lg font-medium">{t('chat.emptyTitle')}</p>
+            <p className="text-sm">{t('chat.emptyDescription')}</p>
           </div>
         ) : (
           displayedMessages.map((message: ChatMessage) => (
@@ -202,16 +207,17 @@ export default function Chat() {
                 </div>
                 <div className="flex-1">
                   <div className="theme-card rounded-card p-4">
-                    <div className="flex items-start justify-between gap-2"><p className="text-sm font-medium text-[color:var(--text)]">{message.question}</p>{message.input_mode === 'voice' && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color:var(--accent)] px-2 py-1 text-[10px] font-semibold text-[color:var(--primary)]"><Mic className="h-3 w-3" />Giọng nói</span>}</div>
+                    <div className="flex items-start justify-between gap-2"><p className="text-sm font-medium text-[color:var(--text)]">{message.question}</p>{message.input_mode === 'voice' && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color:var(--accent)] px-2 py-1 text-[10px] font-semibold text-[color:var(--primary)]"><Mic className="h-3 w-3" />{t('chat.voice')}</span>}</div>
                   </div>
                   <p className="mt-2 text-xs font-medium text-[color:var(--text-muted)]">
-                    {formatRelativeTime(message.created_at)}
+                    {formatRelativeTime(message.created_at, language)}
                   </p>
                 </div>
                 <button
                   onClick={() => deleteMessageMutation.mutate(message.id)}
                   className="text-gray-400 hover:text-red-500 transition-colors"
                   disabled={deleteMessageMutation.isLoading}
+                  aria-label={t('chat.deleteMessage')}
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -238,14 +244,14 @@ export default function Chat() {
                     
                     {message.translation && (
                       <div className="mt-3 rounded-lg border-l-4 border-[color:var(--primary)] bg-[color:var(--accent)] p-3">
-                        <p className="text-xs font-semibold text-[color:var(--primary)]">Translation:</p>
+                        <p className="text-xs font-semibold text-[color:var(--primary)]">{t('chat.translation')}:</p>
                         <p className="mt-1 text-sm text-[color:var(--text)]">{message.translation}</p>
                       </div>
                     )}
                     
                     {message.grammar_points && message.grammar_points.length > 0 && (
                       <div className="mt-3">
-                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">Grammar Points:</p>
+                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">{t('chat.grammarPoints')}:</p>
                         <div className="space-y-2">
                           {message.grammar_points.map((point, index) => (
                             <div key={index} className="rounded-lg bg-[color:var(--accent)] p-2 text-xs text-[color:var(--text)]">
@@ -258,7 +264,7 @@ export default function Chat() {
                     
                     {message.sources && message.sources.length > 0 && (
                       <div className="mt-3">
-                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">Sources:</p>
+                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">{t('chat.sources')}:</p>
                         <div className="space-y-1">
                           {message.sources.map((source, index) => (
                             <div key={index} className="text-xs font-medium text-[color:var(--primary)]">
@@ -270,7 +276,7 @@ export default function Chat() {
                     )}
                   </div>
                   <p className="text-xs font-medium text-[color:var(--text-muted)]">
-                    {formatRelativeTime(message.created_at)}
+                    {formatRelativeTime(message.created_at, language)}
                   </p>
                 </div>
               </div>
@@ -284,9 +290,9 @@ export default function Chat() {
       <div className="mt-4">
         <form onSubmit={form.handleSubmit(handleSubmit)} className="flex space-x-2">
           <input
-            {...form.register('message', { required: 'Message is required' })}
+            {...form.register('message', { required: t('chat.messageRequired') })}
             type="text"
-            placeholder="Ask a question about Japanese..."
+            placeholder={t('chat.messagePlaceholder')}
             className="input flex-1 border-[color:var(--border)] bg-[color:var(--card-glass)] text-[color:var(--text)] placeholder:text-[color:var(--text-muted)] focus:ring-[color:var(--primary)]"
             disabled={sendMessageMutation.isLoading}
           />
@@ -295,7 +301,7 @@ export default function Chat() {
             onClick={() => setHandwritingOpen(true)}
             disabled={sendMessageMutation.isLoading}
             className="btn btn-outline border-[color:var(--border)] bg-[color:var(--card-glass)] text-[color:var(--primary)] hover:bg-[color:var(--accent)]"
-            aria-label="Open kanji handwriting input"
+            aria-label={t('chat.handwritingInput')}
           >
             <PenLine className="h-4 w-4" />
           </button>
@@ -303,6 +309,7 @@ export default function Chat() {
             type="submit"
             disabled={sendMessageMutation.isLoading || !form.watch('message')?.trim()}
             className="btn rounded-pill bg-[color:var(--primary)] px-4 font-semibold text-[color:var(--primary-contrast)] shadow-md transition-all hover:opacity-90 hover:shadow-lg"
+            aria-label={t('chat.send')}
           >
             {sendMessageMutation.isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

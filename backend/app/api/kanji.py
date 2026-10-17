@@ -38,8 +38,8 @@ def vocabulary_to_schema(vocabulary: VocabularyModel) -> schemas.Vocabulary:
 
 @router.get("/kanji/list")
 async def get_dictionary_kanji_list(
-    jlpt: str = Query(default="all", pattern="^(N5|N4|all|ALL|n5|n4)$"),
-    limit: int = Query(default=50, ge=1, le=300),
+    jlpt: str = Query(default="all", pattern="^(N5|N4|N3|all|ALL|n5|n4|n3)$"),
+    limit: int = Query(default=50, ge=1, le=500),
     offset: int = Query(default=0, ge=0),
     search: Optional[str] = Query(default=None),
 ):
@@ -56,7 +56,7 @@ async def get_dictionary_kanji_list(
 @router.get("/kanji/quiz")
 async def get_dictionary_kanji_quiz(
     mode: str = Query(default="meaning_match", pattern="^(meaning_match|reading_match|kanji_match|matching_grid)$"),
-    jlpt: str = Query(default="all", pattern="^(N5|N4|all|ALL|n5|n4)$"),
+    jlpt: str = Query(default="all", pattern="^(N5|N4|N3|all|ALL|n5|n4|n3)$"),
     count: int = Query(default=10, ge=1, le=50),
 ):
     """Generate minigame questions from the backend dictionary."""
@@ -67,7 +67,7 @@ async def get_dictionary_kanji_quiz(
 
 @router.get("/kanji/matching-grid")
 async def get_kanji_matching_grid(
-    jlpt: str = Query(default="all", pattern="^(N5|N4|all|ALL|n5|n4)$"),
+    jlpt: str = Query(default="all", pattern="^(N5|N4|N3|all|ALL|n5|n4|n3)$"),
     count: int = Query(default=6, ge=2, le=12),
 ):
     """Return Kanji and shuffled meaning cards for matching-grid minigames."""
@@ -76,7 +76,7 @@ async def get_kanji_matching_grid(
 
 @router.get("/kanji/word-matching-grid")
 async def get_word_matching_grid(
-    jlpt: str = Query(default="all", pattern="^(N5|N4|all|ALL|n5|n4)$"),
+    jlpt: str = Query(default="all", pattern="^(N5|N4|N3|all|ALL|n5|n4|n3)$"),
     count: int = Query(default=6, ge=2, le=12),
 ):
     """Return example words and shuffled meaning cards for matching-grid minigames."""

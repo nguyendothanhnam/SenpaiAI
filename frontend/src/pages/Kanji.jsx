@@ -8,6 +8,7 @@ import KanjiInfoPanel from '../components/kanji/KanjiInfoPanel'
 import KanjiStrokeOrder from '../components/kanji/KanjiStrokeOrder'
 import PredictionResult from '../components/kanji/PredictionResult'
 import { kanjiDataAPI, kanjiRecognitionAPI } from '../services/api'
+import { useTranslation } from 'react-i18next'
 
 function readableError(value, fallback = 'Kanji not recognized') {
   if (!value) return fallback
@@ -228,10 +229,12 @@ function adaptKanjiEntry(entry, fallbackKanji = '') {
     examples,
     vocabulary: examples.map((example) => `${example.word || ''}${example.reading ? ` (${example.reading})` : ''}${example.meaning ? ` - ${example.meaning}` : ''}`.trim()).filter(Boolean),
     has_handwriting_data: Boolean(entry.has_handwriting_data),
+    has_stroke_data: Boolean(entry.has_stroke_data),
   }
 }
 
 function StrokeOrderViewer({ info, step, setStep }) {
+  const { t } = useTranslation('kanjiStatus')
   const [playing, setPlaying] = useState(false)
   const timerRef = useRef(null)
   const strokeQuery = useQuery(
@@ -299,7 +302,7 @@ function StrokeOrderViewer({ info, step, setStep }) {
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">KanjiVG stroke order</p>
           <h2 className="mt-2 text-2xl font-bold text-gray-950">{info.kanji} stroke steps</h2>
-          <p className="mt-1 text-sm text-gray-500">Verified SVG path data is loaded dynamically from KanjiVG. Supported now: {supportedQuery.data?.total ?? 'loading'}.</p>
+          <p className="mt-1 text-sm text-gray-500">{t('strokeCoverage', { count: supportedQuery.data?.total ?? '...' })}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={() => setStep(Math.max(0, step - 1))} disabled={!maxStep || step === 0} className="btn btn-outline rounded-xl border-violet-200 px-3 text-violet-700">
@@ -339,9 +342,9 @@ function StrokeOrderViewer({ info, step, setStep }) {
               Source: {strokeData.source}. {strokeData.license}. {strokeData.source_url}
             </p>
           )}
-          {strokeQuery.isError && (
+          {!strokeQuery.isLoading && !strokeData?.available && (
             <p className="mt-3 text-xs font-semibold text-red-600">
-              No KanjiVG stroke order data available.
+              {t('unsupportedCharacter', { kanji: info.kanji })}
             </p>
           )}
         </div>
@@ -351,6 +354,7 @@ function StrokeOrderViewer({ info, step, setStep }) {
 }
 
 function MiniDictionary({ info, onAsk, onPractice, onStroke }) {
+  const { t } = useTranslation('kanjiStatus')
   const handwritingQuery = useQuery(
     ['kanjiHandwritingSamples', info?.kanji],
     () => kanjiDataAPI.getHandwritingSamples(info.kanji, 5).then((response) => response.data),
@@ -414,7 +418,8 @@ function MiniDictionary({ info, onAsk, onPractice, onStroke }) {
           <MessageCircle className="mr-2 h-4 w-4" /> Ask in Chat
         </button>
         <button type="button" onClick={onPractice} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">Practice this Kanji</button>
-        <button type="button" onClick={onStroke} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">View stroke order</button>
+        <button type="button" onClick={onStroke} disabled={!info.has_stroke_data} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-50">{t('viewStrokeOrder')}</button>
+        {!info.has_stroke_data && <p className="text-xs text-gray-500">{t('noStrokeData')}</p>}
       </div>
     </aside>
   )
@@ -483,6 +488,7 @@ function scorePractice({ target, expectedStrokes, rawStrokes, normalizedStrokes 
 }
 
 export default function Kanji() {
+  const { t } = useTranslation('kanjiStatus')
   const navigate = useNavigate()
   const canvasRef = useRef(null)
   const [mode, setMode] = useState('recognize')
@@ -505,7 +511,7 @@ export default function Kanji() {
 
   const dictionaryQuery = useQuery(
     ['kanjiDictionary', exploreJlpt, exploreSearch],
-    () => kanjiDataAPI.list({ jlpt: exploreJlpt, search: exploreSearch || undefined, limit: 300, offset: 0 }).then((response) => response.data),
+    () => kanjiDataAPI.list({ jlpt: exploreJlpt, search: exploreSearch || undefined, limit: 500, offset: 0 }).then((response) => response.data),
     {
       staleTime: 1000 * 60 * 10,
       cacheTime: 1000 * 60 * 30,
@@ -548,6 +554,11 @@ export default function Kanji() {
       retry: false,
     }
   )
+  const selectedHandwritingQuery = useQuery(
+    ['kanjiHandwritingSamplesForRecognition', selectedInfo.kanji],
+    () => kanjiDataAPI.getHandwritingSamples(selectedInfo.kanji, 1).then((response) => response.data),
+    { enabled: Boolean(selectedInfo.kanji) && mode === 'recognize', retry: false, staleTime: 60_000 },
+  )
   const modelInfoQuery = useQuery(
     'kanjiModelInfo',
     () => kanjiRecognitionAPI.getModelInfo().then((response) => response.data),
@@ -588,6 +599,13 @@ export default function Kanji() {
       setPredictions([])
       setSelectedKanjiSource(null)
       setError('')
+      return
+    }
+
+    if (selectedKanjiSource === 'manual' && selectedHandwritingQuery.data?.total === 0) {
+      setStatus('error')
+      setPredictions([])
+      setError(t('unsupportedCharacter', { kanji: selectedInfo.kanji }))
       return
     }
 
@@ -738,11 +756,12 @@ export default function Kanji() {
                 <option value="all">All JLPT</option>
                 <option value="N5">N5</option>
                 <option value="N4">N4</option>
+                <option value="N3">N3</option>
               </select>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {dictionaryQuery.isLoading && <p className="text-sm text-gray-500">Loading Kanji dictionary...</p>}
-              {!dictionaryQuery.isLoading && !dictionaryItems.length && <p className="text-sm text-gray-500">No Kanji found.</p>}
+              {!dictionaryQuery.isLoading && !dictionaryItems.length && <div className="rounded-xl bg-violet-50 p-4 text-sm text-violet-800"><p>{t('emptyLevel', { level: exploreJlpt })}</p>{exploreJlpt !== 'N4' && <button type="button" onClick={() => setExploreJlpt('N4')} className="mt-3 rounded-lg bg-white px-3 py-2 font-bold text-violet-700">{t('switchLevel', { level: 'N4' })}</button>}</div>}
               {dictionaryItems.map((item) => (
                 <button key={item.kanji} type="button" onClick={() => updateSelectedKanji(item.kanji)} className="rounded-3xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:bg-violet-50">
                   <div className="flex items-start justify-between">
@@ -854,7 +873,8 @@ export default function Kanji() {
               </div>
             ) : (
               <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-5 py-4 text-sm font-medium text-[color:var(--text)] shadow-sm">
-                {modelInfoQuery.data?.message || `Recognition uses the custom CNN model plus stroke count and JLPT re-ranking. Model: ${modelInfoQuery.data?.model_loaded ? 'loaded' : 'not loaded'}; supports ${(modelInfoQuery.data?.supported_jlpt || ['N5', 'N4']).join('-')} (${modelInfoQuery.data?.total_classes ?? modelInfoQuery.data?.classes_count ?? 0} classes).`}
+                {modelInfoQuery.data?.message || `Recognition model: ${modelInfoQuery.data?.model_loaded ? 'loaded' : 'not loaded'}; ${modelInfoQuery.data?.total_classes ?? modelInfoQuery.data?.classes_count ?? 0} classes.`}
+                <p className="mt-2 text-xs">{t('modelCoverage', { levels: modelInfoQuery.data?.supported_jlpt?.join(', ') || t('noTrainedLevels') })}</p>
               </div>
             )}
 

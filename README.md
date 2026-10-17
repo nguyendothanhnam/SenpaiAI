@@ -233,3 +233,7 @@ Nếu gặp vấn đề, vui lòng tạo issue trên GitHub hoặc liên hệ qu
 ---
 
 **SenpaiAI** - Học tiếng Nhật thông minh với AI! 🎌✨
+
+## Kanji data attribution
+
+Kanji stroke-order data is derived from KanjiVG by Ulrich Apel and distributed under CC BY-SA 3.0: https://kanjivg.tagaini.net. Kanji dictionary readings and stroke counts reference KANJIDIC (EDRDG) and the unofficial JLPT kanji lists by Jonathan Waller (tanos.co.uk). Vietnamese meanings and example words are maintained by the project. The app shows KanjiVG source, license, and source URL alongside stroke-order data; derived stroke records retain those fields.

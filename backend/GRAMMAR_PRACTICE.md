@@ -17,8 +17,11 @@ Từ thư mục `backend` (đã cấu hình `DATABASE_URL`):
 ```bash
 alembic upgrade head
 python scripts/seed_grammar_practice.py
+python scripts/seed_library_documents.py
 pytest tests/test_grammar_practice.py
 ```
+
+Nạp theo đúng thứ tự: migration trước, sau đó `seed_grammar_practice.py`, cuối cùng `seed_library_documents.py`. Migration `0005_grammar_practice` phải có trong Alembic head trước khi chạy seed luyện ngữ pháp. Daily lấy câu kanji từ `app/data/kanji_dictionary.json` (nghĩa và cách đọc), từ vựng từ bảng `vocabulary`, và ngữ pháp từ `grammar_questions`; handwriting/stroke/ML không tham gia. Cần có các mục từ vựng có nghĩa và đọc, kanji có nghĩa/cách đọc, cùng câu hỏi ngữ pháp đã seed để Daily đủ nội dung. Dữ liệu hiện tại chỉ phủ N5 và N4; chưa có dữ liệu N3.
 
 Hoặc chạy seed qua module từ `backend`: `python -m scripts.seed_grammar_practice`.
 

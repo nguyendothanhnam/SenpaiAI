@@ -1,4 +1,4 @@
-"""JLPT N5-N4 kanji metadata and dictionary-backed recognition labels."""
+"""JLPT N5-N3 metadata and dictionary-backed recognition labels."""
 
 from __future__ import annotations
 
@@ -87,7 +87,7 @@ def load_dictionary_entries(path: Path = DICTIONARY_PATH) -> list[dict]:
             continue
         kanji = str(row.get("kanji") or "")[:1]
         jlpt = str(row.get("jlpt") or "").upper()
-        if not kanji or kanji in seen or jlpt not in {"N5", "N4"}:
+        if not kanji or kanji in seen or jlpt not in {"N5", "N4", "N3"}:
             continue
         seen.add(kanji)
         entries.append(row | {"kanji": kanji, "jlpt": jlpt})

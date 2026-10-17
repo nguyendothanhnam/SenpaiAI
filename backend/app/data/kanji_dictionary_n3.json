@@ -1,0 +1,8676 @@
+[
+  {
+    "kanji": "才",
+    "meaning": "tài năng, tuổi",
+    "meaning_vi": "tài năng, tuổi",
+    "onyomi": [
+      "サイ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 3,
+    "stroke_count": 3,
+    "examples": [
+      {
+        "word": "才能",
+        "reading": "さいのう",
+        "meaning": "tài năng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "王",
+    "meaning": "vua",
+    "meaning_vi": "vua",
+    "onyomi": [
+      "オウ",
+      "-ノウ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "王様",
+        "reading": "おうさま",
+        "meaning": "nhà vua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "石",
+    "meaning": "đá",
+    "meaning_vi": "đá",
+    "onyomi": [
+      "セキ",
+      "シャク",
+      "コク"
+    ],
+    "kunyomi": [
+      "いし"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "宝石",
+        "reading": "ほうせき",
+        "meaning": "đá quý"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "内",
+    "meaning": "bên trong",
+    "meaning_vi": "bên trong",
+    "onyomi": [
+      "ナイ",
+      "ダイ"
+    ],
+    "kunyomi": [
+      "うち"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "国内",
+        "reading": "こくない",
+        "meaning": "trong nước"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "太",
+    "meaning": "béo, dày, to",
+    "meaning_vi": "béo, dày, to",
+    "onyomi": [
+      "タイ",
+      "タ"
+    ],
+    "kunyomi": [
+      "ふと.い",
+      "ふと.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "太陽",
+        "reading": "たいよう",
+        "meaning": "mặt trời"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "引",
+    "meaning": "kéo",
+    "meaning_vi": "kéo",
+    "onyomi": [
+      "イン"
+    ],
+    "kunyomi": [
+      "ひ.く",
+      "ひ.き",
+      "ひ.き-",
+      "-び.き",
+      "ひ.ける"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "引っ越し",
+        "reading": "ひっこし",
+        "meaning": "chuyển nhà"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "市",
+    "meaning": "chợ, thành phố",
+    "meaning_vi": "chợ, thành phố",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "いち"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "市場",
+        "reading": "いちば",
+        "meaning": "chợ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "他",
+    "meaning": "khác",
+    "meaning_vi": "khác",
+    "onyomi": [
+      "タ"
+    ],
+    "kunyomi": [
+      "ほか"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "他人",
+        "reading": "たにん",
+        "meaning": "người khác"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "号",
+    "meaning": "số, hiệu",
+    "meaning_vi": "số, hiệu",
+    "onyomi": [
+      "ゴウ"
+    ],
+    "kunyomi": [
+      "さけ.ぶ",
+      "よびな"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "番号",
+        "reading": "ばんごう",
+        "meaning": "số (điện thoại, thứ tự)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "平",
+    "meaning": "bằng phẳng, hòa bình",
+    "meaning_vi": "bằng phẳng, hòa bình",
+    "onyomi": [
+      "ヘイ",
+      "ビョウ",
+      "ヒョウ"
+    ],
+    "kunyomi": [
+      "たい.ら",
+      "-だいら",
+      "ひら",
+      "ひら-"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "平和",
+        "reading": "へいわ",
+        "meaning": "hòa bình"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "打",
+    "meaning": "đánh, đập",
+    "meaning_vi": "đánh, đập",
+    "onyomi": [
+      "ダ"
+    ],
+    "kunyomi": [
+      "う.つ",
+      "う.ち-",
+      "ぶ.つ"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "打ち合わせ",
+        "reading": "うちあわせ",
+        "meaning": "buổi bàn bạc trước"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "申",
+    "meaning": "thưa, nói (khiêm nhường)",
+    "meaning_vi": "thưa, nói (khiêm nhường)",
+    "onyomi": [
+      "シン"
+    ],
+    "kunyomi": [
+      "もう.す",
+      "もう.し-",
+      "さる"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "申し込み",
+        "reading": "もうしこみ",
+        "meaning": "việc đăng ký"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "礼",
+    "meaning": "lễ, cảm ơn",
+    "meaning_vi": "lễ, cảm ơn",
+    "onyomi": [
+      "レイ",
+      "ライ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "失礼",
+        "reading": "しつれい",
+        "meaning": "thất lễ, xin phép"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "耳",
+    "meaning": "tai",
+    "meaning_vi": "tai",
+    "onyomi": [
+      "ジ"
+    ],
+    "kunyomi": [
+      "みみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "耳鼻科",
+        "reading": "じびか",
+        "meaning": "khoa tai mũi họng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "交",
+    "meaning": "giao, trao đổi",
+    "meaning_vi": "giao, trao đổi",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "まじ.わる",
+      "まじ.える",
+      "ま.じる",
+      "まじ.る",
+      "ま.ざる"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "交通",
+        "reading": "こうつう",
+        "meaning": "giao thông"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "光",
+    "meaning": "ánh sáng",
+    "meaning_vi": "ánh sáng",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "ひか.る",
+      "ひかり"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "日光",
+        "reading": "にっこう",
+        "meaning": "ánh nắng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "回",
+    "meaning": "lần, quay vòng",
+    "meaning_vi": "lần, quay vòng",
+    "onyomi": [
+      "カイ",
+      "エ"
+    ],
+    "kunyomi": [
+      "まわ.る",
+      "-まわ.る",
+      "-まわ.り",
+      "まわ.す",
+      "-まわ.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "回数",
+        "reading": "かいすう",
+        "meaning": "số lần"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "当",
+    "meaning": "trúng, đúng",
+    "meaning_vi": "trúng, đúng",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "あ.たる",
+      "あ.たり",
+      "あ.てる",
+      "あ.て",
+      "まさ.に"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "当然",
+        "reading": "とうぜん",
+        "meaning": "đương nhiên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "米",
+    "meaning": "gạo, nước Mỹ",
+    "meaning_vi": "gạo, nước Mỹ",
+    "onyomi": [
+      "ベイ",
+      "マイ"
+    ],
+    "kunyomi": [
+      "こめ",
+      "よね"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "白米",
+        "reading": "はくまい",
+        "meaning": "gạo trắng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "声",
+    "meaning": "giọng nói",
+    "meaning_vi": "giọng nói",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "こえ",
+      "こわ-"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "大声",
+        "reading": "おおごえ",
+        "meaning": "giọng to"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "形",
+    "meaning": "hình dạng",
+    "meaning_vi": "hình dạng",
+    "onyomi": [
+      "ケイ",
+      "ギョウ"
+    ],
+    "kunyomi": [
+      "かた",
+      "-がた",
+      "かたち",
+      "なり"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "人形",
+        "reading": "にんぎょう",
+        "meaning": "búp bê"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "草",
+    "meaning": "cỏ",
+    "meaning_vi": "cỏ",
+    "onyomi": [
+      "ソウ"
+    ],
+    "kunyomi": [
+      "くさ",
+      "くさ-",
+      "-ぐさ"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "草原",
+        "reading": "そうげん",
+        "meaning": "đồng cỏ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "化",
+    "meaning": "biến đổi",
+    "meaning_vi": "biến đổi",
+    "onyomi": [
+      "カ",
+      "ケ"
+    ],
+    "kunyomi": [
+      "ば.ける",
+      "ば.かす",
+      "ふ.ける",
+      "け.する"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "文化",
+        "reading": "ぶんか",
+        "meaning": "văn hóa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "両",
+    "meaning": "cả hai",
+    "meaning_vi": "cả hai",
+    "onyomi": [
+      "リョウ"
+    ],
+    "kunyomi": [
+      "てる",
+      "ふたつ"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "両方",
+        "reading": "りょうほう",
+        "meaning": "cả hai bên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "全",
+    "meaning": "toàn bộ",
+    "meaning_vi": "toàn bộ",
+    "onyomi": [
+      "ゼン"
+    ],
+    "kunyomi": [
+      "まった.く",
+      "すべ.て"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "全部",
+        "reading": "ぜんぶ",
+        "meaning": "toàn bộ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "向",
+    "meaning": "hướng về",
+    "meaning_vi": "hướng về",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "む.く",
+      "む.い",
+      "-む.き",
+      "む.ける",
+      "-む.け"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "方向",
+        "reading": "ほうこう",
+        "meaning": "phương hướng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "曲",
+    "meaning": "cong, bản nhạc",
+    "meaning_vi": "cong, bản nhạc",
+    "onyomi": [
+      "キョク"
+    ],
+    "kunyomi": [
+      "ま.がる",
+      "ま.げる",
+      "くま"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "作曲",
+        "reading": "さっきょく",
+        "meaning": "sáng tác nhạc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "次",
+    "meaning": "tiếp theo",
+    "meaning_vi": "tiếp theo",
+    "onyomi": [
+      "ジ",
+      "シ"
+    ],
+    "kunyomi": [
+      "つ.ぐ",
+      "つぎ"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "次回",
+        "reading": "じかい",
+        "meaning": "lần tới"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "直",
+    "meaning": "thẳng, sửa chữa",
+    "meaning_vi": "thẳng, sửa chữa",
+    "onyomi": [
+      "チョク",
+      "ジキ",
+      "ジカ"
+    ],
+    "kunyomi": [
+      "ただ.ちに",
+      "なお.す",
+      "-なお.す",
+      "なお.る",
+      "なお.き"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "直接",
+        "reading": "ちょくせつ",
+        "meaning": "trực tiếp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "活",
+    "meaning": "sống động, hoạt động",
+    "meaning_vi": "sống động, hoạt động",
+    "onyomi": [
+      "カツ"
+    ],
+    "kunyomi": [
+      "い.きる",
+      "い.かす",
+      "い.ける"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "生活",
+        "reading": "せいかつ",
+        "meaning": "cuộc sống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "点",
+    "meaning": "điểm",
+    "meaning_vi": "điểm",
+    "onyomi": [
+      "テン"
+    ],
+    "kunyomi": [
+      "つ.ける",
+      "つ.く",
+      "た.てる",
+      "さ.す",
+      "とぼ.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "点数",
+        "reading": "てんすう",
+        "meaning": "điểm số"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "科",
+    "meaning": "khoa, môn học",
+    "meaning_vi": "khoa, môn học",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "科学",
+        "reading": "かがく",
+        "meaning": "khoa học"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "首",
+    "meaning": "cổ, đứng đầu",
+    "meaning_vi": "cổ, đứng đầu",
+    "onyomi": [
+      "シュ"
+    ],
+    "kunyomi": [
+      "くび"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "首都",
+        "reading": "しゅと",
+        "meaning": "thủ đô"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "欠",
+    "meaning": "thiếu, vắng",
+    "meaning_vi": "thiếu, vắng",
+    "onyomi": [
+      "ケツ",
+      "ケン"
+    ],
+    "kunyomi": [
+      "か.ける",
+      "か.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "欠席",
+        "reading": "けっせき",
+        "meaning": "vắng mặt"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "由",
+    "meaning": "lý do, nguyên do",
+    "meaning_vi": "lý do, nguyên do",
+    "onyomi": [
+      "ユ",
+      "ユウ",
+      "ユイ"
+    ],
+    "kunyomi": [
+      "よし",
+      "よ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "自由",
+        "reading": "じゆう",
+        "meaning": "tự do"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "民",
+    "meaning": "dân",
+    "meaning_vi": "dân",
+    "onyomi": [
+      "ミン"
+    ],
+    "kunyomi": [
+      "たみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "国民",
+        "reading": "こくみん",
+        "meaning": "người dân"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "付",
+    "meaning": "gắn, kèm theo",
+    "meaning_vi": "gắn, kèm theo",
+    "onyomi": [
+      "フ"
+    ],
+    "kunyomi": [
+      "つ.ける",
+      "-つ.ける",
+      "-づ.ける",
+      "つ.け",
+      "つ.け-"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "受付",
+        "reading": "うけつけ",
+        "meaning": "quầy tiếp nhận"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "失",
+    "meaning": "mất, thất bại",
+    "meaning_vi": "mất, thất bại",
+    "onyomi": [
+      "シツ"
+    ],
+    "kunyomi": [
+      "うしな.う",
+      "う.せる"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "失敗",
+        "reading": "しっぱい",
+        "meaning": "thất bại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "必",
+    "meaning": "nhất định, cần",
+    "meaning_vi": "nhất định, cần",
+    "onyomi": [
+      "ヒツ"
+    ],
+    "kunyomi": [
+      "かなら.ず"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "必要",
+        "reading": "ひつよう",
+        "meaning": "cần thiết"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "未",
+    "meaning": "chưa",
+    "meaning_vi": "chưa",
+    "onyomi": [
+      "ミ",
+      "ビ"
+    ],
+    "kunyomi": [
+      "いま.だ",
+      "ま.だ",
+      "ひつじ"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "未来",
+        "reading": "みらい",
+        "meaning": "tương lai"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "末",
+    "meaning": "cuối",
+    "meaning_vi": "cuối",
+    "onyomi": [
+      "マツ",
+      "バツ"
+    ],
+    "kunyomi": [
+      "すえ"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "週末",
+        "reading": "しゅうまつ",
+        "meaning": "cuối tuần"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "記",
+    "meaning": "ghi chép",
+    "meaning_vi": "ghi chép",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "しる.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "日記",
+        "reading": "にっき",
+        "meaning": "nhật ký"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "組",
+    "meaning": "nhóm, lắp ghép",
+    "meaning_vi": "nhóm, lắp ghép",
+    "onyomi": [
+      "ソ"
+    ],
+    "kunyomi": [
+      "く.む",
+      "くみ",
+      "-ぐみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "番組",
+        "reading": "ばんぐみ",
+        "meaning": "chương trình (truyền hình)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "船",
+    "meaning": "thuyền, tàu",
+    "meaning_vi": "thuyền, tàu",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "ふね",
+      "ふな-"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "船便",
+        "reading": "ふなびん",
+        "meaning": "gửi bằng đường biển"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "雪",
+    "meaning": "tuyết",
+    "meaning_vi": "tuyết",
+    "onyomi": [
+      "セツ"
+    ],
+    "kunyomi": [
+      "ゆき"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "大雪",
+        "reading": "おおゆき",
+        "meaning": "tuyết lớn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "支",
+    "meaning": "chống đỡ, chi trả",
+    "meaning_vi": "chống đỡ, chi trả",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "ささ.える",
+      "つか.える",
+      "か.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "支払い",
+        "reading": "しはらい",
+        "meaning": "thanh toán"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "助",
+    "meaning": "giúp đỡ",
+    "meaning_vi": "giúp đỡ",
+    "onyomi": [
+      "ジョ"
+    ],
+    "kunyomi": [
+      "たす.ける",
+      "たす.かる",
+      "す.ける",
+      "すけ"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "助手",
+        "reading": "じょしゅ",
+        "meaning": "trợ lý"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "君",
+    "meaning": "bạn (cách gọi thân), quân",
+    "meaning_vi": "bạn (cách gọi thân), quân",
+    "onyomi": [
+      "クン"
+    ],
+    "kunyomi": [
+      "きみ",
+      "-ぎみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "君",
+        "reading": "きみ",
+        "meaning": "cậu, bạn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "対",
+    "meaning": "đối, đối diện",
+    "meaning_vi": "đối, đối diện",
+    "onyomi": [
+      "タイ",
+      "ツイ"
+    ],
+    "kunyomi": [
+      "あいて",
+      "こた.える",
+      "そろ.い",
+      "つれあ.い",
+      "なら.ぶ"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "反対",
+        "reading": "はんたい",
+        "meaning": "phản đối"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "局",
+    "meaning": "cục, đài",
+    "meaning_vi": "cục, đài",
+    "onyomi": [
+      "キョク"
+    ],
+    "kunyomi": [
+      "つぼね"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "郵便局",
+        "reading": "ゆうびんきょく",
+        "meaning": "bưu điện"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "役",
+    "meaning": "vai trò, nhiệm vụ",
+    "meaning_vi": "vai trò, nhiệm vụ",
+    "onyomi": [
+      "ヤク",
+      "エキ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "市役所",
+        "reading": "しやくしょ",
+        "meaning": "tòa thị chính"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "投",
+    "meaning": "ném",
+    "meaning_vi": "ném",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "な.げる",
+      "-な.げ"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "投票",
+        "reading": "とうひょう",
+        "meaning": "bỏ phiếu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "決",
+    "meaning": "quyết định",
+    "meaning_vi": "quyết định",
+    "onyomi": [
+      "ケツ"
+    ],
+    "kunyomi": [
+      "き.める",
+      "-ぎ.め",
+      "き.まる",
+      "さ.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "決定",
+        "reading": "けってい",
+        "meaning": "quyết định"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "馬",
+    "meaning": "ngựa",
+    "meaning_vi": "ngựa",
+    "onyomi": [
+      "バ"
+    ],
+    "kunyomi": [
+      "うま",
+      "うま-",
+      "ま"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "乗馬",
+        "reading": "じょうば",
+        "meaning": "cưỡi ngựa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "番",
+    "meaning": "số thứ tự, lượt",
+    "meaning_vi": "số thứ tự, lượt",
+    "onyomi": [
+      "バン"
+    ],
+    "kunyomi": [
+      "つが.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "順番",
+        "reading": "じゅんばん",
+        "meaning": "thứ tự"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "絵",
+    "meaning": "tranh",
+    "meaning_vi": "tranh",
+    "onyomi": [
+      "カイ",
+      "エ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "絵本",
+        "reading": "えほん",
+        "meaning": "sách tranh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "数",
+    "meaning": "số, đếm",
+    "meaning_vi": "số, đếm",
+    "onyomi": [
+      "スウ",
+      "ス",
+      "サク",
+      "ソク",
+      "シュ"
+    ],
+    "kunyomi": [
+      "かず",
+      "かぞ.える",
+      "しばしば",
+      "せ.める",
+      "わずらわ.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "数字",
+        "reading": "すうじ",
+        "meaning": "chữ số"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "所",
+    "meaning": "nơi chốn",
+    "meaning_vi": "nơi chốn",
+    "onyomi": [
+      "ショ"
+    ],
+    "kunyomi": [
+      "ところ",
+      "-ところ",
+      "どころ",
+      "とこ"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "場所",
+        "reading": "ばしょ",
+        "meaning": "địa điểm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "具",
+    "meaning": "dụng cụ",
+    "meaning_vi": "dụng cụ",
+    "onyomi": [
+      "グ"
+    ],
+    "kunyomi": [
+      "そな.える",
+      "つぶさ.に"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "道具",
+        "reading": "どうぐ",
+        "meaning": "dụng cụ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "受",
+    "meaning": "nhận, chịu",
+    "meaning_vi": "nhận, chịu",
+    "onyomi": [
+      "ジュ"
+    ],
+    "kunyomi": [
+      "う.ける",
+      "-う.け",
+      "う.かる"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "受験",
+        "reading": "じゅけん",
+        "meaning": "dự thi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "和",
+    "meaning": "hòa, kiểu Nhật",
+    "meaning_vi": "hòa, kiểu Nhật",
+    "onyomi": [
+      "ワ",
+      "オ",
+      "カ"
+    ],
+    "kunyomi": [
+      "やわ.らぐ",
+      "やわ.らげる",
+      "なご.む",
+      "なご.やか",
+      "あ.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "和食",
+        "reading": "わしょく",
+        "meaning": "món ăn Nhật"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "定",
+    "meaning": "định, cố định",
+    "meaning_vi": "định, cố định",
+    "onyomi": [
+      "テイ",
+      "ジョウ"
+    ],
+    "kunyomi": [
+      "さだ.める",
+      "さだ.まる",
+      "さだ.か"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "予定",
+        "reading": "よてい",
+        "meaning": "dự định"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "実",
+    "meaning": "thực, quả",
+    "meaning_vi": "thực, quả",
+    "onyomi": [
+      "ジツ",
+      "シツ"
+    ],
+    "kunyomi": [
+      "み",
+      "みの.る",
+      "まこと",
+      "みの",
+      "みち.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "実際",
+        "reading": "じっさい",
+        "meaning": "thực tế"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "泳",
+    "meaning": "bơi",
+    "meaning_vi": "bơi",
+    "onyomi": [
+      "エイ"
+    ],
+    "kunyomi": [
+      "およ.ぐ"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "水泳",
+        "reading": "すいえい",
+        "meaning": "bơi lội"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "苦",
+    "meaning": "khổ, đắng",
+    "meaning_vi": "khổ, đắng",
+    "onyomi": [
+      "ク"
+    ],
+    "kunyomi": [
+      "くる.しい",
+      "-ぐる.しい",
+      "くる.しむ",
+      "くる.しめる",
+      "にが.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "苦労",
+        "reading": "くろう",
+        "meaning": "vất vả"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "表",
+    "meaning": "bề mặt, bảng, biểu",
+    "meaning_vi": "bề mặt, bảng, biểu",
+    "onyomi": [
+      "ヒョウ"
+    ],
+    "kunyomi": [
+      "おもて",
+      "-おもて",
+      "あらわ.す",
+      "あらわ.れる",
+      "あら.わす"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "発表",
+        "reading": "はっぴょう",
+        "meaning": "phát biểu, công bố"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "部",
+    "meaning": "bộ phận, phòng ban",
+    "meaning_vi": "bộ phận, phòng ban",
+    "onyomi": [
+      "ブ"
+    ],
+    "kunyomi": [
+      "-べ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "部屋",
+        "reading": "へや",
+        "meaning": "căn phòng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "乗",
+    "meaning": "đi (xe), cưỡi",
+    "meaning_vi": "đi (xe), cưỡi",
+    "onyomi": [
+      "ジョウ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "の.る",
+      "-の.り",
+      "の.せる"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "乗車",
+        "reading": "じょうしゃ",
+        "meaning": "lên xe"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "客",
+    "meaning": "khách",
+    "meaning_vi": "khách",
+    "onyomi": [
+      "キャク",
+      "カク"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "お客さん",
+        "reading": "おきゃくさん",
+        "meaning": "khách hàng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "相",
+    "meaning": "tương, lẫn nhau",
+    "meaning_vi": "tương, lẫn nhau",
+    "onyomi": [
+      "ソウ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "あい-"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "相談",
+        "reading": "そうだん",
+        "meaning": "bàn bạc, tham khảo ý kiến"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "美",
+    "meaning": "đẹp",
+    "meaning_vi": "đẹp",
+    "onyomi": [
+      "ビ",
+      "ミ"
+    ],
+    "kunyomi": [
+      "うつく.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "美術",
+        "reading": "びじゅつ",
+        "meaning": "mỹ thuật"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "負",
+    "meaning": "thua, gánh vác",
+    "meaning_vi": "thua, gánh vác",
+    "onyomi": [
+      "フ"
+    ],
+    "kunyomi": [
+      "ま.ける",
+      "ま.かす",
+      "お.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "勝負",
+        "reading": "しょうぶ",
+        "meaning": "thắng bại, trận đấu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "談",
+    "meaning": "nói chuyện",
+    "meaning_vi": "nói chuyện",
+    "onyomi": [
+      "ダン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "冗談",
+        "reading": "じょうだん",
+        "meaning": "lời nói đùa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "要",
+    "meaning": "cần, quan trọng",
+    "meaning_vi": "cần, quan trọng",
+    "onyomi": [
+      "ヨウ"
+    ],
+    "kunyomi": [
+      "い.る",
+      "かなめ"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "重要",
+        "reading": "じゅうよう",
+        "meaning": "quan trọng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "勝",
+    "meaning": "thắng",
+    "meaning_vi": "thắng",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "か.つ",
+      "-が.ち",
+      "まさ.る",
+      "すぐ.れる",
+      "かつ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "勝利",
+        "reading": "しょうり",
+        "meaning": "chiến thắng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "速",
+    "meaning": "nhanh",
+    "meaning_vi": "nhanh",
+    "onyomi": [
+      "ソク"
+    ],
+    "kunyomi": [
+      "はや.い",
+      "はや-",
+      "はや.める",
+      "すみ.やか"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "速度",
+        "reading": "そくど",
+        "meaning": "tốc độ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "配",
+    "meaning": "phân phát, lo lắng",
+    "meaning_vi": "phân phát, lo lắng",
+    "onyomi": [
+      "ハイ"
+    ],
+    "kunyomi": [
+      "くば.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "心配",
+        "reading": "しんぱい",
+        "meaning": "lo lắng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "酒",
+    "meaning": "rượu",
+    "meaning_vi": "rượu",
+    "onyomi": [
+      "シュ"
+    ],
+    "kunyomi": [
+      "さけ",
+      "さか-"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "お酒",
+        "reading": "おさけ",
+        "meaning": "rượu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "進",
+    "meaning": "tiến",
+    "meaning_vi": "tiến",
+    "onyomi": [
+      "シン"
+    ],
+    "kunyomi": [
+      "すす.む",
+      "すす.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "進歩",
+        "reading": "しんぽ",
+        "meaning": "tiến bộ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "落",
+    "meaning": "rơi",
+    "meaning_vi": "rơi",
+    "onyomi": [
+      "ラク"
+    ],
+    "kunyomi": [
+      "お.ちる",
+      "お.ち",
+      "お.とす"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "落とし物",
+        "reading": "おとしもの",
+        "meaning": "đồ đánh rơi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "葉",
+    "meaning": "lá",
+    "meaning_vi": "lá",
+    "onyomi": [
+      "ヨウ"
+    ],
+    "kunyomi": [
+      "は"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "言葉",
+        "reading": "ことば",
+        "meaning": "lời nói, từ ngữ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "路",
+    "meaning": "đường",
+    "meaning_vi": "đường",
+    "onyomi": [
+      "ロ",
+      "ル"
+    ],
+    "kunyomi": [
+      "-じ",
+      "みち"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "道路",
+        "reading": "どうろ",
+        "meaning": "đường sá"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "鳴",
+    "meaning": "kêu, hót",
+    "meaning_vi": "kêu, hót",
+    "onyomi": [
+      "メイ"
+    ],
+    "kunyomi": [
+      "な.く",
+      "な.る",
+      "な.らす"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "鳴き声",
+        "reading": "なきごえ",
+        "meaning": "tiếng kêu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "横",
+    "meaning": "ngang, bên cạnh",
+    "meaning_vi": "ngang, bên cạnh",
+    "onyomi": [
+      "オウ"
+    ],
+    "kunyomi": [
+      "よこ"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "横断歩道",
+        "reading": "おうだんほどう",
+        "meaning": "vạch qua đường"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "調",
+    "meaning": "điều tra, điệu",
+    "meaning_vi": "điều tra, điệu",
+    "onyomi": [
+      "チョウ"
+    ],
+    "kunyomi": [
+      "しら.べる",
+      "しら.べ",
+      "ととの.う",
+      "ととの.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "調査",
+        "reading": "ちょうさ",
+        "meaning": "điều tra"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "頭",
+    "meaning": "đầu",
+    "meaning_vi": "đầu",
+    "onyomi": [
+      "トウ",
+      "ズ",
+      "ト"
+    ],
+    "kunyomi": [
+      "あたま",
+      "かしら",
+      "-がしら",
+      "かぶり"
+    ],
+    "jlpt": "N3",
+    "strokes": 16,
+    "stroke_count": 16,
+    "examples": [
+      {
+        "word": "頭痛",
+        "reading": "ずつう",
+        "meaning": "đau đầu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "顔",
+    "meaning": "mặt",
+    "meaning_vi": "mặt",
+    "onyomi": [
+      "ガン"
+    ],
+    "kunyomi": [
+      "かお"
+    ],
+    "jlpt": "N3",
+    "strokes": 18,
+    "stroke_count": 18,
+    "examples": [
+      {
+        "word": "笑顔",
+        "reading": "えがお",
+        "meaning": "nụ cười"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "最",
+    "meaning": "nhất",
+    "meaning_vi": "nhất",
+    "onyomi": [
+      "サイ",
+      "シュ"
+    ],
+    "kunyomi": [
+      "もっと.も",
+      "つま"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "最近",
+        "reading": "さいきん",
+        "meaning": "gần đây"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "争",
+    "meaning": "tranh giành",
+    "meaning_vi": "tranh giành",
+    "onyomi": [
+      "ソウ"
+    ],
+    "kunyomi": [
+      "あらそ.う",
+      "いか.でか"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "戦争",
+        "reading": "せんそう",
+        "meaning": "chiến tranh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "伝",
+    "meaning": "truyền đạt",
+    "meaning_vi": "truyền đạt",
+    "onyomi": [
+      "デン",
+      "テン"
+    ],
+    "kunyomi": [
+      "つた.わる",
+      "つた.える",
+      "つた.う",
+      "つだ.う",
+      "-づた.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "伝言",
+        "reading": "でんごん",
+        "meaning": "lời nhắn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "共",
+    "meaning": "cùng nhau",
+    "meaning_vi": "cùng nhau",
+    "onyomi": [
+      "キョウ"
+    ],
+    "kunyomi": [
+      "とも",
+      "とも.に",
+      "-ども"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "共通",
+        "reading": "きょうつう",
+        "meaning": "chung, điểm chung"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "好",
+    "meaning": "thích",
+    "meaning_vi": "thích",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "この.む",
+      "す.く",
+      "よ.い",
+      "い.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "好物",
+        "reading": "こうぶつ",
+        "meaning": "món ưa thích"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "成",
+    "meaning": "thành, trở thành",
+    "meaning_vi": "thành, trở thành",
+    "onyomi": [
+      "セイ",
+      "ジョウ"
+    ],
+    "kunyomi": [
+      "な.る",
+      "な.す",
+      "-な.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "成功",
+        "reading": "せいこう",
+        "meaning": "thành công"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "老",
+    "meaning": "già",
+    "meaning_vi": "già",
+    "onyomi": [
+      "ロウ"
+    ],
+    "kunyomi": [
+      "お.いる",
+      "ふ.ける"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "老人",
+        "reading": "ろうじん",
+        "meaning": "người già"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "位",
+    "meaning": "vị trí, thứ hạng",
+    "meaning_vi": "vị trí, thứ hạng",
+    "onyomi": [
+      "イ"
+    ],
+    "kunyomi": [
+      "くらい",
+      "ぐらい"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "位置",
+        "reading": "いち",
+        "meaning": "vị trí"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "初",
+    "meaning": "đầu tiên",
+    "meaning_vi": "đầu tiên",
+    "onyomi": [
+      "ショ"
+    ],
+    "kunyomi": [
+      "はじ.め",
+      "はじ.めて",
+      "はつ",
+      "はつ-",
+      "うい-"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "初めて",
+        "reading": "はじめて",
+        "meaning": "lần đầu tiên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "利",
+    "meaning": "lợi, có lợi",
+    "meaning_vi": "lợi, có lợi",
+    "onyomi": [
+      "リ"
+    ],
+    "kunyomi": [
+      "き.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "便利",
+        "reading": "べんり",
+        "meaning": "tiện lợi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "努",
+    "meaning": "cố gắng",
+    "meaning_vi": "cố gắng",
+    "onyomi": [
+      "ド"
+    ],
+    "kunyomi": [
+      "つと.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "努力",
+        "reading": "どりょく",
+        "meaning": "nỗ lực"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "労",
+    "meaning": "lao động, vất vả",
+    "meaning_vi": "lao động, vất vả",
+    "onyomi": [
+      "ロウ"
+    ],
+    "kunyomi": [
+      "ろう.する",
+      "いたわ.る",
+      "いた.ずき",
+      "ねぎら",
+      "つか.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "労働",
+        "reading": "ろうどう",
+        "meaning": "lao động"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "命",
+    "meaning": "mạng sống, mệnh lệnh",
+    "meaning_vi": "mạng sống, mệnh lệnh",
+    "onyomi": [
+      "メイ",
+      "ミョウ"
+    ],
+    "kunyomi": [
+      "いのち"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "生命",
+        "reading": "せいめい",
+        "meaning": "sinh mệnh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "放",
+    "meaning": "thả, phóng",
+    "meaning_vi": "thả, phóng",
+    "onyomi": [
+      "ホウ"
+    ],
+    "kunyomi": [
+      "はな.す",
+      "-っぱな.し",
+      "はな.つ",
+      "はな.れる",
+      "こ.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "放送",
+        "reading": "ほうそう",
+        "meaning": "phát sóng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "昔",
+    "meaning": "ngày xưa",
+    "meaning_vi": "ngày xưa",
+    "onyomi": [
+      "セキ",
+      "シャク"
+    ],
+    "kunyomi": [
+      "むかし"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "昔話",
+        "reading": "むかしばなし",
+        "meaning": "truyện cổ tích"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "育",
+    "meaning": "nuôi dưỡng",
+    "meaning_vi": "nuôi dưỡng",
+    "onyomi": [
+      "イク"
+    ],
+    "kunyomi": [
+      "そだ.つ",
+      "そだ.ち",
+      "そだ.てる",
+      "はぐく.む"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "教育",
+        "reading": "きょういく",
+        "meaning": "giáo dục"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "指",
+    "meaning": "ngón tay, chỉ",
+    "meaning_vi": "ngón tay, chỉ",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "ゆび",
+      "さ.す",
+      "-さ.し"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "指輪",
+        "reading": "ゆびわ",
+        "meaning": "nhẫn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "神",
+    "meaning": "thần",
+    "meaning_vi": "thần",
+    "onyomi": [
+      "シン",
+      "ジン"
+    ],
+    "kunyomi": [
+      "かみ",
+      "かん-",
+      "こう-"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "神社",
+        "reading": "じんじゃ",
+        "meaning": "đền thờ Thần đạo"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "追",
+    "meaning": "đuổi theo",
+    "meaning_vi": "đuổi theo",
+    "onyomi": [
+      "ツイ"
+    ],
+    "kunyomi": [
+      "お.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "追加",
+        "reading": "ついか",
+        "meaning": "thêm vào"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "戦",
+    "meaning": "chiến, đánh nhau",
+    "meaning_vi": "chiến, đánh nhau",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "いくさ",
+      "たたか.う",
+      "おのの.く",
+      "そよ.ぐ",
+      "わなな.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "戦い",
+        "reading": "たたかい",
+        "meaning": "trận chiến"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "良",
+    "meaning": "tốt",
+    "meaning_vi": "tốt",
+    "onyomi": [
+      "リョウ"
+    ],
+    "kunyomi": [
+      "よ.い",
+      "-よ.い",
+      "い.い",
+      "-い.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "改良",
+        "reading": "かいりょう",
+        "meaning": "cải tiến"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "便",
+    "meaning": "tiện, thư từ",
+    "meaning_vi": "tiện, thư từ",
+    "onyomi": [
+      "ベン",
+      "ビン"
+    ],
+    "kunyomi": [
+      "たよ.り"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "郵便",
+        "reading": "ゆうびん",
+        "meaning": "bưu chính"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "働",
+    "meaning": "làm việc",
+    "meaning_vi": "làm việc",
+    "onyomi": [
+      "ドウ"
+    ],
+    "kunyomi": [
+      "はたら.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "働く",
+        "reading": "はたらく",
+        "meaning": "làm việc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "庭",
+    "meaning": "sân vườn",
+    "meaning_vi": "sân vườn",
+    "onyomi": [
+      "テイ"
+    ],
+    "kunyomi": [
+      "にわ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "庭園",
+        "reading": "ていえん",
+        "meaning": "vườn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "息",
+    "meaning": "hơi thở",
+    "meaning_vi": "hơi thở",
+    "onyomi": [
+      "ソク"
+    ],
+    "kunyomi": [
+      "いき"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "息子",
+        "reading": "むすこ",
+        "meaning": "con trai (của mình)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "流",
+    "meaning": "chảy, dòng",
+    "meaning_vi": "chảy, dòng",
+    "onyomi": [
+      "リュウ",
+      "ル"
+    ],
+    "kunyomi": [
+      "なが.れる",
+      "なが.れ",
+      "なが.す",
+      "-なが.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "交流",
+        "reading": "こうりゅう",
+        "meaning": "giao lưu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "消",
+    "meaning": "tắt, xóa",
+    "meaning_vi": "tắt, xóa",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "き.える",
+      "け.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "消費",
+        "reading": "しょうひ",
+        "meaning": "tiêu dùng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "都",
+    "meaning": "thủ đô, đô thị",
+    "meaning_vi": "thủ đô, đô thị",
+    "onyomi": [
+      "ト",
+      "ツ"
+    ],
+    "kunyomi": [
+      "みやこ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "都会",
+        "reading": "とかい",
+        "meaning": "thành phố lớn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "商",
+    "meaning": "buôn bán",
+    "meaning_vi": "buôn bán",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "あきな.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "商売",
+        "reading": "しょうばい",
+        "meaning": "việc buôn bán"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "深",
+    "meaning": "sâu",
+    "meaning_vi": "sâu",
+    "onyomi": [
+      "シン"
+    ],
+    "kunyomi": [
+      "ふか.い",
+      "-ぶか.い",
+      "ふか.まる",
+      "ふか.める",
+      "み-"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "深夜",
+        "reading": "しんや",
+        "meaning": "đêm khuya"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "球",
+    "meaning": "quả cầu, bóng",
+    "meaning_vi": "quả cầu, bóng",
+    "onyomi": [
+      "キュウ"
+    ],
+    "kunyomi": [
+      "たま"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "野球",
+        "reading": "やきゅう",
+        "meaning": "bóng chày"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "陽",
+    "meaning": "dương, mặt trời",
+    "meaning_vi": "dương, mặt trời",
+    "onyomi": [
+      "ヨウ"
+    ],
+    "kunyomi": [
+      "ひ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "夕陽",
+        "reading": "ゆうひ",
+        "meaning": "ánh chiều tà"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "寒",
+    "meaning": "lạnh",
+    "meaning_vi": "lạnh",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [
+      "さむ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "寒気",
+        "reading": "さむけ",
+        "meaning": "cảm giác ớn lạnh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "悲",
+    "meaning": "buồn",
+    "meaning_vi": "buồn",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "かな.しい",
+      "かな.しむ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "悲しい",
+        "reading": "かなしい",
+        "meaning": "buồn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "期",
+    "meaning": "thời kỳ, kỳ hạn",
+    "meaning_vi": "thời kỳ, kỳ hạn",
+    "onyomi": [
+      "キ",
+      "ゴ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "期間",
+        "reading": "きかん",
+        "meaning": "thời gian, kỳ hạn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "歯",
+    "meaning": "răng",
+    "meaning_vi": "răng",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "よわい",
+      "は",
+      "よわ.い",
+      "よわい.する"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "歯医者",
+        "reading": "はいしゃ",
+        "meaning": "nha sĩ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "港",
+    "meaning": "cảng",
+    "meaning_vi": "cảng",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "みなと"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "空港",
+        "reading": "くうこう",
+        "meaning": "sân bay"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "登",
+    "meaning": "leo",
+    "meaning_vi": "leo",
+    "onyomi": [
+      "トウ",
+      "ト",
+      "ドウ",
+      "ショウ",
+      "チョウ"
+    ],
+    "kunyomi": [
+      "のぼ.る",
+      "あ.がる"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "登山",
+        "reading": "とざん",
+        "meaning": "leo núi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "亡",
+    "meaning": "mất, chết",
+    "meaning_vi": "mất, chết",
+    "onyomi": [
+      "ボウ",
+      "モウ"
+    ],
+    "kunyomi": [
+      "な.い",
+      "な.き-",
+      "ほろ.びる",
+      "ほろ.ぶ",
+      "ほろ.ぼす"
+    ],
+    "jlpt": "N3",
+    "strokes": 3,
+    "stroke_count": 3,
+    "examples": [
+      {
+        "word": "死亡",
+        "reading": "しぼう",
+        "meaning": "tử vong"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "合",
+    "meaning": "hợp, vừa",
+    "meaning_vi": "hợp, vừa",
+    "onyomi": [
+      "ゴウ",
+      "ガッ",
+      "カッ"
+    ],
+    "kunyomi": [
+      "あ.う",
+      "-あ.う",
+      "あ.い",
+      "あい-",
+      "-あ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "合格",
+        "reading": "ごうかく",
+        "meaning": "đỗ, đạt"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "予",
+    "meaning": "trước, dự",
+    "meaning_vi": "trước, dự",
+    "onyomi": [
+      "ヨ",
+      "シャ"
+    ],
+    "kunyomi": [
+      "あらかじ.め"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "予約",
+        "reading": "よやく",
+        "meaning": "đặt trước"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "反",
+    "meaning": "phản, ngược lại",
+    "meaning_vi": "phản, ngược lại",
+    "onyomi": [
+      "ハン",
+      "ホン",
+      "タン",
+      "ホ"
+    ],
+    "kunyomi": [
+      "そ.る",
+      "そ.らす",
+      "かえ.す",
+      "かえ.る",
+      "-かえ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "反応",
+        "reading": "はんのう",
+        "meaning": "phản ứng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "返",
+    "meaning": "trả lại",
+    "meaning_vi": "trả lại",
+    "onyomi": [
+      "ヘン"
+    ],
+    "kunyomi": [
+      "かえ.す",
+      "-かえ.す",
+      "かえ.る",
+      "-かえ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "返事",
+        "reading": "へんじ",
+        "meaning": "hồi âm, câu trả lời"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "宿",
+    "meaning": "trọ, nhà trọ",
+    "meaning_vi": "trọ, nhà trọ",
+    "onyomi": [
+      "シュク"
+    ],
+    "kunyomi": [
+      "やど",
+      "やど.る",
+      "やど.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "宿題",
+        "reading": "しゅくだい",
+        "meaning": "bài tập về nhà"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "想",
+    "meaning": "nghĩ, tưởng tượng",
+    "meaning_vi": "nghĩ, tưởng tượng",
+    "onyomi": [
+      "ソウ",
+      "ソ"
+    ],
+    "kunyomi": [
+      "おも.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "予想",
+        "reading": "よそう",
+        "meaning": "dự đoán"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "感",
+    "meaning": "cảm giác",
+    "meaning_vi": "cảm giác",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "感動",
+        "reading": "かんどう",
+        "meaning": "cảm động"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "暗",
+    "meaning": "tối",
+    "meaning_vi": "tối",
+    "onyomi": [
+      "アン"
+    ],
+    "kunyomi": [
+      "くら.い",
+      "くら.む",
+      "くれ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "暗記",
+        "reading": "あんき",
+        "meaning": "học thuộc lòng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "様",
+    "meaning": "ngài, kiểu cách",
+    "meaning_vi": "ngài, kiểu cách",
+    "onyomi": [
+      "ヨウ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "さま",
+      "さん"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "様子",
+        "reading": "ようす",
+        "meaning": "tình hình, dáng vẻ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "福",
+    "meaning": "phúc",
+    "meaning_vi": "phúc",
+    "onyomi": [
+      "フク"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "幸福",
+        "reading": "こうふく",
+        "meaning": "hạnh phúc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "殺",
+    "meaning": "giết",
+    "meaning_vi": "giết",
+    "onyomi": [
+      "サツ",
+      "サイ",
+      "セツ"
+    ],
+    "kunyomi": [
+      "ころ.す",
+      "-ごろ.し",
+      "そ.ぐ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "殺人",
+        "reading": "さつじん",
+        "meaning": "giết người"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "然",
+    "meaning": "tự nhiên, đương nhiên",
+    "meaning_vi": "tự nhiên, đương nhiên",
+    "onyomi": [
+      "ゼン",
+      "ネン"
+    ],
+    "kunyomi": [
+      "しか",
+      "しか.り",
+      "しか.し",
+      "さ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "自然",
+        "reading": "しぜん",
+        "meaning": "thiên nhiên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "熱",
+    "meaning": "nóng, sốt",
+    "meaning_vi": "nóng, sốt",
+    "onyomi": [
+      "ネツ"
+    ],
+    "kunyomi": [
+      "あつ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "熱心",
+        "reading": "ねっしん",
+        "meaning": "nhiệt tình"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "選",
+    "meaning": "chọn",
+    "meaning_vi": "chọn",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "えら.ぶ"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "選手",
+        "reading": "せんしゅ",
+        "meaning": "vận động viên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "願",
+    "meaning": "nguyện vọng, xin",
+    "meaning_vi": "nguyện vọng, xin",
+    "onyomi": [
+      "ガン"
+    ],
+    "kunyomi": [
+      "ねが.う",
+      "-ねがい"
+    ],
+    "jlpt": "N3",
+    "strokes": 19,
+    "stroke_count": 19,
+    "examples": [
+      {
+        "word": "お願い",
+        "reading": "おねがい",
+        "meaning": "lời nhờ vả"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "情",
+    "meaning": "tình cảm, tình hình",
+    "meaning_vi": "tình cảm, tình hình",
+    "onyomi": [
+      "ジョウ",
+      "セイ"
+    ],
+    "kunyomi": [
+      "なさ.け"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "情報",
+        "reading": "じょうほう",
+        "meaning": "thông tin"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "疑",
+    "meaning": "nghi ngờ",
+    "meaning_vi": "nghi ngờ",
+    "onyomi": [
+      "ギ"
+    ],
+    "kunyomi": [
+      "うたが.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "疑問",
+        "reading": "ぎもん",
+        "meaning": "nghi vấn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "皆",
+    "meaning": "mọi người",
+    "meaning_vi": "mọi người",
+    "onyomi": [
+      "カイ"
+    ],
+    "kunyomi": [
+      "みな",
+      "みんな"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "皆さん",
+        "reading": "みなさん",
+        "meaning": "mọi người"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "例",
+    "meaning": "ví dụ",
+    "meaning_vi": "ví dụ",
+    "onyomi": [
+      "レイ"
+    ],
+    "kunyomi": [
+      "たと.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "例えば",
+        "reading": "たとえば",
+        "meaning": "ví dụ như"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "参",
+    "meaning": "tham gia, đến",
+    "meaning_vi": "tham gia, đến",
+    "onyomi": [
+      "サン",
+      "シン"
+    ],
+    "kunyomi": [
+      "まい.る",
+      "まい-",
+      "まじわる",
+      "みつ"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "参加",
+        "reading": "さんか",
+        "meaning": "tham gia"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "完",
+    "meaning": "hoàn thành",
+    "meaning_vi": "hoàn thành",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "完全",
+        "reading": "かんぜん",
+        "meaning": "hoàn toàn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "念",
+    "meaning": "niệm, ý nghĩ",
+    "meaning_vi": "niệm, ý nghĩ",
+    "onyomi": [
+      "ネン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "残念",
+        "reading": "ざんねん",
+        "meaning": "tiếc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "折",
+    "meaning": "gấp, bẻ gãy",
+    "meaning_vi": "gấp, bẻ gãy",
+    "onyomi": [
+      "セツ",
+      "シャク"
+    ],
+    "kunyomi": [
+      "お.る",
+      "おり",
+      "お.り",
+      "-お.り",
+      "お.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "折り紙",
+        "reading": "おりがみ",
+        "meaning": "gấp giấy"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "望",
+    "meaning": "mong, hy vọng",
+    "meaning_vi": "mong, hy vọng",
+    "onyomi": [
+      "ボウ",
+      "モウ"
+    ],
+    "kunyomi": [
+      "のぞ.む",
+      "もち"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "希望",
+        "reading": "きぼう",
+        "meaning": "hy vọng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "束",
+    "meaning": "bó, hẹn",
+    "meaning_vi": "bó, hẹn",
+    "onyomi": [
+      "ソク"
+    ],
+    "kunyomi": [
+      "たば",
+      "たば.ねる",
+      "つか",
+      "つか.ねる"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "約束",
+        "reading": "やくそく",
+        "meaning": "lời hứa, cuộc hẹn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "残",
+    "meaning": "còn lại",
+    "meaning_vi": "còn lại",
+    "onyomi": [
+      "ザン",
+      "サン"
+    ],
+    "kunyomi": [
+      "のこ.る",
+      "のこ.す",
+      "そこな.う",
+      "のこ.り"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "残業",
+        "reading": "ざんぎょう",
+        "meaning": "làm thêm giờ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "求",
+    "meaning": "yêu cầu, tìm kiếm",
+    "meaning_vi": "yêu cầu, tìm kiếm",
+    "onyomi": [
+      "キュウ",
+      "グ"
+    ],
+    "kunyomi": [
+      "もと.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "要求",
+        "reading": "ようきゅう",
+        "meaning": "yêu cầu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "約",
+    "meaning": "hẹn, khoảng chừng",
+    "meaning_vi": "hẹn, khoảng chừng",
+    "onyomi": [
+      "ヤク"
+    ],
+    "kunyomi": [
+      "つづ.まる",
+      "つづ.める",
+      "つづま.やか"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "節約",
+        "reading": "せつやく",
+        "meaning": "tiết kiệm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "性",
+    "meaning": "tính, giới tính",
+    "meaning_vi": "tính, giới tính",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "さが"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "性格",
+        "reading": "せいかく",
+        "meaning": "tính cách"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "格",
+    "meaning": "cách, tư cách",
+    "meaning_vi": "cách, tư cách",
+    "onyomi": [
+      "カク",
+      "コウ",
+      "キャク",
+      "ゴウ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "資格",
+        "reading": "しかく",
+        "meaning": "tư cách, chứng chỉ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "能",
+    "meaning": "năng lực",
+    "meaning_vi": "năng lực",
+    "onyomi": [
+      "ノウ"
+    ],
+    "kunyomi": [
+      "よ.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "能力",
+        "reading": "のうりょく",
+        "meaning": "năng lực"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "術",
+    "meaning": "thuật, kỹ thuật",
+    "meaning_vi": "thuật, kỹ thuật",
+    "onyomi": [
+      "ジュツ"
+    ],
+    "kunyomi": [
+      "すべ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "技術",
+        "reading": "ぎじゅつ",
+        "meaning": "kỹ thuật"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "晴",
+    "meaning": "trời quang",
+    "meaning_vi": "trời quang",
+    "onyomi": [
+      "セイ"
+    ],
+    "kunyomi": [
+      "は.れる",
+      "は.れ",
+      "は.れ-",
+      "-ば.れ",
+      "は.らす"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "晴れ",
+        "reading": "はれ",
+        "meaning": "trời nắng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "列",
+    "meaning": "hàng",
+    "meaning_vi": "hàng",
+    "onyomi": [
+      "レツ",
+      "レ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "行列",
+        "reading": "ぎょうれつ",
+        "meaning": "hàng người"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "式",
+    "meaning": "nghi lễ, kiểu",
+    "meaning_vi": "nghi lễ, kiểu",
+    "onyomi": [
+      "シキ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "入学式",
+        "reading": "にゅうがくしき",
+        "meaning": "lễ nhập học"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "信",
+    "meaning": "tin",
+    "meaning_vi": "tin",
+    "onyomi": [
+      "シン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "信じる",
+        "reading": "しんじる",
+        "meaning": "tin tưởng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "単",
+    "meaning": "đơn giản",
+    "meaning_vi": "đơn giản",
+    "onyomi": [
+      "タン"
+    ],
+    "kunyomi": [
+      "ひとえ"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "簡単",
+        "reading": "かんたん",
+        "meaning": "đơn giản"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "変",
+    "meaning": "lạ, thay đổi",
+    "meaning_vi": "lạ, thay đổi",
+    "onyomi": [
+      "ヘン"
+    ],
+    "kunyomi": [
+      "か.わる",
+      "か.わり",
+      "か.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "大変",
+        "reading": "たいへん",
+        "meaning": "vất vả, nghiêm trọng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "夫",
+    "meaning": "chồng",
+    "meaning_vi": "chồng",
+    "onyomi": [
+      "フ",
+      "フウ",
+      "ブ"
+    ],
+    "kunyomi": [
+      "おっと",
+      "それ"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "夫婦",
+        "reading": "ふうふ",
+        "meaning": "vợ chồng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "昨",
+    "meaning": "hôm qua, trước",
+    "meaning_vi": "hôm qua, trước",
+    "onyomi": [
+      "サク"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "昨日",
+        "reading": "きのう",
+        "meaning": "hôm qua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "法",
+    "meaning": "pháp luật, phương pháp",
+    "meaning_vi": "pháp luật, phương pháp",
+    "onyomi": [
+      "ホウ",
+      "ハッ",
+      "ホッ",
+      "フラン"
+    ],
+    "kunyomi": [
+      "のり"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "方法",
+        "reading": "ほうほう",
+        "meaning": "phương pháp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "晩",
+    "meaning": "tối",
+    "meaning_vi": "tối",
+    "onyomi": [
+      "バン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "今晩",
+        "reading": "こんばん",
+        "meaning": "tối nay"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "猫",
+    "meaning": "mèo",
+    "meaning_vi": "mèo",
+    "onyomi": [
+      "ビョウ"
+    ],
+    "kunyomi": [
+      "ねこ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "子猫",
+        "reading": "こねこ",
+        "meaning": "mèo con"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "園",
+    "meaning": "vườn",
+    "meaning_vi": "vườn",
+    "onyomi": [
+      "エン"
+    ],
+    "kunyomi": [
+      "その"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "公園",
+        "reading": "こうえん",
+        "meaning": "công viên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "遠",
+    "meaning": "xa",
+    "meaning_vi": "xa",
+    "onyomi": [
+      "エン",
+      "オン"
+    ],
+    "kunyomi": [
+      "とお.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "遠足",
+        "reading": "えんそく",
+        "meaning": "dã ngoại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "係",
+    "meaning": "liên quan, phụ trách",
+    "meaning_vi": "liên quan, phụ trách",
+    "onyomi": [
+      "ケイ"
+    ],
+    "kunyomi": [
+      "かか.る",
+      "かかり",
+      "-がかり",
+      "かか.わる"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "関係",
+        "reading": "かんけい",
+        "meaning": "quan hệ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "取",
+    "meaning": "lấy",
+    "meaning_vi": "lấy",
+    "onyomi": [
+      "シュ"
+    ],
+    "kunyomi": [
+      "と.る",
+      "と.り",
+      "と.り-",
+      "とり",
+      "-ど.り"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "受け取る",
+        "reading": "うけとる",
+        "meaning": "nhận lấy"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "守",
+    "meaning": "giữ, bảo vệ",
+    "meaning_vi": "giữ, bảo vệ",
+    "onyomi": [
+      "シュ",
+      "ス"
+    ],
+    "kunyomi": [
+      "まも.る",
+      "まも.り",
+      "もり",
+      "-もり",
+      "かみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "留守",
+        "reading": "るす",
+        "meaning": "vắng nhà"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "幸",
+    "meaning": "may mắn, hạnh phúc",
+    "meaning_vi": "may mắn, hạnh phúc",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "さいわ.い",
+      "さち",
+      "しあわ.せ"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "幸せ",
+        "reading": "しあわせ",
+        "meaning": "hạnh phúc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "箱",
+    "meaning": "hộp",
+    "meaning_vi": "hộp",
+    "onyomi": [
+      "ソウ"
+    ],
+    "kunyomi": [
+      "はこ"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "ごみ箱",
+        "reading": "ごみばこ",
+        "meaning": "thùng rác"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "面",
+    "meaning": "mặt, bề mặt",
+    "meaning_vi": "mặt, bề mặt",
+    "onyomi": [
+      "メン",
+      "ベン"
+    ],
+    "kunyomi": [
+      "おも",
+      "おもて",
+      "つら"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "場面",
+        "reading": "ばめん",
+        "meaning": "cảnh, tình huống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "喜",
+    "meaning": "vui mừng",
+    "meaning_vi": "vui mừng",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "よろこ.ぶ",
+      "よろこ.ばす"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "喜ぶ",
+        "reading": "よろこぶ",
+        "meaning": "vui mừng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "治",
+    "meaning": "chữa trị, cai trị",
+    "meaning_vi": "chữa trị, cai trị",
+    "onyomi": [
+      "ジ",
+      "チ"
+    ],
+    "kunyomi": [
+      "おさ.める",
+      "おさ.まる",
+      "なお.る",
+      "なお.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "治療",
+        "reading": "ちりょう",
+        "meaning": "điều trị"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "笑",
+    "meaning": "cười",
+    "meaning_vi": "cười",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "わら.う",
+      "え.む"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "笑う",
+        "reading": "わらう",
+        "meaning": "cười"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "辞",
+    "meaning": "từ, từ chức",
+    "meaning_vi": "từ, từ chức",
+    "onyomi": [
+      "ジ"
+    ],
+    "kunyomi": [
+      "や.める",
+      "いな.む"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "辞書",
+        "reading": "じしょ",
+        "meaning": "từ điển"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "関",
+    "meaning": "liên quan, cửa ải",
+    "meaning_vi": "liên quan, cửa ải",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [
+      "せき",
+      "-ぜき",
+      "かか.わる",
+      "からくり",
+      "かんぬき"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "関心",
+        "reading": "かんしん",
+        "meaning": "quan tâm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "政",
+    "meaning": "chính trị",
+    "meaning_vi": "chính trị",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "まつりごと",
+      "まん"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "政治",
+        "reading": "せいじ",
+        "meaning": "chính trị"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "留",
+    "meaning": "lưu lại, ở lại",
+    "meaning_vi": "lưu lại, ở lại",
+    "onyomi": [
+      "リュウ",
+      "ル"
+    ],
+    "kunyomi": [
+      "と.める",
+      "と.まる",
+      "とど.める",
+      "とど.まる",
+      "るうぶる"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "留学",
+        "reading": "りゅうがく",
+        "meaning": "du học"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "険",
+    "meaning": "hiểm, hiểm trở",
+    "meaning_vi": "hiểm, hiểm trở",
+    "onyomi": [
+      "ケン"
+    ],
+    "kunyomi": [
+      "けわ.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "危険",
+        "reading": "きけん",
+        "meaning": "nguy hiểm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "危",
+    "meaning": "nguy",
+    "meaning_vi": "nguy",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "あぶ.ない",
+      "あや.うい",
+      "あや.ぶむ"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "危ない",
+        "reading": "あぶない",
+        "meaning": "nguy hiểm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "存",
+    "meaning": "tồn tại, biết",
+    "meaning_vi": "tồn tại, biết",
+    "onyomi": [
+      "ソン",
+      "ゾン"
+    ],
+    "kunyomi": [
+      "ながら.える",
+      "あ.る",
+      "たも.つ",
+      "と.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "存在",
+        "reading": "そんざい",
+        "meaning": "sự tồn tại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "原",
+    "meaning": "nguyên, cánh đồng",
+    "meaning_vi": "nguyên, cánh đồng",
+    "onyomi": [
+      "ゲン"
+    ],
+    "kunyomi": [
+      "はら"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "原因",
+        "reading": "げんいん",
+        "meaning": "nguyên nhân"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "薬",
+    "meaning": "thuốc",
+    "meaning_vi": "thuốc",
+    "onyomi": [
+      "ヤク"
+    ],
+    "kunyomi": [
+      "くすり"
+    ],
+    "jlpt": "N3",
+    "strokes": 16,
+    "stroke_count": 16,
+    "examples": [
+      {
+        "word": "薬局",
+        "reading": "やっきょく",
+        "meaning": "hiệu thuốc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "側",
+    "meaning": "bên, phía",
+    "meaning_vi": "bên, phía",
+    "onyomi": [
+      "ソク"
+    ],
+    "kunyomi": [
+      "かわ",
+      "がわ",
+      "そば"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "右側",
+        "reading": "みぎがわ",
+        "meaning": "phía bên phải"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "席",
+    "meaning": "chỗ ngồi",
+    "meaning_vi": "chỗ ngồi",
+    "onyomi": [
+      "セキ"
+    ],
+    "kunyomi": [
+      "むしろ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "座席",
+        "reading": "ざせき",
+        "meaning": "chỗ ngồi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "敗",
+    "meaning": "thất bại",
+    "meaning_vi": "thất bại",
+    "onyomi": [
+      "ハイ"
+    ],
+    "kunyomi": [
+      "やぶ.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "勝敗",
+        "reading": "しょうはい",
+        "meaning": "thắng thua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "果",
+    "meaning": "quả, kết quả",
+    "meaning_vi": "quả, kết quả",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "は.たす",
+      "はた.す",
+      "-は.たす",
+      "は.てる",
+      "-は.てる"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "結果",
+        "reading": "けっか",
+        "meaning": "kết quả"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "因",
+    "meaning": "nguyên nhân",
+    "meaning_vi": "nguyên nhân",
+    "onyomi": [
+      "イン"
+    ],
+    "kunyomi": [
+      "よ.る",
+      "ちな.む"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "因果",
+        "reading": "いんが",
+        "meaning": "nhân quả"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "常",
+    "meaning": "thường",
+    "meaning_vi": "thường",
+    "onyomi": [
+      "ジョウ"
+    ],
+    "kunyomi": [
+      "つね",
+      "とこ-"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "日常",
+        "reading": "にちじょう",
+        "meaning": "thường ngày"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "識",
+    "meaning": "nhận thức",
+    "meaning_vi": "nhận thức",
+    "onyomi": [
+      "シキ"
+    ],
+    "kunyomi": [
+      "し.る",
+      "しる.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 19,
+    "stroke_count": 19,
+    "examples": [
+      {
+        "word": "知識",
+        "reading": "ちしき",
+        "meaning": "kiến thức"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "非",
+    "meaning": "phi, không",
+    "meaning_vi": "phi, không",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "あら.ず"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "非常",
+        "reading": "ひじょう",
+        "meaning": "rất, khẩn cấp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "官",
+    "meaning": "quan chức",
+    "meaning_vi": "quan chức",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "警官",
+        "reading": "けいかん",
+        "meaning": "cảnh sát"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "察",
+    "meaning": "xét đoán, quan sát",
+    "meaning_vi": "xét đoán, quan sát",
+    "onyomi": [
+      "サツ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "警察",
+        "reading": "けいさつ",
+        "meaning": "cảnh sát"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "愛",
+    "meaning": "yêu",
+    "meaning_vi": "yêu",
+    "onyomi": [
+      "アイ"
+    ],
+    "kunyomi": [
+      "いと.しい",
+      "かな.しい",
+      "め.でる",
+      "お.しむ",
+      "まな"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "愛情",
+        "reading": "あいじょう",
+        "meaning": "tình yêu thương"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "警",
+    "meaning": "cảnh báo",
+    "meaning_vi": "cảnh báo",
+    "onyomi": [
+      "ケイ"
+    ],
+    "kunyomi": [
+      "いまし.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 19,
+    "stroke_count": 19,
+    "examples": [
+      {
+        "word": "警告",
+        "reading": "けいこく",
+        "meaning": "cảnh báo"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "覚",
+    "meaning": "nhớ, tỉnh dậy",
+    "meaning_vi": "nhớ, tỉnh dậy",
+    "onyomi": [
+      "カク"
+    ],
+    "kunyomi": [
+      "おぼ.える",
+      "さ.ます",
+      "さ.める",
+      "さと.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "覚える",
+        "reading": "おぼえる",
+        "meaning": "ghi nhớ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "説",
+    "meaning": "giải thích, thuyết",
+    "meaning_vi": "giải thích, thuyết",
+    "onyomi": [
+      "セツ",
+      "ゼイ"
+    ],
+    "kunyomi": [
+      "と.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "説明",
+        "reading": "せつめい",
+        "meaning": "giải thích"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "告",
+    "meaning": "báo, thông báo",
+    "meaning_vi": "báo, thông báo",
+    "onyomi": [
+      "コク"
+    ],
+    "kunyomi": [
+      "つ.げる"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "広告",
+        "reading": "こうこく",
+        "meaning": "quảng cáo"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "種",
+    "meaning": "loại, hạt giống",
+    "meaning_vi": "loại, hạt giống",
+    "onyomi": [
+      "シュ"
+    ],
+    "kunyomi": [
+      "たね",
+      "-ぐさ"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "種類",
+        "reading": "しゅるい",
+        "meaning": "chủng loại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "達",
+    "meaning": "đạt, (chỉ số nhiều)",
+    "meaning_vi": "đạt, (chỉ số nhiều)",
+    "onyomi": [
+      "タツ",
+      "ダ"
+    ],
+    "kunyomi": [
+      "-たち"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "友達",
+        "reading": "ともだち",
+        "meaning": "bạn bè"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "類",
+    "meaning": "loại",
+    "meaning_vi": "loại",
+    "onyomi": [
+      "ルイ"
+    ],
+    "kunyomi": [
+      "たぐ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 18,
+    "stroke_count": 18,
+    "examples": [
+      {
+        "word": "書類",
+        "reading": "しょるい",
+        "meaning": "giấy tờ, tài liệu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "報",
+    "meaning": "báo, tin tức",
+    "meaning_vi": "báo, tin tức",
+    "onyomi": [
+      "ホウ"
+    ],
+    "kunyomi": [
+      "むく.いる"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "天気予報",
+        "reading": "てんきよほう",
+        "meaning": "dự báo thời tiết"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "等",
+    "meaning": "vân vân, bằng nhau",
+    "meaning_vi": "vân vân, bằng nhau",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "ひと.しい",
+      "など",
+      "-ら"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "平等",
+        "reading": "びょうどう",
+        "meaning": "bình đẳng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "座",
+    "meaning": "ngồi, chỗ ngồi",
+    "meaning_vi": "ngồi, chỗ ngồi",
+    "onyomi": [
+      "ザ"
+    ],
+    "kunyomi": [
+      "すわ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "座る",
+        "reading": "すわる",
+        "meaning": "ngồi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "忘",
+    "meaning": "quên",
+    "meaning_vi": "quên",
+    "onyomi": [
+      "ボウ"
+    ],
+    "kunyomi": [
+      "わす.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "忘れ物",
+        "reading": "わすれもの",
+        "meaning": "đồ để quên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "洗",
+    "meaning": "rửa",
+    "meaning_vi": "rửa",
+    "onyomi": [
+      "セン"
+    ],
+    "kunyomi": [
+      "あら.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "洗濯",
+        "reading": "せんたく",
+        "meaning": "giặt giũ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "許",
+    "meaning": "cho phép",
+    "meaning_vi": "cho phép",
+    "onyomi": [
+      "キョ"
+    ],
+    "kunyomi": [
+      "ゆる.す",
+      "もと"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "許可",
+        "reading": "きょか",
+        "meaning": "cho phép"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "静",
+    "meaning": "yên tĩnh",
+    "meaning_vi": "yên tĩnh",
+    "onyomi": [
+      "セイ",
+      "ジョウ"
+    ],
+    "kunyomi": [
+      "しず-",
+      "しず.か",
+      "しず.まる",
+      "しず.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "静か",
+        "reading": "しずか",
+        "meaning": "yên tĩnh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "煙",
+    "meaning": "khói",
+    "meaning_vi": "khói",
+    "onyomi": [
+      "エン"
+    ],
+    "kunyomi": [
+      "けむ.る",
+      "けむり",
+      "けむ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "禁煙",
+        "reading": "きんえん",
+        "meaning": "cấm hút thuốc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "加",
+    "meaning": "thêm",
+    "meaning_vi": "thêm",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "くわ.える",
+      "くわ.わる"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "加入",
+        "reading": "かにゅう",
+        "meaning": "gia nhập"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "容",
+    "meaning": "chứa, dung mạo",
+    "meaning_vi": "chứa, dung mạo",
+    "onyomi": [
+      "ヨウ"
+    ],
+    "kunyomi": [
+      "い.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "内容",
+        "reading": "ないよう",
+        "meaning": "nội dung"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "易",
+    "meaning": "dễ, mậu dịch",
+    "meaning_vi": "dễ, mậu dịch",
+    "onyomi": [
+      "エキ",
+      "イ"
+    ],
+    "kunyomi": [
+      "やさ.しい",
+      "やす.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "貿易",
+        "reading": "ぼうえき",
+        "meaning": "mậu dịch, thương mại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "財",
+    "meaning": "của cải",
+    "meaning_vi": "của cải",
+    "onyomi": [
+      "ザイ",
+      "サイ",
+      "ゾク"
+    ],
+    "kunyomi": [
+      "たから"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "財布",
+        "reading": "さいふ",
+        "meaning": "ví tiền"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "若",
+    "meaning": "trẻ",
+    "meaning_vi": "trẻ",
+    "onyomi": [
+      "ジャク",
+      "ニャク",
+      "ニャ"
+    ],
+    "kunyomi": [
+      "わか.い",
+      "わか-",
+      "も.しくわ",
+      "も.し",
+      "も.しくは"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "若者",
+        "reading": "わかもの",
+        "meaning": "người trẻ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "忙",
+    "meaning": "bận",
+    "meaning_vi": "bận",
+    "onyomi": [
+      "ボウ",
+      "モウ"
+    ],
+    "kunyomi": [
+      "いそが.しい",
+      "せわ.しい",
+      "おそ.れる",
+      "うれえるさま"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "忙しい",
+        "reading": "いそがしい",
+        "meaning": "bận rộn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "徒",
+    "meaning": "đồ đệ, đi bộ",
+    "meaning_vi": "đồ đệ, đi bộ",
+    "onyomi": [
+      "ト"
+    ],
+    "kunyomi": [
+      "いたずら",
+      "あだ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "生徒",
+        "reading": "せいと",
+        "meaning": "học sinh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "得",
+    "meaning": "được, lợi",
+    "meaning_vi": "được, lợi",
+    "onyomi": [
+      "トク"
+    ],
+    "kunyomi": [
+      "え.る",
+      "う.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "得意",
+        "reading": "とくい",
+        "meaning": "sở trường"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "続",
+    "meaning": "tiếp tục",
+    "meaning_vi": "tiếp tục",
+    "onyomi": [
+      "ゾク",
+      "ショク",
+      "コウ",
+      "キョウ"
+    ],
+    "kunyomi": [
+      "つづ.く",
+      "つづ.ける",
+      "つぐ.ない"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "続ける",
+        "reading": "つづける",
+        "meaning": "tiếp tục"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "連",
+    "meaning": "liên kết, dẫn theo",
+    "meaning_vi": "liên kết, dẫn theo",
+    "onyomi": [
+      "レン"
+    ],
+    "kunyomi": [
+      "つら.なる",
+      "つら.ねる",
+      "つ.れる",
+      "-づ.れ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "連絡",
+        "reading": "れんらく",
+        "meaning": "liên lạc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "困",
+    "meaning": "khó khăn",
+    "meaning_vi": "khó khăn",
+    "onyomi": [
+      "コン"
+    ],
+    "kunyomi": [
+      "こま.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "困る",
+        "reading": "こまる",
+        "meaning": "gặp khó khăn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "機",
+    "meaning": "máy móc, cơ hội",
+    "meaning_vi": "máy móc, cơ hội",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "はた"
+    ],
+    "jlpt": "N3",
+    "strokes": 16,
+    "stroke_count": 16,
+    "examples": [
+      {
+        "word": "飛行機",
+        "reading": "ひこうき",
+        "meaning": "máy bay"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "飛",
+    "meaning": "bay",
+    "meaning_vi": "bay",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "と.ぶ",
+      "と.ばす",
+      "-と.ばす"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "飛ぶ",
+        "reading": "とぶ",
+        "meaning": "bay"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "害",
+    "meaning": "hại",
+    "meaning_vi": "hại",
+    "onyomi": [
+      "ガイ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "被害",
+        "reading": "ひがい",
+        "meaning": "thiệt hại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "余",
+    "meaning": "thừa",
+    "meaning_vi": "thừa",
+    "onyomi": [
+      "ヨ"
+    ],
+    "kunyomi": [
+      "あま.る",
+      "あま.り",
+      "あま.す",
+      "あんま.り"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "余裕",
+        "reading": "よゆう",
+        "meaning": "sự dư dả, thong thả"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "難",
+    "meaning": "khó",
+    "meaning_vi": "khó",
+    "onyomi": [
+      "ナン"
+    ],
+    "kunyomi": [
+      "かた.い",
+      "-がた.い",
+      "むずか.しい",
+      "むづか.しい",
+      "むつか.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 18,
+    "stroke_count": 18,
+    "examples": [
+      {
+        "word": "難しい",
+        "reading": "むずかしい",
+        "meaning": "khó"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "確",
+    "meaning": "chắc chắn",
+    "meaning_vi": "chắc chắn",
+    "onyomi": [
+      "カク",
+      "コウ"
+    ],
+    "kunyomi": [
+      "たし.か",
+      "たし.かめる"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "確認",
+        "reading": "かくにん",
+        "meaning": "xác nhận"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "在",
+    "meaning": "ở, tồn tại",
+    "meaning_vi": "ở, tồn tại",
+    "onyomi": [
+      "ザイ"
+    ],
+    "kunyomi": [
+      "あ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "現在",
+        "reading": "げんざい",
+        "meaning": "hiện tại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "夢",
+    "meaning": "giấc mơ",
+    "meaning_vi": "giấc mơ",
+    "onyomi": [
+      "ム",
+      "ボウ"
+    ],
+    "kunyomi": [
+      "ゆめ",
+      "ゆめ.みる",
+      "くら.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "悪夢",
+        "reading": "あくむ",
+        "meaning": "ác mộng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "産",
+    "meaning": "sinh, sản xuất",
+    "meaning_vi": "sinh, sản xuất",
+    "onyomi": [
+      "サン"
+    ],
+    "kunyomi": [
+      "う.む",
+      "う.まれる",
+      "うぶ-",
+      "む.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "お土産",
+        "reading": "おみやげ",
+        "meaning": "quà lưu niệm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "倒",
+    "meaning": "đổ, ngã",
+    "meaning_vi": "đổ, ngã",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "たお.れる",
+      "-だお.れ",
+      "たお.す",
+      "さかさま",
+      "さかさ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "倒れる",
+        "reading": "たおれる",
+        "meaning": "ngã, đổ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "妻",
+    "meaning": "vợ",
+    "meaning_vi": "vợ",
+    "onyomi": [
+      "サイ"
+    ],
+    "kunyomi": [
+      "つま"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "夫妻",
+        "reading": "ふさい",
+        "meaning": "vợ chồng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "議",
+    "meaning": "nghị, bàn bạc",
+    "meaning_vi": "nghị, bàn bạc",
+    "onyomi": [
+      "ギ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 20,
+    "stroke_count": 20,
+    "examples": [
+      {
+        "word": "会議",
+        "reading": "かいぎ",
+        "meaning": "cuộc họp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "犯",
+    "meaning": "phạm",
+    "meaning_vi": "phạm",
+    "onyomi": [
+      "ハン",
+      "ボン"
+    ],
+    "kunyomi": [
+      "おか.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "犯人",
+        "reading": "はんにん",
+        "meaning": "thủ phạm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "罪",
+    "meaning": "tội",
+    "meaning_vi": "tội",
+    "onyomi": [
+      "ザイ"
+    ],
+    "kunyomi": [
+      "つみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "犯罪",
+        "reading": "はんざい",
+        "meaning": "tội phạm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "論",
+    "meaning": "luận, tranh luận",
+    "meaning_vi": "luận, tranh luận",
+    "onyomi": [
+      "ロン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "議論",
+        "reading": "ぎろん",
+        "meaning": "tranh luận"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "経",
+    "meaning": "kinh, trải qua",
+    "meaning_vi": "kinh, trải qua",
+    "onyomi": [
+      "ケイ",
+      "キョウ",
+      "キン"
+    ],
+    "kunyomi": [
+      "へ.る",
+      "た.つ",
+      "たていと",
+      "はか.る",
+      "のり"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "経験",
+        "reading": "けいけん",
+        "meaning": "kinh nghiệm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "済",
+    "meaning": "xong, cứu giúp",
+    "meaning_vi": "xong, cứu giúp",
+    "onyomi": [
+      "サイ",
+      "セイ"
+    ],
+    "kunyomi": [
+      "す.む",
+      "-ず.み",
+      "-ずみ",
+      "す.まない",
+      "す.ます"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "経済",
+        "reading": "けいざい",
+        "meaning": "kinh tế"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "判",
+    "meaning": "phán đoán, con dấu",
+    "meaning_vi": "phán đoán, con dấu",
+    "onyomi": [
+      "ハン",
+      "バン"
+    ],
+    "kunyomi": [
+      "わか.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "裁判",
+        "reading": "さいばん",
+        "meaning": "xét xử"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "制",
+    "meaning": "chế, hệ thống",
+    "meaning_vi": "chế, hệ thống",
+    "onyomi": [
+      "セイ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "制度",
+        "reading": "せいど",
+        "meaning": "chế độ, hệ thống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "務",
+    "meaning": "nhiệm vụ",
+    "meaning_vi": "nhiệm vụ",
+    "onyomi": [
+      "ム"
+    ],
+    "kunyomi": [
+      "つと.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "事務",
+        "reading": "じむ",
+        "meaning": "công việc văn phòng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "資",
+    "meaning": "tài sản, vốn",
+    "meaning_vi": "tài sản, vốn",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "資料",
+        "reading": "しりょう",
+        "meaning": "tài liệu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "権",
+    "meaning": "quyền",
+    "meaning_vi": "quyền",
+    "onyomi": [
+      "ケン",
+      "ゴン"
+    ],
+    "kunyomi": [
+      "おもり",
+      "かり",
+      "はか.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "権利",
+        "reading": "けんり",
+        "meaning": "quyền lợi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "件",
+    "meaning": "vụ việc",
+    "meaning_vi": "vụ việc",
+    "onyomi": [
+      "ケン"
+    ],
+    "kunyomi": [
+      "くだん"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "事件",
+        "reading": "じけん",
+        "meaning": "sự kiện, vụ án"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "断",
+    "meaning": "cắt đứt, từ chối",
+    "meaning_vi": "cắt đứt, từ chối",
+    "onyomi": [
+      "ダン"
+    ],
+    "kunyomi": [
+      "た.つ",
+      "ことわ.る",
+      "さだ.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "断る",
+        "reading": "ことわる",
+        "meaning": "từ chối"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "任",
+    "meaning": "nhiệm, giao phó",
+    "meaning_vi": "nhiệm, giao phó",
+    "onyomi": [
+      "ニン"
+    ],
+    "kunyomi": [
+      "まか.せる",
+      "まか.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "責任",
+        "reading": "せきにん",
+        "meaning": "trách nhiệm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "責",
+    "meaning": "trách, chỉ trích",
+    "meaning_vi": "trách, chỉ trích",
+    "onyomi": [
+      "セキ"
+    ],
+    "kunyomi": [
+      "せ.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "責める",
+        "reading": "せめる",
+        "meaning": "trách móc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "増",
+    "meaning": "tăng",
+    "meaning_vi": "tăng",
+    "onyomi": [
+      "ゾウ"
+    ],
+    "kunyomi": [
+      "ま.す",
+      "ま.し",
+      "ふ.える",
+      "ふ.やす"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "増える",
+        "reading": "ふえる",
+        "meaning": "tăng lên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "解",
+    "meaning": "giải, hiểu",
+    "meaning_vi": "giải, hiểu",
+    "onyomi": [
+      "カイ",
+      "ゲ"
+    ],
+    "kunyomi": [
+      "と.く",
+      "と.かす",
+      "と.ける",
+      "ほど.く",
+      "ほど.ける"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "理解",
+        "reading": "りかい",
+        "meaning": "hiểu, lý giải"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "際",
+    "meaning": "dịp, ranh giới",
+    "meaning_vi": "dịp, ranh giới",
+    "onyomi": [
+      "サイ"
+    ],
+    "kunyomi": [
+      "きわ",
+      "-ぎわ"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "国際",
+        "reading": "こくさい",
+        "meaning": "quốc tế"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "認",
+    "meaning": "công nhận",
+    "meaning_vi": "công nhận",
+    "onyomi": [
+      "ニン"
+    ],
+    "kunyomi": [
+      "みと.める",
+      "したた.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "認める",
+        "reading": "みとめる",
+        "meaning": "thừa nhận"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "過",
+    "meaning": "quá, trải qua",
+    "meaning_vi": "quá, trải qua",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "す.ぎる",
+      "-す.ぎる",
+      "-す.ぎ",
+      "す.ごす",
+      "あやま.つ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "過去",
+        "reading": "かこ",
+        "meaning": "quá khứ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "寝",
+    "meaning": "ngủ",
+    "meaning_vi": "ngủ",
+    "onyomi": [
+      "シン"
+    ],
+    "kunyomi": [
+      "ね.る",
+      "ね.かす",
+      "い.ぬ",
+      "みたまや",
+      "や.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "寝坊",
+        "reading": "ねぼう",
+        "meaning": "ngủ quên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "置",
+    "meaning": "đặt",
+    "meaning_vi": "đặt",
+    "onyomi": [
+      "チ"
+    ],
+    "kunyomi": [
+      "お.く",
+      "-お.き"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "置く",
+        "reading": "おく",
+        "meaning": "đặt"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "費",
+    "meaning": "chi phí",
+    "meaning_vi": "chi phí",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "つい.やす",
+      "つい.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "費用",
+        "reading": "ひよう",
+        "meaning": "chi phí"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "示",
+    "meaning": "chỉ ra",
+    "meaning_vi": "chỉ ra",
+    "onyomi": [
+      "ジ",
+      "シ"
+    ],
+    "kunyomi": [
+      "しめ.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "表示",
+        "reading": "ひょうじ",
+        "meaning": "hiển thị"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "観",
+    "meaning": "quan sát",
+    "meaning_vi": "quan sát",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [
+      "み.る",
+      "しめ.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 18,
+    "stroke_count": 18,
+    "examples": [
+      {
+        "word": "観光",
+        "reading": "かんこう",
+        "meaning": "tham quan, du lịch"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "値",
+    "meaning": "giá trị, giá",
+    "meaning_vi": "giá trị, giá",
+    "onyomi": [
+      "チ"
+    ],
+    "kunyomi": [
+      "ね",
+      "あたい"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "値段",
+        "reading": "ねだん",
+        "meaning": "giá cả"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "吸",
+    "meaning": "hút",
+    "meaning_vi": "hút",
+    "onyomi": [
+      "キュウ"
+    ],
+    "kunyomi": [
+      "す.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "吸う",
+        "reading": "すう",
+        "meaning": "hít, hút"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "状",
+    "meaning": "tình trạng, thư",
+    "meaning_vi": "tình trạng, thư",
+    "onyomi": [
+      "ジョウ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "状態",
+        "reading": "じょうたい",
+        "meaning": "tình trạng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "収",
+    "meaning": "thu",
+    "meaning_vi": "thu",
+    "onyomi": [
+      "シュウ"
+    ],
+    "kunyomi": [
+      "おさ.める",
+      "おさ.まる"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "収入",
+        "reading": "しゅうにゅう",
+        "meaning": "thu nhập"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "職",
+    "meaning": "nghề",
+    "meaning_vi": "nghề",
+    "onyomi": [
+      "ショク",
+      "ソク"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 18,
+    "stroke_count": 18,
+    "examples": [
+      {
+        "word": "職業",
+        "reading": "しょくぎょう",
+        "meaning": "nghề nghiệp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "規",
+    "meaning": "quy tắc",
+    "meaning_vi": "quy tắc",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "規則",
+        "reading": "きそく",
+        "meaning": "quy tắc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "割",
+    "meaning": "chia, tỷ lệ",
+    "meaning_vi": "chia, tỷ lệ",
+    "onyomi": [
+      "カツ"
+    ],
+    "kunyomi": [
+      "わ.る",
+      "わり",
+      "わ.り",
+      "わ.れる",
+      "さ.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "割合",
+        "reading": "わりあい",
+        "meaning": "tỷ lệ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "演",
+    "meaning": "biểu diễn",
+    "meaning_vi": "biểu diễn",
+    "onyomi": [
+      "エン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "演奏",
+        "reading": "えんそう",
+        "meaning": "biểu diễn nhạc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "師",
+    "meaning": "thầy, chuyên gia",
+    "meaning_vi": "thầy, chuyên gia",
+    "onyomi": [
+      "シ"
+    ],
+    "kunyomi": [
+      "いくさ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "医師",
+        "reading": "いし",
+        "meaning": "bác sĩ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "備",
+    "meaning": "chuẩn bị",
+    "meaning_vi": "chuẩn bị",
+    "onyomi": [
+      "ビ"
+    ],
+    "kunyomi": [
+      "そな.える",
+      "そな.わる",
+      "つぶさ.に"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "準備",
+        "reading": "じゅんび",
+        "meaning": "chuẩn bị"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "優",
+    "meaning": "hiền, ưu tú",
+    "meaning_vi": "hiền, ưu tú",
+    "onyomi": [
+      "ユウ",
+      "ウ"
+    ],
+    "kunyomi": [
+      "やさ.しい",
+      "すぐ.れる",
+      "まさ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 17,
+    "stroke_count": 17,
+    "examples": [
+      {
+        "word": "優しい",
+        "reading": "やさしい",
+        "meaning": "hiền, tốt bụng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "宅",
+    "meaning": "nhà",
+    "meaning_vi": "nhà",
+    "onyomi": [
+      "タク"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 6,
+    "stroke_count": 6,
+    "examples": [
+      {
+        "word": "自宅",
+        "reading": "じたく",
+        "meaning": "nhà riêng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "現",
+    "meaning": "hiện ra, hiện tại",
+    "meaning_vi": "hiện ra, hiện tại",
+    "onyomi": [
+      "ゲン"
+    ],
+    "kunyomi": [
+      "あらわ.れる",
+      "あらわ.す",
+      "うつつ",
+      "うつ.つ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "現代",
+        "reading": "げんだい",
+        "meaning": "hiện đại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "呼",
+    "meaning": "gọi",
+    "meaning_vi": "gọi",
+    "onyomi": [
+      "コ"
+    ],
+    "kunyomi": [
+      "よ.ぶ"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "呼ぶ",
+        "reading": "よぶ",
+        "meaning": "gọi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "違",
+    "meaning": "khác, sai",
+    "meaning_vi": "khác, sai",
+    "onyomi": [
+      "イ"
+    ],
+    "kunyomi": [
+      "ちが.う",
+      "ちが.い",
+      "ちが.える",
+      "-ちが.える",
+      "たが.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "違う",
+        "reading": "ちがう",
+        "meaning": "khác, sai"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "差",
+    "meaning": "chênh lệch",
+    "meaning_vi": "chênh lệch",
+    "onyomi": [
+      "サ"
+    ],
+    "kunyomi": [
+      "さ.す",
+      "さ.し"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "時差",
+        "reading": "じさ",
+        "meaning": "chênh lệch múi giờ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "供",
+    "meaning": "cung cấp, đi cùng",
+    "meaning_vi": "cung cấp, đi cùng",
+    "onyomi": [
+      "キョウ",
+      "ク",
+      "クウ",
+      "グ"
+    ],
+    "kunyomi": [
+      "そな.える",
+      "とも",
+      "-ども"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "子供",
+        "reading": "こども",
+        "meaning": "trẻ em"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "限",
+    "meaning": "giới hạn",
+    "meaning_vi": "giới hạn",
+    "onyomi": [
+      "ゲン"
+    ],
+    "kunyomi": [
+      "かぎ.る",
+      "かぎ.り",
+      "-かぎ.り"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "制限",
+        "reading": "せいげん",
+        "meaning": "hạn chế"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "与",
+    "meaning": "cho, trao",
+    "meaning_vi": "cho, trao",
+    "onyomi": [
+      "ヨ"
+    ],
+    "kunyomi": [
+      "あた.える",
+      "あずか.る",
+      "くみ.する",
+      "ともに"
+    ],
+    "jlpt": "N3",
+    "strokes": 3,
+    "stroke_count": 3,
+    "examples": [
+      {
+        "word": "与える",
+        "reading": "あたえる",
+        "meaning": "trao cho"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "渡",
+    "meaning": "qua, trao",
+    "meaning_vi": "qua, trao",
+    "onyomi": [
+      "ト"
+    ],
+    "kunyomi": [
+      "わた.る",
+      "-わた.る",
+      "わた.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "渡る",
+        "reading": "わたる",
+        "meaning": "băng qua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "景",
+    "meaning": "cảnh",
+    "meaning_vi": "cảnh",
+    "onyomi": [
+      "ケイ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "景色",
+        "reading": "けしき",
+        "meaning": "phong cảnh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "抜",
+    "meaning": "rút, vượt",
+    "meaning_vi": "rút, vượt",
+    "onyomi": [
+      "バツ",
+      "ハツ",
+      "ハイ"
+    ],
+    "kunyomi": [
+      "ぬ.く",
+      "-ぬ.く",
+      "ぬ.き",
+      "ぬ.ける",
+      "ぬ.かす"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "抜く",
+        "reading": "ぬく",
+        "meaning": "rút ra"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "候",
+    "meaning": "thời tiết, khí hậu",
+    "meaning_vi": "thời tiết, khí hậu",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "そうろう"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "天候",
+        "reading": "てんこう",
+        "meaning": "thời tiết"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "構",
+    "meaning": "cấu trúc, bận tâm",
+    "meaning_vi": "cấu trúc, bận tâm",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "かま.える",
+      "かま.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "構造",
+        "reading": "こうぞう",
+        "meaning": "cấu trúc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "捕",
+    "meaning": "bắt",
+    "meaning_vi": "bắt",
+    "onyomi": [
+      "ホ"
+    ],
+    "kunyomi": [
+      "と.らえる",
+      "と.らわれる",
+      "と.る",
+      "とら.える",
+      "とら.われる"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "捕まえる",
+        "reading": "つかまえる",
+        "meaning": "bắt lấy"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "慣",
+    "meaning": "quen",
+    "meaning_vi": "quen",
+    "onyomi": [
+      "カン"
+    ],
+    "kunyomi": [
+      "な.れる",
+      "な.らす"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "習慣",
+        "reading": "しゅうかん",
+        "meaning": "thói quen"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "満",
+    "meaning": "đầy",
+    "meaning_vi": "đầy",
+    "onyomi": [
+      "マン",
+      "バン"
+    ],
+    "kunyomi": [
+      "み.ちる",
+      "み.つ",
+      "み.たす"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "満員",
+        "reading": "まんいん",
+        "meaning": "đầy người"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "掛",
+    "meaning": "treo, móc",
+    "meaning_vi": "treo, móc",
+    "onyomi": [
+      "カイ",
+      "ケイ"
+    ],
+    "kunyomi": [
+      "か.ける",
+      "-か.ける",
+      "か.け",
+      "-か.け",
+      "-が.け"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "掛ける",
+        "reading": "かける",
+        "meaning": "treo, gọi (điện)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "居",
+    "meaning": "ở, cư trú",
+    "meaning_vi": "ở, cư trú",
+    "onyomi": [
+      "キョ",
+      "コ"
+    ],
+    "kunyomi": [
+      "い.る",
+      "-い",
+      "お.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "居間",
+        "reading": "いま",
+        "meaning": "phòng khách"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "突",
+    "meaning": "đâm, đột ngột",
+    "meaning_vi": "đâm, đột ngột",
+    "onyomi": [
+      "トツ",
+      "カ"
+    ],
+    "kunyomi": [
+      "つ.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "突然",
+        "reading": "とつぜん",
+        "meaning": "đột nhiên"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "招",
+    "meaning": "mời",
+    "meaning_vi": "mời",
+    "onyomi": [
+      "ショウ"
+    ],
+    "kunyomi": [
+      "まね.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "招待",
+        "reading": "しょうたい",
+        "meaning": "lời mời"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "段",
+    "meaning": "bậc, giai đoạn",
+    "meaning_vi": "bậc, giai đoạn",
+    "onyomi": [
+      "ダン",
+      "タン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "階段",
+        "reading": "かいだん",
+        "meaning": "cầu thang"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "腹",
+    "meaning": "bụng",
+    "meaning_vi": "bụng",
+    "onyomi": [
+      "フク"
+    ],
+    "kunyomi": [
+      "はら"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "お腹",
+        "reading": "おなか",
+        "meaning": "bụng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "痛",
+    "meaning": "đau",
+    "meaning_vi": "đau",
+    "onyomi": [
+      "ツウ"
+    ],
+    "kunyomi": [
+      "いた.い",
+      "いた.む",
+      "いた.ましい",
+      "いた.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "痛い",
+        "reading": "いたい",
+        "meaning": "đau"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "退",
+    "meaning": "lui, rút",
+    "meaning_vi": "lui, rút",
+    "onyomi": [
+      "タイ"
+    ],
+    "kunyomi": [
+      "しりぞ.く",
+      "しりぞ.ける",
+      "ひ.く",
+      "の.く",
+      "の.ける"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "退院",
+        "reading": "たいいん",
+        "meaning": "xuất viện"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "迷",
+    "meaning": "lạc, phân vân",
+    "meaning_vi": "lạc, phân vân",
+    "onyomi": [
+      "メイ"
+    ],
+    "kunyomi": [
+      "まよ.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "迷子",
+        "reading": "まいご",
+        "meaning": "trẻ đi lạc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "訪",
+    "meaning": "thăm",
+    "meaning_vi": "thăm",
+    "onyomi": [
+      "ホウ"
+    ],
+    "kunyomi": [
+      "おとず.れる",
+      "たず.ねる",
+      "と.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "訪問",
+        "reading": "ほうもん",
+        "meaning": "thăm viếng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "怒",
+    "meaning": "giận",
+    "meaning_vi": "giận",
+    "onyomi": [
+      "ド",
+      "ヌ"
+    ],
+    "kunyomi": [
+      "いか.る",
+      "おこ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "怒る",
+        "reading": "おこる",
+        "meaning": "tức giận"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "眠",
+    "meaning": "ngủ",
+    "meaning_vi": "ngủ",
+    "onyomi": [
+      "ミン"
+    ],
+    "kunyomi": [
+      "ねむ.る",
+      "ねむ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "眠い",
+        "reading": "ねむい",
+        "meaning": "buồn ngủ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "靴",
+    "meaning": "giày",
+    "meaning_vi": "giày",
+    "onyomi": [
+      "カ"
+    ],
+    "kunyomi": [
+      "くつ"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "靴下",
+        "reading": "くつした",
+        "meaning": "tất"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "途",
+    "meaning": "đường, giữa chừng",
+    "meaning_vi": "đường, giữa chừng",
+    "onyomi": [
+      "ト"
+    ],
+    "kunyomi": [
+      "みち"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "途中",
+        "reading": "とちゅう",
+        "meaning": "giữa đường"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "給",
+    "meaning": "cấp, lương",
+    "meaning_vi": "cấp, lương",
+    "onyomi": [
+      "キュウ"
+    ],
+    "kunyomi": [
+      "たま.う",
+      "たも.う",
+      "-たま.え"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "給料",
+        "reading": "きゅうりょう",
+        "meaning": "tiền lương"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "冷",
+    "meaning": "lạnh, nguội",
+    "meaning_vi": "lạnh, nguội",
+    "onyomi": [
+      "レイ"
+    ],
+    "kunyomi": [
+      "つめ.たい",
+      "ひ.える",
+      "ひ.や",
+      "ひ.ややか",
+      "ひ.やす"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "冷蔵庫",
+        "reading": "れいぞうこ",
+        "meaning": "tủ lạnh"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "処",
+    "meaning": "xử lý, nơi",
+    "meaning_vi": "xử lý, nơi",
+    "onyomi": [
+      "ショ"
+    ],
+    "kunyomi": [
+      "ところ",
+      "-こ",
+      "お.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "処理",
+        "reading": "しょり",
+        "meaning": "xử lý"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "婦",
+    "meaning": "phụ nữ, vợ",
+    "meaning_vi": "phụ nữ, vợ",
+    "onyomi": [
+      "フ"
+    ],
+    "kunyomi": [
+      "よめ"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "主婦",
+        "reading": "しゅふ",
+        "meaning": "nội trợ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "程",
+    "meaning": "mức độ",
+    "meaning_vi": "mức độ",
+    "onyomi": [
+      "テイ"
+    ],
+    "kunyomi": [
+      "ほど",
+      "-ほど"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "程度",
+        "reading": "ていど",
+        "meaning": "mức độ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "精",
+    "meaning": "tinh, tinh thần",
+    "meaning_vi": "tinh, tinh thần",
+    "onyomi": [
+      "セイ",
+      "ショウ"
+    ],
+    "kunyomi": [
+      "しら.げる",
+      "くわ.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "精神",
+        "reading": "せいしん",
+        "meaning": "tinh thần"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "絶",
+    "meaning": "tuyệt, cắt đứt",
+    "meaning_vi": "tuyệt, cắt đứt",
+    "onyomi": [
+      "ゼツ"
+    ],
+    "kunyomi": [
+      "た.える",
+      "た.やす",
+      "た.つ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "絶対",
+        "reading": "ぜったい",
+        "meaning": "tuyệt đối"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "杯",
+    "meaning": "chén, cốc",
+    "meaning_vi": "chén, cốc",
+    "onyomi": [
+      "ハイ"
+    ],
+    "kunyomi": [
+      "さかずき"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "乾杯",
+        "reading": "かんぱい",
+        "meaning": "cạn ly"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "積",
+    "meaning": "tích, chất, diện tích",
+    "meaning_vi": "tích, chất, diện tích",
+    "onyomi": [
+      "セキ"
+    ],
+    "kunyomi": [
+      "つ.む",
+      "-づ.み",
+      "つ.もる",
+      "つ.もり"
+    ],
+    "jlpt": "N3",
+    "strokes": 16,
+    "stroke_count": 16,
+    "examples": [
+      {
+        "word": "面積",
+        "reading": "めんせき",
+        "meaning": "diện tích"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "寄",
+    "meaning": "ghé, tiến lại gần",
+    "meaning_vi": "ghé, tiến lại gần",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "よ.る",
+      "-よ.り",
+      "よ.せる"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "寄る",
+        "reading": "よる",
+        "meaning": "ghé qua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "娘",
+    "meaning": "con gái",
+    "meaning_vi": "con gái",
+    "onyomi": [
+      "ジョウ"
+    ],
+    "kunyomi": [
+      "むすめ",
+      "こ"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "娘",
+        "reading": "むすめ",
+        "meaning": "con gái (của mình)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "怖",
+    "meaning": "sợ",
+    "meaning_vi": "sợ",
+    "onyomi": [
+      "フ",
+      "ホ"
+    ],
+    "kunyomi": [
+      "こわ.い",
+      "こわ.がる",
+      "お.じる",
+      "おそ.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "怖い",
+        "reading": "こわい",
+        "meaning": "đáng sợ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "恐",
+    "meaning": "sợ hãi",
+    "meaning_vi": "sợ hãi",
+    "onyomi": [
+      "キョウ"
+    ],
+    "kunyomi": [
+      "おそ.れる",
+      "おそ.る",
+      "おそ.ろしい",
+      "こわ.い",
+      "こわ.がる"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "恐怖",
+        "reading": "きょうふ",
+        "meaning": "nỗi sợ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "婚",
+    "meaning": "kết hôn",
+    "meaning_vi": "kết hôn",
+    "onyomi": [
+      "コン"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "結婚",
+        "reading": "けっこん",
+        "meaning": "kết hôn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "遊",
+    "meaning": "chơi",
+    "meaning_vi": "chơi",
+    "onyomi": [
+      "ユウ",
+      "ユ"
+    ],
+    "kunyomi": [
+      "あそ.ぶ",
+      "あそ.ばす"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "遊ぶ",
+        "reading": "あそぶ",
+        "meaning": "chơi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "貧",
+    "meaning": "nghèo",
+    "meaning_vi": "nghèo",
+    "onyomi": [
+      "ヒン",
+      "ビン"
+    ],
+    "kunyomi": [
+      "まず.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "貧乏",
+        "reading": "びんぼう",
+        "meaning": "nghèo"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "適",
+    "meaning": "thích hợp",
+    "meaning_vi": "thích hợp",
+    "onyomi": [
+      "テキ"
+    ],
+    "kunyomi": [
+      "かな.う"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "適当",
+        "reading": "てきとう",
+        "meaning": "thích hợp, qua loa"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "押",
+    "meaning": "đẩy, ấn",
+    "meaning_vi": "đẩy, ấn",
+    "onyomi": [
+      "オウ"
+    ],
+    "kunyomi": [
+      "お.す",
+      "お.し-",
+      "お.っ-",
+      "お.さえる",
+      "おさ.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "押す",
+        "reading": "おす",
+        "meaning": "ấn, đẩy"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "更",
+    "meaning": "thêm nữa, đổi mới",
+    "meaning_vi": "thêm nữa, đổi mới",
+    "onyomi": [
+      "コウ"
+    ],
+    "kunyomi": [
+      "さら",
+      "さら.に",
+      "ふ.ける",
+      "ふ.かす"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "更新",
+        "reading": "こうしん",
+        "meaning": "cập nhật"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "浮",
+    "meaning": "nổi",
+    "meaning_vi": "nổi",
+    "onyomi": [
+      "フ"
+    ],
+    "kunyomi": [
+      "う.く",
+      "う.かれる",
+      "う.かぶ",
+      "む",
+      "う.かべる"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "浮く",
+        "reading": "うく",
+        "meaning": "nổi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "越",
+    "meaning": "vượt, chuyển",
+    "meaning_vi": "vượt, chuyển",
+    "onyomi": [
+      "エツ",
+      "オツ"
+    ],
+    "kunyomi": [
+      "こ.す",
+      "-こ.す",
+      "-ご.し",
+      "こ.える",
+      "-ご.え"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "越える",
+        "reading": "こえる",
+        "meaning": "vượt qua"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "背",
+    "meaning": "lưng, chiều cao",
+    "meaning_vi": "lưng, chiều cao",
+    "onyomi": [
+      "ハイ"
+    ],
+    "kunyomi": [
+      "せ",
+      "せい",
+      "そむ.く",
+      "そむ.ける"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "背中",
+        "reading": "せなか",
+        "meaning": "lưng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "盗",
+    "meaning": "ăn trộm",
+    "meaning_vi": "ăn trộm",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "ぬす.む",
+      "ぬす.み"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "盗む",
+        "reading": "ぬすむ",
+        "meaning": "ăn trộm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "除",
+    "meaning": "trừ, loại bỏ",
+    "meaning_vi": "trừ, loại bỏ",
+    "onyomi": [
+      "ジョ",
+      "ジ"
+    ],
+    "kunyomi": [
+      "のぞ.く",
+      "-よ.け"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "掃除",
+        "reading": "そうじ",
+        "meaning": "dọn dẹp"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "幾",
+    "meaning": "mấy, bao nhiêu",
+    "meaning_vi": "mấy, bao nhiêu",
+    "onyomi": [
+      "キ"
+    ],
+    "kunyomi": [
+      "いく-",
+      "いく.つ",
+      "いく.ら"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "幾つ",
+        "reading": "いくつ",
+        "meaning": "bao nhiêu cái"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "散",
+    "meaning": "tản, rải rác",
+    "meaning_vi": "tản, rải rác",
+    "onyomi": [
+      "サン"
+    ],
+    "kunyomi": [
+      "ち.る",
+      "ち.らす",
+      "-ち.らす",
+      "ち.らかす",
+      "ち.らかる"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "散歩",
+        "reading": "さんぽ",
+        "meaning": "đi dạo"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "似",
+    "meaning": "giống",
+    "meaning_vi": "giống",
+    "onyomi": [
+      "ジ"
+    ],
+    "kunyomi": [
+      "に.る",
+      "ひ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "似る",
+        "reading": "にる",
+        "meaning": "giống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "富",
+    "meaning": "giàu",
+    "meaning_vi": "giàu",
+    "onyomi": [
+      "フ",
+      "フウ"
+    ],
+    "kunyomi": [
+      "と.む",
+      "とみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "富士山",
+        "reading": "ふじさん",
+        "meaning": "núi Phú Sĩ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "探",
+    "meaning": "tìm",
+    "meaning_vi": "tìm",
+    "onyomi": [
+      "タン"
+    ],
+    "kunyomi": [
+      "さぐ.る",
+      "さが.す"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "探す",
+        "reading": "さがす",
+        "meaning": "tìm kiếm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "迎",
+    "meaning": "đón",
+    "meaning_vi": "đón",
+    "onyomi": [
+      "ゲイ"
+    ],
+    "kunyomi": [
+      "むか.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "迎える",
+        "reading": "むかえる",
+        "meaning": "đón"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "祖",
+    "meaning": "tổ tiên",
+    "meaning_vi": "tổ tiên",
+    "onyomi": [
+      "ソ"
+    ],
+    "kunyomi": [],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "祖父",
+        "reading": "そふ",
+        "meaning": "ông"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "雑",
+    "meaning": "tạp, lẫn lộn",
+    "meaning_vi": "tạp, lẫn lộn",
+    "onyomi": [
+      "ザツ",
+      "ゾウ"
+    ],
+    "kunyomi": [
+      "まじ.える",
+      "まじ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "雑誌",
+        "reading": "ざっし",
+        "meaning": "tạp chí"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "賛",
+    "meaning": "tán thành",
+    "meaning_vi": "tán thành",
+    "onyomi": [
+      "サン"
+    ],
+    "kunyomi": [
+      "たす.ける",
+      "たた.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "賛成",
+        "reading": "さんせい",
+        "meaning": "tán thành"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "込",
+    "meaning": "vào, chen vào",
+    "meaning_vi": "vào, chen vào",
+    "onyomi": [],
+    "kunyomi": [
+      "-こ.む",
+      "こ.む",
+      "こ.み",
+      "-こ.み",
+      "こ.める"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "込む",
+        "reading": "こむ",
+        "meaning": "đông đúc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "欲",
+    "meaning": "muốn",
+    "meaning_vi": "muốn",
+    "onyomi": [
+      "ヨク"
+    ],
+    "kunyomi": [
+      "ほっ.する",
+      "ほ.しい"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "欲しい",
+        "reading": "ほしい",
+        "meaning": "muốn có"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "閉",
+    "meaning": "đóng",
+    "meaning_vi": "đóng",
+    "onyomi": [
+      "ヘイ"
+    ],
+    "kunyomi": [
+      "と.じる",
+      "と.ざす",
+      "し.める",
+      "し.まる",
+      "た.てる"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "閉める",
+        "reading": "しめる",
+        "meaning": "đóng"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "窓",
+    "meaning": "cửa sổ",
+    "meaning_vi": "cửa sổ",
+    "onyomi": [
+      "ソウ",
+      "ス"
+    ],
+    "kunyomi": [
+      "まど",
+      "てんまど",
+      "けむだし"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "窓口",
+        "reading": "まどぐち",
+        "meaning": "quầy giao dịch"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "否",
+    "meaning": "phủ định, không",
+    "meaning_vi": "phủ định, không",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "いな",
+      "いや"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "否定",
+        "reading": "ひてい",
+        "meaning": "phủ định"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "暮",
+    "meaning": "chiều tối, sinh sống",
+    "meaning_vi": "chiều tối, sinh sống",
+    "onyomi": [
+      "ボ"
+    ],
+    "kunyomi": [
+      "く.れる",
+      "く.らす"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "暮らす",
+        "reading": "くらす",
+        "meaning": "sinh sống"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "誤",
+    "meaning": "sai lầm",
+    "meaning_vi": "sai lầm",
+    "onyomi": [
+      "ゴ"
+    ],
+    "kunyomi": [
+      "あやま.る",
+      "-あやま.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "誤解",
+        "reading": "ごかい",
+        "meaning": "hiểu lầm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "降",
+    "meaning": "rơi, xuống",
+    "meaning_vi": "rơi, xuống",
+    "onyomi": [
+      "コウ",
+      "ゴ"
+    ],
+    "kunyomi": [
+      "お.りる",
+      "お.ろす",
+      "ふ.る",
+      "ふ.り",
+      "くだ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "降りる",
+        "reading": "おりる",
+        "meaning": "xuống (xe)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "勤",
+    "meaning": "làm việc, siêng năng",
+    "meaning_vi": "làm việc, siêng năng",
+    "onyomi": [
+      "キン",
+      "ゴン"
+    ],
+    "kunyomi": [
+      "つと.める",
+      "-づと.め",
+      "つと.まる",
+      "いそ.しむ"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "勤務",
+        "reading": "きんむ",
+        "meaning": "làm việc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "刻",
+    "meaning": "khắc, thời khắc",
+    "meaning_vi": "khắc, thời khắc",
+    "onyomi": [
+      "コク"
+    ],
+    "kunyomi": [
+      "きざ.む",
+      "きざ.み"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "遅刻",
+        "reading": "ちこく",
+        "meaning": "đến muộn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "遅",
+    "meaning": "chậm, muộn",
+    "meaning_vi": "chậm, muộn",
+    "onyomi": [
+      "チ"
+    ],
+    "kunyomi": [
+      "おく.れる",
+      "おく.らす",
+      "おそ.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "遅い",
+        "reading": "おそい",
+        "meaning": "chậm, muộn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "破",
+    "meaning": "rách, phá",
+    "meaning_vi": "rách, phá",
+    "onyomi": [
+      "ハ"
+    ],
+    "kunyomi": [
+      "やぶ.る",
+      "やぶ.れる",
+      "わ.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "破る",
+        "reading": "やぶる",
+        "meaning": "xé, phá"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "互",
+    "meaning": "lẫn nhau",
+    "meaning_vi": "lẫn nhau",
+    "onyomi": [
+      "ゴ"
+    ],
+    "kunyomi": [
+      "たが.い",
+      "かたみ.に"
+    ],
+    "jlpt": "N3",
+    "strokes": 4,
+    "stroke_count": 4,
+    "examples": [
+      {
+        "word": "お互い",
+        "reading": "おたがい",
+        "meaning": "lẫn nhau"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "彼",
+    "meaning": "anh ấy, kia",
+    "meaning_vi": "anh ấy, kia",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "かれ",
+      "かの",
+      "か.の"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "彼女",
+        "reading": "かのじょ",
+        "meaning": "cô ấy, bạn gái"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "恥",
+    "meaning": "xấu hổ",
+    "meaning_vi": "xấu hổ",
+    "onyomi": [
+      "チ"
+    ],
+    "kunyomi": [
+      "は.じる",
+      "はじ",
+      "は.じらう",
+      "は.ずかしい"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "恥ずかしい",
+        "reading": "はずかしい",
+        "meaning": "xấu hổ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "払",
+    "meaning": "trả tiền, phủi",
+    "meaning_vi": "trả tiền, phủi",
+    "onyomi": [
+      "フツ",
+      "ヒツ",
+      "ホツ"
+    ],
+    "kunyomi": [
+      "はら.う",
+      "-はら.い",
+      "-ばら.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 5,
+    "stroke_count": 5,
+    "examples": [
+      {
+        "word": "払う",
+        "reading": "はらう",
+        "meaning": "trả (tiền)"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "舞",
+    "meaning": "múa",
+    "meaning_vi": "múa",
+    "onyomi": [
+      "ブ"
+    ],
+    "kunyomi": [
+      "ま.う",
+      "-ま.う",
+      "まい"
+    ],
+    "jlpt": "N3",
+    "strokes": 15,
+    "stroke_count": 15,
+    "examples": [
+      {
+        "word": "舞台",
+        "reading": "ぶたい",
+        "meaning": "sân khấu"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "頼",
+    "meaning": "nhờ cậy",
+    "meaning_vi": "nhờ cậy",
+    "onyomi": [
+      "ライ"
+    ],
+    "kunyomi": [
+      "たの.む",
+      "たの.もしい",
+      "たよ.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 16,
+    "stroke_count": 16,
+    "examples": [
+      {
+        "word": "頼む",
+        "reading": "たのむ",
+        "meaning": "nhờ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "戻",
+    "meaning": "quay lại",
+    "meaning_vi": "quay lại",
+    "onyomi": [
+      "レイ"
+    ],
+    "kunyomi": [
+      "もど.す",
+      "もど.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "戻る",
+        "reading": "もどる",
+        "meaning": "quay lại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "抱",
+    "meaning": "ôm",
+    "meaning_vi": "ôm",
+    "onyomi": [
+      "ホウ"
+    ],
+    "kunyomi": [
+      "だ.く",
+      "いだ.く",
+      "かか.える"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "抱える",
+        "reading": "かかえる",
+        "meaning": "ôm, gánh vác"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "緒",
+    "meaning": "đầu mối",
+    "meaning_vi": "đầu mối",
+    "onyomi": [
+      "ショ",
+      "チョ"
+    ],
+    "kunyomi": [
+      "お",
+      "いとぐち"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "一緒",
+        "reading": "いっしょ",
+        "meaning": "cùng nhau"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "逃",
+    "meaning": "chạy trốn",
+    "meaning_vi": "chạy trốn",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "に.げる",
+      "に.がす",
+      "のが.す",
+      "のが.れる"
+    ],
+    "jlpt": "N3",
+    "strokes": 9,
+    "stroke_count": 9,
+    "examples": [
+      {
+        "word": "逃げる",
+        "reading": "にげる",
+        "meaning": "chạy trốn"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "御",
+    "meaning": "kính ngữ",
+    "meaning_vi": "kính ngữ",
+    "onyomi": [
+      "ギョ",
+      "ゴ"
+    ],
+    "kunyomi": [
+      "おん-",
+      "お-",
+      "み-"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "御飯",
+        "reading": "ごはん",
+        "meaning": "cơm"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "吹",
+    "meaning": "thổi",
+    "meaning_vi": "thổi",
+    "onyomi": [
+      "スイ"
+    ],
+    "kunyomi": [
+      "ふ.く"
+    ],
+    "jlpt": "N3",
+    "strokes": 7,
+    "stroke_count": 7,
+    "examples": [
+      {
+        "word": "吹く",
+        "reading": "ふく",
+        "meaning": "thổi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "到",
+    "meaning": "đến",
+    "meaning_vi": "đến",
+    "onyomi": [
+      "トウ"
+    ],
+    "kunyomi": [
+      "いた.る"
+    ],
+    "jlpt": "N3",
+    "strokes": 8,
+    "stroke_count": 8,
+    "examples": [
+      {
+        "word": "到着",
+        "reading": "とうちゃく",
+        "meaning": "đến nơi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "髪",
+    "meaning": "tóc",
+    "meaning_vi": "tóc",
+    "onyomi": [
+      "ハツ"
+    ],
+    "kunyomi": [
+      "かみ"
+    ],
+    "jlpt": "N3",
+    "strokes": 14,
+    "stroke_count": 14,
+    "examples": [
+      {
+        "word": "髪型",
+        "reading": "かみがた",
+        "meaning": "kiểu tóc"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "疲",
+    "meaning": "mệt",
+    "meaning_vi": "mệt",
+    "onyomi": [
+      "ヒ"
+    ],
+    "kunyomi": [
+      "つか.れる",
+      "-づか.れ",
+      "つか.らす"
+    ],
+    "jlpt": "N3",
+    "strokes": 10,
+    "stroke_count": 10,
+    "examples": [
+      {
+        "word": "疲れる",
+        "reading": "つかれる",
+        "meaning": "mệt"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "歳",
+    "meaning": "tuổi, năm",
+    "meaning_vi": "tuổi, năm",
+    "onyomi": [
+      "サイ",
+      "セイ"
+    ],
+    "kunyomi": [
+      "とし",
+      "とせ",
+      "よわい"
+    ],
+    "jlpt": "N3",
+    "strokes": 13,
+    "stroke_count": 13,
+    "examples": [
+      {
+        "word": "二十歳",
+        "reading": "はたち",
+        "meaning": "hai mươi tuổi"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "偶",
+    "meaning": "ngẫu nhiên",
+    "meaning_vi": "ngẫu nhiên",
+    "onyomi": [
+      "グウ"
+    ],
+    "kunyomi": [
+      "たま"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "偶然",
+        "reading": "ぐうぜん",
+        "meaning": "tình cờ"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "偉",
+    "meaning": "vĩ đại",
+    "meaning_vi": "vĩ đại",
+    "onyomi": [
+      "イ"
+    ],
+    "kunyomi": [
+      "えら.い"
+    ],
+    "jlpt": "N3",
+    "strokes": 12,
+    "stroke_count": 12,
+    "examples": [
+      {
+        "word": "偉い",
+        "reading": "えらい",
+        "meaning": "giỏi, vĩ đại"
+      }
+    ],
+    "has_handwriting_data": false
+  },
+  {
+    "kanji": "頂",
+    "meaning": "đỉnh, nhận",
+    "meaning_vi": "đỉnh, nhận",
+    "onyomi": [
+      "チョウ"
+    ],
+    "kunyomi": [
+      "いただ.く",
+      "いただき"
+    ],
+    "jlpt": "N3",
+    "strokes": 11,
+    "stroke_count": 11,
+    "examples": [
+      {
+        "word": "頂く",
+        "reading": "いただく",
+        "meaning": "nhận (cách nói khiêm nhường)"
+      }
+    ],
+    "has_handwriting_data": false
+  }
+]

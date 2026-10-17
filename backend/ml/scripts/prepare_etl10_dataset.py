@@ -194,7 +194,7 @@ def main() -> None:
     label_map = write_label_map(counts, args.model_dir)
     total = sum(counts.values())
     print(f"Processed {total} ETL samples into {args.output}")
-    print(f"Matched {len(label_map)} JLPT N5-N4 app kanji")
+    print(f"Matched {len(label_map)} JLPT N5-N3 dictionary kanji")
     print(f"Saved label map: {args.model_dir / 'label_map.json'}")
     if not total:
         print("No matching ETL samples found. Check that the source contains ETL G-format kanji records or <kanji>/*.png folders.")

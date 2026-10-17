@@ -395,7 +395,7 @@ def evaluate(model, loader, criterion, device):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train a JLPT N5-N4 Kanji Canvas CNN.")
+    parser = argparse.ArgumentParser(description="Train a JLPT N5-N3 Kanji Canvas CNN using dictionary-backed labels.")
     parser.add_argument("--dataset-dir", type=Path, default=None, help="Optional folder dataset: dataset/<kanji>/*.png")
     parser.add_argument("--etl10-dir", type=Path, default=DEFAULT_ETL10_DIR, help="Optional ETL10 processed folder: etl10_processed/<kanji>/*.png")
     parser.add_argument("--artifact-dir", type=Path, default=DEFAULT_ARTIFACT_DIR)
@@ -403,7 +403,7 @@ def main():
     parser.add_argument("--user-samples-dir", type=Path, default=DEFAULT_USER_SAMPLE_DIR)
     parser.add_argument("--label-map", type=Path, default=None, help="Optional label_map.json from dataset preparation.")
     parser.add_argument("--app-kanji-json", type=Path, default=DEFAULT_APP_KANJI_PATH, help="Optional frontend kanji.json label source.")
-    parser.add_argument("--use-app-kanji-json", action="store_true", help="Limit labels to frontend kanji.json instead of full JLPT N5-N4.")
+    parser.add_argument("--use-app-kanji-json", action="store_true", help="Limit labels to frontend kanji.json instead of the full N5-N3 dictionary.")
     parser.add_argument("--labels-from-dataset", action="store_true", help="Train only labels that have folders in --dataset-dir.")
     parser.add_argument("--no-synthetic", action="store_true", help="Train only on --dataset-dir images.")
     parser.add_argument("--no-user-samples", action="store_true", help="Do not fine-tune with backend/ml/user_samples.")

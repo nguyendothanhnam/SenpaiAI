@@ -47,6 +47,11 @@ def get_supported_kanji() -> Dict[str, Any]:
     }
 
 
+def has_stroke_data(kanji: str) -> bool:
+    key = (kanji or "").strip()[:1]
+    return bool(key and (key in load_kanjivg_data() or svg_path_for_kanji(key).is_file()))
+
+
 def get_stroke_data(kanji: str) -> Dict[str, Any]:
     item = load_stroke_order(kanji)
     if not item:

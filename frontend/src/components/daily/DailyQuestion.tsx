@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ArrowRight, RotateCcw } from 'lucide-react'
 import type { DailyAnswerResult, DailyTaskItem, GrammarPracticeQuestion } from '../../services/api'
 import QuestionFillBlank from '../grammar/QuestionFillBlank'
@@ -17,10 +18,11 @@ interface Props {
   onNext: () => void
 }
 
-const labels = { grammar: 'Ngữ pháp', kanji: 'Kanji', vocab: 'Từ vựng', flashcard: 'Thẻ ghi nhớ' }
+const labelKeys = { grammar: 'daily.types.grammar', kanji: 'daily.types.kanji', vocab: 'daily.types.vocab', flashcard: 'daily.types.flashcard' }
 const buttonClass = 'flex min-h-14 items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-4 py-3 text-left font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:bg-[color:var(--accent)] disabled:opacity-50'
 
 export default function DailyQuestion({ item, index, total, busy, result, onAnswer, onNext }: Props) {
+  const { t } = useTranslation('common')
   const payload = item.payload || {}
   const [text, setText] = useState('')
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([])
@@ -37,12 +39,12 @@ export default function DailyQuestion({ item, index, total, busy, result, onAnsw
     explanation_vi: result.explanation,
     examples: result.examples || [],
   } : null
-  const answerText = (answer: unknown) => Array.isArray(answer) ? answer.join('') : typeof answer === 'boolean' ? (answer ? 'Đúng' : 'Sai') : String(answer ?? '—')
+  const answerText = (answer: unknown) => Array.isArray(answer) ? answer.join('') : typeof answer === 'boolean' ? (answer ? t('shared.correct') : t('shared.incorrect')) : String(answer ?? '—')
 
   return <article className="theme-card mx-auto w-full max-w-3xl rounded-3xl p-5 shadow-[var(--shadow-card)] sm:p-8">
     <div className="mb-6 flex items-center justify-between gap-3">
-      <span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-sm font-bold text-[color:var(--primary)]">{labels[item.item_type]}</span>
-      <span className="text-sm font-semibold text-[color:var(--text-muted)]">Câu {index + 1} / {total}</span>
+      <span className="flex items-center gap-2"><span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-sm font-bold text-[color:var(--primary)]">{t(labelKeys[item.item_type])}</span>{payload.level && <span className="rounded-full border border-[color:var(--border)] px-2 py-1 text-xs font-semibold text-[color:var(--text-muted)]">{payload.level}</span>}</span>
+      <span className="text-sm font-semibold text-[color:var(--text-muted)]">{t('daily.questionProgress', { current: index + 1, total })}</span>
     </div>
 
     {item.item_type === 'grammar' && <div className="space-y-5">
@@ -63,23 +65,23 @@ export default function DailyQuestion({ item, index, total, busy, result, onAnsw
       <p lang="ja" className="text-5xl font-bold text-[color:var(--primary)]">{payload.word}</p>
       <p lang="ja" className="text-xl text-[color:var(--text-muted)]">{payload.reading}</p>
       <p className="text-[color:var(--text-muted)]">{payload.prompt}</p>
-      {revealed && <p className="rounded-2xl bg-[color:var(--accent)] p-4 text-lg font-semibold text-[color:var(--text)]">{result?.explanation || 'Hãy tự đánh giá khả năng ghi nhớ của bạn.'}</p>}
+      {revealed && <p className="rounded-2xl bg-[color:var(--accent)] p-4 text-lg font-semibold text-[color:var(--text)]">{result?.explanation || t('daily.selfAssess')}</p>}
       {!result && <div className="flex flex-wrap justify-center gap-3">
-        {!revealed ? <button type="button" disabled={busy} onClick={() => setRevealed(true)} className="min-h-12 rounded-xl border border-[color:var(--border)] px-5 font-semibold text-[color:var(--text)] hover:bg-[color:var(--accent)]">Xem nghĩa</button> : <>
-          <button type="button" disabled={busy} onClick={() => submit(false)} className={buttonClass}><RotateCcw className="h-4 w-4" />Chưa nhớ</button>
-          <button type="button" disabled={busy} onClick={() => submit(true)} className={buttonClass}>Đã nhớ</button>
+        {!revealed ? <button type="button" disabled={busy} onClick={() => setRevealed(true)} className="min-h-12 rounded-xl border border-[color:var(--border)] px-5 font-semibold text-[color:var(--text)] hover:bg-[color:var(--accent)]">{t('daily.revealMeaning')}</button> : <>
+          <button type="button" disabled={busy} onClick={() => submit(false)} className={buttonClass}><RotateCcw className="h-4 w-4" />{t('daily.notRemembered')}</button>
+          <button type="button" disabled={busy} onClick={() => submit(true)} className={buttonClass}>{t('daily.remembered')}</button>
         </>}
       </div>}
     </div>}
 
     {feedback && item.item_type === 'flashcard' ? <section aria-live="polite" className="mt-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 sm:p-5">
-      <h3 className="font-bold text-[color:var(--text)]">{feedback.is_correct ? 'Đã ghi nhận: bạn nhớ từ này!' : 'Đã ghi nhận, hãy ôn lại từ này nhé.'}</h3>
+      <h3 className="font-bold text-[color:var(--text)]">{feedback.is_correct ? t('daily.rememberedFeedback') : t('daily.reviewFeedback')}</h3>
       {feedback.explanation_vi && <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">{feedback.explanation_vi}</p>}
     </section> : feedback && <>
       <FeedbackPanel result={feedback} />
-      <p className="mt-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-4 py-3 text-sm text-[color:var(--text-muted)]">Đáp án: <strong className="text-[color:var(--text)]">{answerText(result?.correct_answer)}</strong></p>
+      <p className="mt-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-4 py-3 text-sm text-[color:var(--text-muted)]">{t('daily.answer')}: <strong className="text-[color:var(--text)]">{answerText(result?.correct_answer)}</strong></p>
     </>}
-    {result && <div className="mt-6 flex justify-end"><button type="button" onClick={onNext} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[color:var(--primary)] px-5 font-bold text-[color:var(--primary-contrast)]">{result.all_answered ? 'Xem tổng kết' : 'Câu tiếp theo'}<ArrowRight className="h-4 w-4" /></button></div>}
-    {busy && <p className="mt-4 text-sm text-[color:var(--text-muted)]" role="status">Đang gửi câu trả lời…</p>}
+    {result && <div className="mt-6 flex justify-end"><button type="button" onClick={onNext} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[color:var(--primary)] px-5 font-bold text-[color:var(--primary-contrast)]">{result.all_answered ? t('daily.viewSummary') : t('daily.nextQuestion')}<ArrowRight className="h-4 w-4" /></button></div>}
+    {busy && <p className="mt-4 text-sm text-[color:var(--text-muted)]" role="status">{t('daily.sendingAnswer')}</p>}
   </article>
 }

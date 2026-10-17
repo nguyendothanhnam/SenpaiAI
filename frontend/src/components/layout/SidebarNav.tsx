@@ -36,7 +36,17 @@ function isSelected(pathname: string, paths: string[]) {
 export default function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const { t } = useTranslation('nav')
   const { pathname } = useLocation()
-  const { data: today } = useQuery(['daily', 'today'], () => dailyAPI.getToday().then(({ data }) => data), { retry: false, staleTime: 60_000 })
+  const { data: today } = useQuery(['daily', 'today'], async () => {
+    try {
+      const { data } = await dailyAPI.getToday()
+      return data
+    } catch (error: any) {
+      // Daily tasks are optional when the question bank does not have enough content.
+      // The sidebar only needs this query for its pending-task indicator.
+      if (error?.response?.status === 409 && error?.response?.data?.detail?.code === 'not_enough_content') return null
+      throw error
+    }
+  }, { retry: false, staleTime: 60_000 })
   const hasPendingDaily = today?.status === 'in_progress'
 
   return <nav aria-label={t('mainMenu')} className="min-h-0 flex-1 overflow-y-auto px-3 py-4">

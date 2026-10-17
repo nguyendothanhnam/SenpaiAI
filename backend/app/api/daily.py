@@ -103,20 +103,20 @@ def answer_item(item_id: int, payload: AnswerRequest, current_user: User = Depen
         DailyTaskItem.id == item_id, DailyTask.user_id == current_user.id,
     ).first()
     if joined is None:
-        raise HTTPException(status_code=404, detail="Nhiệm vụ không tồn tại")
+        raise HTTPException(status_code=404, detail={"code": "daily_task_not_found", "message": "Nhiệm vụ không tồn tại"})
     item, task_snapshot = joined
     task = db.query(DailyTask).filter(DailyTask.id == task_snapshot.id, DailyTask.user_id == current_user.id).with_for_update().first()
     if task is None:
-        raise HTTPException(status_code=404, detail="Nhiệm vụ không tồn tại")
+        raise HTTPException(status_code=404, detail={"code": "daily_task_not_found", "message": "Nhiệm vụ không tồn tại"})
     if task.task_date != app_today():
         raise HTTPException(status_code=409, detail={"code": "task_expired", "message": "Nhiệm vụ này đã hết hạn."})
     if task.status != "in_progress":
-        raise HTTPException(status_code=409, detail="Nhiệm vụ đã hoàn thành")
+        raise HTTPException(status_code=409, detail={"code": "task_completed", "message": "Nhiệm vụ đã hoàn thành"})
     item = db.query(DailyTaskItem).filter(DailyTaskItem.id == item_id, DailyTaskItem.daily_task_id == task.id).with_for_update().first()
     if item is None:
-        raise HTTPException(status_code=404, detail="Mục nhiệm vụ không tồn tại")
+        raise HTTPException(status_code=404, detail={"code": "daily_item_not_found", "message": "Mục nhiệm vụ không tồn tại"})
     if item.answered_at is not None:
-        raise HTTPException(status_code=409, detail="Bạn đã trả lời mục này rồi")
+        raise HTTPException(status_code=409, detail={"code": "item_already_answered", "message": "Bạn đã trả lời mục này rồi"})
 
     is_correct = grade_daily_answer(item.item_type, item.question_type, payload.answer, item.answer_key or {})
     now = datetime.now(timezone.utc)
@@ -149,7 +149,7 @@ def complete_today(current_user: User = Depends(get_current_active_user), db: Se
     today = app_today()
     task = db.query(DailyTask).filter(DailyTask.user_id == current_user.id, DailyTask.task_date == today).with_for_update().first()
     if task is None:
-        raise HTTPException(status_code=404, detail="Chưa có nhiệm vụ hôm nay")
+        raise HTTPException(status_code=404, detail={"code": "daily_task_not_found", "message": "Chưa có nhiệm vụ hôm nay"})
     if task.task_date != today:
         raise HTTPException(status_code=409, detail={"code": "task_expired", "message": "Nhiệm vụ này đã hết hạn."})
     try:

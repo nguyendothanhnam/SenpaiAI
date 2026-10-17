@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useQueryClient } from 'react-query'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../services/auth'
 import { rewardsAPI } from '../services/api'
 import { rewardsMeKey, useRewardsMe } from '../services/rewards'
@@ -39,6 +40,7 @@ const developmentUnlockEnabled = () => import.meta.env.DEV &&
   (import.meta.env as ImportMetaEnv & { VITE_UNLOCK_ALL_THEMES?: string }).VITE_UNLOCK_ALL_THEMES === 'true'
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
+  const { t } = useTranslation('common')
   const { user } = useAuth()
   const queryClient = useQueryClient()
   const rewards = useRewardsMe(user?.id)
@@ -134,7 +136,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         themeId: previous.themeId,
         backgroundId: previous.backgroundId,
       }))
-      toast.error('Không thể cập nhật giao diện. Vui lòng thử lại.')
+      toast.error(t('themeShop.equipError'))
       void queryClient.invalidateQueries(rewardsMeKey(user.id))
     }
   }

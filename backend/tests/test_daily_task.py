@@ -17,9 +17,13 @@ from app.models.database import (
 )
 from app.services.daily_task_service import (
     calculate_reward_breakdown,
+    create_daily_task,
+    daily_level_fallback_order,
+    DailyTaskError,
     complete_daily_task,
     get_or_create_daily_task,
     grade_daily_answer,
+    select_daily_items,
     update_study_stats,
     weighted_sample,
 )
@@ -57,6 +61,54 @@ def test_weighted_sample_prefers_often_wrong_items():
     rng = random.Random(17)
     chosen_weak = sum(weighted_sample([weak, normal], 1, rng)[0]["id"] == "weak" for _ in range(100))
     assert chosen_weak > 75
+
+
+def test_daily_fallback_order_prioritizes_easier_then_harder_levels():
+    assert daily_level_fallback_order("N3") == ("N3", "N4", "N5", "N2", "N1")
+    assert daily_level_fallback_order("N5") == ("N5", "N4", "N3", "N2", "N1")
+
+
+def test_daily_selector_handles_mixed_level_fallback_payload_without_answers():
+    requested = [{"item_type": "kanji", "level": "N3", "payload": {"level": "N3"}, "unique_key": ("kanji", str(i))} for i in range(5)]
+    easier = [{"item_type": "kanji", "level": "N4", "payload": {"level": "N4"}, "unique_key": ("kanji", str(i + 5))} for i in range(5)]
+    selected = select_daily_items({"kanji": requested + easier}, distribution={"kanji": 5}, total_count=5,
+                                  rng=random.Random(5), level_order=daily_level_fallback_order("N3"))
+    assert len(selected) == 5
+    assert all(item["level"] == "N3" for item in selected)
+    assert all(item["payload"]["level"] == "N3" for item in selected)
+    assert all("answer_key" not in item for item in selected)
+
+
+def test_daily_selector_uses_only_lower_levels_when_requested_level_is_empty():
+    lower = [{"item_type": "kanji", "level": level, "unique_key": ("kanji", f"{level}-{i}")}
+             for level in ("N4", "N5") for i in range(4)]
+    selected = select_daily_items({"kanji": lower}, distribution={"kanji": 5}, total_count=5,
+                                  rng=random.Random(2), level_order=daily_level_fallback_order("N3"))
+    assert len(selected) == 5
+    assert {item["level"] for item in selected} <= {"N4", "N5"}
+    assert selected[0]["level"] == "N4"
+
+
+def test_daily_selector_fills_easier_level_before_harder_level_and_empty_returns_empty():
+    items = ([{"level": "N2", "unique_key": ("grammar", f"N2-{i}")} for i in range(3)]
+             + [{"level": "N4", "unique_key": ("grammar", f"N4-{i}")} for i in range(3)])
+    selected = select_daily_items({"grammar": items}, distribution={"grammar": 5}, total_count=5,
+                                  rng=random.Random(1), level_order=daily_level_fallback_order("N3"))
+    assert [item["level"] for item in selected[:3]] == ["N4"] * 3
+    assert len(selected) == 5
+    assert select_daily_items({}, distribution={"grammar": 5}, total_count=5) == []
+
+
+def test_create_daily_task_returns_409_when_every_source_is_empty(db, monkeypatch):
+    import app.services.daily_task_service as service
+
+    session, user_id = db
+    monkeypatch.setattr(service, "_yesterday_sources", lambda *_: set())
+    for name in ("_grammar_candidates", "_kanji_candidates", "_vocab_candidates", "_flashcard_candidates"):
+        monkeypatch.setattr(service, name, lambda *_: [])
+    with pytest.raises(DailyTaskError) as error:
+        create_daily_task(session, user_id, date(2026, 8, 1), "N3")
+    assert (error.value.code, error.value.status_code) == ("not_enough_content", 409)
 
 
 @pytest.mark.parametrize(

@@ -1,5 +1,6 @@
 """Daily task selection, safe payload construction, grading, and reward math."""
 import random
+import logging
 from datetime import date, datetime, timezone
 from typing import Any, Mapping, Sequence
 
@@ -29,6 +30,18 @@ from ..models.database import (
 from .grammar_practice_service import grade_answer, public_question
 from .kanji_dictionary_service import kanji_dictionary_service
 from .rewards_service import award_points, get_or_create_profile, update_streak_on_completion
+
+logger = logging.getLogger(__name__)
+JLPT_LEVELS = ("N5", "N4", "N3", "N2", "N1")
+
+
+def daily_level_fallback_order(level: str) -> tuple[str, ...]:
+    """Requested level, easier levels, then progressively harder levels."""
+    normalized = level.upper()
+    if normalized not in JLPT_LEVELS:
+        return (normalized,)
+    index = JLPT_LEVELS.index(normalized)
+    return (normalized, *reversed(JLPT_LEVELS[:index]), *JLPT_LEVELS[index + 1 :])
 
 
 class DailyTaskError(Exception):
@@ -61,14 +74,31 @@ def select_daily_items(
     distribution: Mapping[str, int] = DAILY_ITEM_DISTRIBUTION,
     total_count: int = DAILY_ITEM_COUNT,
     rng: Any = None,
+    level_order: Sequence[str] = (),
 ) -> list[Mapping[str, Any]]:
     """Fill configured category counts, then redistribute shortages to any source."""
     chooser = rng or random
     selected: list[Mapping[str, Any]] = []
     used = set()
+    rank = {level: index for index, level in enumerate(level_order)}
+
+    def sample_by_level(candidates: Sequence[Mapping[str, Any]], requested: int) -> list[Mapping[str, Any]]:
+        if not level_order:
+            return weighted_sample(candidates, requested, chooser)
+        grouped: dict[str, list[Mapping[str, Any]]] = {}
+        for item in candidates:
+            grouped.setdefault(str(item.get("level", "")), []).append(item)
+        result: list[Mapping[str, Any]] = []
+        for level in level_order:
+            result.extend(weighted_sample(grouped.get(level, []), requested - len(result), chooser))
+            if len(result) >= requested:
+                break
+        return result
+
     for item_type, requested in distribution.items():
         candidates = [item for item in pools.get(item_type, ()) if item.get("unique_key") not in used]
-        chosen = weighted_sample(candidates, requested, chooser)
+        candidates.sort(key=lambda item: rank.get(str(item.get("level", "")), len(rank)))
+        chosen = sample_by_level(candidates, requested)
         selected.extend(chosen)
         used.update(item.get("unique_key") for item in chosen)
     if len(selected) < total_count:
@@ -76,7 +106,7 @@ def select_daily_items(
             item for candidates in pools.values() for item in candidates
             if item.get("unique_key") not in used
         ]
-        selected.extend(weighted_sample(remaining, total_count - len(selected), chooser))
+        selected.extend(sample_by_level(remaining, total_count - len(selected)))
     chooser.shuffle(selected)
     return selected[:total_count]
 
@@ -161,7 +191,7 @@ def _grammar_candidates(db: Session, user_id: int, level: str, yesterday: set[tu
         public = public_question(question, question.grammar_rule)
         candidates.append({
             "item_type": "grammar", "source_id": source_id, "question_type": question.question_type,
-            "payload": {key: value for key, value in public.items() if key != "id"},
+            "payload": {**{key: value for key, value in public.items() if key != "id"}, "level": question.jlpt_level},
             "answer_key": {"correct_answer": question.correct_answer,
                            "accepted_answers": question.accepted_answers or [],
                            "explanation": question.explanation_vi, "examples": question.examples or []},
@@ -202,7 +232,7 @@ def _kanji_candidates(db: Session, user_id: int, level: str, yesterday: set[tupl
         prompt = f"Chọn cách đọc đúng của {entry['kanji']}" if question_type == "kanji_reading" else f"Chọn nghĩa đúng của {entry['kanji']}"
         candidates.append({
             "item_type": "kanji", "source_id": source_id, "question_type": question_type,
-            "payload": {"prompt": prompt, "kanji": entry["kanji"], "options": options, "jlpt_level": level},
+            "payload": {"prompt": prompt, "kanji": entry["kanji"], "options": options, "jlpt_level": level, "level": entry.get("jlpt", level)},
             "answer_key": {"correct_answer": correct, "explanation": explanation},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("kanji", source_id),
         })
@@ -226,7 +256,7 @@ def _vocab_candidates(db: Session, user_id: int, level: str, yesterday: set[tupl
         candidates.append({
             "item_type": "vocab", "source_id": source_id, "question_type": "vocab_meaning",
             "payload": {"prompt": f"{row.japanese_word}（{row.reading}）có nghĩa là gì?", "word": row.japanese_word,
-                        "reading": row.reading, "options": options, "jlpt_level": level},
+                        "reading": row.reading, "options": options, "jlpt_level": level, "level": row.jlpt_level},
             "answer_key": {"correct_answer": row.meaning.strip(),
                            "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {row.meaning.strip()}."},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("vocab", source_id),
@@ -245,7 +275,7 @@ def _flashcard_candidates(db: Session, user_id: int, level: str, yesterday: set[
         candidates.append({
             "item_type": "flashcard", "source_id": source_id, "question_type": "self_recall",
             "payload": {"prompt": "Bạn còn nhớ nghĩa của từ này không?", "word": row.japanese_word, "reading": row.reading,
-                        "jlpt_level": level},
+                        "jlpt_level": level, "level": row.jlpt_level},
             "answer_key": {"correct_answer": "Đã nhớ", "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {row.meaning.strip()}.",
                            "stats_item_type": "vocab"},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("flashcard", source_id),
@@ -256,20 +286,29 @@ def _flashcard_candidates(db: Session, user_id: int, level: str, yesterday: set[
 def create_daily_task(db: Session, user_id: int, task_date: date, jlpt_level: str) -> DailyTask:
     """Build and add a task to the session; the caller owns commit/rollback."""
     yesterday = _yesterday_sources(db, user_id, task_date)
-    pools = {
-        "grammar": _grammar_candidates(db, user_id, jlpt_level, yesterday),
-        "kanji": _kanji_candidates(db, user_id, jlpt_level, yesterday),
-        "vocab": _vocab_candidates(db, user_id, jlpt_level, yesterday),
-        "flashcard": _flashcard_candidates(db, user_id, jlpt_level, yesterday),
-    }
+    pools = {name: [] for name in ("grammar", "kanji", "vocab", "flashcard")}
+    source_builders = {"grammar": _grammar_candidates, "kanji": _kanji_candidates,
+                       "vocab": _vocab_candidates, "flashcard": _flashcard_candidates}
+    level_counts: dict[str, dict[str, int]] = {}
+    for level in daily_level_fallback_order(jlpt_level):
+        level_counts[level] = {}
+        for name, builder in source_builders.items():
+            candidates = builder(db, user_id, level, yesterday)
+            level_counts[level][name] = len(candidates)
+            for candidate in candidates:
+                candidate["level"] = level
+            pools[name].extend(candidates)
+    logger.debug("Daily candidate counts user=%s requested_level=%s by_level=%s", user_id, jlpt_level, level_counts)
     # A vocabulary source appears at most once even if it could be a quiz and a card.
     for item in pools["flashcard"]:
         item["unique_key"] = ("vocab-source", item["source_id"])
     for item in pools["vocab"]:
         item["unique_key"] = ("vocab-source", item["source_id"])
 
-    selected = select_daily_items(pools)
+    selected = select_daily_items(pools, level_order=daily_level_fallback_order(jlpt_level))
     if len(selected) < 5:
+        logger.info("Daily insufficient content user=%s requested_level=%s counts_by_level=%s selected=%s minimum=5",
+                    user_id, jlpt_level, level_counts, len(selected))
         raise DailyTaskError("not_enough_content", 409, "Chưa đủ nội dung để tạo nhiệm vụ hằng ngày.")
 
     task = DailyTask(user_id=user_id, task_date=task_date, status="in_progress", total_items=len(selected))

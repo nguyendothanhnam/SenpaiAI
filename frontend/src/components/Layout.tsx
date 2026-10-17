@@ -64,7 +64,6 @@ export default function Layout({ children }: LayoutProps) {
             <Link to="/daily" title={t('dailyStreak')} className="inline-flex items-center gap-1 rounded-pill bg-[color:var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-[color:var(--primary)] sm:px-3 sm:text-sm"><Flame className="h-4 w-4" /><span>{rewards?.current_streak ?? 0}</span></Link>
             <span className="hidden text-sm text-[color:var(--text-muted)] md:inline">{t('jlptLevel')}</span>
             <span className="rounded-pill bg-[color:var(--accent)] px-2 py-1 text-xs font-semibold text-[color:var(--primary)] sm:px-3 sm:text-sm">{user?.current_jlpt_level}</span>
-            <span className="hidden rounded-pill bg-[color:var(--accent)] px-3 py-1 text-sm font-semibold text-[color:var(--primary)] sm:inline-flex">{user?.exercise_points ?? 0} {t('pointsUnit')}</span>
             <LanguageSwitcher compact />
             <NotificationBell />
             <button type="button" onClick={toggleMode} aria-label={isDark ? t('switchLight') : t('switchDark')} title={t('mode', { mode })} className="rounded-full p-2 text-[color:var(--text-muted)] transition-colors hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]">{isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}</button>

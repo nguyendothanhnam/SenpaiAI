@@ -10,9 +10,10 @@ from typing import Any, List
 import numpy as np
 
 try:
-    from .kanji_labels import SUPPORTED_KANJI
+    from .kanji_labels import SUPPORTED_KANJI, get_metadata
 except ImportError:  # pragma: no cover - handled at runtime
     SUPPORTED_KANJI = []
+    get_metadata = lambda _kanji: {}
 
 try:
     from PIL import Image, ImageOps
@@ -92,6 +93,11 @@ class KanjiRecognizer:
 
     def info(self) -> dict[str, Any]:
         supported_kanji = [self.index_to_label[index] for index in sorted(self.index_to_label)]
+        jlpt_order = {"N5": 0, "N4": 1, "N3": 2, "N2": 3, "N1": 4}
+        supported_jlpt = sorted(
+            {get_metadata(kanji).get("jlpt") for kanji in supported_kanji} - {None},
+            key=lambda level: jlpt_order.get(level, 99),
+        ) if self.available else []
         missing_files = self.missing_files.copy()
         dictionary_count = len(SUPPORTED_KANJI)
         message = (
@@ -114,7 +120,7 @@ class KanjiRecognizer:
             "label_map_path": str(self.label_map_path.resolve()),
             "missing_files": missing_files,
             "message": message,
-            "supported_jlpt": ["N5", "N4"],
+            "supported_jlpt": supported_jlpt,
             "supported_kanji": supported_kanji,
             "dictionary_classes": dictionary_count,
         }
