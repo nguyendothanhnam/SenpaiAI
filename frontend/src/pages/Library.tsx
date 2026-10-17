@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   AlertTriangle,
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { libraryAPI } from '../services/api'
+import { useAuth } from '../services/auth'
 import { formatDate } from '../utils/helpers'
 
 interface LibraryDocument {
@@ -35,6 +37,10 @@ interface LibraryDocument {
   chunk_index?: number | null
   relevance_score?: number | null
   indexing_warning?: string | null
+  scope?: 'system' | 'personal'
+  is_mine?: boolean
+  can_edit?: boolean
+  can_delete?: boolean
 }
 
 interface DocumentListResponse {
@@ -165,12 +171,16 @@ function DocumentFormModal({
   saving,
   onClose,
   onSubmit,
+  allowSystemScope,
+  t,
 }: {
   categories?: Categories
   initial?: LibraryDocument | null
   saving: boolean
   onClose: () => void
   onSubmit: (payload: any) => void
+  allowSystemScope: boolean
+  t: (key: string) => string
 }) {
   const [form, setForm] = useState<DocumentForm>(
     initial
@@ -185,6 +195,7 @@ function DocumentFormModal({
       : emptyForm
   )
   const [errors, setErrors] = useState<Partial<Record<keyof DocumentForm, string>>>({})
+  const [scope, setScope] = useState<'personal' | 'system'>(initial?.scope === 'system' ? 'system' : 'personal')
   const [fetchError, setFetchError] = useState('')
   const types = categories?.document_types?.length ? categories.document_types : fallbackTypes
   const levels = categories?.jlpt_levels?.length ? categories.jlpt_levels : fallbackJlpt
@@ -212,7 +223,7 @@ function DocumentFormModal({
     const result = validateDocument(form)
     setErrors(result.errors)
     if (!result.success) return
-    onSubmit(buildPayload(form))
+    onSubmit(initial ? buildPayload(form) : { ...buildPayload(form), scope })
   }
 
   const fetchFromUrl = () => {
@@ -243,6 +254,16 @@ function DocumentFormModal({
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {!initial && (
+            <label className="space-y-1 md:col-span-2">
+              <span className="text-sm font-bold text-gray-700">{t('library.scope.label')}</span>
+              <select value={scope} onChange={(event) => setScope(event.target.value as 'personal' | 'system')} className="input border-violet-200 focus:ring-violet-200">
+                <option value="personal">{t('library.badge.personal')}</option>
+                {allowSystemScope && <option value="system">{t('library.badge.system')}</option>}
+              </select>
+              <span className="block text-xs text-gray-500">{t('library.privateNote')}</span>
+            </label>
+          )}
           <label className="space-y-1">
             <span className="text-sm font-bold text-gray-700">Title *</span>
             <input value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} className="input border-violet-200 focus:ring-violet-200" />
@@ -305,10 +326,13 @@ function DocumentFormModal({
 }
 
 export default function Library() {
+  const { t } = useTranslation('common')
+  const { user } = useAuth()
   const queryClient = useQueryClient()
   const [filters, setFilters] = useState({ query: '', document_type: '', jlpt_level: '' })
   const [searchPayload, setSearchPayload] = useState({ query: '', document_type: '', jlpt_level: '' })
   const [sort, setSort] = useState<'newest' | 'relevance' | 'alphabetical'>('newest')
+  const [scope, setScope] = useState<'all' | 'mine' | 'system'>('all')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<LibraryDocument | null>(null)
   const [editing, setEditing] = useState<LibraryDocument | null>(null)
@@ -327,13 +351,14 @@ export default function Library() {
   })
 
   const documentsQuery = useQuery(
-    ['libraryDocuments', filters.document_type, filters.jlpt_level, sort, page],
+    ['libraryDocuments', filters.document_type, filters.jlpt_level, sort, scope, page],
     () =>
       libraryAPI
         .getDocuments({
           document_type: filters.document_type || undefined,
           jlpt_level: filters.jlpt_level || undefined,
           sort,
+          scope,
           limit: PAGE_SIZE,
           offset,
         })
@@ -342,13 +367,14 @@ export default function Library() {
   )
 
   const searchQuery = useQuery(
-    ['librarySearch', searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, page],
+    ['librarySearch', searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, scope, page],
     () =>
       libraryAPI
         .searchDocuments({
           query: searchPayload.query,
           document_type: searchPayload.document_type || null,
           jlpt_level: searchPayload.jlpt_level || null,
+          scope,
           limit: PAGE_SIZE,
           offset,
         })
@@ -364,7 +390,22 @@ export default function Library() {
     }
   )
 
-  useEffect(() => setPage(1), [searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, filters.document_type, filters.jlpt_level, sort])
+  useEffect(() => setPage(1), [searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, filters.document_type, filters.jlpt_level, sort, scope])
+
+  const canEditDocument = (document: LibraryDocument) => document.can_edit ?? document.is_mine === true
+  const canDeleteDocument = (document: LibraryDocument) => document.can_delete ?? document.is_mine === true
+  const isSystemDocument = (document: LibraryDocument) =>
+    document.scope === 'system' ? true : document.scope === 'personal' || document.is_mine === true ? false : null
+
+  const showSaveError = (error: any) => {
+    const status = error.response?.status
+    const detail = String(error.response?.data?.detail || '').toLowerCase()
+    if (status === 413 || (status === 400 && /limit|maximum|too long|exceed/.test(detail))) {
+      toast.error(t('library.limitError'))
+    } else {
+      toast.error(error.response?.data?.detail || t('library.saveError'))
+    }
+  }
 
   const createMutation = useMutation((payload: any) => libraryAPI.createDocument(payload), {
     onSuccess: (response) => {
@@ -380,7 +421,7 @@ export default function Library() {
       }
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.detail || 'Failed to save document')
+      showSaveError(error)
     },
   })
 
@@ -399,7 +440,7 @@ export default function Library() {
       }
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.detail || 'Failed to save document')
+      showSaveError(error)
     },
   })
 
@@ -414,7 +455,7 @@ export default function Library() {
       toast.success('Document deleted')
     },
     onError: () => {
-      toast.error('Failed to delete document')
+      toast.error(t('library.deleteError'))
     },
   })
 
@@ -461,7 +502,7 @@ export default function Library() {
       )}
 
       <div className="rounded-2xl border border-violet-100 bg-white/90 p-4 shadow-sm">
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_auto_auto]">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_170px_auto_auto]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
             <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder="Search documents by meaning or keyword..." className="input w-full border-violet-200 bg-violet-50/60 pl-10 focus:ring-violet-200" />
@@ -478,6 +519,11 @@ export default function Library() {
             <option value="newest">newest</option>
             <option value="relevance">relevance</option>
             <option value="alphabetical">alphabetical</option>
+          </select>
+          <select aria-label={t('library.scope.label')} value={scope} onChange={(event) => setScope(event.target.value as typeof scope)} className="input border-violet-200 bg-violet-50/60">
+            <option value="all">{t('library.scope.all')}</option>
+            <option value="mine">{t('library.scope.mine')}</option>
+            <option value="system">{t('library.scope.system')}</option>
           </select>
           <button
             type="button"
@@ -553,6 +599,7 @@ export default function Library() {
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Badge>{document.document_type}</Badge>
+                    {isSystemDocument(document) !== null && <Badge tone={isSystemDocument(document) ? 'gray' : 'violet'}>{isSystemDocument(document) ? t('library.badge.system') : t('library.badge.personal')}</Badge>}
                     {document.jlpt_level && <Badge tone="amber">{document.jlpt_level}</Badge>}
                     {document.relevance_score !== undefined && document.relevance_score !== null && <Badge tone="gray">{Math.round(document.relevance_score * 100)}% relevant</Badge>}
                   </div>
@@ -569,14 +616,12 @@ export default function Library() {
                   <button type="button" onClick={() => setSelected(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
                     View Detail
                   </button>
-                  <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
-                    <Pencil className="mr-1 h-3.5 w-3.5" />
-                    Edit
-                  </button>
-                  <button type="button" onClick={() => setDeleteTarget(document)} className="btn btn-outline rounded-xl border-red-200 px-3 py-2 text-xs font-bold text-red-600">
-                    <Trash2 className="mr-1 h-3.5 w-3.5" />
-                    Delete
-                  </button>
+                  {canEditDocument(document) && <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
+                    <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+                  </button>}
+                  {canDeleteDocument(document) && <button type="button" onClick={() => setDeleteTarget(document)} className="btn btn-outline rounded-xl border-red-200 px-3 py-2 text-xs font-bold text-red-600">
+                    <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
+                  </button>}
                 </div>
               </motion.article>
             ))}
@@ -597,6 +642,8 @@ export default function Library() {
           <DocumentFormModal
             categories={categoriesQuery.data}
             saving={createMutation.isLoading}
+            allowSystemScope={user?.is_library_admin === true}
+            t={t}
             onClose={() => setFormOpen(false)}
             onSubmit={(payload) => createMutation.mutate(payload)}
           />
@@ -606,6 +653,8 @@ export default function Library() {
             initial={editing}
             categories={categoriesQuery.data}
             saving={updateMutation.isLoading}
+            allowSystemScope={user?.is_library_admin === true}
+            t={t}
             onClose={() => setEditing(null)}
             onSubmit={(payload) => updateMutation.mutate({ id: editing.id, payload })}
           />
@@ -619,6 +668,7 @@ export default function Library() {
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Badge>{selected.document_type}</Badge>
+                {isSystemDocument(selected) !== null && <Badge tone={isSystemDocument(selected) ? 'gray' : 'violet'}>{isSystemDocument(selected) ? t('library.badge.system') : t('library.badge.personal')}</Badge>}
                 {selected.jlpt_level && <Badge tone="amber">{selected.jlpt_level}</Badge>}
                 {selected.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
               </div>
@@ -637,14 +687,14 @@ export default function Library() {
                 <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">
                   Close
                 </button>
-                <button type="button" onClick={() => setEditing(selected)} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">
+                {canEditDocument(selected) && <button type="button" onClick={() => setEditing(selected)} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">
                   <Pencil className="mr-2 h-4 w-4" />
                   Edit
-                </button>
-                <button type="button" onClick={() => setDeleteTarget(selected)} className="btn btn-outline rounded-xl border-red-200 px-4 text-red-600">
+                </button>}
+                {canDeleteDocument(selected) && <button type="button" onClick={() => setDeleteTarget(selected)} className="btn btn-outline rounded-xl border-red-200 px-4 text-red-600">
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
-                </button>
+                </button>}
               </div>
             </div>
           </Modal>

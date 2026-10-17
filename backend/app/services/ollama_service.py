@@ -23,7 +23,7 @@ class OllamaJapaneseLearningService:
         # Prompts are now built directly in methods
         pass
 
-    def _call_ollama(self, prompt: str, system_prompt: str = None, max_retries: int = 2) -> str:
+    def _call_ollama(self, prompt: str, system_prompt: str = None, max_retries: int = 2, temperature: Optional[float] = None) -> str:
         """Call Ollama API directly with retry logic."""
         # Check Ollama connection first
         if not self.check_ollama_connection():
@@ -37,9 +37,11 @@ class OllamaJapaneseLearningService:
                     messages.append({"role": "system", "content": system_prompt})
                 messages.append({"role": "user", "content": prompt})
 
+                chat_options = {"temperature": temperature} if temperature is not None else None
                 response = ollama.chat(
                     model=self.model,
-                    messages=messages
+                    messages=messages,
+                    **({"options": chat_options} if chat_options else {}),
                 )
                 return response['message']['content']
             except Exception as e:
@@ -55,7 +57,8 @@ class OllamaJapaneseLearningService:
                 try:
                     response = ollama.generate(
                         model=self.model,
-                        prompt=f"{system_prompt}\n\n{prompt}" if system_prompt else prompt
+                        prompt=f"{system_prompt}\n\n{prompt}" if system_prompt else prompt,
+                        **({"options": chat_options} if chat_options else {}),
                     )
                     return response['response']
                 except Exception as e2:
@@ -122,10 +125,12 @@ class OllamaJapaneseLearningService:
         try:
             system_prompt = """You are SenpaiAI, a Japanese grammar expert for Vietnamese learners.
             Analyze only the given Japanese text. Never invent meanings. If a word is uncertain, write "Chưa chắc chắn về từ này".
+            When Vietnamese is requested, write every explanation, vocabulary meaning, sentence meaning, and suggestion in Vietnamese. Never return English prose. Keep Japanese grammar forms and example sentences in Japanese.
             Common JLPT vocabulary must be recognized accurately:
             - がくせい / 学生 = học sinh, sinh viên
             - どういう意味 = nghĩa là gì
             Do not treat vocabulary items as grammar patterns.
+            Return only essential grammar patterns that actually occur in the input. Use each pattern's canonical textbook form, order patterns by their first occurrence, remove duplicate or equivalent patterns, and return at most 6.
             If Vietnamese is requested, use Vietnamese for all explanations and suggestions. Do not use English unless requested.
             Do not suggest articles, prepositions, or conjunctions; those are not useful Japanese grammar categories here.
             Difficulty score must match JLPT level: N5 simple questions 2-3/10, N4 4/10, N3 5-6/10, N2 7-8/10, N1 9-10/10.
@@ -140,7 +145,7 @@ class OllamaJapaneseLearningService:
             - suggestions: array of Japanese-learning suggestions related to the text"""
 
             prompt = f"Vietnamese requested: {include_vietnamese}\nAnalyze this Japanese text: {text}"
-            response = self._call_ollama(prompt, system_prompt)
+            response = self._call_ollama(prompt, system_prompt, temperature=0)
 
             # Try to parse JSON response
             try:
@@ -199,7 +204,7 @@ class OllamaJapaneseLearningService:
         try:
             system_prompt = """You are a professional Japanese-Vietnamese translator.
             Provide accurate, natural translations while preserving the original meaning and tone.
-            For Japanese to Vietnamese: Provide both literal and natural translations.
+            For Japanese to Vietnamese: output Vietnamese only. Do not include English headings or explanations.
             For Vietnamese to Japanese: Provide natural Japanese that sounds native.
             Include pronunciation guides (romaji) for Japanese text when helpful."""
 

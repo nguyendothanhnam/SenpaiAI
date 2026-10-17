@@ -27,6 +27,18 @@ services:
               count: 1
               capabilities: [gpu]
 
+  # CPU Japanese TTS engine. The official stable CPU tag avoids dev/preview builds.
+  voicevox:
+    image: voicevox/voicevox_engine:cpu-latest
+    container_name: senpai-voicevox
+    expose:
+      - "50021"
+    environment:
+      - VV_HOST=0.0.0.0
+    networks:
+      - senpai-network
+    restart: unless-stopped
+
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
@@ -63,16 +75,30 @@ services:
       - OLLAMA_MODEL=gemma:2b
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - CHROMA_PERSIST_DIRECTORY=/app/chroma_db
+      - REMINDERS_ENABLED=${REMINDERS_ENABLED:-true}
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY:-}
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY:-}
+      - VAPID_SUBJECT=${VAPID_SUBJECT:-mailto:admin@senpaiai.local}
+      - WHISPER_MODEL_SIZE=${WHISPER_MODEL_SIZE:-small}
+      - WHISPER_DEVICE=${WHISPER_DEVICE:-cpu}
+      - WHISPER_MODEL_DIR=/app/models
+      - VOICEVOX_URL=${VOICEVOX_URL:-http://voicevox:50021}
+      - LISTENING_MEDIA_DIR=/app/media/audio
+      - LISTENING_VOICEVOX_SPEAKER_ID=${LISTENING_VOICEVOX_SPEAKER_ID:-1}
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
       - chroma_data:/app/chroma_db
+      - models_data:/app/models
+      - media_data:/app/media
     depends_on:
       postgres:
         condition: service_healthy
       ollama:
         condition: service_healthy
+      voicevox:
+        condition: service_started
     networks:
       - senpai-network
     restart: unless-stopped
@@ -142,6 +168,9 @@ volumes:
   postgres_data:
     driver: local
   chroma_data:
+  models_data:
+    driver: local
+  media_data:
     driver: local
   redis_data:
     driver: local

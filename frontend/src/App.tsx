@@ -22,6 +22,9 @@ import Settings from './pages/Settings'
 import GrammarPractice from './pages/GrammarPractice'
 import ThemeShop from './pages/ThemeShop'
 import DailyChallenge from './pages/DailyChallenge'
+import RemindersSettings from './pages/RemindersSettings'
+import ListeningLessons from './pages/ListeningLessons'
+import ListeningPlayer from './pages/ListeningPlayer'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -66,6 +69,9 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/shop" element={<ThemeShop />} />
         <Route path="/daily" element={<DailyChallenge />} />
+        <Route path="/settings/reminders" element={<RemindersSettings />} />
+        <Route path="/listening" element={<ListeningLessons />} />
+        <Route path="/listening/:id" element={<ListeningPlayer />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Layout>

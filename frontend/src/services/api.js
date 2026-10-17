@@ -44,6 +44,49 @@ export const rewardsAPI = {
   equip: (data) => api.put('/rewards/equip', data),
 }
 
+// Keep the runtime JavaScript client aligned with api.ts: Vite resolves
+// extensionless imports to this file before the TypeScript module.
+export const voiceAPI = {
+  getScenarios: () => api.get('/voice/scenarios'),
+  createConversation: (data) => api.post('/voice/conversations', data),
+  transcribe: (audio) => {
+    const form = new FormData()
+    const extension = audio.type.includes('ogg') ? 'ogg' : audio.type.includes('mp4') ? 'mp4' : audio.type.includes('wav') ? 'wav' : 'webm'
+    form.append('audio', audio, `recording.${extension}`)
+    return api.post('/voice/transcribe', form, { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  sendTurn: (id, text, transcript_confidence) => api.post(`/voice/conversations/${id}/turn`, { text, transcript_confidence }),
+  feedback: (chatId) => api.post(`/voice/turns/${chatId}/feedback`),
+  endConversation: (id) => api.post(`/voice/conversations/${id}/end`),
+}
+
+export const remindersAPI = {
+  getSettings: () => api.get('/reminders/settings'),
+  updateSettings: (data) => api.put('/reminders/settings', data),
+  getSuggestedTime: () => api.get('/reminders/suggested-time'),
+}
+
+export const notificationsAPI = {
+  list: (limit = 20, unread_only = false) => api.get('/notifications/', { params: { limit, unread_only } }),
+  unreadCount: () => api.get('/notifications/unread-count'),
+  markRead: (id) => api.post(`/notifications/${id}/read`),
+  markAllRead: () => api.post('/notifications/read-all'),
+  remove: (id) => api.delete(`/notifications/${id}`),
+}
+
+export const pushAPI = {
+  getPublicKey: () => api.get('/push/vapid-public-key'),
+  subscribe: (subscription) => api.post('/push/subscribe', subscription),
+  unsubscribe: (endpoint) => api.delete('/push/subscribe', { data: { endpoint } }),
+  test: () => api.post('/push/test'),
+}
+
+export const listeningAPI = {
+  getLessons: (params = {}) => api.get('/listening/lessons', { params }),
+  getLesson: (id) => api.get(`/listening/lessons/${id}`),
+  getAudio: (id) => api.get(`/listening/lessons/${id}/audio`, { responseType: 'blob' }),
+}
+
 export const dailyAPI = {
   getToday: () => api.get('/daily/today'),
   answer: (itemId, data) => api.post(`/daily/items/${itemId}/answer`, data),

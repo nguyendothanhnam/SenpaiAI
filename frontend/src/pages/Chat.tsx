@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { Send, Bot, User, Loader2, Trash2, Search, PenLine } from 'lucide-react'
+import { Send, Bot, User, Loader2, Trash2, Search, PenLine, Mic } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { useLocation } from 'react-router-dom'
 import { chatAPI } from '../services/api'
@@ -9,6 +9,7 @@ import { formatRelativeTime } from '../utils/helpers'
 import toast from 'react-hot-toast'
 import LoadingSpinner from '../components/LoadingSpinner'
 import HandwritingInputModal from '../components/kanji/HandwritingInputModal.jsx'
+import VoiceChatPanel from '../components/chat/VoiceChatPanel'
 
 interface ChatMessage {
   id: number
@@ -19,6 +20,7 @@ interface ChatMessage {
   translation?: string
   sources?: any[]
   created_at: string
+  input_mode?: 'text' | 'voice'
 }
 
 interface MessageFormData {
@@ -28,6 +30,7 @@ interface MessageFormData {
 export default function Chat() {
   const [searchQuery, setSearchQuery] = useState('')
   const [handwritingOpen, setHandwritingOpen] = useState(false)
+  const [voiceOpen, setVoiceOpen] = useState(false)
   const { user } = useAuth()
   const location = useLocation()
   const queryClient = useQueryClient()
@@ -142,6 +145,7 @@ export default function Chat() {
         onClose={() => setHandwritingOpen(false)}
         onSelect={insertKanji}
       />
+      {voiceOpen && <VoiceChatPanel onClose={() => setVoiceOpen(false)} />}
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -151,6 +155,9 @@ export default function Chat() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <button type="button" onClick={() => setVoiceOpen(true)} className="btn btn-outline btn-sm inline-flex items-center gap-2" aria-label="Mở hội thoại giọng nói">
+            <Mic className="h-4 w-4" /><span className="hidden sm:inline">Hội thoại giọng nói</span>
+          </button>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]" />
             <input
@@ -195,7 +202,7 @@ export default function Chat() {
                 </div>
                 <div className="flex-1">
                   <div className="theme-card rounded-card p-4">
-                    <p className="text-sm font-medium text-[color:var(--text)]">{message.question}</p>
+                    <div className="flex items-start justify-between gap-2"><p className="text-sm font-medium text-[color:var(--text)]">{message.question}</p>{message.input_mode === 'voice' && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color:var(--accent)] px-2 py-1 text-[10px] font-semibold text-[color:var(--primary)]"><Mic className="h-3 w-3" />Giọng nói</span>}</div>
                   </div>
                   <p className="mt-2 text-xs font-medium text-[color:var(--text-muted)]">
                     {formatRelativeTime(message.created_at)}

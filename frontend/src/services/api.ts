@@ -74,6 +74,71 @@ export const rewardsAPI = {
   equip: (data: { theme_id?: string; background_id?: string | null }) => api.put('/rewards/equip', data),
 }
 
+export interface VoiceScenario { id: string; name: string; description: string; opening: string }
+export interface VoiceFeedbackIssue { type: 'grammar' | 'vocab' | 'politeness'; original: string; suggestion: string; explanation_vi: string }
+export interface VoiceFeedback { corrected_sentence: string; issues: VoiceFeedbackIssue[]; better_phrases: string[] }
+export interface ListeningLessonSummary {
+  id: number; title: string; jlpt_level: string; topic: string; description?: string | null
+  duration_ms: number; source: string
+}
+export interface ListeningToken { text: string; reading?: string }
+export interface ListeningSegment {
+  idx: number; start_ms?: number; end_ms?: number; ja: string; tokens?: ListeningToken[]; vi: string
+}
+export interface ListeningLesson extends ListeningLessonSummary { segments: ListeningSegment[] }
+export interface AppNotification {
+  id: number; type: string; title: string; body: string; url: string; data: Record<string, unknown>
+  created_at: string; read_at: string | null
+}
+export interface ReminderSettings {
+  enabled: boolean; timezone: string; reminder_time: string; days_of_week: number[]
+  types: Array<'daily_task' | 'streak_risk' | 'review_due'>; quiet_start: string; quiet_end: string
+  push_enabled: boolean; max_per_day: number; snooze_until: string | null; updated_at?: string | null
+}
+
+export const voiceAPI = {
+  getScenarios: () => api.get<VoiceScenario[]>('/voice/scenarios'),
+  createConversation: (data: { scenario_id: string; jlpt_level: 'N5' | 'N4' | 'N3' }) =>
+    api.post<{ id: string; opening_text: string; audio_url: string | null }>('/voice/conversations', data),
+  transcribe: (audio: Blob) => {
+    const form = new FormData()
+    form.append('audio', audio, `recording.${audio.type.includes('ogg') ? 'ogg' : audio.type.includes('mp4') ? 'mp4' : audio.type.includes('wav') ? 'wav' : 'webm'}`)
+    return api.post<{ text: string; confidence: number | null }>('/voice/transcribe', form, { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
+  sendTurn: (id: string, text: string, transcript_confidence?: number | null) =>
+    api.post<{ chat_id: number; reply: string; audio_url: string | null }>(`/voice/conversations/${id}/turn`, { text, transcript_confidence }),
+  feedback: (chatId: number) => api.post<VoiceFeedback>(`/voice/turns/${chatId}/feedback`),
+  endConversation: (id: string) => api.post<{ summary: Record<string, unknown>; turn_count: number }>(`/voice/conversations/${id}/end`),
+}
+
+export const remindersAPI = {
+  getSettings: () => api.get<ReminderSettings>('/reminders/settings'),
+  updateSettings: (data: Partial<ReminderSettings>) => api.put<ReminderSettings>('/reminders/settings', data),
+  getSuggestedTime: () => api.get<{ suggested_time: string | null; sample_count: number; hour_count: number; timezone: string }>('/reminders/suggested-time'),
+}
+
+export const notificationsAPI = {
+  list: (limit = 20, unread_only = false) => api.get<AppNotification[]>('/notifications/', { params: { limit, unread_only } }),
+  unreadCount: () => api.get<{ unread_count: number }>('/notifications/unread-count'),
+  markRead: (id: number) => api.post<AppNotification>(`/notifications/${id}/read`),
+  markAllRead: () => api.post<{ updated: number }>('/notifications/read-all'),
+  remove: (id: number) => api.delete(`/notifications/${id}`),
+}
+
+export const pushAPI = {
+  getPublicKey: () => api.get<{ enabled: boolean; public_key: string | null }>('/push/vapid-public-key'),
+  subscribe: (subscription: PushSubscriptionJSON) => api.post('/push/subscribe', subscription),
+  unsubscribe: (endpoint: string) => api.delete('/push/subscribe', { data: { endpoint } }),
+  test: () => api.post('/push/test'),
+}
+
+export const listeningAPI = {
+  getLessons: (params: { jlpt_level?: string; topic?: string; search?: string; limit?: number; offset?: number } = {}) =>
+    api.get<{ items: ListeningLessonSummary[]; total: number; limit: number; offset: number }>('/listening/lessons', { params }),
+  getLesson: (id: number) => api.get<ListeningLesson>(`/listening/lessons/${id}`),
+  getAudio: (id: number) => api.get<Blob>(`/listening/lessons/${id}/audio`, { responseType: 'blob' }),
+}
+
 export type DailyItemType = 'grammar' | 'kanji' | 'vocab' | 'flashcard'
 export interface DailyTaskItem {
   id: number
@@ -217,14 +282,14 @@ export const grammarPracticeAPI = {
 }
 
 export const libraryAPI = {
-  getDocuments: (params: { document_type?: string; jlpt_level?: string; tag?: string; sort?: string; limit?: number; offset?: number } = {}) =>
+  getDocuments: (params: { document_type?: string; jlpt_level?: string; tag?: string; sort?: string; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number } = {}) =>
     api.get('/library/documents', { params }),
   getDocument: (documentId: number) => api.get(`/library/documents/${documentId}`),
   createDocument: (data: any) => api.post('/library/documents', data),
   updateDocument: (documentId: number, data: any) => api.put(`/library/documents/${documentId}`, data),
   deleteDocument: (documentId: number) => api.delete(`/library/documents/${documentId}`),
   fetchUrl: (url: string) => api.post('/library/fetch-url', { url }),
-  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; limit?: number; offset?: number }) =>
+  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number }) =>
     api.post('/library/search', data),
   getCategories: () => api.get('/library/categories'),
   getStats: () => api.get('/library/stats'),

@@ -10,6 +10,8 @@ interface User {
   learning_goals: string[]
   exercise_points: number
   created_at: string
+  ui_language?: 'vi' | 'en' | null
+  is_library_admin?: boolean
 }
 
 interface AuthContextType {

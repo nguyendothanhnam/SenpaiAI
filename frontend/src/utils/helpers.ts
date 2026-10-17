@@ -1,12 +1,15 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import i18n from '../i18n'
+
+const intlLocale = () => i18n.resolvedLanguage === 'en' ? 'en-US' : 'vi-VN'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
 export function formatDate(date: string | Date) {
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat(intlLocale(), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -15,23 +18,28 @@ export function formatDate(date: string | Date) {
   }).format(new Date(date))
 }
 
+export function formatNumber(value: number, options?: Intl.NumberFormatOptions) {
+  return new Intl.NumberFormat(intlLocale(), options).format(value)
+}
+
+export function formatTime(date: string | Date) {
+  return new Intl.DateTimeFormat(intlLocale(), { hour: '2-digit', minute: '2-digit' }).format(new Date(date))
+}
+
 export function formatRelativeTime(date: string | Date) {
   const now = new Date()
   const targetDate = new Date(date)
   const diffInSeconds = Math.floor((now.getTime() - targetDate.getTime()) / 1000)
 
-  if (diffInSeconds < 60) {
-    return 'Just now'
-  } else if (diffInSeconds < 3600) {
-    const minutes = Math.floor(diffInSeconds / 60)
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-  } else if (diffInSeconds < 86400) {
-    const hours = Math.floor(diffInSeconds / 3600)
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`
-  } else {
-    const days = Math.floor(diffInSeconds / 86400)
-    return `${days} day${days > 1 ? 's' : ''} ago`
+  const units: Intl.RelativeTimeFormatUnit[] = ['second', 'minute', 'hour', 'day']
+  const seconds = [60, 60, 24]
+  let amount = -diffInSeconds
+  let unit: Intl.RelativeTimeFormatUnit = units[0]
+  for (let index = 0; index < seconds.length && Math.abs(amount) >= seconds[index]; index += 1) {
+    amount /= seconds[index]
+    unit = units[index + 1]
   }
+  return new Intl.RelativeTimeFormat(intlLocale(), { numeric: 'auto' }).format(Math.round(amount), unit)
 }
 
 export function getJLPTColor(level: string) {
@@ -43,17 +51,6 @@ export function getJLPTColor(level: string) {
     N1: 'jlpt-n1',
   }
   return colors[level as keyof typeof colors] || 'jlpt-n3'
-}
-
-export function getJLPTDescription(level: string) {
-  const descriptions = {
-    N5: 'Basic level - Can understand basic Japanese',
-    N4: 'Elementary level - Can understand basic Japanese',
-    N3: 'Intermediate level - Can understand Japanese used in everyday situations',
-    N2: 'Pre-advanced level - Can understand Japanese used in everyday situations and various circumstances',
-    N1: 'Advanced level - Can understand Japanese used in a variety of circumstances',
-  }
-  return descriptions[level as keyof typeof descriptions] || 'Unknown level'
 }
 
 export function debounce<T extends (...args: any[]) => any>(

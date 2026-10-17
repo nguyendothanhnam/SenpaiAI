@@ -29,6 +29,20 @@ class Settings(BaseSettings):
     # Application calendar and development-only reward tools
     app_timezone: str = "Asia/Ho_Chi_Minh"
     enable_dev_rewards: bool = False
+
+    # In-process reminder scheduler and optional Web Push credentials.
+    reminders_enabled: bool = True
+    vapid_public_key: Optional[str] = None
+    vapid_private_key: Optional[str] = None
+    vapid_subject: str = "mailto:admin@senpaiai.local"
+
+    whisper_model_size: str = "small"
+    whisper_device: str = "cpu"
+    whisper_model_dir: str = "/app/models"
+
+    voicevox_url: str = "http://voicevox:50021"
+    listening_media_dir: str = "/app/media/audio"
+    listening_voicevox_speaker_id: int = 1
     
     class Config:
         env_file = ".env"

@@ -33,6 +33,23 @@ async def analyze_grammar(
             analysis_result,
             include_vietnamese=request.include_translation,
         )
+
+        if request.include_translation:
+            # Ask the translation path to translate the original Japanese directly.
+            # This prevents a grammar model's English fallback from being shown as
+            # the Vietnamese meaning requested by the UI.
+            translated = await japanese_service.translate_text(
+                text=request.text,
+                source_lang="ja",
+                target_lang="vi",
+            )
+            translated_text = str(translated.get("translated_text") or "").strip()
+            if translated.get("confidence", 0) > 0 and translated_text and not translated_text.startswith("Translation error:"):
+                analysis_result["sentence_meaning"] = translated_text
+                analysis_result["translation"] = translated_text
+            else:
+                analysis_result["sentence_meaning"] = "Chưa thể tạo bản dịch tiếng Việt lúc này."
+                analysis_result["translation"] = analysis_result["sentence_meaning"]
         
         return GrammarAnalysisResponse(
             text=request.text,

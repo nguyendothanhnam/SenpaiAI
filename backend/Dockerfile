@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     libpq-dev \
+    ffmpeg \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,7 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Create directory for ChromaDB
-RUN mkdir -p /app/chroma_db
+RUN mkdir -p /app/chroma_db /app/models /app/media/audio
 
 # Create non-root user
 RUN useradd -m -u 1000 senpai && chown -R senpai:senpai /app

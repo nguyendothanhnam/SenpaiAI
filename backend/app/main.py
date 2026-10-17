@@ -8,8 +8,9 @@ import logging
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, analysis, library, game, kanji, grammar_practice, rewards, daily
+from .api import auth, chat, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, voice, listening
 from .services.kanji_dictionary_service import kanji_dictionary_service
+from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
 
 try:
     from ml.kanji_recognizer import get_model_info
@@ -33,9 +34,12 @@ async def lifespan(app: FastAPI):
         logger.info("[Recognition] Model classes: %s", model_info.get("classes_count", 0))
         if model_info.get("dictionary_classes") != model_info.get("classes_count"):
             logger.warning("[Recognition] %s", model_info.get("message"))
-    yield
-    # Shutdown
-    pass
+    if settings.reminders_enabled:
+        start_reminder_scheduler()
+    try:
+        yield
+    finally:
+        stop_reminder_scheduler()
 
 # Create FastAPI app
 app = FastAPI(
@@ -90,6 +94,16 @@ app.include_router(rewards.router)
 app.include_router(rewards.router, prefix="/api")
 app.include_router(daily.router)
 app.include_router(daily.router, prefix="/api")
+app.include_router(reminders.router)
+app.include_router(reminders.router, prefix="/api")
+app.include_router(notifications.router)
+app.include_router(notifications.router, prefix="/api")
+app.include_router(push.router)
+app.include_router(push.router, prefix="/api")
+app.include_router(voice.router)
+app.include_router(voice.router, prefix="/api")
+app.include_router(listening.router)
+app.include_router(listening.router, prefix="/api")
 
 @app.get("/")
 async def root():

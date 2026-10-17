@@ -319,6 +319,9 @@ async def clear_chat_history(
 ):
     """Clear all chat history for current user."""
     
+    from ..models.database import VoiceConversation
+    # Clearing chat also clears voice conversation summaries; turns are removed below.
+    db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
     db.query(ChatHistory)\
         .filter(ChatHistory.user_id == current_user.id)\
         .delete()

@@ -15,10 +15,12 @@ import {
 } from 'lucide-react'
 import { authAPI, dailyAPI } from '../services/api'
 import { useAuth } from '../services/auth'
-import { formatDate, getJLPTDescription } from '../utils/helpers'
+import { formatDate } from '../utils/helpers'
 import toast from 'react-hot-toast'
 import { useQuery } from 'react-query'
 import { useRewardsMe } from '../services/rewards'
+import { useTranslation } from 'react-i18next'
+import { getErrorMessage } from '../utils/getErrorMessage'
 
 interface ProfileFormData {
   username: string
@@ -29,6 +31,8 @@ interface ProfileFormData {
 const JLPT_LEVELS = ['N5', 'N4', 'N3', 'N2', 'N1']
 
 export default function Profile() {
+  const { t } = useTranslation('profile')
+  const { t: c } = useTranslation('common')
   const { user } = useAuth()
   const { data: rewardProfile } = useRewardsMe(user?.id)
   const { data: historyResult } = useQuery(['daily', 'history', user?.id, 30], async () => {
@@ -55,10 +59,10 @@ export default function Profile() {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['auth'])
-        toast.success('Profile updated successfully!')
+        toast.success(t('profileUpdated'))
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.detail || 'Failed to update profile')
+        toast.error(getErrorMessage(error))
       },
     }
   )
@@ -72,7 +76,7 @@ export default function Profile() {
     
     const currentGoals = form.getValues('learning_goals')
     if (currentGoals.includes(newGoal.trim())) {
-      toast.error('This goal already exists')
+      toast.error(t('duplicateGoal'))
       return
     }
     
@@ -99,19 +103,19 @@ export default function Profile() {
       <section className="theme-card rounded-3xl p-5 shadow-[var(--shadow-card)] sm:p-7">
         <div className="flex items-start gap-3">
           <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)]"><Trophy className="h-5 w-5 text-[color:var(--primary)]" /></div>
-          <div><h2 className="text-xl font-bold text-[color:var(--text)]">Điểm & chuỗi ngày học</h2><p className="mt-1 text-sm text-[color:var(--text-muted)]">Thành tích đồng bộ với tài khoản của bạn.</p></div>
+          <div><h2 className="text-xl font-bold text-[color:var(--text)]">{t('rewards')}</h2><p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('rewardsDescription')}</p></div>
         </div>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><Coins className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">Điểm hiện có</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.points_balance ?? '—'}</p></div></div>
-          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><Flame className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">Streak hiện tại</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.current_streak ?? 0} ngày</p></div></div>
-          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><CalendarDays className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">Streak dài nhất</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.longest_streak ?? 0} ngày</p></div></div>
+          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><Coins className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">{t('pointsBalance')}</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.points_balance ?? '—'}</p></div></div>
+          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><Flame className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">{t('currentStreak')}</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.current_streak ?? 0} {c('days')}</p></div></div>
+          <div className="flex items-center gap-3 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4"><CalendarDays className="h-6 w-6 text-[color:var(--primary)]" /><div><p className="text-xs text-[color:var(--text-muted)]">{t('longestStreak')}</p><p className="text-xl font-extrabold text-[color:var(--text)]">{rewardProfile?.longest_streak ?? 0} {c('days')}</p></div></div>
         </div>
         <div className="mt-6">
-          <h3 className="mb-3 text-sm font-bold text-[color:var(--text)]">Lịch hoạt động 30 ngày gần nhất</h3>
+          <h3 className="mb-3 text-sm font-bold text-[color:var(--text)]">{t('calendar')}</h3>
           {calendarDates.length ? <div className="grid grid-cols-6 gap-2 sm:grid-cols-10">{calendarDates.map((date) => {
             const entry = historyMap.get(date)
             return <div key={date} title={`${date}${entry ? ` · ${entry.points_awarded} điểm` : ''}`} className={`grid aspect-square place-items-center rounded-xl border text-[10px] font-semibold sm:text-xs ${entry ? 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--primary)]' : 'border-[color:var(--border)] bg-[color:var(--bg-elevated)] text-[color:var(--text-muted)]'}`}><span>{Number(date.slice(-2))}</span>{entry && <Flame className="h-3 w-3" />}</div>
-          })}</div> : <p className="rounded-xl bg-[color:var(--bg-elevated)] p-4 text-sm text-[color:var(--text-muted)]">Lịch sẽ hiển thị sau khi có ngày học hoàn thành đầu tiên.</p>}
+          })}</div> : <p className="rounded-xl bg-[color:var(--bg-elevated)] p-4 text-sm text-[color:var(--text-muted)]">{t('calendarEmpty')}</p>}
         </div>
       </section>
       {/* Header */}
@@ -120,9 +124,9 @@ export default function Profile() {
           <User className="h-6 w-6 text-[color:var(--primary-contrast)]" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-[color:var(--primary)]">Profile</h1>
+          <h1 className="text-3xl font-bold text-[color:var(--primary)]">{t('title')}</h1>
           <p className="text-sm text-gray-600 mt-1">
-            Manage your account settings and learning preferences
+            {t('subtitle')}
           </p>
         </div>
       </div>
@@ -132,16 +136,16 @@ export default function Profile() {
         <div className="lg:col-span-2">
           <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
             <div className="card-header border-b border-orange-100">
-              <h2 className="card-title text-orange-900">Account Information</h2>
+              <h2 className="card-title text-orange-900">{t('accountInformation')}</h2>
               <p className="card-description text-gray-600">
-                Update your profile information and learning preferences
+                {t('accountDescription')}
               </p>
             </div>
             <div className="card-content">
               <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                 <div>
                   <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address
+                    {t('email')}
                   </label>
                   <input
                     type="email"
@@ -150,59 +154,59 @@ export default function Profile() {
                     className="input w-full bg-gray-100 border-gray-300 text-gray-600"
                   />
                   <p className="mt-1 text-xs text-gray-500">
-                    Email cannot be changed
+                    {t('emailImmutable')}
                   </p>
                 </div>
 
                 <div>
                   <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Username
+                    {t('username')}
                   </label>
                   <input
                     {...form.register('username', {
-                      required: 'Username is required',
-                      minLength: { value: 3, message: 'Username must be at least 3 characters' },
-                      maxLength: { value: 20, message: 'Username must be less than 20 characters' },
+                      required: 'usernameRequired',
+                      minLength: { value: 3, message: 'usernameMin' },
+                      maxLength: { value: 20, message: 'usernameMax' },
                       pattern: {
                         value: /^[a-zA-Z0-9_]+$/,
-                        message: 'Username can only contain letters, numbers, and underscores'
+                        message: 'usernamePattern'
                       }
                     })}
                     type="text"
                     className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
-                    placeholder="Enter your username"
+                    placeholder={t('usernamePlaceholder')}
                   />
                   {form.formState.errors.username && (
                     <p className="mt-1 text-sm text-red-600 font-medium">
-                      {form.formState.errors.username.message}
+                      {t(form.formState.errors.username.message || '')}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label htmlFor="current_jlpt_level" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Current JLPT Level
+                    {t('currentLevel')}
                   </label>
                   <select
-                    {...form.register('current_jlpt_level', { required: 'JLPT level is required' })}
+                    {...form.register('current_jlpt_level', { required: 'levelRequired' })}
                     className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
                   >
                     {JLPT_LEVELS.map((level) => (
                       <option key={level} value={level}>
-                        {level} - {getJLPTDescription(level)}
+                        {level} - {t(`jlptDescriptions.${level}`)}
                       </option>
                     ))}
                   </select>
                   {form.formState.errors.current_jlpt_level && (
                     <p className="mt-1 text-sm text-red-600 font-medium">
-                      {form.formState.errors.current_jlpt_level.message}
+                      {t(form.formState.errors.current_jlpt_level.message || '')}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Learning Goals
+                    {t('learningGoals')}
                   </label>
                   <div className="space-y-3">
                     <div className="flex space-x-2">
@@ -210,7 +214,7 @@ export default function Profile() {
                         type="text"
                         value={newGoal}
                         onChange={(e) => setNewGoal(e.target.value)}
-                        placeholder="Add a learning goal..."
+                        placeholder={t('goalPlaceholder')}
                         className="input flex-1 border-orange-200 focus:ring-orange-300 bg-orange-50"
                         onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addGoal())}
                       />
@@ -220,7 +224,7 @@ export default function Profile() {
                         className="btn btn-outline border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold"
                         disabled={!newGoal.trim()}
                       >
-                        Add
+                        {t('add')}
                       </button>
                     </div>
                     
@@ -249,12 +253,12 @@ export default function Profile() {
                   {updateProfileMutation.isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
+                      {c('saving')}
                     </>
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
-                      Save Changes
+                      {c('save')}
                     </>
                   )}
                 </button>
@@ -268,7 +272,7 @@ export default function Profile() {
           {/* Account Info */}
           <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
             <div className="card-header border-b border-orange-100">
-              <h3 className="card-title text-orange-900">Account Information</h3>
+              <h3 className="card-title text-orange-900">{t('accountInformation')}</h3>
             </div>
             <div className="card-content space-y-4">
               <div className="flex items-center space-x-3">
@@ -285,21 +289,21 @@ export default function Profile() {
               
               <div className="space-y-3 pt-2 border-t border-orange-100">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Member since</span>
+                  <span className="text-sm font-medium text-gray-600">{t('memberSince')}</span>
                   <span className="text-sm font-semibold text-gray-900">
-                    {user?.created_at ? formatDate(user.created_at) : 'N/A'}
+                    {user?.created_at ? formatDate(user.created_at) : c('notAvailable')}
                   </span>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Current Level</span>
+                  <span className="text-sm font-medium text-gray-600">{t('currentLevelShort')}</span>
                   <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-semibold">
                     {user?.current_jlpt_level}
                   </span>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Learning Goals</span>
+                  <span className="text-sm font-medium text-gray-600">{t('learningGoals')}</span>
                   <span className="text-sm font-semibold text-gray-900 bg-amber-100 px-2 py-1 rounded">
                     {user?.learning_goals?.length || 0}
                   </span>
@@ -311,15 +315,15 @@ export default function Profile() {
           {/* Learning Progress */}
           <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
             <div className="card-header border-b border-orange-100">
-              <h3 className="card-title text-orange-900">Learning Progress</h3>
+              <h3 className="card-title text-orange-900">{t('progress')}</h3>
             </div>
             <div className="card-content space-y-4">
               <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
                 <Trophy className="h-8 w-8 text-amber-500" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">JLPT Level</p>
+                  <p className="text-sm font-semibold text-gray-900">{t('currentLevel')}</p>
                   <p className="text-xs text-gray-600">
-                    {user?.current_jlpt_level} - {getJLPTDescription(user?.current_jlpt_level || 'N5')}
+                    {user?.current_jlpt_level} - {t(`jlptDescriptions.${user?.current_jlpt_level || 'N5'}`)}
                   </p>
                 </div>
               </div>
@@ -327,9 +331,9 @@ export default function Profile() {
               <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
                 <Target className="h-8 w-8 text-orange-500" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">Learning Goals</p>
+                  <p className="text-sm font-semibold text-gray-900">{t('learningGoals')}</p>
                   <p className="text-xs text-gray-600">
-                    {user?.learning_goals?.length || 0} goal{(user?.learning_goals?.length || 0) !== 1 ? 's' : ''} set
+                    {user?.learning_goals?.length || 0} {t('goalSet')}
                   </p>
                 </div>
               </div>
@@ -337,16 +341,16 @@ export default function Profile() {
               <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
                 <MessageCircle className="h-8 w-8 text-orange-400" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">Chat Sessions</p>
-                  <p className="text-xs text-gray-600">Track your conversations</p>
+                  <p className="text-sm font-semibold text-gray-900">{t('chatSessions')}</p>
+                  <p className="text-xs text-gray-600">{t('chatDescription')}</p>
                 </div>
               </div>
               
               <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
                 <BookOpen className="h-8 w-8 text-amber-500" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">Study Materials</p>
-                  <p className="text-xs text-gray-600">Access learning library</p>
+                  <p className="text-sm font-semibold text-gray-900">{t('studyMaterials')}</p>
+                  <p className="text-xs text-gray-600">{t('studyDescription')}</p>
                 </div>
               </div>
             </div>
@@ -355,17 +359,17 @@ export default function Profile() {
           {/* Quick Actions */}
           <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
             <div className="card-header border-b border-orange-100">
-              <h3 className="card-title text-orange-900">Quick Actions</h3>
+              <h3 className="card-title text-orange-900">{t('quickActions')}</h3>
             </div>
             <div className="card-content space-y-2">
               <button className="w-full btn btn-outline btn-sm border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold transition-colors">
-                Export Learning Data
+                {t('export')}
               </button>
               <button className="w-full btn btn-outline btn-sm border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold transition-colors">
-                Reset Progress
+                {t('reset')}
               </button>
               <button className="w-full btn btn-outline btn-sm border-red-300 text-red-600 hover:bg-red-50 font-semibold transition-colors">
-                Delete Account
+                {t('delete')}
               </button>
             </div>
           </div>

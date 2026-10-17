@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
+import { useTranslation } from 'react-i18next'
 import { BookOpen, Loader2, Languages, Star, Lightbulb } from 'lucide-react'
 import { analysisAPI } from '../services/api'
 import toast from 'react-hot-toast'
+import GrammarTabs from '../components/layout/GrammarTabs'
 
 interface GrammarFormData {
   text: string
@@ -35,13 +37,18 @@ interface GrammarAnalysis {
 }
 
 export default function Grammar() {
+  const { t, i18n } = useTranslation('grammar')
   const [analysis, setAnalysis] = useState<GrammarAnalysis | null>(null)
   
   const form = useForm<GrammarFormData>({
     defaultValues: {
-      includeTranslation: false,
+      includeTranslation: i18n.resolvedLanguage !== 'en',
     }
   })
+
+  useEffect(() => {
+    form.setValue('includeTranslation', i18n.resolvedLanguage !== 'en')
+  }, [form.setValue, i18n.resolvedLanguage])
 
   const analyzeMutation = useMutation(
     (data: { text: string; includeTranslation: boolean }) =>
@@ -49,10 +56,10 @@ export default function Grammar() {
     {
       onSuccess: (data) => {
         setAnalysis(data)
-        toast.success('Grammar analysis completed!')
+        toast.success(t('analysis.success'))
       },
-      onError: (error: any) => {
-        toast.error(error.response?.data?.detail || 'Failed to analyze grammar')
+      onError: () => {
+        toast.error(t('analysis.failure'))
       },
     }
   )
@@ -64,15 +71,16 @@ export default function Grammar() {
 
   return (
     <div className="space-y-6">
+      <GrammarTabs />
       {/* Header */}
       <div className="flex items-center space-x-4">
         <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
           <BookOpen className="h-6 w-6 text-white" />
         </div>
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Grammar Analysis</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">{t('analysis.title')}</h1>
           <p className="text-sm text-gray-600 mt-1">
-            Analyze Japanese text for grammar patterns, JLPT level, and difficulty
+            {t('analysis.subtitle')}
           </p>
         </div>
       </div>
@@ -81,22 +89,22 @@ export default function Grammar() {
         {/* Input Form */}
         <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
           <div className="card-header border-b border-orange-100">
-            <h2 className="card-title text-orange-900">Analyze Japanese Text</h2>
+            <h2 className="card-title text-orange-900">{t('analysis.formTitle')}</h2>
             <p className="card-description text-gray-600">
-              Enter Japanese text to get detailed grammar analysis
+              {t('analysis.formDescription')}
             </p>
           </div>
           <div className="card-content">
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
               <div>
                 <label htmlFor="text" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Japanese Text
+                  {t('analysis.japaneseText')}
                 </label>
                 <textarea
-                  {...form.register('text', { required: 'Text is required' })}
+                  {...form.register('text', { required: t('analysis.textRequired') })}
                   rows={6}
                   className="input w-full resize-none border-orange-200 focus:ring-orange-300 bg-orange-50"
-                  placeholder="Enter Japanese text to analyze..."
+                  placeholder={t('analysis.inputPlaceholder')}
                   disabled={analyzeMutation.isLoading}
                 />
                 {form.formState.errors.text && (
@@ -114,7 +122,7 @@ export default function Grammar() {
                   className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-orange-300 rounded"
                 />
                 <label htmlFor="includeTranslation" className="ml-2 block text-sm text-gray-700 font-medium">
-                  Include Vietnamese translation
+                  {t('analysis.includeTranslation')}
                 </label>
               </div>
 
@@ -126,12 +134,12 @@ export default function Grammar() {
                 {analyzeMutation.isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analyzing...
+                    {t('analysis.analyzing')}
                   </>
                 ) : (
                   <>
                     <BookOpen className="mr-2 h-4 w-4" />
-                    Analyze Grammar
+                    {t('analysis.analyze')}
                   </>
                 )}
               </button>
@@ -146,18 +154,18 @@ export default function Grammar() {
               {/* Basic Info */}
               <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                 <div className="card-header border-b border-orange-100">
-                  <h3 className="card-title text-orange-900">JLPT Level</h3>
+                  <h3 className="card-title text-orange-900">{t('analysis.jlptLevel')}</h3>
                 </div>
                 <div className="card-content space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">Level:</span>
+                    <span className="text-sm font-semibold text-gray-700">{t('analysis.level')}</span>
                     <span className={`jlpt-badge bg-orange-100 text-orange-700`}>
                       {analysis.jlpt_level}
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-gray-700">Difficulty Score:</span>
+                    <span className="text-sm font-semibold text-gray-700">{t('analysis.difficulty')}</span>
                     <div className="flex items-center space-x-2">
                       <div className="flex">
                         {[...Array(10)].map((_, i) => (
@@ -183,7 +191,7 @@ export default function Grammar() {
               {(analysis.sentence_meaning || analysis.translation) && (
                 <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                   <div className="card-header border-b border-orange-100">
-                    <h3 className="card-title text-orange-900">Sentence Meaning</h3>
+                    <h3 className="card-title text-orange-900">{t('analysis.sentenceMeaning')}</h3>
                   </div>
                   <div className="card-content">
                     <div className="flex items-start space-x-2 p-3 bg-orange-50 rounded-xl border-l-4 border-orange-400">
@@ -198,7 +206,7 @@ export default function Grammar() {
               {analysis.vocabulary?.length > 0 && (
                 <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                   <div className="card-header border-b border-orange-100">
-                    <h3 className="card-title text-orange-900">Vocabulary</h3>
+                    <h3 className="card-title text-orange-900">{t('analysis.vocabulary')}</h3>
                   </div>
                   <div className="card-content">
                     <div className="space-y-3">
@@ -224,7 +232,7 @@ export default function Grammar() {
               {(analysis.grammar_patterns?.length || analysis.grammar_points.length) > 0 && (
                 <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                   <div className="card-header border-b border-orange-100">
-                    <h3 className="card-title text-orange-900">Grammar Patterns</h3>
+                    <h3 className="card-title text-orange-900">{t('analysis.patterns')}</h3>
                   </div>
                   <div className="card-content">
                     <div className="space-y-3">
@@ -263,7 +271,7 @@ export default function Grammar() {
               {analysis.suggestions.length > 0 && (
                 <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
                   <div className="card-header border-b border-orange-100">
-                    <h3 className="card-title text-orange-900">Learning Suggestions</h3>
+                    <h3 className="card-title text-orange-900">{t('analysis.suggestions')}</h3>
                   </div>
                   <div className="card-content">
                     <div className="space-y-3">
@@ -285,8 +293,8 @@ export default function Grammar() {
                   <div className="h-16 w-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
                     <BookOpen className="h-8 w-8 text-orange-400" />
                   </div>
-                  <p className="text-lg font-semibold text-gray-700">No analysis yet</p>
-                  <p className="text-sm text-gray-500 mt-1">Enter Japanese text to get started</p>
+                  <p className="text-lg font-semibold text-gray-700">{t('analysis.emptyTitle')}</p>
+                  <p className="text-sm text-gray-500 mt-1">{t('analysis.emptyDescription')}</p>
                 </div>
               </div>
             </div>

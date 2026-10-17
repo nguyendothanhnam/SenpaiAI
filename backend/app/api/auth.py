@@ -139,6 +139,9 @@ async def update_current_user(
         if user_update.learning_goals is not None:
             db_user.learning_goals = user_update.learning_goals
 
+        if user_update.ui_language is not None:
+            db_user.ui_language = user_update.ui_language
+
         db.commit()
         db.refresh(db_user)
 
@@ -184,6 +187,8 @@ async def export_user_data(
         point_transactions = db.query(PointTransaction).filter(PointTransaction.user_id == current_user.id) \
             .order_by(PointTransaction.created_at.desc(), PointTransaction.id.desc()).limit(100).all()
         unlocked_items = db.query(UserUnlockedItem).filter(UserUnlockedItem.user_id == current_user.id).all()
+        from ..models.database import ReminderSettings
+        reminder_settings = db.query(ReminderSettings).filter(ReminderSettings.user_id == current_user.id).first()
 
         # Format data for export
         export_data = {
@@ -192,6 +197,7 @@ async def export_user_data(
                 "email": current_user.email,
                 "current_jlpt_level": current_user.current_jlpt_level,
                 "learning_goals": current_user.learning_goals,
+                "ui_language": current_user.ui_language,
                 "created_at": current_user.created_at.isoformat() if current_user.created_at else None,
             },
             "chat_history": [
@@ -203,6 +209,10 @@ async def export_user_data(
                     "grammar_points": chat.grammar_points,
                     "translation": chat.translation,
                     "sources": chat.sources,
+                    "input_mode": chat.input_mode,
+                    "conversation_id": str(chat.conversation_id) if chat.conversation_id else None,
+                    "scenario": chat.scenario,
+                    "feedback": chat.feedback,
                     "created_at": chat.created_at.isoformat() if chat.created_at else None,
                 }
                 for chat in chat_history
@@ -248,6 +258,18 @@ async def export_user_data(
                     for x in unlocked_items
                 ],
             },
+            "reminder_settings": ({
+                "enabled": reminder_settings.enabled,
+                "timezone": reminder_settings.timezone,
+                "reminder_time": reminder_settings.reminder_time,
+                "days_of_week": reminder_settings.days_of_week,
+                "types": reminder_settings.types,
+                "quiet_start": reminder_settings.quiet_start,
+                "quiet_end": reminder_settings.quiet_end,
+                "push_enabled": reminder_settings.push_enabled,
+                "max_per_day": reminder_settings.max_per_day,
+                "snooze_until": reminder_settings.snooze_until.isoformat() if reminder_settings.snooze_until else None,
+            } if reminder_settings else None),
             "export_date": datetime.utcnow().isoformat(),
             "total_chat_messages": len(chat_history),
             "total_learning_sessions": len(learning_sessions),
@@ -268,11 +290,12 @@ async def reset_user_progress(
         db: Session = Depends(get_db)
 ):
     """Reset user's learning progress (chat history, learning sessions)."""
-    from ..models.database import ChatHistory, LearningSession, GrammarPracticeAttempt
+    from ..models.database import ChatHistory, LearningSession, GrammarPracticeAttempt, VoiceConversation
 
     try:
         # Delete chat history
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
+        db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
 
         # Explicit deletion also supports databases where FK cascade enforcement is disabled.
         db.query(GrammarPracticeAttempt).filter(GrammarPracticeAttempt.user_id == current_user.id).delete(synchronize_session=False)
@@ -289,8 +312,8 @@ async def reset_user_progress(
 
         return {
             "message": "Progress reset successfully",
-            "reset_items": ["chat_history", "learning_sessions", "grammar_practice_attempts"],
-            "preserved_items": ["rewards", "daily_tasks", "study_item_stats"],
+            "reset_items": ["chat_history", "voice_conversations", "learning_sessions", "grammar_practice_attempts"],
+            "preserved_items": ["rewards", "daily_tasks", "study_item_stats", "reminder_settings", "push_subscriptions"],
             "preserved_reason": "Giữ điểm, nhiệm vụ và thống kê học để tránh làm lại nhằm nhận điểm lần nữa.",
         }
 
@@ -309,11 +332,14 @@ async def delete_current_user(
 ):
     """Delete current user account."""
     try:
-        from ..models.database import (ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction,
-                                       UserGameProfile, UserUnlockedItem, DailyTask, DailyTaskItem, StudyItemStat)
+        from ..models.database import (ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction, VoiceConversation, ListeningAttempt,
+                                       UserGameProfile, UserUnlockedItem, DailyTask, DailyTaskItem, StudyItemStat,
+                                       ReminderSettings, Notification, PushSubscription)
 
         # Delete related data first
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
+        db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(ListeningAttempt).filter(ListeningAttempt.user_id == current_user.id).delete(synchronize_session=False)
         db.query(GrammarPracticeAttempt).filter(GrammarPracticeAttempt.user_id == current_user.id).delete(synchronize_session=False)
         db.query(LearningSession).filter(LearningSession.user_id == current_user.id).delete()
 
@@ -325,6 +351,9 @@ async def delete_current_user(
         db.query(DailyTaskItem).filter(DailyTaskItem.daily_task_id.in_(task_ids)).delete(synchronize_session=False)
         db.query(DailyTask).filter(DailyTask.user_id == current_user.id).delete(synchronize_session=False)
         db.query(StudyItemStat).filter(StudyItemStat.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(Notification).filter(Notification.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(PushSubscription).filter(PushSubscription.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(ReminderSettings).filter(ReminderSettings.user_id == current_user.id).delete(synchronize_session=False)
 
         # Delete user
         db.delete(current_user)

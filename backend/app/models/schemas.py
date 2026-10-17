@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import Optional, List, Dict, Any
 from datetime import datetime
+from uuid import UUID
 from typing import Literal
 
 
@@ -27,6 +28,7 @@ class User(UserBase):
     exercise_points: int
     created_at: datetime
     updated_at: Optional[datetime] = None
+    ui_language: Optional[Literal["vi", "en"]] = None
 
     class Config:
         from_attributes = True
@@ -36,6 +38,7 @@ class UserUpdate(BaseModel):
     username: Optional[str] = None
     current_jlpt_level: Optional[str] = None
     learning_goals: Optional[List[str]] = None
+    ui_language: Optional[Literal["vi", "en"]] = None
 
 
 # Token Schemas
@@ -72,6 +75,10 @@ class ChatHistory(BaseModel):
     grammar_points: Optional[List[Dict[str, Any]]] = None
     translation: Optional[str] = None
     sources: Optional[List[Dict[str, Any]]] = None  # Changed from Dict[str, str] to Dict[str, Any] to allow numbers
+    input_mode: Optional[str] = "text"
+    conversation_id: Optional[UUID] = None
+    scenario: Optional[str] = None
+    feedback: Optional[Dict[str, Any]] = None
     created_at: datetime
 
     model_config = {

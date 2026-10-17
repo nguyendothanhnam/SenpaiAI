@@ -7,6 +7,8 @@ import App from './App.tsx'
 import { AuthProvider } from './services/auth'
 import { ThemeProvider } from './themes/ThemeProvider'
 import './index.css'
+import './i18n'
+import { LanguageProvider } from './i18n/LanguageProvider'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,12 +23,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 <React.StrictMode>
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
+      <LanguageProvider>
       <ThemeProvider>
       <BrowserRouter>
         <App />
         <Toaster />
       </BrowserRouter>
       </ThemeProvider>
+      </LanguageProvider>
     </AuthProvider>
   </QueryClientProvider>
 </React.StrictMode>,

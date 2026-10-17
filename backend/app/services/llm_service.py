@@ -10,6 +10,9 @@ from typing import Dict, List, Any, Optional
 import time
 import json
 import re
+import asyncio
+from collections import OrderedDict
+from copy import deepcopy
 from ..core.config import settings
 from .ollama_service import ollama_service
 from .grammar_analyzer import sanitize_grammar_analysis
@@ -19,6 +22,7 @@ from .chat_prompt import CHAT_SYSTEM_PROMPT
 class JapaneseLearningService:
     def __init__(self):
         self.provider = settings.llm_provider
+        self._grammar_analysis_cache = OrderedDict()
 
         if self.provider == "ollama":
             self.service = ollama_service
@@ -29,6 +33,12 @@ class JapaneseLearningService:
                 model_name="gpt-3.5-turbo",
                 temperature=0.7,
                 max_tokens=1000
+            )
+            self.grammar_llm = ChatOpenAI(
+                openai_api_key=settings.openai_api_key,
+                model_name="gpt-3.5-turbo",
+                temperature=0,
+                max_tokens=1000,
             )
             self._setup_prompts()
 
@@ -45,7 +55,9 @@ class JapaneseLearningService:
         self.grammar_prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content="""You are SenpaiAI, a Japanese grammar expert for Vietnamese learners.
             Analyze only the given Japanese text. Never invent meanings. If a word is uncertain, write "Chưa chắc chắn về từ này".
+            When Vietnamese is requested, write every explanation, vocabulary meaning, sentence meaning, and suggestion in Vietnamese. Never return English prose. Keep Japanese grammar forms and example sentences in Japanese.
             Do not treat vocabulary items as grammar patterns.
+            Return only essential grammar patterns that actually occur in the input. Use each pattern's canonical textbook form, order patterns by their first occurrence, remove duplicate or equivalent patterns, and return at most 6.
             If Vietnamese is requested, use Vietnamese for all explanations and suggestions. Do not use English unless requested.
             Difficulty score must match JLPT level: N5 simple questions 2-3/10, N4 4/10, N3 5-6/10, N2 7-8/10, N1 9-10/10.
 
@@ -64,7 +76,7 @@ class JapaneseLearningService:
         self.translation_prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content="""You are a professional Japanese-Vietnamese translator.
             Provide accurate, natural translations while preserving the original meaning and tone.
-            For Japanese to Vietnamese: Provide both literal and natural translations.
+            For Japanese to Vietnamese: output Vietnamese only. Do not include English headings or explanations.
             For Vietnamese to Japanese: Provide natural Japanese that sounds native.
             Include pronunciation guides (romaji) for Japanese text when helpful."""),
             HumanMessage(content="Translate this {source_lang} text to {target_lang}: {text}")
@@ -127,15 +139,30 @@ class JapaneseLearningService:
                 "response_time": time.time() - start_time
             }
 
+    async def voice_completion(self, system_prompt: str, prompt: str) -> str:
+        """Run a purpose-built voice conversation prompt without changing regular chat."""
+        if self.provider == "ollama":
+            return await asyncio.to_thread(self.service._call_ollama, prompt, system_prompt)
+        messages = [SystemMessage(content=system_prompt), HumanMessage(content=prompt)]
+        response = await self.llm.agenerate([messages])
+        return response.generations[0][0].text.strip()
+
     async def analyze_grammar(self, text: str, include_vietnamese: bool = False) -> Dict[str, Any]:
         """Analyze Japanese grammar in the given text."""
+        cache_key = (" ".join(text.split()), include_vietnamese)
+        if cache_key in self._grammar_analysis_cache:
+            self._grammar_analysis_cache.move_to_end(cache_key)
+            return deepcopy(self._grammar_analysis_cache[cache_key])
+
         if self.provider == "ollama":
-            return await self.service.analyze_grammar(text, include_vietnamese=include_vietnamese)
+            result = await self.service.analyze_grammar(text, include_vietnamese=include_vietnamese)
+            self._cache_grammar_analysis(cache_key, result)
+            return result
 
         # OpenAI implementation
         try:
             messages = self.grammar_prompt.format_messages(text=text, include_vietnamese=include_vietnamese)
-            response = await self.llm.agenerate([messages])
+            response = await self.grammar_llm.agenerate([messages])
 
             result_text = response.generations[0][0].text.strip()
 
@@ -171,7 +198,9 @@ class JapaneseLearningService:
                     "suggestions": ["Ôn lại các mẫu ngữ pháp xuất hiện trong câu"]
                 }
 
-            return sanitize_grammar_analysis(text, result, include_vietnamese=include_vietnamese)
+            analysis = sanitize_grammar_analysis(text, result, include_vietnamese=include_vietnamese)
+            self._cache_grammar_analysis(cache_key, analysis)
+            return analysis
 
         except Exception as e:
             return sanitize_grammar_analysis(text, {
@@ -180,6 +209,12 @@ class JapaneseLearningService:
                 "difficulty_score": 5.0,
                 "suggestions": []
             }, include_vietnamese=include_vietnamese)
+
+    def _cache_grammar_analysis(self, key: tuple, result: Dict[str, Any]) -> None:
+        self._grammar_analysis_cache[key] = deepcopy(result)
+        self._grammar_analysis_cache.move_to_end(key)
+        while len(self._grammar_analysis_cache) > 256:
+            self._grammar_analysis_cache.popitem(last=False)
 
     async def translate_text(
             self,

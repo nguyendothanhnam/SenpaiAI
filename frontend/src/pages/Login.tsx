@@ -5,6 +5,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useAuth } from '../services/auth'
 import { isValidEmail, isValidPassword, isValidUsername } from '../utils/helpers'
 import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
+import LanguageSwitcher from '../components/LanguageSwitcher'
+import { getErrorMessage } from '../utils/getErrorMessage'
 
 interface LoginFormData {
   email: string
@@ -19,6 +22,7 @@ interface RegisterFormData {
 }
 
 export default function Login() {
+  const { t } = useTranslation('auth')
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -35,9 +39,9 @@ export default function Login() {
     setIsLoading(true)
     try {
       await login(data.email, data.password)
-      toast.success('Welcome back!')
+      toast.success(t('welcome'))
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Login failed')
+      toast.error(getErrorMessage(error))
     } finally {
       setIsLoading(false)
     }
@@ -45,16 +49,16 @@ export default function Login() {
 
   const handleRegister = async (data: RegisterFormData) => {
     if (data.password !== data.confirmPassword) {
-      toast.error('Passwords do not match')
+      toast.error(t('passwordMismatch'))
       return
     }
 
     setIsLoading(true)
     try {
       await register(data.email, data.username, data.password)
-      toast.success('Account created successfully!')
+      toast.success(t('accountCreated'))
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Registration failed')
+      toast.error(getErrorMessage(error))
     } finally {
       setIsLoading(false)
     }
@@ -64,11 +68,12 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-to-br from-orange-100 via-amber-50 to-white px-4 py-10">
       <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md items-center">
         <div className="w-full space-y-6 rounded-3xl border border-white/70 bg-white/80 p-8 shadow-2xl backdrop-blur-md">
+          <div className="flex justify-end"><LanguageSwitcher compact /></div>
           <div className="space-y-2 text-center">
             <h1 className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
               SenpaiAI
             </h1>
-            <p className="text-sm text-gray-600">Learn Japanese smarter</p>
+            <p className="text-sm text-gray-600">{t('tagline')}</p>
           </div>
 
           <div className="rounded-full bg-gray-100/90 p-1">
@@ -82,7 +87,7 @@ export default function Login() {
                     : 'text-gray-600 hover:bg-white/70 hover:text-gray-900'
                 }`}
               >
-                Sign In
+                {t('signInTab')}
               </button>
               <button
                 type="button"
@@ -93,7 +98,7 @@ export default function Login() {
                     : 'text-gray-600 hover:bg-white/70 hover:text-gray-900'
                 }`}
               >
-                Sign Up
+                {t('signUpTab')}
               </button>
             </div>
           </div>
@@ -111,40 +116,41 @@ export default function Login() {
               >
                 <div>
                   <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
-                    Email address
+                    {t('email')}
                   </label>
                   <input
                     {...loginForm.register('email', {
-                      required: 'Email is required',
-                      validate: (value) => isValidEmail(value) || 'Invalid email format'
+                      required: 'validation.emailRequired',
+                      validate: (value) => isValidEmail(value) || 'validation.emailInvalid'
                     })}
                     type="email"
                     className={inputClassName}
-                    placeholder="Enter your email"
+                    placeholder={t('emailPlaceholder')}
                   />
                   {loginForm.formState.errors.email && (
                     <p className="mt-1 text-sm text-red-600">
-                      {loginForm.formState.errors.email.message}
+                      {t(loginForm.formState.errors.email.message || '')}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
-                    Password
+                    {t('password')}
                   </label>
                   <div className="relative">
                     <input
                       {...loginForm.register('password', {
-                        required: 'Password is required'
+                        required: 'validation.passwordRequired'
                       })}
                       type={showPassword ? 'text' : 'password'}
                       className={`${inputClassName} pr-11`}
-                      placeholder="Enter your password"
+                      placeholder={t('passwordPlaceholder')}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? t('hidePassword') : t('showPassword')}
                       className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 transition hover:text-orange-500"
                     >
                       {showPassword ? (
@@ -156,7 +162,7 @@ export default function Login() {
                   </div>
                   {loginForm.formState.errors.password && (
                     <p className="mt-1 text-sm text-red-600">
-                      {loginForm.formState.errors.password.message}
+                      {t(loginForm.formState.errors.password.message || '')}
                     </p>
                   )}
                 </div>
@@ -169,10 +175,10 @@ export default function Login() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Signing in...
+                      {t('signingIn')}
                     </>
                   ) : (
-                    'Sign in'
+                    t('signIn')
                   )}
                 </button>
               </motion.form>
@@ -188,61 +194,62 @@ export default function Login() {
               >
                 <div>
                   <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
-                    Email address
+                    {t('email')}
                   </label>
                   <input
                     {...registerForm.register('email', {
-                      required: 'Email is required',
-                      validate: (value) => isValidEmail(value) || 'Invalid email format'
+                      required: 'validation.emailRequired',
+                      validate: (value) => isValidEmail(value) || 'validation.emailInvalid'
                     })}
                     type="email"
                     className={inputClassName}
-                    placeholder="Enter your email"
+                    placeholder={t('emailPlaceholder')}
                   />
                   {registerForm.formState.errors.email && (
                     <p className="mt-1 text-sm text-red-600">
-                      {registerForm.formState.errors.email.message}
+                      {t(registerForm.formState.errors.email.message || '')}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label htmlFor="username" className="mb-2 block text-sm font-medium text-gray-700">
-                    Username
+                    {t('username')}
                   </label>
                   <input
                     {...registerForm.register('username', {
-                      required: 'Username is required',
-                      validate: (value) => isValidUsername(value) || 'Username must be 3-20 characters and contain only letters, numbers, and underscores'
+                      required: 'validation.usernameRequired',
+                      validate: (value) => isValidUsername(value) || 'validation.usernameInvalid'
                     })}
                     type="text"
                     className={inputClassName}
-                    placeholder="Choose a username"
+                    placeholder={t('usernamePlaceholder')}
                   />
                   {registerForm.formState.errors.username && (
                     <p className="mt-1 text-sm text-red-600">
-                      {registerForm.formState.errors.username.message}
+                      {t(registerForm.formState.errors.username.message || '')}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
-                    Password
+                    {t('password')}
                   </label>
                   <div className="relative">
                     <input
                       {...registerForm.register('password', {
-                        required: 'Password is required',
-                        validate: (value) => isValidPassword(value) || 'Password must be at least 6 characters'
+                        required: 'validation.passwordRequired',
+                        validate: (value) => isValidPassword(value) || 'validation.passwordMin'
                       })}
                       type={showPassword ? 'text' : 'password'}
                       className={`${inputClassName} pr-11`}
-                      placeholder="Create a password"
+                      placeholder={t('newPasswordPlaceholder')}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? t('hidePassword') : t('showPassword')}
                       className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 transition hover:text-orange-500"
                     >
                       {showPassword ? (
@@ -254,27 +261,28 @@ export default function Login() {
                   </div>
                   {registerForm.formState.errors.password && (
                     <p className="mt-1 text-sm text-red-600">
-                      {registerForm.formState.errors.password.message}
+                      {t(registerForm.formState.errors.password.message || '')}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label htmlFor="confirmPassword" className="mb-2 block text-sm font-medium text-gray-700">
-                    Confirm Password
+                    {t('confirmPassword')}
                   </label>
                   <div className="relative">
                     <input
                       {...registerForm.register('confirmPassword', {
-                        required: 'Please confirm your password'
+                        required: 'validation.confirmRequired'
                       })}
                       type={showConfirmPassword ? 'text' : 'password'}
                       className={`${inputClassName} pr-11`}
-                      placeholder="Confirm your password"
+                      placeholder={t('confirmPlaceholder')}
                     />
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
                       className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 transition hover:text-orange-500"
                     >
                       {showConfirmPassword ? (
@@ -286,7 +294,7 @@ export default function Login() {
                   </div>
                   {registerForm.formState.errors.confirmPassword && (
                     <p className="mt-1 text-sm text-red-600">
-                      {registerForm.formState.errors.confirmPassword.message}
+                      {t(registerForm.formState.errors.confirmPassword.message || '')}
                     </p>
                   )}
                 </div>
@@ -299,10 +307,10 @@ export default function Login() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
+                      {t('creatingAccount')}
                     </>
                   ) : (
-                    'Create account'
+                    t('signUp')
                   )}
                 </button>
               </motion.form>

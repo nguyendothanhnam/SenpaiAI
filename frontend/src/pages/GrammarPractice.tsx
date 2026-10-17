@@ -9,6 +9,7 @@ import QuestionTrueFalse from '../components/grammar/QuestionTrueFalse'
 import QuestionConjugation from '../components/grammar/QuestionConjugation'
 import FeedbackPanel from '../components/grammar/FeedbackPanel'
 import SessionResult from '../components/grammar/SessionResult'
+import GrammarTabs from '../components/layout/GrammarTabs'
 import { grammarPracticeAPI } from '../services/api'
 import type {
   GrammarAnswerResult, GrammarPattern, GrammarPracticeMode,
@@ -86,7 +87,7 @@ export default function GrammarPractice() {
         questionStartedAt.current = Date.now()
         if (data.message) toast(data.message, { icon: 'ℹ️', duration: 6000 })
       },
-      onError: (error: any) => toast.error(errorMessage(error, 'Không thể tạo buổi luyện. Hãy kiểm tra kết nối rồi thử lại.')),
+      onError: (error: any) => { toast.error(errorMessage(error, 'Không thể tạo buổi luyện. Hãy kiểm tra kết nối rồi thử lại.')) },
     },
   )
 
@@ -113,7 +114,7 @@ export default function GrammarPractice() {
     },
     {
       onSuccess: (data) => { setResult(data); setScreen('result') },
-      onError: (error: any) => toast.error(errorMessage(error, 'Không thể lưu kết quả. Hãy thử kết thúc phiên lần nữa.')),
+      onError: (error: any) => { toast.error(errorMessage(error, 'Không thể lưu kết quả. Hãy thử kết thúc phiên lần nữa.')) },
     },
   )
 
@@ -228,6 +229,7 @@ export default function GrammarPractice() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 pb-8">
+      <GrammarTabs />
       <header className="theme-card flex flex-col gap-4 rounded-3xl p-5 shadow-[var(--shadow-card)] sm:flex-row sm:items-center sm:justify-between sm:p-6">
         <div className="flex items-start gap-3">
           <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]"><Brain className="h-6 w-6" /></div>

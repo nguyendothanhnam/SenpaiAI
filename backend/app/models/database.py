@@ -11,10 +11,12 @@ from sqlalchemy import (
     Boolean,
     String,
     Text,
+    Uuid,
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+import uuid
 from ..core.database import Base
 
 
@@ -33,6 +35,7 @@ class User(Base):
     current_jlpt_level = Column(String, default="N5")  # N5, N4, N3, N2, N1
     learning_goals = Column(JSON, default=list)
     exercise_points = Column(Integer, default=0, server_default="0", nullable=False)
+    ui_language = Column(String(2), nullable=True)
 
     # Relationships
     chat_history = relationship("ChatHistory", back_populates="user")
@@ -144,10 +147,62 @@ class StudyItemStat(Base):
     last_seen_at = Column(DateTime(timezone=True), nullable=True)
 
 
+class ReminderSettings(Base):
+    __tablename__ = "reminder_settings"
+
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    enabled = Column(Boolean, nullable=False, default=True, server_default="true")
+    timezone = Column(String(100), nullable=False, default="Asia/Ho_Chi_Minh", server_default="Asia/Ho_Chi_Minh")
+    reminder_time = Column(String(5), nullable=False, default="20:00", server_default="20:00")
+    days_of_week = Column(JSON, nullable=False, default=lambda: list(range(7)))
+    types = Column(JSON, nullable=False, default=lambda: ["daily_task", "streak_risk", "review_due"])
+    quiet_start = Column(String(5), nullable=False, default="22:00", server_default="22:00")
+    quiet_end = Column(String(5), nullable=False, default="07:00", server_default="07:00")
+    push_enabled = Column(Boolean, nullable=False, default=False, server_default="false")
+    max_per_day = Column(Integer, nullable=False, default=3, server_default="3")
+    snooze_until = Column(DateTime(timezone=True), nullable=True)
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+    __table_args__ = (
+        UniqueConstraint("dedupe_key", name="uq_notifications_dedupe_key"),
+        Index("ix_notifications_user_created", "user_id", "created_at"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    type = Column(String(40), nullable=False)
+    title = Column(String(200), nullable=False)
+    body = Column(Text, nullable=False)
+    url = Column(String(500), nullable=False, default="/daily", server_default="/daily")
+    data = Column(JSON, nullable=False, default=dict)
+    dedupe_key = Column(String(255), nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    read_at = Column(DateTime(timezone=True), nullable=True)
+    push_sent_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class PushSubscription(Base):
+    __tablename__ = "push_subscriptions"
+    __table_args__ = (UniqueConstraint("endpoint", name="uq_push_subscriptions_endpoint"),)
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    endpoint = Column(Text, nullable=False)
+    p256dh = Column(Text, nullable=False)
+    auth = Column(Text, nullable=False)
+    user_agent = Column(String(500), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    last_success_at = Column(DateTime(timezone=True), nullable=True)
+    failed_count = Column(Integer, nullable=False, default=0, server_default="0")
+
+
 class ChatHistory(Base):
     __tablename__ = "chat_history"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     question = Column(Text, nullable=False)
     answer = Column(Text, nullable=False)
@@ -155,6 +210,10 @@ class ChatHistory(Base):
     grammar_points = Column(JSON)  # Extracted grammar points
     translation = Column(Text)  # Vietnamese translation if requested
     sources = Column(JSON)  # RAG sources used
+    input_mode = Column(String(20), nullable=True, default="text", server_default="text")
+    conversation_id = Column(Uuid(as_uuid=True), nullable=True, index=True)
+    scenario = Column(String(80), nullable=True)
+    feedback = Column(JSON, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
@@ -177,6 +236,53 @@ class LearningSession(Base):
 
     # Relationships
     user = relationship("User", back_populates="learning_sessions")
+
+
+class VoiceConversation(Base):
+    __tablename__ = "voice_conversations"
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    scenario_id = Column(String(80), nullable=False)
+    jlpt_level = Column(String(2), nullable=False)
+    status = Column(String(20), nullable=False, default="active", server_default="active")
+    started_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    ended_at = Column(DateTime(timezone=True), nullable=True)
+    summary = Column(JSON, nullable=True)
+
+
+class ListeningLesson(Base):
+    __tablename__ = "listening_lessons"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(200), nullable=False)
+    jlpt_level = Column(String(2), nullable=False, index=True)
+    topic = Column(String(80), nullable=False, index=True)
+    description = Column(Text, nullable=True)
+    segments = Column(JSON, nullable=False)
+    audio_path = Column(String(255), nullable=True)
+    duration_ms = Column(Integer, nullable=False, default=0, server_default="0")
+    source = Column(String(20), nullable=False, default="seed", server_default="seed")
+    is_published = Column(Boolean, nullable=False, default=False, server_default="false")
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+class ListeningAttempt(Base):
+    __tablename__ = "listening_attempts"
+    __table_args__ = (
+        CheckConstraint("mode IN ('dictation', 'comprehension', 'cloze')", name="ck_listening_attempts_mode"),
+        Index("ix_listening_attempts_user_created", "user_id", "created_at"),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    lesson_id = Column(Integer, ForeignKey("listening_lessons.id", ondelete="CASCADE"), nullable=False, index=True)
+    mode = Column(String(20), nullable=False)
+    score = Column(Float, nullable=False)
+    details = Column(JSON, nullable=True)
+    duration_ms = Column(Integer, nullable=False, default=0, server_default="0")
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
 class Document(Base):
