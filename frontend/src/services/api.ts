@@ -133,10 +133,12 @@ export const pushAPI = {
 }
 
 export const listeningAPI = {
-  getLessons: (params: { jlpt_level?: string; topic?: string; search?: string; limit?: number; offset?: number } = {}) =>
+  getLessons: (params: { jlpt_level?: string; topic?: string; search?: string; source?: string; limit?: number; offset?: number } = {}) =>
     api.get<{ items: ListeningLessonSummary[]; total: number; limit: number; offset: number }>('/listening/lessons', { params }),
   getLesson: (id: number) => api.get<ListeningLesson>(`/listening/lessons/${id}`),
   getAudio: (id: number) => api.get<Blob>(`/listening/lessons/${id}/audio`, { responseType: 'blob' }),
+  createFromLibraryDraft: (data: { document_id: number; topic?: string }) => api.post('/listening/lessons/from-library', data),
+  saveFromLibrary: (data: { document_id: number; title: string; description: string; jlpt_level: string; topic: string; segments: Array<{ ja: string; vi: string }> }) => api.post<ListeningLesson>('/listening/lessons/from-library/save', data),
 }
 
 export type DailyItemType = 'grammar' | 'kanji' | 'vocab' | 'flashcard'
@@ -280,6 +282,8 @@ export const grammarPracticeAPI = {
   finish: (sessionId: number) => api.post<GrammarSessionResult>(`/grammar-practice/sessions/${sessionId}/finish`),
   generate: (data: { jlpt_level: JlptLevel; grammar_rule_id: number; question_type: GrammarQuestionType; count: number }) =>
     api.post<{ requested: number; saved: number; rejected: number }>('/grammar-practice/generate', data),
+  generateFromLibrary: (data: { document_id: number; jlpt_level: JlptLevel; question_type: GrammarQuestionType; count: number }) =>
+    api.post<{ requested: number; saved: number; rejected: number; limited: boolean; question_ids: number[] }>('/grammar-practice/from-library', data),
 }
 
 export const libraryAPI = {

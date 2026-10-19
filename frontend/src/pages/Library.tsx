@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -6,12 +6,15 @@ import {
   AlertTriangle,
   ArrowDownAZ,
   BookOpen,
+  Brain,
   Calendar,
+  Copy,
   Database,
   ExternalLink,
   FilePlus2,
   Layers3,
   Library as LibraryIcon,
+  Headphones,
   Pencil,
   Search,
   Tags,
@@ -19,7 +22,8 @@ import {
   X,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { libraryAPI } from '../services/api'
+import { useNavigate } from 'react-router-dom'
+import { grammarPracticeAPI, libraryAPI, listeningAPI, type GrammarQuestionType, type JlptLevel } from '../services/api'
 import { useAuth } from '../services/auth'
 import { formatDate } from '../utils/helpers'
 
@@ -69,6 +73,18 @@ interface Categories {
 const PAGE_SIZE = 12
 const fallbackTypes = ['vocabulary', 'grammar', 'lesson', 'culture', 'example']
 const fallbackJlpt = ['N5', 'N4', 'N3', 'N2', 'N1']
+const DOCUMENT_TYPE_LABELS = {
+  vocabulary: 'library.documentTypes.vocabulary',
+  grammar: 'library.documentTypes.grammar',
+  lesson: 'library.documentTypes.lesson',
+  culture: 'library.documentTypes.culture',
+  example: 'library.documentTypes.example',
+} as const
+const SORT_LABELS = {
+  newest: 'library.sortOptions.newest',
+  relevance: 'library.sortOptions.relevance',
+  alphabetical: 'library.sortOptions.alphabetical',
+} as const
 
 const emptyForm = {
   title: '',
@@ -88,22 +104,31 @@ function parseTags(tags: string) {
     .filter(Boolean)
 }
 
-function validateDocument(form: DocumentForm) {
+function validateDocument(form: DocumentForm, t: ReturnType<typeof useTranslation>['t']) {
   const errors: Partial<Record<keyof DocumentForm, string>> = {}
-  if (!form.title.trim()) errors.title = 'Title is required'
-  if (!form.document_type.trim()) errors.document_type = 'Document type is required'
-  if (!form.content.trim()) errors.content = 'Content is required'
+  if (!form.title.trim()) errors.title = t('library.validation.titleRequired')
+  if (!form.document_type.trim()) errors.document_type = t('library.validation.typeRequired')
+  if (!form.content.trim()) errors.content = t('library.validation.contentRequired')
   if (form.source_url.trim()) {
     try {
       const parsed = new URL(form.source_url.trim())
       if (!['http:', 'https:'].includes(parsed.protocol)) {
-        throw new Error('Unsupported protocol')
+        throw new Error('unsupported-protocol')
       }
     } catch {
-      errors.source_url = 'Source URL must start with http:// or https://'
+      errors.source_url = t('library.validation.sourceUrlInvalid')
     }
   }
   return { success: Object.keys(errors).length === 0, errors }
+}
+
+function documentTypeLabel(type: string, t: ReturnType<typeof useTranslation>['t']) {
+  const key = DOCUMENT_TYPE_LABELS[type as keyof typeof DOCUMENT_TYPE_LABELS]
+  return key ? t(key) : type
+}
+
+function sortLabel(sort: keyof typeof SORT_LABELS, t: ReturnType<typeof useTranslation>['t']) {
+  return t(SORT_LABELS[sort])
 }
 
 function buildPayload(form: DocumentForm) {
@@ -115,6 +140,15 @@ function buildPayload(form: DocumentForm) {
     source_url: form.source_url.trim() || null,
     content: form.content.trim(),
   }
+}
+
+function libraryGenerationErrorKey(error: any, t: ReturnType<typeof useTranslation>['t']) {
+  const status = error?.response?.status
+  const detail = String(error?.response?.data?.detail || '').toLowerCase()
+  if (status === 429 || /rate|limit/.test(detail)) return t('library.generationRateLimit')
+  if (status === 413) return t('library.documentTooLong')
+  if (status === 422 || /short|content/.test(detail)) return t('library.documentTooShort')
+  return t('library.generationError')
 }
 
 function SkeletonCard() {
@@ -143,7 +177,7 @@ function statCount(value: Record<string, number> | number | undefined) {
   return 0
 }
 
-function Badge({ children, tone = 'violet' }: { children: React.ReactNode; tone?: 'violet' | 'gray' | 'amber' }) {
+function Badge({ children, tone = 'violet' }: { children: ReactNode; tone?: 'violet' | 'gray' | 'amber' }) {
   const styles = {
     violet: 'bg-violet-50 text-violet-700',
     gray: 'bg-gray-100 text-gray-700',
@@ -152,11 +186,11 @@ function Badge({ children, tone = 'violet' }: { children: React.ReactNode; tone?
   return <span className={`rounded-full px-3 py-1 text-xs font-bold ${styles[tone]}`}>{children}</span>
 }
 
-function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+function Modal({ children, onClose }: { children: ReactNode; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-gray-950/45 p-4 backdrop-blur-sm">
-      <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.98 }} className="max-h-[92vh] w-full max-w-3xl overflow-auto rounded-2xl bg-white shadow-2xl">
-        <button type="button" onClick={onClose} className="absolute right-5 top-5 rounded-full bg-white/90 p-2 text-gray-500 shadow-sm hover:text-gray-900">
+      <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.98 }} className="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-2xl bg-[color:var(--bg-elevated)] text-[color:var(--text)] shadow-2xl">
+        <button type="button" onClick={onClose} className="absolute right-5 top-5 rounded-full bg-[color:var(--bg-elevated)] p-2 text-[color:var(--text-muted)] shadow-sm hover:text-[color:var(--text)]">
           <X className="h-5 w-5" />
         </button>
         {children}
@@ -178,9 +212,9 @@ function DocumentFormModal({
   initial?: LibraryDocument | null
   saving: boolean
   onClose: () => void
-  onSubmit: (payload: any) => void
+  onSubmit: Function
   allowSystemScope: boolean
-  t: (key: string) => string
+  t: ReturnType<typeof useTranslation>['t']
 }) {
   const [form, setForm] = useState<DocumentForm>(
     initial
@@ -197,8 +231,15 @@ function DocumentFormModal({
   const [errors, setErrors] = useState<Partial<Record<keyof DocumentForm, string>>>({})
   const [scope, setScope] = useState<'personal' | 'system'>(initial?.scope === 'system' ? 'system' : 'personal')
   const [fetchError, setFetchError] = useState('')
+  const [showPromptTemplate, setShowPromptTemplate] = useState(false)
   const types = categories?.document_types?.length ? categories.document_types : fallbackTypes
   const levels = categories?.jlpt_levels?.length ? categories.jlpt_levels : fallbackJlpt
+  const promptOutline = t(`library.promptOutlines.${form.document_type}`, { defaultValue: t('library.promptOutlines.default') })
+  const promptText = t('library.promptText', {
+    type: documentTypeLabel(form.document_type, t),
+    level: form.jlpt_level || t('library.promptAnyLevel'),
+    outline: promptOutline,
+  })
   const fetchUrlMutation = useMutation((url: string) => libraryAPI.fetchUrl(url), {
     onSuccess: (response) => {
       const data = response.data as { title: string; content: string; source_url: string }
@@ -209,18 +250,18 @@ function DocumentFormModal({
       }))
       setErrors((current) => ({ ...current, source_url: undefined, content: undefined, title: undefined }))
       setFetchError('')
-      toast.success('Page content fetched.')
+      toast.success(t('library.pageContentFetched'))
     },
-    onError: (error: any) => {
-      const detail = error.response?.data?.detail || 'Could not read that URL. Check the address and try again.'
-      setFetchError(detail)
-      toast.error(detail)
+    onError: () => {
+      const message = t('library.fetchUrlError')
+      setFetchError(message)
+      toast.error(message)
     },
   })
 
-  const submit = (event: React.FormEvent) => {
+  const submit = (event: FormEvent) => {
     event.preventDefault()
-    const result = validateDocument(form)
+    const result = validateDocument(form, t)
     setErrors(result.errors)
     if (!result.success) return
     onSubmit(initial ? buildPayload(form) : { ...buildPayload(form), scope })
@@ -230,27 +271,36 @@ function DocumentFormModal({
     const sourceUrl = form.source_url.trim()
     setFetchError('')
     if (!sourceUrl) {
-      setErrors((current) => ({ ...current, source_url: 'Enter a URL before fetching' }))
+      setErrors((current) => ({ ...current, source_url: t('library.validation.urlRequired') }))
       return
     }
     try {
       const parsed = new URL(sourceUrl)
       if (!['http:', 'https:'].includes(parsed.protocol)) {
-        throw new Error('Unsupported protocol')
+        throw new Error('unsupported-protocol')
       }
     } catch {
-      setErrors((current) => ({ ...current, source_url: 'Source URL must start with http:// or https://' }))
+      setErrors((current) => ({ ...current, source_url: t('library.validation.sourceUrlInvalid') }))
       return
     }
     fetchUrlMutation.mutate(sourceUrl)
+  }
+
+  const copyPromptTemplate = async () => {
+    try {
+      await navigator.clipboard.writeText(promptText)
+      toast.success(t('library.promptCopied'))
+    } catch {
+      toast.error(t('library.promptCopyError'))
+    }
   }
 
   return (
     <Modal onClose={onClose}>
       <form onSubmit={submit} className="p-6">
         <div className="pr-12">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">{initial ? 'Edit document' : 'Add new document'}</p>
-          <h2 className="mt-2 text-2xl font-bold text-gray-950">{initial ? initial.title : 'Create library document'}</h2>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">{initial ? t('library.editDocument') : t('library.addNewDocument')}</p>
+          <h2 className="mt-2 text-2xl font-bold text-gray-950">{initial ? initial.title : t('library.createDocument')}</h2>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -265,33 +315,33 @@ function DocumentFormModal({
             </label>
           )}
           <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">Title *</span>
+            <span className="text-sm font-bold text-gray-700">{t('library.fields.title')} *</span>
             <input value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} className="input border-violet-200 focus:ring-violet-200" />
             {errors.title && <span className="text-xs font-semibold text-red-600">{errors.title}</span>}
           </label>
           <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">Document Type *</span>
+            <span className="text-sm font-bold text-gray-700">{t('library.fields.documentType')} *</span>
             <select value={form.document_type} onChange={(event) => setForm((current) => ({ ...current, document_type: event.target.value }))} className="input border-violet-200 focus:ring-violet-200">
               {types.map((type) => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>{documentTypeLabel(type, t)}</option>
               ))}
             </select>
           </label>
           <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">JLPT Level</span>
+            <span className="text-sm font-bold text-gray-700">{t('library.fields.jlptLevel')}</span>
             <select value={form.jlpt_level} onChange={(event) => setForm((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-violet-200 focus:ring-violet-200">
-              <option value="">No level</option>
+              <option value="">{t('library.noLevel')}</option>
               {levels.map((level) => (
                 <option key={level} value={level}>{level}</option>
               ))}
             </select>
           </label>
           <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">Tags</span>
-            <input value={form.tags} onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))} placeholder="grammar, particles, n5" className="input border-violet-200 focus:ring-violet-200" />
+            <span className="text-sm font-bold text-gray-700">{t('library.fields.tags')}</span>
+            <input value={form.tags} onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))} placeholder={t('library.tagsPlaceholder')} className="input border-violet-200 focus:ring-violet-200" />
           </label>
           <label className="space-y-1 md:col-span-2">
-            <span className="text-sm font-bold text-gray-700">Source URL</span>
+            <span className="text-sm font-bold text-gray-700">{t('library.fields.sourceUrl')}</span>
             <div className="flex flex-col gap-2 sm:flex-row">
               <input value={form.source_url} onChange={(event) => setForm((current) => ({ ...current, source_url: event.target.value }))} placeholder="https://..." className="input min-w-0 flex-1 border-violet-200 focus:ring-violet-200" />
               <button
@@ -300,7 +350,7 @@ function DocumentFormModal({
                 disabled={fetchUrlMutation.isLoading}
                 className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-60"
               >
-                {fetchUrlMutation.isLoading ? 'Fetching...' : 'Fetch from URL'}
+                {fetchUrlMutation.isLoading ? t('library.fetching') : t('library.fetchFromUrl')}
               </button>
             </div>
             {errors.source_url && <span className="text-xs font-semibold text-red-600">{errors.source_url}</span>}
@@ -309,15 +359,23 @@ function DocumentFormModal({
         </div>
 
         <label className="mt-4 block space-y-1">
-          <span className="text-sm font-bold text-gray-700">Content *</span>
-          <textarea value={form.content} onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))} rows={11} placeholder="Paste grammar notes, vocabulary explanations, examples, or lesson content..." className="input h-auto border-violet-200 font-japanese leading-7 focus:ring-violet-200" />
+          <span className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-sm font-bold text-gray-700">{t('library.fields.content')} *</span>
+            {!initial && <button type="button" aria-expanded={showPromptTemplate} onClick={() => setShowPromptTemplate((value) => !value)} className="inline-flex items-center gap-1.5 rounded-lg border border-[color:var(--border)] px-3 py-1.5 text-xs font-semibold text-[color:var(--primary)] transition hover:bg-[color:var(--accent)]"><Copy className="h-3.5 w-3.5" />{t('library.promptTemplate')}</button>}
+          </span>
+          {showPromptTemplate && <div className="space-y-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3">
+            <p className="text-xs text-[color:var(--text-muted)]">{t('library.promptTemplateHelp')}</p>
+            <textarea readOnly value={promptText} rows={7} className="input h-auto w-full font-mono text-xs leading-5" aria-label={t('library.promptTemplate')} />
+            <button type="button" onClick={() => void copyPromptTemplate()} className="btn btn-outline rounded-lg px-3 py-1.5 text-xs"><Copy className="mr-1.5 h-3.5 w-3.5" />{t('library.copyPrompt')}</button>
+          </div>}
+          <textarea value={form.content} onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))} rows={11} placeholder={t('library.contentPlaceholder')} className="input h-auto border-violet-200 font-japanese leading-7 focus:ring-violet-200" />
           {errors.content && <span className="text-xs font-semibold text-red-600">{errors.content}</span>}
         </label>
 
         <div className="mt-6 flex flex-wrap justify-end gap-3">
-          <button type="button" onClick={onClose} className="btn btn-outline rounded-xl border-gray-200 px-5">Cancel</button>
+          <button type="button" onClick={onClose} className="btn btn-outline rounded-xl border-gray-200 px-5">{t('library.cancel')}</button>
           <button type="submit" disabled={saving} className="btn btn-primary rounded-xl px-5 text-white disabled:opacity-60">
-            {saving ? 'Saving...' : initial ? 'Save Changes' : 'Add Document'}
+            {saving ? t('library.saving') : initial ? t('library.saveChanges') : t('library.addDocument')}
           </button>
         </div>
       </form>
@@ -328,16 +386,25 @@ function DocumentFormModal({
 export default function Library() {
   const { t } = useTranslation('common')
   const { user } = useAuth()
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [filters, setFilters] = useState({ query: '', document_type: '', jlpt_level: '' })
   const [searchPayload, setSearchPayload] = useState({ query: '', document_type: '', jlpt_level: '' })
   const [sort, setSort] = useState<'newest' | 'relevance' | 'alphabetical'>('newest')
   const [scope, setScope] = useState<'all' | 'mine' | 'system'>('all')
   const [page, setPage] = useState(1)
+  const [pageInput, setPageInput] = useState('1')
   const [selected, setSelected] = useState<LibraryDocument | null>(null)
   const [editing, setEditing] = useState<LibraryDocument | null>(null)
   const [formOpen, setFormOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState<LibraryDocument | null>(null)
+  const [actionDocument, setActionDocument] = useState<LibraryDocument | null>(null)
+  const [actionKind, setActionKind] = useState<'grammar' | 'listening' | null>(null)
+  const [questionType, setQuestionType] = useState<GrammarQuestionType>('fill_blank')
+  const [questionCount, setQuestionCount] = useState(5)
+  const [grammarResult, setGrammarResult] = useState<{ requested: number; saved: number; rejected: number; limited: boolean; question_ids: number[] } | null>(null)
+  const [listeningDraft, setListeningDraft] = useState<any>(null)
+  const [actionError, setActionError] = useState('')
   const offset = (page - 1) * PAGE_SIZE
   const hasSearch = Boolean(searchPayload.query.trim())
 
@@ -386,7 +453,7 @@ export default function Library() {
       enabled: hasSearch,
       keepPreviousData: true,
       refetchOnWindowFocus: false,
-      onError: () => toast.error('Failed to search documents'),
+      onError: () => toast.error(t('library.searchError')),
     }
   )
 
@@ -396,6 +463,47 @@ export default function Library() {
   const canDeleteDocument = (document: LibraryDocument) => document.can_delete ?? document.is_mine === true
   const isSystemDocument = (document: LibraryDocument) =>
     document.scope === 'system' ? true : document.scope === 'personal' || document.is_mine === true ? false : null
+  const canUseDocument = (document: LibraryDocument) =>
+    isSystemDocument(document) === true || (isSystemDocument(document) === false && canEditDocument(document))
+
+  const grammarGenerationMutation = useMutation(
+    (document: LibraryDocument) => grammarPracticeAPI.generateFromLibrary({
+      document_id: document.id,
+      jlpt_level: (document.jlpt_level || user?.current_jlpt_level || 'N5') as JlptLevel,
+      question_type: questionType,
+      count: questionCount,
+    }).then(({ data }) => data),
+    {
+      onSuccess: (result) => {
+        setGrammarResult(result)
+        setActionError(result.limited && result.saved === 0 ? t('library.generationRateLimit') : result.saved === 0 ? t('library.noQuestionsGenerated') : '')
+      },
+      onError: (error: any) => setActionError(libraryGenerationErrorKey(error, t)),
+    },
+  )
+
+  const listeningDraftMutation = useMutation(
+    (documentId: number) => listeningAPI.createFromLibraryDraft({ document_id: documentId }).then(({ data }) => data),
+    {
+      onSuccess: (draft) => { setListeningDraft(draft); setActionError('') },
+      onError: (error: any) => setActionError(libraryGenerationErrorKey(error, t)),
+    },
+  )
+
+  const listeningSaveMutation = useMutation(
+    (payload: { document_id: number; title: string; description: string; jlpt_level: string; topic: string; segments: Array<{ ja: string; vi: string }> }) =>
+      listeningAPI.saveFromLibrary(payload).then(({ data }) => data),
+    {
+      onSuccess: (lesson) => {
+        setActionKind(null)
+        setActionDocument(null)
+        setListeningDraft(null)
+        toast.success(t('library.lessonSaved'))
+        navigate(`/listening/${lesson.id}`)
+      },
+      onError: () => setActionError(t('library.lessonSaveError')),
+    },
+  )
 
   const showSaveError = (error: any) => {
     const status = error.response?.status
@@ -403,7 +511,7 @@ export default function Library() {
     if (status === 413 || (status === 400 && /limit|maximum|too long|exceed/.test(detail))) {
       toast.error(t('library.limitError'))
     } else {
-      toast.error(error.response?.data?.detail || t('library.saveError'))
+      toast.error(t('library.saveError'))
     }
   }
 
@@ -415,9 +523,9 @@ export default function Library() {
       queryClient.invalidateQueries('librarySearch')
       setFormOpen(false)
       if (response.data?.indexing_warning) {
-        toast(response.data.indexing_warning)
+        toast(t('library.indexingWarning'))
       } else {
-        toast.success('Document added successfully.')
+        toast.success(t('library.documentAdded'))
       }
     },
     onError: (error: any) => {
@@ -434,9 +542,9 @@ export default function Library() {
       setSelected(response.data)
       setEditing(null)
       if (response.data?.indexing_warning) {
-        toast(response.data.indexing_warning)
+        toast(t('library.indexingWarning'))
       } else {
-        toast.success('Document updated successfully')
+        toast.success(t('library.documentUpdated'))
       }
     },
     onError: (error: any) => {
@@ -452,7 +560,7 @@ export default function Library() {
       queryClient.invalidateQueries('librarySearch')
       setSelected(null)
       setDeleteTarget(null)
-      toast.success('Document deleted')
+      toast.success(t('library.documentDeleted'))
     },
     onError: () => {
       toast.error(t('library.deleteError'))
@@ -469,8 +577,29 @@ export default function Library() {
   }, [activeData?.items, hasSearch, sort])
   const total = activeData?.total || 0
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  useEffect(() => setPageInput(String(page)), [page])
   const types = categoriesQuery.data?.document_types?.length ? fallbackTypes.filter((type) => categoriesQuery.data?.document_types.includes(type)) : fallbackTypes
   const levels = categoriesQuery.data?.jlpt_levels?.length ? categoriesQuery.data.jlpt_levels : fallbackJlpt
+
+  const openGeneration = (document: LibraryDocument, kind: 'grammar' | 'listening') => {
+    setActionDocument(document)
+    setActionKind(kind)
+    setGrammarResult(null)
+    setListeningDraft(null)
+    setActionError('')
+    setQuestionType('fill_blank')
+    setQuestionCount(5)
+    if (kind === 'listening') listeningDraftMutation.mutate(document.id)
+  }
+
+  const closeGeneration = () => {
+    if (grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading) return
+    setActionKind(null)
+    setActionDocument(null)
+    setGrammarResult(null)
+    setListeningDraft(null)
+    setActionError('')
+  }
 
   return (
     <div className="space-y-6">
@@ -480,24 +609,24 @@ export default function Library() {
             <LibraryIcon className="h-6 w-6 text-[color:var(--primary-contrast)]" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-950">JLPT Document Library</h1>
-            <p className="mt-1 text-sm text-gray-600">Search, manage, and index Japanese learning material with semantic retrieval.</p>
+            <h1 className="text-3xl font-bold text-gray-950">{t('library.pageTitle')}</h1>
+            <p className="mt-1 text-sm text-gray-600">{t('library.pageSubtitle')}</p>
           </div>
         </div>
         <button type="button" onClick={() => setFormOpen(true)} className="btn btn-primary rounded-xl px-5 py-3 shadow-md">
           <FilePlus2 className="mr-2 h-4 w-4" />
-          Add New Document
+          {t('library.addNewDocument')}
         </button>
       </div>
 
       {statsQuery.isError ? (
-        <div className="rounded-2xl border border-red-100 bg-red-50 p-4 text-sm font-semibold text-red-700">Unable to load library statistics.</div>
+        <div className="rounded-2xl border border-red-100 bg-red-50 p-4 text-sm font-semibold text-red-700">{t('library.statsError')}</div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Total Documents" value={statsQuery.data?.total_documents || 0} icon={BookOpen} loading={statsQuery.isLoading} />
-          <StatCard label="Document Types" value={statCount(statsQuery.data?.document_types)} icon={Layers3} loading={statsQuery.isLoading} />
-          <StatCard label="JLPT Levels" value={statCount(statsQuery.data?.jlpt_levels)} icon={Tags} loading={statsQuery.isLoading} />
-          <StatCard label="Vector Chunks" value={statsQuery.data?.vector_chunks || 0} icon={Database} loading={statsQuery.isLoading} />
+          <StatCard label={t('library.stats.totalDocuments')} value={statsQuery.data?.total_documents || 0} icon={BookOpen} loading={statsQuery.isLoading} />
+          <StatCard label={t('library.stats.documentTypes')} value={statCount(statsQuery.data?.document_types)} icon={Layers3} loading={statsQuery.isLoading} />
+          <StatCard label={t('library.stats.jlptLevels')} value={statCount(statsQuery.data?.jlpt_levels)} icon={Tags} loading={statsQuery.isLoading} />
+          <StatCard label={t('library.stats.vectorChunks')} value={statsQuery.data?.vector_chunks || 0} icon={Database} loading={statsQuery.isLoading} />
         </div>
       )}
 
@@ -505,20 +634,18 @@ export default function Library() {
         <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_170px_auto_auto]">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
-            <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder="Search documents by meaning or keyword..." className="input w-full border-violet-200 bg-violet-50/60 pl-10 focus:ring-violet-200" />
+            <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={t('library.searchPlaceholder')} className="input w-full border-violet-200 bg-violet-50/60 pl-10 focus:ring-violet-200" />
           </div>
           <select value={filters.document_type} onChange={(event) => setFilters((current) => ({ ...current, document_type: event.target.value }))} className="input border-violet-200 bg-violet-50/60">
-            <option value="">All Types</option>
-            {types.map((type) => <option key={type} value={type}>{type}</option>)}
+            <option value="">{t('library.allTypes')}</option>
+            {types.map((type) => <option key={type} value={type}>{documentTypeLabel(type, t)}</option>)}
           </select>
           <select value={filters.jlpt_level} onChange={(event) => setFilters((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-violet-200 bg-violet-50/60">
-            <option value="">All Levels</option>
+            <option value="">{t('library.allLevels')}</option>
             {levels.map((level) => <option key={level} value={level}>{level}</option>)}
           </select>
           <select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="input border-violet-200 bg-violet-50/60">
-            <option value="newest">newest</option>
-            <option value="relevance">relevance</option>
-            <option value="alphabetical">alphabetical</option>
+            {(Object.keys(SORT_LABELS) as Array<keyof typeof SORT_LABELS>).map((value) => <option key={value} value={value}>{sortLabel(value, t)}</option>)}
           </select>
           <select aria-label={t('library.scope.label')} value={scope} onChange={(event) => setScope(event.target.value as typeof scope)} className="input border-violet-200 bg-violet-50/60">
             <option value="all">{t('library.scope.all')}</option>
@@ -535,13 +662,13 @@ export default function Library() {
                   jlpt_level: filters.jlpt_level,
                 })
               } else {
-                toast.error('Enter a query before searching')
+                toast.error(t('library.searchRequired'))
               }
             }}
             className="btn btn-primary rounded-xl px-4 text-white"
           >
             <Search className="mr-2 h-4 w-4" />
-            Search
+            {t('library.search')}
           </button>
           <button
             type="button"
@@ -552,7 +679,7 @@ export default function Library() {
             }}
             className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700"
           >
-            Clear Search
+            {t('library.clearSearch')}
           </button>
         </div>
       </div>
@@ -560,19 +687,19 @@ export default function Library() {
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold text-gray-950">{hasSearch ? 'Semantic Search Results' : 'Document Grid'}</h2>
-            <p className="mt-1 text-sm text-gray-500">{total} document{total === 1 ? '' : 's'} found</p>
+            <h2 className="text-xl font-bold text-gray-950">{hasSearch ? t('library.searchResults') : t('library.documentGrid')}</h2>
+            <p className="mt-1 text-sm text-gray-500">{t('library.documentCount', { count: total })}</p>
           </div>
           <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-gray-600 shadow-sm">
             <ArrowDownAZ className="h-4 w-4 text-violet-500" />
-            {sort}
+            {sortLabel(sort, t)}
           </div>
         </div>
 
         {errored ? (
           <div className="rounded-2xl border border-red-100 bg-red-50 p-8 text-center text-red-700">
             <AlertTriangle className="mx-auto h-8 w-8" />
-            <p className="mt-3 font-bold">Unable to load documents</p>
+            <p className="mt-3 font-bold">{t('library.documentsLoadError')}</p>
           </div>
         ) : loading ? (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -581,8 +708,8 @@ export default function Library() {
         ) : documents.length === 0 ? (
           <div className="rounded-2xl border border-violet-100 bg-white p-10 text-center text-gray-500 shadow-sm">
             <BookOpen className="mx-auto h-10 w-10 text-violet-300" />
-            <p className="mt-3 font-semibold">No documents found</p>
-            <p className="mt-1 text-sm">Add a document or adjust your search filters.</p>
+            <p className="mt-3 font-semibold">{t('library.noDocuments')}</p>
+            <p className="mt-1 text-sm">{t('library.emptyHint')}</p>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -598,10 +725,10 @@ export default function Library() {
                     )}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <Badge>{document.document_type}</Badge>
+                    <Badge>{documentTypeLabel(document.document_type, t)}</Badge>
                     {isSystemDocument(document) !== null && <Badge tone={isSystemDocument(document) ? 'gray' : 'violet'}>{isSystemDocument(document) ? t('library.badge.system') : t('library.badge.personal')}</Badge>}
                     {document.jlpt_level && <Badge tone="amber">{document.jlpt_level}</Badge>}
-                    {document.relevance_score !== undefined && document.relevance_score !== null && <Badge tone="gray">{Math.round(document.relevance_score * 100)}% relevant</Badge>}
+                    {document.relevance_score !== undefined && document.relevance_score !== null && <Badge tone="gray">{t('library.relevanceScore', { score: Math.round(document.relevance_score * 100) })}</Badge>}
                   </div>
                   <p className="mt-4 line-clamp-4 text-sm leading-6 text-gray-700">{(document as any).content_preview || document.content.slice(0, 150)}{document.content.length > 150 ? '...' : ''}</p>
                 </button>
@@ -614,25 +741,38 @@ export default function Library() {
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <button type="button" onClick={() => setSelected(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
-                    View Detail
+                    {t('library.viewDetail')}
                   </button>
                   {canEditDocument(document) && <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
-                    <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+                    <Pencil className="mr-1 h-3.5 w-3.5" /> {t('library.edit')}
                   </button>}
                   {canDeleteDocument(document) && <button type="button" onClick={() => setDeleteTarget(document)} className="btn btn-outline rounded-xl border-red-200 px-3 py-2 text-xs font-bold text-red-600">
-                    <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
+                    <Trash2 className="mr-1 h-3.5 w-3.5" /> {t('library.delete')}
                   </button>}
                 </div>
+                {canUseDocument(document) && <div className="mt-3 grid grid-cols-2 gap-2">
+                  <button type="button" disabled={grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} onClick={() => openGeneration(document, 'grammar')} className="btn btn-outline inline-flex items-center justify-center gap-1.5 rounded-xl border-violet-200 px-2 py-2 text-xs font-bold text-violet-700 disabled:opacity-50">
+                    <Brain className="h-3.5 w-3.5 shrink-0" />{t('library.createGrammarQuestions')}
+                  </button>
+                  <button type="button" disabled={grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} onClick={() => openGeneration(document, 'listening')} className="btn btn-outline inline-flex items-center justify-center gap-1.5 rounded-xl border-violet-200 px-2 py-2 text-xs font-bold text-violet-700 disabled:opacity-50">
+                    <Headphones className="h-3.5 w-3.5 shrink-0" />{t('library.createListeningLesson')}
+                  </button>
+                </div>}
               </motion.article>
             ))}
           </div>
         )}
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-3 pt-2">
-            <button type="button" disabled={page === 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">Previous</button>
-            <span className="text-sm font-bold text-gray-600">Page {page} / {totalPages}</span>
-            <button type="button" disabled={page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">Next</button>
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button type="button" disabled={page === 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">{t('library.previous')}</button>
+            <span className="text-sm font-bold text-gray-600">{t('library.page', { current: page, total: totalPages })}</span>
+            <form onSubmit={(event) => { event.preventDefault(); const target = Number(pageInput); if (Number.isInteger(target) && target >= 1 && target <= totalPages) setPage(target) }} className="flex items-center gap-2">
+              <label htmlFor="library-page-number" className="sr-only">{t('library.pageInput')}</label>
+              <input id="library-page-number" type="number" min="1" max={totalPages} step="1" value={pageInput} onChange={(event) => setPageInput(event.target.value)} aria-label={t('library.pageInput')} className="input w-16 px-2 text-center" />
+              <button type="submit" className="btn btn-outline rounded-xl">{t('library.goToPage')}</button>
+            </form>
+            <button type="button" disabled={page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">{t('library.next')}</button>
           </div>
         )}
       </section>
@@ -645,7 +785,7 @@ export default function Library() {
             allowSystemScope={user?.is_library_admin === true}
             t={t}
             onClose={() => setFormOpen(false)}
-            onSubmit={(payload) => createMutation.mutate(payload)}
+            onSubmit={(payload: any) => createMutation.mutate(payload)}
           />
         )}
         {editing && (
@@ -656,18 +796,89 @@ export default function Library() {
             allowSystemScope={user?.is_library_admin === true}
             t={t}
             onClose={() => setEditing(null)}
-            onSubmit={(payload) => updateMutation.mutate({ id: editing.id, payload })}
+            onSubmit={(payload: any) => updateMutation.mutate({ id: editing.id, payload })}
           />
+        )}
+        {actionKind && actionDocument && (
+          <Modal onClose={closeGeneration}>
+            <div className="space-y-5 p-6">
+              <div className="pr-12">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{actionKind === 'grammar' ? t('library.grammarDialogTitle') : t('library.listeningDialogTitle')}</p>
+                <h2 className="mt-2 text-2xl font-bold">{actionDocument.title}</h2>
+              </div>
+
+              {actionKind === 'grammar' ? <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="space-y-1 text-sm font-semibold">{t('library.questionType')}
+                    <select value={questionType} onChange={(event) => setQuestionType(event.target.value as GrammarQuestionType)} className="input w-full">
+                      <option value="fill_blank">{t('library.types.fill_blank')}</option>
+                      <option value="reorder">{t('library.types.reorder')}</option>
+                      <option value="true_false">{t('library.types.true_false')}</option>
+                      <option value="conjugation">{t('library.types.conjugation')}</option>
+                    </select>
+                  </label>
+                  <label className="space-y-1 text-sm font-semibold">{t('library.questionCount')}
+                    <select value={questionCount} onChange={(event) => setQuestionCount(Number(event.target.value))} className="input w-full">
+                      {[1, 3, 5, 10, 15, 20].map((count) => <option key={count} value={count}>{count}</option>)}
+                    </select>
+                  </label>
+                </div>
+                {grammarResult && <div className="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 text-sm">
+                  <p className="font-bold">{t('library.generationResult', { saved: grammarResult.saved, rejected: grammarResult.rejected })}</p>
+                  {grammarResult.saved > 0 && <button type="button" onClick={() => navigate('/grammar/practice')} className="btn btn-primary mt-3 rounded-xl px-4 py-2 text-sm">{t('library.goToPractice')}</button>}
+                </div>}
+                {actionError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{actionError}</p>}
+                <div className="flex flex-wrap justify-end gap-3">
+                  <button type="button" onClick={closeGeneration} disabled={grammarGenerationMutation.isLoading} className="btn btn-outline rounded-xl px-4">{t('library.close')}</button>
+                  <button type="button" disabled={grammarGenerationMutation.isLoading} onClick={() => { setActionError(''); setGrammarResult(null); grammarGenerationMutation.mutate(actionDocument) }} className="btn btn-primary rounded-xl px-4 disabled:opacity-60">
+                    {grammarGenerationMutation.isLoading ? t('library.generatingQuestions') : t('library.generateQuestions')}
+                  </button>
+                </div>
+              </> : <>
+                <p className="text-sm text-[color:var(--text-muted)]">{t('library.listeningDraftHelp')}</p>
+                {listeningDraftMutation.isLoading && <p className="rounded-xl bg-[color:var(--accent)] p-4 text-sm font-semibold">{t('library.generatingDraft')}</p>}
+                {listeningDraft && <div className="space-y-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="space-y-1 text-sm font-semibold">{t('library.lessonTitle')}<input value={listeningDraft.title} onChange={(event) => setListeningDraft({ ...listeningDraft, title: event.target.value })} className="input w-full" /></label>
+                    <label className="space-y-1 text-sm font-semibold">{t('library.lessonTopic')}<input value={listeningDraft.topic} onChange={(event) => setListeningDraft({ ...listeningDraft, topic: event.target.value })} className="input w-full" /></label>
+                  </div>
+                  <div className="max-h-[38vh] space-y-3 overflow-y-auto pr-1">
+                    {listeningDraft.segments.map((segment: { ja: string; vi: string }, index: number) => <div key={index} className="grid gap-3 rounded-xl border border-[color:var(--border)] p-3 sm:grid-cols-2">
+                      <label className="space-y-1 text-sm font-semibold">{t('library.japaneseLine', { number: index + 1 })}<textarea value={segment.ja} onChange={(event) => setListeningDraft({ ...listeningDraft, segments: listeningDraft.segments.map((line: { ja: string; vi: string }, lineIndex: number) => lineIndex === index ? { ...line, ja: event.target.value } : line) })} rows={2} className="input h-auto w-full" /></label>
+                      <label className="space-y-1 text-sm font-semibold">{t('library.vietnameseLine', { number: index + 1 })}<textarea value={segment.vi} onChange={(event) => setListeningDraft({ ...listeningDraft, segments: listeningDraft.segments.map((line: { ja: string; vi: string }, lineIndex: number) => lineIndex === index ? { ...line, vi: event.target.value } : line) })} rows={2} className="input h-auto w-full" /></label>
+                    </div>)}
+                  </div>
+                </div>}
+                {actionError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{actionError}</p>}
+                <div className="flex flex-wrap justify-end gap-3">
+                  <button type="button" onClick={closeGeneration} disabled={listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} className="btn btn-outline rounded-xl px-4">{t('library.close')}</button>
+                  {listeningDraft && <button type="button" disabled={listeningSaveMutation.isLoading} onClick={() => {
+                    setActionError('')
+                    listeningSaveMutation.mutate({
+                      document_id: actionDocument.id,
+                      title: listeningDraft.title,
+                      description: listeningDraft.description || '',
+                      jlpt_level: listeningDraft.jlpt_level,
+                      topic: listeningDraft.topic,
+                      segments: listeningDraft.segments.map((line: { ja: string; vi: string }) => ({ ja: line.ja, vi: line.vi })),
+                    })
+                  }} className="btn btn-primary rounded-xl px-4 disabled:opacity-60">
+                    {listeningSaveMutation.isLoading ? t('library.savingLesson') : t('library.saveLesson')}
+                  </button>}
+                </div>
+              </>}
+            </div>
+          </Modal>
         )}
         {selected && (
           <Modal onClose={() => setSelected(null)}>
             <div className="p-6">
               <div className="pr-12">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Document detail</p>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">{t('library.documentDetail')}</p>
                 <h2 className="mt-2 text-2xl font-bold text-gray-950">{selected.title}</h2>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Badge>{selected.document_type}</Badge>
+                <Badge>{documentTypeLabel(selected.document_type, t)}</Badge>
                 {isSystemDocument(selected) !== null && <Badge tone={isSystemDocument(selected) ? 'gray' : 'violet'}>{isSystemDocument(selected) ? t('library.badge.system') : t('library.badge.personal')}</Badge>}
                 {selected.jlpt_level && <Badge tone="amber">{selected.jlpt_level}</Badge>}
                 {selected.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
@@ -675,25 +886,25 @@ export default function Library() {
               {selected.source_url && (
                 <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-violet-700 hover:text-violet-900">
                   <ExternalLink className="h-4 w-4" />
-                  Source URL
+                  {t('library.fields.sourceUrl')}
                 </a>
               )}
-              <p className="mt-4 text-xs font-semibold text-gray-500">Created {formatDate(selected.created_at)}</p>
-              <p className="mt-1 text-xs font-semibold text-gray-500">Updated {selected.updated_at ? formatDate(selected.updated_at) : 'Not updated yet'}</p>
+              <p className="mt-4 text-xs font-semibold text-gray-500">{t('library.created', { date: formatDate(selected.created_at) })}</p>
+              <p className="mt-1 text-xs font-semibold text-gray-500">{selected.updated_at ? t('library.updated', { date: formatDate(selected.updated_at) }) : t('library.notUpdated')}</p>
               <div className="mt-5 rounded-2xl bg-gray-50 p-4">
                 <p className="whitespace-pre-wrap font-japanese text-sm leading-7 text-gray-800">{selected.content}</p>
               </div>
               <div className="mt-6 flex flex-wrap justify-end gap-3">
                 <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">
-                  Close
+                  {t('library.close')}
                 </button>
                 {canEditDocument(selected) && <button type="button" onClick={() => setEditing(selected)} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">
                   <Pencil className="mr-2 h-4 w-4" />
-                  Edit
+                  {t('library.edit')}
                 </button>}
                 {canDeleteDocument(selected) && <button type="button" onClick={() => setDeleteTarget(selected)} className="btn btn-outline rounded-xl border-red-200 px-4 text-red-600">
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
+                  {t('library.delete')}
                 </button>}
               </div>
             </div>
@@ -707,14 +918,14 @@ export default function Library() {
                   <Trash2 className="h-5 w-5" />
                 </div>
                 <div className="pr-10">
-                  <h2 className="text-xl font-bold text-gray-950">Delete document?</h2>
-                  <p className="mt-2 text-sm leading-6 text-gray-600">This removes the PostgreSQL record and all ChromaDB vector chunks for "{deleteTarget.title}".</p>
+                  <h2 className="text-xl font-bold text-gray-950">{t('library.deleteConfirmation.title')}</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">{t('library.deleteConfirmation.message', { title: deleteTarget.title })}</p>
                 </div>
               </div>
               <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={() => setDeleteTarget(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">Cancel</button>
+                <button type="button" onClick={() => setDeleteTarget(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">{t('library.cancel')}</button>
                 <button type="button" disabled={deleteMutation.isLoading} onClick={() => deleteMutation.mutate(deleteTarget.id)} className="btn rounded-xl bg-red-600 px-4 text-white hover:bg-red-700 disabled:opacity-60">
-                  Delete
+                  {t('library.delete')}
                 </button>
               </div>
             </div>

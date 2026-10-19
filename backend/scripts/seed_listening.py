@@ -1,4 +1,5 @@
 """Idempotently seed editable N5/N4 listening dialogues and VOICEVOX audio."""
+import argparse
 import os
 import sys
 from pathlib import Path
@@ -72,6 +73,46 @@ LESSONS = [
         ("この電車は次の駅に止まりますか。", "Tàu này có dừng ở ga tiếp theo không?"), ("はい、止まります。三番線に着きます。", "Có. Tàu sẽ đến sân ga số ba."),
         ("乗り換えに時間がかかりますか。", "Đổi tàu có mất nhiều thời gian không?"), ("五分あれば大丈夫ですよ。", "Có năm phút là kịp thôi."),
     ]),
+    ("N3", "Chuẩn bị tài liệu cho cuộc họp", "cong_viec", [
+        ("会議の資料はもうできましたか。", "Tài liệu cho cuộc họp đã xong chưa?"),
+        ("はい。今朝、内容を確認しておきました。", "Rồi. Sáng nay tôi đã kiểm tra trước nội dung."),
+        ("ありがとうございます。部長にも見てもらいましたか。", "Cảm ơn bạn. Bạn đã nhờ trưởng phòng xem chưa?"),
+        ("まだです。会議の前に送っておきます。", "Vẫn chưa. Tôi sẽ gửi trước cuộc họp."),
+        ("助かります。変更があったら教えてください。", "May quá. Nếu có thay đổi thì hãy báo cho tôi nhé."),
+        ("分かりました。すぐ連絡します。", "Tôi hiểu rồi. Tôi sẽ liên lạc ngay."),
+    ]),
+    ("N3", "Lạc đường khi đi du lịch", "du_lich", [
+        ("すみません、ホテルまでどう行けばいいですか。", "Xin lỗi, tôi nên đi thế nào để đến khách sạn?"),
+        ("この道をまっすぐ進んで、二つ目の角を右に曲がってください。", "Hãy đi thẳng đường này rồi rẽ phải ở góc thứ hai."),
+        ("駅の近くにあるホテルですか。", "Khách sạn đó ở gần nhà ga phải không ạ?"),
+        ("はい。駅を出ると、左側に大きな看板が見えます。", "Đúng vậy. Ra khỏi ga, bạn sẽ thấy một biển hiệu lớn ở bên trái."),
+        ("歩いてどのくらいかかりますか。", "Đi bộ mất khoảng bao lâu ạ?"),
+        ("十分ぐらいです。雨が降りそうなので、気をつけてください。", "Khoảng mười phút. Có vẻ trời sắp mưa nên bạn hãy cẩn thận."),
+    ]),
+    ("N3", "Kế hoạch học trước kỳ thi", "hoc_tap", [
+        ("試験まであと一か月ですね。準備は進んでいますか。", "Còn một tháng nữa là đến kỳ thi nhỉ. Bạn chuẩn bị đến đâu rồi?"),
+        ("文法はだいたい終わりましたが、聞き取りがまだ苦手です。", "Phần ngữ pháp gần xong rồi, nhưng tôi vẫn yếu phần nghe."),
+        ("毎日少しずつ聞くようにするといいですよ。", "Bạn nên tập nghe từng chút mỗi ngày."),
+        ("そうですね。通学中に日本語のニュースを聞いてみます。", "Đúng nhỉ. Tôi sẽ thử nghe tin tức tiếng Nhật trên đường đi học."),
+        ("分からない言葉は後で調べておくと、覚えやすいですよ。", "Nếu tra trước những từ chưa hiểu sau đó, bạn sẽ dễ nhớ hơn đấy."),
+        ("いい方法ですね。今日からやってみます。", "Ý hay đấy. Tôi sẽ thử làm từ hôm nay."),
+    ]),
+    ("N3", "Đổi lịch hẹn với bạn", "doi_song", [
+        ("土曜日に映画を見に行く約束でしたよね。", "Chúng ta đã hẹn đi xem phim vào thứ Bảy nhỉ."),
+        ("ごめんなさい。急に仕事が入ってしまったんです。", "Xin lỗi nhé. Đột nhiên tôi có việc phải làm mất rồi."),
+        ("そうですか。日曜日なら時間がありますよ。", "Vậy à. Nếu là Chủ nhật thì tôi có thời gian."),
+        ("よかったです。日曜日の午後に会うことにしませんか。", "May quá. Chúng ta hẹn gặp vào chiều Chủ nhật nhé?"),
+        ("いいですね。映画の後で食事もしましょう。", "Được đấy. Sau khi xem phim chúng ta cùng ăn nhé."),
+        ("楽しみです。では、駅で待ち合わせましょう。", "Tôi mong đến lúc đó quá. Vậy chúng ta hẹn gặp ở nhà ga nhé."),
+    ]),
+    ("N3", "Hỏi kinh nghiệm tìm việc", "cong_viec", [
+        ("日本で仕事を探すのは大変でしたか。", "Tìm việc ở Nhật có vất vả không ạ?"),
+        ("最初は履歴書の書き方が分からなくて困りました。", "Ban đầu tôi không biết cách viết sơ yếu lý lịch nên khá khó khăn."),
+        ("誰かに相談しましたか。", "Anh/chị có hỏi ý kiến ai không ạ?"),
+        ("学校の先生に見てもらって、何度も直しました。", "Tôi nhờ giáo viên ở trường xem giúp rồi sửa nhiều lần."),
+        ("面接ではどんなことを聞かれましたか。", "Trong buổi phỏng vấn họ đã hỏi những gì ạ?"),
+        ("これまでの経験や、入社したら何をしたいかなどを聞かれました。", "Họ hỏi về kinh nghiệm trước đây và tôi muốn làm gì nếu vào công ty."),
+    ]),
 ]
 
 
@@ -82,7 +123,7 @@ def _choose_speaker(provider: VoicevoxProvider) -> int:
         raise RuntimeError(f"Không kết nối được VOICEVOX. Hãy khởi động service rồi chạy seed lại: {exc}") from exc
 
 
-def seed(db=None, provider=None) -> dict[str, int]:
+def seed(db=None, provider=None, generate_audio: bool = True) -> dict[str, int]:
     owns_session = db is None
     db = db or SessionLocal()
     provider = provider or VoicevoxProvider()
@@ -109,16 +150,22 @@ def seed(db=None, provider=None) -> dict[str, int]:
                 created += 1
             audio_exists = bool(lesson.audio_path and (Path(settings.listening_media_dir) / lesson.audio_path).is_file())
             if is_new or not lesson.segments:
-                wav_name, assembled = synthesize_segments([ja for ja, _ in content], ensure_speaker_id(), provider)
-                segments = []
-                for index, ((ja, vi), timing) in enumerate(zip(content, assembled.timings)):
-                    segments.append({"idx": index, **timing, "ja": ja,
-                                     "tokens": furigana_tokens(ja), "vi": vi})
+                if generate_audio:
+                    wav_name, assembled = synthesize_segments([ja for ja, _ in content], ensure_speaker_id(), provider)
+                    segments = []
+                    for index, ((ja, vi), timing) in enumerate(zip(content, assembled.timings)):
+                        segments.append({"idx": index, **timing, "ja": ja,
+                                         "tokens": furigana_tokens(ja), "vi": vi})
+                    lesson.audio_path = wav_name
+                    lesson.duration_ms = assembled.duration_ms
+                    generated += 1
+                else:
+                    segments = [{"idx": index, "start_ms": 0, "end_ms": 0, "ja": ja, "vi": vi}
+                                for index, (ja, vi) in enumerate(content)]
+                    lesson.audio_path = None
+                    lesson.duration_ms = 0
                 lesson.segments = segments
-                lesson.audio_path = wav_name
-                lesson.duration_ms = assembled.duration_ms
-                generated += 1
-            elif not audio_exists:
+            elif not audio_exists and generate_audio:
                 # Rebuild audio from persisted Japanese text without duplicating the lesson.
                 wav_name, assembled = synthesize_segments([segment["ja"] for segment in lesson.segments],
                                                             ensure_speaker_id(), provider)
@@ -138,4 +185,7 @@ def seed(db=None, provider=None) -> dict[str, int]:
 
 
 if __name__ == "__main__":
-    print(seed())
+    parser = argparse.ArgumentParser(description="Nạp hội thoại luyện nghe mẫu.")
+    parser.add_argument("--no-audio", action="store_true", help="chỉ nạp lời thoại; tạo audio lười khi người học mở bài")
+    args = parser.parse_args()
+    print(seed(generate_audio=not args.no_audio))

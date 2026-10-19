@@ -178,6 +178,31 @@ Ví dụ examples dùng khóa ja và vi. Nội dung ngữ pháp phải chính x�
     return response.generations[0][0].text
 
 
+async def generate_raw_questions_from_document(jlpt_level: str, question_type: str, count: int, document_text: str) -> str:
+    """Generate questions grounded in Library text using the configured LLM provider."""
+    if jlpt_level not in JLPT_LEVELS or question_type not in QUESTION_TYPES:
+        raise ValueError("Cấp JLPT hoặc dạng câu hỏi không hợp lệ")
+    context = document_text[:24000]
+    prompt = f"""Tạo {count} câu hỏi luyện ngữ pháp tiếng Nhật cấp {jlpt_level}, bám sát nội dung, ví dụ và mẫu câu trong tài liệu bên dưới.
+Không đưa thông tin ngoài tài liệu nếu không cần cho ngữ pháp. Mỗi câu phải có giải thích tiếng Việt. Dạng câu hỏi: {question_type}.
+Chỉ trả JSON object {{\"questions\":[...]}} với mỗi câu có jlpt_level, question_type, prompt, payload, correct_answer, accepted_answers (nếu có), explanation_vi, examples (mảng {{ja,vi}}).
+fill_blank: prompt có đúng một ____; payload.options đúng 4 lựa chọn khác nhau.
+reorder: payload.tokens có 4-8 token theo thứ tự đúng; correct_answer là câu nối các token.
+true_false: payload.statement, correct_answer boolean; explanation_vi giải thích vì sao đúng/sai.
+conjugation: payload.base_form, payload.target_form; correct_answer là đáp án đúng.
+Tài liệu:
+---
+{context}
+---"""
+    if settings_provider() == "ollama":
+        from .ollama_service import ollama_service
+        return await asyncio.to_thread(ollama_service._call_ollama, prompt, "Chỉ xuất JSON hợp lệ, không Markdown.")
+    from .llm_service import japanese_service
+    message_class = __import__("langchain_core.messages", fromlist=["HumanMessage"]).HumanMessage
+    response = await japanese_service.llm.agenerate([[message_class(content=prompt)]])
+    return response.generations[0][0].text
+
+
 def settings_provider() -> str:
     from ..core.config import settings
     return settings.llm_provider

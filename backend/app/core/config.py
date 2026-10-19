@@ -40,7 +40,9 @@ class Settings(BaseSettings):
     whisper_device: str = "cpu"
     whisper_model_dir: str = "/app/models"
 
-    voicevox_url: str = "http://voicevox:50021"
+    # Local backend development uses the host-published VOICEVOX port. Docker
+    # Compose overrides this with its internal service URL.
+    voicevox_url: str = "http://localhost:50021"
     listening_media_dir: str = "/app/media/audio"
     listening_voicevox_speaker_id: int = 1
     

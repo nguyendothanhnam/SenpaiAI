@@ -265,6 +265,7 @@ class ListeningLesson(Base):
     source = Column(String(20), nullable=False, default="seed", server_default="seed")
     is_published = Column(Boolean, nullable=False, default=False, server_default="false")
     created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    source_document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True, index=True)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
@@ -339,6 +340,7 @@ class GrammarQuestion(Base):
     source = Column(String(10), nullable=False, default="manual")
     is_active = Column(Boolean, nullable=False, default=True, server_default="true")
     created_by_user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    source_document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     grammar_rule = relationship("GrammarRule")
 

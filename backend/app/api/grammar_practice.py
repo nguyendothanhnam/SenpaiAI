@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from ..core.auth import get_current_active_user
 from ..core.database import get_db
-from ..models.database import GrammarPracticeAttempt, GrammarQuestion, GrammarRule, LearningSession, User
+from ..models.database import Document, GrammarPracticeAttempt, GrammarQuestion, GrammarRule, LearningSession, User
 from ..services.grammar_practice_service import (
     QUESTION_TYPES, grade_answer, is_duplicate_question, parse_generated_questions, public_question,
 )
@@ -39,9 +39,24 @@ class GenerateRequest(BaseModel):
     count: int = Field(ge=1, le=5)
 
 
+class LibraryGenerateRequest(BaseModel):
+    document_id: int
+    jlpt_level: str
+    question_type: str
+    count: int = Field(ge=1, le=20)
+
+
 def _validate_level(level: str) -> None:
     if level not in LEVELS:
         raise HTTPException(422, "jlpt_level must be N5, N4, N3, N2, or N1")
+
+
+def _accessible_document(db: Session, document_id: int) -> Document:
+    """Central access check for Library documents; extend here if visibility rules are added."""
+    document = db.query(Document).filter(Document.id == document_id).first()
+    if not document:
+        raise HTTPException(404, "Library document not found")
+    return document
 
 
 async def _ai_questions(db: Session, user_id: int, level: str, rule: GrammarRule, kind: str, count: int) -> Dict[str, int]:
@@ -269,3 +284,50 @@ async def generate_questions(body: GenerateRequest, current_user: User = Depends
     result = await _ai_questions(db, current_user.id, body.jlpt_level, rule, body.question_type, body.count)
     db.commit()
     return result
+
+
+@router.post("/from-library")
+async def generate_questions_from_library(body: LibraryGenerateRequest, current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    _validate_level(body.jlpt_level)
+    if body.question_type not in QUESTION_TYPES:
+        raise HTTPException(422, "Unsupported question_type")
+    document = _accessible_document(db, body.document_id)
+    level = document.jlpt_level or body.jlpt_level
+    _validate_level(level)
+
+    recent = datetime.now(timezone.utc) - timedelta(hours=1)
+    used = db.query(func.count(GrammarQuestion.id)).filter(
+        GrammarQuestion.source == "ai", GrammarQuestion.created_by_user_id == current_user.id,
+        GrammarQuestion.created_at >= recent,
+    ).scalar() or 0
+    allowed = max(0, min(body.count, 30 - used))
+    if allowed == 0:
+        return {"requested": body.count, "saved": 0, "rejected": body.count, "limited": True, "question_ids": []}
+
+    from ..services.grammar_practice_service import generate_raw_questions_from_document
+    raw = await generate_raw_questions_from_document(level, body.question_type, allowed, document.content[:24000])
+    parsed, rejected = parse_generated_questions(raw, level, body.question_type)
+    existing = [(prompt, kind) for prompt, kind in db.query(GrammarQuestion.prompt, GrammarQuestion.question_type).all()]
+    saved_ids = []
+    for candidate in parsed:
+        if candidate.jlpt_level != level or candidate.question_type != body.question_type:
+            rejected += 1
+            continue
+        if is_duplicate_question(candidate.prompt, body.question_type, existing):
+            rejected += 1
+            continue
+        question = GrammarQuestion(
+            grammar_rule_id=None, jlpt_level=level, question_type=body.question_type,
+            prompt=candidate.prompt, payload=candidate.payload, correct_answer=candidate.correct_answer,
+            accepted_answers=candidate.accepted_answers, explanation_vi=candidate.explanation_vi,
+            examples=candidate.examples, source="ai", created_by_user_id=current_user.id,
+            source_document_id=document.id, is_active=True,
+        )
+        db.add(question)
+        db.flush()
+        saved_ids.append(question.id)
+        existing.append((candidate.prompt, body.question_type))
+    rejected += max(0, allowed - len(saved_ids) - rejected)
+    db.commit()
+    return {"requested": body.count, "saved": len(saved_ids), "rejected": rejected,
+            "limited": allowed < body.count, "question_ids": saved_ids}

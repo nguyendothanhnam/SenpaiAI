@@ -12,7 +12,7 @@ import SessionResult from '../components/grammar/SessionResult'
 import GrammarTabs from '../components/layout/GrammarTabs'
 import { useAuth } from '../services/auth'
 import { useTranslation } from 'react-i18next'
-import { grammarPracticeAPI } from '../services/api'
+import { grammarPracticeAPI, libraryAPI } from '../services/api'
 import type {
   GrammarAnswerResult, GrammarPattern, GrammarPracticeMode,
   GrammarPracticeQuestion, GrammarQuestionType, GrammarSessionResult, JlptLevel,
@@ -44,6 +44,11 @@ export default function GrammarPractice() {
   const [questionTypes, setQuestionTypes] = useState<GrammarQuestionType[]>(['fill_blank', 'reorder', 'true_false', 'conjugation'])
   const [count, setCount] = useState<Count>(5)
   const [mode, setMode] = useState<GrammarPracticeMode>('bank')
+  const [librarySearch, setLibrarySearch] = useState('')
+  const [libraryDocumentId, setLibraryDocumentId] = useState<number | ''>('')
+  const [libraryKind, setLibraryKind] = useState<GrammarQuestionType>('fill_blank')
+  const [libraryCount, setLibraryCount] = useState(5)
+  const [libraryResult, setLibraryResult] = useState<{ question_ids: number[]; saved: number; rejected: number } | null>(null)
   const [config, setConfig] = useState<SessionConfig | null>(null)
   const [sessionId, setSessionId] = useState<number | null>(null)
   const [questions, setQuestions] = useState<GrammarPracticeQuestion[]>([])
@@ -64,6 +69,15 @@ export default function GrammarPractice() {
   const patternsQuery = useQuery(['grammarPracticePatterns', 'all-levels'], async () => Object.fromEntries(await Promise.all(
     levels.map(async (itemLevel) => [itemLevel, (await grammarPracticeAPI.getPatterns(itemLevel)).data.patterns as GrammarPattern[]]),
   )) as Record<JlptLevel, GrammarPattern[]>)
+  const libraryDocumentsQuery = useQuery(['grammarLibraryDocuments', level, librarySearch], () => libraryAPI.getDocuments({
+    jlpt_level: level, sort: 'alphabetical', limit: 50,
+  }).then(({ data }) => data), { enabled: screen === 'setup' })
+  const libraryDocuments = (libraryDocumentsQuery.data?.items || []).filter((document: any) =>
+    !librarySearch.trim() || document.title.toLocaleLowerCase().includes(librarySearch.trim().toLocaleLowerCase()))
+  const libraryGenerateMutation = useMutation(
+    () => grammarPracticeAPI.generateFromLibrary({ document_id: Number(libraryDocumentId), jlpt_level: level, question_type: libraryKind, count: libraryCount }),
+    { onSuccess: ({ data }) => setLibraryResult(data), onError: (error: any) => { toast.error(errorMessage(error, tGrammar('libraryGenerateError'))) } },
+  )
   const patternsByLevel = patternsQuery.data || {} as Record<JlptLevel, GrammarPattern[]>
   const availableLevels = levels.filter((itemLevel) => (patternsByLevel[itemLevel] || []).length > 0)
   const fallbackLevel = [level, ...levels.filter((itemLevel) => levels.indexOf(itemLevel) < levels.indexOf(level)).reverse(), ...levels.filter((itemLevel) => levels.indexOf(itemLevel) > levels.indexOf(level))]
@@ -263,6 +277,19 @@ export default function GrammarPractice() {
       </header>
 
       {screen === 'setup' && <>
+        <section className="theme-card space-y-4 rounded-2xl p-4 sm:p-5">
+          <div><h2 className="text-lg font-bold">{tGrammar('libraryTitle')}</h2><p className="mt-1 text-sm text-[color:var(--text-muted)]">{tGrammar('libraryDescription')}</p></div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="space-y-1 text-sm font-semibold">{tGrammar('librarySearch')}<input className="input w-full" value={librarySearch} onChange={(event) => setLibrarySearch(event.target.value)} placeholder={tGrammar('librarySearchPlaceholder')} /></label>
+            <label className="space-y-1 text-sm font-semibold">{tGrammar('libraryDocument')}<select className="input w-full" value={libraryDocumentId} onChange={(event) => { setLibraryDocumentId(event.target.value ? Number(event.target.value) : ''); setLibraryResult(null) }}><option value="">{tGrammar('libraryChooseDocument')}</option>{libraryDocuments.map((document: any) => <option key={document.id} value={document.id}>{document.title} · {document.jlpt_level || level}</option>)}</select></label>
+            <label className="space-y-1 text-sm font-semibold">{tGrammar('libraryQuestionType')}<select className="input w-full" value={libraryKind} onChange={(event) => setLibraryKind(event.target.value as GrammarQuestionType)}>{(['fill_blank', 'reorder', 'true_false', 'conjugation'] as GrammarQuestionType[]).map((kind) => <option key={kind} value={kind}>{tGrammar(`libraryType${({ fill_blank: 'FillBlank', reorder: 'Reorder', true_false: 'TrueFalse', conjugation: 'Conjugation' } as Record<GrammarQuestionType, string>)[kind]}`)}</option>)}</select></label>
+            <label className="space-y-1 text-sm font-semibold">{tGrammar('libraryCount')}<select className="input w-full" value={libraryCount} onChange={(event) => setLibraryCount(Number(event.target.value))}>{[5, 10, 15, 20].map((value) => <option key={value}>{value}</option>)}</select></label>
+          </div>
+          {libraryDocumentsQuery.isError && <p className="text-sm text-red-600">{tGrammar('libraryLoadError')}</p>}
+          <div className="flex flex-wrap items-center gap-3"><button type="button" disabled={!libraryDocumentId || libraryGenerateMutation.isLoading} onClick={() => { setLibraryResult(null); libraryGenerateMutation.mutate() }} className="btn btn-primary disabled:opacity-50">{libraryGenerateMutation.isLoading ? tGrammar('libraryGenerating') : tGrammar('libraryGenerate')}</button>
+            {libraryResult && <><span className="text-sm text-[color:var(--text-muted)]">{tGrammar('libraryGeneratedResult', { saved: libraryResult.saved, rejected: libraryResult.rejected })}</span>{libraryResult.question_ids.length >= 5 && <button type="button" onClick={() => startMutation.mutate({ jlpt_level: level, question_types: [libraryKind], count: libraryResult.question_ids.length as Count, mode: 'bank', question_ids: libraryResult.question_ids })} disabled={startMutation.isLoading} className="btn btn-outline">{tGrammar('libraryStart')}</button>}</>}
+          </div>
+        </section>
         {!patternsQuery.isLoading && availableLevels.length > 0 && isAutomaticFallback && <p className="theme-card rounded-xl px-4 py-3 text-sm text-[color:var(--text-muted)]">{tGrammar('fallbackNotice', { requested: user?.current_jlpt_level, selected: level })}</p>}
         {!patternsQuery.isLoading && !patternsQuery.isError && patterns.length === 0 && <div className="theme-card flex gap-3 rounded-2xl p-4 text-sm text-[color:var(--text-muted)]"><HelpCircle className="h-5 w-5 shrink-0 text-[color:var(--primary)]" /><p>{tGrammar('emptyLevel', { level })}</p></div>}
         <SessionSetup

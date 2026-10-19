@@ -360,8 +360,14 @@
   }
   
   .japanese-text {
-    font-family: 'Noto Sans JP', sans-serif;
+    font-family: 'Noto Sans JP', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Hiragino Kaku Gothic ProN', system-ui, sans-serif;
     line-height: 1.8;
+  }
+
+  .listening-japanese {
+    font-family: 'Noto Sans JP', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Hiragino Kaku Gothic ProN', system-ui, sans-serif;
+    font-synthesis: none;
+    line-height: 1.9;
   }
   
   .jlpt-badge {
