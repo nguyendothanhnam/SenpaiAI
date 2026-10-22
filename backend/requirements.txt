@@ -23,6 +23,7 @@ httpx==0.25.2
 numpy==1.24.3
 pandas==2.0.3
 Pillow==10.2.0
+fonttools>=4.40
 torch>=2.1.0
 beautifulsoup4==4.12.2
 requests==2.31.0

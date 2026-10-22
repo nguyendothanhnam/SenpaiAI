@@ -33,10 +33,10 @@ export default function Quiz() {
       </Link>
 
       <div className="theme-card overflow-hidden rounded-3xl shadow-sm">
-      <div className="px-6 py-8" style={{ backgroundImage: 'var(--primary-gradient)', color: 'var(--primary-contrast)' }}>
-        <p className="text-sm font-medium uppercase tracking-[0.2em] opacity-80">{t('quiz.eyebrow')}</p>
-        <h1 className="mt-3 text-3xl font-bold">{t('quiz.title')}</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 opacity-95">
+      <div className="px-6 py-8" style={{ backgroundImage: 'var(--primary-gradient)' }}>
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--primary)]">{t('quiz.eyebrow')}</p>
+        <h1 className="mt-3 text-3xl font-bold text-[color:var(--text)]">{t('quiz.title')}</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-[color:var(--text-muted)]">
           {t('quiz.subtitle')}
         </p>
       </div>

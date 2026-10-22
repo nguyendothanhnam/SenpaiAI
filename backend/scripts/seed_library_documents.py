@@ -88,6 +88,7 @@ def upsert_documents(db, model, docs, index_fn, delete_vectors_fn):
     for doc in docs:
         title = doc["title"].strip()
         values = {
+            "title": title,
             "content": doc["content"].strip(),
             "document_type": doc["document_type"].strip(),
             "jlpt_level": doc.get("jlpt_level") or None,
@@ -95,7 +96,8 @@ def upsert_documents(db, model, docs, index_fn, delete_vectors_fn):
             "source_url": (doc.get("source_url") or None),
         }
 
-        query = db.query(model).filter(model.title == title)
+        match_titles = [title, *(doc.get("legacy_titles") or [])]
+        query = db.query(model).filter(model.title.in_(match_titles))
         if has_owner:
             query = query.filter(model.owner_id.is_(None))  # chỉ tài liệu hệ thống
         existing = query.first()
@@ -128,12 +130,19 @@ def upsert_documents(db, model, docs, index_fn, delete_vectors_fn):
 
 
 def main() -> int:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description="Nạp tài liệu mẫu vào thư viện hệ thống.")
     parser.add_argument("--file", type=Path, default=DEFAULT_FILE, help="đường dẫn file JSON")
     parser.add_argument("--dry-run", action="store_true", help="chỉ kiểm tra dữ liệu, không ghi gì")
+    parser.add_argument("--document-type", choices=sorted(ALLOWED_TYPES), help="Only import documents of this type.")
+    parser.add_argument("--jlpt-level", choices=sorted(JLPT_LEVELS), help="Only import documents at this JLPT level.")
     args = parser.parse_args()
-
     docs = load_documents(args.file)
+    if args.document_type:
+        docs = [doc for doc in docs if doc.get("document_type") == args.document_type]
+    if args.jlpt_level:
+        docs = [doc for doc in docs if doc.get("jlpt_level") == args.jlpt_level]
     errors = validate_documents(docs)
     if errors:
         print("Dữ liệu không hợp lệ:")

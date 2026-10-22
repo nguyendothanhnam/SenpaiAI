@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import time
 from pathlib import Path
 from typing import Iterable, List, Tuple
 
@@ -13,17 +14,17 @@ from torch import nn
 from torch.utils.data import DataLoader, Dataset, Subset, WeightedRandomSampler, random_split
 
 try:
-    from .kanji_labels import SUPPORTED_KANJI
+    from .kanji_labels import DICTIONARY_ENTRIES, SUPPORTED_KANJI, validate_training_dictionary
     from .kanji_model import KanjiCNN
 except ImportError:
-    from kanji_labels import SUPPORTED_KANJI
+    from kanji_labels import DICTIONARY_ENTRIES, SUPPORTED_KANJI, validate_training_dictionary
     from kanji_model import KanjiCNN
 
 
 IMAGE_SIZE = 64
 ML_DIR = Path(__file__).resolve().parent
 REPO_DIR = ML_DIR.parents[1]
-DEFAULT_ARTIFACT_DIR = ML_DIR / "models"
+DEFAULT_ARTIFACT_DIR = ML_DIR / "models" / "n3_candidate"
 DEFAULT_SYNTHETIC_DIR = ML_DIR / "data" / "synthetic_kanji"
 DEFAULT_ETL10_DIR = ML_DIR / "data" / "etl10_processed"
 DEFAULT_USER_SAMPLE_DIR = ML_DIR / "user_samples"
@@ -53,6 +54,8 @@ def find_japanese_fonts(extra_fonts: Iterable[str] | None = None) -> List[Path]:
         "NotoSansJP",
         "SourceHanSans",
         "SourceHanSerif",
+        "UDDigiKyokasho", "UD Digi Kyokasho", "Klee", "BIZ-UD", "BIZUDGothic", "BIZUDMincho",
+        "HGP", "HGS", "HGSeikaishotai", "YuKyokasho", "MSMincho",
     ]
 
     for root in search_roots:
@@ -71,7 +74,9 @@ def find_japanese_fonts(extra_fonts: Iterable[str] | None = None) -> List[Path]:
         if path.exists() and resolved not in seen:
             seen.add(resolved)
             unique.append(path)
-    return unique
+    preferred = ("uddigikyokasho", "biz-ud", "klee", "yukyo", "yugoth", "meiryo", "msmincho", "yumin", "msgothic", "noto")
+    return sorted(unique, key=lambda path: next((index for index, name in enumerate(preferred)
+                                                 if name in path.name.lower()), len(preferred)))
 
 
 def repair_mojibake(value: str) -> str:
@@ -82,6 +87,53 @@ def repair_mojibake(value: str) -> str:
         return repaired if repaired in SUPPORTED_KANJI else value
     except UnicodeError:
         return value
+
+
+def font_missing_kanji(font_path: Path, labels: List[str]) -> List[str]:
+    try:
+        from fontTools.ttLib import TTFont
+
+        font = TTFont(str(font_path), fontNumber=0, lazy=True)
+        try:
+            codepoints = set().union(*(table.cmap.keys() for table in font["cmap"].tables))
+        finally:
+            font.close()
+        return [kanji for kanji in labels if ord(kanji) not in codepoints]
+    except ImportError:
+        pass
+    font = ImageFont.truetype(str(font_path), 48)
+    missing = []
+    for kanji in labels:
+        mask = font.getmask(kanji)
+        bbox = mask.getbbox()
+        if not bbox or mask.getbbox() == (0, 0, 0, 0):
+            missing.append(kanji)
+    return missing
+
+
+def validate_fonts(fonts: List[Path], labels: List[str], strict_paths: bool = False) -> List[Path]:
+    usable = []
+    failures = []
+    for font in fonts:
+        try:
+            missing = font_missing_kanji(font, labels)
+        except Exception as error:
+            missing = labels
+            failures.append(f"{font}: could not inspect font ({error}); missing glyphs: {''.join(labels)}")
+            continue
+        if missing:
+            failures.append(f"{font}: cannot render {len(missing)} kanji: {''.join(missing)}")
+        else:
+            usable.append(font)
+    if failures:
+        print("Font coverage check:")
+        for failure in failures:
+            print("  " + failure)
+    if strict_paths and failures:
+        raise ValueError("Explicit font(s) do not cover every training kanji; see missing-glyph list above.")
+    if not usable:
+        raise ValueError("No selected Japanese font can render every requested kanji.")
+    return usable
 
 
 def load_app_kanji_labels(path: Path = DEFAULT_APP_KANJI_PATH) -> List[str]:
@@ -283,6 +335,8 @@ class SyntheticKanjiDataset(Dataset):
 class FolderKanjiDataset(Dataset):
     def __init__(self, dataset_dir: Path, label_map: dict[str, int], image_size: int, sample_weight: float = 1.0):
         self.samples = []
+        self.targets = []
+        self.counts_by_kanji = {}
         self.sample_weights = []
         self.image_size = image_size
         for kanji, index in label_map.items():
@@ -292,7 +346,9 @@ class FolderKanjiDataset(Dataset):
             for path in class_dir.rglob("*"):
                 if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".bmp", ".webp"}:
                     self.samples.append((path, index))
+                    self.targets.append(index)
                     self.sample_weights.append(sample_weight)
+                    self.counts_by_kanji[kanji] = self.counts_by_kanji.get(kanji, 0) + 1
 
     def __len__(self) -> int:
         return len(self.samples)
@@ -307,6 +363,8 @@ class FolderKanjiDataset(Dataset):
 class UserSampleDataset(Dataset):
     def __init__(self, sample_dir: Path, label_map: dict[str, int], image_size: int):
         self.samples = []
+        self.targets = []
+        self.counts_by_kanji = {}
         self.sample_weights = []
         self.image_size = image_size
         if not sample_dir.exists():
@@ -322,12 +380,13 @@ class UserSampleDataset(Dataset):
             except (OSError, json.JSONDecodeError):
                 continue
             corrected = metadata.get("corrected_kanji")
-            predicted = metadata.get("predicted_kanji")
-            kanji = corrected or predicted
+            kanji = corrected
             if kanji not in label_map:
                 continue
             self.samples.append((image_path, label_map[kanji]))
+            self.targets.append(label_map[kanji])
             self.sample_weights.append(6.0 if corrected else 2.0)
+            self.counts_by_kanji[kanji] = self.counts_by_kanji.get(kanji, 0) + 1
 
     def __len__(self) -> int:
         return len(self.samples)
@@ -348,6 +407,7 @@ class CombinedDataset(Dataset):
             for dataset in self.datasets
             for weight in getattr(dataset, "sample_weights", [1.0] * len(dataset))
         ]
+        self.targets = [target for dataset in self.datasets for target in getattr(dataset, "targets", [])]
 
     def __len__(self) -> int:
         return sum(self.lengths)
@@ -378,7 +438,7 @@ def train_epoch(model, loader, criterion, optimizer, device):
     return total_loss / max(1, total), correct / max(1, total)
 
 
-def evaluate(model, loader, criterion, device):
+def evaluate(model, loader, criterion, device, levels_by_index=None):
     model.eval()
     total_loss = 0.0
     correct = 0
@@ -391,7 +451,20 @@ def evaluate(model, loader, criterion, device):
             total_loss += loss.item() * labels.size(0)
             correct += (logits.argmax(dim=1) == labels).sum().item()
             total += labels.size(0)
-    return total_loss / max(1, total), correct / max(1, total)
+    result = {"loss": total_loss / max(1, total), "accuracy": correct / max(1, total)}
+    if levels_by_index is not None:
+        level_totals = {level: [0, 0] for level in ("N5", "N4", "N3")}
+        with torch.no_grad():
+            for images, labels in loader:
+                logits = model(images.to(device))
+                guesses = logits.argmax(dim=1).cpu()
+                for actual, guess in zip(labels.tolist(), guesses.tolist()):
+                    level = levels_by_index[actual]
+                    level_totals[level][1] += 1
+                    level_totals[level][0] += int(actual == guess)
+        result["by_level"] = {level: level_totals[level][0] / level_totals[level][1]
+                              for level in level_totals if level_totals[level][1]}
+    return result
 
 
 def main():
@@ -413,8 +486,12 @@ def main():
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--batch-size", type=int, default=0, help="0 chooses an automatic batch size.")
     parser.add_argument("--lr", type=float, default=1e-3)
+    parser.add_argument("--resume", action="store_true", help="Resume from artifact-dir/checkpoint_last.pt when present.")
+    parser.add_argument("--min-samples-per-class", type=int, default=1, help="Fail if the combined source data has fewer samples for any class.")
     parser.add_argument("--font", action="append", default=[], help="Extra Japanese font path. Can be passed multiple times.")
     args = parser.parse_args()
+
+    validate_training_dictionary()
 
     random.seed(42)
     np.random.seed(42)
@@ -423,7 +500,9 @@ def main():
     if args.label_map:
         with args.label_map.open("r", encoding="utf-8") as file:
             loaded_label_map = json.load(file)
-        labels = [kanji for kanji, _ in sorted(loaded_label_map.items(), key=lambda item: item[1])]
+        if set(loaded_label_map) != set(SUPPORTED_KANJI):
+            raise ValueError("--label-map must contain exactly the merged dictionary labels; training order still comes from the dictionary.")
+        labels = SUPPORTED_KANJI
     elif args.labels_from_dataset and args.dataset_dir:
         labels = [kanji for kanji in SUPPORTED_KANJI if (args.dataset_dir / kanji).is_dir()]
     elif args.use_app_kanji_json:
@@ -432,26 +511,33 @@ def main():
         labels = SUPPORTED_KANJI
     if not labels:
         raise RuntimeError("No labels found for training.")
+    if len(labels) != len(set(labels)):
+        raise ValueError("Duplicate kanji labels: " + "".join(sorted(k for k in set(labels) if labels.count(k) > 1)))
+    if set(labels) != set(SUPPORTED_KANJI):
+        raise ValueError("Training labels must come from the complete merged N5/N4/N3 dictionary.")
 
     label_map = {kanji: index for index, kanji in enumerate(labels)}
     datasets: List[Dataset] = []
 
     folder_dataset_added = False
+    sources = {}
     if args.etl10_dir and args.etl10_dir.exists():
         etl10_dataset = FolderKanjiDataset(args.etl10_dir, label_map, args.image_size, sample_weight=3.0)
         if len(etl10_dataset):
             print(f"Using {len(etl10_dataset)} ETL10 handwriting sample(s).")
             datasets.append(etl10_dataset)
             folder_dataset_added = True
+            sources["etl10"] = etl10_dataset
 
     if args.dataset_dir and args.dataset_dir.exists():
         folder_dataset = FolderKanjiDataset(args.dataset_dir, label_map, args.image_size)
         if len(folder_dataset):
             datasets.append(folder_dataset)
             folder_dataset_added = True
+            sources["folder"] = folder_dataset
 
     if not args.no_synthetic:
-        fonts = find_japanese_fonts(args.font)
+        fonts = validate_fonts(find_japanese_fonts(args.font), labels, strict_paths=bool(args.font))
         if not fonts:
             raise RuntimeError("No Japanese fonts found. Pass one or more --font paths, or train with --no-synthetic.")
         synthetic_count = count_folder_images(args.synthetic_dir, labels)
@@ -465,6 +551,7 @@ def main():
         synthetic_dataset = FolderKanjiDataset(args.synthetic_dir, label_map, args.image_size)
         if len(synthetic_dataset):
             datasets.append(synthetic_dataset)
+            sources["synthetic"] = synthetic_dataset
     elif args.dataset_dir and not args.dataset_dir.exists():
         raise RuntimeError(f"Dataset directory does not exist: {args.dataset_dir}")
 
@@ -473,10 +560,35 @@ def main():
         if len(user_dataset):
             print(f"Using {len(user_dataset)} user sample(s) for handwriting fine-tuning.")
             datasets.append(user_dataset)
+            sources["user_samples"] = user_dataset
 
     dataset = CombinedDataset(datasets)
     if len(dataset) < 2:
         raise RuntimeError("Training needs at least two images. Prepare ETL data or enable synthetic samples.")
+    class_counts = [0] * len(labels)
+    for source_dataset in sources.values():
+        for _, label_index in getattr(source_dataset, "samples", []):
+            class_counts[label_index] += 1
+    sparse = [(labels[index], count) for index, count in enumerate(class_counts) if count < args.min_samples_per_class]
+    if sparse:
+        raise ValueError(f"Classes below --min-samples-per-class={args.min_samples_per_class}: " + ", ".join(f"{k}={n}" for k, n in sparse))
+    level_by_index = {index: next(row["jlpt"] for row in DICTIONARY_ENTRIES if row["kanji"] == kanji)
+                      for kanji, index in ((k, i) for i, k in enumerate(labels))}
+    print("Image summary before training:")
+    for name, source_dataset in sources.items():
+        per_level = {level: 0 for level in ("N5", "N4", "N3")}
+        samples = getattr(source_dataset, "samples", [])
+        if name == "synthetic":
+            per_level = {level: sum(1 for i in range(len(labels)) if level_by_index[i] == level) * args.samples_per_class for level in per_level}
+            count = sum(per_level.values())
+        else:
+            count = len(samples)
+            for _, idx in samples:
+                per_level[level_by_index[idx]] += 1
+        print(f"  {name}: {count} total; " + ", ".join(f"{level}={per_level[level]}" for level in per_level))
+    for level in ("N5", "N4", "N3"):
+        level_counts = [class_counts[i] for i in range(len(labels)) if level_by_index[i] == level]
+        print(f"  balance {level}: min={min(level_counts)} max={max(level_counts)}")
     val_size = max(len(labels), int(len(dataset) * 0.15))
     val_size = min(val_size, len(dataset) - 1)
     train_size = len(dataset) - val_size
@@ -484,7 +596,13 @@ def main():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     batch_size = args.batch_size or (128 if device == "cuda" else 64)
-    train_weights = [dataset.sample_weights[index] for index in train_dataset.indices]
+    train_targets = [dataset.targets[index] for index in train_dataset.indices]
+    class_weight_totals = {}
+    for index in train_dataset.indices:
+        target = dataset.targets[index]
+        class_weight_totals[target] = class_weight_totals.get(target, 0.0) + dataset.sample_weights[index]
+    train_weights = [dataset.sample_weights[index] / class_weight_totals[dataset.targets[index]]
+                     for index in train_dataset.indices]
     sampler = WeightedRandomSampler(train_weights, num_samples=len(train_weights), replacement=True)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, sampler=sampler, num_workers=0)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
@@ -494,28 +612,74 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
 
-    best_acc = 0.0
     args.artifact_dir.mkdir(parents=True, exist_ok=True)
     model_path = args.artifact_dir / "kanji_model.pt"
     label_map_path = args.artifact_dir / "label_map.json"
+    checkpoint_path = args.artifact_dir / "checkpoint_last.pt"
+    start_epoch = 1
+    best_acc = -1.0
+    best_validation_by_level = {}
+    if args.resume and checkpoint_path.exists():
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+        model.load_state_dict(checkpoint["model"])
+        optimizer.load_state_dict(checkpoint["optimizer"])
+        start_epoch = int(checkpoint["epoch"]) + 1
+        best_acc = float(checkpoint.get("best_accuracy", -1.0))
+        best_validation_by_level = checkpoint.get("best_validation_by_level", {})
+        print(f"Resuming at epoch {start_epoch} (best validation accuracy {best_acc:.4f}).")
 
-    for epoch in range(1, args.epochs + 1):
+    validation_by_level = {}
+    epoch_seconds = []
+    for epoch in range(start_epoch, args.epochs + 1):
+        epoch_started = time.perf_counter()
         train_loss, train_acc = train_epoch(model, train_loader, criterion, optimizer, device)
-        val_loss, val_acc = evaluate(model, val_loader, criterion, device)
+        validation = evaluate(model, val_loader, criterion, device, level_by_index)
+        val_loss, val_acc = validation["loss"], validation["accuracy"]
+        validation_by_level = validation.get("by_level", {})
+        elapsed = time.perf_counter() - epoch_started
+        epoch_seconds.append(elapsed)
         print(
             f"epoch {epoch:02d}/{args.epochs} "
             f"train_loss={train_loss:.4f} train_acc={train_acc:.3f} "
             f"val_loss={val_loss:.4f} val_acc={val_acc:.3f}"
+            f" val_by_level={validation.get('by_level', {})}"
+            f" seconds={elapsed:.1f}"
         )
-        if val_acc >= best_acc:
+        if val_acc > best_acc:
             best_acc = val_acc
+            best_validation_by_level = validation_by_level
             torch.save(model.state_dict(), model_path)
             with label_map_path.open("w", encoding="utf-8") as file:
                 json.dump(label_map, file, ensure_ascii=False, indent=2)
+        torch.save({"epoch": epoch, "model": model.state_dict(), "optimizer": optimizer.state_dict(),
+                    "best_accuracy": best_acc, "best_validation_by_level": best_validation_by_level,
+                    "label_map": label_map, "image_size": args.image_size}, checkpoint_path)
 
     print(f"best_val_acc={best_acc:.3f}")
     print(f"saved model: {model_path}")
     print(f"saved labels: {label_map_path}")
+    source_counts = {}
+    source_level_counts = {}
+    for name, source in sources.items():
+        counts = {level: 0 for level in ("N5", "N4", "N3")}
+        if name == "synthetic":
+            counts = {level: sum(1 for i in range(len(labels)) if level_by_index[i] == level) * args.samples_per_class for level in counts}
+        else:
+            for _, idx in getattr(source, "samples", []):
+                counts[level_by_index[idx]] += 1
+        source_counts[name] = sum(counts.values())
+        source_level_counts[name] = counts
+    summary = {"class_count": len(labels), "class_counts": dict(zip(labels, class_counts)),
+               "source_counts": source_counts, "source_counts_by_jlpt": source_level_counts,
+               "configuration": {"image_size": args.image_size, "samples_per_class": args.samples_per_class,
+                                 "epochs": args.epochs, "batch_size": batch_size, "learning_rate": args.lr,
+                                 "synthetic_dir": str(args.synthetic_dir), "etl10_dir": str(args.etl10_dir),
+                                 "user_samples_dir": str(args.user_samples_dir), "fonts": [str(font) for font in fonts] if not args.no_synthetic else []},
+               "epochs_requested": args.epochs,
+               "best_validation_accuracy": best_acc, "validation_accuracy_by_jlpt": best_validation_by_level,
+               "seconds_per_epoch": epoch_seconds}
+    with (args.artifact_dir / "training_summary.json").open("w", encoding="utf-8") as file:
+        json.dump(summary, file, ensure_ascii=False, indent=2)
 
 
 if __name__ == "__main__":

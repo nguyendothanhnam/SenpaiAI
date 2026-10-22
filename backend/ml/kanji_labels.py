@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 JLPT_N5_KANJI = [
@@ -67,39 +68,88 @@ KANJI_METADATA = {
 
 
 ML_DIR = Path(__file__).resolve().parent
-REPO_DIR = ML_DIR.parents[1]
-DICTIONARY_PATH = REPO_DIR / "backend" / "app" / "data" / "kanji_dictionary.json"
+BACKEND_DIR = ML_DIR.parent
+DICTIONARY_PATH = BACKEND_DIR / "app" / "data" / "kanji_dictionary.json"
+KANJIVG_DIR = BACKEND_DIR / "app" / "data" / "kanjivg" / "kanji"
+
+
+def _kanjivg_stroke_count(kanji: str) -> int | None:
+    path = KANJIVG_DIR / f"{ord(kanji):05x}.svg"
+    try:
+        content = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    return len(re.findall(r'id="kvg:[^"]+-s\d+"', content)) or None
 
 
 def load_dictionary_entries(path: Path = DICTIONARY_PATH) -> list[dict]:
     try:
         with path.open("r", encoding="utf-8") as file:
             rows = json.load(file)
-    except (OSError, json.JSONDecodeError):
-        return []
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"Cannot read the merged kanji dictionary at {path}: {error}") from error
     if not isinstance(rows, list):
-        return []
+        raise ValueError(f"Kanji dictionary must be a JSON list: {path}")
 
     entries = []
     seen = set()
-    for row in rows:
+    duplicates = []
+    missing = []
+    for row_index, row in enumerate(rows):
         if not isinstance(row, dict):
+            missing.append(f"row {row_index + 1}: expected an object with kanji/JLPT data")
             continue
-        kanji = str(row.get("kanji") or "")[:1]
+        kanji = str(row.get("kanji") or "")
         jlpt = str(row.get("jlpt") or "").upper()
-        if not kanji or kanji in seen or jlpt not in {"N5", "N4", "N3"}:
+        if not kanji:
+            missing.append(f"row {row_index + 1}: missing kanji character")
+            continue
+        if len(kanji) != 1:
+            missing.append(f"{kanji!r}: expected one kanji character")
+            continue
+        if jlpt not in {"N5", "N4", "N3"}:
+            missing.append(f"{kanji}: missing/invalid JLPT level ({jlpt or 'empty'})")
+            continue
+        if kanji in seen:
+            duplicates.append(kanji)
             continue
         seen.add(kanji)
-        entries.append(row | {"kanji": kanji, "jlpt": jlpt})
+        strokes = row.get("strokes", row.get("stroke_count"))
+        if strokes in (None, ""):
+            strokes = _kanjivg_stroke_count(kanji)
+        entries.append(row | {"kanji": kanji, "jlpt": jlpt, "strokes": strokes, "stroke_count": strokes})
+    errors = []
+    if duplicates:
+        errors.append("duplicate kanji: " + ", ".join(sorted(set(duplicates))))
+    if missing:
+        errors.append("missing kanji/JLPT/stroke data: " + "; ".join(missing))
+    if errors:
+        raise ValueError("Invalid kanji dictionary: " + " | ".join(errors))
+    if not entries:
+        raise ValueError(f"No N5/N4/N3 entries found in {path}")
     return entries
 
 
+def validate_training_dictionary(entries: list[dict] | None = None) -> None:
+    """Fail with a complete report when training metadata is incomplete."""
+    entries = DICTIONARY_ENTRIES if entries is None else entries
+    problems = []
+    for entry in entries:
+        kanji = entry.get("kanji", "?")
+        if entry.get("jlpt") not in {"N5", "N4", "N3"}:
+            problems.append(f"{kanji}: missing/invalid JLPT level")
+        try:
+            stroke_count = int(entry.get("strokes", entry.get("stroke_count")))
+        except (TypeError, ValueError):
+            stroke_count = 0
+        if stroke_count <= 0:
+            problems.append(f"{kanji}: missing stroke count")
+    if problems:
+        raise ValueError("Dictionary metadata required for training is missing:\n  " + "\n  ".join(problems))
+
+
 DICTIONARY_ENTRIES = load_dictionary_entries()
-SUPPORTED_KANJI = (
-    [entry["kanji"] for entry in DICTIONARY_ENTRIES]
-    if DICTIONARY_ENTRIES
-    else list(dict.fromkeys(JLPT_N5_KANJI + JLPT_N4_KANJI))
-)
+SUPPORTED_KANJI = [entry["kanji"] for entry in DICTIONARY_ENTRIES]
 FREQUENCY_BY_KANJI = {
     kanji: round(1.0 - (index / max(1, len(SUPPORTED_KANJI) - 1)) * 0.55, 4)
     for index, kanji in enumerate(SUPPORTED_KANJI)
@@ -124,7 +174,7 @@ for entry in DICTIONARY_ENTRIES:
 
 
 def get_metadata(kanji: str) -> dict:
-    level = "N5" if kanji in JLPT_N5_KANJI else "N4"
+    level = next((entry["jlpt"] for entry in DICTIONARY_ENTRIES if entry["kanji"] == kanji), None)
     base = {
         "jlpt": level,
         "stroke_count": None,

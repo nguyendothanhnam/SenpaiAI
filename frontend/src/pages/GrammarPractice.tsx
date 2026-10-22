@@ -12,6 +12,7 @@ import SessionResult from '../components/grammar/SessionResult'
 import GrammarTabs from '../components/layout/GrammarTabs'
 import { useAuth } from '../services/auth'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { grammarPracticeAPI, libraryAPI } from '../services/api'
 import type {
   GrammarAnswerResult, GrammarPattern, GrammarPracticeMode,
@@ -36,6 +37,9 @@ function errorMessage(error: any, fallback: string) {
 
 export default function GrammarPractice() {
   const [screen, setScreen] = useState<Screen>('setup')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const startedLibraryPractice = useRef(false)
   const { user } = useAuth()
   const { t: tGrammar } = useTranslation('grammarStatus')
   const [level, setLevel] = useState<JlptLevel>((user?.current_jlpt_level as JlptLevel) || 'N5')
@@ -128,6 +132,23 @@ export default function GrammarPractice() {
       onError: (error: any) => { toast.error(errorMessage(error, 'Không thể tạo buổi luyện. Hãy kiểm tra kết nối rồi thử lại.')) },
     },
   )
+
+  useEffect(() => {
+    const libraryPractice = (location.state as any)?.libraryPractice
+    if (startedLibraryPractice.current || !libraryPractice?.question_ids?.length) return
+    startedLibraryPractice.current = true
+    const sessionLevel = (libraryPractice.jlpt_level || level) as JlptLevel
+    const questionType = libraryPractice.question_type as GrammarQuestionType
+    const ids = libraryPractice.question_ids as number[]
+    startMutation.mutate({
+      jlpt_level: sessionLevel,
+      question_types: [questionType],
+      count: Math.max(5, Math.min(20, ids.length)) as Count,
+      mode: 'bank',
+      question_ids: ids,
+    })
+    navigate(location.pathname, { replace: true, state: null })
+  }, [location.pathname, location.state, level, navigate, startMutation])
 
   const answerMutation = useMutation(
     (payload: { question_id: number; answer: string | string[] | boolean; time_spent_ms: number }) => {
@@ -287,7 +308,7 @@ export default function GrammarPractice() {
           </div>
           {libraryDocumentsQuery.isError && <p className="text-sm text-red-600">{tGrammar('libraryLoadError')}</p>}
           <div className="flex flex-wrap items-center gap-3"><button type="button" disabled={!libraryDocumentId || libraryGenerateMutation.isLoading} onClick={() => { setLibraryResult(null); libraryGenerateMutation.mutate() }} className="btn btn-primary disabled:opacity-50">{libraryGenerateMutation.isLoading ? tGrammar('libraryGenerating') : tGrammar('libraryGenerate')}</button>
-            {libraryResult && <><span className="text-sm text-[color:var(--text-muted)]">{tGrammar('libraryGeneratedResult', { saved: libraryResult.saved, rejected: libraryResult.rejected })}</span>{libraryResult.question_ids.length >= 5 && <button type="button" onClick={() => startMutation.mutate({ jlpt_level: level, question_types: [libraryKind], count: libraryResult.question_ids.length as Count, mode: 'bank', question_ids: libraryResult.question_ids })} disabled={startMutation.isLoading} className="btn btn-outline">{tGrammar('libraryStart')}</button>}</>}
+            {libraryResult && <><span className="text-sm text-[color:var(--text-muted)]">{tGrammar('libraryGeneratedResult', { saved: libraryResult.saved, rejected: libraryResult.rejected })}</span>{libraryResult.question_ids.length > 0 && <button type="button" onClick={() => startMutation.mutate({ jlpt_level: level, question_types: [libraryKind], count: Math.max(5, Math.min(20, libraryResult.question_ids.length)) as Count, mode: 'bank', question_ids: libraryResult.question_ids })} disabled={startMutation.isLoading} className="btn btn-outline">{tGrammar('libraryStart')}</button>}</>}
           </div>
         </section>
         {!patternsQuery.isLoading && availableLevels.length > 0 && isAutomaticFallback && <p className="theme-card rounded-xl px-4 py-3 text-sm text-[color:var(--text-muted)]">{tGrammar('fallbackNotice', { requested: user?.current_jlpt_level, selected: level })}</p>}

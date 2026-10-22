@@ -402,7 +402,7 @@ export default function Library() {
   const [actionKind, setActionKind] = useState<'grammar' | 'listening' | null>(null)
   const [questionType, setQuestionType] = useState<GrammarQuestionType>('fill_blank')
   const [questionCount, setQuestionCount] = useState(5)
-  const [grammarResult, setGrammarResult] = useState<{ requested: number; saved: number; rejected: number; limited: boolean; question_ids: number[] } | null>(null)
+  const [grammarResult, setGrammarResult] = useState<{ requested: number; saved: number; rejected: number; limited: boolean; question_ids: number[]; jlpt_level?: string; question_type?: GrammarQuestionType } | null>(null)
   const [listeningDraft, setListeningDraft] = useState<any>(null)
   const [actionError, setActionError] = useState('')
   const offset = (page - 1) * PAGE_SIZE
@@ -475,7 +475,7 @@ export default function Library() {
     }).then(({ data }) => data),
     {
       onSuccess: (result) => {
-        setGrammarResult(result)
+        setGrammarResult({ ...result, jlpt_level: actionDocument?.jlpt_level || user?.current_jlpt_level || 'N5', question_type: questionType })
         setActionError(result.limited && result.saved === 0 ? t('library.generationRateLimit') : result.saved === 0 ? t('library.noQuestionsGenerated') : '')
       },
       onError: (error: any) => setActionError(libraryGenerationErrorKey(error, t)),
@@ -825,7 +825,7 @@ export default function Library() {
                 </div>
                 {grammarResult && <div className="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 text-sm">
                   <p className="font-bold">{t('library.generationResult', { saved: grammarResult.saved, rejected: grammarResult.rejected })}</p>
-                  {grammarResult.saved > 0 && <button type="button" onClick={() => navigate('/grammar/practice')} className="btn btn-primary mt-3 rounded-xl px-4 py-2 text-sm">{t('library.goToPractice')}</button>}
+                  {grammarResult.saved > 0 && <button type="button" onClick={() => navigate('/grammar/practice', { state: { libraryPractice: { question_ids: grammarResult.question_ids, jlpt_level: grammarResult.jlpt_level, question_type: grammarResult.question_type } } })} className="btn btn-primary mt-3 rounded-xl px-4 py-2 text-sm">{t('library.goToPractice')}</button>}
                 </div>}
                 {actionError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">{actionError}</p>}
                 <div className="flex flex-wrap justify-end gap-3">

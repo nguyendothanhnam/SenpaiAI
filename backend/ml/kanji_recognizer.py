@@ -12,8 +12,11 @@ import numpy as np
 try:
     from .kanji_labels import SUPPORTED_KANJI, get_metadata
 except ImportError:  # pragma: no cover - handled at runtime
-    SUPPORTED_KANJI = []
-    get_metadata = lambda _kanji: {}
+    try:
+        from kanji_labels import SUPPORTED_KANJI, get_metadata
+    except ImportError:
+        SUPPORTED_KANJI = []
+        get_metadata = lambda _kanji: {}
 
 try:
     from PIL import Image, ImageOps
@@ -25,7 +28,10 @@ try:
     import torch
     import torch.nn.functional as F
 
-    from .kanji_model import KanjiCNN
+    try:
+        from .kanji_model import KanjiCNN
+    except ImportError:  # script entry points place ml/ directly on sys.path
+        from kanji_model import KanjiCNN
 except ImportError:  # pragma: no cover - handled at runtime
     torch = None
     F = None

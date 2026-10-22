@@ -1,170 +1,73 @@
-# Kanji Canvas ML Pipeline
+# Kanji CNN training and evaluation
 
-This folder contains the custom visual Kanji recognizer. Its dictionary-backed class list covers N5/N4/N3; the actually trained levels are read from the model's `label_map.json` and may remain N5/N4 until retraining is completed.
-Ollama is not used for image recognition; it remains only for explanations and learning feedback.
+This pipeline builds its ordered class list from `backend/app/data/kanji_dictionary.json` (N5/N4/N3). Missing stroke counts are resolved from the local KanjiVG SVG files; an entry missing its JLPT level or both dictionary and SVG stroke data stops the run with the affected characters listed. Duplicate labels also stop the run. The running model files remain `models/kanji_model.pt` and `models/label_map.json`; all retraining commands below write to `models/n3_candidate`.
 
-## Folders
+`kanji_recognizer.py` reads the number of classes from `label_map.json`; `get_model_info()` derives the supported JLPT levels from those labels and dictionary metadata. Once candidate files are deliberately copied into the standard model paths and the backend restarts, the status endpoint and UI report levels automatically.
 
-- `data/`: generated or imported training datasets
-- `data/synthetic_kanji/`: default generated kanji images from system fonts
-- `data/etl10_processed/`: optional ETL10 samples converted to `PNG` by kanji label
-- `scripts/`: dataset generation and ETL preparation helpers
-- `models/`: trained model artifacts
-- `user_samples/`: anonymized recognition/correction samples collected by the API
+## Environment
 
-## Artifacts
-
-Training writes:
-
-- `backend/ml/models/kanji_model.pt`
-- `backend/ml/models/label_map.json`
-
-The FastAPI recognizer loads these files automatically. If they are missing, `/api/kanji/recognize` returns `success: false` with engine `kanji-cnn-v1-unavailable` instead of inventing predictions.
-
-## Install Dependencies
-
-From `backend/`:
+Run commands from `backend/` in the project virtual environment:
 
 ```powershell
-python -m venv venv
 .\venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## Train Without ETL10
+The first run renders the full synthetic dataset and can take a while. The complete default is 350 images per class, 64×64 pixels, 50 epochs. At 612 classes that is 214,200 synthetic images. On this CPU, the 20-images-per-class smoke epoch took 171 seconds; a simple linear estimate puts a full-data epoch near 50 minutes and 50 epochs near 42 hours, plus generation. GPU and storage speed change this substantially, so benchmark on the target machine before starting a full run.
 
-ETL10 is optional. By default, the trainer uses the N5/N4/N3 kanji in `backend/app/data/kanji_dictionary.json`, renders 350 synthetic images per kanji from installed Japanese system fonts, mixes in available ETL10 and corrected samples, saves images under `backend/ml/data/synthetic_kanji/<kanji>/`, then trains the CNN for 50 epochs:
+## 1. Check fonts and generate data
 
-```powershell
-.\venv\Scripts\python.exe ml/train_kanji_cnn.py
-```
+Fonts are searched automatically. Each selected font is checked against every dictionary label; fonts with missing glyphs are reported with the exact characters and excluded. Explicit `--font` paths are strict and stop if any requested font lacks a glyph. Japanese schoolbook fonts are preferred when installed (UD Digi Kyokasho, BIZ UD, Yu Gothic, Meiryo, and Japanese Mincho families).
 
-Regenerate synthetic samples before training:
+Generate into a separate candidate dataset so the existing generated dataset is preserved:
 
 ```powershell
-.\venv\Scripts\python.exe ml/train_kanji_cnn.py --force-regenerate-synthetic --samples-per-class 500
+.\venv\Scripts\python.exe ml/scripts/generate_kanji_dataset.py --output ml/data/n3_candidate_synthetic --samples-per-class 350 --image-size 64
 ```
 
-If no Japanese font is found, pass one or more explicitly:
+The existing augmentation defaults are retained for comparison: scale 0.88–1.12, rotation ±10°, translation up to 9 px before crop and ±4 px affine shift, morphology-based thickness changes, blur radius up to 0.65, noise standard deviation 3–12, stroke offset up to 2 px, and elastic jitter 1.5–4 px. These are fairly strong transformations. For a later controlled experiment, consider reducing rotation to ±6°, affine shift to ±2 px, elastic jitter to 1–2 px, and applying elastic distortion less often (about 10%) while retaining varied thickness and modest noise. Existing defaults remain unchanged.
+
+## 2. Train a separate candidate
+
+By default the trainer combines generated samples, ETL10 PNGs under `ml/data/etl10_processed`, any `--dataset-dir` folder, and corrected user samples under `ml/user_samples`. ETL10 samples have weight 3 and corrected user samples weight 6 versus generated samples weight 1. User samples without `corrected_kanji` are ignored. Before training, it prints source totals, totals by JLPT level, and per-class minimum/maximum counts. The weighted sampler oversamples the higher-weight sources and keeps classes represented evenly.
 
 ```powershell
-.\venv\Scripts\python.exe ml/train_kanji_cnn.py --font C:\Windows\Fonts\YuGothR.ttc
+.\venv\Scripts\python.exe ml/train_kanji_model.py --artifact-dir ml/models/n3_candidate --synthetic-dir ml/data/n3_candidate_synthetic --samples-per-class 350 --image-size 64 --epochs 50 --batch-size 64
 ```
 
-Synthetic augmentation includes rotation, scale, translation, stroke thickness variation, blur, pixel noise, stroke offset, and light elastic distortion.
+Each epoch reports overall and N5/N4/N3 validation accuracy and elapsed seconds. The best validation model is stored as `kanji_model.pt`; `label_map.json` uses the recognizer's current `{kanji: index}` format. `checkpoint_last.pt` is updated each epoch with model and optimizer state. Continue after interruption with the same arguments plus `--resume`; set `--epochs` to the desired final epoch number (for example, `--epochs 50`). `training_summary.json` records class/source counts, configuration, best per-level validation accuracy, and measured epoch times.
 
-## Prepare ETL10 Dataset
-
-The ETL10 preparer accepts a local dataset archive, extracted folder, binary file, direct archive URL, or an already converted `<kanji>/*.png` folder. It converts matching ETL G-format samples into:
-
-```text
-backend/ml/data/etl10_processed/<kanji>/<sample>.png
-```
-
-It filters to the N5/N4/N3 kanji in the backend dictionary and writes:
-
-```text
-backend/ml/models/label_map.json
-```
-
-Use a local ETL10 path:
+Small end-to-end smoke run (same 612 classes, deliberately tiny volume):
 
 ```powershell
-.\venv\Scripts\python.exe ml/scripts/prepare_etl10_dataset.py --etl10-path C:\datasets\ETL10 --clean
+.\venv\Scripts\python.exe ml/scripts/generate_kanji_dataset.py --output ml/data/n3_smoke --samples-per-class 20 --image-size 64
+.\venv\Scripts\python.exe ml/train_kanji_model.py --artifact-dir ml/models/n3_smoke --synthetic-dir ml/data/n3_smoke --samples-per-class 20 --image-size 64 --epochs 1 --batch-size 64
 ```
 
-Or use a direct archive URL:
+The smoke model checks that generation, training, checkpointing, summary writing, evaluation, and recognizer loading work. Its accuracy is not a deployment result; do not promote it.
+
+## 3. Compare against real handwriting
+
+Keep a held-out set that was not used for training in `heldout/<kanji>/*.png` (JPG and other common image formats are also accepted). It must contain real handwriting. Evaluate both models against exactly the same files:
 
 ```powershell
-.\venv\Scripts\python.exe ml/scripts/prepare_etl10_dataset.py --etl10-url https://example.com/ETL10.zip --clean
+.\venv\Scripts\python.exe ml/scripts/evaluate_kanji_models.py --dataset C:\datasets\kanji-heldout --old-model-dir ml/models --candidate-model-dir ml/models/n3_candidate
 ```
 
-## Train With Optional ETL10
+The report shows top-1 and top-5 accuracy per N5/N4/N3, the 20 most frequent top-1 confusion pairs for each model, and warns when candidate N5 or N4 top-1 accuracy falls below the old model. If the old model lacks a true N3 class, each N3 sample counts as incorrect for it without aborting evaluation. Training validation on synthetic images does not replace this handwriting holdout.
 
-Train with ETL10 plus synthetic augmentation:
+## Promote and restore manually
+
+Only after reviewing the real-handwriting comparison, back up both current artifacts together, then copy the candidate pair into the standard paths:
 
 ```powershell
-.\venv\Scripts\python.exe ml/train_kanji_cnn.py --dataset-dir ml/data/etl10_processed --label-map ml/models/label_map.json
+Copy-Item ml/models/kanji_model.pt ml/models/kanji_model.pt.backup
+Copy-Item ml/models/label_map.json ml/models/label_map.json.backup
+Copy-Item ml/models/n3_candidate/kanji_model.pt ml/models/kanji_model.pt -Force
+Copy-Item ml/models/n3_candidate/label_map.json ml/models/label_map.json -Force
 ```
 
-Train from ETL10 images only:
+Restart the backend and inspect `/api/kanji/model-info` (or call `get_model_info()`). To restore, copy both `.backup` files back to their original names and restart. Never copy only one of the model and label-map files.
 
-```powershell
-.\venv\Scripts\python.exe ml/train_kanji_cnn.py --dataset-dir ml/data/etl10_processed --label-map ml/models/label_map.json --no-synthetic
-```
+## Existing API behavior
 
-## Generate Synthetic Data Manually
-
-The trainer does this automatically, but you can pre-generate the default synthetic dataset:
-
-```powershell
-.\venv\Scripts\python.exe ml/scripts/generate_kanji_dataset.py --samples-per-class 350
-```
-
-## Test Recognition
-
-Check model status:
-
-```powershell
-.\venv\Scripts\python.exe -c "from ml.kanji_recognizer import get_model_info; print(get_model_info())"
-```
-
-Test one generated PNG after training:
-
-```powershell
-.\venv\Scripts\python.exe -c "import base64; from ml.kanji_recognizer import predict_kanji; p='ml/data/synthetic_kanji/月/00000.png'; data='data:image/png;base64,'+base64.b64encode(open(p,'rb').read()).decode(); print(predict_kanji(data, top_k=5))"
-```
-
-## Inference
-
-`ml/kanji_recognizer.py` exposes:
-
-```python
-predict_kanji(image_data, strokes, jlpt_level, top_k=5)
-```
-
-The app re-ranks model predictions with:
-
-```text
-0.70 * model_confidence
-+ 0.15 * stroke_count_score
-+ 0.10 * jlpt_score
-+ 0.05 * frequency_score
-```
-
-KanjiVG paths are useful for training/reference overlays, but they are not the recognition algorithm. Ollama is not used for image recognition.
-
-## Add N3 dictionary and stroke data
-
-Run these from `backend/` in order:
-
-```powershell
-python scripts/merge_kanji_n3.py --dry-run
-python scripts/merge_kanji_n3.py
-python scripts/validate_kanji_dictionary.py
-python scripts/seed_kanji_from_dictionary.py
-```
-
-The merge preserves existing N5/N4 entries and writes ignored `*.bak-*` backups. The seed script only creates or updates N3 rows in `kanji`, `kanji_readings`, and `kanji_examples`; it skips a conflicting character already assigned to another level. Restart the backend after merging so the KanjiVG JSON cache reloads. Recognition is a separate final step and is not automatically retrained by the merge or database seed.
-
-## Prepare and evaluate an N3 recognition model (manual)
-
-This is a manual, optional operation. Install a Japanese font with broad Kanji coverage first (for example Yu Gothic, Meiryo, or Noto Sans CJK JP) and pass its actual path. The default N3 class set is generated from the merged backend dictionary, not from a hand-maintained N3 label list.
-
-Example from `backend/` on Windows:
-
-```powershell
-python ml/scripts/generate_kanji_dataset.py --output ml/data/synthetic_kanji_n3_candidate --samples-per-class 350 --image-size 64 --font C:\Windows\Fonts\YuGothR.ttc
-python ml/train_kanji_model.py --synthetic-dir ml/data/synthetic_kanji_n3_candidate --artifact-dir ml/models/n3_candidate --samples-per-class 350 --epochs 50 --batch-size 64 --image-size 64 --font C:\Windows\Fonts\YuGothR.ttc
-```
-
-At 612 classes and 350 samples per class this generates about 214,200 images. Budget roughly 1–4 hours on a suitable GPU; CPU-only generation plus 50 training epochs may take several hours or overnight, depending on hardware and font/disk speed. Benchmark one epoch on the target machine before committing to the full run.
-
-Before replacing the existing model, keep the candidate in its separate artifact directory and evaluate both models on the exact same held-out **real handwritten** images, arranged as `heldout/<kanji>/*.png` (or JPG). Do not put these evaluation images in training folders.
-
-```powershell
-python ml/scripts/evaluate_kanji_models.py --dataset C:\datasets\kanji-heldout --old-model-dir ml/models --candidate-model-dir ml/models/n3_candidate
-```
-
-The script reports top-1 accuracy and sample counts separately for N5, N4, and N3. Review per-level accuracy and confusion examples, especially N5/N4 regression, before backing up and manually promoting both candidate files (`kanji_model.pt` and `label_map.json`) together. The training script's validation split is not a substitute for a real handwriting holdout.
-
-Risk: the classifier grows from roughly 245 to 612 classes, while the added N3 training images may be synthetic font renderings only. This can lower accuracy on real handwriting, including existing N5/N4 classes. Do not deploy the candidate until its held-out real handwriting results are acceptable.
+`/api/kanji/recognize` is unchanged. It obtains CNN predictions from the label map and the service reranks candidates using the existing stroke-count, requested-JLPT, and frequency scores. Ollama is not used for image recognition.

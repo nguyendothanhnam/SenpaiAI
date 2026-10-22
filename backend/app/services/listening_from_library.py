@@ -10,7 +10,7 @@ from ..core.config import settings
 async def generate_listening_draft(document_text: str, jlpt_level: str, topic: str) -> dict[str, Any]:
     context = document_text[:24000]
     prompt = f"""Viết một hội thoại học tiếng Nhật ngắn khoảng 6 lượt/câu, cấp {jlpt_level}, chủ đề {topic or 'phù hợp tài liệu'}, bám sát thông tin và mẫu câu trong tài liệu.
-Chỉ trả JSON: {{"title":"tiêu đề tiếng Việt","description":"mô tả ngắn tiếng Việt","segments":[{{"ja":"câu tiếng Nhật","vi":"bản dịch tiếng Việt"}}]}}.
+Chỉ trả về JSON theo cấu trúc: {{"title":"tiêu đề tiếng Việt","description":"mô tả ngắn tiếng Việt","segments":[{{"ja":"câu tiếng Nhật","vi":"bản dịch tiếng Việt"}}]}}.
 Mỗi câu phải tự nhiên, có đủ ja và vi, không thêm trường ngoài. Không bịa dữ kiện trái với tài liệu.
 Tài liệu:
 ---

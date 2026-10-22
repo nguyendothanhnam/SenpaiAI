@@ -31,8 +31,8 @@ services:
   voicevox:
     image: voicevox/voicevox_engine:cpu-latest
     container_name: senpai-voicevox
-    expose:
-      - "50021"
+    ports:
+      - "${VOICEVOX_PORT:-50021}:50021"
     environment:
       - VV_HOST=0.0.0.0
     networks:

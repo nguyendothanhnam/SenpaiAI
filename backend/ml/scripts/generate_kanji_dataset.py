@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from train_kanji_model import DEFAULT_SYNTHETIC_DIR, find_japanese_fonts, generate_synthetic_dataset  # noqa: E402
-from kanji_labels import SUPPORTED_KANJI  # noqa: E402
+from train_kanji_model import DEFAULT_SYNTHETIC_DIR, find_japanese_fonts, generate_synthetic_dataset, validate_fonts  # noqa: E402
+from kanji_labels import SUPPORTED_KANJI, validate_training_dictionary  # noqa: E402
 
 
 def main() -> None:
@@ -22,10 +22,16 @@ def main() -> None:
     parser.add_argument("--force", action="store_true", help="Regenerate existing PNGs.")
     args = parser.parse_args()
 
+    validate_training_dictionary()
+
     random.seed(42)
     fonts = find_japanese_fonts(args.font)
     if not fonts:
         raise RuntimeError("No Japanese fonts found. Pass --font C:\\path\\to\\font.ttc")
+    fonts = validate_fonts(fonts, SUPPORTED_KANJI, strict_paths=bool(args.font))
+    print("Using full-coverage fonts:")
+    for font in fonts:
+        print(f"  {font}")
 
     generate_synthetic_dataset(args.output, SUPPORTED_KANJI, fonts, args.samples_per_class, args.image_size, args.force)
     print(f"Generated {len(SUPPORTED_KANJI) * args.samples_per_class} images in {args.output}")

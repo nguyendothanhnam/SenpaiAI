@@ -1,8 +1,10 @@
 import { KANJIVG_VIEW_BOX } from '../../utils/kanjiStrokeData'
 import { useQuery } from 'react-query'
 import { kanjiDataAPI } from '../../services/api'
+import { useTranslation } from 'react-i18next'
 
 export default function KanjiStrokeOrder({ kanji, strokes: providedStrokes, step, viewBox: providedViewBox = KANJIVG_VIEW_BOX, strokeOrder }) {
+  const { t } = useTranslation('kanjiStatus')
   const strokeOrderQuery = useQuery(
     ['kanjiStrokeOrderComponent', kanji],
     () => kanjiDataAPI.getStrokeOrder(kanji).then((response) => response.data),
@@ -21,8 +23,8 @@ export default function KanjiStrokeOrder({ kanji, strokes: providedStrokes, step
       <div className="theme-writing-surface grid min-h-[420px] place-items-center rounded-3xl border border-violet-100 bg-white p-5">
         <div className="max-w-md text-center">
           <p className="font-japanese text-7xl font-bold text-gray-300">{kanji}</p>
-          <p className="mt-5 text-base font-bold text-gray-950">{data?.message || 'Stroke order data is not available for this Kanji.'}</p>
-          <p className="mt-2 text-sm leading-6 text-gray-500">No fallback drawing is shown because unverified stroke paths would be misleading.</p>
+          <p className="mt-5 text-base font-bold text-gray-950">{t('noStrokeData')}</p>
+          <p className="mt-2 text-sm leading-6 text-gray-500">{t('strokeFallbackNote')}</p>
         </div>
       </div>
     )

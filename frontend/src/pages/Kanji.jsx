@@ -9,6 +9,7 @@ import KanjiStrokeOrder from '../components/kanji/KanjiStrokeOrder'
 import PredictionResult from '../components/kanji/PredictionResult'
 import { kanjiDataAPI, kanjiRecognitionAPI } from '../services/api'
 import { useTranslation } from 'react-i18next'
+import { KANJI_DICTIONARY_LEVELS } from '../constants/jlptLevels'
 
 function readableError(value, fallback = 'Kanji not recognized') {
   if (!value) return fallback
@@ -754,9 +755,7 @@ export default function Kanji() {
                 className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 outline-none focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
               >
                 <option value="all">All JLPT</option>
-                <option value="N5">N5</option>
-                <option value="N4">N4</option>
-                <option value="N3">N3</option>
+                {KANJI_DICTIONARY_LEVELS.map((level) => <option key={level} value={level}>{level}</option>)}
               </select>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

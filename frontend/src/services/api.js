@@ -121,6 +121,7 @@ export const grammarPracticeAPI = {
   finish: (sessionId) =>
     api.post(`/grammar-practice/sessions/${sessionId}/finish`),
   generate: (data) => api.post('/grammar-practice/generate', data),
+  generateFromLibrary: (data) => api.post('/grammar-practice/from-library', data),
 }
 
 export const libraryAPI = {
