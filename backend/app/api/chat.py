@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from datetime import datetime, timezone
 from typing import List, Optional
 import time
 import re
+import uuid
 
 from ..core.database import get_db
+from ..core.config import settings
 from ..core.auth import get_current_active_user
-from ..models.database import User, ChatHistory
+from ..models.database import User, ChatHistory, ChatConversation, VoiceConversation
 from ..models.schemas import (
     ChatMessage, 
     ChatResponse, 
@@ -17,8 +20,46 @@ from ..services.llm_service import japanese_service
 from ..services import vocab_mcq_service
 from ..services.kanji_dictionary_service import kanji_dictionary_service
 from ..services.vector_db import chroma_service
+from ..services.chat_conversations import build_recent_chat_context, normalize_title
+from ..services.chat_grounding import reviewed_reference, relevant_chat_documents, finalize_chat_answer
+from ..services.chat_language import detect_chat_language, needs_history, is_translation_question, same_language_translation
 
 router = APIRouter(prefix="/chat", tags=["chat"])
+
+
+def _prepare_text_conversation(db: Session, user: User, message: ChatMessage) -> ChatConversation:
+    if message.conversation_id:
+        conversation = db.query(ChatConversation).filter(
+            ChatConversation.id == message.conversation_id,
+            ChatConversation.user_id == user.id,
+        ).first()
+        if conversation is None:
+            raise HTTPException(status_code=404, detail="conversation_not_found")
+        if conversation.mode != "text":
+            raise HTTPException(status_code=409, detail="conversation_mode_mismatch")
+        has_messages = db.query(ChatHistory.id).filter(
+            ChatHistory.user_id == user.id,
+            ChatHistory.conversation_id == conversation.id,
+        ).first()
+        if conversation.title_is_auto and not has_messages:
+            conversation.title = normalize_title(message.message)
+        return conversation
+
+    now = datetime.now(timezone.utc)
+    conversation = ChatConversation(
+        id=uuid.uuid4(), user_id=user.id, title=normalize_title(message.message),
+        title_is_auto=True, is_pinned=False, mode="text", created_at=now, last_activity_at=now,
+    )
+    db.add(conversation)
+    db.flush()
+    return conversation
+
+
+def _save_chat_entry(db: Session, conversation: ChatConversation, entry: ChatHistory) -> None:
+    conversation.last_activity_at = datetime.now(timezone.utc)
+    entry.conversation_id = conversation.id
+    db.add(entry)
+    db.commit()
 
 
 def find_single_kanji_request(text: str) -> str | None:
@@ -118,99 +159,51 @@ async def send_message(
     
     try:
         start_time = time.time()
+        conversation = _prepare_text_conversation(db, current_user, message)
+        previous_turns = db.query(ChatHistory).filter(
+            ChatHistory.user_id == current_user.id,
+            ChatHistory.conversation_id == conversation.id,
+        ).order_by(ChatHistory.created_at.desc(), ChatHistory.id.desc()).limit(
+            settings.chat_context_max_turns
+        ).all()
+        previous_turns.reverse()
+        conversation_context = build_recent_chat_context(
+            previous_turns,
+            max_turns=settings.chat_context_max_turns,
+            max_chars=settings.chat_context_max_chars,
+        )
+        if not needs_history(message.message):
+            conversation_context = ''
 
-        deterministic_answer = deterministic_chat_answer(message.message)
-        if deterministic_answer:
-            sources = [{"title": "SenpaiAI intent rules", "type": "deterministic_chat", "relevance": 1.0}]
-            chat_entry = ChatHistory(
-                user_id=current_user.id,
-                question=message.message,
-                answer=deterministic_answer,
-                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-                grammar_points=[],
-                translation=None,
-                sources=sources
-            )
-            db.add(chat_entry)
-            db.commit()
-            return ChatResponse(
-                answer=deterministic_answer,
-                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-                grammar_points=[],
-                translation=None,
-                sources=sources,
-                response_time=time.time() - start_time
-            )
+        language = detect_chat_language(message.message, message.response_language or current_user.ui_language)
 
-        requested_kanji = find_single_kanji_request(message.message)
-        if requested_kanji:
-            entry = kanji_dictionary_service.get_entry(requested_kanji)
-            if entry:
-                answer = build_kanji_answer(entry)
-                sources = [{"title": "Local Kanji dictionary", "type": "kanji_dictionary", "relevance": 1.0}]
-                chat_entry = ChatHistory(
-                    user_id=current_user.id,
-                    question=message.message,
-                    answer=answer,
-                    jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-                    grammar_points=[],
-                    translation=None,
-                    sources=sources
-                )
-                db.add(chat_entry)
-                db.commit()
-                return ChatResponse(
-                    answer=answer,
-                    jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-                    grammar_points=[],
-                    translation=None,
-                    sources=sources,
-                    response_time=time.time() - start_time
-                )
-
-        mcq_answer = vocab_mcq_service.try_answer(message.message)
-        if mcq_answer:
-            sources = [{"title": "Local JLPT vocabulary dictionary", "type": mcq_answer.intent, "relevance": 1.0}]
-            chat_entry = ChatHistory(
-                user_id=current_user.id,
-                question=message.message,
-                answer=mcq_answer.answer,
-                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-                grammar_points=[],
-                translation=None,
-                sources=sources
-            )
-
-            db.add(chat_entry)
-            db.commit()
-
-            return ChatResponse(
-                answer=mcq_answer.answer,
-                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-                grammar_points=[],
-                translation=None,
-                sources=sources,
-                response_time=time.time() - start_time
-            )
         
         # Get relevant context using RAG
-        context = chroma_service.get_relevant_context(
-            message.message, 
-            message.jlpt_level or current_user.current_jlpt_level
-        )
+        context, sources = reviewed_reference(message.message, language)
+        if not context and not is_translation_question(message.message):
+            rag_results = relevant_chat_documents(chroma_service.search_documents(
+                message.message, n_results=3,
+                filter_dict={"jlpt_level": message.jlpt_level or current_user.current_jlpt_level},
+            ), message.message)
+            context = "\n\n".join(f"{result['source']['title']}\n{result['content']}" for result in rag_results)
+            sources = [{"title": result["source"]["title"], "url": result["source"].get("source_url", ""),
+                        "relevance": result["similarity_score"]} for result in rag_results]
+        response_context = "\n\n".join(part for part in (context, conversation_context) if part)
         
         # Generate AI response
-        response_data = await japanese_service.chat_response(
+        same_language_answer = same_language_translation(message.message, language)
+        response_data = {"answer": same_language_answer, "jlpt_level": message.jlpt_level or current_user.current_jlpt_level} if same_language_answer else await japanese_service.chat_response(
             question=message.message,
-            context=context,
-            jlpt_level=message.jlpt_level or current_user.current_jlpt_level
+            context=response_context,
+            jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+            response_language=language,
         )
+        response_data["answer"] = finalize_chat_answer(message.message, response_data["answer"], language)
         
         # Extract grammar points if the response contains Japanese
-        grammar_points = None
-        if contains_japanese(response_data["answer"]):
-            grammar_analysis = await japanese_service.analyze_grammar(response_data["answer"])
-            grammar_points = grammar_analysis.get("grammar_points", [])
+        # A second model pass over its own answer produced contradictory cards.
+        # Grammar is explained in context in the main answer instead.
+        grammar_points = []
         
         # Generate translation if requested
         translation = None
@@ -218,26 +211,9 @@ async def send_message(
             translation_result = await japanese_service.translate_text(
                 text=response_data["answer"],
                 source_lang="ja",
-                target_lang="vi"
+                target_lang=language
             )
             translation = translation_result["translated_text"]
-        
-        # Prepare sources from RAG
-        sources = []
-        if context:
-            rag_results = chroma_service.search_documents(
-                message.message, 
-                n_results=3,
-                filter_dict={"jlpt_level": message.jlpt_level or current_user.current_jlpt_level} if message.jlpt_level else None
-            )
-            sources = [
-                {
-                    "title": result["source"]["title"],
-                    "url": result["source"]["source_url"],
-                    "relevance": result["similarity_score"]
-                }
-                for result in rag_results
-            ]
         
         # Save to chat history
         chat_entry = ChatHistory(
@@ -247,11 +223,11 @@ async def send_message(
             jlpt_level=response_data["jlpt_level"],
             grammar_points=grammar_points,
             translation=translation,
-            sources=sources
+            sources=sources,
+            conversation_id=conversation.id,
         )
         
-        db.add(chat_entry)
-        db.commit()
+        _save_chat_entry(db, conversation, chat_entry)
         
         response_time = time.time() - start_time
         
@@ -261,10 +237,18 @@ async def send_message(
             grammar_points=grammar_points,
             translation=translation,
             sources=sources,
-            response_time=response_time
+            response_time=response_time,
+            conversation_id=conversation.id,
         )
         
+    except HTTPException:
+        db.rollback()
+        raise
+    except RuntimeError as exc:
+        db.rollback()
+        raise HTTPException(status_code=503, detail="chat_generation_failed") from exc
     except Exception as e:
+        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error processing message: {str(e)}"
@@ -306,8 +290,20 @@ async def delete_chat_entry(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Chat entry not found"
         )
-    
+    conversation_id = chat_entry.conversation_id
     db.delete(chat_entry)
+    db.flush()
+    if conversation_id:
+        voice = db.query(VoiceConversation).filter(
+            VoiceConversation.id == conversation_id,
+            VoiceConversation.user_id == current_user.id,
+        ).first()
+        if voice:
+            voice.turn_count = db.query(ChatHistory).filter(
+                ChatHistory.conversation_id == conversation_id,
+                ChatHistory.user_id == current_user.id,
+                ChatHistory.input_mode == "voice",
+            ).count()
     db.commit()
     
     return None
@@ -319,12 +315,12 @@ async def clear_chat_history(
 ):
     """Clear all chat history for current user."""
     
-    from ..models.database import VoiceConversation
     # Clearing chat also clears voice conversation summaries; turns are removed below.
     db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
     db.query(ChatHistory)\
         .filter(ChatHistory.user_id == current_user.id)\
         .delete()
+    db.query(ChatConversation).filter(ChatConversation.user_id == current_user.id).delete(synchronize_session=False)
     
     db.commit()
     

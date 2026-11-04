@@ -1,6 +1,6 @@
 from pathlib import Path
 import re
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from fastapi.responses import StreamingResponse
@@ -11,13 +11,67 @@ from sqlalchemy.orm import Session
 from ..core.auth import get_current_active_user
 from ..core.config import settings
 from ..core.database import get_db
-from ..models.database import Document, ListeningLesson, User
+from ..models.database import Document, ListeningAttempt, ListeningLesson, User
 from ..models.schemas import TokenData
 from ..services.audio_service import VoicevoxProvider, VoicevoxError, choose_speaker_id, furigana_tokens, synthesize_segments
 from ..services.listening_from_library import generate_listening_draft
+from ..services.listening_exercises import build_exercises, public_questions, grade_questions
 
 router = APIRouter(prefix="/listening", tags=["listening"])
 optional_bearer = HTTPBearer(auto_error=False)
+
+
+class ListeningAnswer(BaseModel):
+    question_id: str = Field(min_length=1, max_length=80)
+    answer: str = Field(max_length=1000)
+
+
+class ListeningAttemptRequest(BaseModel):
+    mode: Literal['dictation', 'cloze', 'comprehension']
+    revision: str = Field(min_length=1, max_length=64)
+    answers: list[ListeningAnswer] = Field(min_length=1, max_length=50)
+    duration_ms: int = Field(default=0, ge=0, le=86400000)
+
+
+def exercise_lesson(lesson_id: int, user: User, db: Session) -> ListeningLesson:
+    lesson = db.query(ListeningLesson).filter(ListeningLesson.id == lesson_id, ListeningLesson.is_published.is_(True)).first()
+    if not lesson or not _library_lesson_visible(lesson, user):
+        raise HTTPException(404, detail='listening_lesson_not_found')
+    return lesson
+
+
+@router.get('/lessons/{lesson_id}/exercises')
+def get_exercises(lesson_id: int, current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    lesson = exercise_lesson(lesson_id, current_user, db)
+    revision, questions = build_exercises(lesson.id, lesson.segments or [])
+    return {'lesson_id': lesson.id, 'revision': revision, 'questions': public_questions(questions)}
+
+
+@router.post('/lessons/{lesson_id}/attempts', status_code=201)
+def submit_attempt(lesson_id: int, body: ListeningAttemptRequest, current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    lesson = exercise_lesson(lesson_id, current_user, db)
+    revision, questions = build_exercises(lesson.id, lesson.segments or [])
+    if revision != body.revision:
+        raise HTTPException(409, detail='listening_exercises_changed')
+    try:
+        graded = grade_questions(questions, body.mode, [answer.model_dump() for answer in body.answers])
+    except ValueError as error:
+        raise HTTPException(422, detail=str(error)) from error
+    attempt = ListeningAttempt(user_id=current_user.id, lesson_id=lesson.id, mode=body.mode,
+                               score=graded['score'], details={'revision': revision, **graded}, duration_ms=body.duration_ms)
+    db.add(attempt)
+    db.commit()
+    db.refresh(attempt)
+    return {'id': attempt.id, 'mode': body.mode, 'created_at': attempt.created_at, **graded}
+
+
+@router.get('/lessons/{lesson_id}/attempts')
+def list_attempts(lesson_id: int, limit: int = Query(10, ge=1, le=50),
+                  current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    exercise_lesson(lesson_id, current_user, db)
+    rows = db.query(ListeningAttempt).filter(ListeningAttempt.user_id == current_user.id, ListeningAttempt.lesson_id == lesson_id).order_by(ListeningAttempt.created_at.desc(), ListeningAttempt.id.desc()).limit(limit).all()
+    return {'items': [{'id': row.id, 'mode': row.mode, 'score': row.score, 'created_at': row.created_at,
+                       'correct_count': (row.details or {}).get('correct_count', 0), 'total': (row.details or {}).get('total', 0)} for row in rows]}
 
 
 class LibraryDraftRequest(BaseModel):
@@ -146,8 +200,11 @@ def get_lesson_audio(lesson_id: int, range_header: Optional[str] = Header(None, 
             generated_name, assembled = synthesize_segments(
                 [segment["ja"] for segment in lesson.segments], speaker_id, provider
             )
-            for segment, timing in zip(lesson.segments, assembled.timings):
-                segment.update(timing)
+            # Assign a new JSON value so SQLAlchemy persists the generated timings.
+            lesson.segments = [
+                {**segment, **timing}
+                for segment, timing in zip(lesson.segments, assembled.timings)
+            ]
             lesson.audio_path = generated_name
             lesson.duration_ms = assembled.duration_ms
             db.commit()

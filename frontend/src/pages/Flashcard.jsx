@@ -91,19 +91,19 @@ export default function Flashcard() {
       <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
         <ArrowLeft className="h-4 w-4" /> {t('shared.backToGames')}
       </Link>
-    <div className="space-y-4 rounded-2xl border border-orange-100 bg-orange-50 p-4 shadow-sm sm:p-5">
-      <section className="rounded-2xl border border-orange-100 bg-white p-4 shadow-sm">
+    <div className="space-y-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--accent)] p-4 shadow-sm sm:p-5">
+      <section className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-4 shadow-sm">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-500">{t('flashcard.eyebrow')}</p>
-            <h1 className="mt-1 text-2xl font-bold text-gray-950">{t('flashcard.title')}</h1>
-            <p className="mt-1 text-sm text-gray-500">{t('flashcard.subtitle')}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{t('flashcard.eyebrow')}</p>
+            <h1 className="mt-1 text-2xl font-bold text-[color:var(--text)]">{t('flashcard.title')}</h1>
+            <p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('flashcard.subtitle')}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button onClick={() => navigate('/flashcard/manual')} className="inline-flex items-center rounded-xl bg-orange-500 px-4 py-2 text-sm font-bold text-white">
+            <button onClick={() => navigate('/flashcard/manual')} className="inline-flex items-center rounded-xl bg-[color:var(--primary)] px-4 py-2 text-sm font-bold text-[color:var(--primary-contrast)]">
               <Plus className="mr-2 h-4 w-4" /> {t('flashcard.createSet')}
             </button>
-            <label className="inline-flex cursor-pointer items-center rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
+            <label className="inline-flex cursor-pointer items-center rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-sm font-bold text-[color:var(--primary)]">
               <FileUp className="mr-2 h-4 w-4" /> {t('flashcard.importSet')}
               <input type="file" accept=".xlsx,.xls,.csv,.json" onChange={handleImport} className="sr-only" />
             </label>
@@ -113,38 +113,38 @@ export default function Flashcard() {
         {importError && <div className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{importError}</div>}
 
         <div className="mt-4 grid gap-3 md:grid-cols-4">
-          <div className="rounded-xl bg-orange-50 px-4 py-3">
-            <p className="text-xs font-bold text-orange-600">{t('flashcard.totalSets')}</p>
-            <p className="mt-1 text-2xl font-black text-gray-950">{sets.length}</p>
+          <div className="rounded-xl bg-[color:var(--accent)] px-4 py-3">
+            <p className="text-xs font-bold text-[color:var(--primary)]">{t('flashcard.totalSets')}</p>
+            <p className="mt-1 text-2xl font-black text-[color:var(--text)]">{sets.length}</p>
           </div>
-          <div className="rounded-xl bg-orange-50 px-4 py-3">
-            <p className="text-xs font-bold text-orange-600">{t('flashcard.totalCards')}</p>
-            <p className="mt-1 text-2xl font-black text-gray-950">{totalCards}</p>
+          <div className="rounded-xl bg-[color:var(--accent)] px-4 py-3">
+            <p className="text-xs font-bold text-[color:var(--primary)]">{t('flashcard.totalCards')}</p>
+            <p className="mt-1 text-2xl font-black text-[color:var(--text)]">{totalCards}</p>
           </div>
-          <div className="rounded-xl bg-orange-50 px-4 py-3">
-            <p className="text-xs font-bold text-orange-600">{t('flashcard.recentSet')}</p>
-            <p className="mt-1 truncate text-base font-black text-gray-950">{recentlyStudied?.name || t('shared.notYet')}</p>
+          <div className="rounded-xl bg-[color:var(--accent)] px-4 py-3">
+            <p className="text-xs font-bold text-[color:var(--primary)]">{t('flashcard.recentSet')}</p>
+            <p className="mt-1 truncate text-base font-black text-[color:var(--text)]">{recentlyStudied?.name || t('shared.notYet')}</p>
           </div>
-          <div className="rounded-xl bg-orange-50 px-4 py-3">
-            <p className="text-xs font-bold text-orange-600">{t('flashcard.studyProgress')}</p>
-            <p className="mt-1 text-2xl font-black text-gray-950">{aggregateAccuracy}%</p>
+          <div className="rounded-xl bg-[color:var(--accent)] px-4 py-3">
+            <p className="text-xs font-bold text-[color:var(--primary)]">{t('flashcard.studyProgress')}</p>
+            <p className="mt-1 text-2xl font-black text-[color:var(--text)]">{aggregateAccuracy}%</p>
           </div>
         </div>
 
         <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_repeat(3,auto)]">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-orange-400" />
-            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t('flashcard.search')} className="w-full rounded-xl border border-orange-100 bg-orange-50 py-2.5 pl-10 pr-4 text-sm font-semibold outline-none focus:border-orange-300 focus:bg-white" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--primary)]" />
+            <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={t('flashcard.search')} className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] py-2.5 pl-10 pr-4 text-sm font-semibold outline-none focus:border-[color:var(--border)] focus:bg-[color:var(--card)]" />
           </div>
-          <select value={filters.jlpt} onChange={(event) => setFilters((current) => ({ ...current, jlpt: event.target.value }))} className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
+          <select value={filters.jlpt} onChange={(event) => setFilters((current) => ({ ...current, jlpt: event.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-sm font-bold text-[color:var(--primary)]">
             <option value="all">{t('shared.allJlpt')}</option>
             {filterOptions.jlpt.map((level) => <option key={level} value={level}>{level}</option>)}
           </select>
-          <select value={filters.category} onChange={(event) => setFilters((current) => ({ ...current, category: event.target.value }))} className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
+          <select value={filters.category} onChange={(event) => setFilters((current) => ({ ...current, category: event.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-sm font-bold text-[color:var(--primary)]">
             <option value="all">{t('shared.allCategories')}</option>
             {filterOptions.category.map((category) => <option key={category} value={category}>{category}</option>)}
           </select>
-          <select value={filters.source} onChange={(event) => setFilters((current) => ({ ...current, source: event.target.value }))} className="rounded-xl border border-orange-200 bg-white px-4 py-2 text-sm font-bold text-orange-700">
+          <select value={filters.source} onChange={(event) => setFilters((current) => ({ ...current, source: event.target.value }))} className="rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-2 text-sm font-bold text-[color:var(--primary)]">
             <option value="all">{t('flashcard.allSources')}</option>
             <option value="user">{t('flashcard.sourceUser')}</option>
             <option value="imported">{t('flashcard.sourceImported')}</option>
@@ -156,32 +156,32 @@ export default function Flashcard() {
 
       <section className="grid gap-4 lg:grid-cols-2">
         {visibleSets.length ? visibleSets.map((set, index) => (
-          <motion.div key={set.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.03 }} className="rounded-2xl border border-orange-100 bg-white p-5 shadow-sm">
+          <motion.div key={set.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.03 }} className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-5 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h2 className="text-lg font-black text-gray-950">{set.name}</h2>
-                <p className="mt-1 text-xs font-semibold text-gray-500">{set.file_name || (set.source ? t(`flashcard.source${set.source[0].toUpperCase()}${set.source.slice(1)}`) : t('flashcard.sourceUser'))}</p>
+                <h2 className="text-lg font-black text-[color:var(--text)]">{set.name}</h2>
+                <p className="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">{set.file_name || (set.source ? t(`flashcard.source${set.source[0].toUpperCase()}${set.source.slice(1)}`) : t('flashcard.sourceUser'))}</p>
               </div>
-              <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-bold text-orange-700">{set.jlpt_level || t('shared.mixed')}</span>
+              <span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-bold text-[color:var(--primary)]">{set.jlpt_level || t('shared.mixed')}</span>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-              <div><p className="font-black text-gray-950">{set.cards?.length || 0}</p><p className="text-xs text-gray-500">{t('flashcard.cards')}</p></div>
-              <div><p className="font-black text-gray-950">{set.category || t('shared.mixed')}</p><p className="text-xs text-gray-500">{t('shared.category')}</p></div>
-              <div><p className="font-black text-gray-950">{formatDate(set.created_at, t('shared.notYet'))}</p><p className="text-xs text-gray-500">{t('shared.created')}</p></div>
-              <div><p className="font-black text-gray-950">{formatDate(set.last_studied_at, t('shared.notYet'))}</p><p className="text-xs text-gray-500">{t('flashcard.lastStudied')}</p></div>
+              <div><p className="font-black text-[color:var(--text)]">{set.cards?.length || 0}</p><p className="text-xs text-[color:var(--text-muted)]">{t('flashcard.cards')}</p></div>
+              <div><p className="font-black text-[color:var(--text)]">{set.category || t('shared.mixed')}</p><p className="text-xs text-[color:var(--text-muted)]">{t('shared.category')}</p></div>
+              <div><p className="font-black text-[color:var(--text)]">{formatDate(set.created_at, t('shared.notYet'))}</p><p className="text-xs text-[color:var(--text-muted)]">{t('shared.created')}</p></div>
+              <div><p className="font-black text-[color:var(--text)]">{formatDate(set.last_studied_at, t('shared.notYet'))}</p><p className="text-xs text-[color:var(--text-muted)]">{t('flashcard.lastStudied')}</p></div>
             </div>
-            <div className="mt-4 rounded-xl bg-orange-50 px-3 py-2 text-xs font-bold text-orange-800">
+            <div className="mt-4 rounded-xl bg-[color:var(--accent)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">
               {t('flashcard.stats', { accuracy: set.stats?.accuracy || 0, correct: set.stats?.correct || 0, wrong: set.stats?.wrong || 0, streak: set.stats?.streak || 0 })}
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <button onClick={() => navigate('/flashcard/play', { state: { setId: set.id } })} className="inline-flex items-center rounded-xl bg-orange-500 px-3 py-2 text-sm font-bold text-white"><PlayCircle className="mr-2 h-4 w-4" /> {t('shared.study')}</button>
-              <button onClick={() => navigate('/flashcard/manual', { state: { editSetId: set.id } })} className="inline-flex items-center rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm font-bold text-orange-700"><PencilLine className="mr-2 h-4 w-4" /> {t('shared.edit')}</button>
-              <button onClick={() => handleDuplicate(set)} className="inline-flex items-center rounded-xl border border-orange-200 bg-white px-3 py-2 text-sm font-bold text-orange-700"><Copy className="mr-2 h-4 w-4" /> {t('shared.duplicate')}</button>
-              <button onClick={() => handleDelete(set)} className="inline-flex items-center rounded-xl border border-red-200 bg-white px-3 py-2 text-sm font-bold text-red-600"><Trash2 className="mr-2 h-4 w-4" /> {t('shared.delete')}</button>
+              <button onClick={() => navigate('/flashcard/play', { state: { setId: set.id } })} className="inline-flex items-center rounded-xl bg-[color:var(--primary)] px-3 py-2 text-sm font-bold text-[color:var(--primary-contrast)]"><PlayCircle className="mr-2 h-4 w-4" /> {t('shared.study')}</button>
+              <button onClick={() => navigate('/flashcard/manual', { state: { editSetId: set.id } })} className="inline-flex items-center rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm font-bold text-[color:var(--primary)]"><PencilLine className="mr-2 h-4 w-4" /> {t('shared.edit')}</button>
+              <button onClick={() => handleDuplicate(set)} className="inline-flex items-center rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 py-2 text-sm font-bold text-[color:var(--primary)]"><Copy className="mr-2 h-4 w-4" /> {t('shared.duplicate')}</button>
+              <button onClick={() => handleDelete(set)} className="inline-flex items-center rounded-xl border border-red-200 bg-[color:var(--card)] px-3 py-2 text-sm font-bold text-red-600"><Trash2 className="mr-2 h-4 w-4" /> {t('shared.delete')}</button>
             </div>
           </motion.div>
         )) : (
-          <div className="rounded-2xl bg-white p-8 text-center text-sm font-semibold text-gray-600 lg:col-span-2">{t('flashcard.noMatches')}</div>
+          <div className="rounded-2xl bg-[color:var(--card)] p-8 text-center text-sm font-semibold text-[color:var(--text-muted)] lg:col-span-2">{t('flashcard.noMatches')}</div>
         )}
       </section>
     </div>

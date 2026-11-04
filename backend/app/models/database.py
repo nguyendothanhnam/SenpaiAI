@@ -40,6 +40,8 @@ class User(Base):
     # Relationships
     chat_history = relationship("ChatHistory", back_populates="user")
     learning_sessions = relationship("LearningSession", back_populates="user")
+    chat_folders = relationship("ChatFolder", back_populates="user")
+    chat_conversations = relationship("ChatConversation", back_populates="user")
 
 
 class UserGameProfile(Base):
@@ -199,8 +201,42 @@ class PushSubscription(Base):
     failed_count = Column(Integer, nullable=False, default=0, server_default="0")
 
 
+class ChatFolder(Base):
+    __tablename__ = "chat_folders"
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(Text, nullable=False)
+    sort_order = Column(Integer, nullable=False, default=0, server_default="0")
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+    user = relationship("User", back_populates="chat_folders")
+
+
+class ChatConversation(Base):
+    __tablename__ = "chat_conversations"
+    __table_args__ = (
+        Index("ix_chat_conversations_user_activity", "user_id", "last_activity_at"),
+        Index("ix_chat_conversations_user_folder", "user_id", "folder_id"),
+        Index("ix_chat_conversations_user_pinned", "user_id", "is_pinned"),
+    )
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    folder_id = Column(Uuid(as_uuid=True), ForeignKey("chat_folders.id", ondelete="SET NULL"), nullable=True, index=True)
+    title = Column(Text, nullable=False)
+    title_is_auto = Column(Boolean, nullable=False, default=True, server_default="true")
+    is_pinned = Column(Boolean, nullable=False, default=False, server_default="false")
+    mode = Column(String(10), nullable=False, default="text", server_default="text")
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    last_activity_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+    user = relationship("User", back_populates="chat_conversations")
+
+
 class ChatHistory(Base):
     __tablename__ = "chat_history"
+    __table_args__ = (Index("ix_chat_history_conversation_time", "conversation_id", "created_at", "id"),)
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)

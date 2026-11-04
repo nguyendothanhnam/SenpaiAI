@@ -82,10 +82,10 @@ export default function FlashcardManual() {
     <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
       <ArrowLeft className="h-4 w-4" /> Back to Games
     </Link>
-    <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm">
-      <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400 px-6 py-8 text-white">
+    <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-sm">
+      <div className="bg-[image:var(--primary-gradient)] px-6 py-8 text-[color:var(--primary-contrast)]">
         <h1 className="text-3xl font-semibold">{existingSet ? 'Edit Flashcard Set' : 'Create Flashcard Set'}</h1>
-        <p className="mt-2 text-sm text-white/90">Manage one organized collection of flashcards.</p>
+        <p className="mt-2 text-sm text-[color:var(--primary-contrast)] opacity-90">Manage one organized collection of flashcards.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 px-6 py-8">
@@ -94,27 +94,27 @@ export default function FlashcardManual() {
 
         <div className="grid gap-3 md:grid-cols-3">
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Set Name</label>
-            <input value={setName} onChange={(event) => setSetName(event.target.value)} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm" />
+            <label className="mb-2 block text-sm font-medium text-[color:var(--text)]">Set Name</label>
+            <input value={setName} onChange={(event) => setSetName(event.target.value)} className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm" />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">JLPT Level</label>
-            <select value={jlptLevel} onChange={(event) => setJlptLevel(event.target.value)} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm">
+            <label className="mb-2 block text-sm font-medium text-[color:var(--text)]">JLPT Level</label>
+            <select value={jlptLevel} onChange={(event) => setJlptLevel(event.target.value)} className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm">
               <option value="">Mixed</option>
               {['N5', 'N4', 'N3', 'N2', 'N1'].map((level) => <option key={level} value={level}>{level}</option>)}
             </select>
           </div>
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">Category</label>
-            <input value={category} onChange={(event) => setCategory(event.target.value)} placeholder="Food, Travel, Verbs..." className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm" />
+            <label className="mb-2 block text-sm font-medium text-[color:var(--text)]">Category</label>
+            <input value={category} onChange={(event) => setCategory(event.target.value)} placeholder="Food, Travel, Verbs..." className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm" />
           </div>
         </div>
 
         <AnimatePresence mode="popLayout">
           {cards.map((card, index) => (
-            <motion.div key={card.id || `card-${index}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+            <motion.div key={card.id || `card-${index}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-5">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-gray-700">Card {index + 1}</h3>
+                <h3 className="text-sm font-semibold text-[color:var(--text)]">Card {index + 1}</h3>
                 {cards.length > 1 && (
                   <button type="button" onClick={() => handleRemoveCard(index)} className="inline-flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100">
                     <Trash2 className="h-3.5 w-3.5" /> Delete Card
@@ -124,12 +124,12 @@ export default function FlashcardManual() {
 
               <div className="grid gap-3 md:grid-cols-2">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">Front</label>
-                  <input value={card.front} onChange={(event) => handleCardChange(index, 'front', event.target.value)} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm" placeholder="例: 犬" />
+                  <label className="mb-2 block text-sm font-medium text-[color:var(--text)]">Front</label>
+                  <input value={card.front} onChange={(event) => handleCardChange(index, 'front', event.target.value)} className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm" placeholder="例: 犬" />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">Back</label>
-                  <input value={card.back} onChange={(event) => handleCardChange(index, 'back', event.target.value)} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm" placeholder="VD: chó" />
+                  <label className="mb-2 block text-sm font-medium text-[color:var(--text)]">Back</label>
+                  <input value={card.back} onChange={(event) => handleCardChange(index, 'back', event.target.value)} className="w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 py-3 text-sm" placeholder="VD: chó" />
                 </div>
               </div>
             </motion.div>
@@ -137,8 +137,8 @@ export default function FlashcardManual() {
         </AnimatePresence>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <button type="button" onClick={handleAddCard} className="rounded-xl border border-dashed border-gray-300 bg-gray-50 px-5 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100">+ Add Card</button>
-          <button type="submit" disabled={isSubmitDisabled} className="rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60">
+          <button type="button" onClick={handleAddCard} className="rounded-xl border border-dashed border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-5 py-3 text-sm font-semibold text-[color:var(--text)] hover:bg-[color:var(--bg-elevated)]">+ Add Card</button>
+          <button type="submit" disabled={isSubmitDisabled} className="rounded-xl bg-[color:var(--primary)] px-5 py-3 text-sm font-semibold text-[color:var(--primary-contrast)] shadow-sm hover:bg-[color:var(--primary)] disabled:cursor-not-allowed disabled:opacity-60">
             {isSubmitting ? 'Saving...' : `Save Set & Study`}
           </button>
         </div>

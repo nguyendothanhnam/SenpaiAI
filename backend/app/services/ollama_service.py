@@ -2,10 +2,36 @@ from typing import Dict, List, Any, Optional
 import time
 import json
 import re
+import asyncio
 import ollama
+import httpx
 from ..core.config import settings
-from .grammar_analyzer import sanitize_grammar_analysis
-from .chat_prompt import CHAT_SYSTEM_PROMPT
+from .grammar_analyzer import grammar_generation_prompt
+from .grammar_grounded import grounded_patterns
+from .chat_prompt import CHAT_SYSTEM_PROMPT, build_chat_system_prompt
+from .chat_grounding import clean_chat_answer, finalize_chat_answer, reviewed_reference
+from .chat_language import detect_chat_language, answer_needs_revision
+
+
+GRAMMAR_SCHEMA = {
+    'type': 'object', 'additionalProperties': False,
+    'properties': {
+        'sentence_meaning': {'type': 'string'},
+        'vocabulary': {'type': 'array', 'maxItems': 12, 'items': {
+            'type': 'object', 'additionalProperties': False,
+            'properties': {'term': {'type': 'string'}, 'meaning': {'type': 'string'},
+                           'jlpt_level': {'type': 'string', 'enum': ['N5', 'N4', 'N3', 'N2', 'N1']}},
+            'required': ['term', 'meaning', 'jlpt_level']}},
+        'grammar_patterns': {'type': 'array', 'maxItems': 6, 'items': {
+            'type': 'object', 'additionalProperties': False,
+            'properties': {key: {'type': 'string'} for key in ('pattern', 'evidence', 'explanation', 'example')},
+            'required': ['pattern', 'evidence', 'explanation', 'example']}},
+        'jlpt_level': {'type': 'string', 'enum': ['N5', 'N4', 'N3', 'N2', 'N1']},
+        'difficulty_score': {'type': 'number', 'minimum': 1, 'maximum': 10},
+        'suggestions': {'type': 'array', 'maxItems': 3, 'items': {'type': 'string'}},
+    },
+    'required': ['sentence_meaning', 'vocabulary', 'grammar_patterns', 'jlpt_level', 'difficulty_score', 'suggestions'],
+}
 
 
 class OllamaJapaneseLearningService:
@@ -23,10 +49,10 @@ class OllamaJapaneseLearningService:
         # Prompts are now built directly in methods
         pass
 
-    def _call_ollama(self, prompt: str, system_prompt: str = None, max_retries: int = 2, temperature: Optional[float] = None) -> str:
+    def _call_ollama(self, prompt: str, system_prompt: str = None, max_retries: int = 2, temperature: Optional[float] = None, response_format: Any = None) -> str:
         """Call Ollama API directly with retry logic."""
         # Check Ollama connection first
-        if not self.check_ollama_connection():
+        if not isinstance(response_format, dict) and not self.check_ollama_connection():
             raise Exception("Ollama is not running. Please start Ollama service.")
 
         last_error = None
@@ -38,14 +64,35 @@ class OllamaJapaneseLearningService:
                 messages.append({"role": "user", "content": prompt})
 
                 chat_options = {"temperature": temperature} if temperature is not None else None
+                if isinstance(response_format, dict):
+                    # The installed Ollama SDK accepts only format='json'.
+                    # Send the schema to the configured server directly so
+                    # field types and JLPT enums are actually constrained.
+                    with httpx.Client(timeout=90) as client:
+                        structured = client.post(f"{self.base_url.rstrip('/')}/api/chat", json={
+                            'model': self.model, 'messages': messages, 'stream': False,
+                            'format': response_format,
+                            'options': {**(chat_options or {}), 'num_ctx': 4096, 'num_predict': 1800},
+                        })
+                        structured.raise_for_status()
+                        payload = structured.json()
+                        if not payload.get('done') or payload.get('done_reason') == 'length':
+                            raise ValueError('incomplete_grammar_response')
+                        return payload['message']['content']
                 response = ollama.chat(
                     model=self.model,
                     messages=messages,
                     **({"options": chat_options} if chat_options else {}),
+                    **({'format': response_format} if response_format else {}),
                 )
                 return response['message']['content']
             except Exception as e:
                 last_error = e
+                if isinstance(response_format, dict):
+                    # Do not silently drop schema constraints through the old
+                    # SDK's generate fallback. The caller can show grounded
+                    # partial analysis if the server is unavailable.
+                    break
                 # If it's a connection error, try to reconnect
                 if "connection" in str(e).lower() or "terminated" in str(e).lower():
                     if attempt < max_retries:
@@ -59,6 +106,7 @@ class OllamaJapaneseLearningService:
                         model=self.model,
                         prompt=f"{system_prompt}\n\n{prompt}" if system_prompt else prompt,
                         **({"options": chat_options} if chat_options else {}),
+                        **({'format': response_format} if response_format else {}),
                     )
                     return response['response']
                 except Exception as e2:
@@ -84,115 +132,68 @@ class OllamaJapaneseLearningService:
             self,
             question: str,
             context: Optional[str] = None,
-            jlpt_level: Optional[str] = None
+            jlpt_level: Optional[str] = None,
+            response_language: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Generate a chat response with RAG context."""
         start_time = time.time()
+        language = response_language or detect_chat_language(question)
+        system_prompt = build_chat_system_prompt(language)
 
         try:
             # Prepare the question with context
             if context:
-                enhanced_question = f"Context: {context}\n\nQuestion: {question}"
+                enhanced_question = f"Reference material (use only if relevant):\n{context}\n\nLATEST QUESTION:\n{question}"
             else:
                 enhanced_question = question
 
             # Add JLPT level context if provided
             if jlpt_level:
-                enhanced_question = f"User's JLPT level: {jlpt_level}\n\n{enhanced_question}"
+                enhanced_question = f"Learner JLPT: {jlpt_level}\n\n{enhanced_question}"
 
-            answer = self._call_ollama(enhanced_question, CHAT_SYSTEM_PROMPT).strip()
-
-            # Predict JLPT level of the response
-            jlpt_prediction = await self.predict_jlpt_level(answer)
+            answer = finalize_chat_answer(question, await asyncio.to_thread(
+                self._call_ollama, enhanced_question, system_prompt, temperature=0
+            ), language)
+            if answer_needs_revision(answer, language, question):
+                reference, _ = reviewed_reference(question, language)
+                # Retry once using only the current task and reviewed material,
+                # never echoing a failed answer or unrelated conversation.
+                correction = f"Answer only in {'Vietnamese' if language == 'vi' else 'English'}.\n{reference}\n\nQuestion: {question}"
+                answer = finalize_chat_answer(question, await asyncio.to_thread(
+                    self._call_ollama, correction, system_prompt, temperature=0
+                ), language)
+            if not answer or answer_needs_revision(answer, language, question):
+                raise RuntimeError('chat_generation_failed')
 
             response_time = time.time() - start_time
 
             return {
                 "answer": answer,
-                "jlpt_level": jlpt_prediction,
+                "jlpt_level": jlpt_level,
                 "response_time": response_time
             }
 
         except Exception as e:
-            return {
-                "answer": f"Xin lỗi, mình gặp lỗi khi xử lý câu hỏi: {str(e)}",
-                "jlpt_level": None,
-                "response_time": time.time() - start_time
-            }
+            raise RuntimeError('chat_generation_failed') from e
 
-    async def analyze_grammar(self, text: str, include_vietnamese: bool = False) -> Dict[str, Any]:
-        """Analyze Japanese grammar in the given text."""
-        try:
-            system_prompt = """You are SenpaiAI, a Japanese grammar expert for Vietnamese learners.
-            Analyze only the given Japanese text. Never invent meanings. If a word is uncertain, write "Chưa chắc chắn về từ này".
-            When Vietnamese is requested, write every explanation, vocabulary meaning, sentence meaning, and suggestion in Vietnamese. Never return English prose. Keep Japanese grammar forms and example sentences in Japanese.
-            Common JLPT vocabulary must be recognized accurately:
-            - がくせい / 学生 = học sinh, sinh viên
-            - どういう意味 = nghĩa là gì
-            Do not treat vocabulary items as grammar patterns.
-            Return only essential grammar patterns that actually occur in the input. Use each pattern's canonical textbook form, order patterns by their first occurrence, remove duplicate or equivalent patterns, and return at most 6.
-            If Vietnamese is requested, use Vietnamese for all explanations and suggestions. Do not use English unless requested.
-            Do not suggest articles, prepositions, or conjunctions; those are not useful Japanese grammar categories here.
-            Difficulty score must match JLPT level: N5 simple questions 2-3/10, N4 4/10, N3 5-6/10, N2 7-8/10, N1 9-10/10.
-
-            Format your response as JSON with these fields:
-            - sentence_meaning: string
-            - vocabulary: array of objects with 'term', 'meaning', 'jlpt_level'
-            - grammar_patterns: array of objects with 'pattern', 'explanation', 'example'
-            - grammar_points: same array as grammar_patterns
-            - jlpt_level: string
-            - difficulty_score: number
-            - suggestions: array of Japanese-learning suggestions related to the text"""
-
-            prompt = f"Vietnamese requested: {include_vietnamese}\nAnalyze this Japanese text: {text}"
-            response = self._call_ollama(prompt, system_prompt, temperature=0)
-
-            # Try to parse JSON response
-            try:
-                # Extract JSON from response if it's wrapped in text
-                json_match = re.search(r'\{.*\}', response, re.DOTALL)
-                if json_match:
-                    result = json.loads(json_match.group())
-                else:
-                    result = json.loads(response)
-
-                # Ensure grammar_points is always an array
-                if "grammar_points" in result:
-                    if not isinstance(result["grammar_points"], list):
-                        # If it's a single object, wrap it in an array
-                        if isinstance(result["grammar_points"], dict):
-                            result["grammar_points"] = [result["grammar_points"]]
-                        else:
-                            result["grammar_points"] = []
-                else:
-                    result["grammar_points"] = []
-
-                # Ensure suggestions is always an array
-                if "suggestions" in result:
-                    if not isinstance(result["suggestions"], list):
-                        result["suggestions"] = [str(result["suggestions"])] if result["suggestions"] else []
-                else:
-                    result["suggestions"] = []
-
-            except json.JSONDecodeError:
-                # Fallback if JSON parsing fails
-                result = {
-                    "jlpt_level": "N3",
-                    "grammar_points": [],
-                    "grammar_patterns": [],
-                    "difficulty_score": 5.0,
-                    "suggestions": ["Ôn lại các mẫu ngữ pháp xuất hiện trong câu"]
-                }
-
-            return sanitize_grammar_analysis(text, result, include_vietnamese=include_vietnamese)
-
-        except Exception as e:
-            return sanitize_grammar_analysis(text, {
-                "jlpt_level": "N3",
-                "grammar_points": [],
-                "difficulty_score": 5.0,
-                "suggestions": []
-            }, include_vietnamese=include_vietnamese)
+    async def analyze_grammar(self, text: str, include_vietnamese: bool = False,
+                              response_language: Optional[str] = None, repair_language: bool = False) -> Dict[str, Any]:
+        language = response_language or ('vi' if include_vietnamese else 'en')
+        system, prompt = grammar_generation_prompt(text, language)
+        points = grounded_patterns(text, language)
+        if points:
+            prompt += '\nVerified forms in this input (use these explanations; preserve their meaning when translating):\n' + json.dumps(points, ensure_ascii=False)
+        if repair_language:
+            prompt += ('\nLưu ý: câu trả lời trước chưa đúng ngôn ngữ. Mỗi trường meaning, sentence_meaning, explanation và suggestions phải là tiếng Việt có dấu, không dùng tiếng Anh.' if language == 'vi' else '\nEvery meaning, explanation and suggestion must be in English. Recheck the language of every field.')
+        response = await asyncio.to_thread(
+            self._call_ollama, prompt, system, temperature=0, max_retries=0,
+            response_format=GRAMMAR_SCHEMA,
+        )
+        match = re.search(r'\{.*\}', response, re.DOTALL)
+        result = json.loads(match.group() if match else response)
+        if not isinstance(result, dict):
+            raise RuntimeError('grammar_analysis_failed')
+        return result
 
     async def translate_text(
             self,

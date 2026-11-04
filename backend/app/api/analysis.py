@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+import re
 from sqlalchemy.orm import Session
 
 from ..core.database import get_db
@@ -12,7 +13,6 @@ from ..models.schemas import (
     ErrorResponse
 )
 from ..services.llm_service import japanese_service
-from ..services.grammar_analyzer import sanitize_grammar_analysis
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
@@ -24,35 +24,17 @@ async def analyze_grammar(
     """Analyze Japanese grammar in the given text."""
     
     try:
-        analysis_result = await japanese_service.analyze_grammar(
-            request.text,
-            include_vietnamese=request.include_translation,
-        )
-        analysis_result = sanitize_grammar_analysis(
-            request.text,
-            analysis_result,
-            include_vietnamese=request.include_translation,
-        )
+        text = request.text.strip()
+        if not text or not re.search(r'[\u3040-\u30ff\u3400-\u9fff]', text):
+            raise HTTPException(status_code=422, detail='grammar_japanese_required')
+        language = request.response_language or current_user.ui_language or 'vi'
+        analysis_result = await japanese_service.analyze_grammar(text, response_language=language)
 
-        if request.include_translation:
-            # Ask the translation path to translate the original Japanese directly.
-            # This prevents a grammar model's English fallback from being shown as
-            # the Vietnamese meaning requested by the UI.
-            translated = await japanese_service.translate_text(
-                text=request.text,
-                source_lang="ja",
-                target_lang="vi",
-            )
-            translated_text = str(translated.get("translated_text") or "").strip()
-            if translated.get("confidence", 0) > 0 and translated_text and not translated_text.startswith("Translation error:"):
-                analysis_result["sentence_meaning"] = translated_text
-                analysis_result["translation"] = translated_text
-            else:
-                analysis_result["sentence_meaning"] = "Chưa thể tạo bản dịch tiếng Việt lúc này."
-                analysis_result["translation"] = analysis_result["sentence_meaning"]
         
         return GrammarAnalysisResponse(
             text=request.text,
+            analysis_status=analysis_result.get('analysis_status', 'complete'),
+            analysis_note=analysis_result.get('analysis_note'),
             jlpt_level=analysis_result.get("jlpt_level", "N3"),
             sentence_meaning=analysis_result.get("sentence_meaning"),
             vocabulary=analysis_result.get("vocabulary", []),
@@ -63,6 +45,10 @@ async def analyze_grammar(
             suggestions=analysis_result.get("suggestions", [])
         )
         
+    except HTTPException:
+        raise
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail='grammar_analysis_failed') from exc
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

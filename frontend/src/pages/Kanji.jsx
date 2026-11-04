@@ -1,3 +1,4 @@
+import { kanjiText as k } from '../utils/kanjiLocale'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
@@ -216,7 +217,7 @@ function readingText(value) {
 function adaptKanjiEntry(entry, fallbackKanji = '') {
   if (!entry) return null
   const examples = Array.isArray(entry.examples) ? entry.examples : []
-  const hasMeaning = Boolean(entry.meaning || entry.meaning_vi)
+  const hasMeaning = Boolean(entry.meaning_vi || entry.meaning)
   return {
     kanji: normalizeKanji(entry.kanji || fallbackKanji),
     meaning: entry.meaning || entry.meaning_vi || 'Meaning metadata is not filled yet.',
@@ -228,7 +229,7 @@ function adaptKanjiEntry(entry, fallbackKanji = '') {
     strokes: entry.strokes || entry.stroke_count || null,
     jlpt: entry.jlpt || '-',
     examples,
-    vocabulary: examples.map((example) => `${example.word || ''}${example.reading ? ` (${example.reading})` : ''}${example.meaning ? ` - ${example.meaning}` : ''}`.trim()).filter(Boolean),
+    vocabulary: examples.map((example) => `${example.word || ''}${example.reading ? ` (${example.reading})` : ''}${example.meaning ? ` - ${k(example.meaning)}` : ''}`.trim()).filter(Boolean),
     has_handwriting_data: Boolean(entry.has_handwriting_data),
     has_stroke_data: Boolean(entry.has_stroke_data),
   }
@@ -298,49 +299,43 @@ function StrokeOrderViewer({ info, step, setStep }) {
   }
 
   return (
-    <div className="rounded-3xl border border-white bg-white/90 p-5 shadow-sm">
+    <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-5 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">KanjiVG stroke order</p>
-          <h2 className="mt-2 text-2xl font-bold text-gray-950">{info.kanji} stroke steps</h2>
-          <p className="mt-1 text-sm text-gray-500">{t('strokeCoverage', { count: supportedQuery.data?.total ?? '...' })}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("KanjiVG stroke order")}</p>
+          <h2 className="mt-2 text-2xl font-bold text-[color:var(--text)]">{info.kanji}{k("stroke steps")}</h2>
+          <p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('strokeCoverage', { count: supportedQuery.data?.total ?? '...' })}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => setStep(Math.max(0, step - 1))} disabled={!maxStep || step === 0} className="btn btn-outline rounded-xl border-violet-200 px-3 text-violet-700">
-            <SkipBack className="mr-2 h-4 w-4" /> Previous Stroke
-          </button>
-          <button type="button" onClick={() => setStep(Math.min(maxStep, step + 1))} disabled={!maxStep || step >= maxStep} className="btn btn-outline rounded-xl border-violet-200 px-3 text-violet-700">
-            <SkipForward className="mr-2 h-4 w-4" /> Next Stroke
-          </button>
+          <button type="button" onClick={() => setStep(Math.max(0, step - 1))} disabled={!maxStep || step === 0} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 text-[color:var(--primary)]">
+            <SkipBack className="mr-2 h-4 w-4" />{k("Previous Stroke")}</button>
+          <button type="button" onClick={() => setStep(Math.min(maxStep, step + 1))} disabled={!maxStep || step >= maxStep} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 text-[color:var(--primary)]">
+            <SkipForward className="mr-2 h-4 w-4" />{k("Next Stroke")}</button>
           <button type="button" onClick={play} disabled={!maxStep || playing} className="btn btn-primary rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-3 text-[color:var(--text)] shadow-sm hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)]">
-            <Play className="mr-2 h-4 w-4" /> Auto Play
-          </button>
-          <button type="button" onClick={pause} disabled={!playing} className="btn btn-outline rounded-xl border-gray-200 px-3">
-            <Pause className="mr-2 h-4 w-4" /> Pause
-          </button>
-          <button type="button" onClick={reset} disabled={!maxStep && step === 0} className="btn btn-outline rounded-xl border-gray-200 px-3">
-            <RotateCcw className="mr-2 h-4 w-4" /> Reset
-          </button>
+            <Play className="mr-2 h-4 w-4" />{k("Auto Play")}</button>
+          <button type="button" onClick={pause} disabled={!playing} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3">
+            <Pause className="mr-2 h-4 w-4" />{k("Pause")}</button>
+          <button type="button" onClick={reset} disabled={!maxStep && step === 0} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3">
+            <RotateCcw className="mr-2 h-4 w-4" />{k("Reset")}</button>
         </div>
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
         <KanjiStrokeOrder kanji={info.kanji} strokeOrder={strokeData} strokes={strokes} step={step} viewBox={strokeData?.viewBox} />
-        <div className="rounded-3xl bg-violet-50 p-5">
-          <p className="font-japanese text-7xl font-bold text-gray-950">{info.kanji}</p>
+        <div className="rounded-3xl bg-[color:var(--accent)] p-5">
+          <p className="font-japanese text-7xl font-bold text-[color:var(--text)]">{info.kanji}</p>
           <div className="mt-5 space-y-2 text-sm">
-            <p><span className="font-bold">Meaning:</span> {info.meaning}</p>
-            <p><span className="font-bold">Onyomi:</span> {info.onyomi}</p>
-            <p><span className="font-bold">Kunyomi:</span> {info.kunyomi}</p>
-            <p><span className="font-bold">Stroke count:</span> {strokeData?.stroke_count || info.strokes || 'Unknown'}</p>
+            <p><span className="font-bold">{k("Meaning:")}</span> {k(info.meaning)}</p>
+            <p><span className="font-bold">{k("Onyomi:")}</span> {info.onyomi}</p>
+            <p><span className="font-bold">{k("Kunyomi:")}</span> {info.kunyomi}</p>
+            <p><span className="font-bold">{k("Stroke count:")}</span> {strokeData?.stroke_count || info.strokes || k("Unknown")}</p>
             <p><span className="font-bold">JLPT:</span> {strokeData?.jlpt || info.jlpt}</p>
           </div>
-          <p className="mt-4 rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-violet-800">
-            {strokeQuery.isLoading ? 'Loading stroke data...' : `Step ${step} / ${maxStep || 'unavailable'}`}
+          <p className="mt-4 rounded-2xl bg-[color:var(--card)] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">
+            {strokeQuery.isLoading ? k("Loading stroke data...") : k(`Step ${step} / ${maxStep || 'unavailable'}`)}
           </p>
           {strokeData && (
-            <p className="mt-3 text-xs font-semibold text-violet-700">
-              Source: {strokeData.source}. {strokeData.license}. {strokeData.source_url}
+            <p className="mt-3 text-xs font-semibold text-[color:var(--primary)]">{k("Source:")}{strokeData.source}. {strokeData.license}. {strokeData.source_url}
             </p>
           )}
           {!strokeQuery.isLoading && !strokeData?.available && (
@@ -368,59 +363,58 @@ function MiniDictionary({ info, onAsk, onPractice, onStroke }) {
   if (!info?.kanji) return null
 
   return (
-    <aside className="rounded-3xl border border-white bg-white/90 p-5 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">Mini dictionary</p>
+    <aside className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-5 shadow-sm">
+      <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("Mini dictionary")}</p>
       <div className="mt-4 flex items-start gap-4">
-        <div className="grid h-20 w-20 place-items-center rounded-3xl bg-violet-50 font-japanese text-5xl font-bold text-gray-950">
+        <div className="grid h-20 w-20 place-items-center rounded-3xl bg-[color:var(--accent)] font-japanese text-5xl font-bold text-[color:var(--text)]">
           {info.kanji}
         </div>
         <div className="min-w-0">
-          <h2 className="text-xl font-bold text-gray-950">{info.meaning}</h2>
-          <p className="mt-1 text-xs font-bold text-orange-600">{info.jlpt} · {info.strokes || '-'} strokes</p>
-          <p className="mt-2 text-sm text-gray-600">{info.onyomi} · {info.kunyomi}</p>
-          <p className="mt-2 text-xs font-semibold text-gray-500">{info.has_handwriting_data ? 'ETL10 handwriting data available' : 'Synthetic training data only'}</p>
+          <h2 className="text-xl font-bold text-[color:var(--text)]">{k(info.meaning)}</h2>
+          <p className="mt-1 text-xs font-bold text-[color:var(--primary)]">{info.jlpt} · {info.strokes || '-'}{k("strokes")}</p>
+          <p className="mt-2 text-sm text-[color:var(--text-muted)]">{info.onyomi} · {info.kunyomi}</p>
+          <p className="mt-2 text-xs font-semibold text-[color:var(--text-muted)]">{info.has_handwriting_data ? k("ETL10 handwriting data available") : k("Synthetic training data only")}</p>
         </div>
       </div>
       <div className="mt-5 space-y-4 text-sm">
         <div>
-          <p className="font-bold text-gray-950">Examples</p>
+          <p className="font-bold text-[color:var(--text)]">{k("Examples")}</p>
           <div className="mt-2 space-y-2">
             {(info.examples || []).map((example, index) => (
-              <p key={`${example.word || example}-${index}`} className="rounded-2xl bg-gray-50 px-4 py-2 font-japanese text-gray-700">
-                {typeof example === 'string' ? example : `${example.word || ''}${example.reading ? ` (${example.reading})` : ''}${example.meaning ? ` - ${example.meaning}` : ''}`}
+              <p key={`${example.word || example}-${index}`} className="rounded-2xl bg-[color:var(--bg-elevated)] px-4 py-2 font-japanese text-[color:var(--text)]">
+                {typeof example === 'string' ? k(example) : `${example.word || ''}${example.reading ? ` (${example.reading})` : ''}${example.meaning ? ` - ${example.meaning}` : ''}`}
               </p>
             ))}
-            {!(info.examples || []).length && <p className="rounded-2xl bg-gray-50 px-4 py-2 text-gray-500">Kanji data not found in local dictionary.</p>}
+            {!(info.examples || []).length && <p className="rounded-2xl bg-[color:var(--bg-elevated)] px-4 py-2 text-[color:var(--text-muted)]">{k("Kanji data not found in local dictionary.")}</p>}
           </div>
         </div>
         <div>
-          <p className="font-bold text-gray-950">ETL10 handwriting samples</p>
+          <p className="font-bold text-[color:var(--text)]">{k("ETL10 handwriting samples")}</p>
           {handwritingQuery.data?.items?.length ? (
             <div className="mt-2 grid grid-cols-5 gap-2">
               {handwritingQuery.data.items.map((item) => (
-                <img key={item.filename} src={item.image_data} alt={`${info.kanji} handwriting sample`} className="h-12 w-12 rounded-xl border border-gray-100 bg-white object-contain p-1" />
+                <img key={item.filename} src={item.image_data} alt={k('Handwriting sample for {{kanji}}', { kanji: info.kanji })} className="h-12 w-12 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] object-contain p-1" />
               ))}
             </div>
           ) : (
-            <p className="mt-2 rounded-2xl bg-gray-50 px-4 py-2 text-gray-500">No handwriting samples available.</p>
+            <p className="mt-2 rounded-2xl bg-[color:var(--bg-elevated)] px-4 py-2 text-[color:var(--text-muted)]">{k("No handwriting samples available.")}</p>
           )}
         </div>
         <div>
-          <p className="font-bold text-gray-950">Related vocabulary</p>
+          <p className="font-bold text-[color:var(--text)]">{k("Related vocabulary")}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {(info.vocabulary || []).map((item) => (
-              <span key={item} className="rounded-full bg-violet-50 px-3 py-1 text-xs font-semibold text-violet-700">{item}</span>
+              <span key={item} className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">{k(item)}</span>
             ))}
           </div>
         </div>
       </div>
       <div className="mt-5 grid gap-2">
         <button type="button" onClick={onAsk} className="btn btn-primary rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-4 text-[color:var(--text)] shadow-sm hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)]">
-          <MessageCircle className="mr-2 h-4 w-4" /> Ask in Chat
-        </button>
-        <button type="button" onClick={onPractice} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">Practice this Kanji</button>
-        <button type="button" onClick={onStroke} disabled={!info.has_stroke_data} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-50">{t('viewStrokeOrder')}</button>
-        {!info.has_stroke_data && <p className="text-xs text-gray-500">{t('noStrokeData')}</p>}
+          <MessageCircle className="mr-2 h-4 w-4" />{k("Ask in Chat")}</button>
+        <button type="button" onClick={onPractice} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)]">{k("Practice this Kanji")}</button>
+        <button type="button" onClick={onStroke} disabled={!info.has_stroke_data} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)] disabled:opacity-50">{t('viewStrokeOrder')}</button>
+        {!info.has_stroke_data && <p className="text-xs text-[color:var(--text-muted)]">{t('noStrokeData')}</p>}
       </div>
     </aside>
   )
@@ -692,7 +686,7 @@ export default function Kanji() {
   const askInChat = () => {
     navigate('/chat', {
       state: {
-        prefillMessage: `Explain the Kanji ${selectedInfo.kanji} with readings, meaning, examples, and common words.`,
+        prefillMessage: k('Explain kanji {{kanji}}', { kanji: selectedInfo.kanji }),
       },
     })
   }
@@ -708,21 +702,21 @@ export default function Kanji() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: 'easeOut' }} className="kanji-page space-y-6">
-      <div className="rounded-3xl border border-white bg-white/90 p-5 shadow-sm">
+      <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-5 shadow-sm">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">SenpaiAI handwriting lab</p>
-            <h1 className="mt-2 text-3xl font-bold text-gray-950">Kanji Canvas</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-gray-600">Recognize handwriting, practice with feedback, explore kanji, and study verified stroke order.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("SenpaiAI handwriting lab")}</p>
+            <h1 className="mt-2 text-3xl font-bold text-[color:var(--text)]">{k("Kanji Canvas")}</h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[color:var(--text-muted)]">{k("Recognize handwriting, practice with feedback, explore kanji, and study verified stroke order.")}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-gray-100 p-1 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[color:var(--bg-elevated)] p-1 sm:grid-cols-4">
             {modes.map((item) => {
               const Icon = item.icon
               return (
-                <button key={item.id} type="button" onClick={() => setMode(item.id)} className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition ${mode === item.id ? 'bg-white text-violet-700 shadow-sm' : 'text-gray-500'}`}>
+                <button key={item.id} type="button" onClick={() => setMode(item.id)} className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition ${mode === item.id ? 'bg-[color:var(--card)] text-[color:var(--primary)] shadow-sm' : 'text-[color:var(--text-muted)]'}`}>
                   <Icon className="h-4 w-4" />
-                  {item.label}
+                  {k(item.label)}
                 </button>
               )
             })}
@@ -732,13 +726,13 @@ export default function Kanji() {
 
       {mode === 'explore' ? (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="rounded-3xl border border-white bg-white/90 p-6 shadow-sm">
+          <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-6 shadow-sm">
             <div className="flex items-center gap-3">
-              <BookOpen className="h-6 w-6 text-violet-600" />
+              <BookOpen className="h-6 w-6 text-[color:var(--primary)]" />
               <div>
-                <h2 className="text-xl font-bold text-gray-950">Explore JLPT Kanji</h2>
-                <p className="text-sm text-gray-500">
-                  {dictionaryQuery.isError ? 'Kanji dictionary is unavailable.' : `${dictionaryQuery.data?.total || 0} Kanji from the backend dictionary.`}
+                <h2 className="text-xl font-bold text-[color:var(--text)]">{k("Explore JLPT Kanji")}</h2>
+                <p className="text-sm text-[color:var(--text-muted)]">
+                  {dictionaryQuery.isError ? k("Kanji dictionary is unavailable.") : k('{{count}} Kanji in the dictionary', { count: dictionaryQuery.data?.total || 0 })}
                 </p>
               </div>
             </div>
@@ -746,30 +740,30 @@ export default function Kanji() {
               <input
                 value={exploreSearch}
                 onChange={(event) => setExploreSearch(event.target.value)}
-                placeholder="Search kanji, meaning, reading, or example"
-                className="h-11 flex-1 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                placeholder={k("Search kanji, meaning, reading, or example")}
+                className="h-11 flex-1 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 text-sm outline-none focus:border-[color:var(--border)] focus:ring-4 focus:ring-[color:var(--primary)]"
               />
               <select
                 value={exploreJlpt}
                 onChange={(event) => setExploreJlpt(event.target.value)}
-                className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 outline-none focus:border-violet-300 focus:ring-4 focus:ring-violet-100"
+                className="h-11 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-4 text-sm font-semibold text-[color:var(--text)] outline-none focus:border-[color:var(--border)] focus:ring-4 focus:ring-[color:var(--primary)]"
               >
-                <option value="all">All JLPT</option>
+                <option value="all">{k("All JLPT")}</option>
                 {KANJI_DICTIONARY_LEVELS.map((level) => <option key={level} value={level}>{level}</option>)}
               </select>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {dictionaryQuery.isLoading && <p className="text-sm text-gray-500">Loading Kanji dictionary...</p>}
-              {!dictionaryQuery.isLoading && !dictionaryItems.length && <div className="rounded-xl bg-violet-50 p-4 text-sm text-violet-800"><p>{t('emptyLevel', { level: exploreJlpt })}</p>{exploreJlpt !== 'N4' && <button type="button" onClick={() => setExploreJlpt('N4')} className="mt-3 rounded-lg bg-white px-3 py-2 font-bold text-violet-700">{t('switchLevel', { level: 'N4' })}</button>}</div>}
+              {dictionaryQuery.isLoading && <p className="text-sm text-[color:var(--text-muted)]">{k("Loading Kanji dictionary...")}</p>}
+              {!dictionaryQuery.isLoading && !dictionaryItems.length && <div className="rounded-xl bg-[color:var(--accent)] p-4 text-sm text-[color:var(--primary)]"><p>{t('emptyLevel', { level: exploreJlpt })}</p>{exploreJlpt !== 'N4' && <button type="button" onClick={() => setExploreJlpt('N4')} className="mt-3 rounded-lg bg-[color:var(--card)] px-3 py-2 font-bold text-[color:var(--primary)]">{t('switchLevel', { level: 'N4' })}</button>}</div>}
               {dictionaryItems.map((item) => (
-                <button key={item.kanji} type="button" onClick={() => updateSelectedKanji(item.kanji)} className="rounded-3xl border border-gray-100 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-violet-200 hover:bg-violet-50">
+                <button key={item.kanji} type="button" onClick={() => updateSelectedKanji(item.kanji)} className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-[color:var(--border)] hover:bg-[color:var(--accent)]">
                   <div className="flex items-start justify-between">
-                    <p className="font-japanese text-5xl font-bold text-gray-950">{normalizeKanji(item.kanji)}</p>
-                    <span className="rounded-full bg-orange-50 px-3 py-1 text-xs font-bold text-orange-600">{item.jlpt}</span>
+                    <p className="font-japanese text-5xl font-bold text-[color:var(--text)]">{normalizeKanji(item.kanji)}</p>
+                    <span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-bold text-[color:var(--primary)]">{item.jlpt}</span>
                   </div>
-                  <p className="mt-4 text-sm font-bold text-gray-950">{item.meaning}</p>
-                  <p className="mt-1 text-xs text-gray-500">{item.onyomi} · {item.kunyomi} · {item.strokes || '-'} strokes</p>
-                  <p className="mt-2 text-xs font-semibold text-violet-700">{item.has_handwriting_data ? 'ETL10 data' : 'Synthetic data'}</p>
+                  <p className="mt-4 text-sm font-bold text-[color:var(--text)]">{k(item.meaning)}</p>
+                  <p className="mt-1 text-xs text-[color:var(--text-muted)]">{item.onyomi} · {item.kunyomi} · {item.strokes || '-'} {k("strokes")}</p>
+                  <p className="mt-2 text-xs font-semibold text-[color:var(--primary)]">{item.has_handwriting_data ? k('ETL10 handwriting data available') : k("Synthetic data")}</p>
                 </button>
               ))}
             </div>
@@ -786,47 +780,47 @@ export default function Kanji() {
           <KanjiInfoPanel recent={recent} onSelectSuggested={switchToPractice} />
           <section className="space-y-4">
             {mode === 'practice' ? (
-              <div className="rounded-3xl border border-violet-100 bg-violet-50/80 p-5">
+              <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--accent)] p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <p className="text-sm font-bold text-violet-900">Practice target</p>
-                    <p className="mt-1 text-sm text-violet-700">{selectedInfo.meaning} · {selectedInfo.onyomi} · {selectedInfo.kunyomi} · {selectedInfo.strokes || '-'} strokes · {selectedInfo.jlpt}</p>
+                    <p className="text-sm font-bold text-[color:var(--primary)]">{k("Practice target")}</p>
+                    <p className="mt-1 text-sm text-[color:var(--primary)]">{k(selectedInfo.meaning)} · {selectedInfo.onyomi} · {selectedInfo.kunyomi} · {selectedInfo.strokes || '-'} {k("strokes ·")} {selectedInfo.jlpt}</p>
                   </div>
-                  <input value={selectedInfo.kanji} onChange={(event) => { updateSelectedKanji(event.target.value.slice(0, 1) || selectedInfo.kanji); setPracticeFeedback(null) }} className="h-12 w-24 rounded-2xl border border-violet-200 bg-white text-center font-japanese text-2xl font-bold text-gray-950 outline-none focus:ring-4 focus:ring-violet-100" aria-label="Practice kanji" />
+                  <input value={selectedInfo.kanji} onChange={(event) => { updateSelectedKanji(event.target.value.slice(0, 1) || selectedInfo.kanji); setPracticeFeedback(null) }} className="h-12 w-24 rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] text-center font-japanese text-2xl font-bold text-[color:var(--text)] outline-none focus:ring-4 focus:ring-[color:var(--primary)]" aria-label={k("Practice kanji")} />
                 </div>
                 {practiceFeedback && (
-                  <div className={`mt-4 rounded-2xl px-4 py-3 text-sm ${practiceFeedback.tone === 'error' ? 'bg-red-50 text-red-700' : 'bg-white text-violet-900'}`}>
+                  <div className={`mt-4 rounded-2xl px-4 py-3 text-sm ${practiceFeedback.tone === 'error' ? 'bg-red-50 text-red-700' : 'bg-[color:var(--card)] text-[color:var(--primary)]'}`}>
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <p className="font-bold">Practice feedback</p>
-                        <p className="mt-1 text-2xl font-black">{practiceFeedback.overall_score}/100 · {practiceFeedback.grade}</p>
+                        <p className="font-bold">{k("Practice feedback")}</p>
+                        <p className="mt-1 text-2xl font-black">{practiceFeedback.overall_score}/100 · {k(practiceFeedback.grade)}</p>
                       </div>
-                      <div className="flex rounded-xl bg-violet-50 p-1">
-                        {['overview', 'scores', 'order', 'compare'].map((tab) => (
-                          <button key={tab} type="button" onClick={() => setFeedbackTab(tab)} className={`rounded-lg px-3 py-1 text-xs font-bold capitalize ${feedbackTab === tab ? 'bg-white text-violet-700 shadow-sm' : 'text-violet-500'}`}>
-                            {tab === 'scores' ? 'Detailed Scores' : tab === 'order' ? 'Stroke Order' : tab}
+                      <div className="flex rounded-xl bg-[color:var(--accent)] p-1">
+                        {[k("overview"), 'scores', 'order', k("compare")].map((tab) => (
+                          <button key={tab} type="button" onClick={() => setFeedbackTab(tab)} className={`rounded-lg px-3 py-1 text-xs font-bold capitalize ${feedbackTab === tab ? 'bg-[color:var(--card)] text-[color:var(--primary)] shadow-sm' : 'text-[color:var(--primary)]'}`}>
+                            {tab === 'scores' ? k("Detailed Scores") : tab === 'order' ? k("Stroke Order") : k(tab)}
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {feedbackTab === 'overview' && (
+                    {feedbackTab === k("overview") && (
                       <div className="mt-4 grid gap-4 lg:grid-cols-2">
                         <div>
-                          <p className="font-semibold">{practiceFeedback.summary}</p>
-                          <p className="mt-3 rounded-xl bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700">{practiceFeedback.next_practice_tip}</p>
+                          <p className="font-semibold">{k(practiceFeedback.summary)}</p>
+                          <p className="mt-3 rounded-xl bg-[color:var(--accent)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">{k(practiceFeedback.next_practice_tip)}</p>
                         </div>
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div>
-                            <p className="font-bold">Strengths</p>
+                            <p className="font-bold">{k("Strengths")}</p>
                             <ul className="mt-2 space-y-1 text-xs">
-                              {practiceFeedback.strengths?.map((item) => <li key={item}>• {item}</li>)}
+                              {practiceFeedback.strengths?.map((item) => <li key={item}>• {k(item)}</li>)}
                             </ul>
                           </div>
                           <div>
-                            <p className="font-bold">Improvements</p>
+                            <p className="font-bold">{k("Improvements")}</p>
                             <ul className="mt-2 space-y-1 text-xs">
-                              {practiceFeedback.improvements?.map((item) => <li key={item}>• {item}</li>)}
+                              {practiceFeedback.improvements?.map((item) => <li key={item}>• {k(item)}</li>)}
                             </ul>
                           </div>
                         </div>
@@ -836,34 +830,34 @@ export default function Kanji() {
                     {feedbackTab === 'scores' && (
                       <div className="mt-4 grid gap-3">
                         {Object.entries(practiceFeedback.scores || {}).map(([key, value]) => (
-                          <div key={key} className="rounded-xl bg-gray-50 p-3">
+                          <div key={key} className="rounded-xl bg-[color:var(--bg-elevated)] p-3">
                             <div className="flex items-center justify-between gap-3">
-                              <p className="font-bold capitalize">{key.replaceAll('_', ' ')}</p>
-                              <p className="text-xs font-black text-violet-700">{value.score}/{value.max}</p>
+                              <p className="font-bold capitalize">{k(key.replaceAll('_', ' '))}</p>
+                              <p className="text-xs font-black text-[color:var(--primary)]">{value.score}/{value.max}</p>
                             </div>
-                            <div className="mt-2 h-2 rounded-full bg-white">
-                              <div className="h-2 rounded-full bg-violet-600" style={{ width: `${Math.round((value.score / value.max) * 100)}%` }} />
+                            <div className="mt-2 h-2 rounded-full bg-[color:var(--card)]">
+                              <div className="h-2 rounded-full bg-[color:var(--primary)]" style={{ width: `${Math.round((value.score / value.max) * 100)}%` }} />
                             </div>
-                            <p className="mt-2 text-xs text-gray-600">{value.feedback}</p>
+                            <p className="mt-2 text-xs text-[color:var(--text-muted)]">{k(value.feedback)}</p>
                           </div>
                         ))}
                       </div>
                     )}
 
                     {feedbackTab === 'order' && (
-                      <div className="mt-4 rounded-xl bg-gray-50 p-3">
-                        <p className="font-bold">Expected stroke order</p>
-                        <p className="mt-2 text-sm">For 月: 1. left vertical stroke, 2. top-right outer stroke, 3. middle horizontal stroke, 4. lower horizontal stroke.</p>
-                        <p className="mt-3 text-xs font-semibold text-violet-700">User stroke order is estimated from the captured stroke sequence. Replay your strokes and compare with the reference order.</p>
+                      <div className="mt-4 rounded-xl bg-[color:var(--bg-elevated)] p-3">
+                        <p className="font-bold">{k("Expected stroke order")}</p>
+                        <p className="mt-2 text-sm">{k("For 月: 1. left vertical stroke, 2. top-right outer stroke, 3. middle horizontal stroke, 4. lower horizontal stroke.")}</p>
+                        <p className="mt-3 text-xs font-semibold text-[color:var(--primary)]">{k("User stroke order is estimated from the captured stroke sequence. Replay your strokes and compare with the reference order.")}</p>
                       </div>
                     )}
 
-                    {feedbackTab === 'compare' && (
-                      <div className="mt-4 rounded-xl bg-gray-50 p-3">
-                        <p className="font-bold">Compare</p>
-                        <div className="mt-3 grid min-h-[180px] place-items-center rounded-xl bg-white">
-                          <p className="font-japanese text-8xl font-black text-violet-100">{selectedInfo.kanji}</p>
-                          <p className="-mt-16 text-xs font-semibold text-violet-700">Use the canvas replay over the faint reference to compare width, centering, and inner stroke spacing.</p>
+                    {feedbackTab === k("compare") && (
+                      <div className="mt-4 rounded-xl bg-[color:var(--bg-elevated)] p-3">
+                        <p className="font-bold">{k("Compare")}</p>
+                        <div className="mt-3 grid min-h-[180px] place-items-center rounded-xl bg-[color:var(--card)]">
+                          <p className="font-japanese text-8xl font-black text-[color:var(--primary)]">{selectedInfo.kanji}</p>
+                          <p className="-mt-16 text-xs font-semibold text-[color:var(--primary)]">{k("Use the canvas replay over the faint reference to compare width, centering, and inner stroke spacing.")}</p>
                         </div>
                       </div>
                     )}
@@ -872,7 +866,7 @@ export default function Kanji() {
               </div>
             ) : (
               <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-5 py-4 text-sm font-medium text-[color:var(--text)] shadow-sm">
-                {modelInfoQuery.data?.message || `Recognition model: ${modelInfoQuery.data?.model_loaded ? 'loaded' : 'not loaded'}; ${modelInfoQuery.data?.total_classes ?? modelInfoQuery.data?.classes_count ?? 0} classes.`}
+                {k('Model: {{state}}; {{count}} classes.', { state: k(modelInfoQuery.data?.available || modelInfoQuery.data?.model_loaded ? 'loaded' : 'not loaded'), count: modelInfoQuery.data?.total_classes ?? modelInfoQuery.data?.classes_count ?? 0 })}
                 <p className="mt-2 text-xs">{t('modelCoverage', { levels: modelInfoQuery.data?.supported_jlpt?.join(', ') || t('noTrainedLevels') })}</p>
               </div>
             )}

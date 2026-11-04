@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -11,9 +12,11 @@ import {
   Copy,
   Database,
   ExternalLink,
+  Eye,
   FilePlus2,
   Layers3,
   Library as LibraryIcon,
+  Loader2,
   Headphones,
   Pencil,
   Search,
@@ -152,18 +155,18 @@ function libraryGenerationErrorKey(error: any, t: ReturnType<typeof useTranslati
 }
 
 function SkeletonCard() {
-  return <div className="h-28 animate-pulse rounded-2xl border border-violet-100 bg-white/70" />
+  return <div className="h-28 animate-pulse rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-glass)]" />
 }
 
 function StatCard({ label, value, icon: Icon, loading }: { label: string; value: number; icon: any; loading: boolean }) {
   return (
-    <motion.div whileHover={{ y: -3 }} className="rounded-2xl border border-white/70 bg-white/75 p-5 shadow-sm backdrop-blur">
+    <motion.div whileHover={{ y: -3 }} className="rounded-2xl border border-[color:var(--border)]/70 bg-[color:var(--card-glass)] p-5 shadow-sm backdrop-blur">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-violet-600">{label}</p>
-          {loading ? <div className="mt-3 h-8 w-20 animate-pulse rounded-lg bg-violet-100" /> : <p className="mt-2 text-3xl font-bold text-gray-950">{value.toLocaleString()}</p>}
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[color:var(--primary)]">{label}</p>
+          {loading ? <div className="mt-3 h-8 w-20 animate-pulse rounded-lg bg-[color:var(--accent)]" /> : <p className="mt-2 text-3xl font-bold text-[color:var(--text)]">{value.toLocaleString()}</p>}
         </div>
-        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-violet-50 text-violet-700">
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]">
           <Icon className="h-5 w-5" />
         </div>
       </div>
@@ -179,23 +182,53 @@ function statCount(value: Record<string, number> | number | undefined) {
 
 function Badge({ children, tone = 'violet' }: { children: ReactNode; tone?: 'violet' | 'gray' | 'amber' }) {
   const styles = {
-    violet: 'bg-violet-50 text-violet-700',
-    gray: 'bg-gray-100 text-gray-700',
+    violet: 'bg-[color:var(--accent)] text-[color:var(--primary)]',
+    gray: 'bg-[color:var(--bg-elevated)] text-[color:var(--text)]',
     amber: 'bg-amber-50 text-amber-700',
   }
   return <span className={`rounded-full px-3 py-1 text-xs font-bold ${styles[tone]}`}>{children}</span>
 }
 
-function Modal({ children, onClose }: { children: ReactNode; onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-gray-950/45 p-4 backdrop-blur-sm">
-      <motion.div initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.98 }} className="relative max-h-[92vh] w-full max-w-3xl overflow-auto rounded-2xl bg-[color:var(--bg-elevated)] text-[color:var(--text)] shadow-2xl">
-        <button type="button" onClick={onClose} className="absolute right-5 top-5 rounded-full bg-[color:var(--bg-elevated)] p-2 text-[color:var(--text-muted)] shadow-sm hover:text-[color:var(--text)]">
-          <X className="h-5 w-5" />
-        </button>
+let openLibraryModals = 0
+let previousLibraryOverflow = ''
+
+function Modal({ children, onClose, wide = false }: { children: ReactNode; onClose: () => void; wide?: boolean }) {
+  const { t } = useTranslation('common')
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const closeRef = useRef(onClose)
+  closeRef.current = onClose
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    if (openLibraryModals === 0) previousLibraryOverflow = document.body.style.overflow
+    openLibraryModals += 1
+    document.body.style.overflow = 'hidden'
+    const dialog = dialogRef.current
+    ;(dialog?.querySelector<HTMLElement>('input:not(:disabled), textarea:not(:disabled)') || dialog?.querySelector<HTMLElement>('button'))?.focus()
+    const onKeyDown = (event: KeyboardEvent) => {
+      const modals = document.querySelectorAll('[data-library-modal]')
+      if (modals[modals.length - 1] !== dialog) return
+      if (event.key === 'Escape') { event.preventDefault(); closeRef.current() }
+      if (event.key !== 'Tab' || !dialog) return
+      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href]')).filter(element => element.getClientRects().length > 0)
+      const first = focusable[0], last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      openLibraryModals -= 1
+      if (openLibraryModals === 0) document.body.style.overflow = previousLibraryOverflow
+      document.removeEventListener('keydown', onKeyDown)
+      if (openLibraryModals === 0 && previous?.isConnected) previous.focus()
+    }
+  }, [])
+  return createPortal(
+    <div className="fixed inset-0 z-[90] grid place-items-center overflow-y-auto bg-black/50 p-3 backdrop-blur-sm sm:p-6" onMouseDown={event => { if (!wide && event.target === event.currentTarget) onClose() }}>
+      <motion.div data-library-modal ref={dialogRef} role="dialog" aria-modal="true" aria-label={t('library.documentDialog')} initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12, scale: 0.98 }} className={`relative max-h-[92dvh] w-full overflow-auto rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] text-[color:var(--text)] shadow-2xl ${wide ? 'max-w-5xl' : 'max-w-3xl'}`}>
+        <button type="button" onClick={onClose} aria-label={t('library.close')} className="absolute right-4 top-4 z-20 grid h-9 w-9 place-items-center rounded-xl text-[color:var(--text-muted)] transition hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]"><X className="h-5 w-5" /></button>
         {children}
       </motion.div>
-    </div>
+    </div>, document.body
   )
 }
 
@@ -232,6 +265,7 @@ function DocumentFormModal({
   const [scope, setScope] = useState<'personal' | 'system'>(initial?.scope === 'system' ? 'system' : 'personal')
   const [fetchError, setFetchError] = useState('')
   const [showPromptTemplate, setShowPromptTemplate] = useState(false)
+  const [preview, setPreview] = useState(false)
   const types = categories?.document_types?.length ? categories.document_types : fallbackTypes
   const levels = categories?.jlpt_levels?.length ? categories.jlpt_levels : fallbackJlpt
   const promptOutline = t(`library.promptOutlines.${form.document_type}`, { defaultValue: t('library.promptOutlines.default') })
@@ -261,6 +295,7 @@ function DocumentFormModal({
 
   const submit = (event: FormEvent) => {
     event.preventDefault()
+    if (saving || fetchUrlMutation.isLoading) return
     const result = validateDocument(form, t)
     setErrors(result.errors)
     if (!result.success) return
@@ -283,6 +318,7 @@ function DocumentFormModal({
       setErrors((current) => ({ ...current, source_url: t('library.validation.sourceUrlInvalid') }))
       return
     }
+    if (form.content.trim() && !window.confirm(t('library.replaceContentConfirm'))) return
     fetchUrlMutation.mutate(sourceUrl)
   }
 
@@ -295,89 +331,84 @@ function DocumentFormModal({
     }
   }
 
-  return (
-    <Modal onClose={onClose}>
-      <form onSubmit={submit} className="p-6">
-        <div className="pr-12">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">{initial ? t('library.editDocument') : t('library.addNewDocument')}</p>
-          <h2 className="mt-2 text-2xl font-bold text-gray-950">{initial ? initial.title : t('library.createDocument')}</h2>
-        </div>
+  const updateField = (name: keyof DocumentForm, value: string) => {
+    setForm(current => ({ ...current, [name]: value }))
+    setErrors(current => ({ ...current, [name]: undefined }))
+  }
+  const ready = Boolean(form.title.trim() && form.content.trim())
+  const close = () => { if (!saving) onClose() }
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          {!initial && (
-            <label className="space-y-1 md:col-span-2">
-              <span className="text-sm font-bold text-gray-700">{t('library.scope.label')}</span>
-              <select value={scope} onChange={(event) => setScope(event.target.value as 'personal' | 'system')} className="input border-violet-200 focus:ring-violet-200">
+  return (
+    <Modal wide onClose={close}>
+      <form noValidate onSubmit={submit} onKeyDown={event => { if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); event.currentTarget.requestSubmit() } }} className="flex max-h-[90dvh] flex-col">
+        <header className="shrink-0 border-b border-[color:var(--border)] px-5 py-5 pr-16 sm:px-6 sm:pr-16">
+          <div className="flex items-center gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]"><FilePlus2 className="h-5 w-5" /></span>
+            <div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--primary)]">{initial ? t('library.editDocument') : t('library.addNewDocument')}</p>
+              <h2 className="mt-1 text-xl font-bold">{initial ? t('library.editDocument') : t('library.createDocument')}</h2></div>
+          </div>
+          <p className="mt-3 text-sm text-[color:var(--text-muted)]">{t('library.editorHint')}</p>
+        </header>
+
+        <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto p-5 sm:p-6 lg:grid-cols-[minmax(260px,.85fr)_minmax(0,1.3fr)]">
+          <fieldset disabled={saving} className="min-w-0 space-y-4">
+            <legend className="mb-3 text-xs font-bold uppercase tracking-wider text-[color:var(--text-muted)]">{t('library.documentInformation')}</legend>
+            {!initial && <label className="block space-y-1.5">
+              <span className="text-sm font-semibold">{t('library.scope.label')}</span>
+              <select value={scope} onChange={event => setScope(event.target.value as 'personal' | 'system')} className="input h-11 rounded-xl">
                 <option value="personal">{t('library.badge.personal')}</option>
                 {allowSystemScope && <option value="system">{t('library.badge.system')}</option>}
               </select>
-              <span className="block text-xs text-gray-500">{t('library.privateNote')}</span>
+              <span className="block rounded-xl bg-[color:var(--accent)] px-3 py-2 text-xs leading-5 text-[color:var(--text-muted)]">{scope === 'personal' ? t('library.privateNote') : t('library.systemScopeNote')}</span>
+            </label>}
+            <label className="block space-y-1.5">
+              <span className="text-sm font-semibold">{t('library.fields.title')} <span className="text-[color:var(--primary)]">*</span></span>
+              <input autoFocus required value={form.title} onChange={event => updateField('title', event.target.value)} placeholder={t('library.titlePlaceholder')} aria-invalid={Boolean(errors.title)} className="input h-11 rounded-xl" />
+              {errors.title && <span role="alert" className="text-xs text-red-600">{errors.title}</span>}
             </label>
-          )}
-          <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">{t('library.fields.title')} *</span>
-            <input value={form.title} onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))} className="input border-violet-200 focus:ring-violet-200" />
-            {errors.title && <span className="text-xs font-semibold text-red-600">{errors.title}</span>}
-          </label>
-          <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">{t('library.fields.documentType')} *</span>
-            <select value={form.document_type} onChange={(event) => setForm((current) => ({ ...current, document_type: event.target.value }))} className="input border-violet-200 focus:ring-violet-200">
-              {types.map((type) => (
-                <option key={type} value={type}>{documentTypeLabel(type, t)}</option>
-              ))}
-            </select>
-          </label>
-          <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">{t('library.fields.jlptLevel')}</span>
-            <select value={form.jlpt_level} onChange={(event) => setForm((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-violet-200 focus:ring-violet-200">
-              <option value="">{t('library.noLevel')}</option>
-              {levels.map((level) => (
-                <option key={level} value={level}>{level}</option>
-              ))}
-            </select>
-          </label>
-          <label className="space-y-1">
-            <span className="text-sm font-bold text-gray-700">{t('library.fields.tags')}</span>
-            <input value={form.tags} onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))} placeholder={t('library.tagsPlaceholder')} className="input border-violet-200 focus:ring-violet-200" />
-          </label>
-          <label className="space-y-1 md:col-span-2">
-            <span className="text-sm font-bold text-gray-700">{t('library.fields.sourceUrl')}</span>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <input value={form.source_url} onChange={(event) => setForm((current) => ({ ...current, source_url: event.target.value }))} placeholder="https://..." className="input min-w-0 flex-1 border-violet-200 focus:ring-violet-200" />
-              <button
-                type="button"
-                onClick={fetchFromUrl}
-                disabled={fetchUrlMutation.isLoading}
-                className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-60"
-              >
-                {fetchUrlMutation.isLoading ? t('library.fetching') : t('library.fetchFromUrl')}
-              </button>
+            <label className="block space-y-1.5">
+              <span className="text-sm font-semibold">{t('library.fields.documentType')} *</span>
+              <select value={form.document_type} onChange={event => updateField('document_type', event.target.value)} className="input h-11 rounded-xl">{types.map(type => <option key={type} value={type}>{documentTypeLabel(type, t)}</option>)}</select>
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <label className="block space-y-1.5"><span className="text-sm font-semibold">{t('library.fields.jlptLevel')}</span>
+                <select value={form.jlpt_level} onChange={event => updateField('jlpt_level', event.target.value)} className="input h-11 rounded-xl"><option value="">{t('library.noLevel')}</option>{levels.map(level => <option key={level} value={level}>{level}</option>)}</select>
+              </label>
+              <label className="block space-y-1.5"><span className="text-sm font-semibold">{t('library.fields.tags')}</span>
+                <input value={form.tags} onChange={event => updateField('tags', event.target.value)} placeholder={t('library.tagsPlaceholder')} className="input h-11 rounded-xl" />
+              </label>
             </div>
-            {errors.source_url && <span className="text-xs font-semibold text-red-600">{errors.source_url}</span>}
-            {fetchError && <span className="text-xs font-semibold text-red-600">{fetchError}</span>}
-          </label>
+            <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4">
+              <label className="block space-y-1.5"><span className="flex items-center gap-2 text-sm font-semibold"><ExternalLink className="h-4 w-4 text-[color:var(--primary)]" />{t('library.fields.sourceUrl')}</span>
+                <input type="url" value={form.source_url} onChange={event => updateField('source_url', event.target.value)} placeholder="https://…" disabled={fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.source_url)} className="input h-11 rounded-xl" />
+              </label>
+              <p className="mt-2 text-xs leading-5 text-[color:var(--text-muted)]">{t('library.urlImportHint')}</p>
+              <button type="button" onClick={fetchFromUrl} disabled={fetchUrlMutation.isLoading || !form.source_url.trim()} className="btn btn-outline mt-3 min-h-10 w-full gap-2 rounded-xl px-3 text-[color:var(--primary)]">{fetchUrlMutation.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}{fetchUrlMutation.isLoading ? t('library.fetching') : t('library.fetchFromUrl')}</button>
+              {(errors.source_url || fetchError) && <p role="alert" className="mt-2 text-xs text-red-600">{errors.source_url || fetchError}</p>}
+            </div>
+          </fieldset>
+
+          <section className="flex min-h-[320px] min-w-0 flex-col">
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+              <label htmlFor="library-document-content" className="text-sm font-semibold">{t('library.fields.content')} *</label>
+              <div className="flex rounded-xl bg-[color:var(--accent)] p-1">
+                <button type="button" onClick={() => setPreview(false)} aria-pressed={!preview} className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold ${!preview ? 'bg-[color:var(--card)] text-[color:var(--primary)] shadow-sm' : 'text-[color:var(--text-muted)]'}`}><Pencil className="h-3.5 w-3.5" />{t('library.writeContent')}</button>
+                <button type="button" onClick={() => setPreview(true)} aria-pressed={preview} className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold ${preview ? 'bg-[color:var(--card)] text-[color:var(--primary)] shadow-sm' : 'text-[color:var(--text-muted)]'}`}><Eye className="h-3.5 w-3.5" />{t('library.previewContent')}</button>
+              </div>
+            </div>
+            {preview ? <div className="min-h-[280px] flex-1 whitespace-pre-wrap break-words rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 text-sm leading-7">{form.content || <span className="text-[color:var(--text-muted)]">{t('library.previewEmpty')}</span>}</div> :
+              <textarea id="library-document-content" required value={form.content} onChange={event => updateField('content', event.target.value)} disabled={saving || fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.content)} placeholder={t('library.contentPlaceholder')} className="input !h-auto min-h-[280px] flex-1 resize-y rounded-2xl p-4 font-japanese leading-7 lg:min-h-[380px]" />}
+            <div className="mt-2 flex items-center justify-between gap-2 text-xs text-[color:var(--text-muted)]"><span>{t('library.contentCharacterCount', { count: form.content.length })}</span>{errors.content && <span role="alert" className="text-red-600">{errors.content}</span>}</div>
+            {!initial && <button type="button" aria-expanded={showPromptTemplate} onClick={() => setShowPromptTemplate(value => !value)} className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-dashed border-[color:var(--border)] px-3 text-xs font-semibold text-[color:var(--primary)] hover:bg-[color:var(--accent)]"><Copy className="h-3.5 w-3.5" />{t('library.promptTemplate')}</button>}
+            {showPromptTemplate && <div className="mt-3 space-y-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3"><p className="text-xs text-[color:var(--text-muted)]">{t('library.promptTemplateHelp')}</p><textarea readOnly value={promptText} rows={6} className="input !h-auto text-xs leading-5" aria-label={t('library.promptTemplate')} /><button type="button" onClick={() => void copyPromptTemplate()} className="btn btn-outline btn-sm gap-1.5"><Copy className="h-3.5 w-3.5" />{t('library.copyPrompt')}</button></div>}
+          </section>
         </div>
 
-        <label className="mt-4 block space-y-1">
-          <span className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-sm font-bold text-gray-700">{t('library.fields.content')} *</span>
-            {!initial && <button type="button" aria-expanded={showPromptTemplate} onClick={() => setShowPromptTemplate((value) => !value)} className="inline-flex items-center gap-1.5 rounded-lg border border-[color:var(--border)] px-3 py-1.5 text-xs font-semibold text-[color:var(--primary)] transition hover:bg-[color:var(--accent)]"><Copy className="h-3.5 w-3.5" />{t('library.promptTemplate')}</button>}
-          </span>
-          {showPromptTemplate && <div className="space-y-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3">
-            <p className="text-xs text-[color:var(--text-muted)]">{t('library.promptTemplateHelp')}</p>
-            <textarea readOnly value={promptText} rows={7} className="input h-auto w-full font-mono text-xs leading-5" aria-label={t('library.promptTemplate')} />
-            <button type="button" onClick={() => void copyPromptTemplate()} className="btn btn-outline rounded-lg px-3 py-1.5 text-xs"><Copy className="mr-1.5 h-3.5 w-3.5" />{t('library.copyPrompt')}</button>
-          </div>}
-          <textarea value={form.content} onChange={(event) => setForm((current) => ({ ...current, content: event.target.value }))} rows={11} placeholder={t('library.contentPlaceholder')} className="input h-auto border-violet-200 font-japanese leading-7 focus:ring-violet-200" />
-          {errors.content && <span className="text-xs font-semibold text-red-600">{errors.content}</span>}
-        </label>
-
-        <div className="mt-6 flex flex-wrap justify-end gap-3">
-          <button type="button" onClick={onClose} className="btn btn-outline rounded-xl border-gray-200 px-5">{t('library.cancel')}</button>
-          <button type="submit" disabled={saving} className="btn btn-primary rounded-xl px-5 text-white disabled:opacity-60">
-            {saving ? t('library.saving') : initial ? t('library.saveChanges') : t('library.addDocument')}
-          </button>
-        </div>
+        <footer className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-5 py-4 sm:px-6">
+          <div><p className="text-xs font-semibold text-[color:var(--text-muted)]">{ready ? t('library.readyToSave') : t('library.requiredFieldsHint')}</p><p className="mt-1 hidden text-[10px] text-[color:var(--text-muted)] sm:block">{t('library.saveShortcut')}</p></div>
+          <div className="flex gap-2"><button type="button" onClick={close} disabled={saving} className="btn btn-outline min-h-11 rounded-xl px-5">{t('library.cancel')}</button>
+            <button type="submit" disabled={saving || fetchUrlMutation.isLoading} className="btn btn-primary min-h-11 gap-2 rounded-xl px-5 font-semibold">{saving && <Loader2 className="h-4 w-4 animate-spin" />}{saving ? t('library.saving') : initial ? t('library.saveChanges') : t('library.addDocument')}</button></div>
+        </footer>
       </form>
     </Modal>
   )
@@ -609,8 +640,8 @@ export default function Library() {
             <LibraryIcon className="h-6 w-6 text-[color:var(--primary-contrast)]" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-950">{t('library.pageTitle')}</h1>
-            <p className="mt-1 text-sm text-gray-600">{t('library.pageSubtitle')}</p>
+            <h1 className="text-3xl font-bold text-[color:var(--text)]">{t('library.pageTitle')}</h1>
+            <p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('library.pageSubtitle')}</p>
           </div>
         </div>
         <button type="button" onClick={() => setFormOpen(true)} className="btn btn-primary rounded-xl px-5 py-3 shadow-md">
@@ -630,24 +661,24 @@ export default function Library() {
         </div>
       )}
 
-      <div className="rounded-2xl border border-violet-100 bg-white/90 p-4 shadow-sm">
+      <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-4 shadow-sm">
         <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_170px_140px_150px_170px_auto_auto]">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-violet-500" />
-            <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={t('library.searchPlaceholder')} className="input w-full border-violet-200 bg-violet-50/60 pl-10 focus:ring-violet-200" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--primary)]" />
+            <input value={filters.query} onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))} placeholder={t('library.searchPlaceholder')} className="input w-full border-[color:var(--border)] bg-[color:var(--accent)] pl-10 focus:ring-[color:var(--primary)]" />
           </div>
-          <select value={filters.document_type} onChange={(event) => setFilters((current) => ({ ...current, document_type: event.target.value }))} className="input border-violet-200 bg-violet-50/60">
+          <select value={filters.document_type} onChange={(event) => setFilters((current) => ({ ...current, document_type: event.target.value }))} className="input border-[color:var(--border)] bg-[color:var(--accent)]">
             <option value="">{t('library.allTypes')}</option>
             {types.map((type) => <option key={type} value={type}>{documentTypeLabel(type, t)}</option>)}
           </select>
-          <select value={filters.jlpt_level} onChange={(event) => setFilters((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-violet-200 bg-violet-50/60">
+          <select value={filters.jlpt_level} onChange={(event) => setFilters((current) => ({ ...current, jlpt_level: event.target.value }))} className="input border-[color:var(--border)] bg-[color:var(--accent)]">
             <option value="">{t('library.allLevels')}</option>
             {levels.map((level) => <option key={level} value={level}>{level}</option>)}
           </select>
-          <select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="input border-violet-200 bg-violet-50/60">
+          <select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)} className="input border-[color:var(--border)] bg-[color:var(--accent)]">
             {(Object.keys(SORT_LABELS) as Array<keyof typeof SORT_LABELS>).map((value) => <option key={value} value={value}>{sortLabel(value, t)}</option>)}
           </select>
-          <select aria-label={t('library.scope.label')} value={scope} onChange={(event) => setScope(event.target.value as typeof scope)} className="input border-violet-200 bg-violet-50/60">
+          <select aria-label={t('library.scope.label')} value={scope} onChange={(event) => setScope(event.target.value as typeof scope)} className="input border-[color:var(--border)] bg-[color:var(--accent)]">
             <option value="all">{t('library.scope.all')}</option>
             <option value="mine">{t('library.scope.mine')}</option>
             <option value="system">{t('library.scope.system')}</option>
@@ -665,7 +696,7 @@ export default function Library() {
                 toast.error(t('library.searchRequired'))
               }
             }}
-            className="btn btn-primary rounded-xl px-4 text-white"
+            className="btn btn-primary rounded-xl px-4 text-[color:var(--primary-contrast)]"
           >
             <Search className="mr-2 h-4 w-4" />
             {t('library.search')}
@@ -677,7 +708,7 @@ export default function Library() {
               setSearchPayload({ query: '', document_type: '', jlpt_level: '' })
               setPage(1)
             }}
-            className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700"
+            className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)]"
           >
             {t('library.clearSearch')}
           </button>
@@ -687,11 +718,11 @@ export default function Library() {
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-xl font-bold text-gray-950">{hasSearch ? t('library.searchResults') : t('library.documentGrid')}</h2>
-            <p className="mt-1 text-sm text-gray-500">{t('library.documentCount', { count: total })}</p>
+            <h2 className="text-xl font-bold text-[color:var(--text)]">{hasSearch ? t('library.searchResults') : t('library.documentGrid')}</h2>
+            <p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('library.documentCount', { count: total })}</p>
           </div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-bold text-gray-600 shadow-sm">
-            <ArrowDownAZ className="h-4 w-4 text-violet-500" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-[color:var(--card)] px-3 py-2 text-xs font-bold text-[color:var(--text-muted)] shadow-sm">
+            <ArrowDownAZ className="h-4 w-4 text-[color:var(--primary)]" />
             {sortLabel(sort, t)}
           </div>
         </div>
@@ -706,20 +737,20 @@ export default function Library() {
             {Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)}
           </div>
         ) : documents.length === 0 ? (
-          <div className="rounded-2xl border border-violet-100 bg-white p-10 text-center text-gray-500 shadow-sm">
-            <BookOpen className="mx-auto h-10 w-10 text-violet-300" />
+          <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-10 text-center text-[color:var(--text-muted)] shadow-sm">
+            <BookOpen className="mx-auto h-10 w-10 text-[color:var(--primary)]" />
             <p className="mt-3 font-semibold">{t('library.noDocuments')}</p>
             <p className="mt-1 text-sm">{t('library.emptyHint')}</p>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {documents.map((document) => (
-              <motion.article key={document.id} whileHover={{ y: -4 }} className="rounded-2xl border border-violet-100 bg-white p-5 shadow-sm transition hover:shadow-md">
+              <motion.article key={document.id} whileHover={{ y: -4 }} className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-5 shadow-sm transition hover:shadow-md">
                 <button type="button" onClick={() => setSelected(document)} className="block w-full text-left">
                   <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-lg font-bold leading-6 text-gray-950">{document.title}</h3>
+                    <h3 className="text-lg font-bold leading-6 text-[color:var(--text)]">{document.title}</h3>
                     {document.source_url && (
-                      <a href={document.source_url} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} className="shrink-0 rounded-full p-2 text-gray-400 hover:bg-violet-50 hover:text-violet-700">
+                      <a href={document.source_url} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} className="shrink-0 rounded-full p-2 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]">
                         <ExternalLink className="h-4 w-4" />
                       </a>
                     )}
@@ -730,20 +761,20 @@ export default function Library() {
                     {document.jlpt_level && <Badge tone="amber">{document.jlpt_level}</Badge>}
                     {document.relevance_score !== undefined && document.relevance_score !== null && <Badge tone="gray">{t('library.relevanceScore', { score: Math.round(document.relevance_score * 100) })}</Badge>}
                   </div>
-                  <p className="mt-4 line-clamp-4 text-sm leading-6 text-gray-700">{(document as any).content_preview || document.content.slice(0, 150)}{document.content.length > 150 ? '...' : ''}</p>
+                  <p className="mt-4 line-clamp-4 text-sm leading-6 text-[color:var(--text)]">{(document as any).content_preview || document.content.slice(0, 150)}{document.content.length > 150 ? '...' : ''}</p>
                 </button>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {document.tags?.slice(0, 4).map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
                 </div>
-                <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-gray-500">
+                <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-[color:var(--text-muted)]">
                   <Calendar className="h-4 w-4" />
                   {formatDate(document.created_at)}
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <button type="button" onClick={() => setSelected(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
+                  <button type="button" onClick={() => setSelected(document)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">
                     {t('library.viewDetail')}
                   </button>
-                  {canEditDocument(document) && <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-violet-200 px-3 py-2 text-xs font-bold text-violet-700">
+                  {canEditDocument(document) && <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">
                     <Pencil className="mr-1 h-3.5 w-3.5" /> {t('library.edit')}
                   </button>}
                   {canDeleteDocument(document) && <button type="button" onClick={() => setDeleteTarget(document)} className="btn btn-outline rounded-xl border-red-200 px-3 py-2 text-xs font-bold text-red-600">
@@ -751,10 +782,10 @@ export default function Library() {
                   </button>}
                 </div>
                 {canUseDocument(document) && <div className="mt-3 grid grid-cols-2 gap-2">
-                  <button type="button" disabled={grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} onClick={() => openGeneration(document, 'grammar')} className="btn btn-outline inline-flex items-center justify-center gap-1.5 rounded-xl border-violet-200 px-2 py-2 text-xs font-bold text-violet-700 disabled:opacity-50">
+                  <button type="button" disabled={grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} onClick={() => openGeneration(document, 'grammar')} className="btn btn-outline inline-flex items-center justify-center gap-1.5 rounded-xl border-[color:var(--border)] px-2 py-2 text-xs font-bold text-[color:var(--primary)] disabled:opacity-50">
                     <Brain className="h-3.5 w-3.5 shrink-0" />{t('library.createGrammarQuestions')}
                   </button>
-                  <button type="button" disabled={grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} onClick={() => openGeneration(document, 'listening')} className="btn btn-outline inline-flex items-center justify-center gap-1.5 rounded-xl border-violet-200 px-2 py-2 text-xs font-bold text-violet-700 disabled:opacity-50">
+                  <button type="button" disabled={grammarGenerationMutation.isLoading || listeningDraftMutation.isLoading || listeningSaveMutation.isLoading} onClick={() => openGeneration(document, 'listening')} className="btn btn-outline inline-flex items-center justify-center gap-1.5 rounded-xl border-[color:var(--border)] px-2 py-2 text-xs font-bold text-[color:var(--primary)] disabled:opacity-50">
                     <Headphones className="h-3.5 w-3.5 shrink-0" />{t('library.createListeningLesson')}
                   </button>
                 </div>}
@@ -765,14 +796,14 @@ export default function Library() {
 
         {totalPages > 1 && (
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <button type="button" disabled={page === 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">{t('library.previous')}</button>
-            <span className="text-sm font-bold text-gray-600">{t('library.page', { current: page, total: totalPages })}</span>
+            <button type="button" disabled={page === 1} onClick={() => setPage((current) => Math.max(1, current - 1))} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)] disabled:opacity-40">{t('library.previous')}</button>
+            <span className="text-sm font-bold text-[color:var(--text-muted)]">{t('library.page', { current: page, total: totalPages })}</span>
             <form onSubmit={(event) => { event.preventDefault(); const target = Number(pageInput); if (Number.isInteger(target) && target >= 1 && target <= totalPages) setPage(target) }} className="flex items-center gap-2">
               <label htmlFor="library-page-number" className="sr-only">{t('library.pageInput')}</label>
               <input id="library-page-number" type="number" min="1" max={totalPages} step="1" value={pageInput} onChange={(event) => setPageInput(event.target.value)} aria-label={t('library.pageInput')} className="input w-16 px-2 text-center" />
               <button type="submit" className="btn btn-outline rounded-xl">{t('library.goToPage')}</button>
             </form>
-            <button type="button" disabled={page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700 disabled:opacity-40">{t('library.next')}</button>
+            <button type="button" disabled={page >= totalPages} onClick={() => setPage((current) => Math.min(totalPages, current + 1))} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)] disabled:opacity-40">{t('library.next')}</button>
           </div>
         )}
       </section>
@@ -874,8 +905,8 @@ export default function Library() {
           <Modal onClose={() => setSelected(null)}>
             <div className="p-6">
               <div className="pr-12">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">{t('library.documentDetail')}</p>
-                <h2 className="mt-2 text-2xl font-bold text-gray-950">{selected.title}</h2>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{t('library.documentDetail')}</p>
+                <h2 className="mt-2 text-2xl font-bold text-[color:var(--text)]">{selected.title}</h2>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Badge>{documentTypeLabel(selected.document_type, t)}</Badge>
@@ -884,21 +915,21 @@ export default function Library() {
                 {selected.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
               </div>
               {selected.source_url && (
-                <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-violet-700 hover:text-violet-900">
+                <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)] hover:text-[color:var(--primary)]">
                   <ExternalLink className="h-4 w-4" />
                   {t('library.fields.sourceUrl')}
                 </a>
               )}
-              <p className="mt-4 text-xs font-semibold text-gray-500">{t('library.created', { date: formatDate(selected.created_at) })}</p>
-              <p className="mt-1 text-xs font-semibold text-gray-500">{selected.updated_at ? t('library.updated', { date: formatDate(selected.updated_at) }) : t('library.notUpdated')}</p>
-              <div className="mt-5 rounded-2xl bg-gray-50 p-4">
-                <p className="whitespace-pre-wrap font-japanese text-sm leading-7 text-gray-800">{selected.content}</p>
+              <p className="mt-4 text-xs font-semibold text-[color:var(--text-muted)]">{t('library.created', { date: formatDate(selected.created_at) })}</p>
+              <p className="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">{selected.updated_at ? t('library.updated', { date: formatDate(selected.updated_at) }) : t('library.notUpdated')}</p>
+              <div className="mt-5 rounded-2xl bg-[color:var(--bg-elevated)] p-4">
+                <p className="whitespace-pre-wrap font-japanese text-sm leading-7 text-[color:var(--text)]">{selected.content}</p>
               </div>
               <div className="mt-6 flex flex-wrap justify-end gap-3">
-                <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">
+                <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4">
                   {t('library.close')}
                 </button>
-                {canEditDocument(selected) && <button type="button" onClick={() => setEditing(selected)} className="btn btn-outline rounded-xl border-violet-200 px-4 text-violet-700">
+                {canEditDocument(selected) && <button type="button" onClick={() => { setEditing(selected); setSelected(null) }} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)]">
                   <Pencil className="mr-2 h-4 w-4" />
                   {t('library.edit')}
                 </button>}
@@ -918,12 +949,12 @@ export default function Library() {
                   <Trash2 className="h-5 w-5" />
                 </div>
                 <div className="pr-10">
-                  <h2 className="text-xl font-bold text-gray-950">{t('library.deleteConfirmation.title')}</h2>
-                  <p className="mt-2 text-sm leading-6 text-gray-600">{t('library.deleteConfirmation.message', { title: deleteTarget.title })}</p>
+                  <h2 className="text-xl font-bold text-[color:var(--text)]">{t('library.deleteConfirmation.title')}</h2>
+                  <p className="mt-2 text-sm leading-6 text-[color:var(--text-muted)]">{t('library.deleteConfirmation.message', { title: deleteTarget.title })}</p>
                 </div>
               </div>
               <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={() => setDeleteTarget(null)} className="btn btn-outline rounded-xl border-gray-200 px-4">{t('library.cancel')}</button>
+                <button type="button" onClick={() => setDeleteTarget(null)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4">{t('library.cancel')}</button>
                 <button type="button" disabled={deleteMutation.isLoading} onClick={() => deleteMutation.mutate(deleteTarget.id)} className="btn rounded-xl bg-red-600 px-4 text-white hover:bg-red-700 disabled:opacity-60">
                   {t('library.delete')}
                 </button>

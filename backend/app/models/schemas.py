@@ -56,6 +56,8 @@ class ChatMessage(BaseModel):
     message: str
     context: Optional[str] = None
     jlpt_level: Optional[str] = None
+    conversation_id: Optional[UUID] = None
+    response_language: Optional[Literal["vi", "en"]] = None
 
 
 class ChatResponse(BaseModel):
@@ -65,6 +67,7 @@ class ChatResponse(BaseModel):
     translation: Optional[str] = None
     sources: Optional[List[Dict[str, Any]]] = None  # Changed to Any to allow numbers in relevance
     response_time: float
+    conversation_id: Optional[UUID] = None
 
 
 class ChatHistory(BaseModel):
@@ -86,14 +89,47 @@ class ChatHistory(BaseModel):
     }
 
 
+class ChatFolderCreate(BaseModel):
+    name: str
+
+
+class ChatFolderUpdate(BaseModel):
+    name: str
+
+
+class ChatFolderOrder(BaseModel):
+    folder_ids: List[UUID]
+
+
+class ChatConversationCreate(BaseModel):
+    title: Optional[str] = None
+    mode: Literal["text", "voice"] = "text"
+    folder_id: Optional[UUID] = None
+
+
+class ChatConversationRename(BaseModel):
+    title: str
+
+
+class ChatConversationPin(BaseModel):
+    is_pinned: bool
+
+
+class ChatConversationFolder(BaseModel):
+    folder_id: Optional[UUID] = None
+
+
 # Grammar Analysis Schemas
 class GrammarAnalysisRequest(BaseModel):
-    text: str
+    text: str = Field(min_length=1, max_length=6000)
     include_translation: bool = False
+    response_language: Optional[Literal['vi', 'en']] = None
 
 
 class GrammarAnalysisResponse(BaseModel):
     text: str
+    analysis_status: Literal['complete', 'partial'] = 'complete'
+    analysis_note: Optional[str] = None
     jlpt_level: str
     sentence_meaning: Optional[str] = None
     vocabulary: List[Dict[str, Any]] = Field(default_factory=list)

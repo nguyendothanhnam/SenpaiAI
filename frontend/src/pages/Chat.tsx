@@ -1,330 +1,383 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
-import { Send, Bot, User, Loader2, Trash2, Search, PenLine, Mic } from 'lucide-react'
-import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { useLocation } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { chatAPI } from '../services/api'
-import { useAuth } from '../services/auth'
-import { formatRelativeTime } from '../utils/helpers'
+import { ArrowLeft, Download, MessageCircle, MoreVertical, Pin, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import ChatComposer from '../components/chat/ChatComposer'
+import ChatConversationSidebar from '../components/chat/ChatConversationSidebar'
+import ChatFolderDialog from '../components/chat/ChatFolderDialog'
+import ChatMessageList from '../components/chat/ChatMessageList'
+import { chatAPI, type ChatConversation, type ChatConversationPage, type ChatFolder } from '../services/api'
+import { useAuth } from '../services/auth'
 import { getErrorMessage } from '../utils/getErrorMessage'
-import LoadingSpinner from '../components/LoadingSpinner'
-import HandwritingInputModal from '../components/kanji/HandwritingInputModal.jsx'
-import VoiceChatPanel from '../components/chat/VoiceChatPanel'
+import { downloadChatHistory, serializeChatHistory } from '../utils/chatExport'
 
-interface ChatMessage {
-  id: number
-  question: string
-  answer: string
-  jlpt_level?: string
-  grammar_points?: any[]
-  translation?: string
-  sources?: any[]
-  created_at: string
-  input_mode?: 'text' | 'voice'
-}
+type FolderDialogState = { mode: 'create' | 'rename' | 'move'; folder?: ChatFolder; conversation?: ChatConversation } | null
 
-interface MessageFormData {
-  message: string
+const pageSize = 30
+
+function updateConversationPages(queryClient: ReturnType<typeof useQueryClient>, id: string, update: Partial<ChatConversation>) {
+  ;(queryClient as any).setQueriesData(['chatConversations'], (page: ChatConversationPage | undefined) => page && ({
+    ...page,
+    items: page.items.map((item) => item.id === id ? { ...item, ...update } : item),
+  }))
+  ;(queryClient as any).setQueryData(['chatConversation', id], (current: ChatConversation | undefined) => current ? { ...current, ...update } : current)
 }
 
 export default function Chat() {
   const { t, i18n } = useTranslation('common')
   const language = i18n.resolvedLanguage === 'en' ? 'en' : 'vi'
-  const [searchQuery, setSearchQuery] = useState('')
-  const [handwritingOpen, setHandwritingOpen] = useState(false)
-  const [voiceOpen, setVoiceOpen] = useState(false)
-  const { user } = useAuth()
+  const { conversationId } = useParams<{ conversationId?: string }>()
   const location = useLocation()
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const bottomRef = useRef<HTMLDivElement | null>(null)
-  const form = useForm<MessageFormData>()
+  const { user } = useAuth()
+  const searchRef = useRef<HTMLInputElement | null>(null)
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [folderDialog, setFolderDialog] = useState<FolderDialogState>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [editingTitle, setEditingTitle] = useState(false)
+  const [titleDraft, setTitleDraft] = useState('')
+  const [exporting, setExporting] = useState(false)
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null | undefined>(undefined)
+  const params = new URLSearchParams(location.search)
+  const newConversationState = params.has('new')
+  const listState = params.has('list')
+  const showMobileChat = Boolean(conversationId || newConversationState)
 
-  const { data: chatHistory, isLoading: isLoadingHistory } = useQuery(
-    ['chatHistory'],
-    () => chatAPI.getHistory().then(res => res.data),
-    {
-      refetchOnWindowFocus: false,
-    }
+  const conversationsQuery = useQuery(
+    ['chatConversations', debouncedSearch],
+    () => chatAPI.listConversations({ search: debouncedSearch || undefined, limit: 100 }).then((response) => response.data),
+    { keepPreviousData: true, refetchOnWindowFocus: false },
   )
+  const foldersQuery = useQuery(['chatFolders'], () => chatAPI.listFolders().then((response) => response.data), { refetchOnWindowFocus: false })
+  const conversationQuery = useQuery(
+    ['chatConversation', conversationId],
+    () => chatAPI.getConversation(conversationId!).then((response) => response.data),
+    { enabled: Boolean(conversationId), refetchOnWindowFocus: false },
+  )
+  const messagesQuery = useInfiniteQuery(
+    ['chatMessages', conversationId],
+    ({ pageParam = 0 }) => chatAPI.getConversationMessages(conversationId!, pageSize, pageParam).then((response) => response.data),
+    {
+      enabled: Boolean(conversationId),
+      getNextPageParam: (lastPage) => lastPage.has_more ? lastPage.offset + lastPage.items.length : undefined,
+      refetchOnWindowFocus: false,
+    },
+  )
+
+  const conversations = conversationsQuery.data?.items || []
+  const folders = foldersQuery.data || []
+  const activeConversation = conversationQuery.data || conversations.find((item) => item.id === conversationId) || null
+  const targetFolderId = selectedFolderId === undefined ? activeConversation?.folder_id || null : selectedFolderId
+  const messages = useMemo(() => messagesQuery.data?.pages.flatMap((page) => page.items).reverse() || [], [messagesQuery.data])
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedSearch(search.trim()), 260)
+    return () => window.clearTimeout(timer)
+  }, [search])
+
+
+  useEffect(() => {
+    if (conversationId || newConversationState || listState || conversationsQuery.isLoading || conversationsQuery.isError) return
+    const mostRecent = [...conversations].sort((a, b) => new Date(b.last_activity_at).getTime() - new Date(a.last_activity_at).getTime())[0]
+    if (mostRecent) navigate(`/chat/${mostRecent.id}`, { replace: true })
+  }, [conversationId, newConversationState, listState, conversations, conversationsQuery.isLoading, conversationsQuery.isError, navigate])
+
+  useEffect(() => {
+    if (conversationQuery.isError) {
+      toast.error(getErrorMessage(conversationQuery.error))
+      navigate('/chat?list=1', { replace: true })
+    }
+  }, [conversationQuery.isError, conversationQuery.error, navigate])
+
+  useEffect(() => {
+    if (activeConversation) setTitleDraft(activeConversation.title)
+  }, [activeConversation?.id, activeConversation?.title])
+
+  const refreshChat = (id?: string) => {
+    void queryClient.invalidateQueries(['chatConversations'])
+    void queryClient.invalidateQueries(['chatFolders'])
+    if (id) {
+      void queryClient.invalidateQueries(['chatConversation', id])
+      void queryClient.invalidateQueries(['chatMessages', id])
+    }
+  }
 
   const sendMessageMutation = useMutation(
-    (data: { message: string; context?: string; jlpt_level?: string }) =>
-      chatAPI.sendMessage(data.message, data.context, data.jlpt_level).then(res => res.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['chatHistory'])
-        form.reset()
-      },
-      onError: (error: any) => {
-        toast.error(getErrorMessage(error))
-      },
-    }
+    ({ text, id }: { text: string; id?: string }) => chatAPI.sendMessage(text, undefined, user?.current_jlpt_level, id, language).then((response) => response.data),
+    { onSuccess: (data) => refreshChat(data.conversation_id) },
   )
 
-  const deleteMessageMutation = useMutation(
-    (chatId: number) => chatAPI.deleteEntry(chatId),
+  const createConversationMutation = useMutation(
+    (folderId: string | null) => chatAPI.createConversation({ folder_id: folderId }).then(({ data }) => data),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['chatHistory'])
+      onSuccess: (conversation) => {
+        queryClient.setQueryData(['chatConversation', conversation.id], conversation)
+        setSelectedFolderId(undefined)
+        setSearch('')
+        refreshChat(conversation.id)
+        navigate(`/chat/${conversation.id}`)
+      },
+      onError: (error) => { toast.error(getErrorMessage(error)) },
+    },
+  )
+  const { mutate: createConversation, isLoading: creatingConversation } = createConversationMutation
+  const startNewConversation = useCallback((folderId?: string | null) => {
+    if (!creatingConversation) createConversation(folderId === undefined ? targetFolderId : folderId)
+  }, [createConversation, creatingConversation, targetFolderId])
+
+  useEffect(() => {
+    const onShortcut = (event: KeyboardEvent) => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey) return
+      if (event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        searchRef.current?.focus()
+      } else if (event.shiftKey && event.key.toLowerCase() === 'o') {
+        event.preventDefault()
+        startNewConversation()
+      }
+    }
+    window.addEventListener('keydown', onShortcut)
+    return () => window.removeEventListener('keydown', onShortcut)
+  }, [startNewConversation])
+
+  const renameConversationMutation = useMutation(
+    ({ id, title }: { id: string; title: string }) => chatAPI.renameConversation(id, title),
+    {
+      onMutate: async ({ id, title }) => {
+        await queryClient.cancelQueries(['chatConversations'])
+        const previous = queryClient.getQueriesData<ChatConversationPage>(['chatConversations'])
+        updateConversationPages(queryClient, id, { title })
+        return { previous }
+      },
+      onError: (error, _variables, context) => {
+        context?.previous.forEach(([key, page]) => queryClient.setQueryData(key, page))
+        toast.error(getErrorMessage(error))
+      },
+      onSettled: (_data, _error, variables) => refreshChat(variables.id),
+    },
+  )
+  const pinConversationMutation = useMutation(
+    ({ conversation, is_pinned }: { conversation: ChatConversation; is_pinned: boolean }) => chatAPI.setConversationPinned(conversation.id, is_pinned),
+    {
+      onMutate: async ({ conversation, is_pinned }) => {
+        await queryClient.cancelQueries(['chatConversations'])
+        const previous = queryClient.getQueriesData<ChatConversationPage>(['chatConversations'])
+        updateConversationPages(queryClient, conversation.id, { is_pinned })
+        return { previous }
+      },
+      onError: (error, _variables, context) => {
+        context?.previous.forEach(([key, page]) => queryClient.setQueryData(key, page))
+        toast.error(getErrorMessage(error))
+      },
+      onSettled: (_data, _error, variables) => refreshChat(variables.conversation.id),
+    },
+  )
+  const moveConversationMutation = useMutation(
+    ({ conversation, folder_id }: { conversation: ChatConversation; folder_id: string | null }) => chatAPI.moveConversation(conversation.id, folder_id),
+    {
+      onMutate: async ({ conversation, folder_id }) => {
+        await queryClient.cancelQueries(['chatConversations'])
+        const previous = queryClient.getQueriesData<ChatConversationPage>(['chatConversations'])
+        const folder_name = folders.find((folder) => folder.id === folder_id)?.name || null
+        updateConversationPages(queryClient, conversation.id, { folder_id, folder_name })
+        return { previous }
+      },
+      onError: (error, _variables, context) => {
+        context?.previous.forEach(([key, page]) => queryClient.setQueryData(key, page))
+        toast.error(getErrorMessage(error))
+      },
+      onSettled: (_data, _error, variables) => refreshChat(variables.conversation.id),
+    },
+  )
+
+  const createFolderMutation = useMutation((name: string) => chatAPI.createFolder(name), {
+    onSuccess: ({ data }) => { setSelectedFolderId(data.id); setFolderDialog(null); refreshChat(); toast.success(t('chat.folderCreated')) },
+    onError: (error) => { toast.error(getErrorMessage(error)) },
+  })
+  const renameFolderMutation = useMutation(({ id, name }: { id: string; name: string }) => chatAPI.renameFolder(id, name), {
+    onSuccess: () => { setFolderDialog(null); refreshChat(); toast.success(t('chat.folderRenamed')) },
+    onError: (error) => { toast.error(getErrorMessage(error)) },
+  })
+  const deleteFolderMutation = useMutation(({ folder, deleteConversations }: { folder: ChatFolder; deleteConversations: boolean }) => chatAPI.deleteFolder(folder.id, deleteConversations), {
+    onSuccess: (_data, { folder }) => { if (targetFolderId === folder.id) setSelectedFolderId(null); refreshChat(conversationId); toast.success(t('chat.folderDeleted')) },
+    onError: (error) => { toast.error(getErrorMessage(error)) },
+  })
+  const reorderFoldersMutation = useMutation((folderIds: string[]) => chatAPI.reorderFolders(folderIds), {
+    onMutate: async (folderIds) => {
+      await queryClient.cancelQueries(['chatFolders'])
+      const previous = queryClient.getQueryData<ChatFolder[]>(['chatFolders'])
+      ;(queryClient as any).setQueryData(['chatFolders'], (current: ChatFolder[] | undefined) => current?.map((folder) => ({ ...folder, sort_order: folderIds.indexOf(folder.id) })).sort((a, b) => a.sort_order - b.sort_order))
+      return { previous }
+    },
+    onError: (error, _variables, context) => { queryClient.setQueryData(['chatFolders'], context?.previous); toast.error(getErrorMessage(error)) },
+    onSettled: () => { void queryClient.invalidateQueries(['chatFolders']) },
+  })
+  const deleteConversationMutation = useMutation((id: string) => chatAPI.deleteConversation(id), {
+    onSuccess: (_data, id) => { refreshChat(id); if (conversationId === id) navigate('/chat?list=1'); toast.success(t('chat.conversationDeleted')) },
+    onError: (error) => { toast.error(getErrorMessage(error)) },
+  })
+  const deleteMessageMutation = useMutation(
+    ({ id }: { id: number; conversationId: string }) => chatAPI.deleteEntry(id),
+    {
+      onSuccess: async (_data, variables) => {
+        await queryClient.invalidateQueries(['chatMessages', variables.conversationId])
+        refreshChat(variables.conversationId)
         toast.success(t('chat.messageDeleted'))
       },
-      onError: (error: unknown) => {
-        toast.error(getErrorMessage(error))
-      },
-    }
+      onError: (error) => { toast.error(getErrorMessage(error)) },
+    },
   )
+  const clearHistoryMutation = useMutation(() => chatAPI.clearHistory(), {
+    onSuccess: () => {
+      void (queryClient as any).setQueriesData(['chatConversations'], (page: ChatConversationPage | undefined) => page ? { ...page, items: [], total: 0 } : page)
+      refreshChat(conversationId)
+      navigate('/chat?new=1')
+      toast.success(t('chat.historyCleared'))
+    },
+    onError: (error) => { toast.error(getErrorMessage(error)) },
+  })
 
-  const clearHistoryMutation = useMutation(
-    () => chatAPI.clearHistory(),
-    {
-      onSuccess: () => {
-        queryClient.setQueryData(['chatHistory'], [])
-        queryClient.invalidateQueries(['chatHistory'])
-        toast.success(t('chat.historyCleared'))
-      },
-      onError: (error: unknown) => {
-        toast.error(getErrorMessage(error))
-      },
+  const sendMessage = async (text: string): Promise<boolean> => {
+    try {
+      const result = await sendMessageMutation.mutateAsync({ text, id: conversationId })
+      if (!conversationId && result.conversation_id) navigate(`/chat/${result.conversation_id}`, { replace: true })
+      return true
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+      return false
     }
-  )
-
-  const sortedMessages = useMemo(() => {
-    return [...(chatHistory || [])].sort(
-      (a: ChatMessage, b: ChatMessage) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    )
-  }, [chatHistory])
-
-  const displayedMessages = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase()
-    if (!query) {
-      return sortedMessages
-    }
-
-    return sortedMessages.filter((message: ChatMessage) =>
-      message.question.toLowerCase().includes(query) ||
-      message.answer.toLowerCase().includes(query)
-    )
-  }, [searchQuery, sortedMessages])
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [displayedMessages])
-
-  useEffect(() => {
-    const state = location.state as { prefillMessage?: string } | null
-    if (state?.prefillMessage) {
-      form.setValue('message', state.prefillMessage, {
-        shouldDirty: true,
-        shouldTouch: true,
-        shouldValidate: true,
-      })
-    }
-  }, [location.state, form])
-
-  const handleSubmit = (data: MessageFormData) => {
-    if (!data.message.trim()) return
-    
-    sendMessageMutation.mutate({
-      message: data.message,
-      jlpt_level: user?.current_jlpt_level,
-    })
   }
 
-  const insertKanji = (kanji: string) => {
-    const currentMessage = form.getValues('message') || ''
-    form.setValue('message', `${currentMessage}${kanji}`, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true,
-    })
+
+  const submitFolderDialog = (value: string | null) => {
+    if (!folderDialog) return
+    if (folderDialog.mode === 'create' && value) createFolderMutation.mutate(value)
+    if (folderDialog.mode === 'rename' && folderDialog.folder && value) renameFolderMutation.mutate({ id: folderDialog.folder.id, name: value })
+    if (folderDialog.mode === 'move' && folderDialog.conversation) moveConversationMutation.mutate({ conversation: folderDialog.conversation, folder_id: value })
   }
 
-  return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col">
-      <HandwritingInputModal
-        open={handwritingOpen}
-        onClose={() => setHandwritingOpen(false)}
-        onSelect={insertKanji}
-      />
-      {voiceOpen && <VoiceChatPanel onClose={() => setVoiceOpen(false)} />}
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="font-heading text-3xl font-bold text-[color:var(--text)]">{t('chat.title')}</h1>
-          <p className="mt-1 text-sm text-[color:var(--text-muted)]">
-            {t('chat.subtitle')}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setVoiceOpen(true)} className="btn btn-outline btn-sm inline-flex items-center gap-2" aria-label={t('chat.voiceChat')}>
-            <Mic className="h-4 w-4" /><span className="hidden sm:inline">{t('chat.voiceChat')}</span>
-          </button>
+  const exportConversation = async () => {
+    if (!conversationId || !activeConversation || exporting) return
+    setExporting(true)
+    try {
+      const allMessages = [] as Awaited<ReturnType<typeof chatAPI.getConversationMessages>>['data']['items']
+      let offset = 0
+      while (true) {
+        const { data } = await chatAPI.getConversationMessages(conversationId, 100, offset)
+        allMessages.push(...data.items)
+        if (!data.has_more) break
+        offset += data.items.length
+      }
+      allMessages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+      const content = serializeChatHistory(allMessages.map((message) => ({ ...message, jlpt_level: message.jlpt_level || undefined })), {
+        question: t('chat.exportQuestion'), answer: t('chat.exportAnswer'), level: t('chat.exportLevel'),
+        translation: t('chat.translation'), grammar: t('chat.grammarPoints'), sources: t('chat.sources'),
+      }, language === 'en' ? 'en-US' : 'vi-VN')
+      downloadChatHistory(content, `senpaiai-${activeConversation.title}`)
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  const returnToList = () => navigate('/chat?list=1')
+  const showConversationLoading = Boolean(conversationId && (conversationQuery.isLoading || messagesQuery.isLoading))
+  const displayTitle = editingTitle ? titleDraft : (activeConversation?.title || t('chat.newConversation'))
+
+  return <div className="h-[calc(100dvh-8rem)] min-h-[480px] overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] shadow-[var(--shadow-card)]">
+    <div className="grid h-full grid-cols-1 md:grid-cols-[270px_minmax(0,1fr)] lg:grid-cols-[290px_minmax(0,1fr)]">
+      <div className={`${showMobileChat ? 'hidden' : 'flex'} min-h-0 md:flex`}>
+        <ChatConversationSidebar
+          conversations={conversations}
+          folders={folders}
+          activeId={conversationId || null}
+          selectedFolderId={targetFolderId}
+          creatingConversation={creatingConversation}
+          loading={conversationsQuery.isLoading || foldersQuery.isLoading}
+          search={search}
+          searchInputRef={searchRef}
+          onSearch={setSearch}
+          onCreateText={startNewConversation}
+          onSelectFolder={setSelectedFolderId}
+          onCreateFolder={() => setFolderDialog({ mode: 'create' })}
+          onSelect={(id) => { setSelectedFolderId(undefined); navigate(`/chat/${id}`) }}
+          onRenameConversation={(id, title) => renameConversationMutation.mutate({ id, title })}
+          onPinConversation={(conversation) => pinConversationMutation.mutate({ conversation, is_pinned: !conversation.is_pinned })}
+          onMoveConversation={(conversation) => setFolderDialog({ mode: 'move', conversation })}
+          onDropConversation={(id, folderId) => {
+            const conversation = conversations.find((item) => item.id === id)
+            if (conversation) moveConversationMutation.mutate({ conversation, folder_id: folderId })
+          }}
+          onDeleteConversation={(conversation) => {
+            if (window.confirm(t('chat.confirmDeleteConversation', { title: conversation.title }))) deleteConversationMutation.mutate(conversation.id)
+          }}
+          onRenameFolder={(folder) => setFolderDialog({ mode: 'rename', folder })}
+          onDeleteFolder={(folder, deleteConversations) => deleteFolderMutation.mutate({ folder, deleteConversations })}
+          onReorderFolders={(folderIds) => reorderFoldersMutation.mutate(folderIds)}
+        />
+      </div>
+
+      <main className={`${showMobileChat ? 'flex' : 'hidden'} min-h-0 min-w-0 flex-col md:flex`}>
+        <header className="flex min-h-[76px] shrink-0 items-center gap-3 border-b border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-4 sm:px-6">
+          <button type="button" onClick={returnToList} className="rounded-xl p-2 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)] md:hidden" aria-label={t('chat.backToList')}><ArrowLeft className="h-5 w-5" /></button>
+          <span className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color:var(--accent)] text-[color:var(--primary)] sm:flex"><MessageCircle className="h-5 w-5" /></span>
+          <div className="min-w-0 flex-1">
+            {editingTitle && activeConversation ? <form onSubmit={(event) => { event.preventDefault(); const title = titleDraft.trim(); if (title && title !== activeConversation.title) renameConversationMutation.mutate({ id: activeConversation.id, title }); setEditingTitle(false) }} className="flex items-center gap-2">
+              <input autoFocus maxLength={80} value={titleDraft} onChange={(event) => setTitleDraft(event.target.value)} onKeyDown={(event) => event.key === 'Escape' && setEditingTitle(false)} className="input h-9 max-w-lg flex-1 px-3 text-sm" aria-label={t('chat.renameConversation')} />
+              <button type="submit" className="btn btn-primary btn-sm">{t('chat.save')}</button>
+            </form> : <div className="flex min-w-0 items-center gap-2">
+              <h1 className="truncate font-heading text-base font-bold text-[color:var(--text)] sm:text-lg">{displayTitle}</h1>
+              {activeConversation && <button type="button" onClick={() => { setTitleDraft(activeConversation.title); setEditingTitle(true) }} className="rounded-md px-1.5 py-1 text-xs text-[color:var(--text-muted)] hover:bg-[color:var(--accent)]">{t('chat.rename')}</button>}
+            </div>}
+            <p className="mt-0.5 truncate text-xs text-[color:var(--text-muted)]">{activeConversation?.folder_name || (activeConversation ? t('chat.unfiled') : newConversationState ? t('chat.newConversationHelp') : t('chat.selectConversationHelp'))}</p>
+          </div>
+          {activeConversation?.is_pinned && <Pin className="h-4 w-4 shrink-0 text-[color:var(--primary)]" />}
+
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--text-muted)]" />
-            <input
-              type="text"
-              placeholder={t('chat.searchHistory')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-pill border border-[color:var(--border)] bg-[color:var(--card-glass)] py-2 pl-10 pr-4 text-sm text-[color:var(--text)] placeholder:text-[color:var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[color:var(--primary)]"
-            />
+            <button type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={t('chat.moreActions')} aria-expanded={menuOpen} className="rounded-xl p-2.5 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)]"><MoreVertical className="h-5 w-5" /></button>
+            {menuOpen && <div className="absolute right-0 top-full z-40 mt-1 w-56 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] p-1 shadow-xl">
+              {conversationId && <button type="button" onClick={() => { void exportConversation(); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-[color:var(--text)] hover:bg-[color:var(--accent)]"><Download className="h-4 w-4" />{t('chat.downloadConversation')}</button>}
+              <button type="button" onClick={() => { setMenuOpen(false); if (window.confirm(t('chat.confirmClearHistory'))) clearHistoryMutation.mutate() }} disabled={clearHistoryMutation.isLoading} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-[color:var(--accent)]"><Trash2 className="h-4 w-4" />{t('chat.clearAllConversations')}</button>
+            </div>}
           </div>
-          <button
-            onClick={() => clearHistoryMutation.mutate()}
-            className="btn btn-outline btn-sm text-[color:var(--text-muted)] hover:bg-red-50 hover:text-red-600 hover:border-red-200"
-            disabled={clearHistoryMutation.isLoading}
-            aria-label={t('chat.clearHistory')}
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
+        </header>
 
-      {/* Chat Messages */}
-      <div className="theme-card flex-1 space-y-4 overflow-y-auto p-4">
-        {isLoadingHistory ? (
-          <div className="flex justify-center py-8">
-            <LoadingSpinner size="lg" />
-          </div>
-        ) : displayedMessages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-[color:var(--text-muted)]">
-            <Bot className="h-12 w-12 mb-4" />
-            <p className="text-lg font-medium">{t('chat.emptyTitle')}</p>
-            <p className="text-sm">{t('chat.emptyDescription')}</p>
-          </div>
-        ) : (
-          displayedMessages.map((message: ChatMessage) => (
-            <div key={message.id} className="space-y-3 animate-fadeIn">
-              {/* User Question */}
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--primary)] shadow-md">
-                    <User className="h-4 w-4 text-[color:var(--primary-contrast)]" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <div className="theme-card rounded-card p-4">
-                    <div className="flex items-start justify-between gap-2"><p className="text-sm font-medium text-[color:var(--text)]">{message.question}</p>{message.input_mode === 'voice' && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color:var(--accent)] px-2 py-1 text-[10px] font-semibold text-[color:var(--primary)]"><Mic className="h-3 w-3" />{t('chat.voice')}</span>}</div>
-                  </div>
-                  <p className="mt-2 text-xs font-medium text-[color:var(--text-muted)]">
-                    {formatRelativeTime(message.created_at, language)}
-                  </p>
-                </div>
-                <button
-                  onClick={() => deleteMessageMutation.mutate(message.id)}
-                  className="text-gray-400 hover:text-red-500 transition-colors"
-                  disabled={deleteMessageMutation.isLoading}
-                  aria-label={t('chat.deleteMessage')}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </div>
-
-              {/* AI Response */}
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[color:var(--accent)] shadow-md">
-                    <Bot className="h-4 w-4 text-[color:var(--primary)]" />
-                  </div>
-                </div>
-                <div className="flex-1 space-y-2">
-                  <div className="theme-card rounded-card p-4">
-                    <p className="japanese-text whitespace-pre-wrap text-sm leading-relaxed text-[color:var(--text)]">{message.answer}</p>
-                    
-                    {message.jlpt_level && (
-                      <div className="mt-3">
-                          <span className="jlpt-badge bg-[color:var(--accent)] text-[color:var(--primary)]">
-                          {message.jlpt_level}
-                        </span>
-                      </div>
-                    )}
-                    
-                    {message.translation && (
-                      <div className="mt-3 rounded-lg border-l-4 border-[color:var(--primary)] bg-[color:var(--accent)] p-3">
-                        <p className="text-xs font-semibold text-[color:var(--primary)]">{t('chat.translation')}:</p>
-                        <p className="mt-1 text-sm text-[color:var(--text)]">{message.translation}</p>
-                      </div>
-                    )}
-                    
-                    {message.grammar_points && message.grammar_points.length > 0 && (
-                      <div className="mt-3">
-                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">{t('chat.grammarPoints')}:</p>
-                        <div className="space-y-2">
-                          {message.grammar_points.map((point, index) => (
-                            <div key={index} className="rounded-lg bg-[color:var(--accent)] p-2 text-xs text-[color:var(--text)]">
-                              <span className="font-semibold text-[color:var(--primary)]">{point.pattern}:</span> {point.explanation}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    
-                    {message.sources && message.sources.length > 0 && (
-                      <div className="mt-3">
-                        <p className="mb-2 text-xs font-semibold text-[color:var(--text)]">{t('chat.sources')}:</p>
-                        <div className="space-y-1">
-                          {message.sources.map((source, index) => (
-                            <div key={index} className="text-xs font-medium text-[color:var(--primary)]">
-                              📚 {source.title}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-xs font-medium text-[color:var(--text-muted)]">
-                    {formatRelativeTime(message.created_at, language)}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Message Input */}
-      <div className="mt-4">
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="flex space-x-2">
-          <input
-            {...form.register('message', { required: t('chat.messageRequired') })}
-            type="text"
-            placeholder={t('chat.messagePlaceholder')}
-            className="input flex-1 border-[color:var(--border)] bg-[color:var(--card-glass)] text-[color:var(--text)] placeholder:text-[color:var(--text-muted)] focus:ring-[color:var(--primary)]"
-            disabled={sendMessageMutation.isLoading}
+        {conversationId && conversationQuery.isError ? <div className="flex flex-1 items-center justify-center p-8 text-sm text-[color:var(--text-muted)]">{t('chat.conversationNotFound')}</div> : <>
+          <ChatMessageList
+            onDelete={(id) => { if (conversationId && !deleteMessageMutation.isLoading) deleteMessageMutation.mutate({ id, conversationId }) }}
+            deletingId={deleteMessageMutation.isLoading ? deleteMessageMutation.variables?.id : undefined}
+            pendingText={sendMessageMutation.isLoading ? sendMessageMutation.variables?.text : undefined}
+            messages={messages}
+            loading={showConversationLoading}
+            loadingOlder={messagesQuery.isFetchingNextPage}
+            hasMore={Boolean(messagesQuery.hasNextPage)}
+            searchTerm={search}
+            showSuggestions={newConversationState || Boolean(activeConversation?.mode === 'text' && !messages.length)}
+            emptyTitle={!conversationId && !newConversationState ? t('chat.selectConversation') : undefined}
+            emptyDescription={!conversationId && !newConversationState ? t('chat.selectConversationHelp') : undefined}
+            onLoadOlder={() => { void messagesQuery.fetchNextPage() }}
+            onStartSuggestion={(value) => { void sendMessage(value) }}
           />
-          <button
-            type="button"
-            onClick={() => setHandwritingOpen(true)}
-            disabled={sendMessageMutation.isLoading}
-            className="btn btn-outline border-[color:var(--border)] bg-[color:var(--card-glass)] text-[color:var(--primary)] hover:bg-[color:var(--accent)]"
-            aria-label={t('chat.handwritingInput')}
-          >
-            <PenLine className="h-4 w-4" />
-          </button>
-          <button
-            type="submit"
-            disabled={sendMessageMutation.isLoading || !form.watch('message')?.trim()}
-            className="btn rounded-pill bg-[color:var(--primary)] px-4 font-semibold text-[color:var(--primary-contrast)] shadow-md transition-all hover:opacity-90 hover:shadow-lg"
-            aria-label={t('chat.send')}
-          >
-            {sendMessageMutation.isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-          </button>
-        </form>
-        {form.formState.errors.message && (
-          <p className="mt-2 text-sm text-red-600 font-medium">
-            {form.formState.errors.message.message}
-          </p>
-        )}
-      </div>
+          {(!activeConversation || activeConversation.mode === 'text') && <div className="shrink-0 px-4 pb-4 pt-2 sm:px-7 sm:pb-5"><div className="mx-auto max-w-3xl">
+            <ChatComposer sending={sendMessageMutation.isLoading} onSend={sendMessage} />
+          </div></div>}
+        </>}
+      </main>
     </div>
-  )
-}
 
+    {folderDialog && <ChatFolderDialog
+      open
+      mode={folderDialog.mode}
+      folder={folderDialog.folder}
+      folders={folders}
+      currentFolderId={folderDialog.conversation?.folder_id}
+      onClose={() => setFolderDialog(null)}
+      onSubmit={submitFolderDialog}
+    />}
+  </div>
+}

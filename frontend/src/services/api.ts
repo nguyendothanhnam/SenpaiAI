@@ -74,9 +74,6 @@ export const rewardsAPI = {
   equip: (data: { theme_id?: string; background_id?: string | null }) => api.put('/rewards/equip', data),
 }
 
-export interface VoiceScenario { id: string; name: string; description: string; opening: string }
-export interface VoiceFeedbackIssue { type: 'grammar' | 'vocab' | 'politeness'; original: string; suggestion: string; explanation_vi: string }
-export interface VoiceFeedback { corrected_sentence: string; issues: VoiceFeedbackIssue[]; better_phrases: string[] }
 export interface ListeningLessonSummary {
   id: number; title: string; jlpt_level: string; topic: string; description?: string | null
   duration_ms: number; source: string
@@ -86,6 +83,38 @@ export interface ListeningSegment {
   idx: number; start_ms?: number; end_ms?: number; ja: string; tokens?: ListeningToken[]; vi: string
 }
 export interface ListeningLesson extends ListeningLessonSummary { segments: ListeningSegment[] }
+export type ListeningExerciseMode = 'dictation' | 'cloze' | 'comprehension'
+export interface ListeningExerciseQuestion {
+  id: string
+  mode: ListeningExerciseMode
+  segment_index: number
+  prefix?: string
+  suffix?: string
+  accepts_kana?: boolean
+  options?: Array<{ id: string; text: string }>
+}
+export interface ListeningExerciseSet {
+  lesson_id: number
+  revision: string
+  questions: ListeningExerciseQuestion[]
+}
+export interface ListeningExerciseResult {
+  question_id: string
+  correct: boolean
+  submitted: string
+  expected: string
+  transcript: string
+  segment_index: number
+}
+export interface ListeningAttemptSummary {
+  id: number
+  mode: ListeningExerciseMode
+  score: number
+  correct_count: number
+  total: number
+  created_at: string
+}
+export interface ListeningAttemptResult extends ListeningAttemptSummary { results: ListeningExerciseResult[] }
 export interface AppNotification {
   id: number; type: string; title: string; body: string; url: string; data: Record<string, unknown>
   created_at: string; read_at: string | null
@@ -94,21 +123,6 @@ export interface ReminderSettings {
   enabled: boolean; timezone: string; reminder_time: string; days_of_week: number[]
   types: Array<'daily_task' | 'streak_risk' | 'review_due'>; quiet_start: string; quiet_end: string
   push_enabled: boolean; max_per_day: number; snooze_until: string | null; updated_at?: string | null
-}
-
-export const voiceAPI = {
-  getScenarios: () => api.get<VoiceScenario[]>('/voice/scenarios'),
-  createConversation: (data: { scenario_id: string; jlpt_level: 'N5' | 'N4' | 'N3' }) =>
-    api.post<{ id: string; opening_text: string; audio_url: string | null }>('/voice/conversations', data),
-  transcribe: (audio: Blob) => {
-    const form = new FormData()
-    form.append('audio', audio, `recording.${audio.type.includes('ogg') ? 'ogg' : audio.type.includes('mp4') ? 'mp4' : audio.type.includes('wav') ? 'wav' : 'webm'}`)
-    return api.post<{ text: string; confidence: number | null }>('/voice/transcribe', form, { headers: { 'Content-Type': 'multipart/form-data' } })
-  },
-  sendTurn: (id: string, text: string, transcript_confidence?: number | null) =>
-    api.post<{ chat_id: number; reply: string; audio_url: string | null }>(`/voice/conversations/${id}/turn`, { text, transcript_confidence }),
-  feedback: (chatId: number) => api.post<VoiceFeedback>(`/voice/turns/${chatId}/feedback`),
-  endConversation: (id: string) => api.post<{ summary: Record<string, unknown>; turn_count: number }>(`/voice/conversations/${id}/end`),
 }
 
 export const remindersAPI = {
@@ -137,6 +151,10 @@ export const listeningAPI = {
     api.get<{ items: ListeningLessonSummary[]; total: number; limit: number; offset: number }>('/listening/lessons', { params }),
   getLesson: (id: number) => api.get<ListeningLesson>(`/listening/lessons/${id}`),
   getAudio: (id: number) => api.get<Blob>(`/listening/lessons/${id}/audio`, { responseType: 'blob' }),
+  getExercises: (id: number) => api.get<ListeningExerciseSet>(`/listening/lessons/${id}/exercises`),
+  submitAttempt: (id: number, data: { mode: ListeningExerciseMode; revision: string; answers: Array<{ question_id: string; answer: string }>; duration_ms: number }) =>
+    api.post<ListeningAttemptResult>(`/listening/lessons/${id}/attempts`, data),
+  getAttempts: (id: number) => api.get<{ items: ListeningAttemptSummary[] }>(`/listening/lessons/${id}/attempts`),
   createFromLibraryDraft: (data: { document_id: number; topic?: string }) => api.post('/listening/lessons/from-library', data),
   saveFromLibrary: (data: { document_id: number; title: string; description: string; jlpt_level: string; topic: string; segments: Array<{ ja: string; vi: string }> }) => api.post<ListeningLesson>('/listening/lessons/from-library/save', data),
 }
@@ -200,9 +218,88 @@ export const dailyAPI = {
   getHistory: (days = 30) => api.get<DailyHistoryEntry[]>('/daily/history', { params: { days } }),
 }
 
+export interface ChatConversation {
+  id: string
+  folder_id: string | null
+  folder_name: string | null
+  title: string
+  is_pinned: boolean
+  mode: 'text' | 'voice'
+  created_at: string
+  last_activity_at: string
+  message_count: number
+  snippet?: string | null
+  voice_status?: 'active' | 'ended' | null
+  scenario_id?: string | null
+  jlpt_level?: string | null
+  summary?: Record<string, unknown> | null
+}
+
+export interface ChatFolder {
+  id: string
+  name: string
+  sort_order: number
+  created_at?: string
+  conversation_count: number
+}
+
+export interface ChatMessageEntry {
+  id: number
+  question: string
+  answer: string
+  jlpt_level?: string | null
+  grammar_points?: Array<{ pattern?: string; explanation?: string; [key: string]: unknown }> | null
+  translation?: string | null
+  sources?: Array<{ title?: string; url?: string; type?: string; [key: string]: unknown }> | null
+  input_mode?: 'text' | 'voice' | null
+  conversation_id?: string | null
+  scenario?: string | null
+  feedback?: Record<string, unknown> | null
+  created_at: string
+}
+
+export interface ChatConversationPage {
+  items: ChatConversation[]
+  total: number
+  limit: number
+  offset: number
+}
+
+export interface ChatMessagesPage {
+  items: ChatMessageEntry[]
+  total: number
+  limit: number
+  offset: number
+  has_more: boolean
+}
+
 export const chatAPI = {
-  sendMessage: (message: string, context?: string, jlpt_level?: string) =>
-    api.post('/chat/message', { message, context, jlpt_level }),
+  sendMessage: (message: string, context?: string, jlpt_level?: string, conversation_id?: string, response_language?: 'vi' | 'en') =>
+    api.post<{ answer: string; conversation_id: string; jlpt_level?: string; grammar_points?: ChatMessageEntry['grammar_points']; translation?: string | null; sources?: ChatMessageEntry['sources']; response_time: number }>(
+      '/chat/message', { message, context, jlpt_level, conversation_id, response_language },
+    ),
+  listConversations: (params: { folder_id?: string; unfiled?: boolean; pinned_only?: boolean; search?: string; limit?: number; offset?: number } = {}) =>
+    api.get<ChatConversationPage>('/chat/conversations', { params }),
+  createConversation: (data: { title?: string; mode?: 'text'; folder_id?: string | null }) =>
+    api.post<ChatConversation>('/chat/conversations', data),
+  getConversation: (id: string) => api.get<ChatConversation>(`/chat/conversations/${id}`),
+  getConversationMessages: (id: string, limit = 30, offset = 0) =>
+    api.get<ChatMessagesPage>(`/chat/conversations/${id}/messages`, { params: { limit, offset } }),
+  renameConversation: (id: string, title: string) =>
+    api.patch<ChatConversation>(`/chat/conversations/${id}`, { title }),
+  setConversationPinned: (id: string, is_pinned: boolean) =>
+    api.put<{ id: string; is_pinned: boolean }>(`/chat/conversations/${id}/pin`, { is_pinned }),
+  moveConversation: (id: string, folder_id: string | null) =>
+    api.put<{ id: string; folder_id: string | null }>(`/chat/conversations/${id}/folder`, { folder_id }),
+  deleteConversation: (id: string) => api.delete(`/chat/conversations/${id}`),
+  listFolders: () => api.get<ChatFolder[]>('/chat/folders'),
+  createFolder: (name: string) => api.post<ChatFolder>('/chat/folders', { name }),
+  renameFolder: (id: string, name: string) => api.patch<ChatFolder>(`/chat/folders/${id}`, { name }),
+  reorderFolders: (folder_ids: string[]) => api.put<{ folder_ids: string[] }>('/chat/folders/order', { folder_ids }),
+  deleteFolder: (id: string, delete_conversations = false) =>
+    api.delete<{ deleted_folder_id: string; deleted_conversations: number; unfiled_conversations: number }>(
+      `/chat/folders/${id}`, { params: { delete_conversations } },
+    ),
   getHistory: (limit = 50, offset = 0) =>
     api.get(`/chat/history?limit=${limit}&offset=${offset}`),
   searchHistory: (query: string, limit = 20) =>
@@ -212,8 +309,8 @@ export const chatAPI = {
 }
 
 export const analysisAPI = {
-  analyzeGrammar: (text: string, includeTranslation = false) =>
-    api.post('/analysis/grammar', { text, include_translation: includeTranslation }),
+  analyzeGrammar: (text: string, responseLanguage: 'vi' | 'en' = 'vi') =>
+    api.post('/analysis/grammar', { text, response_language: responseLanguage }),
   translate: (text: string, sourceLang: string, targetLang: string) =>
     api.post('/analysis/translate', { text, source_lang: sourceLang, target_lang: targetLang }),
   predictJLPT: (text: string) => api.post('/analysis/jlpt-level', text),

@@ -1,3 +1,5 @@
+import { kanjiText as k } from '../../utils/kanjiLocale'
+import { useTranslation } from 'react-i18next'
 import { useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import KanjiCanvas from './KanjiCanvas'
@@ -24,6 +26,8 @@ function readableError(value, fallback = 'Kanji not recognized') {
 }
 
 export default function HandwritingInputModal({ open, onClose, onSelect }) {
+  useTranslation('kanjiUI')
+
   const canvasRef = useRef(null)
   const [status, setStatus] = useState('idle')
   const [predictions, setPredictions] = useState([])
@@ -73,19 +77,19 @@ export default function HandwritingInputModal({ open, onClose, onSelect }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-gray-950/50 p-4 backdrop-blur-sm">
-      <div className="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-3xl bg-white p-5 shadow-2xl">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <div className="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-3xl bg-[color:var(--card)] p-5 shadow-2xl">
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-violet-600">Chat handwriting input</p>
-            <h2 className="mt-1 text-2xl font-bold text-gray-950">Write a kanji</h2>
-            <p className="mt-1 text-sm text-gray-500">Select a prediction to insert it into your chat message.</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("Chat handwriting input")}</p>
+            <h2 className="mt-1 text-2xl font-bold text-[color:var(--text)]">{k("Write a kanji")}</h2>
+            <p className="mt-1 text-sm text-[color:var(--text-muted)]">{k("Select a prediction to insert it into your chat message.")}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="grid h-10 w-10 place-items-center rounded-2xl border border-gray-200 text-gray-500 hover:bg-gray-50"
-            aria-label="Close handwriting input"
+            className="grid h-10 w-10 place-items-center rounded-2xl border border-[color:var(--border)] text-[color:var(--text-muted)] hover:bg-[color:var(--bg-elevated)]"
+            aria-label={k("Close handwriting input")}
           >
             <X className="h-5 w-5" />
           </button>

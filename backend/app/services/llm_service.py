@@ -15,8 +15,10 @@ from collections import OrderedDict
 from copy import deepcopy
 from ..core.config import settings
 from .ollama_service import ollama_service
-from .grammar_analyzer import sanitize_grammar_analysis
-from .chat_prompt import CHAT_SYSTEM_PROMPT
+from .grammar_analyzer import (sanitize_grammar_analysis, deterministic_grammar_analysis,
+                               grammar_generation_prompt, grammar_analysis_is_valid, grounded_model_analysis)
+from .grammar_grounded import partial_analysis
+from .chat_prompt import CHAT_SYSTEM_PROMPT, build_chat_system_prompt
 
 
 class JapaneseLearningService:
@@ -95,11 +97,12 @@ class JapaneseLearningService:
             self,
             question: str,
             context: Optional[str] = None,
-            jlpt_level: Optional[str] = None
+            jlpt_level: Optional[str] = None,
+            response_language: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Generate a chat response with RAG context."""
         if self.provider == "ollama":
-            return await self.service.chat_response(question, context, jlpt_level)
+            return await self.service.chat_response(question, context, jlpt_level, response_language=response_language)
 
         # OpenAI implementation
         start_time = time.time()
@@ -116,7 +119,7 @@ class JapaneseLearningService:
                 enhanced_question = f"User's JLPT level: {jlpt_level}\n\n{enhanced_question}"
 
             # Generate response
-            messages = self.chat_prompt.format_messages(question=enhanced_question)
+            messages = [SystemMessage(content=build_chat_system_prompt(response_language or 'vi')), HumanMessage(content=enhanced_question)]
             response = await self.llm.agenerate([messages])
 
             answer = response.generations[0][0].text.strip()
@@ -147,68 +150,46 @@ class JapaneseLearningService:
         response = await self.llm.agenerate([messages])
         return response.generations[0][0].text.strip()
 
-    async def analyze_grammar(self, text: str, include_vietnamese: bool = False) -> Dict[str, Any]:
-        """Analyze Japanese grammar in the given text."""
-        cache_key = (" ".join(text.split()), include_vietnamese)
+    async def analyze_grammar(self, text: str, include_vietnamese: bool = False,
+                              response_language: Optional[str] = None) -> Dict[str, Any]:
+        language = response_language or ('vi' if include_vietnamese else 'en')
+        text = text.strip()
+        cache_key = (" ".join(text.split()), language, 'grounded-v3')
         if cache_key in self._grammar_analysis_cache:
             self._grammar_analysis_cache.move_to_end(cache_key)
             return deepcopy(self._grammar_analysis_cache[cache_key])
 
-        if self.provider == "ollama":
-            result = await self.service.analyze_grammar(text, include_vietnamese=include_vietnamese)
-            self._cache_grammar_analysis(cache_key, result)
-            return result
+        reviewed = deterministic_grammar_analysis(text, response_language=language)
+        if reviewed is not None:
+            self._cache_grammar_analysis(cache_key, reviewed)
+            return deepcopy(reviewed)
 
-        # OpenAI implementation
-        try:
-            messages = self.grammar_prompt.format_messages(text=text, include_vietnamese=include_vietnamese)
-            response = await self.grammar_llm.agenerate([messages])
-
-            result_text = response.generations[0][0].text.strip()
-
-            # Try to parse JSON response
+        last_error = None
+        for _attempt in range(2):
             try:
-                result = json.loads(result_text)
-
-                # Ensure grammar_points is always an array
-                if "grammar_points" in result:
-                    if not isinstance(result["grammar_points"], list):
-                        # If it's a single object, wrap it in an array
-                        if isinstance(result["grammar_points"], dict):
-                            result["grammar_points"] = [result["grammar_points"]]
-                        else:
-                            result["grammar_points"] = []
+                if self.provider == 'ollama':
+                    raw = await self.service.analyze_grammar(text, response_language=language, repair_language=bool(_attempt))
                 else:
-                    result["grammar_points"] = []
-
-                # Ensure suggestions is always an array
-                if "suggestions" in result:
-                    if not isinstance(result["suggestions"], list):
-                        result["suggestions"] = [str(result["suggestions"])] if result["suggestions"] else []
-                else:
-                    result["suggestions"] = []
-
-            except json.JSONDecodeError:
-                # Fallback if JSON parsing fails
-                result = {
-                    "jlpt_level": "N3",
-                    "grammar_points": [],
-                    "grammar_patterns": [],
-                    "difficulty_score": 5.0,
-                    "suggestions": ["Ôn lại các mẫu ngữ pháp xuất hiện trong câu"]
-                }
-
-            analysis = sanitize_grammar_analysis(text, result, include_vietnamese=include_vietnamese)
-            self._cache_grammar_analysis(cache_key, analysis)
-            return analysis
-
-        except Exception as e:
-            return sanitize_grammar_analysis(text, {
-                "jlpt_level": "N3",
-                "grammar_points": [],
-                "difficulty_score": 5.0,
-                "suggestions": []
-            }, include_vietnamese=include_vietnamese)
+                    system, prompt = grammar_generation_prompt(text, language)
+                    response = await self.grammar_llm.agenerate([[SystemMessage(content=system), HumanMessage(content=prompt)]])
+                    raw = json.loads(response.generations[0][0].text.strip())
+                if not isinstance(raw, dict) or raw.get('jlpt_level') not in {'N5', 'N4', 'N3', 'N2', 'N1'}:
+                    raise ValueError('invalid_grammar_analysis')
+                analysis = grounded_model_analysis(text, raw, language)
+                if not grammar_analysis_is_valid(analysis, language):
+                    raise ValueError('invalid_grammar_language')
+                analysis['translation'] = None
+                self._cache_grammar_analysis(cache_key, analysis)
+                return deepcopy(analysis)
+            except Exception as error:
+                last_error = error
+        # Do not cache a fabricated N3 result or an error message as analysis.
+        partial = partial_analysis(text, language)
+        if partial is not None:
+            # Do not cache partial results: a later request should be allowed
+            # to obtain a complete analysis when generation succeeds.
+            return partial
+        raise RuntimeError('grammar_analysis_failed') from last_error
 
     def _cache_grammar_analysis(self, key: tuple, result: Dict[str, Any]) -> None:
         self._grammar_analysis_cache[key] = deepcopy(result)

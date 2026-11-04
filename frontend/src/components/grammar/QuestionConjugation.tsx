@@ -23,7 +23,7 @@ export default function QuestionConjugation({ question, value, disabled = false,
       </div>
       <label className="block">
         <span className="mb-2 block text-sm font-semibold text-[color:var(--text-muted)]">Nhập đáp án tiếng Nhật</span>
-        <input autoComplete="off" lang="ja" value={value} onChange={(event) => onChange(event.target.value)} disabled={disabled} className="h-14 w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-4 text-xl text-[color:var(--text)] outline-none transition placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--primary)]/20 disabled:opacity-60" placeholder="Nhập cách chia..." />
+        <input autoComplete="off" lang="ja" value={value} onChange={(event) => onChange(event.target.value)} disabled={disabled} className="h-14 w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-4 text-xl text-[color:var(--text)] outline-none transition placeholder:text-[color:var(--text-muted)] focus:border-[color:var(--primary)] focus:ring-2 focus:ring-[color:var(--primary)] disabled:opacity-60" placeholder="Nhập cách chia..." />
       </label>
       <button type="submit" disabled={disabled || !value.trim()} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[color:var(--primary)] px-5 font-bold text-[color:var(--primary-contrast)] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50">Kiểm tra đáp án <ArrowRight className="h-4 w-4" /></button>
     </form>

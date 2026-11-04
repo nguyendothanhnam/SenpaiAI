@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from typing import Optional
+from pathlib import Path
 import os
 
 class Settings(BaseSettings):
@@ -26,6 +27,16 @@ class Settings(BaseSettings):
     # Rate Limiting
     rate_limit_per_minute: int = 60
 
+    # Chat conversations and folders.
+    chat_max_folders: int = 30
+    chat_folder_name_max_length: int = 60
+    chat_conversation_title_max_length: int = 80
+    chat_history_group_gap_hours: int = 6
+    chat_context_max_turns: int = 6
+    chat_context_max_chars: int = 6000
+    chat_messages_page_size: int = 30
+    chat_messages_page_max_size: int = 100
+
     # Application calendar and development-only reward tools
     app_timezone: str = "Asia/Ho_Chi_Minh"
     enable_dev_rewards: bool = False
@@ -43,7 +54,7 @@ class Settings(BaseSettings):
     # Local backend development uses the host-published VOICEVOX port. Docker
     # Compose overrides this with its internal service URL.
     voicevox_url: str = "http://localhost:50021"
-    listening_media_dir: str = "/app/media/audio"
+    listening_media_dir: str = str(Path(__file__).resolve().parents[2] / "media" / "audio")
     listening_voicevox_speaker_id: int = 1
     
     class Config:

@@ -169,13 +169,9 @@ def try_answer(message: str) -> Optional[VocabMcqResult]:
 
     entry = lookup_vocab(target)
     if not entry:
-        return VocabMcqResult(
-            answer="Không chắc chắn, đây là các khả năng. Mình chưa thấy từ này trong từ điển cục bộ, nên cần tra thêm trước khi kết luận.",
-            target=target,
-            matched_label=None,
-            matched_text=None,
-            intent=intent,
-        )
+        # This small dictionary only answers entries it actually knows. Let the
+        # chat LLM handle unknown vocabulary and whole-sentence explanations.
+        return None
 
     matched = next((option for option in options if option_matches_entry(option, entry)), None)
     if options and not matched:

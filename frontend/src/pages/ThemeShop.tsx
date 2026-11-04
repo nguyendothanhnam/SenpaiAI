@@ -127,7 +127,7 @@ export default function ThemeShop() {
                     {theme.background[previewMode] && <img src={theme.background[previewMode]} alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" />}
                     <div className="relative flex h-full flex-col justify-between">
                       <div className="flex items-start justify-between gap-2">
-                        <span className="rounded-pill bg-white/75 px-3 py-1 text-xs font-semibold text-gray-800 backdrop-blur">{t('themeShop.preview')}</span>
+                        <span className="rounded-pill bg-[color:var(--card-glass)] px-3 py-1 text-xs font-semibold text-[color:var(--text)] backdrop-blur">{t('themeShop.preview')}</span>
                         {equipped && <span className="inline-flex items-center gap-1 rounded-pill bg-[color:var(--primary)] px-2.5 py-1 text-xs font-bold text-[color:var(--primary-contrast)]"><Check className="h-3.5 w-3.5" />{t('themeShop.equipped')}</span>}
                       </div>
                       <div className="rounded-2xl border p-3 backdrop-blur" style={{ backgroundColor: theme.palettes[previewMode].cardGlass, borderColor: theme.palettes[previewMode].border }}>
@@ -138,7 +138,7 @@ export default function ThemeShop() {
                 ) : (
                   <div className="relative h-44 overflow-hidden bg-[color:var(--accent)]">
                     <img src={background?.image} alt={displayName} loading="lazy" className="h-full w-full object-cover" />
-                    <div className={`absolute inset-0 ${previewMode === 'dark' ? 'bg-slate-950/45' : 'bg-white/10'}`} />
+                    <div className={`absolute inset-0 ${previewMode === 'dark' ? 'bg-black/40' : 'bg-white/10'}`} />
                     {equipped && <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-pill bg-[color:var(--primary)] px-2.5 py-1 text-xs font-bold text-[color:var(--primary-contrast)]"><Check className="h-3.5 w-3.5" />{t('themeShop.equipped')}</span>}
                   </div>
                 )}

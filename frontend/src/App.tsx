@@ -51,6 +51,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/chat" replace />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:conversationId" element={<Chat />} />
         <Route path="/grammar" element={<Grammar />} />
         <Route path="/grammar/practice" element={<GrammarPractice />} />
         <Route path="/library" element={<Library />} />

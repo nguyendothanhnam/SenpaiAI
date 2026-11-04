@@ -8,7 +8,7 @@ import logging
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, voice, listening
+from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
 
@@ -80,6 +80,8 @@ app.include_router(auth.router)
 app.include_router(auth.router, prefix="/api")
 app.include_router(chat.router)
 app.include_router(chat.router, prefix="/api")
+app.include_router(chat_conversations.router)
+app.include_router(chat_conversations.router, prefix="/api")
 app.include_router(analysis.router)
 app.include_router(analysis.router, prefix="/api")
 app.include_router(library.router)
@@ -100,8 +102,6 @@ app.include_router(notifications.router)
 app.include_router(notifications.router, prefix="/api")
 app.include_router(push.router)
 app.include_router(push.router, prefix="/api")
-app.include_router(voice.router)
-app.include_router(voice.router, prefix="/api")
 app.include_router(listening.router)
 app.include_router(listening.router, prefix="/api")
 

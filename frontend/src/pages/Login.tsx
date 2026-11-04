@@ -33,7 +33,7 @@ export default function Login() {
   const registerForm = useForm<RegisterFormData>()
 
   const inputClassName =
-    'w-full rounded-xl border border-gray-200 bg-white/90 px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-orange-200 focus:ring-2 focus:ring-orange-100'
+    'w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-3 text-sm text-[color:var(--text)] outline-none transition focus:border-[color:var(--border)] focus:ring-2 focus:ring-[color:var(--primary)]'
 
   const handleLogin = async (data: LoginFormData) => {
     setIsLoading(true)
@@ -65,26 +65,26 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 via-amber-50 to-white px-4 py-10">
+    <div className="min-h-screen bg-[image:var(--bg-image)] px-4 py-10">
       <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md items-center">
-        <div className="w-full space-y-6 rounded-3xl border border-white/70 bg-white/80 p-8 shadow-2xl backdrop-blur-md">
+        <div className="w-full space-y-6 rounded-3xl border border-[color:var(--border)]/70 bg-[color:var(--card-glass)] p-8 shadow-2xl backdrop-blur-md">
           <div className="flex justify-end"><LanguageSwitcher compact /></div>
           <div className="space-y-2 text-center">
-            <h1 className="bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
+            <h1 className="bg-[image:var(--primary-gradient)] bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
               SenpaiAI
             </h1>
-            <p className="text-sm text-gray-600">{t('tagline')}</p>
+            <p className="text-sm text-[color:var(--text-muted)]">{t('tagline')}</p>
           </div>
 
-          <div className="rounded-full bg-gray-100/90 p-1">
+          <div className="rounded-full bg-[color:var(--bg-elevated)] p-1">
             <div className="grid grid-cols-2 gap-1">
               <button
                 type="button"
                 onClick={() => setIsLogin(true)}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                   isLogin
-                    ? 'bg-orange-500 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-white/70 hover:text-gray-900'
+                    ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)] shadow-sm'
+                    : 'text-[color:var(--text-muted)] hover:bg-[color:var(--card-glass)] hover:text-[color:var(--text)]'
                 }`}
               >
                 {t('signInTab')}
@@ -94,8 +94,8 @@ export default function Login() {
                 onClick={() => setIsLogin(false)}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                   !isLogin
-                    ? 'bg-orange-500 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-white/70 hover:text-gray-900'
+                    ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)] shadow-sm'
+                    : 'text-[color:var(--text-muted)] hover:bg-[color:var(--card-glass)] hover:text-[color:var(--text)]'
                 }`}
               >
                 {t('signUpTab')}
@@ -115,7 +115,7 @@ export default function Login() {
                 className="space-y-5"
               >
                 <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('email')}
                   </label>
                   <input
@@ -135,7 +135,7 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor="password" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('password')}
                   </label>
                   <div className="relative">
@@ -151,7 +151,7 @@ export default function Login() {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? t('hidePassword') : t('showPassword')}
-                      className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 transition hover:text-orange-500"
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-[color:var(--text-muted)] transition hover:text-[color:var(--primary)]"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -170,7 +170,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white shadow-md transition hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="flex w-full items-center justify-center rounded-xl bg-[image:var(--primary-gradient)] px-4 py-3 text-sm font-bold text-[color:var(--primary-contrast)] shadow-md transition hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {isLoading ? (
                     <>
@@ -193,7 +193,7 @@ export default function Login() {
                 className="space-y-5"
               >
                 <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('email')}
                   </label>
                   <input
@@ -213,7 +213,7 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <label htmlFor="username" className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor="username" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('username')}
                   </label>
                   <input
@@ -233,7 +233,7 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor="password" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('password')}
                   </label>
                   <div className="relative">
@@ -250,7 +250,7 @@ export default function Login() {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={showPassword ? t('hidePassword') : t('showPassword')}
-                      className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 transition hover:text-orange-500"
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-[color:var(--text-muted)] transition hover:text-[color:var(--primary)]"
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -267,7 +267,7 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <label htmlFor="confirmPassword" className="mb-2 block text-sm font-medium text-gray-700">
+                  <label htmlFor="confirmPassword" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('confirmPassword')}
                   </label>
                   <div className="relative">
@@ -283,7 +283,7 @@ export default function Login() {
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
-                      className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 transition hover:text-orange-500"
+                      className="absolute inset-y-0 right-0 flex items-center px-3 text-[color:var(--text-muted)] transition hover:text-[color:var(--primary)]"
                     >
                       {showConfirmPassword ? (
                         <EyeOff className="h-4 w-4" />
@@ -302,7 +302,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-4 py-3 text-sm font-bold text-white shadow-md transition hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="flex w-full items-center justify-center rounded-xl bg-[image:var(--primary-gradient)] px-4 py-3 text-sm font-bold text-[color:var(--primary-contrast)] shadow-md transition hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {isLoading ? (
                     <>

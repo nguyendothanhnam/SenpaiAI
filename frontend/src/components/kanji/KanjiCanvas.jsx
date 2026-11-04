@@ -1,3 +1,5 @@
+import { kanjiText as k } from '../../utils/kanjiLocale'
+import { useTranslation } from 'react-i18next'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { Eraser, Play, RotateCcw, Search, Sparkles } from 'lucide-react'
 
@@ -114,6 +116,8 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
   { mode = 'free', templateKanji = '月', referenceStrokes = [], disabled = false, onRecognize, onStrokeChange },
   ref
 ) {
+  useTranslation('kanjiUI')
+
   const canvasRef = useRef(null)
   const normalizedReferenceStrokes = Array.isArray(referenceStrokes) ? referenceStrokes : []
   const strokesRef = useRef([])
@@ -318,30 +322,24 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
   }
 
   return (
-    <div className="rounded-2xl border border-violet-100 bg-white p-4 shadow-[0_24px_60px_-38px_rgba(76,29,149,0.42)]">
+    <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-4 shadow-[0_24px_60px_-38px_rgba(76,29,149,0.42)]">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-bold text-gray-950">Writing canvas</p>
-          <p className="text-xs font-medium text-gray-500">
-            {strokes.length ? `${strokes.length} stroke${strokes.length > 1 ? 's' : ''} captured` : 'Nothing written yet'}
+          <p className="text-sm font-bold text-[color:var(--text)]">{k("Writing canvas")}</p>
+          <p className="text-xs font-medium text-[color:var(--text-muted)]">
+            {strokes.length ? k(`${strokes.length} stroke${strokes.length > 1 ? 's' : ''} captured`) : k("Nothing written yet")}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <button type="button" onClick={replay} disabled={disabled || !strokes.length || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 transition hover:border-violet-200 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-40">
-            <Play className="h-4 w-4" />
-            Replay
-          </button>
-          <button type="button" onClick={undo} disabled={disabled || !strokes.length || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 transition hover:border-violet-200 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-40">
-            <RotateCcw className="h-4 w-4" />
-            Undo
-          </button>
-          <button type="button" onClick={clear} disabled={disabled || !strokes.length} className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-700 transition hover:border-violet-200 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-40">
-            <Eraser className="h-4 w-4" />
-            Clear
-          </button>
+          <button type="button" onClick={replay} disabled={disabled || !strokes.length || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--border)] hover:text-[color:var(--primary)] disabled:cursor-not-allowed disabled:opacity-40">
+            <Play className="h-4 w-4" />{k("Replay")}</button>
+          <button type="button" onClick={undo} disabled={disabled || !strokes.length || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--border)] hover:text-[color:var(--primary)] disabled:cursor-not-allowed disabled:opacity-40">
+            <RotateCcw className="h-4 w-4" />{k("Undo")}</button>
+          <button type="button" onClick={clear} disabled={disabled || !strokes.length} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] px-3 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--border)] hover:text-[color:var(--primary)] disabled:cursor-not-allowed disabled:opacity-40">
+            <Eraser className="h-4 w-4" />{k("Clear")}</button>
           <button type="button" onClick={onRecognize} disabled={disabled || isReplaying} className="inline-flex h-10 items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-4 text-sm font-semibold text-[color:var(--text)] shadow-sm transition hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)] disabled:cursor-not-allowed disabled:opacity-60">
             {disabled ? <Sparkles className="h-4 w-4 animate-pulse" /> : <Search className="h-4 w-4" />}
-            {mode === 'practice' ? 'Check' : 'Recognize'}
+            {mode === 'practice' ? k("Check") : k("Recognize")}
           </button>
         </div>
       </div>
@@ -354,8 +352,8 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
         onPointerMove={draw}
         onPointerUp={stopDrawing}
         onPointerCancel={stopDrawing}
-        className="theme-writing-surface aspect-square w-full touch-none rounded-2xl border border-gray-100 bg-white [cursor:crosshair]"
-        aria-label="Kanji handwriting canvas"
+        className="theme-writing-surface aspect-square w-full touch-none rounded-2xl border border-[color:var(--border)] bg-white [cursor:crosshair]"
+        aria-label={k("Kanji handwriting canvas")}
       />
     </div>
   )

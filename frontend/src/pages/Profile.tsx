@@ -125,7 +125,7 @@ export default function Profile() {
         </div>
         <div>
           <h1 className="text-3xl font-bold text-[color:var(--primary)]">{t('title')}</h1>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-[color:var(--text-muted)] mt-1">
             {t('subtitle')}
           </p>
         </div>
@@ -134,32 +134,32 @@ export default function Profile() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Form */}
         <div className="lg:col-span-2">
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
-            <div className="card-header border-b border-orange-100">
-              <h2 className="card-title text-orange-900">{t('accountInformation')}</h2>
-              <p className="card-description text-gray-600">
+          <div className="card bg-[color:var(--card)] border border-[color:var(--border)] rounded-2xl shadow-md hover:shadow-lg transition-shadow">
+            <div className="card-header border-b border-[color:var(--border)]">
+              <h2 className="card-title text-[color:var(--primary)]">{t('accountInformation')}</h2>
+              <p className="card-description text-[color:var(--text-muted)]">
                 {t('accountDescription')}
               </p>
             </div>
             <div className="card-content">
               <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-semibold text-[color:var(--text)] mb-2">
                     {t('email')}
                   </label>
                   <input
                     type="email"
                     value={user?.email || ''}
                     disabled
-                    className="input w-full bg-gray-100 border-gray-300 text-gray-600"
+                    className="input w-full bg-[color:var(--bg-elevated)] border-[color:var(--border)] text-[color:var(--text-muted)]"
                   />
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[color:var(--text-muted)]">
                     {t('emailImmutable')}
                   </p>
                 </div>
 
                 <div>
-                  <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="username" className="block text-sm font-semibold text-[color:var(--text)] mb-2">
                     {t('username')}
                   </label>
                   <input
@@ -173,7 +173,7 @@ export default function Profile() {
                       }
                     })}
                     type="text"
-                    className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
+                    className="input w-full border-[color:var(--border)] focus:ring-[color:var(--primary)] bg-[color:var(--accent)]"
                     placeholder={t('usernamePlaceholder')}
                   />
                   {form.formState.errors.username && (
@@ -184,12 +184,12 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label htmlFor="current_jlpt_level" className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label htmlFor="current_jlpt_level" className="block text-sm font-semibold text-[color:var(--text)] mb-2">
                     {t('currentLevel')}
                   </label>
                   <select
                     {...form.register('current_jlpt_level', { required: 'levelRequired' })}
-                    className="input w-full border-orange-200 focus:ring-orange-300 bg-orange-50"
+                    className="input w-full border-[color:var(--border)] focus:ring-[color:var(--primary)] bg-[color:var(--accent)]"
                   >
                     {JLPT_LEVELS.map((level) => (
                       <option key={level} value={level}>
@@ -205,7 +205,7 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-[color:var(--text)] mb-2">
                     {t('learningGoals')}
                   </label>
                   <div className="space-y-3">
@@ -215,13 +215,13 @@ export default function Profile() {
                         value={newGoal}
                         onChange={(e) => setNewGoal(e.target.value)}
                         placeholder={t('goalPlaceholder')}
-                        className="input flex-1 border-orange-200 focus:ring-orange-300 bg-orange-50"
+                        className="input flex-1 border-[color:var(--border)] focus:ring-[color:var(--primary)] bg-[color:var(--accent)]"
                         onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addGoal())}
                       />
                       <button
                         type="button"
                         onClick={addGoal}
-                        className="btn btn-outline border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold"
+                        className="btn btn-outline border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold"
                         disabled={!newGoal.trim()}
                       >
                         {t('add')}
@@ -230,8 +230,8 @@ export default function Profile() {
                     
                     <div className="space-y-2">
                       {form.watch('learning_goals').map((goal, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 bg-orange-50 border border-orange-100 rounded-lg">
-                          <span className="text-sm text-gray-800 font-medium">{goal}</span>
+                        <div key={index} className="flex items-center justify-between p-3 bg-[color:var(--accent)] border border-[color:var(--border)] rounded-lg">
+                          <span className="text-sm text-[color:var(--text)] font-medium">{goal}</span>
                           <button
                             type="button"
                             onClick={() => removeGoal(index)}
@@ -248,7 +248,7 @@ export default function Profile() {
                 <button
                   type="submit"
                   disabled={updateProfileMutation.isLoading}
-                  className="btn btn-primary w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold shadow-md hover:shadow-lg transition-all"
+                  className="btn btn-primary w-full bg-[image:var(--primary-gradient)] hover:from-[color:var(--primary)] hover:to-[color:var(--accent)] text-[color:var(--primary-contrast)] font-semibold shadow-md hover:shadow-lg transition-all"
                 >
                   {updateProfileMutation.isLoading ? (
                     <>
@@ -270,9 +270,9 @@ export default function Profile() {
         {/* Profile Stats */}
         <div className="space-y-6">
           {/* Account Info */}
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
-            <div className="card-header border-b border-orange-100">
-              <h3 className="card-title text-orange-900">{t('accountInformation')}</h3>
+          <div className="card bg-[color:var(--card)] border border-[color:var(--border)] rounded-2xl shadow-md">
+            <div className="card-header border-b border-[color:var(--border)]">
+              <h3 className="card-title text-[color:var(--primary)]">{t('accountInformation')}</h3>
             </div>
             <div className="card-content space-y-4">
               <div className="flex items-center space-x-3">
@@ -282,29 +282,29 @@ export default function Profile() {
                   </span>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">{user?.username}</p>
-                  <p className="text-sm text-gray-600">{user?.email}</p>
+                  <p className="font-semibold text-[color:var(--text)]">{user?.username}</p>
+                  <p className="text-sm text-[color:var(--text-muted)]">{user?.email}</p>
                 </div>
               </div>
               
-              <div className="space-y-3 pt-2 border-t border-orange-100">
+              <div className="space-y-3 pt-2 border-t border-[color:var(--border)]">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">{t('memberSince')}</span>
-                  <span className="text-sm font-semibold text-gray-900">
+                  <span className="text-sm font-medium text-[color:var(--text-muted)]">{t('memberSince')}</span>
+                  <span className="text-sm font-semibold text-[color:var(--text)]">
                     {user?.created_at ? formatDate(user.created_at) : c('notAvailable')}
                   </span>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">{t('currentLevelShort')}</span>
-                  <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-semibold">
+                  <span className="text-sm font-medium text-[color:var(--text-muted)]">{t('currentLevelShort')}</span>
+                  <span className="inline-block px-3 py-1 bg-[color:var(--accent)] text-[color:var(--primary)] rounded-full text-sm font-semibold">
                     {user?.current_jlpt_level}
                   </span>
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">{t('learningGoals')}</span>
-                  <span className="text-sm font-semibold text-gray-900 bg-amber-100 px-2 py-1 rounded">
+                  <span className="text-sm font-medium text-[color:var(--text-muted)]">{t('learningGoals')}</span>
+                  <span className="text-sm font-semibold text-[color:var(--text)] bg-amber-100 px-2 py-1 rounded">
                     {user?.learning_goals?.length || 0}
                   </span>
                 </div>
@@ -313,59 +313,59 @@ export default function Profile() {
           </div>
 
           {/* Learning Progress */}
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
-            <div className="card-header border-b border-orange-100">
-              <h3 className="card-title text-orange-900">{t('progress')}</h3>
+          <div className="card bg-[color:var(--card)] border border-[color:var(--border)] rounded-2xl shadow-md">
+            <div className="card-header border-b border-[color:var(--border)]">
+              <h3 className="card-title text-[color:var(--primary)]">{t('progress')}</h3>
             </div>
             <div className="card-content space-y-4">
-              <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
+              <div className="flex items-center space-x-3 p-3 bg-[color:var(--accent)] rounded-lg border border-[color:var(--border)]">
                 <Trophy className="h-8 w-8 text-amber-500" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{t('currentLevel')}</p>
-                  <p className="text-xs text-gray-600">
+                  <p className="text-sm font-semibold text-[color:var(--text)]">{t('currentLevel')}</p>
+                  <p className="text-xs text-[color:var(--text-muted)]">
                     {user?.current_jlpt_level} - {t(`jlptDescriptions.${user?.current_jlpt_level || 'N5'}`)}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
-                <Target className="h-8 w-8 text-orange-500" />
+              <div className="flex items-center space-x-3 p-3 bg-[color:var(--accent)] rounded-lg border border-[color:var(--border)]">
+                <Target className="h-8 w-8 text-[color:var(--primary)]" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{t('learningGoals')}</p>
-                  <p className="text-xs text-gray-600">
+                  <p className="text-sm font-semibold text-[color:var(--text)]">{t('learningGoals')}</p>
+                  <p className="text-xs text-[color:var(--text-muted)]">
                     {user?.learning_goals?.length || 0} {t('goalSet')}
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
-                <MessageCircle className="h-8 w-8 text-orange-400" />
+              <div className="flex items-center space-x-3 p-3 bg-[color:var(--accent)] rounded-lg border border-[color:var(--border)]">
+                <MessageCircle className="h-8 w-8 text-[color:var(--primary)]" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{t('chatSessions')}</p>
-                  <p className="text-xs text-gray-600">{t('chatDescription')}</p>
+                  <p className="text-sm font-semibold text-[color:var(--text)]">{t('chatSessions')}</p>
+                  <p className="text-xs text-[color:var(--text-muted)]">{t('chatDescription')}</p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
+              <div className="flex items-center space-x-3 p-3 bg-[color:var(--accent)] rounded-lg border border-[color:var(--border)]">
                 <BookOpen className="h-8 w-8 text-amber-500" />
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{t('studyMaterials')}</p>
-                  <p className="text-xs text-gray-600">{t('studyDescription')}</p>
+                  <p className="text-sm font-semibold text-[color:var(--text)]">{t('studyMaterials')}</p>
+                  <p className="text-xs text-[color:var(--text-muted)]">{t('studyDescription')}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="card bg-white border border-orange-100 rounded-2xl shadow-md">
-            <div className="card-header border-b border-orange-100">
-              <h3 className="card-title text-orange-900">{t('quickActions')}</h3>
+          <div className="card bg-[color:var(--card)] border border-[color:var(--border)] rounded-2xl shadow-md">
+            <div className="card-header border-b border-[color:var(--border)]">
+              <h3 className="card-title text-[color:var(--primary)]">{t('quickActions')}</h3>
             </div>
             <div className="card-content space-y-2">
-              <button className="w-full btn btn-outline btn-sm border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold transition-colors">
+              <button className="w-full btn btn-outline btn-sm border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold transition-colors">
                 {t('export')}
               </button>
-              <button className="w-full btn btn-outline btn-sm border-orange-300 text-orange-600 hover:bg-orange-50 font-semibold transition-colors">
+              <button className="w-full btn btn-outline btn-sm border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold transition-colors">
                 {t('reset')}
               </button>
               <button className="w-full btn btn-outline btn-sm border-red-300 text-red-600 hover:bg-red-50 font-semibold transition-colors">

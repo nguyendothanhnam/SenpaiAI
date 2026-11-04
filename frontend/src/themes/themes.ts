@@ -53,7 +53,7 @@ export const themeBackgrounds: ThemeBackground[] = [
   { id: 'sakura-path', image: '/themes/background13.webp', points: 100, locked: true },
 ]
 
-const palette = (values: Omit<ThemePalette, 'bgImage' | 'bgOverlay' | 'primaryGradient'>, bgImage: string, bgOverlay: string, primaryGradient = values.primary): ThemePalette => ({
+const palette = (values: Omit<ThemePalette, 'bgImage' | 'bgOverlay' | 'primaryGradient'>, bgImage: string, bgOverlay: string, primaryGradient = `linear-gradient(135deg, ${values.primary}, ${values.primary})`): ThemePalette => ({
   ...values,
   primaryGradient,
   bgImage,

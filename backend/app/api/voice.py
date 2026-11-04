@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 
 from ..core.auth import get_current_active_user
 from ..core.database import get_db
-from ..models.database import ChatHistory, LearningSession, User, VoiceConversation
+from ..models.database import ChatConversation, ChatHistory, LearningSession, User, VoiceConversation
 from ..services.llm_service import japanese_service
 from ..services.stt_service import validate_audio_upload, transcribe_audio
 from ..services.voice_scenarios import SCENARIOS, build_recent_context, build_system_prompt
@@ -91,9 +91,22 @@ async def create_conversation(payload: ConversationCreate,
                               db: Session = Depends(get_db)):
     if payload.scenario_id not in SCENARIOS:
         raise HTTPException(404, detail="scenario_not_found")
-    conversation = VoiceConversation(user_id=current_user.id, scenario_id=payload.scenario_id,
+    conversation_id = uuid.uuid4()
+    now = datetime.now(timezone.utc)
+    conversation = VoiceConversation(id=conversation_id, user_id=current_user.id, scenario_id=payload.scenario_id,
                                     jlpt_level=payload.jlpt_level)
+    shared_conversation = ChatConversation(
+        id=conversation_id,
+        user_id=current_user.id,
+        title=SCENARIOS[payload.scenario_id]["name"][:80],
+        title_is_auto=False,
+        is_pinned=False,
+        mode="voice",
+        created_at=now,
+        last_activity_at=now,
+    )
     db.add(conversation)
+    db.add(shared_conversation)
     db.commit()
     db.refresh(conversation)
     return {"id": str(conversation.id), "scenario_id": conversation.scenario_id,
@@ -155,6 +168,23 @@ async def conversation_turn(conversation_id: uuid.UUID, payload: TurnRequest,
                         jlpt_level=conversation.jlpt_level, grammar_points=[], sources=[],
                         input_mode="voice", conversation_id=conversation_id,
                         scenario=conversation.scenario_id)
+    shared_conversation = db.query(ChatConversation).filter(
+        ChatConversation.id == conversation_id,
+        ChatConversation.user_id == current_user.id,
+    ).first()
+    if shared_conversation is None:
+        shared_conversation = ChatConversation(
+            id=conversation_id,
+            user_id=current_user.id,
+            title=SCENARIOS[conversation.scenario_id]["name"][:80],
+            title_is_auto=False,
+            is_pinned=False,
+            mode="voice",
+            created_at=conversation.started_at,
+            last_activity_at=conversation.started_at,
+        )
+        db.add(shared_conversation)
+    shared_conversation.last_activity_at = datetime.now(timezone.utc)
     db.add(entry)
     db.commit()
     db.refresh(entry)

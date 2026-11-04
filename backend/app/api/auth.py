@@ -163,7 +163,7 @@ async def export_user_data(
         db: Session = Depends(get_db)
 ):
     """Export all user learning data."""
-    from ..models.database import ChatHistory, LearningSession
+    from ..models.database import ChatConversation, ChatFolder, ChatHistory, LearningSession, VoiceConversation
 
     try:
         # Get chat history
@@ -171,6 +171,17 @@ async def export_user_data(
             .filter(ChatHistory.user_id == current_user.id) \
             .order_by(ChatHistory.created_at.desc()) \
             .all()
+
+        chat_conversations = db.query(ChatConversation).filter(
+            ChatConversation.user_id == current_user.id
+        ).order_by(ChatConversation.created_at.asc()).all()
+        chat_folders = db.query(ChatFolder).filter(
+            ChatFolder.user_id == current_user.id
+        ).order_by(ChatFolder.sort_order, ChatFolder.created_at).all()
+        voice_conversations = db.query(VoiceConversation).filter(
+            VoiceConversation.user_id == current_user.id
+        ).all()
+        voice_by_id = {conversation.id: conversation for conversation in voice_conversations}
 
         # Get learning sessions
         learning_sessions = db.query(LearningSession) \
@@ -216,6 +227,35 @@ async def export_user_data(
                     "created_at": chat.created_at.isoformat() if chat.created_at else None,
                 }
                 for chat in chat_history
+            ],
+            "chat_conversations": [
+                {
+                    "id": str(conversation.id),
+                    "folder_id": str(conversation.folder_id) if conversation.folder_id else None,
+                    "title": conversation.title,
+                    "title_is_auto": conversation.title_is_auto,
+                    "is_pinned": conversation.is_pinned,
+                    "mode": conversation.mode,
+                    "created_at": conversation.created_at.isoformat() if conversation.created_at else None,
+                    "last_activity_at": conversation.last_activity_at.isoformat() if conversation.last_activity_at else None,
+                    "voice": ({
+                        "scenario_id": voice_by_id[conversation.id].scenario_id,
+                        "jlpt_level": voice_by_id[conversation.id].jlpt_level,
+                        "status": voice_by_id[conversation.id].status,
+                        "started_at": voice_by_id[conversation.id].started_at.isoformat() if voice_by_id[conversation.id].started_at else None,
+                        "ended_at": voice_by_id[conversation.id].ended_at.isoformat() if voice_by_id[conversation.id].ended_at else None,
+                        "summary": voice_by_id[conversation.id].summary,
+                    } if conversation.id in voice_by_id else None),
+                }
+                for conversation in chat_conversations
+            ],
+            "chat_folders": [
+                {
+                    "id": str(folder.id), "name": folder.name,
+                    "sort_order": folder.sort_order,
+                    "created_at": folder.created_at.isoformat() if folder.created_at else None,
+                }
+                for folder in chat_folders
             ],
             "learning_sessions": [
                 {
@@ -290,12 +330,13 @@ async def reset_user_progress(
         db: Session = Depends(get_db)
 ):
     """Reset user's learning progress (chat history, learning sessions)."""
-    from ..models.database import ChatHistory, LearningSession, GrammarPracticeAttempt, VoiceConversation
+    from ..models.database import ChatConversation, ChatHistory, LearningSession, GrammarPracticeAttempt, VoiceConversation
 
     try:
         # Delete chat history
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
         db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(ChatConversation).filter(ChatConversation.user_id == current_user.id).delete(synchronize_session=False)
 
         # Explicit deletion also supports databases where FK cascade enforcement is disabled.
         db.query(GrammarPracticeAttempt).filter(GrammarPracticeAttempt.user_id == current_user.id).delete(synchronize_session=False)
@@ -312,7 +353,8 @@ async def reset_user_progress(
 
         return {
             "message": "Progress reset successfully",
-            "reset_items": ["chat_history", "voice_conversations", "learning_sessions", "grammar_practice_attempts"],
+            "reset_items": ["chat_history", "chat_conversations", "voice_conversations", "learning_sessions", "grammar_practice_attempts"],
+            "preserved_chat_items": ["chat_folders"],
             "preserved_items": ["rewards", "daily_tasks", "study_item_stats", "reminder_settings", "push_subscriptions"],
             "preserved_reason": "Giữ điểm, nhiệm vụ và thống kê học để tránh làm lại nhằm nhận điểm lần nữa.",
         }
@@ -332,13 +374,15 @@ async def delete_current_user(
 ):
     """Delete current user account."""
     try:
-        from ..models.database import (ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction, VoiceConversation, ListeningAttempt,
+        from ..models.database import (ChatConversation, ChatFolder, ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction, VoiceConversation, ListeningAttempt,
                                        UserGameProfile, UserUnlockedItem, DailyTask, DailyTaskItem, StudyItemStat,
                                        ReminderSettings, Notification, PushSubscription)
 
         # Delete related data first
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
         db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(ChatConversation).filter(ChatConversation.user_id == current_user.id).delete(synchronize_session=False)
+        db.query(ChatFolder).filter(ChatFolder.user_id == current_user.id).delete(synchronize_session=False)
         db.query(ListeningAttempt).filter(ListeningAttempt.user_id == current_user.id).delete(synchronize_session=False)
         db.query(GrammarPracticeAttempt).filter(GrammarPracticeAttempt.user_id == current_user.id).delete(synchronize_session=False)
         db.query(LearningSession).filter(LearningSession.user_id == current_user.id).delete()

@@ -33,6 +33,16 @@ class VocabularyMcqServiceTest(unittest.TestCase):
             "JLPT: N5 Vocabulary",
         )
 
+    def test_sentence_meaning_falls_through_to_llm(self):
+        for question in [
+            "今日は何をしましたか。 có nghĩa là gì",
+            "「今日は何をしましたか。」 có nghĩa là gì?",
+            "「図書館」 có nghĩa là gì?",
+            "「図書館」 có nghĩa là gì? A. Thư viện B. Trường học C. Nhà D. Ga",
+        ]:
+            with self.subTest(question=question):
+                self.assertIsNone(try_answer(question))
+
 
 if __name__ == "__main__":
     unittest.main()

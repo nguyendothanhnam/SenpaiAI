@@ -5,7 +5,7 @@ SenpaiAI version 1.3 là ứng dụng web hỗ trợ người Việt học tiế
 ## Tính năng
 
 - **Tài khoản và hồ sơ:** đăng ký, đăng nhập bằng JWT, cập nhật hồ sơ, chọn cấp độ JLPT và theo dõi hoạt động học.
-- **Chat AI:** hỏi đáp tiếng Nhật theo ngữ cảnh tài liệu; lịch sử hội thoại được lưu theo tài khoản.
+- **Chat AI:** hỏi đáp tiếng Nhật có thể dùng ngữ cảnh tài liệu qua RAG; các lượt hỏi–đáp văn bản được lưu trong một lịch sử chung theo tài khoản. API chat văn bản hiện chưa hỗ trợ tách cuộc hội thoại, lưu ngữ cảnh giữa các lượt, ghim, thư mục hoặc tải tin nhắn theo từng cuộc hội thoại.
 - **Phân tích và dịch:** phân tích ngữ pháp, dịch Nhật–Việt/Việt–Nhật và dự đoán cấp độ JLPT.
 - **Thư viện:** duyệt, tìm kiếm, thêm, sửa và xóa tài liệu; nhập nội dung từ URL; xem danh mục và thống kê. Tài liệu hệ thống và tài liệu cá nhân có phạm vi truy cập riêng; nội dung được lập chỉ mục trong ChromaDB để hỗ trợ tìm kiếm ngữ nghĩa và RAG.
 - **Luyện tập:** quiz thủ công hoặc nhập từ tệp, flashcard, trò chơi từ vựng/kanji, bài luyện ngữ pháp theo phiên và thử thách hằng ngày. Có thể sinh câu hỏi ngữ pháp từ tài liệu Library, lưu vào ngân hàng rồi bắt đầu luyện trực tiếp các câu vừa tạo.
@@ -41,6 +41,33 @@ SenpaiAI version 1.3 là ứng dụng web hỗ trợ người Việt học tiế
 - `docker-compose.yml`: cấu hình PostgreSQL, backend, frontend, Ollama và VoiceVox.
 
 Các router được đăng ký tại `backend/app/main.py`; một số API có cả đường dẫn gốc và tiền tố `/api` để tương thích với client hiện tại. Danh sách endpoint đầy đủ có tại `/docs` khi backend đang chạy.
+
+## Trạng thái Chat và API hiện có
+
+Chat văn bản hiện dùng bảng `chat_history`. Mỗi bản ghi có câu hỏi, câu trả lời, cấp JLPT, phân tích ngữ pháp, bản dịch, nguồn tham khảo và thời gian tạo. `conversation_id` trong bảng hiện phục vụ các lượt thuộc hội thoại giọng nói; nó chưa được dùng để quản lý các cuộc hội thoại văn bản. Giao diện Chat hiện vẫn là một luồng lịch sử chung.
+
+Các endpoint Chat được đăng ký ở cả đường dẫn `/chat/...` và `/api/chat/...`; frontend hiện gọi tiền tố `/api`:
+
+| Method | Endpoint | Chức năng hiện có |
+|---|---|---|
+| `POST` | `/api/chat/message` | Gửi một câu hỏi và lưu câu trả lời vào lịch sử chung. Request chưa nhận `conversation_id` và không ghép lịch sử các lượt trước làm ngữ cảnh hội thoại. |
+| `GET` | `/api/chat/history?limit=50&offset=0` | Lấy lịch sử chung theo phân trang. |
+| `GET` | `/api/chat/search?query=...&limit=20` | Tìm trong câu hỏi và câu trả lời của lịch sử chung. |
+| `DELETE` | `/api/chat/history/{chat_id}` | Xóa một lượt hỏi–đáp. |
+| `DELETE` | `/api/chat/history` | Xóa lịch sử Chat và các bản ghi hội thoại giọng nói của người dùng. |
+
+Hội thoại giọng nói hiện có bảng `voice_conversations` và API riêng, cũng được đăng ký tại `/voice/...` và `/api/voice/...`:
+
+| Method | Endpoint | Chức năng hiện có |
+|---|---|---|
+| `GET` | `/api/voice/scenarios` | Liệt kê tình huống luyện nói. |
+| `POST` | `/api/voice/conversations` | Tạo phiên luyện nói. |
+| `POST` | `/api/voice/transcribe` | Chuyển audio thành văn bản. |
+| `POST` | `/api/voice/conversations/{conversation_id}/turn` | Gửi lượt nói trong phiên giọng nói. |
+| `POST` | `/api/voice/turns/{chat_id}/feedback` | Tạo phản hồi cho một lượt nói. |
+| `POST` | `/api/voice/conversations/{conversation_id}/end` | Kết thúc phiên và lưu tóm tắt. |
+
+Hiện chưa có API quản lý hội thoại văn bản dùng chung, thư mục, ghim, đổi tên, chuyển thư mục, xóa hội thoại hoặc lấy tin nhắn theo từng hội thoại. API giọng nói cũng chưa có endpoint liệt kê phiên để đưa chúng vào một danh sách hội thoại chung. Vì vậy giao diện mới gồm danh sách hội thoại/thư mục, URL theo mã hội thoại và lịch sử chuyển đổi thành các cuộc hội thoại chưa thể hoạt động chỉ bằng thay đổi frontend; backend cần cung cấp các API và lưu trữ tương ứng trước.
 
 ## Chạy bằng Docker Compose
 
