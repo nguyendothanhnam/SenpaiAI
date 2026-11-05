@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, status
 from fastapi import Query
@@ -21,6 +21,7 @@ from ..models.schemas import (
     LibraryStatsResponse,
 )
 from ..services.library_service import library_service
+from ..services.library_localization import localize_document
 
 router = APIRouter(prefix="/library", tags=["library"])
 api_router = APIRouter(prefix="/api/library", tags=["library"])
@@ -63,6 +64,7 @@ async def get_documents(
     sort: str = "newest",
     limit: int = 24,
     offset: int = 0,
+    language: Optional[Literal['vi', 'en']] = None,
     current_user: User = Depends(_current_user_dependency),
     db: Session = Depends(get_db),
 ):
@@ -80,7 +82,8 @@ async def get_documents(
     except Exception as exc:
         logger.exception("[Library] failed to load documents: %s", exc)
         documents, total = [], 0
-    return DocumentListResponse(items=documents, total=total, limit=limit, offset=offset)
+    items = [localize_document(DocumentSchema.model_validate(document), language) for document in documents]
+    return DocumentListResponse(items=items, total=total, limit=limit, offset=offset)
 
 
 @router.get("/documents/{document_id}", response_model=DocumentSchema)
@@ -89,9 +92,11 @@ async def get_document(
     document_id: int,
     current_user: User = Depends(_current_user_dependency),
     db: Session = Depends(get_db),
+    language: Optional[Literal['vi', 'en']] = None,
 ):
     """Get one document from PostgreSQL."""
-    return library_service.get_document(db, document_id)
+    document = DocumentSchema.model_validate(library_service.get_document(db, document_id))
+    return localize_document(document, language)
 
 
 @router.post("/documents", response_model=DocumentSchema, status_code=status.HTTP_201_CREATED)
@@ -135,6 +140,7 @@ async def search_documents(
     request: DocumentSearchRequest,
     current_user: User = Depends(_current_user_dependency),
     db: Session = Depends(get_db),
+    language: Optional[Literal['vi', 'en']] = None,
 ):
     """Semantic document search backed by ChromaDB, with keyword fallback."""
     results = library_service.search_documents(
@@ -144,8 +150,9 @@ async def search_documents(
         jlpt_level=request.jlpt_level,
         limit=request.limit,
         offset=request.offset,
+        language=language,
     )
-    return LibrarySearchResponse(results=results)
+    return LibrarySearchResponse(results=[localize_document(document, language) for document in results])
 
 
 @router.get("/categories", response_model=LibraryCategoriesResponse)

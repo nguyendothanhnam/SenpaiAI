@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom'
 import { grammarPracticeAPI, libraryAPI, listeningAPI, type GrammarQuestionType, type JlptLevel } from '../services/api'
 import { useAuth } from '../services/auth'
 import { formatDate } from '../utils/helpers'
+import { useLanguage } from '../hooks/useLanguage'
 
 interface LibraryDocument {
   id: number
@@ -397,7 +398,7 @@ function DocumentFormModal({
               </div>
             </div>
             {preview ? <div className="min-h-[280px] flex-1 whitespace-pre-wrap break-words rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 text-sm leading-7">{form.content || <span className="text-[color:var(--text-muted)]">{t('library.previewEmpty')}</span>}</div> :
-              <textarea id="library-document-content" required value={form.content} onChange={event => updateField('content', event.target.value)} disabled={saving || fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.content)} placeholder={t('library.contentPlaceholder')} className="input !h-auto min-h-[280px] flex-1 resize-y rounded-2xl p-4 font-japanese leading-7 lg:min-h-[380px]" />}
+              <textarea id="library-document-content" required value={form.content} onChange={event => updateField('content', event.target.value)} disabled={saving || fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.content)} placeholder={t('library.contentPlaceholder')} className="input !h-auto min-h-[280px] flex-1 resize-y rounded-2xl p-4 library-text leading-7 lg:min-h-[380px]" />}
             <div className="mt-2 flex items-center justify-between gap-2 text-xs text-[color:var(--text-muted)]"><span>{t('library.contentCharacterCount', { count: form.content.length })}</span>{errors.content && <span role="alert" className="text-red-600">{errors.content}</span>}</div>
             {!initial && <button type="button" aria-expanded={showPromptTemplate} onClick={() => setShowPromptTemplate(value => !value)} className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-dashed border-[color:var(--border)] px-3 text-xs font-semibold text-[color:var(--primary)] hover:bg-[color:var(--accent)]"><Copy className="h-3.5 w-3.5" />{t('library.promptTemplate')}</button>}
             {showPromptTemplate && <div className="mt-3 space-y-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3"><p className="text-xs text-[color:var(--text-muted)]">{t('library.promptTemplateHelp')}</p><textarea readOnly value={promptText} rows={6} className="input !h-auto text-xs leading-5" aria-label={t('library.promptTemplate')} /><button type="button" onClick={() => void copyPromptTemplate()} className="btn btn-outline btn-sm gap-1.5"><Copy className="h-3.5 w-3.5" />{t('library.copyPrompt')}</button></div>}
@@ -416,6 +417,7 @@ function DocumentFormModal({
 
 export default function Library() {
   const { t } = useTranslation('common')
+  const { language } = useLanguage()
   const { user } = useAuth()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -439,6 +441,24 @@ export default function Library() {
   const offset = (page - 1) * PAGE_SIZE
   const hasSearch = Boolean(searchPayload.query.trim())
 
+  const selectedQuery = useQuery(
+    ['libraryDocument', selected?.id, language, selected?.updated_at],
+    () => libraryAPI.getDocument(selected!.id, language).then(({ data }) => data as LibraryDocument),
+    { enabled: selected !== null, refetchOnWindowFocus: false },
+  )
+  const selectedView = selectedQuery.data
+
+  const editDocument = async (document: LibraryDocument) => {
+    try {
+      // Always edit the stored original, so a translated view cannot overwrite it.
+      const { data } = await libraryAPI.getDocument(document.id, 'vi')
+      setEditing(data)
+      setSelected(null)
+    } catch {
+      toast.error(t('library.documentsLoadError'))
+    }
+  }
+
   const statsQuery = useQuery('libraryStats', () => libraryAPI.getStats().then((res) => res.data as LibraryStats), {
     refetchInterval: 30000,
     refetchOnWindowFocus: false,
@@ -449,7 +469,7 @@ export default function Library() {
   })
 
   const documentsQuery = useQuery(
-    ['libraryDocuments', filters.document_type, filters.jlpt_level, sort, scope, page],
+    ['libraryDocuments', filters.document_type, filters.jlpt_level, sort, scope, page, language],
     () =>
       libraryAPI
         .getDocuments({
@@ -459,13 +479,14 @@ export default function Library() {
           scope,
           limit: PAGE_SIZE,
           offset,
+          language,
         })
         .then((res) => res.data as DocumentListResponse),
-    { enabled: !hasSearch, keepPreviousData: true, refetchOnWindowFocus: false }
+    { enabled: !hasSearch, refetchOnWindowFocus: false }
   )
 
   const searchQuery = useQuery(
-    ['librarySearch', searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, scope, page],
+    ['librarySearch', searchPayload.query, searchPayload.document_type, searchPayload.jlpt_level, scope, page, language],
     () =>
       libraryAPI
         .searchDocuments({
@@ -475,14 +496,13 @@ export default function Library() {
           scope,
           limit: PAGE_SIZE,
           offset,
-        })
+        }, language)
         .then((res) => {
           const data = res.data as SearchResponse
           return { items: data.results, total: data.results.length, limit: PAGE_SIZE, offset } as DocumentListResponse
         }),
     {
       enabled: hasSearch,
-      keepPreviousData: true,
       refetchOnWindowFocus: false,
       onError: () => toast.error(t('library.searchError')),
     }
@@ -552,6 +572,7 @@ export default function Library() {
       queryClient.invalidateQueries('libraryCategories')
       queryClient.invalidateQueries('libraryDocuments')
       queryClient.invalidateQueries('librarySearch')
+      queryClient.invalidateQueries('libraryDocument')
       setFormOpen(false)
       if (response.data?.indexing_warning) {
         toast(t('library.indexingWarning'))
@@ -570,6 +591,7 @@ export default function Library() {
       queryClient.invalidateQueries('libraryCategories')
       queryClient.invalidateQueries('libraryDocuments')
       queryClient.invalidateQueries('librarySearch')
+      queryClient.invalidateQueries('libraryDocument')
       setSelected(response.data)
       setEditing(null)
       if (response.data?.indexing_warning) {
@@ -589,6 +611,7 @@ export default function Library() {
       queryClient.invalidateQueries('libraryCategories')
       queryClient.invalidateQueries('libraryDocuments')
       queryClient.invalidateQueries('librarySearch')
+      queryClient.invalidateQueries('libraryDocument')
       setSelected(null)
       setDeleteTarget(null)
       toast.success(t('library.documentDeleted'))
@@ -761,7 +784,7 @@ export default function Library() {
                     {document.jlpt_level && <Badge tone="amber">{document.jlpt_level}</Badge>}
                     {document.relevance_score !== undefined && document.relevance_score !== null && <Badge tone="gray">{t('library.relevanceScore', { score: Math.round(document.relevance_score * 100) })}</Badge>}
                   </div>
-                  <p className="mt-4 line-clamp-4 text-sm leading-6 text-[color:var(--text)]">{(document as any).content_preview || document.content.slice(0, 150)}{document.content.length > 150 ? '...' : ''}</p>
+                  <p className="mt-4 line-clamp-4 library-text text-sm leading-6 text-[color:var(--text)]">{(document as any).content_preview || document.content.slice(0, 150)}{document.content.length > 150 ? '...' : ''}</p>
                 </button>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {document.tags?.slice(0, 4).map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
@@ -774,7 +797,7 @@ export default function Library() {
                   <button type="button" onClick={() => setSelected(document)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">
                     {t('library.viewDetail')}
                   </button>
-                  {canEditDocument(document) && <button type="button" onClick={() => setEditing(document)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">
+                  {canEditDocument(document) && <button type="button" onClick={() => void editDocument(document)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">
                     <Pencil className="mr-1 h-3.5 w-3.5" /> {t('library.edit')}
                   </button>}
                   {canDeleteDocument(document) && <button type="button" onClick={() => setDeleteTarget(document)} className="btn btn-outline rounded-xl border-red-200 px-3 py-2 text-xs font-bold text-red-600">
@@ -903,42 +926,44 @@ export default function Library() {
         )}
         {selected && (
           <Modal onClose={() => setSelected(null)}>
-            <div className="p-6">
+            {selectedQuery.isLoading ? <p role="status" className="p-6">{t('library.loadingDocument')}</p>
+              : selectedQuery.isError ? <p role="alert" className="p-6">{t('library.documentsLoadError')}</p>
+              : selectedView && <div className="p-6">
               <div className="pr-12">
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{t('library.documentDetail')}</p>
-                <h2 className="mt-2 text-2xl font-bold text-[color:var(--text)]">{selected.title}</h2>
+                <h2 className="mt-2 text-2xl font-bold text-[color:var(--text)]">{selectedView.title}</h2>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Badge>{documentTypeLabel(selected.document_type, t)}</Badge>
-                {isSystemDocument(selected) !== null && <Badge tone={isSystemDocument(selected) ? 'gray' : 'violet'}>{isSystemDocument(selected) ? t('library.badge.system') : t('library.badge.personal')}</Badge>}
-                {selected.jlpt_level && <Badge tone="amber">{selected.jlpt_level}</Badge>}
-                {selected.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
+                <Badge>{documentTypeLabel(selectedView.document_type, t)}</Badge>
+                {isSystemDocument(selectedView) !== null && <Badge tone={isSystemDocument(selectedView) ? 'gray' : 'violet'}>{isSystemDocument(selectedView) ? t('library.badge.system') : t('library.badge.personal')}</Badge>}
+                {selectedView.jlpt_level && <Badge tone="amber">{selectedView.jlpt_level}</Badge>}
+                {selectedView.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
               </div>
-              {selected.source_url && (
-                <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)] hover:text-[color:var(--primary)]">
+              {selectedView.source_url && (
+                <a href={selectedView.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)] hover:text-[color:var(--primary)]">
                   <ExternalLink className="h-4 w-4" />
                   {t('library.fields.sourceUrl')}
                 </a>
               )}
-              <p className="mt-4 text-xs font-semibold text-[color:var(--text-muted)]">{t('library.created', { date: formatDate(selected.created_at) })}</p>
-              <p className="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">{selected.updated_at ? t('library.updated', { date: formatDate(selected.updated_at) }) : t('library.notUpdated')}</p>
+              <p className="mt-4 text-xs font-semibold text-[color:var(--text-muted)]">{t('library.created', { date: formatDate(selectedView.created_at) })}</p>
+              <p className="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">{selectedView.updated_at ? t('library.updated', { date: formatDate(selectedView.updated_at) }) : t('library.notUpdated')}</p>
               <div className="mt-5 rounded-2xl bg-[color:var(--bg-elevated)] p-4">
-                <p className="whitespace-pre-wrap font-japanese text-sm leading-7 text-[color:var(--text)]">{selected.content}</p>
+                <p className="whitespace-pre-wrap library-text break-words text-sm leading-7 text-[color:var(--text)]">{selectedView.content}</p>
               </div>
               <div className="mt-6 flex flex-wrap justify-end gap-3">
                 <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4">
                   {t('library.close')}
                 </button>
-                {canEditDocument(selected) && <button type="button" onClick={() => { setEditing(selected); setSelected(null) }} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)]">
+                {canEditDocument(selectedView) && <button type="button" onClick={() => void editDocument(selectedView)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)]">
                   <Pencil className="mr-2 h-4 w-4" />
                   {t('library.edit')}
                 </button>}
-                {canDeleteDocument(selected) && <button type="button" onClick={() => setDeleteTarget(selected)} className="btn btn-outline rounded-xl border-red-200 px-4 text-red-600">
+                {canDeleteDocument(selectedView) && <button type="button" onClick={() => setDeleteTarget(selected)} className="btn btn-outline rounded-xl border-red-200 px-4 text-red-600">
                   <Trash2 className="mr-2 h-4 w-4" />
                   {t('library.delete')}
                 </button>}
               </div>
-            </div>
+            </div>}
           </Modal>
         )}
         {deleteTarget && (

@@ -1,0 +1,70 @@
+{
+  "name": "senpai-ai-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
+  },
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start --go",
+    "android": "expo start --android --go",
+    "ios": "expo start --ios --go",
+    "start:tunnel": "expo start --tunnel --go",
+    "start:dev": "expo start --dev-client",
+    "typecheck": "node scripts/generate-routes.mjs && tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "test": "tsx --test tests/*.test.ts",
+    "i18n:check": "node scripts/check-i18n.mjs",
+    "backend:check": "node --env-file-if-exists=.env scripts/check-backend.mjs",
+    "smoke:api": "node --env-file-if-exists=.env scripts/smoke-api.mjs",
+    "smoke:phase1": "node --env-file-if-exists=.env scripts/smoke-phase1.mjs",
+    "check": "npm run typecheck && npm run lint && npm test && npm run i18n:check",
+    "export:check": "expo export --platform all --output-dir dist"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^15.0.2",
+    "@formatjs/intl-getcanonicallocales": "^3.3.0",
+    "@formatjs/intl-locale": "^5.4.2",
+    "@formatjs/intl-pluralrules": "^7.0.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "axios": "^1.13.0",
+    "expo": "~58.0.23",
+    "expo-build-properties": "~58.0.12",
+    "expo-constants": "~58.0.15",
+    "expo-dev-client": "~58.0.18",
+    "expo-font": "~58.0.11",
+    "expo-linking": "~58.0.16",
+    "expo-localization": "~58.0.5",
+    "expo-router": "~58.0.30",
+    "expo-secure-store": "~58.0.2",
+    "expo-status-bar": "~58.0.4",
+    "expo-system-ui": "~58.0.7",
+    "i18next": "^23.16.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.48.2",
+    "react-i18next": "^14.1.3",
+    "react-native": "0.88.1",
+    "react-native-safe-area-context": "~5.11.1",
+    "react-native-screens": "~4.30.1",
+    "react-query": "3.39.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "~19.3.0",
+    "@types/react-test-renderer": "^19.3.1",
+    "babel-preset-expo": "^58.0.24",
+    "eslint": "^9.39.0",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "react-test-renderer": "^19.3.0",
+    "tsx": "^4.20.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.46.0"
+  },
+  "overrides": {
+    "react-query": {
+      "react": "$react"
+    }
+  }
+}

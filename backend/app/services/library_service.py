@@ -7,12 +7,13 @@ from urllib.parse import urlparse
 from fastapi import HTTPException, status
 import requests
 from bs4 import BeautifulSoup
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from ..models import schemas
 from ..models.database import Document
 from .vector_db import chroma_service
+from .library_localization import matching_sources
 
 
 DEFAULT_TYPES = ["vocabulary", "grammar", "lesson", "culture", "example"]
@@ -109,6 +110,7 @@ class LibraryService:
         jlpt_level: Optional[str] = None,
         limit: int = 24,
         offset: int = 0,
+        language: Optional[str] = None,
     ) -> list[schemas.DocumentSearchResult]:
         if not query.strip():
             return []
@@ -143,6 +145,14 @@ class LibraryService:
         if not ranked_ids:
             ranked_ids = self._keyword_ids(db, query, document_type, jlpt_level, limit + offset)
             relevance_by_id = {document_id: 0.35 for document_id in ranked_ids}
+
+        translated_matches = matching_sources(query, language)
+        if translated_matches:
+            clauses = [and_(Document.title == title, Document.content.in_(contents)) for title, contents in translated_matches]
+            matches = self._filtered_query(db, document_type, jlpt_level).filter(or_(*clauses)).order_by(Document.id).all()
+            matching_ids = [document.id for document in matches]
+            ranked_ids = matching_ids + [document_id for document_id in ranked_ids if document_id not in matching_ids]
+            relevance_by_id.update({document_id: 1.0 for document_id in matching_ids})
 
         page_ids = ranked_ids[offset : offset + limit]
         documents = db.query(Document).filter(Document.id.in_(page_ids)).all() if page_ids else []
