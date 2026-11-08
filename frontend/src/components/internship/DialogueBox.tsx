@@ -8,6 +8,7 @@ interface DialogueBoxProps {
   messageJa: string
   messageVi: string
   focus?: string
+  onSpeakingChange?: (speaking: boolean) => void
 }
 
 export const DialogueBox: React.FC<DialogueBoxProps> = ({
@@ -16,9 +17,15 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   messageJa,
   messageVi,
   focus,
+  onSpeakingChange,
 }) => {
   const [showVi, setShowVi] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
+
+  const updatePlayingState = (playing: boolean) => {
+    setIsPlayingAudio(playing)
+    onSpeakingChange?.(playing)
+  }
 
   // Speak Japanese text via Web Speech API
   const handlePlayAudio = () => {
@@ -27,7 +34,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
     window.speechSynthesis.cancel()
 
     if (isPlayingAudio) {
-      setIsPlayingAudio(false)
+      updatePlayingState(false)
       return
     }
 
@@ -43,9 +50,9 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
       utterance.voice = jaVoice
     }
 
-    utterance.onstart = () => setIsPlayingAudio(true)
-    utterance.onend = () => setIsPlayingAudio(false)
-    utterance.onerror = () => setIsPlayingAudio(false)
+    utterance.onstart = () => updatePlayingState(true)
+    utterance.onend = () => updatePlayingState(false)
+    utterance.onerror = () => updatePlayingState(false)
 
     window.speechSynthesis.speak(utterance)
   }
@@ -53,7 +60,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   // Cleanup audio on unmount or new message
   useEffect(() => {
     setShowVi(false)
-    setIsPlayingAudio(false)
+    updatePlayingState(false)
     return () => {
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel()

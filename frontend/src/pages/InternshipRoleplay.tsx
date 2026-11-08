@@ -25,6 +25,7 @@ import {
   type IndustryInfo,
   type InternshipSession,
 } from '../services/api'
+import InterviewRoom3D from '../components/internship/InterviewRoom3D'
 import NpcStage from '../components/internship/NpcStage'
 import DialogueBox from '../components/internship/DialogueBox'
 import PlayerControl from '../components/internship/PlayerControl'
@@ -51,6 +52,8 @@ export default function InternshipRoleplay() {
   const [selectedIndustry, setSelectedIndustry] = useState<string>('it')
   const [currentSession, setCurrentSession] = useState<InternshipSession | null>(null)
   const [isAnswering, setIsAnswering] = useState(false)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [is3DMode, setIs3DMode] = useState(true)
   const [showHandbook, setShowHandbook] = useState(false)
   const [showOfferModal, setShowOfferModal] = useState(false)
 
@@ -176,26 +179,52 @@ export default function InternshipRoleplay() {
             <span>← Quay lại danh sách</span>
           </button>
 
-          <button
-            onClick={() => setShowHandbook(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold hover:bg-amber-500/20 transition-colors"
-          >
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Sổ tay văn hóa công sở</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIs3DMode(!is3DMode)}
+              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                is3DMode
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-500 shadow-md'
+                  : 'bg-[color:var(--bg-card)] text-[color:var(--text-muted)] border-[color:var(--border)]'
+              }`}
+            >
+              {is3DMode ? '🎮 Chế độ 3D Game' : '🖼️ Chế độ 2.5D Stage'}
+            </button>
+
+            <button
+              onClick={() => setShowHandbook(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold hover:bg-amber-500/20 transition-colors"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Sổ tay văn hóa công sở</span>
+            </button>
+          </div>
         </div>
 
-        {/* 2.5D NPC Stage */}
-        <NpcStage
-          npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
-          npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
-          npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
-          companyName={currentSession.company_name}
-          companyLocation={selectedIndustryData?.location}
-          sessionType={currentSession.session_type}
-          currentTurn={currentSession.current_turn}
-          maxTurns={currentSession.max_turns}
-        />
+        {/* 3D Game Interactive Scene or 2.5D Stage */}
+        {is3DMode ? (
+          <InterviewRoom3D
+            npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
+            npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
+            npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
+            companyName={currentSession.company_name}
+            isSpeaking={isSpeaking}
+            sessionType={currentSession.session_type}
+            currentTurn={currentSession.current_turn}
+            maxTurns={currentSession.max_turns}
+          />
+        ) : (
+          <NpcStage
+            npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
+            npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
+            npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
+            companyName={currentSession.company_name}
+            companyLocation={selectedIndustryData?.location}
+            sessionType={currentSession.session_type}
+            currentTurn={currentSession.current_turn}
+            maxTurns={currentSession.max_turns}
+          />
+        )}
 
         {/* Dialogue Box */}
         {currentTurnData && (
@@ -205,6 +234,7 @@ export default function InternshipRoleplay() {
             messageJa={currentTurnData.message_ja}
             messageVi={currentTurnData.message_vi}
             focus={currentTurnData.focus}
+            onSpeakingChange={setIsSpeaking}
           />
         )}
 
