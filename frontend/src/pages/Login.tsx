@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -22,6 +23,7 @@ interface RegisterFormData {
 }
 
 export default function Login() {
+  const navigate = useNavigate()
   const { t } = useTranslation('auth')
   const [isLogin, setIsLogin] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
@@ -40,6 +42,7 @@ export default function Login() {
     try {
       await login(data.email, data.password)
       toast.success(t('welcome'))
+      navigate('/chat')
     } catch (error: any) {
       toast.error(getErrorMessage(error))
     } finally {
@@ -57,6 +60,7 @@ export default function Login() {
     try {
       await register(data.email, data.username, data.password)
       toast.success(t('accountCreated'))
+      navigate('/chat')
     } catch (error: any) {
       toast.error(getErrorMessage(error))
     } finally {

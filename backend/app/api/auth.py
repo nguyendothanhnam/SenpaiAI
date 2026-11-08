@@ -71,8 +71,10 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
 async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
     """Login user and return access token."""
 
-    # Authenticate user
-    user = db.query(UserDB).filter(UserDB.email == user_credentials.email).first()
+    # Authenticate user by email or username
+    user = db.query(UserDB).filter(
+        (UserDB.email == user_credentials.email) | (UserDB.username == user_credentials.email)
+    ).first()
 
     if not user or not verify_password(user_credentials.password, user.hashed_password):
         raise HTTPException(
