@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Play,
   History,
+  MessageSquare,
+  Eye,
 } from 'lucide-react'
 
 import {
@@ -54,6 +56,9 @@ export default function InternshipRoleplay() {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [showHandbook, setShowHandbook] = useState(false)
   const [showOfferModal, setShowOfferModal] = useState(false)
+  const [isDialogueCollapsed, setIsDialogueCollapsed] = useState(false)
+  const [distToBoss, setDistToBoss] = useState(2.75)
+  const [canTalkToBoss, setCanTalkToBoss] = useState(true)
 
   // Fetch Profile
   const { data: profile, isLoading: isProfileLoading } = useQuery(
@@ -175,6 +180,10 @@ export default function InternshipRoleplay() {
           currentTurn={currentSession.current_turn}
           maxTurns={currentSession.max_turns}
           isFullScreenMode={true}
+          onDistanceChange={(dist, canTalk) => {
+            setDistToBoss(dist)
+            setCanTalkToBoss(canTalk)
+          }}
           onExit={() => {
             if (window.confirm('Bạn có chắc muốn tạm dừng phiên làm việc 3D này không?')) {
               setCurrentSession(null)
@@ -208,57 +217,101 @@ export default function InternshipRoleplay() {
         </div>
 
         {/* 4. Bottom Floating Visual Novel Console (Dialogue + Input) */}
-        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 pb-4 sm:pb-6 space-y-3 pointer-events-auto">
-          {currentTurnData && (
-            <div className="shadow-2xl">
-              <DialogueBox
-                speakerName={currentTurnData.npc_name}
-                speakerTitle={currentTurnData.npc_title}
-                messageJa={currentTurnData.message_ja}
-                messageVi={currentTurnData.message_vi}
-                focus={currentTurnData.focus}
-                onSpeakingChange={setIsSpeaking}
-              />
-            </div>
-          )}
+        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 pb-4 sm:pb-6 space-y-2 pointer-events-auto">
+          {/* Collapse / Expand Toggle Bar */}
+          <div className="flex items-center justify-between text-xs px-2">
+            <span className="flex items-center gap-1.5 font-bold text-amber-400 drop-shadow">
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>
+                {canTalkToBoss
+                  ? `Đang đàm thoại trực tiếp với ${currentTurnData?.npc_name || 'Sếp'}`
+                  : `Khoảng cách tới Sếp: ${distToBoss.toFixed(1)}m (Bước lại gần bàn)`}
+              </span>
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsDialogueCollapsed(!isDialogueCollapsed)}
+              className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white transition-all text-[11px] font-semibold shadow-md"
+            >
+              <Eye className="w-3.5 h-3.5 text-amber-400" />
+              <span>{isDialogueCollapsed ? '💬 Mở rộng hội thoại' : '− Thu gọn để ngắm phòng'}</span>
+            </button>
+          </div>
 
-          {currentSession.status === 'in_progress' ? (
-            <div className="shadow-2xl">
-              <PlayerControl
-                onSubmit={handleAnswerTurn}
-                isLoading={isAnswering}
-                hints={currentTurnData?.hints || []}
-              />
-            </div>
+          {!isDialogueCollapsed ? (
+            <>
+              {/* Distance Warning banner if candidate stepped far away */}
+              {!canTalkToBoss && (
+                <div className="p-3 rounded-2xl bg-amber-950/90 border border-amber-500/50 text-amber-200 text-xs font-semibold flex items-center justify-between gap-2 shadow-2xl backdrop-blur-md">
+                  <span>
+                    🚶 Bạn đang đứng cách sếp <strong>{distToBoss.toFixed(1)}m</strong>. Bạn có thể bước lại gần bàn hoặc dùng nút <strong>[Ngồi vào bàn phỏng vấn]</strong> góc trái màn hình!
+                  </span>
+                </div>
+              )}
+
+              {currentTurnData && (
+                <div className="shadow-2xl">
+                  <DialogueBox
+                    speakerName={currentTurnData.npc_name}
+                    speakerTitle={currentTurnData.npc_title}
+                    messageJa={currentTurnData.message_ja}
+                    messageVi={currentTurnData.message_vi}
+                    focus={currentTurnData.focus}
+                    onSpeakingChange={setIsSpeaking}
+                  />
+                </div>
+              )}
+
+              {currentSession.status === 'in_progress' ? (
+                <div className="shadow-2xl">
+                  <PlayerControl
+                    onSubmit={handleAnswerTurn}
+                    isLoading={isAnswering}
+                    hints={currentTurnData?.hints || []}
+                  />
+                </div>
+              ) : (
+                <div className="p-6 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-slate-700 text-center space-y-4 shadow-2xl">
+                  <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
+                  <h3 className="text-xl font-bold text-white">
+                    {currentSession.session_type === 'interview'
+                      ? 'Đã hoàn thành buổi phỏng vấn 3D!'
+                      : 'Đã hoàn thành tình huống công sở 3D!'}
+                  </h3>
+                  <p className="text-sm text-slate-300">
+                    Tổng điểm năng lực của bạn đạt: {currentSession.overall_score} / 100 điểm.
+                  </p>
+                  <div className="flex justify-center gap-3 pt-2">
+                    {currentSession.offer_letter && (
+                      <button
+                        type="button"
+                        onClick={() => setShowOfferModal(true)}
+                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold hover:opacity-95 transition-all shadow-md text-sm"
+                      >
+                        Xem Thư trúng tuyển (内定通知書)
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setCurrentSession(null)}
+                      className="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold transition-colors text-sm"
+                    >
+                      Tiếp tục nhiệm vụ mới
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
-            <div className="p-6 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-slate-700 text-center space-y-4 shadow-2xl">
-              <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
-              <h3 className="text-xl font-bold text-white">
-                {currentSession.session_type === 'interview'
-                  ? 'Đã hoàn thành buổi phỏng vấn 3D!'
-                  : 'Đã hoàn thành tình huống công sở 3D!'}
-              </h3>
-              <p className="text-sm text-slate-300">
-                Tổng điểm năng lực của bạn đạt: {currentSession.overall_score} / 100 điểm.
-              </p>
-              <div className="flex justify-center gap-3 pt-2">
-                {currentSession.offer_letter && (
-                  <button
-                    type="button"
-                    onClick={() => setShowOfferModal(true)}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold hover:opacity-95 transition-all shadow-md text-sm"
-                  >
-                    Xem Thư trúng tuyển (内定通知書)
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setCurrentSession(null)}
-                  className="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold transition-colors text-sm"
-                >
-                  Tiếp tục nhiệm vụ mới
-                </button>
-              </div>
+            <div className="flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => setIsDialogueCollapsed(false)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-sm shadow-2xl hover:opacity-95 transition-all animate-bounce"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>💬 Mở hội thoại với {currentTurnData?.npc_name || 'Sếp'} (Nhấn để trả lời)</span>
+              </button>
             </div>
           )}
         </div>

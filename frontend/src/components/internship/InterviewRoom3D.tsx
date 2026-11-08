@@ -1,6 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import * as THREE from 'three'
-import { Maximize2, Minimize2, RotateCcw, Sparkles } from 'lucide-react'
+import {
+  Maximize2,
+  Minimize2,
+  RotateCcw,
+  Sparkles,
+  Eye,
+  Navigation,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  UserCheck,
+  Compass,
+  Footprints,
+  HelpCircle,
+  X,
+} from 'lucide-react'
 
 interface InterviewRoom3DProps {
   npcName: string
@@ -14,9 +30,11 @@ interface InterviewRoom3DProps {
   isFullScreenMode?: boolean
   onToggleNativeFullscreen?: () => void
   onExit?: () => void
+  onDistanceChange?: (dist: number, canTalk: boolean) => void
+  onSitDownRequest?: () => void
 }
 
-type CameraViewMode = 'front' | 'isometric' | 'close'
+type CameraViewMode = 'pov' | 'close' | 'isometric'
 
 export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   npcName,
@@ -30,13 +48,19 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   isFullScreenMode = true,
   onToggleNativeFullscreen,
   onExit,
+  onDistanceChange,
+  onSitDownRequest,
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null)
-  const [viewMode, setViewMode] = useState<CameraViewMode>('front')
+  const [viewMode, setViewMode] = useState<CameraViewMode>('pov')
+  const [stance, setStance] = useState<'sitting' | 'standing'>('sitting')
+  const [distToBoss, setDistToBoss] = useState<number>(2.75)
+  const [isNearBoss, setIsNearBoss] = useState<boolean>(true)
+  const [showControlsGuide, setShowControlsGuide] = useState<boolean>(true)
   const [isRotating, setIsRotating] = useState(false)
   const [isNativeFs, setIsNativeFs] = useState(false)
 
-  // References to keep across re-renders
+  // 3D Scene Refs
   const sceneRef = useRef<THREE.Scene | null>(null)
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
@@ -50,12 +74,109 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   const torsoRef = useRef<THREE.Mesh | null>(null)
   const moodLightRef = useRef<THREE.PointLight | null>(null)
 
-  // Mouse parallax state
-  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
-  const isMouseDown = useRef(false)
-  const previousMousePosition = useRef({ x: 0, y: 0 })
-  const manualRotation = useRef({ x: 0, y: 0 })
+  // First-Person Direct Eye POV & Movement State
+  const playerPos = useRef({ x: 0, y: 1.38, z: 2.1 }) // Default candidate chair eye position
+  const playerYaw = useRef(0) // 0 radians = facing directly at Boss (-Z)
+  const playerPitch = useRef(0) // 0 = looking horizontal
+  const keysDown = useRef({ w: false, a: false, s: false, d: false, shift: false })
+  const walkCycle = useRef(0)
+  const isPointerDown = useRef(false)
+  const prevPointer = useRef({ x: 0, y: 0 })
+  const manualOrbit = useRef({ x: 0, y: 0 })
 
+  // Quick action: Sit down at candidate desk facing boss
+  const handleSitDown = useCallback(() => {
+    playerPos.current = { x: 0, y: 1.38, z: 2.1 }
+    playerYaw.current = 0
+    playerPitch.current = 0
+    setStance('sitting')
+    if (onSitDownRequest) onSitDownRequest()
+  }, [onSitDownRequest])
+
+  // Quick action: Stand up to walk around room
+  const handleStandUp = useCallback(() => {
+    setStance('standing')
+  }, [])
+
+  // Quick action: Align direct gaze at boss's face
+  const handleResetGaze = useCallback(() => {
+    const dx = 0 - playerPos.current.x
+    const dz = -0.65 - playerPos.current.z
+    playerYaw.current = Math.atan2(-dx, -dz)
+    const dist = Math.hypot(dx, dz)
+    const dy = 1.45 - playerPos.current.y
+    playerPitch.current = Math.atan2(dy, dist)
+  }, [])
+
+  // Virtual D-Pad handlers for mobile/mouse hold
+  const handleVirtualDirDown = (dir: 'w' | 'a' | 's' | 'd') => {
+    if (stance === 'sitting') {
+      setStance('standing')
+    }
+    keysDown.current[dir] = true
+  }
+
+  const handleVirtualDirUp = (dir: 'w' | 'a' | 's' | 'd') => {
+    keysDown.current[dir] = false
+  }
+
+  // Keyboard Event Listeners for Movement
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't trigger movement if user is typing in a form or dialogue input
+      const activeEl = document.activeElement
+      if (
+        activeEl &&
+        (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || (activeEl as HTMLElement).isContentEditable)
+      ) {
+        return
+      }
+
+      if (e.code === 'KeyW' || e.code === 'ArrowUp') {
+        if (stance === 'sitting') setStance('standing')
+        keysDown.current.w = true
+      } else if (e.code === 'KeyS' || e.code === 'ArrowDown') {
+        if (stance === 'sitting') setStance('standing')
+        keysDown.current.s = true
+      } else if (e.code === 'KeyA' || e.code === 'ArrowLeft') {
+        if (stance === 'sitting') setStance('standing')
+        keysDown.current.a = true
+      } else if (e.code === 'KeyD' || e.code === 'ArrowRight') {
+        if (stance === 'sitting') setStance('standing')
+        keysDown.current.d = true
+      } else if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+        keysDown.current.shift = true
+      } else if (e.code === 'KeyC') {
+        setStance((prev) => {
+          if (prev === 'sitting') {
+            return 'standing'
+          } else {
+            handleSitDown()
+            return 'sitting'
+          }
+        })
+      } else if (e.code === 'KeyR') {
+        handleResetGaze()
+      }
+    }
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'KeyW' || e.code === 'ArrowUp') keysDown.current.w = false
+      else if (e.code === 'KeyS' || e.code === 'ArrowDown') keysDown.current.s = false
+      else if (e.code === 'KeyA' || e.code === 'ArrowLeft') keysDown.current.a = false
+      else if (e.code === 'KeyD' || e.code === 'ArrowRight') keysDown.current.d = false
+      else if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') keysDown.current.shift = false
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [stance, handleSitDown, handleResetGaze])
+
+  // Main Three.js Scene Setup & Render Loop
   useEffect(() => {
     if (!mountRef.current) return
 
@@ -65,14 +186,14 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
 
     // 1. Scene
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x0f172a) // Deep slate navy
-    scene.fog = new THREE.FogExp2(0x0f172a, 0.04)
+    scene.background = new THREE.Color(0x0a0f1d) // Deep slate navy
+    scene.fog = new THREE.FogExp2(0x0a0f1d, 0.035)
     sceneRef.current = scene
 
     // 2. Camera
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100)
-    camera.position.set(0, 1.45, 2.3)
-    camera.lookAt(0, 1.25, 0)
+    const camera = new THREE.PerspectiveCamera(52, width / height, 0.1, 100)
+    camera.position.set(0, 1.38, 2.1)
+    camera.lookAt(0, 1.25, -0.65)
     cameraRef.current = camera
 
     // 3. Renderer
@@ -87,59 +208,50 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     rendererRef.current = renderer
 
     // 4. Lighting
-    // Ambient Light
-    const ambientLight = new THREE.AmbientLight(0xfff7ed, 0.7)
+    const ambientLight = new THREE.AmbientLight(0xf8fafc, 0.75)
     scene.add(ambientLight)
 
-    // Main Overhead Boardroom Light
-    const ceilingLight = new THREE.DirectionalLight(0xffffff, 1.2)
-    ceilingLight.position.set(0, 4, 1)
+    const ceilingLight = new THREE.DirectionalLight(0xffffff, 1.1)
+    ceilingLight.position.set(0, 4.5, 0.5)
     ceilingLight.castShadow = true
     ceilingLight.shadow.mapSize.width = 1024
     ceilingLight.shadow.mapSize.height = 1024
-    ceilingLight.shadow.camera.near = 0.5
-    ceilingLight.shadow.camera.far = 10
     ceilingLight.shadow.bias = -0.001
     scene.add(ceilingLight)
 
-    // Tokyo Window Sunlight
-    const windowLight = new THREE.DirectionalLight(0x93c5fd, 0.9)
-    windowLight.position.set(-3, 3, -4)
+    const windowLight = new THREE.DirectionalLight(0x93c5fd, 0.85)
+    windowLight.position.set(-3.5, 3.2, -4)
     scene.add(windowLight)
 
-    // Mood Point Light (reacts to emotion)
-    const moodLight = new THREE.PointLight(0xf59e0b, 1.0, 5)
-    moodLight.position.set(0, 1.8, 0.5)
+    const moodLight = new THREE.PointLight(0xf59e0b, 1.2, 6)
+    moodLight.position.set(0, 1.8, 0.4)
     scene.add(moodLight)
     moodLightRef.current = moodLight
 
     // 5. Procedural Textures & Materials
-    // Create Tokyo Skyline texture for panoramic window
+    // Tokyo Sunset Skyline texture
     const skyCanvas = document.createElement('canvas')
     skyCanvas.width = 1024
     skyCanvas.height = 512
     const sCtx = skyCanvas.getContext('2d')
     if (sCtx) {
-      // Sky gradient: Tokyo dusk / sunset
       const grad = sCtx.createLinearGradient(0, 0, 0, 512)
-      grad.addColorStop(0, '#0284c7')
-      grad.addColorStop(0.4, '#f59e0b')
-      grad.addColorStop(0.7, '#ea580c')
-      grad.addColorStop(1, '#0f172a')
+      grad.addColorStop(0, '#0369a1')
+      grad.addColorStop(0.35, '#f59e0b')
+      grad.addColorStop(0.65, '#ea580c')
+      grad.addColorStop(1, '#090d16')
       sCtx.fillStyle = grad
       sCtx.fillRect(0, 0, 1024, 512)
 
-      // Silhouette of Tokyo Skyscrapers
       sCtx.fillStyle = '#090d16'
-      for (let x = 0; x < 1024; x += 30) {
-        const bHeight = 150 + Math.sin(x * 0.05) * 80 + Math.random() * 50
-        const bWidth = 20 + Math.random() * 25
+      for (let x = 0; x < 1024; x += 28) {
+        const bHeight = 160 + Math.sin(x * 0.05) * 85 + Math.random() * 45
+        const bWidth = 22 + Math.random() * 20
         sCtx.fillRect(x, 512 - bHeight, bWidth, bHeight)
 
-        // Windows dots
         sCtx.fillStyle = '#fef08a'
-        for (let wy = 512 - bHeight + 10; wy < 510; wy += 12) {
-          if (Math.random() > 0.4) {
+        for (let wy = 512 - bHeight + 10; wy < 510; wy += 14) {
+          if (Math.random() > 0.45) {
             sCtx.fillRect(x + 4, wy, 3, 3)
             sCtx.fillRect(x + 12, wy, 3, 3)
           }
@@ -147,80 +259,202 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         sCtx.fillStyle = '#090d16'
       }
 
-      // Tokyo Tower silhouette in the distance
+      // Tokyo Tower Silhouette
       sCtx.fillStyle = '#dc2626'
       sCtx.beginPath()
-      sCtx.moveTo(680, 512 - 280)
-      sCtx.lineTo(670, 512)
+      sCtx.moveTo(700, 512 - 270)
       sCtx.lineTo(690, 512)
+      sCtx.lineTo(710, 512)
       sCtx.fill()
     }
     const skyTexture = new THREE.CanvasTexture(skyCanvas)
 
-    // Wood Floor Material
-    const floorGeo = new THREE.PlaneGeometry(10, 10)
+    // Japanese Ho-Ren-So Presentation Whiteboard Texture
+    const wbCanvas = document.createElement('canvas')
+    wbCanvas.width = 1024
+    wbCanvas.height = 512
+    const wbCtx = wbCanvas.getContext('2d')
+    if (wbCtx) {
+      wbCtx.fillStyle = '#f8fafc'
+      wbCtx.fillRect(0, 0, 1024, 512)
+
+      wbCtx.fillStyle = '#0f172a'
+      wbCtx.font = 'bold 32px sans-serif'
+      wbCtx.fillText('2026年 ビジネス戦略 & 報・連・相 (Ho-Ren-So)', 40, 55)
+
+      wbCtx.strokeStyle = '#cbd5e1'
+      wbCtx.lineWidth = 3
+      wbCtx.beginPath()
+      wbCtx.moveTo(40, 75)
+      wbCtx.lineTo(980, 75)
+      wbCtx.stroke()
+
+      wbCtx.fillStyle = '#0284c7'
+      wbCtx.font = 'bold 24px sans-serif'
+      wbCtx.fillText('【ビジネスマナー三大原則】', 40, 120)
+
+      wbCtx.fillStyle = '#334155'
+      wbCtx.font = '20px sans-serif'
+      wbCtx.fillText('1. 報告 (Houkoku): Kết quả & tiến độ công việc', 55, 160)
+      wbCtx.fillText('2. 連絡 (Renraku): Thông tin phát sinh kịp thời', 55, 195)
+      wbCtx.fillText('3. 相談 (Soudan): Trao đổi khi gặp khó khăn, vướng mắc', 55, 230)
+
+      wbCtx.fillStyle = '#ea580c'
+      wbCtx.font = 'bold 24px sans-serif'
+      wbCtx.fillText('【AI ĐÁNH GIÁ NĂNG LỰC】', 550, 120)
+
+      wbCtx.fillStyle = '#334155'
+      wbCtx.font = '20px sans-serif'
+      wbCtx.fillText('• 文法 (Ngữ pháp): Chuẩn xác, súc tích', 565, 160)
+      wbCtx.fillText('• 敬語 (Kính ngữ): Sonkeigo & Kenjougo', 565, 195)
+      wbCtx.fillText('• マナー (Tác phong): Lịch thiệp, chuẩn mực', 565, 230)
+
+      wbCtx.fillStyle = '#16a34a'
+      wbCtx.font = 'bold 22px sans-serif'
+      wbCtx.fillText('★ 目標: 日本企業内定 100% 達成！ (Quyết tâm nhận Naitei!)', 40, 310)
+    }
+    const wbTexture = new THREE.CanvasTexture(wbCanvas)
+
+    // Japanese Exit Sign (非常口) Texture
+    const exitCanvas = document.createElement('canvas')
+    exitCanvas.width = 256
+    exitCanvas.height = 128
+    const eCtx = exitCanvas.getContext('2d')
+    if (eCtx) {
+      eCtx.fillStyle = '#15803d'
+      eCtx.fillRect(0, 0, 256, 128)
+      eCtx.fillStyle = '#ffffff'
+      eCtx.font = 'bold 36px sans-serif'
+      eCtx.fillText('非常口', 70, 52)
+      eCtx.font = 'bold 22px sans-serif'
+      eCtx.fillText('EXIT 🏃', 85, 92)
+    }
+    const exitTexture = new THREE.CanvasTexture(exitCanvas)
+
+    // 6. Room Geometry
+    // Floor
     const floorMat = new THREE.MeshStandardMaterial({
       color: 0x1e293b,
       roughness: 0.35,
       metalness: 0.2,
     })
-    const floor = new THREE.Mesh(floorGeo, floorMat)
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), floorMat)
     floor.rotation.x = -Math.PI / 2
     floor.receiveShadow = true
     scene.add(floor)
 
-    // Back Wall with Tokyo Window
-    const backWallMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.8 })
-    const backWall = new THREE.Mesh(new THREE.BoxGeometry(10, 5, 0.2), backWallMat)
-    backWall.position.set(0, 2.5, -3)
+    // Back Wall with Tokyo Panoramic Window
+    const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.85 })
+    const backWall = new THREE.Mesh(new THREE.BoxGeometry(10, 5, 0.2), wallMat)
+    backWall.position.set(0, 2.5, -3.2)
     scene.add(backWall)
 
-    // Large Tokyo Skyline Window
+    // Tokyo Window
     const windowFrame = new THREE.Mesh(
-      new THREE.PlaneGeometry(6, 2.8),
+      new THREE.PlaneGeometry(6.4, 2.8),
       new THREE.MeshBasicMaterial({ map: skyTexture })
     )
-    windowFrame.position.set(0, 2.5, -2.88)
+    windowFrame.position.set(0, 2.5, -3.08)
     scene.add(windowFrame)
 
-    // Window Mullions (Japanese Office Glass Grids)
+    // Window Mullions
     const mullionMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.8, roughness: 0.2 })
-    const hBar = new THREE.Mesh(new THREE.BoxGeometry(6, 0.05, 0.05), mullionMat)
-    hBar.position.set(0, 2.5, -2.85)
+    const hBar = new THREE.Mesh(new THREE.BoxGeometry(6.4, 0.05, 0.05), mullionMat)
+    hBar.position.set(0, 2.5, -3.05)
     scene.add(hBar)
 
     const vBar1 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 2.8, 0.05), mullionMat)
-    vBar1.position.set(-1.5, 2.5, -2.85)
+    vBar1.position.set(-1.6, 2.5, -3.05)
     scene.add(vBar1)
 
     const vBar2 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 2.8, 0.05), mullionMat)
-    vBar2.position.set(1.5, 2.5, -2.85)
+    vBar2.position.set(1.6, 2.5, -3.05)
     scene.add(vBar2)
 
-    // Side Walls
-    const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 5, 8), backWallMat)
-    leftWall.position.set(-5, 2.5, 0)
+    // Left Wall with Japanese Shoji Screens
+    const leftWall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 5, 8), wallMat)
+    leftWall.position.set(-4.9, 2.5, 0)
     scene.add(leftWall)
 
-    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 5, 8), backWallMat)
-    rightWall.position.set(5, 2.5, 0)
-    scene.add(rightWall)
-
-    // Decorative Japanese Shoji Screen Accent on Left Wall
-    const shojiGeo = new THREE.PlaneGeometry(0.05, 3, 2)
     const shojiMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, roughness: 0.6 })
-    const shoji = new THREE.Mesh(shojiGeo, shojiMat)
-    shoji.position.set(-4.88, 2.2, -1)
+    const shoji = new THREE.Mesh(new THREE.PlaneGeometry(0.05, 3, 2), shojiMat)
+    shoji.position.set(-4.78, 2.2, -1)
     scene.add(shoji)
 
-    // 6. Executive Boardroom Conference Table
-    const tableTopGeo = new THREE.BoxGeometry(2.4, 0.08, 1.2)
+    // Right Wall with Whiteboard
+    const rightWall = new THREE.Mesh(new THREE.BoxGeometry(0.2, 5, 8), wallMat)
+    rightWall.position.set(4.9, 2.5, 0)
+    scene.add(rightWall)
+
+    const whiteboard = new THREE.Mesh(
+      new THREE.PlaneGeometry(3.6, 1.8),
+      new THREE.MeshBasicMaterial({ map: wbTexture })
+    )
+    whiteboard.position.set(4.78, 2.2, 0)
+    whiteboard.rotation.y = -Math.PI / 2
+    scene.add(whiteboard)
+
+    const wbFrame = new THREE.Mesh(
+      new THREE.BoxGeometry(0.04, 1.9, 3.7),
+      new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2 })
+    )
+    wbFrame.position.set(4.8, 2.2, 0)
+    scene.add(wbFrame)
+
+    // Front Wall Behind Candidate with Frosted Office Door
+    const frontWall = new THREE.Mesh(new THREE.BoxGeometry(10, 5, 0.2), wallMat)
+    frontWall.position.set(0, 2.5, 3.9)
+    scene.add(frontWall)
+
+    const doorMat = new THREE.MeshStandardMaterial({
+      color: 0x38bdf8,
+      roughness: 0.1,
+      metalness: 0.2,
+      transparent: true,
+      opacity: 0.35,
+    })
+    const door = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.8), doorMat)
+    door.position.set(0, 1.4, 3.78)
+    scene.add(door)
+
+    const exitSign = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.5, 0.25),
+      new THREE.MeshBasicMaterial({ map: exitTexture })
+    )
+    exitSign.position.set(0, 3.0, 3.77)
+    scene.add(exitSign)
+
+    // Potted Office Plant in Corner
+    const plantPot = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.22, 0.16, 0.45, 16),
+      new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.2 })
+    )
+    plantPot.position.set(-3.8, 0.225, 2.8)
+    plantPot.castShadow = true
+    scene.add(plantPot)
+
+    const stem = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.03, 0.04, 0.75, 8),
+      new THREE.MeshStandardMaterial({ color: 0x5c3d2e })
+    )
+    stem.position.set(-3.8, 0.65, 2.8)
+    scene.add(stem)
+
+    const foliageMat = new THREE.MeshStandardMaterial({ color: 0x166534, roughness: 0.6 })
+    for (let i = 0; i < 4; i++) {
+      const leafSphere = new THREE.Mesh(new THREE.SphereGeometry(0.2 - i * 0.02, 8, 8), foliageMat)
+      leafSphere.position.set(-3.8 + (i % 2 === 0 ? 0.05 : -0.05), 0.95 + i * 0.14, 2.8)
+      leafSphere.castShadow = true
+      scene.add(leafSphere)
+    }
+
+    // 7. Executive Boardroom Conference Table
     const tableTopMat = new THREE.MeshStandardMaterial({
       color: 0x3b2314, // Polished dark mahogany
       roughness: 0.2,
       metalness: 0.15,
     })
-    const tableTop = new THREE.Mesh(tableTopGeo, tableTopMat)
+    const tableTop = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.08, 1.2), tableTopMat)
     tableTop.position.set(0, 0.85, 0)
     tableTop.castShadow = true
     tableTop.receiveShadow = true
@@ -250,7 +484,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     scene.add(leg4)
 
     // Table Accessories
-    // Laptop
+    // Boss Laptop
     const laptopBase = new THREE.Mesh(
       new THREE.BoxGeometry(0.32, 0.015, 0.22),
       new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2 })
@@ -269,7 +503,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     laptopScreen.rotation.x = -0.15
     scene.add(laptopScreen)
 
-    // Ceramic Japanese Green Tea Cup
+    // Green Tea Cup
     const cup = new THREE.Mesh(
       new THREE.CylinderGeometry(0.04, 0.035, 0.09, 16),
       new THREE.MeshStandardMaterial({ color: 0xf1f5f9, roughness: 0.1 })
@@ -278,7 +512,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     cup.castShadow = true
     scene.add(cup)
 
-    // Document CV Folder
+    // Boss Folder
     const docFolder = new THREE.Mesh(
       new THREE.BoxGeometry(0.26, 0.01, 0.35),
       new THREE.MeshStandardMaterial({ color: 0x1e3a8a, roughness: 0.5 })
@@ -287,7 +521,38 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     docFolder.castShadow = true
     scene.add(docFolder)
 
-    // 7. Full Procedural 3D Japanese Business NPC Character
+    // Candidate Resume Folder on Candidate's side of table
+    const candFolder = new THREE.Mesh(
+      new THREE.BoxGeometry(0.26, 0.01, 0.34),
+      new THREE.MeshStandardMaterial({ color: 0x991b1b, roughness: 0.4 })
+    )
+    candFolder.position.set(0, 0.9, 0.35)
+    candFolder.castShadow = true
+    scene.add(candFolder)
+
+    // 8. Candidate Executive Chair (Facing Boss)
+    const candChairGroup = new THREE.Group()
+    candChairGroup.position.set(0, 0, 2.05)
+    candChairGroup.rotation.y = Math.PI
+    scene.add(candChairGroup)
+
+    const chairMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
+    const candSeat = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.08, 0.5), chairMat)
+    candSeat.position.set(0, 0.48, 0)
+    candSeat.castShadow = true
+    candChairGroup.add(candSeat)
+
+    const candBack = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.65, 0.08), chairMat)
+    candBack.position.set(0, 0.85, -0.22)
+    candBack.castShadow = true
+    candChairGroup.add(candBack)
+
+    const candLegMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.8, roughness: 0.2 })
+    const candLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.44, 16), candLegMat)
+    candLeg.position.set(0, 0.22, 0)
+    candChairGroup.add(candLeg)
+
+    // 9. 3D Procedural Japanese Boss Character
     const npcGroup = new THREE.Group()
     npcGroup.position.set(0, 0.85, -0.65)
     scene.add(npcGroup)
@@ -300,7 +565,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     npcGroup.add(torso)
     torsoRef.current = torso
 
-    // White Shirt Collar
+    // Shirt Collar
     const shirtMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 })
     const collar = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.18, 4), shirtMat)
     collar.position.set(0, 0.62, 0.1)
@@ -313,15 +578,14 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     tie.position.set(0, 0.44, 0.155)
     npcGroup.add(tie)
 
-    // Arms resting on desk
-    const armMat = suitMat
-    const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.45, 12), armMat)
+    // Arms
+    const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.45, 12), suitMat)
     leftArm.position.set(-0.35, 0.3, 0.15)
     leftArm.rotation.x = Math.PI / 3
     leftArm.rotation.z = -0.3
     npcGroup.add(leftArm)
 
-    const rightArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.45, 12), armMat)
+    const rightArm = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.05, 0.45, 12), suitMat)
     rightArm.position.set(0.35, 0.3, 0.15)
     rightArm.rotation.x = Math.PI / 3
     rightArm.rotation.z = 0.3
@@ -339,62 +603,53 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     neck.position.set(0, -0.04, 0)
     headGroup.add(neck)
 
-    // Head Head Sphere
-    const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.18, 24, 24), skinMat)
-    headMesh.castShadow = true
-    headGroup.add(headMesh)
+    // Head Mesh
+    const headGeo = new THREE.SphereGeometry(0.18, 20, 20)
+    headGeo.scale(1, 1.25, 1)
+    const head = new THREE.Mesh(headGeo, skinMat)
+    head.position.set(0, 0.14, 0)
+    head.castShadow = true
+    headGroup.add(head)
 
-    // Japanese Styled Business Hair
-    const hairMat = new THREE.MeshStandardMaterial({ color: 0x171717, roughness: 0.9 })
-    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.19, 20, 20), hairMat)
-    hair.position.set(0, 0.04, -0.02)
-    hair.scale.set(1.02, 1.05, 1.05)
+    // Business Hair
+    const hairMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9 })
+    const hair = new THREE.Mesh(new THREE.SphereGeometry(0.19, 16, 16), hairMat)
+    hair.position.set(0, 0.22, -0.03)
+    hair.scale.set(1.02, 1.15, 1.05)
     headGroup.add(hair)
 
     // Eyes
-    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x1e293b })
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0x0f172a })
     const leftEye = new THREE.Mesh(new THREE.SphereGeometry(0.022, 12, 12), eyeMat)
-    leftEye.position.set(-0.065, 0.015, 0.165)
+    leftEye.position.set(-0.065, 0.15, 0.165)
     headGroup.add(leftEye)
     leftEyeRef.current = leftEye
 
     const rightEye = new THREE.Mesh(new THREE.SphereGeometry(0.022, 12, 12), eyeMat)
-    rightEye.position.set(0.065, 0.015, 0.165)
+    rightEye.position.set(0.065, 0.15, 0.165)
     headGroup.add(rightEye)
     rightEyeRef.current = rightEye
 
-    // Business Glasses Frame
-    const glassesMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 })
-    const lFrame = new THREE.Mesh(new THREE.TorusGeometry(0.038, 0.005, 8, 20), glassesMat)
-    lFrame.position.set(-0.065, 0.015, 0.17)
-    headGroup.add(lFrame)
+    // Executive Glasses Frame
+    const glassesMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.8, roughness: 0.2 })
+    const glassesFrame = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.04, 0.015), glassesMat)
+    glassesFrame.position.set(0, 0.15, 0.175)
+    headGroup.add(glassesFrame)
 
-    const rFrame = new THREE.Mesh(new THREE.TorusGeometry(0.038, 0.005, 8, 20), glassesMat)
-    rFrame.position.set(0.065, 0.015, 0.17)
-    headGroup.add(rFrame)
-
-    const bridge = new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.004, 0.05), glassesMat)
-    bridge.rotation.z = Math.PI / 2
-    bridge.position.set(0, 0.025, 0.175)
-    headGroup.add(bridge)
-
-    // Animated Mouth Mesh
+    // Animated Mouth
     const mouthMat = new THREE.MeshBasicMaterial({ color: 0x991b1b })
     const mouth = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.015, 0.01), mouthMat)
-    mouth.position.set(0, -0.08, 0.17)
+    mouth.position.set(0, -0.04, 0.17)
     headGroup.add(mouth)
     mouthRef.current = mouth
 
-    // Executive Chair Behind NPC
-    const chairBack = new THREE.Mesh(
-      new THREE.BoxGeometry(0.65, 0.8, 0.1),
-      new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.5 })
-    )
-    chairBack.position.set(0, 1.25, -0.9)
-    chairBack.castShadow = true
-    scene.add(chairBack)
+    // Boss Chair
+    const bossChairBack = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.8, 0.1), chairMat)
+    bossChairBack.position.set(0, 1.25, -0.9)
+    bossChairBack.castShadow = true
+    scene.add(bossChairBack)
 
-    // 8. Event Handlers (Mouse Parallax & Resize)
+    // 10. Resize Listener
     const handleResize = () => {
       if (!mountRef.current || !rendererRef.current || !cameraRef.current) return
       const w = mountRef.current.clientWidth
@@ -405,59 +660,202 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     }
     window.addEventListener('resize', handleResize)
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect()
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1
-      const y = -(((e.clientY - rect.top) / rect.height) * 2 - 1)
-      mouseRef.current.targetX = x * 0.4
-      mouseRef.current.targetY = y * 0.25
+    // 11. Mouse & Touch Direct Eye POV Drag Listeners
+    const handlePointerDown = (e: MouseEvent) => {
+      isPointerDown.current = true
+      prevPointer.current = { x: e.clientX, y: e.clientY }
+    }
 
-      if (isMouseDown.current) {
-        const deltaX = e.clientX - previousMousePosition.current.x
-        const deltaY = e.clientY - previousMousePosition.current.y
-        manualRotation.current.y += deltaX * 0.005
-        manualRotation.current.x = Math.max(-0.3, Math.min(0.3, manualRotation.current.x + deltaY * 0.005))
-        previousMousePosition.current = { x: e.clientX, y: e.clientY }
+    const handlePointerMove = (e: MouseEvent) => {
+      if (!isPointerDown.current) return
+      const dx = e.clientX - prevPointer.current.x
+      const dy = e.clientY - prevPointer.current.y
+      prevPointer.current = { x: e.clientX, y: e.clientY }
+
+      if (viewMode === 'pov') {
+        playerYaw.current -= dx * 0.0035
+        playerPitch.current = Math.max(-1.1, Math.min(1.1, playerPitch.current - dy * 0.003))
+      } else {
+        manualOrbit.current.y += dx * 0.005
+        manualOrbit.current.x = Math.max(-0.4, Math.min(0.4, manualOrbit.current.x + dy * 0.005))
       }
     }
 
-    const handleMouseDownEvt = (e: MouseEvent) => {
-      isMouseDown.current = true
-      previousMousePosition.current = { x: e.clientX, y: e.clientY }
+    const handlePointerUp = () => {
+      isPointerDown.current = false
     }
 
-    const handleMouseUpEvt = () => {
-      isMouseDown.current = false
+    container.addEventListener('mousedown', handlePointerDown)
+    window.addEventListener('mousemove', handlePointerMove)
+    window.addEventListener('mouseup', handlePointerUp)
+
+    // Touch Support
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        isPointerDown.current = true
+        prevPointer.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+      }
     }
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isPointerDown.current || e.touches.length !== 1) return
+      const dx = e.touches[0].clientX - prevPointer.current.x
+      const dy = e.touches[0].clientY - prevPointer.current.y
+      prevPointer.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
 
-    container.addEventListener('mousemove', handleMouseMove)
-    container.addEventListener('mousedown', handleMouseDownEvt)
-    window.addEventListener('mouseup', handleMouseUpEvt)
+      if (viewMode === 'pov') {
+        playerYaw.current -= dx * 0.004
+        playerPitch.current = Math.max(-1.1, Math.min(1.1, playerPitch.current - dy * 0.0035))
+      }
+    }
+    const handleTouchEnd = () => {
+      isPointerDown.current = false
+    }
+    container.addEventListener('touchstart', handleTouchStart, { passive: true })
+    window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('touchend', handleTouchEnd)
 
-    // 9. Animation Loop
-    let clock = new THREE.Clock()
+    // 12. Main 60FPS Game Loop with Delta-time Physics
+    const clock = new THREE.Clock()
+    let lastDistCheck = 0
 
     const animate = () => {
       animFrameId.current = requestAnimationFrame(animate)
+      const dt = Math.min(clock.getDelta(), 0.1)
       const elapsedTime = clock.getElapsedTime()
 
-      // Smooth mouse parallax interpolation
-      mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.05
-      mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.05
+      // A. Keyboard Movement & Sliding Collision (when in POV mode)
+      if (viewMode === 'pov') {
+        const isMoving =
+          keysDown.current.w || keysDown.current.s || keysDown.current.a || keysDown.current.d
 
-      // Breathing idle motion
+        if (isMoving) {
+          const forwardX = -Math.sin(playerYaw.current)
+          const forwardZ = -Math.cos(playerYaw.current)
+          const rightX = Math.cos(playerYaw.current)
+          const rightZ = -Math.sin(playerYaw.current)
+
+          let vx = 0
+          let vz = 0
+          if (keysDown.current.w) {
+            vx += forwardX
+            vz += forwardZ
+          }
+          if (keysDown.current.s) {
+            vx -= forwardX
+            vz -= forwardZ
+          }
+          if (keysDown.current.a) {
+            vx -= rightX
+            vz -= rightZ
+          }
+          if (keysDown.current.d) {
+            vx += rightX
+            vz += rightZ
+          }
+
+          const len = Math.hypot(vx, vz)
+          if (len > 0.001) {
+            const speed = keysDown.current.shift ? 3.2 : 1.9
+            const stepX = (vx / len) * speed * dt
+            const stepZ = (vz / len) * speed * dt
+
+            const nextX = Math.max(-3.5, Math.min(3.5, playerPos.current.x + stepX))
+            const nextZ = Math.max(-2.5, Math.min(3.5, playerPos.current.z + stepZ))
+
+            // Obstacle 1: Conference Table is x in [-1.35, 1.35], z in [-0.75, 0.75]
+            const inTableX = nextX >= -1.35 && nextX <= 1.35
+            const inTableZ = nextZ >= -0.75 && nextZ <= 0.75
+            const currInTableX = playerPos.current.x >= -1.35 && playerPos.current.x <= 1.35
+            const currInTableZ = playerPos.current.z >= -0.75 && playerPos.current.z <= 0.75
+
+            // Slide collision test (allows smooth glide along table edges)
+            if (!(inTableX && currInTableZ)) {
+              playerPos.current.x = nextX
+            }
+            if (!(inTableZ && currInTableX)) {
+              playerPos.current.z = nextZ
+            }
+
+            walkCycle.current += dt * (keysDown.current.shift ? 11 : 7)
+          }
+        }
+
+        // Natural Walking Eye-Bobbing
+        const targetEyeY = stance === 'standing' ? 1.65 : 1.38
+        playerPos.current.y += (targetEyeY - playerPos.current.y) * 0.12
+        const bobbing =
+          stance === 'standing' && isMoving ? Math.sin(walkCycle.current) * 0.025 : 0
+        const actualEyeY = playerPos.current.y + bobbing
+
+        // Look Direction vector from direct eye perspective
+        const lookDirX = -Math.sin(playerYaw.current) * Math.cos(playerPitch.current)
+        const lookDirY = Math.sin(playerPitch.current)
+        const lookDirZ = -Math.cos(playerYaw.current) * Math.cos(playerPitch.current)
+
+        camera.position.set(playerPos.current.x, actualEyeY, playerPos.current.z)
+        camera.lookAt(
+          playerPos.current.x + lookDirX,
+          actualEyeY + lookDirY,
+          playerPos.current.z + lookDirZ
+        )
+
+        // Periodic distance to boss update
+        if (elapsedTime - lastDistCheck > 0.15) {
+          lastDistCheck = elapsedTime
+          const dist = Math.hypot(playerPos.current.x - 0, playerPos.current.z - (-0.65))
+          setDistToBoss(dist)
+          const canTalk = dist <= 3.2
+          setIsNearBoss(canTalk)
+          if (onDistanceChange) onDistanceChange(dist, canTalk)
+        }
+      } else {
+        // Other Preset Views (close or isometric)
+        let targetCamX = 0
+        let targetCamY = 1.6
+        let targetCamZ = 1.2
+
+        if (viewMode === 'isometric') {
+          targetCamX = 1.9
+          targetCamY = 2.1
+          targetCamZ = 2.5
+        }
+
+        if (isRotating) {
+          manualOrbit.current.y += 0.008
+        }
+
+        camera.position.x +=
+          (targetCamX + Math.sin(manualOrbit.current.y) * 0.8 - camera.position.x) * 0.06
+        camera.position.y += (targetCamY + manualOrbit.current.x - camera.position.y) * 0.06
+        camera.position.z +=
+          (targetCamZ + Math.cos(manualOrbit.current.y) * 0.8 - camera.position.z) * 0.06
+        camera.lookAt(0, 1.3, -0.65)
+      }
+
+      // B. Boss Animations & Dynamic Real-Time Head Tracking
+      // Idle Breathing
       if (torsoRef.current) {
         torsoRef.current.position.y = 0.35 + Math.sin(elapsedTime * 2.2) * 0.008
       }
 
-      // Head Animation: breathing + subtle nodding + mouse tracking
+      // Boss Head Tracks Player's Eyes Wherever Player Moves!
       if (headRef.current) {
-        headRef.current.position.y = 0.75 + Math.sin(elapsedTime * 2.2) * 0.012
-        headRef.current.rotation.y = Math.sin(elapsedTime * 0.8) * 0.04 + mouseRef.current.x * 0.3
-        headRef.current.rotation.x = Math.cos(elapsedTime * 1.5) * 0.02 - mouseRef.current.y * 0.2
+        headRef.current.position.y = 0.75 + Math.sin(elapsedTime * 2.2) * 0.01
+
+        const dx = camera.position.x - 0
+        const dz = camera.position.z - (-0.65)
+        const angleToPlayer = Math.atan2(dx, dz)
+        // Anatomical neck limit (-75 to +75 degrees)
+        const clampedAngle = Math.max(-1.3, Math.min(1.3, angleToPlayer))
+        headRef.current.rotation.y += (clampedAngle - headRef.current.rotation.y) * 0.1
+
+        const distXZ = Math.hypot(dx, dz)
+        const dy = camera.position.y - 1.55
+        const pitchToPlayer = Math.atan2(dy, distXZ)
+        headRef.current.rotation.x += (-pitchToPlayer - headRef.current.rotation.x) * 0.1
       }
 
-      // Talking mouth animation when speaking
+      // Talking Lipsync
       if (mouthRef.current) {
         if (isSpeaking) {
           mouthRef.current.scale.y = 1 + Math.abs(Math.sin(elapsedTime * 14)) * 3.5
@@ -466,7 +864,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         }
       }
 
-      // Periodic natural eye blinking
+      // Natural Eye Blinking
       if (leftEyeRef.current && rightEyeRef.current) {
         const blinkCycle = elapsedTime % 4.5
         if (blinkCycle > 4.35 && blinkCycle < 4.45) {
@@ -478,32 +876,6 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         }
       }
 
-      // Camera Position by View Mode with smooth lerp
-      let targetCamX = 0
-      let targetCamY = 1.45
-      let targetCamZ = 2.3
-
-      if (viewMode === 'close') {
-        targetCamX = 0
-        targetCamY = 1.6
-        targetCamZ = 1.2
-      } else if (viewMode === 'isometric') {
-        targetCamX = 1.8
-        targetCamY = 2.0
-        targetCamZ = 2.4
-      }
-
-      // Add auto-rotation if toggled
-      if (isRotating) {
-        manualRotation.current.y += 0.008
-      }
-
-      // Apply parallax and manual rotation to camera
-      camera.position.x += (targetCamX + mouseRef.current.x + Math.sin(manualRotation.current.y) * 0.8 - camera.position.x) * 0.06
-      camera.position.y += (targetCamY + mouseRef.current.y + manualRotation.current.x - camera.position.y) * 0.06
-      camera.position.z += (targetCamZ + Math.cos(manualRotation.current.y) * 0.8 - camera.position.z) * 0.06
-      camera.lookAt(0, 1.3, -0.4)
-
       renderer.render(scene, camera)
     }
 
@@ -513,15 +885,18 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     return () => {
       if (animFrameId.current) cancelAnimationFrame(animFrameId.current)
       window.removeEventListener('resize', handleResize)
-      container.removeEventListener('mousemove', handleMouseMove)
-      container.removeEventListener('mousedown', handleMouseDownEvt)
-      window.removeEventListener('mouseup', handleMouseUpEvt)
+      container.removeEventListener('mousedown', handlePointerDown)
+      window.removeEventListener('mousemove', handlePointerMove)
+      window.removeEventListener('mouseup', handlePointerUp)
+      container.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleTouchEnd)
       if (renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement)
       }
       renderer.dispose()
     }
-  }, [viewMode, isRotating])
+  }, [viewMode, isRotating, stance, onDistanceChange])
 
   // Update mood lighting based on NPC emotion
   useEffect(() => {
@@ -567,7 +942,17 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
       }`}
     >
       {/* 3D WebGL Canvas Mount */}
-      <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+      <div
+        ref={mountRef}
+        className="w-full h-full cursor-crosshair active:cursor-grabbing touch-none"
+      />
+
+      {/* Subtle First-Person Center Eye Reticle */}
+      {viewMode === 'pov' && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <div className="w-2.5 h-2.5 rounded-full border border-white/40 bg-white/20 backdrop-blur-sm" />
+        </div>
+      )}
 
       {/* Top 3D Game HUD */}
       <div className="absolute top-4 inset-x-4 sm:inset-x-6 flex items-center justify-between pointer-events-none z-10">
@@ -576,38 +961,41 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
             <button
               type="button"
               onClick={onExit}
-              className="px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold shadow-lg transition-colors flex items-center gap-1.5"
+              className="px-3 py-1.5 rounded-full bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold shadow-lg transition-colors flex items-center gap-1.5"
             >
               <span>← Thoát</span>
             </button>
           )}
 
-          <div className="px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-white text-xs font-semibold shadow-lg flex items-center gap-2">
+          <div className="px-3.5 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700 text-white text-xs font-semibold shadow-lg flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
             <span className="truncate max-w-[150px] sm:max-w-xs">{companyName}</span>
           </div>
 
-          <div className="hidden md:flex px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-amber-300 text-xs font-bold shadow-lg items-center gap-1.5">
+          <div className="hidden md:flex px-3 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700 text-amber-300 text-xs font-bold shadow-lg items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>
-              {sessionType === 'interview' ? 'Phỏng vấn 3D' : 'Công sở 3D'} • Vòng {currentTurn}/{maxTurns}
+              {sessionType === 'interview' ? 'Phỏng vấn 3D' : 'Công sở 3D'} • Vòng {currentTurn}/
+              {maxTurns}
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-1.5 pointer-events-auto">
-          {/* Camera View Switcher */}
+          {/* Camera View Mode Selector */}
           <div className="flex items-center bg-slate-900/85 backdrop-blur-md border border-slate-700 rounded-full p-1 shadow-lg text-xs">
             <button
               type="button"
-              onClick={() => setViewMode('front')}
-              className={`px-2.5 py-1 rounded-full font-semibold transition-colors ${
-                viewMode === 'front'
-                  ? 'bg-amber-500 text-white shadow-sm'
+              onClick={() => setViewMode('pov')}
+              title="Góc nhìn mắt trực tiếp của ứng viên (First-Person POV)"
+              className={`flex items-center gap-1 px-3 py-1 rounded-full font-bold transition-all ${
+                viewMode === 'pov'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md'
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              Chính diện
+              <Eye className="w-3.5 h-3.5" />
+              <span>Góc nhìn mắt (POV)</span>
             </button>
             <button
               type="button"
@@ -633,35 +1021,37 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
             </button>
           </div>
 
-          {/* Auto Rotation Button */}
-          <button
-            type="button"
-            onClick={() => setIsRotating(!isRotating)}
-            title="Tự động quay góc 3D"
-            className={`p-2 rounded-full border shadow-lg backdrop-blur-md transition-colors ${
-              isRotating
-                ? 'bg-amber-500 text-white border-amber-500'
-                : 'bg-slate-900/80 text-slate-300 hover:text-white border-slate-700'
-            }`}
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
+          {/* Auto Rotation Button for Orbit */}
+          {viewMode !== 'pov' && (
+            <button
+              type="button"
+              onClick={() => setIsRotating(!isRotating)}
+              title="Tự động quay góc 3D"
+              className={`p-2 rounded-full border shadow-lg backdrop-blur-md transition-colors ${
+                isRotating
+                  ? 'bg-amber-500 text-white border-amber-500'
+                  : 'bg-slate-900/80 text-slate-300 hover:text-white border-slate-700'
+              }`}
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Native Browser Fullscreen Toggle */}
           <button
             type="button"
             onClick={handleToggleFullscreen}
             title={isNativeFs ? 'Thoát toàn màn hình' : 'Toàn màn hình 3D'}
-            className="p-2 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white shadow-lg transition-colors"
+            className="p-2 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white shadow-lg transition-colors"
           >
             {isNativeFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* Floating 3D NPC Label Card */}
+      {/* Floating 3D NPC Label Card (Boss) */}
       <div className="absolute top-16 left-4 sm:left-6 z-10 pointer-events-none">
-        <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-2xl flex items-center gap-3">
+        <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-700/80 shadow-2xl flex items-center gap-3">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
             👔
           </div>
@@ -683,10 +1073,160 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         </div>
       </div>
 
-      {/* Top Right 3D Controls Hint */}
-      <div className="absolute top-16 right-4 sm:right-6 z-10 hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-slate-400 pointer-events-none">
-        <span>🖱️ Kéo chuột xoay phòng 360° • Di chuột tạo chiều sâu 3D</span>
+      {/* Proximity & Eye Perspective Status Pill */}
+      <div className="absolute top-16 right-4 sm:right-6 z-10 pointer-events-auto flex items-center gap-2">
+        <div
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full backdrop-blur-md border shadow-xl text-xs font-bold transition-all ${
+            isNearBoss
+              ? 'bg-emerald-950/85 border-emerald-500/40 text-emerald-300'
+              : 'bg-amber-950/85 border-amber-500/40 text-amber-300'
+          }`}
+        >
+          <span
+            className={`w-2 h-2 rounded-full ${
+              isNearBoss ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+            }`}
+          />
+          <span>
+            {isNearBoss
+              ? `🟢 Trong cự ly trò chuyện: ${distToBoss.toFixed(1)}m`
+              : `🚶 Đang dạo quanh phòng: ${distToBoss.toFixed(1)}m`}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowControlsGuide(!showControlsGuide)}
+          title="Hướng dẫn di chuyển góc nhìn mắt"
+          className="p-1.5 rounded-full bg-slate-900/85 border border-slate-700 text-slate-300 hover:text-white"
+        >
+          <HelpCircle className="w-4 h-4 text-amber-400" />
+        </button>
       </div>
+
+      {/* Controls Guide Floating Box */}
+      {showControlsGuide && viewMode === 'pov' && (
+        <div className="absolute top-28 right-4 sm:right-6 z-20 max-w-xs p-3.5 rounded-2xl bg-slate-950/95 backdrop-blur-xl border border-slate-700/90 shadow-2xl text-xs text-slate-200 pointer-events-auto space-y-2 animate-in fade-in slide-in-from-top-2">
+          <div className="flex items-center justify-between font-bold text-amber-400 border-b border-slate-800 pb-1.5">
+            <span className="flex items-center gap-1.5">
+              <Compass className="w-4 h-4" />
+              Cách di chuyển góc nhìn mắt
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowControlsGuide(false)}
+              className="text-slate-400 hover:text-white p-0.5"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <div className="space-y-1 text-[11px] leading-relaxed">
+            <p>
+              🎮 <strong>Phím W / A / S / D</strong> hoặc <strong>Mũi tên</strong>: Đi tới, lùi, qua trái, qua phải.
+            </p>
+            <p>
+              🖱️ <strong>Kéo chuột trên màn hình</strong>: Quay góc nhìn mắt 360° tự nhiên.
+            </p>
+            <p>
+              🪑 <strong>Phím C</strong>: Đứng dậy đi dạo / Ngồi vào ghế đối diện sếp.
+            </p>
+            <p>
+              🎯 <strong>Phím R</strong>: Lập tức hướng mắt nhìn thẳng vào Sếp.
+            </p>
+            <p>
+              💬 <strong>Trò chuyện</strong>: Lại gần bàn để phỏng vấn & đàm thoại trực diện!
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Bottom-Left First-Person Movement & Stance Virtual Controller */}
+      {viewMode === 'pov' && (
+        <div className="absolute bottom-6 left-4 sm:left-6 z-20 pointer-events-auto flex flex-col gap-2.5">
+          {/* Quick Action Stance Buttons */}
+          <div className="flex items-center gap-1.5">
+            {stance === 'sitting' ? (
+              <button
+                type="button"
+                onClick={handleStandUp}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/50 text-amber-300 text-xs font-bold shadow-lg transition-all"
+              >
+                <Footprints className="w-3.5 h-3.5 text-amber-400" />
+                <span>🚶 Đứng dậy đi dạo</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSitDown}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-orange-500/20 transition-all"
+              >
+                <UserCheck className="w-3.5 h-3.5" />
+                <span>🪑 Ngồi vào bàn phỏng vấn</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleResetGaze}
+              title="Hướng mắt nhìn thẳng vào Sếp"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white text-xs font-medium shadow-lg transition-all"
+            >
+              <Navigation className="w-3.5 h-3.5 text-amber-400" />
+              <span>Nhìn Sếp</span>
+            </button>
+          </div>
+
+          {/* Virtual On-Screen D-Pad (Touch & Mouse Click Friendly) */}
+          <div className="p-2.5 rounded-2xl bg-slate-950/90 backdrop-blur-md border border-slate-700/80 shadow-2xl flex flex-col items-center gap-1 w-[120px]">
+            {/* Forward (W) */}
+            <button
+              type="button"
+              onMouseDown={() => handleVirtualDirDown('w')}
+              onMouseUp={() => handleVirtualDirUp('w')}
+              onTouchStart={() => handleVirtualDirDown('w')}
+              onTouchEnd={() => handleVirtualDirUp('w')}
+              className="w-9 h-8 rounded-lg bg-slate-800 hover:bg-amber-600 active:bg-amber-500 border border-slate-600 flex items-center justify-center text-white text-xs font-bold shadow transition-colors"
+            >
+              <ArrowUp className="w-4 h-4" />
+            </button>
+
+            {/* Left (A), Backward (S), Right (D) */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onMouseDown={() => handleVirtualDirDown('a')}
+                onMouseUp={() => handleVirtualDirUp('a')}
+                onTouchStart={() => handleVirtualDirDown('a')}
+                onTouchEnd={() => handleVirtualDirUp('a')}
+                className="w-9 h-8 rounded-lg bg-slate-800 hover:bg-amber-600 active:bg-amber-500 border border-slate-600 flex items-center justify-center text-white text-xs font-bold shadow transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onMouseDown={() => handleVirtualDirDown('s')}
+                onMouseUp={() => handleVirtualDirUp('s')}
+                onTouchStart={() => handleVirtualDirDown('s')}
+                onTouchEnd={() => handleVirtualDirUp('s')}
+                className="w-9 h-8 rounded-lg bg-slate-800 hover:bg-amber-600 active:bg-amber-500 border border-slate-600 flex items-center justify-center text-white text-xs font-bold shadow transition-colors"
+              >
+                <ArrowDown className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onMouseDown={() => handleVirtualDirDown('d')}
+                onMouseUp={() => handleVirtualDirUp('d')}
+                onTouchStart={() => handleVirtualDirDown('d')}
+                onTouchEnd={() => handleVirtualDirUp('d')}
+                className="w-9 h-8 rounded-lg bg-slate-800 hover:bg-amber-600 active:bg-amber-500 border border-slate-600 flex items-center justify-center text-white text-xs font-bold shadow transition-colors"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+            <span className="text-[10px] text-slate-400 font-medium">Bấm giữ để bước đi</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
