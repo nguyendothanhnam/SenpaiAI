@@ -407,4 +407,24 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* 3D Internship Game HUD Isolation - Always Dark High Contrast & Immune to Theme Shell */
+  .game-3d-hud {
+    color: #ffffff !important;
+  }
+
+  .game-3d-hud textarea {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+  }
+
+  .game-3d-hud textarea::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1 !important;
+  }
+
+  .game-3d-hud input {
+    color: #ffffff !important;
+  }
 }

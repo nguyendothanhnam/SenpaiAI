@@ -72,32 +72,39 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative w-full rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-surface)] p-4 sm:p-6 shadow-md transition-all"
+      className="relative w-full rounded-3xl border-2 border-slate-700/90 bg-slate-950/95 backdrop-blur-2xl p-5 sm:p-6 shadow-2xl transition-all text-white select-text"
     >
       {/* Dialogue Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--border)] pb-3">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-base sm:text-lg text-[color:var(--text)]">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+        <div className="flex items-center gap-2.5">
+          <span
+            className="font-extrabold text-lg sm:text-xl text-amber-400 drop-shadow"
+            style={{ color: '#fbbf24' }}
+          >
             {speakerName}
           </span>
-          <span className="text-xs px-2.5 py-0.5 rounded-full bg-[color:var(--accent)] text-[color:var(--primary)] font-medium">
+          <span
+            className="text-xs px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold"
+            style={{ color: '#fcd34d' }}
+          >
             {speakerTitle}
           </span>
         </div>
 
         {/* Audio & Translation Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-2">
           <button
             onClick={handlePlayAudio}
             type="button"
             title="Nghe phát âm tiếng Nhật"
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
+            style={{ color: isPlayingAudio ? '#ffffff' : '#f1f5f9' }}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border shadow-md ${
               isPlayingAudio
-                ? 'bg-amber-500 text-white border-amber-500 animate-pulse'
-                : 'bg-[color:var(--bg-card)] text-[color:var(--text-muted)] hover:text-[color:var(--primary)] border-[color:var(--border)]'
+                ? 'bg-amber-500 text-white border-amber-400 animate-pulse'
+                : 'bg-slate-900 text-slate-100 hover:text-white hover:bg-slate-800 border-slate-700'
             }`}
           >
-            {isPlayingAudio ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+            {isPlayingAudio ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
             <span>{isPlayingAudio ? 'Đang phát...' : 'Phát âm'}</span>
           </button>
 
@@ -105,21 +112,25 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
             onClick={() => setShowVi(!showVi)}
             type="button"
             title="Bật / Tắt dịch nghĩa tiếng Việt"
-            className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
+            style={{ color: showVi ? '#ffffff' : '#f1f5f9' }}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border shadow-md ${
               showVi
-                ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)] border-[color:var(--primary)]'
-                : 'bg-[color:var(--bg-card)] text-[color:var(--text-muted)] hover:text-[color:var(--text)] border-[color:var(--border)]'
+                ? 'bg-amber-500 text-white border-amber-400'
+                : 'bg-slate-900 text-slate-100 hover:text-white hover:bg-slate-800 border-slate-700'
             }`}
           >
-            {showVi ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+            {showVi ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4 text-amber-400" />}
             <span>{showVi ? 'Ẩn dịch' : 'Dịch nghĩa'}</span>
           </button>
         </div>
       </div>
 
-      {/* Main Dialogue Japanese Text */}
+      {/* Main Dialogue Japanese Text - High Contrast Crystal Clear Pure White */}
       <div className="mt-4">
-        <p className="text-base sm:text-xl font-medium text-[color:var(--text)] leading-relaxed tracking-wide">
+        <p
+          className="text-lg sm:text-2xl font-bold text-white leading-relaxed tracking-wide drop-shadow-md select-text"
+          style={{ color: '#ffffff' }}
+        >
           {messageJa}
         </p>
 
@@ -128,20 +139,24 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-3 p-3 rounded-xl bg-[color:var(--accent)]/40 border border-[color:var(--border)] text-sm sm:text-base text-[color:var(--text-muted)] italic"
+            style={{ color: '#fef08a' }}
+            className="mt-3 p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-sm sm:text-base text-amber-200 leading-relaxed font-medium"
           >
-            {messageVi}
+            🇻🇳 <strong style={{ color: '#ffffff' }}>Dịch: </strong>{messageVi}
           </motion.div>
         )}
       </div>
 
       {/* Target Focus / Hint for Learner */}
       {focus && (
-        <div className="mt-4 pt-3 border-t border-[color:var(--border)]/60 flex items-start gap-2 text-xs text-[color:var(--text-muted)]">
-          <Target className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+        <div
+          className="mt-4 pt-3 border-t border-slate-800 flex items-start gap-2 text-xs sm:text-sm text-slate-200"
+          style={{ color: '#e2e8f0' }}
+        >
+          <Target className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <span>
-            <strong className="text-[color:var(--text)] font-semibold">Trọng tâm phản xạ: </strong>
-            {focus}
+            <strong className="text-amber-400 font-bold" style={{ color: '#fbbf24' }}>Trọng tâm phản xạ: </strong>
+            <span className="text-white font-medium" style={{ color: '#ffffff' }}>{focus}</span>
           </span>
         </div>
       )}

@@ -163,7 +163,7 @@ export default function InternshipRoleplay() {
   // Active Simulation Stage View (Full Screen 3D Game)
   if (currentSession) {
     return (
-      <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-slate-950 flex flex-col justify-between">
+      <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-slate-950 flex flex-col justify-between game-3d-hud text-white selection:bg-amber-500 selection:text-white">
         {/* 1. Full-Screen 3D Interactive Background Canvas */}
         <InterviewRoom3D
           npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
