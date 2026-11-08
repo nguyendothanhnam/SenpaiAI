@@ -507,3 +507,53 @@ class VocabularyKanji(Base):
     vocabulary = relationship("Vocabulary", back_populates="kanji_links")
     kanji = relationship("Kanji", back_populates="vocabulary_links")
 
+
+class InternshipProfile(Base):
+    __tablename__ = "internship_profiles"
+
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    current_industry = Column(String(50), nullable=False, default="it", server_default="it")
+    current_level = Column(Integer, nullable=False, default=1, server_default="1")  # 1: N5, 2: N4, 3: N3, 4: N2, 5: N1
+    exp_points = Column(Integer, nullable=False, default=0, server_default="0")
+    company_name = Column(String(120), nullable=False, default="株式会社ネクステック", server_default="株式会社ネクステック")
+    job_title = Column(String(100), nullable=False, default="Thực tập sinh IT mới", server_default="Thực tập sinh IT mới")
+    interview_passed = Column(Boolean, nullable=False, default=False, server_default="false")
+    total_interviews = Column(Integer, nullable=False, default=0, server_default="0")
+    total_scenarios_completed = Column(Integer, nullable=False, default=0, server_default="0")
+    manner_score_avg = Column(Float, nullable=False, default=0.0, server_default="0.0")
+    keigo_score_avg = Column(Float, nullable=False, default=0.0, server_default="0.0")
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+
+    user = relationship("User")
+
+
+class InternshipSession(Base):
+    __tablename__ = "internship_sessions"
+    __table_args__ = (
+        CheckConstraint("session_type IN ('interview', 'workplace')", name="ck_internship_sessions_type"),
+        Index("ix_internship_sessions_user", "user_id", "created_at"),
+    )
+
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    session_type = Column(String(20), nullable=False)  # "interview" | "workplace"
+    industry = Column(String(50), nullable=False)
+    level = Column(Integer, nullable=False, default=1)  # 1-5
+    scenario_id = Column(String(80), nullable=False)
+    status = Column(String(20), nullable=False, default="in_progress", server_default="in_progress")
+    current_turn = Column(Integer, nullable=False, default=0, server_default="0")
+    max_turns = Column(Integer, nullable=False, default=4, server_default="4")
+    overall_score = Column(Float, nullable=False, default=0.0, server_default="0.0")
+    grammar_score = Column(Float, nullable=False, default=0.0, server_default="0.0")
+    keigo_score = Column(Float, nullable=False, default=0.0, server_default="0.0")
+    manner_score = Column(Float, nullable=False, default=0.0, server_default="0.0")
+    turns_data = Column(JSON, nullable=False, default=list)
+    final_feedback = Column(JSON, nullable=True)
+    offer_letter = Column(JSON, nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+
+    user = relationship("User")
+
+

@@ -8,7 +8,7 @@ import logging
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening
+from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening, internship
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
 
@@ -104,6 +104,8 @@ app.include_router(push.router)
 app.include_router(push.router, prefix="/api")
 app.include_router(listening.router)
 app.include_router(listening.router, prefix="/api")
+app.include_router(internship.router)
+app.include_router(internship.router, prefix="/api")
 
 @app.get("/")
 async def root():

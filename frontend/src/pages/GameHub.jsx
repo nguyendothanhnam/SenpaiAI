@@ -1,9 +1,16 @@
 import { motion } from 'framer-motion'
-import { BookOpen, Brain, ChevronRight, Layers3 } from 'lucide-react'
+import { BookOpen, Brain, ChevronRight, Layers3, Briefcase } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 const games = [
+  {
+    titleKey: 'gameHub.internship.title',
+    descriptionKey: 'gameHub.internship.description',
+    to: '/internship',
+    icon: Briefcase,
+    highlight: true,
+  },
   {
     titleKey: 'gameHub.quiz.title',
     descriptionKey: 'gameHub.quiz.description',
