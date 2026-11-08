@@ -11,6 +11,9 @@ interface InterviewRoom3DProps {
   sessionType: 'interview' | 'workplace'
   currentTurn: number
   maxTurns: number
+  isFullScreenMode?: boolean
+  onToggleNativeFullscreen?: () => void
+  onExit?: () => void
 }
 
 type CameraViewMode = 'front' | 'isometric' | 'close'
@@ -24,11 +27,14 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   sessionType,
   currentTurn,
   maxTurns,
+  isFullScreenMode = true,
+  onToggleNativeFullscreen,
+  onExit,
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null)
   const [viewMode, setViewMode] = useState<CameraViewMode>('front')
-  const [isFullscreen, setIsFullscreen] = useState(false)
   const [isRotating, setIsRotating] = useState(false)
+  const [isNativeFs, setIsNativeFs] = useState(false)
 
   // References to keep across re-renders
   const sceneRef = useRef<THREE.Scene | null>(null)
@@ -538,24 +544,50 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     }
   }, [npcEmotion])
 
+  const handleToggleFullscreen = () => {
+    if (onToggleNativeFullscreen) {
+      onToggleNativeFullscreen()
+    } else {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {})
+        setIsNativeFs(true)
+      } else {
+        document.exitFullscreen().catch(() => {})
+        setIsNativeFs(false)
+      }
+    }
+  }
+
   return (
     <div
-      className={`relative w-full rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl bg-slate-950 select-none transition-all ${
-        isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen' : 'h-[360px] sm:h-[440px] md:h-[500px]'
+      className={`relative w-full overflow-hidden bg-slate-950 select-none transition-all ${
+        isFullScreenMode
+          ? 'absolute inset-0 w-full h-full z-0'
+          : 'h-[360px] sm:h-[440px] md:h-[500px] rounded-3xl border border-slate-700/80 shadow-2xl'
       }`}
     >
       {/* 3D WebGL Canvas Mount */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Top 3D Game HUD */}
-      <div className="absolute top-4 inset-x-4 flex items-center justify-between pointer-events-none z-10">
+      <div className="absolute top-4 inset-x-4 sm:inset-x-6 flex items-center justify-between pointer-events-none z-10">
         <div className="flex items-center gap-2 pointer-events-auto">
+          {onExit && (
+            <button
+              type="button"
+              onClick={onExit}
+              className="px-3 py-1.5 rounded-full bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white text-xs font-semibold shadow-lg transition-colors flex items-center gap-1.5"
+            >
+              <span>← Thoát</span>
+            </button>
+          )}
+
           <div className="px-3.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-white text-xs font-semibold shadow-lg flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
             <span className="truncate max-w-[150px] sm:max-w-xs">{companyName}</span>
           </div>
 
-          <div className="hidden sm:flex px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-amber-300 text-xs font-bold shadow-lg items-center gap-1.5">
+          <div className="hidden md:flex px-3 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-amber-300 text-xs font-bold shadow-lg items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>
               {sessionType === 'interview' ? 'Phỏng vấn 3D' : 'Công sở 3D'} • Vòng {currentTurn}/{maxTurns}
@@ -615,27 +647,27 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
             <RotateCcw className="w-4 h-4" />
           </button>
 
-          {/* Fullscreen Toggle */}
+          {/* Native Browser Fullscreen Toggle */}
           <button
             type="button"
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            title={isFullscreen ? 'Thu nhỏ' : 'Toàn màn hình 3D'}
+            onClick={handleToggleFullscreen}
+            title={isNativeFs ? 'Thoát toàn màn hình' : 'Toàn màn hình 3D'}
             className="p-2 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700 text-slate-300 hover:text-white shadow-lg transition-colors"
           >
-            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            {isNativeFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
       {/* Floating 3D NPC Label Card */}
-      <div className="absolute bottom-4 left-4 z-10 pointer-events-none">
-        <div className="p-3 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-2xl flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
+      <div className="absolute top-16 left-4 sm:left-6 z-10 pointer-events-none">
+        <div className="p-2.5 sm:p-3 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-2xl flex items-center gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
             👔
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="text-sm font-bold text-white drop-shadow">
+              <h4 className="text-xs sm:text-sm font-bold text-white drop-shadow">
                 {npcName}
               </h4>
               {isSpeaking && (
@@ -644,16 +676,16 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
                 </span>
               )}
             </div>
-            <p className="text-xs text-amber-400 font-medium">
+            <p className="text-[11px] sm:text-xs text-amber-400 font-medium">
               {npcTitle}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Bottom Right 3D Controls Hint */}
-      <div className="absolute bottom-4 right-4 z-10 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-slate-400 pointer-events-none">
-        <span>🖱️ Kéo chuột để xoay phòng 360° • Di chuột tạo hiệu ứng chiều sâu</span>
+      {/* Top Right 3D Controls Hint */}
+      <div className="absolute top-16 right-4 sm:right-6 z-10 hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-slate-400 pointer-events-none">
+        <span>🖱️ Kéo chuột xoay phòng 360° • Di chuột tạo chiều sâu 3D</span>
       </div>
     </div>
   )

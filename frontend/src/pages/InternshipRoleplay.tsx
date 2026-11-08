@@ -26,7 +26,6 @@ import {
   type InternshipSession,
 } from '../services/api'
 import InterviewRoom3D from '../components/internship/InterviewRoom3D'
-import NpcStage from '../components/internship/NpcStage'
 import DialogueBox from '../components/internship/DialogueBox'
 import PlayerControl from '../components/internship/PlayerControl'
 import FeedbackBubble from '../components/internship/FeedbackBubble'
@@ -53,7 +52,6 @@ export default function InternshipRoleplay() {
   const [currentSession, setCurrentSession] = useState<InternshipSession | null>(null)
   const [isAnswering, setIsAnswering] = useState(false)
   const [isSpeaking, setIsSpeaking] = useState(false)
-  const [is3DMode, setIs3DMode] = useState(true)
   const [showHandbook, setShowHandbook] = useState(false)
   const [showOfferModal, setShowOfferModal] = useState(false)
 
@@ -162,130 +160,108 @@ export default function InternshipRoleplay() {
       ? currentSession.turns[currentSession.current_turn - 2]
       : null
 
-  // Active Simulation Stage View
+  // Active Simulation Stage View (Full Screen 3D Game)
   if (currentSession) {
     return (
-      <div className="max-w-4xl mx-auto space-y-6 pb-12">
-        {/* Top Control Bar */}
-        <div className="flex items-center justify-between">
+      <div className="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-slate-950 flex flex-col justify-between">
+        {/* 1. Full-Screen 3D Interactive Background Canvas */}
+        <InterviewRoom3D
+          npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
+          npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
+          npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
+          companyName={currentSession.company_name}
+          isSpeaking={isSpeaking}
+          sessionType={currentSession.session_type}
+          currentTurn={currentSession.current_turn}
+          maxTurns={currentSession.max_turns}
+          isFullScreenMode={true}
+          onExit={() => {
+            if (window.confirm('Bạn có chắc muốn tạm dừng phiên làm việc 3D này không?')) {
+              setCurrentSession(null)
+            }
+          }}
+        />
+
+        {/* 2. Top Right Floating Control (Sổ tay văn hóa) */}
+        <div className="relative z-20 flex justify-end p-4 sm:p-6 pointer-events-none pt-16 sm:pt-4">
           <button
-            onClick={() => {
-              if (window.confirm('Bạn có chắc muốn tạm dừng phiên làm việc này không?')) {
-                setCurrentSession(null)
-              }
-            }}
-            className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[color:var(--text-muted)] hover:text-[color:var(--text)] transition-colors"
+            onClick={() => setShowHandbook(true)}
+            className="pointer-events-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-slate-900/85 backdrop-blur-md text-amber-300 text-xs font-bold hover:bg-slate-800 shadow-xl transition-all"
           >
-            <span>← Quay lại danh sách</span>
+            <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+            <span>Sổ tay văn hóa</span>
           </button>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIs3DMode(!is3DMode)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
-                is3DMode
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-500 shadow-md'
-                  : 'bg-[color:var(--bg-card)] text-[color:var(--text-muted)] border-[color:var(--border)]'
-              }`}
-            >
-              {is3DMode ? '🎮 Chế độ 3D Game' : '🖼️ Chế độ 2.5D Stage'}
-            </button>
-
-            <button
-              onClick={() => setShowHandbook(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold hover:bg-amber-500/20 transition-colors"
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>Sổ tay văn hóa công sở</span>
-            </button>
-          </div>
         </div>
 
-        {/* 3D Game Interactive Scene or 2.5D Stage */}
-        {is3DMode ? (
-          <InterviewRoom3D
-            npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
-            npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
-            npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
-            companyName={currentSession.company_name}
-            isSpeaking={isSpeaking}
-            sessionType={currentSession.session_type}
-            currentTurn={currentSession.current_turn}
-            maxTurns={currentSession.max_turns}
-          />
-        ) : (
-          <NpcStage
-            npcName={currentTurnData?.npc_name || 'Người phỏng vấn'}
-            npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
-            npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
-            companyName={currentSession.company_name}
-            companyLocation={selectedIndustryData?.location}
-            sessionType={currentSession.session_type}
-            currentTurn={currentSession.current_turn}
-            maxTurns={currentSession.max_turns}
-          />
-        )}
+        {/* 3. Middle Area: Floating AI Evaluation Feedback */}
+        <div className="relative z-20 px-4 sm:px-6 pointer-events-none flex justify-end max-h-[30vh] overflow-y-auto">
+          {previousTurnData?.user_response && (
+            <div className="pointer-events-auto max-w-sm sm:max-w-md w-full shadow-2xl">
+              <FeedbackBubble
+                userResponse={previousTurnData.user_response}
+                correctedSentence={previousTurnData.feedback?.corrected_sentence}
+                adviceVi={previousTurnData.feedback?.advice_vi}
+                scores={previousTurnData.scores}
+              />
+            </div>
+          )}
+        </div>
 
-        {/* Dialogue Box */}
-        {currentTurnData && (
-          <DialogueBox
-            speakerName={currentTurnData.npc_name}
-            speakerTitle={currentTurnData.npc_title}
-            messageJa={currentTurnData.message_ja}
-            messageVi={currentTurnData.message_vi}
-            focus={currentTurnData.focus}
-            onSpeakingChange={setIsSpeaking}
-          />
-        )}
+        {/* 4. Bottom Floating Visual Novel Console (Dialogue + Input) */}
+        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 pb-4 sm:pb-6 space-y-3 pointer-events-auto">
+          {currentTurnData && (
+            <div className="shadow-2xl">
+              <DialogueBox
+                speakerName={currentTurnData.npc_name}
+                speakerTitle={currentTurnData.npc_title}
+                messageJa={currentTurnData.message_ja}
+                messageVi={currentTurnData.message_vi}
+                focus={currentTurnData.focus}
+                onSpeakingChange={setIsSpeaking}
+              />
+            </div>
+          )}
 
-        {/* Previous Turn Feedback Bubble (if available) */}
-        {previousTurnData?.user_response && (
-          <FeedbackBubble
-            userResponse={previousTurnData.user_response}
-            correctedSentence={previousTurnData.feedback?.corrected_sentence}
-            adviceVi={previousTurnData.feedback?.advice_vi}
-            scores={previousTurnData.scores}
-          />
-        )}
-
-        {/* Player Response Input Control (if session still in progress) */}
-        {currentSession.status === 'in_progress' ? (
-          <PlayerControl
-            onSubmit={handleAnswerTurn}
-            isLoading={isAnswering}
-            hints={currentTurnData?.hints || []}
-          />
-        ) : (
-          <div className="p-6 rounded-3xl bg-[color:var(--bg-card)] border border-[color:var(--border)] text-center space-y-4 shadow-sm">
-            <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
-            <h3 className="text-xl font-bold text-[color:var(--text)]">
-              {currentSession.session_type === 'interview'
-                ? 'Đã hoàn thành buổi phỏng vấn!'
-                : 'Đã hoàn thành tình huống công sở!'}
-            </h3>
-            <p className="text-sm text-[color:var(--text-muted)]">
-              Tổng điểm năng lực của bạn đạt: {currentSession.overall_score} / 100 điểm.
-            </p>
-            <div className="flex justify-center gap-3 pt-2">
-              {currentSession.offer_letter && (
+          {currentSession.status === 'in_progress' ? (
+            <div className="shadow-2xl">
+              <PlayerControl
+                onSubmit={handleAnswerTurn}
+                isLoading={isAnswering}
+                hints={currentTurnData?.hints || []}
+              />
+            </div>
+          ) : (
+            <div className="p-6 rounded-3xl bg-slate-900/90 backdrop-blur-xl border border-slate-700 text-center space-y-4 shadow-2xl">
+              <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
+              <h3 className="text-xl font-bold text-white">
+                {currentSession.session_type === 'interview'
+                  ? 'Đã hoàn thành buổi phỏng vấn 3D!'
+                  : 'Đã hoàn thành tình huống công sở 3D!'}
+              </h3>
+              <p className="text-sm text-slate-300">
+                Tổng điểm năng lực của bạn đạt: {currentSession.overall_score} / 100 điểm.
+              </p>
+              <div className="flex justify-center gap-3 pt-2">
+                {currentSession.offer_letter && (
+                  <button
+                    type="button"
+                    onClick={() => setShowOfferModal(true)}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold hover:opacity-95 transition-all shadow-md text-sm"
+                  >
+                    Xem Thư trúng tuyển (内定通知書)
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={() => setShowOfferModal(true)}
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 text-white font-bold hover:bg-amber-600 transition-colors shadow-md text-sm"
+                  onClick={() => setCurrentSession(null)}
+                  className="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold transition-colors text-sm"
                 >
-                  Xem Thư trúng tuyển (内定通知書)
+                  Tiếp tục nhiệm vụ mới
                 </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setCurrentSession(null)}
-                className="px-5 py-2.5 rounded-xl bg-[color:var(--primary)] text-[color:var(--primary-contrast)] font-bold hover:opacity-90 transition-opacity text-sm"
-              >
-                Tiếp tục nhiệm vụ mới
-              </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Offer Letter Modal */}
         <OfferLetterModal
