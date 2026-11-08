@@ -278,7 +278,14 @@ class OllamaJapaneseLearningService:
             # Try to list models - this will fail if Ollama is not running
             response = ollama.list()
             # Also check if the model exists
-            models = [model['name'] for model in response.get('models', [])]
+            raw_models = getattr(response, 'models', None) or (response.get('models', []) if isinstance(response, dict) else [])
+            models = []
+            for m in raw_models:
+                name = getattr(m, 'model', None) or getattr(m, 'name', None) or (m.get('model') or m.get('name') if isinstance(m, dict) else str(m))
+                if name:
+                    models.append(name)
+                    if ':' in name:
+                        models.append(name.split(':')[0])
             if self.model not in models:
                 print(f"Warning: Model '{self.model}' not found. Available models: {models}")
                 print(f"Please run: ollama pull {self.model}")
@@ -291,7 +298,13 @@ class OllamaJapaneseLearningService:
         """Get list of available Ollama models."""
         try:
             response = ollama.list()
-            return [model['name'] for model in response['models']]
+            raw_models = getattr(response, 'models', None) or (response.get('models', []) if isinstance(response, dict) else [])
+            models = []
+            for m in raw_models:
+                name = getattr(m, 'model', None) or getattr(m, 'name', None) or (m.get('model') or m.get('name') if isinstance(m, dict) else str(m))
+                if name:
+                    models.append(name)
+            return models
         except Exception:
             return []
 

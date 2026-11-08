@@ -1,8 +1,13 @@
 try:
-    from langchain_community.chat_models import ChatOpenAI
+    from langchain_openai import ChatOpenAI
 except ImportError:
-    # Fallback for older versions
-    from langchain.chat_models import ChatOpenAI
+    try:
+        from langchain_community.chat_models import ChatOpenAI
+    except ImportError:
+        try:
+            from langchain.chat_models import ChatOpenAI
+        except ImportError:
+            ChatOpenAI = None
 
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
