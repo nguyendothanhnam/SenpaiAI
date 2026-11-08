@@ -1,4 +1,4 @@
-import { CalendarCheck, MessageCircle, Library, BookOpen, Brush, Headphones, Gamepad2, Briefcase } from 'lucide-react'
+import { CalendarCheck, MessageCircle, Library, BookOpen, Brush, Headphones, Gamepad2, UserCheck } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useQuery } from 'react-query'
 import { Link, useLocation } from 'react-router-dom'
@@ -19,10 +19,10 @@ const navigation: NavigationGroup[] = [
   { items: [
     { key: 'daily', href: '/daily', icon: CalendarCheck, matchPaths: ['/daily'] },
     { key: 'chat', href: '/chat', icon: MessageCircle, matchPaths: ['/chat'] },
+    { key: 'interview', href: '/interview', icon: UserCheck, matchPaths: ['/interview', '/internship'] },
     { key: 'library', href: '/library', icon: Library, matchPaths: ['/library'] },
   ] },
   { labelKey: 'groups.practice', items: [
-    { key: 'internship', href: '/internship', icon: Briefcase, matchPaths: ['/internship'] },
     { key: 'grammar', href: '/grammar', icon: BookOpen, matchPaths: ['/grammar'] },
     { key: 'kanji', href: '/kanji', icon: Brush, matchPaths: ['/kanji'] },
     { key: 'listening', href: '/listening', icon: Headphones, matchPaths: ['/listening'], enabled: true },

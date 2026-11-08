@@ -74,7 +74,8 @@ function App() {
         <Route path="/settings/reminders" element={<RemindersSettings />} />
         <Route path="/listening" element={<ListeningLessons />} />
         <Route path="/listening/:id" element={<ListeningPlayer />} />
-        <Route path="/internship" element={<InternshipRoleplay />} />
+        <Route path="/interview" element={<InternshipRoleplay />} />
+        <Route path="/internship" element={<Navigate to="/interview" replace />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Layout>

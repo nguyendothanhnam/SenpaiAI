@@ -38,7 +38,7 @@ export const NpcStage: React.FC<NpcStageProps> = ({
     <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-3xl overflow-hidden border border-[color:var(--border)] shadow-xl bg-gradient-to-b from-slate-900/90 via-slate-800/80 to-slate-950/95 flex flex-col justify-between p-4 sm:p-6 select-none">
       {/* Background Architectural Japanese Office Grid */}
       <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
-      
+
       {/* Ambient Office Glow */}
       <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-10 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />

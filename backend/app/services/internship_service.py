@@ -475,3 +475,4 @@ def format_session_response(session: InternshipSession, industry: Dict[str, Any]
         "created_at": session.created_at.isoformat() if session.created_at else None,
         "completed_at": session.completed_at.isoformat() if session.completed_at else None
     }
+

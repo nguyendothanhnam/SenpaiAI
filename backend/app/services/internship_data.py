@@ -600,3 +600,4 @@ BUSINESS_HANDBOOK = [
         "pro_tip": "Dù trong tiệc có thể vui vẻ thoải mái, nhưng không bao giờ được thất lễ hoặc suồng sã quá mức."
     }
 ]
+
