@@ -22,7 +22,14 @@ from ..services.kanji_dictionary_service import kanji_dictionary_service
 from ..services.vector_db import chroma_service
 from ..services.chat_conversations import build_recent_chat_context, normalize_title
 from ..services.chat_grounding import reviewed_reference, relevant_chat_documents, finalize_chat_answer
-from ..services.chat_language import detect_chat_language, needs_history, is_translation_question, same_language_translation
+from ..services.chat_language import (
+    detect_chat_language,
+    needs_history,
+    is_translation_question,
+    same_language_translation,
+    is_chitchat_query,
+    chitchat_direct_answer,
+)
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -80,17 +87,19 @@ def build_kanji_answer(entry: dict) -> str:
         word = example.get("word") or ""
         reading = example.get("reading") or ""
         meaning = example.get("meaning") or ""
-        example_lines.append(f"- {word} ({reading}): {meaning}".strip())
+        example_lines.append(f"- **{word}** ({reading}): {meaning}".strip())
     examples_text = "\n".join(example_lines) if example_lines else "- Chưa có ví dụ trong từ điển cục bộ."
+    onyomi = ", ".join(entry.get("onyomi") or []) or "-"
+    kunyomi = ", ".join(entry.get("kunyomi") or []) or "-"
     return (
-        f"Kanji {entry['kanji']}\n"
-        f"Nghĩa: {entry.get('meaning') or entry.get('meaning_vi') or 'Chưa có dữ liệu'}\n"
-        f"Onyomi: {', '.join(entry.get('onyomi') or []) or '-'}\n"
-        f"Kunyomi: {', '.join(entry.get('kunyomi') or []) or '-'}\n"
-        f"JLPT: {entry.get('jlpt') or '-'}\n"
-        f"Số nét: {entry.get('strokes') or entry.get('stroke_count') or '-'}\n"
-        f"Ví dụ:\n{examples_text}\n\n"
-        "Dữ liệu trên lấy từ từ điển Kanji cục bộ, không phải do LLM tự đoán."
+        f"### 🈸 Chữ Hán (Kanji): **{entry['kanji']}**\n\n"
+        f"- **Ý nghĩa:** {entry.get('meaning') or entry.get('meaning_vi') or 'Chưa có dữ liệu'}\n"
+        f"- **Cấp độ JLPT:** {entry.get('jlpt') or 'N/A'}\n"
+        f"- **Số nét:** {entry.get('strokes') or entry.get('stroke_count') or 'N/A'} nét\n"
+        f"- **Âm On (Onyomi):** {onyomi}\n"
+        f"- **Âm Kun (Kunyomi):** {kunyomi}\n\n"
+        f"**Từ vựng & Ví dụ thường gặp:**\n{examples_text}\n\n"
+        f"*(Tra cứu chuẩn xác từ Từ điển Kanji JLPT SenpaiAI)*"
     )
 
 def parse_mcq_options(message: str) -> dict[str, str]:
@@ -177,22 +186,157 @@ async def send_message(
 
         language = detect_chat_language(message.message, message.response_language or current_user.ui_language)
 
-        
-        # Get relevant context using RAG
+        # 1. Single Kanji direct lookup (100% dictionary accuracy)
+        kanji_char = find_single_kanji_request(message.message)
+        if kanji_char:
+            kanji_entry = kanji_dictionary_service.get_entry(kanji_char)
+            if kanji_entry:
+                answer = build_kanji_answer(kanji_entry)
+                sources = [{
+                    "title": f"Từ điển Kanji JLPT: {kanji_char}",
+                    "type": "kanji_dictionary",
+                    "jlpt_level": kanji_entry.get("jlpt", ""),
+                    "url": "/kanji",
+                    "relevance": 1.0,
+                }]
+                chat_entry = ChatHistory(
+                    user_id=current_user.id,
+                    question=message.message,
+                    answer=answer,
+                    jlpt_level=kanji_entry.get("jlpt") or message.jlpt_level or current_user.current_jlpt_level,
+                    grammar_points=[],
+                    translation=None,
+                    sources=sources,
+                    conversation_id=conversation.id,
+                )
+                _save_chat_entry(db, conversation, chat_entry)
+                return ChatResponse(
+                    answer=answer,
+                    jlpt_level=chat_entry.jlpt_level,
+                    grammar_points=[],
+                    translation=None,
+                    sources=sources,
+                    response_time=time.time() - start_time,
+                    conversation_id=conversation.id,
+                )
+
+        # 2. Deterministic / reviewed answers for textbook sentences
+        det_answer = deterministic_chat_answer(message.message)
+        if det_answer:
+            chat_entry = ChatHistory(
+                user_id=current_user.id,
+                question=message.message,
+                answer=det_answer,
+                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=[],
+                conversation_id=conversation.id,
+            )
+            _save_chat_entry(db, conversation, chat_entry)
+            return ChatResponse(
+                answer=det_answer,
+                jlpt_level=chat_entry.jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=[],
+                response_time=time.time() - start_time,
+                conversation_id=conversation.id,
+            )
+
+        # 3. Chitchat & greeting queries (zero RAG hallucination)
+        chitchat_answer = chitchat_direct_answer(message.message, language)
+        if chitchat_answer:
+            chat_entry = ChatHistory(
+                user_id=current_user.id,
+                question=message.message,
+                answer=chitchat_answer,
+                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=[],
+                conversation_id=conversation.id,
+            )
+            _save_chat_entry(db, conversation, chat_entry)
+            return ChatResponse(
+                answer=chitchat_answer,
+                jlpt_level=chat_entry.jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=[],
+                response_time=time.time() - start_time,
+                conversation_id=conversation.id,
+            )
+
+        # 4. Same language translation checks
+        same_language_answer = same_language_translation(message.message, language)
+        if same_language_answer:
+            chat_entry = ChatHistory(
+                user_id=current_user.id,
+                question=message.message,
+                answer=same_language_answer,
+                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=[],
+                conversation_id=conversation.id,
+            )
+            _save_chat_entry(db, conversation, chat_entry)
+            return ChatResponse(
+                answer=same_language_answer,
+                jlpt_level=chat_entry.jlpt_level,
+                grammar_points=[],
+                translation=None,
+                sources=[],
+                response_time=time.time() - start_time,
+                conversation_id=conversation.id,
+            )
+
+        # 5. Get reviewed references or relevant context using smart RAG
         context, sources = reviewed_reference(message.message, language)
         if not context and not is_translation_question(message.message):
-            rag_results = relevant_chat_documents(chroma_service.search_documents(
-                message.message, n_results=3,
-                filter_dict={"jlpt_level": message.jlpt_level or current_user.current_jlpt_level},
-            ), message.message)
-            context = "\n\n".join(f"{result['source']['title']}\n{result['content']}" for result in rag_results)
-            sources = [{"title": result["source"]["title"], "url": result["source"].get("source_url", ""),
-                        "relevance": result["similarity_score"]} for result in rag_results]
+            user_level = message.jlpt_level or getattr(current_user, "current_jlpt_level", None)
+            level_filter = {"jlpt_level": user_level} if user_level else None
+
+            # Search with level filter (top-k = 3)
+            raw_results = chroma_service.search_documents(
+                message.message, n_results=3, filter_dict=level_filter
+            )
+            rag_results = relevant_chat_documents(raw_results, message.message)
+
+            # Fallback: if filtered search yields no documents, fallback to all levels
+            if not rag_results and level_filter:
+                raw_fallback = chroma_service.search_documents(
+                    message.message, n_results=3, filter_dict=None
+                )
+                rag_results = relevant_chat_documents(raw_fallback, message.message)
+
+            if rag_results:
+                context_parts = []
+                sources = []
+                for idx, result in enumerate(rag_results, 1):
+                    src = result.get("source", {})
+                    doc_id = src.get("id")
+                    title = src.get("title", "Tài liệu học tập")
+                    doc_type = src.get("document_type", "vocabulary")
+                    jlpt_level = src.get("jlpt_level", "")
+                    relevance = result.get("similarity_score", 0.0)
+
+                    header = f"[Nguồn {idx}: {title} ({doc_type.upper()}{' | ' + jlpt_level if jlpt_level else ''})]"
+                    context_parts.append(f"{header}\n{result.get('content', '')}")
+                    sources.append({
+                        "id": doc_id,
+                        "title": title,
+                        "type": doc_type,
+                        "jlpt_level": jlpt_level,
+                        "url": src.get("source_url") or f"/library?doc_id={doc_id}",
+                        "relevance": relevance,
+                    })
+                context = "\n\n".join(context_parts)
         response_context = "\n\n".join(part for part in (context, conversation_context) if part)
         
         # Generate AI response
-        same_language_answer = same_language_translation(message.message, language)
-        response_data = {"answer": same_language_answer, "jlpt_level": message.jlpt_level or current_user.current_jlpt_level} if same_language_answer else await japanese_service.chat_response(
+        response_data = await japanese_service.chat_response(
             question=message.message,
             context=response_context,
             jlpt_level=message.jlpt_level or current_user.current_jlpt_level,

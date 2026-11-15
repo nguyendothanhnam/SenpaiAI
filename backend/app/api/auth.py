@@ -101,6 +101,8 @@ async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=User)
 async def get_current_user_info(current_user: User = Depends(get_current_active_user)):
     """Get current user information."""
+    if getattr(current_user, "learning_goals", None) is None:
+        current_user.learning_goals = []
     return current_user
 
 

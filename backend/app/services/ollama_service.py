@@ -49,9 +49,16 @@ class OllamaJapaneseLearningService:
         # Prompts are now built directly in methods
         pass
 
-    def _call_ollama(self, prompt: str, system_prompt: str = None, max_retries: int = 2, temperature: Optional[float] = None, response_format: Any = None) -> str:
-        """Call Ollama API directly with retry logic."""
-        # Check Ollama connection first
+    def _call_ollama(
+        self,
+        prompt: str,
+        system_prompt: str = None,
+        max_retries: int = 1,
+        temperature: Optional[float] = None,
+        num_predict: int = 350,
+        response_format: Any = None
+    ) -> str:
+        """Call Ollama API directly with fast execution options."""
         if not isinstance(response_format, dict) and not self.check_ollama_connection():
             raise Exception("Ollama is not running. Please start Ollama service.")
 
@@ -63,16 +70,19 @@ class OllamaJapaneseLearningService:
                     messages.append({"role": "system", "content": system_prompt})
                 messages.append({"role": "user", "content": prompt})
 
-                chat_options = {"temperature": temperature} if temperature is not None else None
+                chat_options = {
+                    "temperature": temperature if temperature is not None else 0.3,
+                    "num_predict": num_predict,
+                    "num_ctx": 2048,
+                    "num_thread": 6,
+                    "repeat_penalty": 1.12,
+                }
                 if isinstance(response_format, dict):
-                    # The installed Ollama SDK accepts only format='json'.
-                    # Send the schema to the configured server directly so
-                    # field types and JLPT enums are actually constrained.
                     with httpx.Client(timeout=90) as client:
                         structured = client.post(f"{self.base_url.rstrip('/')}/api/chat", json={
                             'model': self.model, 'messages': messages, 'stream': False,
                             'format': response_format,
-                            'options': {**(chat_options or {}), 'num_ctx': 4096, 'num_predict': 1800},
+                            'options': chat_options,
                         })
                         structured.raise_for_status()
                         payload = structured.json()
@@ -82,7 +92,7 @@ class OllamaJapaneseLearningService:
                 response = ollama.chat(
                     model=self.model,
                     messages=messages,
-                    **({"options": chat_options} if chat_options else {}),
+                    options=chat_options,
                     **({'format': response_format} if response_format else {}),
                 )
                 return response['message']['content']
@@ -142,28 +152,52 @@ class OllamaJapaneseLearningService:
 
         try:
             # Prepare the question with context
-            if context:
-                enhanced_question = f"Reference material (use only if relevant):\n{context}\n\nLATEST QUESTION:\n{question}"
+            if context and context.strip():
+                if language == 'vi':
+                    enhanced_question = (
+                        f"=== TÀI LIỆU HỌC TẬP THAM KHẢO (Chỉ dùng nếu trực tiếp liên quan đến câu hỏi) ===\n"
+                        f"{context.strip()}\n"
+                        f"=================================================================================\n\n"
+                        f"CÂU HỎI CỦA NGƯỜI HỌC: {question}\n\n"
+                        f"LƯU Ý: Trả lời đúng trọng tâm câu hỏi trên bằng Tiếng Việt. Nếu tài liệu tham khảo không liên quan đến câu hỏi, hãy bỏ qua và giải thích chuẩn xác."
+                    )
+                else:
+                    enhanced_question = (
+                        f"=== REFERENCE MATERIAL (Use only if directly relevant) ===\n"
+                        f"{context.strip()}\n"
+                        f"=========================================================\n\n"
+                        f"USER QUESTION: {question}\n\n"
+                        f"NOTE: Answer the question directly in English. If reference material is not relevant, ignore it."
+                    )
             else:
                 enhanced_question = question
 
             # Add JLPT level context if provided
             if jlpt_level:
-                enhanced_question = f"Learner JLPT: {jlpt_level}\n\n{enhanced_question}"
+                lvl_header = f"Trình độ JLPT của người học: {jlpt_level}" if language == 'vi' else f"Learner JLPT: {jlpt_level}"
+                enhanced_question = f"{lvl_header}\n\n{enhanced_question}"
 
             answer = finalize_chat_answer(question, await asyncio.to_thread(
-                self._call_ollama, enhanced_question, system_prompt, temperature=0
+                self._call_ollama, enhanced_question, system_prompt, temperature=0.3, num_predict=220
             ), language)
-            if answer_needs_revision(answer, language, question):
-                reference, _ = reviewed_reference(question, language)
-                # Retry once using only the current task and reviewed material,
-                # never echoing a failed answer or unrelated conversation.
-                correction = f"Answer only in {'Vietnamese' if language == 'vi' else 'English'}.\n{reference}\n\nQuestion: {question}"
-                answer = finalize_chat_answer(question, await asyncio.to_thread(
-                    self._call_ollama, correction, system_prompt, temperature=0
+            if not answer or (len(answer.strip().split()) < 4 and answer_needs_revision(answer, language, question)):
+                # Retry only if the answer is essentially empty or failed
+                correction = (
+                    f"Trả lời ngắn gọn, đúng trọng tâm câu hỏi bằng Tiếng Việt 100% (tuyệt đối không dùng tiếng Trung hay tiếng Anh):\nCâu hỏi: {question}"
+                    if language == 'vi'
+                    else f"Answer directly in English:\nQuestion: {question}"
+                )
+                retry_ans = finalize_chat_answer(question, await asyncio.to_thread(
+                    self._call_ollama, correction, system_prompt, temperature=0.2, num_predict=220
                 ), language)
-            if not answer or answer_needs_revision(answer, language, question):
-                raise RuntimeError('chat_generation_failed')
+                if retry_ans:
+                    answer = retry_ans
+
+            if not answer:
+                if context:
+                    answer = f"Dưới đây là thông tin tra cứu từ Thư viện học liệu SenpaiAI:\n\n{context}"
+                else:
+                    answer = "Xin lỗi bạn, tôi chưa thể tìm thấy tài liệu phù hợp cho câu hỏi này. Bạn có thể diễn đạt lại câu hỏi cụ thể hơn không?"
 
             response_time = time.time() - start_time
 
@@ -174,6 +208,12 @@ class OllamaJapaneseLearningService:
             }
 
         except Exception as e:
+            if context:
+                return {
+                    "answer": f"Dưới đây là thông tin từ Thư viện học liệu SenpaiAI:\n\n{context}",
+                    "jlpt_level": jlpt_level,
+                    "response_time": time.time() - start_time
+                }
             raise RuntimeError('chat_generation_failed') from e
 
     async def analyze_grammar(self, text: str, include_vietnamese: bool = False,

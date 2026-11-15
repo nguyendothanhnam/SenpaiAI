@@ -2,7 +2,6 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from typing import Any, List
 import json
-import pandas as pd
 
 from app.services import game_service
 
@@ -34,7 +33,7 @@ def normalize_flashcard_column(column: Any) -> str:
     }.get(key, "")
 
 
-def parse_flashcard_dataframe(df: pd.DataFrame) -> List[dict]:
+def parse_flashcard_dataframe(df: Any) -> List[dict]:
     column_map = {}
     for column in df.columns:
         normalized = normalize_flashcard_column(column)
@@ -110,7 +109,9 @@ def normalize_column_name(column: Any) -> str:
 
 
 def clean_cell(value: Any) -> str:
-    if pd.isna(value):
+    if value is None:
+        return ""
+    if isinstance(value, float) and value != value:
         return ""
     return str(value).strip()
 
@@ -148,7 +149,7 @@ def parse_correct_answer(raw_answer: str, options: List[str]) -> str:
     return ""
 
 
-def parse_quiz_dataframe(df: pd.DataFrame) -> List[dict]:
+def parse_quiz_dataframe(df: Any) -> List[dict]:
     column_map = {}
     for column in df.columns:
         normalized = normalize_column_name(column)
@@ -226,6 +227,7 @@ def create_quiz(data: QuizCreateRequest):
 @router.post("/quiz/upload")
 def upload_quiz_excel(file: UploadFile = File(...)):
     try:
+        import pandas as pd
         df = pd.read_excel(file.file)
         questions = parse_quiz_dataframe(df)
         return {"questions": questions, "file_name": file.filename}
@@ -265,6 +267,7 @@ def create_flashcard(data: FlashcardCreate):
 @router.post("/flashcard/import")
 def import_flashcard_set(file: UploadFile = File(...)):
     try:
+        import pandas as pd
         filename = file.filename or ""
         lower_name = filename.lower()
         if lower_name.endswith(".csv"):

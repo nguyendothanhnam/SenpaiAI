@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Bot, Check, Copy, ExternalLink, Loader2, Trash2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { BookOpen, Bot, Check, Copy, ExternalLink, Loader2, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import type { ChatMessageEntry } from '../../services/api'
@@ -71,8 +72,89 @@ export default function ChatMessageBubble({ message, searchTerm = '', deleting =
           </details>}
 
           {sources.length > 0 && <div className="mt-4 border-t border-[color:var(--border)] pt-3">
-            <p className="mb-2 text-[11px] font-semibold text-[color:var(--text-muted)]">{t('chat.sources')}</p>
-            <div className="flex flex-wrap gap-2">{sources.map((source, index) => <span key={index} className="inline-flex max-w-full items-center gap-1 rounded-lg border border-[color:var(--border)] px-2.5 py-1.5 text-xs text-[color:var(--primary)]">{source.url && /^https?:\/\//i.test(source.url) ? <a href={source.url} target="_blank" rel="noreferrer" className="inline-flex min-w-0 items-center gap-1.5 hover:underline"><span className="truncate">{source.title || source.url}</span><ExternalLink className="h-3 w-3 shrink-0" /></a> : source.title}</span>)}</div>
+            <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold text-[color:var(--text-muted)]">
+              <BookOpen className="h-3.5 w-3.5 text-[color:var(--primary)]" />
+              <span>{t('chat.sources')} ({sources.length}):</span>
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {sources.map((source, index) => {
+                const sType = String(source.type || '').toLowerCase()
+                const sLevel = source.jlpt_level ? String(source.jlpt_level) : null
+                const sRelevance = typeof source.relevance === 'number' && source.relevance > 0
+                  ? Math.round(source.relevance * 100)
+                  : null
+                const isHttp = Boolean(source.url && /^https?:\/\//i.test(source.url))
+                const linkHref = isHttp
+                  ? source.url!
+                  : (source.url || `/library?search=${encodeURIComponent(source.title || '')}`)
+
+                const typeBadgeColor = sType === 'kanji'
+                  ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20'
+                  : sType === 'vocabulary'
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20'
+                  : sType === 'grammar'
+                  ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20'
+                  : sType === 'conversation'
+                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
+                  : 'bg-primary/10 text-primary border-primary/20'
+
+                const typeLabel = sType === 'kanji' ? 'Hán tự'
+                  : sType === 'vocabulary' ? 'Từ vựng'
+                  : sType === 'grammar' ? 'Ngữ pháp'
+                  : sType === 'conversation' ? 'Hội thoại'
+                  : sType || 'Học liệu'
+
+                const content = (
+                  <>
+                    <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase border ${typeBadgeColor}`}>
+                      {typeLabel}
+                    </span>
+                    {sLevel && (
+                      <span className="rounded bg-[color:var(--accent)] px-1.5 py-0.5 text-[10px] font-semibold text-[color:var(--primary)]">
+                        {sLevel}
+                      </span>
+                    )}
+                    <span className="max-w-[200px] truncate sm:max-w-[280px]">
+                      {source.title || source.url}
+                    </span>
+                    {sRelevance !== null && (
+                      <span className="text-[10px] opacity-75">
+                        ({sRelevance}%)
+                      </span>
+                    )}
+                    {isHttp ? (
+                      <ExternalLink className="h-3 w-3 shrink-0 opacity-70" />
+                    ) : (
+                      <BookOpen className="h-3 w-3 shrink-0 opacity-70" />
+                    )}
+                  </>
+                )
+
+                return (
+                  <span key={index} className="inline-flex max-w-full items-center">
+                    {isHttp ? (
+                      <a
+                        href={linkHref}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-[color:var(--border)] bg-[color:var(--accent)]/50 px-2.5 py-1 text-xs text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+                        title={source.title || linkHref}
+                      >
+                        {content}
+                      </a>
+                    ) : (
+                      <Link
+                        to={linkHref}
+                        className="inline-flex max-w-full items-center gap-1.5 rounded-lg border border-[color:var(--border)] bg-[color:var(--accent)]/50 px-2.5 py-1 text-xs text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+                        title={source.title || linkHref}
+                      >
+                        {content}
+                      </Link>
+                    )}
+                  </span>
+                )
+              })}
+            </div>
           </div>}
 
         </div>

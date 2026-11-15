@@ -391,6 +391,24 @@ export const libraryAPI = {
   updateDocument: (documentId: number, data: any) => api.put(`/library/documents/${documentId}`, data),
   deleteDocument: (documentId: number) => api.delete(`/library/documents/${documentId}`),
   fetchUrl: (url: string) => api.post('/library/fetch-url', { url }),
+  parseFile: (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post<{ title: string; content: string; file_name: string }>('/library/parse-file', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+  uploadDocument: (file: File, extra?: { title?: string; document_type?: string; jlpt_level?: string; tags?: string }) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    if (extra?.title) formData.append('title', extra.title)
+    if (extra?.document_type) formData.append('document_type', extra.document_type)
+    if (extra?.jlpt_level) formData.append('jlpt_level', extra.jlpt_level)
+    if (extra?.tags) formData.append('tags', extra.tags)
+    return api.post('/library/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
   searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number }) =>
     api.post('/library/search', data),
   getCategories: () => api.get('/library/categories'),

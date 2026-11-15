@@ -1,8 +1,7 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, Depends, status
-from fastapi import Query
+from fastapi import APIRouter, Depends, File, Form, Query, UploadFile, status
 from sqlalchemy.orm import Session
 
 from ..core.auth import get_current_active_user
@@ -14,6 +13,7 @@ from ..models.schemas import (
     DocumentFetchUrlRequest,
     DocumentFetchUrlResponse,
     DocumentListResponse,
+    DocumentParseFileResponse,
     DocumentSearchRequest,
     DocumentUpdate,
     LibraryCategoriesResponse,
@@ -52,6 +52,49 @@ async def fetch_document_url(
     """Fetch a URL and return readable text for the Add Document form."""
     del current_user
     return library_service.fetch_url_content(payload.url)
+
+
+@router.post("/parse-file", response_model=DocumentParseFileResponse)
+@api_router.post("/parse-file", response_model=DocumentParseFileResponse)
+async def parse_document_file(
+    file: UploadFile = File(...),
+    current_user: User = Depends(_current_user_dependency),
+):
+    """Parse uploaded file (PDF, DOC, DOCX, TXT, MD) and return extracted title and content."""
+    del current_user
+    file_bytes = await file.read()
+    title, content = library_service.extract_file_content(file.filename or "uploaded_document", file_bytes)
+    return DocumentParseFileResponse(title=title, content=content, file_name=file.filename or "")
+
+
+@router.post("/upload", response_model=DocumentSchema, status_code=status.HTTP_201_CREATED)
+@api_router.post("/upload", response_model=DocumentSchema, status_code=status.HTTP_201_CREATED)
+async def upload_document_file(
+    file: UploadFile = File(...),
+    title: Optional[str] = Form(None),
+    document_type: str = Form("vocabulary"),
+    jlpt_level: Optional[str] = Form(None),
+    tags: Optional[str] = Form(""),
+    current_user: User = Depends(_current_user_dependency),
+    db: Session = Depends(get_db),
+):
+    """Directly upload a document file (PDF, Word, etc.), parse, save to DB and index to ChromaDB."""
+    del current_user
+    file_bytes = await file.read()
+    extracted_title, content = library_service.extract_file_content(file.filename or "uploaded_document", file_bytes)
+    doc_title = title.strip() if title and title.strip() else extracted_title
+
+    tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
+
+    payload = DocumentCreate(
+        title=doc_title,
+        content=content,
+        document_type=document_type,
+        jlpt_level=jlpt_level if jlpt_level and jlpt_level.strip() else None,
+        tags=tag_list,
+        source_url=file.filename,
+    )
+    return library_service.create_document(db, payload)
 
 
 @router.get("/documents", response_model=DocumentListResponse)

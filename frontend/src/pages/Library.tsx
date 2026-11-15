@@ -18,10 +18,12 @@ import {
   Library as LibraryIcon,
   Loader2,
   Headphones,
+  Paperclip,
   Pencil,
   Search,
   Tags,
   Trash2,
+  UploadCloud,
   X,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -74,11 +76,13 @@ interface Categories {
 }
 
 const PAGE_SIZE = 12
-const fallbackTypes = ['vocabulary', 'grammar', 'lesson', 'culture', 'example']
+const fallbackTypes = ['vocabulary', 'kanji', 'grammar', 'conversation', 'lesson', 'culture', 'example']
 const fallbackJlpt = ['N5', 'N4', 'N3', 'N2', 'N1']
 const DOCUMENT_TYPE_LABELS = {
   vocabulary: 'library.documentTypes.vocabulary',
+  kanji: 'library.documentTypes.kanji',
   grammar: 'library.documentTypes.grammar',
+  conversation: 'library.documentTypes.conversation',
   lesson: 'library.documentTypes.lesson',
   culture: 'library.documentTypes.culture',
   example: 'library.documentTypes.example',
@@ -113,12 +117,10 @@ function validateDocument(form: DocumentForm, t: ReturnType<typeof useTranslatio
   if (!form.document_type.trim()) errors.document_type = t('library.validation.typeRequired')
   if (!form.content.trim()) errors.content = t('library.validation.contentRequired')
   if (form.source_url.trim()) {
-    try {
-      const parsed = new URL(form.source_url.trim())
-      if (!['http:', 'https:'].includes(parsed.protocol)) {
-        throw new Error('unsupported-protocol')
-      }
-    } catch {
+    const raw = form.source_url.trim()
+    if (/^(javascript|vbscript|data):/i.test(raw)) {
+      errors.source_url = t('library.validation.sourceUrlInvalid')
+    } else if (raw.includes('://') && !['http:', 'https:'].includes(raw.split('://')[0].toLowerCase() + ':')) {
       errors.source_url = t('library.validation.sourceUrlInvalid')
     }
   }
@@ -293,12 +295,51 @@ function DocumentFormModal({
     },
   })
 
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [parsingFile, setParsingFile] = useState(false)
+  const parseFileMutation = useMutation((file: File) => libraryAPI.parseFile(file), {
+    onMutate: () => setParsingFile(true),
+    onSuccess: (response) => {
+      setParsingFile(false)
+      const data = response.data as { title: string; content: string; file_name: string }
+      setForm((current) => ({
+        ...current,
+        title: current.title.trim() ? current.title : data.title,
+        content: data.content,
+        source_url: current.source_url.trim() ? current.source_url : data.file_name,
+      }))
+      setErrors((current) => ({ ...current, content: undefined, title: undefined, source_url: undefined }))
+      setFetchError('')
+      toast.success(t('library.fileParsedSuccess', { defaultValue: 'Trích xuất file thành công!' }))
+    },
+    onError: (err: any) => {
+      setParsingFile(false)
+      const detail = err?.response?.data?.detail || 'Không thể trích xuất nội dung file.'
+      toast.error(detail)
+    },
+  })
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (form.content.trim() && !window.confirm('File mới sẽ ghi đè nội dung hiện tại. Tiếp tục?')) {
+      e.target.value = ''
+      return
+    }
+    parseFileMutation.mutate(file)
+    e.target.value = ''
+  }
+
   const submit = (event: FormEvent) => {
     event.preventDefault()
-    if (saving || fetchUrlMutation.isLoading) return
+    if (saving || fetchUrlMutation.isLoading || parseFileMutation.isLoading) return
     const result = validateDocument(form, t)
     setErrors(result.errors)
-    if (!result.success) return
+    if (!result.success) {
+      const firstError = Object.values(result.errors)[0]
+      if (firstError) toast.error(firstError)
+      return
+    }
     onSubmit(initial ? buildPayload(form) : { ...buildPayload(form), scope })
   }
 
@@ -309,12 +350,7 @@ function DocumentFormModal({
       setErrors((current) => ({ ...current, source_url: t('library.validation.urlRequired') }))
       return
     }
-    try {
-      const parsed = new URL(sourceUrl)
-      if (!['http:', 'https:'].includes(parsed.protocol)) {
-        throw new Error('unsupported-protocol')
-      }
-    } catch {
+    if (!sourceUrl.startsWith('http://') && !sourceUrl.startsWith('https://')) {
       setErrors((current) => ({ ...current, source_url: t('library.validation.sourceUrlInvalid') }))
       return
     }
@@ -334,6 +370,7 @@ function DocumentFormModal({
   const updateField = (name: keyof DocumentForm, value: string) => {
     setForm(current => ({ ...current, [name]: value }))
     setErrors(current => ({ ...current, [name]: undefined }))
+    if (name === 'source_url') setFetchError('')
   }
   const ready = Boolean(form.title.trim() && form.content.trim())
   const close = () => { if (!saving) onClose() }
@@ -379,8 +416,34 @@ function DocumentFormModal({
               </label>
             </div>
             <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf,.docx,.doc,.txt,.md"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+              <span className="flex items-center gap-2 text-sm font-semibold">
+                <UploadCloud className="h-4 w-4 text-[color:var(--primary)]" />
+                {t('library.fields.uploadFile', { defaultValue: 'Tải file tài liệu (PDF / Word / TXT)' })}
+              </span>
+              <p className="mt-1 text-xs leading-5 text-[color:var(--text-muted)]">
+                {t('library.uploadFileHint', { defaultValue: 'Hỗ trợ .pdf, .docx, .doc, .txt, .md. Trích xuất tự động văn bản.' })}
+              </p>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={parsingFile || saving}
+                className="btn btn-outline mt-3 min-h-10 w-full gap-2 rounded-xl px-3 text-[color:var(--primary)]"
+              >
+                {parsingFile ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
+                {parsingFile ? 'Đang trích xuất văn bản...' : 'Chọn file từ máy tính'}
+              </button>
+            </div>
+
+            <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4">
               <label className="block space-y-1.5"><span className="flex items-center gap-2 text-sm font-semibold"><ExternalLink className="h-4 w-4 text-[color:var(--primary)]" />{t('library.fields.sourceUrl')}</span>
-                <input type="url" value={form.source_url} onChange={event => updateField('source_url', event.target.value)} placeholder="https://…" disabled={fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.source_url)} className="input h-11 rounded-xl" />
+                <input type="text" value={form.source_url} onChange={event => updateField('source_url', event.target.value)} placeholder="https://… hoặc tên file tài liệu" disabled={fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.source_url)} className="input h-11 rounded-xl" />
               </label>
               <p className="mt-2 text-xs leading-5 text-[color:var(--text-muted)]">{t('library.urlImportHint')}</p>
               <button type="button" onClick={fetchFromUrl} disabled={fetchUrlMutation.isLoading || !form.source_url.trim()} className="btn btn-outline mt-3 min-h-10 w-full gap-2 rounded-xl px-3 text-[color:var(--primary)]">{fetchUrlMutation.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}{fetchUrlMutation.isLoading ? t('library.fetching') : t('library.fetchFromUrl')}</button>
@@ -750,9 +813,15 @@ export default function Library() {
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-lg font-bold leading-6 text-[color:var(--text)]">{document.title}</h3>
                     {document.source_url && (
-                      <a href={document.source_url} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} className="shrink-0 rounded-full p-2 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]">
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
+                      document.source_url.startsWith('http://') || document.source_url.startsWith('https://') ? (
+                        <a href={document.source_url} target="_blank" rel="noreferrer" onClick={(event) => event.stopPropagation()} className="shrink-0 rounded-full p-2 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]" title={document.source_url}>
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      ) : (
+                        <span className="shrink-0 rounded-full p-2 text-[color:var(--text-muted)]" title={`Tài liệu đính kèm: ${document.source_url}`}>
+                          <Paperclip className="h-4 w-4" />
+                        </span>
+                      )
                     )}
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -915,10 +984,17 @@ export default function Library() {
                 {selected.tags?.map((tag) => <Badge key={tag} tone="gray">{tag}</Badge>)}
               </div>
               {selected.source_url && (
-                <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)] hover:text-[color:var(--primary)]">
-                  <ExternalLink className="h-4 w-4" />
-                  {t('library.fields.sourceUrl')}
-                </a>
+                selected.source_url.startsWith('http://') || selected.source_url.startsWith('https://') ? (
+                  <a href={selected.source_url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)] hover:text-[color:var(--primary)]">
+                    <ExternalLink className="h-4 w-4" />
+                    {t('library.fields.sourceUrl')}
+                  </a>
+                ) : (
+                  <p className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[color:var(--text-muted)]">
+                    <Paperclip className="h-3.5 w-3.5" />
+                    Nguồn file: {selected.source_url}
+                  </p>
+                )
               )}
               <p className="mt-4 text-xs font-semibold text-[color:var(--text-muted)]">{t('library.created', { date: formatDate(selected.created_at) })}</p>
               <p className="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">{selected.updated_at ? t('library.updated', { date: formatDate(selected.updated_at) }) : t('library.notUpdated')}</p>
