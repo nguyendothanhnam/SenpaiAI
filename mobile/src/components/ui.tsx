@@ -1,8 +1,10 @@
 import type { PropsWithChildren } from 'react'
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View, type TextProps, type ViewProps } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import appIcon from '../../assets/icon.png'
+import { ActivityIndicator, Image, Pressable, RefreshControl, StyleSheet, Text, View, type TextProps, type ViewProps } from 'react-native'
+import { KeyboardLayout, KeyboardScrollView } from './KeyboardLayout'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '../theme/ThemeProvider'
+import { readableText } from '../theme/nativeStyle'
 
 export function AppText({ style, ...props }: TextProps) {
   const { colors } = useTheme()
@@ -31,33 +33,34 @@ export function Button({ title, onPress, disabled, secondary = false, selected =
   selected?: boolean
 }) {
   const { colors } = useTheme()
+  const background = secondary ? colors.accent : colors.primary
+  const foreground = readableText(background, secondary ? colors.text : colors.primaryContrast, [colors.text, colors.primaryContrast, colors.bg])
   return <Pressable
     accessibilityRole="button"
     accessibilityState={{ disabled: !!disabled, selected }}
     disabled={disabled}
     onPress={onPress}
-    style={({ pressed }) => [styles.button, { opacity: disabled ? 0.5 : pressed ? 0.75 : 1, backgroundColor: secondary ? colors.accent : colors.primary, borderColor: selected ? colors.primary : colors.border }]}
+    style={({ pressed }) => [styles.button, { opacity: pressed ? 0.9 : 1, backgroundColor: background, borderColor: selected ? colors.primary : colors.border }]}
   >
-    <AppText style={{ color: secondary ? colors.text : colors.primaryContrast, textAlign: 'center', fontWeight: '600' }}>{title}</AppText>
+    <AppText style={{ color: foreground, textAlign: 'center', fontWeight: '600' }}>{title}</AppText>
   </Pressable>
 }
 
-export function Screen({ children, refreshing, onRefresh, pullToRefresh = false }: PropsWithChildren<{ refreshing?: boolean; onRefresh?: () => void; pullToRefresh?: boolean }>) {
+export function Screen({ children, refreshing, onRefresh, pullToRefresh = false, scrollEnabled = true, solid = false }: PropsWithChildren<{ refreshing?: boolean; onRefresh?: () => void; pullToRefresh?: boolean; scrollEnabled?: boolean; solid?: boolean }>) {
   const { colors } = useTheme()
-  const insets = useSafeAreaInsets()
   const { t } = useTranslation('mobile')
-  return <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.bg }} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={80}>
-    <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" refreshControl={pullToRefresh && onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} /> : undefined} contentContainerStyle={[styles.screen, { paddingBottom: Math.max(insets.bottom, 20) + 20 }]}>
+  return <KeyboardLayout style={{ backgroundColor: solid ? colors.bg : colors.screen }}>
+    <KeyboardScrollView scrollEnabled={scrollEnabled} refreshControl={pullToRefresh && onRefresh ? <RefreshControl refreshing={!!refreshing} onRefresh={onRefresh} tintColor={colors.primary} colors={[colors.primary]} /> : undefined} contentContainerStyle={styles.screen}>
       {children}
       {onRefresh && !pullToRefresh && <Button secondary title={t('refresh')} disabled={refreshing} onPress={onRefresh} />}
-    </ScrollView>
-  </KeyboardAvoidingView>
+    </KeyboardScrollView>
+  </KeyboardLayout>
 }
 
 export function Loading() {
   const { t } = useTranslation('mobile')
   const { colors } = useTheme()
-  return <View accessibilityRole="progressbar" style={[styles.loading, { backgroundColor: colors.bg }]}><ActivityIndicator color={colors.primary} size="large" /><AppText>{t('loading')}</AppText></View>
+  return <View accessibilityRole="progressbar" style={[styles.loading, { backgroundColor: colors.screen }]}><Image source={appIcon} accessibilityLabel="SenpaiAI" style={{ width: 88, height: 88, borderRadius: 22 }} /><AppText style={{ fontSize: 26, fontWeight: '800', lineHeight: 34, color: colors.primary }}>SenpaiAI</AppText><ActivityIndicator color={colors.primary} size="large" /><AppText>{t('loading')}</AppText></View>
 }
 
 export function ErrorNotice({ message, retry }: { message: string; retry?: () => void }) {

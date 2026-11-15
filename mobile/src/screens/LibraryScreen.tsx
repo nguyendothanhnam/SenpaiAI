@@ -1,6 +1,6 @@
+import { KeyboardInput as TextInput, KeyboardFlatList as FlatList, KeyboardLayout } from '../components/KeyboardLayout'
 import { useEffect, useState } from 'react'
-import { FlatList, RefreshControl, TextInput, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { RefreshControl, View } from 'react-native'
 import { router } from 'expo-router'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -14,12 +14,13 @@ import { getErrorMessage } from '../utils/getErrorMessage'
 import { AppText, Badge, Button, Card, ErrorNotice, Muted, Title, styles } from '../components/ui'
 import { ChoiceSheet } from '../components/ChoiceSheet'
 import { DocumentCard } from '../components/library/DocumentCard'
+import { SkeletonList } from '../components/SkeletonList'
 
 export function LibraryScreen() {
   const { user } = useAuth()
   const { language } = useLanguage()
   const { colors } = useTheme()
-  const insets = useSafeAreaInsets()
+
   const { t, i18n } = useTranslation('common')
   const { t: mobile } = useTranslation('mobile')
   const [text, setText] = useState('')
@@ -40,10 +41,10 @@ export function LibraryScreen() {
   const levelOptions = [{ value: '', label: t('library.allLevels') }, ...(categories.data?.jlpt_levels ?? JLPT_LEVELS).map((value) => ({ value, label: value }))]
   const scopeOptions = (['all', 'mine', 'system'] as const).map((value) => ({ value, label: t(`library.scope.${value}`), disabled: value !== 'all' && !hasScope }))
   const pickerTitle = t(picker === 'type' ? 'library.fields.documentType' : picker === 'level' ? 'library.fields.jlptLevel' : 'library.scope.label')
-  return <View style={{ flex: 1, backgroundColor: colors.bg }}>
+  return <KeyboardLayout style={{ backgroundColor: colors.screen }}>
     <FlatList
       data={items} keyExtractor={(item) => String(item.id)} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
-      contentContainerStyle={{ padding: 20, paddingBottom: insets.bottom + 30, maxWidth: 720, width: '100%', alignSelf: 'center', flexGrow: 1 }}
+      contentContainerStyle={{ padding: 20, paddingBottom: 30, maxWidth: 720, width: '100%', alignSelf: 'center', flexGrow: 1 }}
       refreshControl={<RefreshControl refreshing={documents.isRefetching || stats.isRefetching} onRefresh={refresh} tintColor={colors.primary} colors={[colors.primary]} />}
       ListHeaderComponent={<View style={{ gap: 14, marginBottom: 18 }}>
         <Title>{t('library.pageTitle')}</Title><Muted>{t('library.pageSubtitle')}</Muted>
@@ -58,7 +59,7 @@ export function LibraryScreen() {
         {documents.isError && <ErrorNotice message={getErrorMessage(documents.error, i18n)} retry={() => void documents.refetch()} />}
       </View>}
       renderItem={({ item }) => <DocumentCard document={item} onOpen={() => router.push({ pathname: '/library-document/[id]', params: { id: String(item.id) } })} />}
-      ListEmptyComponent={<Card><AppText>{t(documents.isLoading ? 'library.fetching' : 'library.noDocuments')}</AppText>{!documents.isLoading && <Muted>{t('library.emptyHint')}</Muted>}</Card>}
+      ListEmptyComponent={documents.isLoading ? <SkeletonList /> : <Card><AppText>{t('library.noDocuments')}</AppText><Muted>{t('library.emptyHint')}</Muted></Card>}
       ListFooterComponent={items.length ? <View style={{ gap: 12, paddingVertical: 16 }}>
         {documents.isError && <ErrorNotice message={getErrorMessage(documents.error, i18n)} />}
         {documents.hasNextPage ? <Button secondary disabled={documents.isFetching} title={mobile(documents.isFetchingNextPage ? 'phase1.library.loadingMore' : 'phase1.library.loadMore')} onPress={() => void documents.fetchNextPage()} /> : <Muted>{mobile('phase1.library.endOfList')}</Muted>}
@@ -66,5 +67,5 @@ export function LibraryScreen() {
       onEndReachedThreshold={0.3} onEndReached={() => { if (documents.hasNextPage && !documents.isFetching) void documents.fetchNextPage() }}
     />
     <ChoiceSheet title={pickerTitle} visible={picker !== null} value={picker === 'type' ? type : picker === 'level' ? level : scope} options={picker === 'type' ? typeOptions : picker === 'level' ? levelOptions : scopeOptions} onClose={() => setPicker(null)} onSelect={(value) => { if (picker === 'type') setType(value); else if (picker === 'level') setLevel(value); else if (['all', 'mine', 'system'].includes(value)) setScope(value as DocumentScope) }} />
-  </View>
+  </KeyboardLayout>
 }

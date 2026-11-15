@@ -5,7 +5,7 @@ import { useTheme } from '../../../src/theme/ThemeProvider'
 export default function PersonalLayout() {
   const { t } = useTranslation('nav')
   const { colors } = useTheme()
-  return <Stack screenOptions={{ headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text, contentStyle: { backgroundColor: colors.bg } }}>
+  return <Stack screenOptions={{ headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text, contentStyle: { backgroundColor: colors.screen } }}>
     <Stack.Screen name="index" options={{ title: t('profile') }} />
     <Stack.Screen name="settings" options={{ title: t('settings') }} />
   </Stack>

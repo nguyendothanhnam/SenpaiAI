@@ -1,6 +1,206 @@
-# SenpaiAI Mobile — Giai đoạn 0 và 1
+# SenpaiAI Mobile — Giai đoạn 0 đến 4
 
-Ứng dụng React Native riêng trong `mobile/`, trên nhánh `version1.3`. Không thay đổi mã web, file dịch web, cấu trúc cơ sở dữ liệu hoặc API FastAPI. Những thay đổi web/backend đã có từ công việc trước không thuộc giai đoạn này.
+## Cửa hàng giao diện — mua và áp dụng
+
+Cửa hàng hiện giữ toàn bộ danh mục giao diện/hình nền từ server, có preview sáng/tối, xác nhận giá/số dư trước-sau, mua bằng điểm và áp dụng ngay. Mục đã sở hữu gọi equip; theme/nền đồng bộ theo tài khoản trên server, mode sáng/tối/hệ thống vẫn lưu trên thiết bị. Không sửa web/backend hoặc thêm native library.
+
+Bảng màu dùng trực tiếp nguồn theme web; 13 nền WebP đóng gói thêm tổng 1.227.524 byte. Chạy `npm.cmd run themes:sync` khi dữ liệu theme/ảnh web thay đổi. Hai linh vật theme riêng đang thiếu tệp nguồn được báo rõ, không chặn palette/nền. Xem [chẩn đoán, API, danh sách file và checklist Android/iPhone](docs/THEME_SHOP.md).
+
+Nếu mất phản hồi mua, app chỉ đọc lại trạng thái và không tự POST lần nữa. Chưa kiểm thử mua bằng điểm tài khoản thật hoặc thao tác trên điện thoại; cần chạy checklist trước khi xác nhận hoàn tất nghiệm thu thiết bị.
+
+Kiểm tra bản sửa cửa hàng: **typecheck, lint, 80 test mobile, khóa dịch web/mobile và export Android/iOS đạt**. Có thêm **5 test rewards backend đạt trên SQLite trong bộ nhớ**; không tiêu điểm tài khoản thật. Không thêm dependency.
+
+## Sửa bàn phím che ô nhập
+
+Chat và các màn nhập liệu hiện dùng chung `KeyboardLayout`/`KeyboardInput` cùng các wrapper ScrollView/FlatList, thay các offset cố định 80/90. Lớp này đo phần nội dung bị bàn phím che, tránh cộng chiều cao hai lần khi Android đã resize, xử lý safe area và cuộn tới ô đang nhập. Chat có khung gõ tự giãn có giới hạn, nút gửi cùng hàng và cuộn tới tin cuối khi mở bàn phím. Không thêm thư viện, không sửa API/web.
+
+Xem [chẩn đoán Android/iPhone, cách dùng chung và checklist từng màn hình](docs/KEYBOARD.md). Đã cho phép dọc/ngang trong cấu hình; APK/iOS build cũ khóa dọc phải build/cài lại để nhận thay đổi native này. Các hành vi bàn phím/IME, cử chỉ, tai thỏ và ba nút Android vẫn cần kiểm chứng trên thiết bị thật.
+
+Kiểm tra bản sửa: **typecheck, lint, 63 test, khóa dịch web/mobile và export Android/iOS đạt**. Có 7 test mới cho hình học tránh bàn phím, safe area, xoay và giới hạn khung nhập. Chưa xác nhận bản sửa trên điện thoại thật; người dùng chưa thử lại được tại thời điểm báo cáo.
+
+### Khi Expo Go lỗi hook ngay lúc mở sau khi cài dependency
+
+Nếu gặp lỗi tại `resolveDispatcher().useState` kèm lỗi LogBox, đóng hẳn Expo Go, dừng Metro cũ rồi chạy trong `mobile/`:
+
+```powershell
+npm.cmd run start:clean -- --lan
+```
+
+Mở lại Expo Go bằng URL/QR của Metro vừa khởi động. Lệnh này chỉ dựng lại cache bundle, không xóa AsyncStorage hoặc các bộ đã lưu. Không chạy hai Metro cùng lúc cho cùng dự án. Nếu vẫn lỗi, cần đối chiếu phiên bản Expo Go/SDK và lỗi đầu tiên trong terminal; dòng LogBox có thể là lỗi tiếp theo khi hiển thị lỗi gốc. Cache sạch là bước khắc phục môi trường, chưa chứng minh mọi lỗi hook đều do cache. Các bản React/React Native phải tiếp tục khớp SDK trong `expo/bundledNativeModules.json`.
+
+## Giai đoạn 4 — Quiz và Flashcard
+
+Vào **Luyện tập → Quiz và Flashcard** để tạo/sửa bộ, nhập tệp có xem trước/xác nhận, làm Quiz hoặc học Flashcard. Các bộ và thống kê Flashcard được lưu riêng theo tài khoản **trên thiết bị này**, không đồng bộ với web/server/thiết bị khác. Quiz chấm tại máy, không cộng điểm tài khoản. Không gọi các API tạo bộ, danh sách chung hoặc nộp bài của game; chỉ hai API nhập tệp được sử dụng. Quiz JSON có thể đọc ngay tại thiết bị.
+
+Đã cài DocumentPicker, FileSystem và Haptics bằng Expo theo SDK hiện tại; AsyncStorage có sẵn. Không thêm native module tùy chỉnh. Giai đoạn 4 dùng được trong Expo Go tương thích SDK. Nếu dùng APK development cũ, cần build/cài lại để có các module mới.
+
+Xem [báo cáo, danh sách file và checklist Android/iPhone](docs/PHASE4.md), [các tệp mẫu Excel/JSON/CSV](docs/samples/study/). Lệnh kiểm tra: `npm.cmd run check`, `npm.cmd run export:check`; khóa dịch web: chạy `npm.cmd run i18n:check` trong `frontend/`. Không coi export bundle là đã thử trên điện thoại hoặc đã phát hành lên cửa hàng.
+
+Kiểm tra Giai đoạn 4: **typecheck, lint, 56 test, khóa dịch web/mobile và export Android/iOS đều đạt**. Cả **8 kiểm tra HTTP nhập tệp** với backend thật và **8 kiểm tra parser trực tiếp** đều đạt; chạy lại HTTP bằng `npm.cmd run smoke:phase4`. Chưa kiểm thử thao tác trực tiếp trên Android/iPhone, tệp đám mây, rung, cử chỉ quay lại hoặc mất mạng thực; xem checklist trong báo cáo.
+
+Giới hạn: 100 bộ và 1,5 MiB JSON mỗi tài khoản, 500 mục mỗi bộ, 10.000 ký tự mỗi ô; tệp tối đa 5 MiB, JSON 1 MiB. Dữ liệu hỏng được báo và giữ nguyên cho tới khi người dùng chủ động đặt lại. Lượt Quiz/Flashcard đang học không được khôi phục sau khi đóng ứng dụng. Cổng khôi phục phiên đăng nhập của các giai đoạn trước vẫn giữ nguyên khi mở app lúc backend mất kết nối.
+
+Ứng dụng React Native riêng trong `mobile/`, hiện làm việc trên nhánh `mobile`, phát triển từ `version1.3`. Giai đoạn 2 chỉ sửa `mobile/`, không thay đổi web hoặc API FastAPI. Các namespace dịch của web được nhập trực tiếp; nhãn riêng cho di động thêm vào cả `src/i18n/locales/vi.json` và `en.json` trong cùng hệ thống i18next.
+
+## Giai đoạn 3 rút gọn — bản 0.3.0 (10/11/2026)
+
+Đã đọc README và kiểm tra nền tảng trước khi sửa: Giai đoạn 0–2 có đầy đủ route/màn hình/API; 37 test, typecheck, lint và khóa dịch đạt. Ban đầu backend tắt nên không tự khởi động; sau khi người dùng bật, OpenAPI live có đủ tuyến và các luồng API Hằng ngày/Thư viện/Ngữ pháp ngân hàng được kiểm tra lại. Chat kiểm tra đạt sau khi người dùng bật Ollama.
+
+### Kết luận lỗi AI 404
+
+Mobile và web cùng gọi `/grammar-practice/sessions` trên base `/api`. Backend đăng ký router cả có/không có `/api`; OpenAPI live xác nhận đầy đủ `/sessions` và `/generate`. **Không có lỗi ghép tiền tố ở mobile.** Trước khi bật Ollama, generate báo provider không chạy. Sau khi bật, `gemma:2b` vẫn sinh mục thiếu `correct_answer` và `explanation_vi`, bị validation loại; API tạo phiên AI trả 404 vì không có câu hợp lệ. Không sửa backend/API, không tự đổi model hoặc restart dịch vụ.
+
+Mobile đã sửa nguồn AI/mixed lỗi thành thông báo vi/en, tự chọn lại ngân hàng cho lần Bắt đầu tiếp theo; không tự POST lại, không xóa phiên/kết quả cũ. Mixed có phiên ít câu hợp lệ vẫn giữ phiên và cảnh báo. Hủy chủ động/401/403 theo luồng riêng. Xem [báo cáo chẩn đoán chi tiết](docs/GRAMMAR_AI_404.md) và chạy `npm.cmd run audit:backend` để kiểm tra tiến trình hiện tại.
+
+### Chức năng Giai đoạn 3
+
+- **Kanji:** danh sách N5/N4/N3 theo dữ liệu thực, tìm sau 300 ms, phân trang và refresh, chữ lớn/nghĩa Việt/số nét; chi tiết On/Kun/ví dụ. Nét KanjiVG từ API được dựng bằng các đoạn vector React Native/Animated, có replay và 0.5×/1×/2×. Không thêm SVG/WebView/Skia/native module, không có vẽ tay. Thiếu nét hoặc lệnh không hỗ trợ thì báo rõ.
+- **Quiz:** ba dạng nghĩa/âm đọc/chữ, cấp và 5/10/20 câu, feedback và kết quả. API cấp sẵn đáp án, chưa có chấm/nộp bài server: ghi rõ tự luyện tại máy, không cộng điểm tài khoản.
+- **Hồ sơ:** sửa username theo quy tắc web, cấp hiện tại, mục tiêu JLPT và mục tiêu học; điểm/chuỗi và lịch 30 ngày. Mục tiêu JLPT lưu dưới dạng `JLPT N3` trong `learning_goals`, không thêm API field và không đổi cấp hiện tại khi chỉ đặt mục tiêu.
+- **Cài đặt:** ngôn ngữ đồng bộ hồ sơ, sáng/tối/hệ thống, phiên bản, ghi công KanjiVG/KANJIDIC/Jonathan Waller/kanji-data. Xuất JSON chọn/copy hoặc Share hệ điều hành. Reset/delete có cảnh báo và bắt gõ từ xác nhận, khóa thao tác trong khi gửi, không retry mutation tự động.
+- **Cửa hàng:** xem danh mục/giá/số dư/quyền sở hữu, chọn theme đã sở hữu bằng API equip; Classic/Than Khe/Sakura dùng trực tiếp palette web. Không mua, không nền ảnh.
+- **Hoàn thiện:** skeleton cho các danh sách chính, health check toàn cục 15 giây khi app hoạt động, tự kiểm tra và refetch query khi mạng phục hồi; giữ cơ chế hết hạn JWT/biên lỗi. Icon PNG 1024 + SVG nguồn, tên SenpaiAI, version 0.3.0, Android versionCode/iOS buildNumber 3, metadata quyền mạng vi/en. Màn hình chờ React có thương hiệu.
+
+### Tài liệu dùng viết báo cáo
+
+- [Kiến trúc và luồng dữ liệu](docs/ARCHITECTURE.md)
+- [Danh sách màn hình và tính năng](docs/SCREENS.md)
+- [Đóng gói, mạng và checklist Android/iPhone](docs/DEMO_CHECKLIST.md)
+- [Nguyên nhân 404 Ngữ pháp AI](docs/GRAMMAR_AI_404.md)
+
+### Kiểm tra và các giới hạn còn lại
+
+Kết quả cuối Giai đoạn 3: **typecheck, lint, 44 test, khóa dịch web/mobile và kiểm tra nhãn JSX đều đạt**. Export Hermes Android/iOS đạt, asset icon được đưa vào bundle; Expo config hợp lệ với version 0.3.0, Android versionCode 3 và iOS buildNumber 3. Script hợp đồng SQLite biệt lập đạt; smoke API thật Giai đoạn 1, Giai đoạn 2 (ngân hàng/Chat sau khi bật Ollama) và Giai đoạn 3 đạt, tài khoản/tài liệu thử được dọn. AI generation thật vẫn trả 0 câu hợp lệ/404, đã chẩn đoán như trên và không được tính là test AI đạt. Đối chiếu SHA-256 cho mã web/backend trước/sau có **0 tệp nguồn thay đổi**. Không coi export bundle hay API test là đã thử trên điện thoại thật.
+
+- AI hiện chưa đáng tin cậy vì đầu ra model không đạt schema; cần phía backend xử lý structured output/validation và chẩn đoán provider. Client đã fallback nhưng không tuyên bố sửa được chất lượng sinh câu.
+- API Kanji chỉ nhận N5/N4/N3/all; không hiển thị N2/N1 trống. Nghĩa/ví dụ Việt được giữ nguyên khi UI en, có lời nhắc; không tự dịch dữ liệu học.
+- Quiz không lưu tiến độ hoặc thưởng vào server vì không có endpoint tương ứng. Trò ghép cặp là mục tùy thời gian, chưa làm và không hiện menu Trò chơi.
+- Export chưa ghi `.json` trực tiếp vào Downloads vì không thêm module ghi tệp/chia sẻ; dùng Share văn bản JSON và copy từng phần. Nếu Share vượt giới hạn hệ điều hành, vẫn có thể copy các phần.
+- Reset chỉ xóa chat/voice/phiên ngữ pháp theo API, giữ folders, điểm, daily tasks và study stats. Xóa tài khoản không thể bảo đảm xóa tài liệu Thư viện thiếu owner metadata. Các giới hạn quyền Thư viện và resume Ngữ pháp đã ghi ở phần Giai đoạn 1–2 vẫn còn.
+- SDK 58 cần Expo Go tương thích. Bản Go SDK 54 trên App Store không chạy được dự án này; iPhone qua Go cần chuẩn bị bản SDK 58 phù hợp/TestFlight theo Expo. Không tự hạ SDK. Chưa kiểm thử trực tiếp Giai đoạn 3 trên Android/iPhone.
+- Không thêm `expo-splash-screen` theo yêu cầu không thêm native library. Trước khi JavaScript chạy, giữ splash mặc định Expo/OS; sau đó có màn hình chờ React có logo. Icon/metadata native mới chỉ có sau khi build/cài APK mới; APK development ngày 07/11 là bản cũ, không phải APK Giai đoạn 3 đã build.
+- Không phát hành lên cửa hàng, không chạy EAS build mới trong giai đoạn này; đã chuẩn bị profile APK preview và hướng dẫn. Không thêm ghi âm, vẽ tay, luyện nghe, push, mua giao diện hoặc offline hoàn chỉnh.
+
+### Tệp tạo/sửa chính trong Giai đoạn 3
+
+| Nhóm | Tệp trong `mobile/` |
+| --- | --- |
+| API/logic | `src/api/phase3.ts`, `phase3Types.ts`; `src/features/kanji/logic.ts`, `vector.ts`; `src/features/phase2/grammarFallback.ts` |
+| Màn hình | `KanjiScreen.tsx`, `KanjiDetailScreen.tsx`, `KanjiQuizScreen.tsx`, `ThemeShopScreen.tsx`, `ExportScreen.tsx`; sửa `GrammarScreen`, `PracticeScreen`, `ProfileScreen`, `SettingsScreen`, `DailyScreen`, `LibraryScreen`, `ChatListScreen` |
+| Thành phần/theme | `StrokeAnimation`, `SkeletonList`, `ConnectivityMonitor`, `AccountThemeBridge`, `DangerDialog`, `ui.tsx`, `ThemeProvider.tsx`, `types/assets.d.ts`, `api/types.ts`, `getErrorMessage.ts` |
+| Route | `app/kanji.tsx`, `kanji/[character].tsx`, `kanji-quiz.tsx`, `theme-shop.tsx`, `export-data.tsx`, `app/_layout.tsx` |
+| Dịch/metadata | Hai locale mobile vi/en, `app.config.ts`, `eas.json`, `package.json`/lock, `assets/icon.svg`, `icon.png` |
+| Kiểm tra/tài liệu | `tests/phase3.test.ts`; scripts `audit-backend.mjs`, `diagnose-grammar-live.mjs`, `smoke-phase3.mjs`, `verify-phase3-backend.py`, `lint-ui-text.mjs`, `render-icon.ps1`; README và `docs/` |
+
+Không sửa mã hoặc file dịch web, API/backend, seed dữ liệu hay mô hình nhận dạng. Dữ liệu ML chưa commit do người dùng tạo không thuộc thay đổi này.
+
+## Giai đoạn 2 — Ngữ pháp và Trò chuyện
+
+### Cài APK phát triển lên Android và reload khi sửa mã
+
+Dùng profile `development` để cài SenpaiAI thành ứng dụng riêng trên điện thoại. Bản này có `expo-dev-client` và nhận mã từ Metro trên laptop. Sau lần cài đầu tiên, thay đổi TypeScript/JavaScript, giao diện, bản dịch và token màu sẽ cập nhật qua Fast Refresh; mở menu phát triển và chọn Reload nếu cần tải lại toàn bộ. Native module mới, SDK/plugin/quyền Android hoặc cấu hình native thay đổi thì cần build và cài APK mới. Development build vẫn cần laptop/Metro khi phát triển; backend phải tiếp tục chạy để đăng nhập và dùng các chức năng API.
+
+APK Android development đã build thành công ngày 07/11/2026: [Tải SenpaiAI APK](https://expo.dev/artifacts/eas/wsz8U2GDJ6vCQ0r94GTwhZUSgybWiz37o5FWPCOtHHw.apk). [Trang build trên Expo](https://expo.dev/accounts/nguyennam34/projects/senpai-ai-mobile/builds/dc66eb4a-2621-42cc-a114-92c7bd18ae2b) có thông tin và đường dẫn cài đặt nếu link tải thay đổi. Việc build đã đạt; cài và kiểm tra trực tiếp trên điện thoại vẫn cần người dùng thực hiện.
+
+Build APK từ `mobile/` bằng tài khoản Expo đã liên kết:
+
+```powershell
+cd E:\AI\DACN\mobile
+npm.cmd run build:android:dev
+```
+
+Mở đường dẫn APK do EAS trả về trên Android, cho phép trình duyệt cài ứng dụng từ nguồn đó khi hệ điều hành hỏi, rồi cài SenpaiAI. Build profile xuất `.apk`, không phải gói phát hành lên Play Store. Mã nguồn gửi EAS được giới hạn bằng `.easignore` ở gốc repository: chỉ `mobile/` và các tệp dịch/theme web cần nhập trực tiếp; không gửi backend, cơ sở dữ liệu hoặc `.env`.
+
+Mỗi lần làm việc sau đó:
+
+```powershell
+cd E:\AI\DACN\mobile
+# mobile/.env trên máy phát triển: EXPO_PUBLIC_API_URL=http://192.168.1.3:8000/api
+$env:REACT_NATIVE_PACKAGER_HOSTNAME = '192.168.1.3'
+npm.cmd run start:dev -- --lan
+```
+
+Điện thoại và laptop cùng Wi-Fi. Mở SenpaiAI, quét QR của **development client** hoặc chọn server đang chạy trên laptop. Đây là QR cho ứng dụng SenpaiAI đã cài. Sau khi sửa mã, lưu tệp để Fast Refresh cập nhật. Đổi `.env` thì dừng Metro, chạy lại với `--clear` và reload ứng dụng. Nếu Wi-Fi/IP thay đổi, cập nhật URL API và IP Metro; không cần cài lại APK cho việc đổi IP. Chỉ dùng `EXPO_PUBLIC_` cho địa chỉ công khai, không đặt SECRET_KEY/OPENAI_API_KEY trong mobile.
+
+Màn hình đăng nhập/đăng ký dùng bố cục của `frontend/src/pages/Login.tsx`: thẻ giữa màn hình, nền/nút gradient Classic lấy trực tiếp từ token web, tagline, bộ chọn VI/EN gọn, tab dạng viên thuốc và nút mắt độc lập cho mật khẩu/xác nhận. Kích thước co theo điện thoại, có safe-area và cuộn khi mở bàn phím. Web không bị chỉnh sửa. Tên thương hiệu dùng màu primary native; hiệu ứng chữ gradient/blur và font trình duyệt của web không được sao chép nguyên dạng sang native.
+
+Kiểm tra sau cập nhật xác thực: typecheck/lint, 37 test và khóa dịch đều đạt. Cần xác nhận trực tiếp trên điện thoại việc cài APK, bàn phím, đăng nhập/đăng ký, nút mắt và Fast Refresh; chưa coi việc build thành công là đã cài trên máy người dùng.
+
+Kiểm tra trước khi triển khai: Giai đoạn 0/1 có đủ đăng nhập, JWT/SecureStore, vi/en, classic sáng/tối/hệ thống, các tab, Hằng ngày và Thư viện. `npm run check` ban đầu đạt 26 test, typecheck, lint và kiểm tra khóa dịch; smoke Giai đoạn 1 chạy được với backend thật và dọn tài khoản thử. Đây là kiểm tra mã và API, không thay thế việc thử trên điện thoại.
+
+Backend có đầy đủ `/grammar-practice/patterns`, `/sessions`, `/sessions/{id}/answer`, `/sessions/{id}/finish`, `/stats`, `/generate`. Ngân hàng kiểm tra ngày 05/11/2026: N5 **39**, N4 **39**, N3 **20** câu; N2/N1 chưa có. Không tự nạp thêm dữ liệu. Backend có cuộc hội thoại, tin nhắn phân trang và thư mục, nên triển khai **nhánh Chat đầy đủ**, không dùng lịch sử chung một luồng.
+
+### Phần đã triển khai
+
+- Tab Luyện tập chỉ có Ngữ pháp. Trang Ngữ pháp gồm Phân tích/Luyện tập; phân tích dùng cùng `/analysis/grammar` và `response_language` như web, hiển thị cấp độ, độ khó, nghĩa câu, từ vựng, mẫu câu và gợi ý. Nội dung có thể nhấn giữ để chọn/sao chép bằng menu hệ điều hành.
+- Thiết lập cấp độ theo hồ sơ, tự chọn cấp gần nhất có câu trong ngân hàng và hiện thông báo; các cấp trống bị vô hiệu hóa. Chọn mẫu có tìm kiếm, nhiều dạng câu, 5/10/20 câu và nguồn bank/AI/mixed. Tạo phiên chờ tối đa 120 giây, có nút hủy request.
+- Bộ câu hỏi duy nhất `src/components/questions/QuestionCard.tsx` được dùng bởi cả Hằng ngày và Ngữ pháp. Giữ nguyên dạng lựa chọn, thẻ từ có chỉ số riêng, đúng/sai, ô nhập Nhật và flashcard. Thời gian đo bằng đồng hồ đơn điệu. Điểm, đáp án và kết quả đều do server trả về.
+- Kết quả có số đúng/tổng, thời gian, kết quả theo mẫu; làm lại các ID câu sai hoặc thiết lập phiên mới. Trang Tiến độ hiển thị độ chính xác theo cấp độ, mẫu yếu và 7 ngày hoạt động từ API thống kê.
+- Chat có tìm kiếm tiêu đề/nội dung sau 350 ms, ghim, nhóm theo ngày, thư mục thu gọn, phân trang, kéo làm mới. Nhấn giữ một mục để đổi tên (tối đa 80 ký tự), ghim/bỏ ghim, chuyển thư mục, xóa có xác nhận. Thư mục tạo/đổi tên (tối đa 60 ký tự), xóa giữ hội thoại hoặc xóa cả hội thoại với xác nhận bổ sung.
+- Hội thoại dùng FlatList đảo chiều, tải tin cũ và giữ vị trí cuộn; ô nhập nhiều dòng tự tăng chiều cao tới giới hạn; chỉ báo đang trả lời, nội dung chọn/sao chép được, thẻ ngữ pháp/bản dịch/cấp độ và nguồn. Nguồn có `document_id` mở chi tiết Thư viện. Các nguồn quy tắc nội bộ bị lọc giống web. Không tự dịch câu trả lời AI.
+- Mở cuộc trò chuyện mới chưa ghi vào cơ sở dữ liệu. Khi bấm Gửi lần đầu mới tạo hội thoại và gửi kèm ID. Lớp API Chat nằm riêng trong `src/api/phase2.ts`. Không thêm thư viện native; yêu cầu Expo Go tương thích SDK đang ghim vẫn áp dụng.
+
+### Giới hạn API và xử lý mất phản hồi
+
+1. **Ngữ pháp chưa có GET phiên/các đáp án đã lưu.** Không thể phục hồi chính xác feedback sau timeout hay mở lại phiên sau khi thoát. App hỏi trước khi thoát, khóa gửi lại khi không xác định server đã lưu hay chưa; người học có thể kết thúc để xem kết quả server đã ghi nhận. Các lỗi từ chối xác định trước khi ghi (ví dụ 422) cho phép sửa đáp án. Không tự POST lại sau timeout. Để phục hồi đầy đủ cần API đọc phiên/feedback và khóa chống trùng phía server; giai đoạn này không sửa backend.
+2. **Chat chưa có idempotency key/trạng thái request.** Sau lỗi gửi, app đọc lại tin server, đối chiếu ID mới và câu đã gửi. Nếu tìm thấy thì phục hồi; nếu request timeout vẫn chưa thấy tin, giữ khóa gửi để tránh lặp trong lúc server còn xử lý. Nút Thử lại chỉ đọc lại dữ liệu trong trường hợp này. Nếu mất phản hồi ngay lúc tạo hội thoại, hãy quay về danh sách và làm mới trước khi tạo tiếp. Đảm bảo tuyệt đối một lần cần hỗ trợ backend.
+3. **Danh sách hội thoại lọc `mode=text` cố định.** Có hỗ trợ huy hiệu và chế độ chỉ đọc khi mở được ID hội thoại voice, nhưng API hiện không liệt kê voice trong danh sách Chat; không giả dữ liệu hay gộp bằng API không tồn tại. Muốn xem tất cả voice cần backend mở rộng bộ lọc danh sách. Ghi âm/voice chat ngoài phạm vi.
+4. Giải thích luyện ngữ pháp hiện chỉ có `explanation_vi`, ví dụ chủ yếu `ja/vi`; giao diện en không tự dịch dữ liệu này. Tên/ý nghĩa mẫu cũng giữ nguyên dữ liệu server. Phân tích và Chat gửi lựa chọn ngôn ngữ theo API hỗ trợ.
+5. Hủy/timeout chỉ ngừng chờ ở máy khách, không bảo đảm hủy công việc AI phía server; câu AI hoặc phiên trống có thể đã được tạo. Chế độ mixed hiện chỉ sinh AI khi ngân hàng không đủ; AI có hạn mức do backend quyết định. API có thể trả ít hơn số câu yêu cầu: app hiển thị số thực tế, không bù hoặc chấm ở máy.
+6. Nguồn Chat thường chỉ có tiêu đề/URL, không có `document_id`; app chỉ mở chi tiết Thư viện khi server cung cấp mã đó. Chưa thay đổi schema nguồn.
+
+### Kiểm tra Giai đoạn 2
+
+```powershell
+cd E:\AI\DACN\mobile
+npm.cmd run check
+npm.cmd run export:check
+# Chạy từ PC dùng localhost, không dùng địa chỉ đặc biệt 10.0.2.2 của emulator:
+$env:EXPO_PUBLIC_API_URL = 'http://127.0.0.1:8000/api'
+npm.cmd run smoke:phase2 -- --create-test-account
+# Thêm --ai để gọi phân tích và sinh AI bằng nhà cung cấp backend đang cấu hình:
+npm.cmd run smoke:phase2 -- --create-test-account --ai
+Remove-Item Env:EXPO_PUBLIC_API_URL
+```
+
+Smoke dùng tài khoản riêng có tên ngẫu nhiên, kiểm tra bốn dạng câu, chống đáp án trùng, kết thúc lặp, làm lại ID sai, thống kê; Chat gửi lời chào, phân trang, tìm nội dung, đổi tên, ghim, chuyển và hai cách xóa thư mục. Cuối cùng xóa tài khoản thử cùng dữ liệu liên quan. Không in JWT, mật khẩu hoặc cấu hình bí mật. `--ai` có thể dùng hạn mức của nhà cung cấp đã cấu hình; lỗi dịch vụ AI được báo riêng, không coi là test đạt.
+
+Kết quả chạy thực tế ngày 05/11/2026: smoke ngân hàng và Chat đạt; phân tích câu `/analysis/grammar` trả 200. Tạo phiên `mode=ai` trả **404**, không có câu hợp lệ được chọn, nên phần sinh AI chưa đạt kiểm thử đầu cuối với cấu hình backend hiện tại. App hỗ trợ gọi, chờ/hủy và hiển thị lỗi đã dịch; cần kiểm tra dịch vụ sinh câu/đầu ra AI phía backend trước khi nghiệm thu chế độ này. Không sửa API để che lỗi.
+
+Các kiểm tra tự động: typecheck/lint đạt, **35 test đạt**, kiểm tra khóa dịch mobile và web đạt; export Hermes Android/iOS đạt. Chưa chạy trên thiết bị thật. Danh sách tệp Giai đoạn 2:
+
+| Nhóm | Tệp tạo/sửa trong `mobile/` |
+| --- | --- |
+| Điều hướng | `app/_layout.tsx`, `app/(tabs)/practice.tsx`, `app/(tabs)/chat.tsx`, `app/grammar.tsx`, `app/grammar-progress.tsx`, `app/chat-folders.tsx`, `app/conversation/[id].tsx` |
+| API và logic | `src/api/phase2.ts`, `src/api/phase2Types.ts`, `src/features/phase2/logic.ts`, `src/features/phase2/grammarSubmission.ts`, `src/utils/getErrorMessage.ts` |
+| Thành phần | Chuyển `src/components/daily/DailyQuestion.tsx` thành `src/components/questions/QuestionCard.tsx`; thêm `src/components/NameDialog.tsx` |
+| Màn hình | `src/screens/DailyExerciseScreen.tsx`, `PracticeScreen.tsx`, `GrammarScreen.tsx`, `GrammarProgressScreen.tsx`, `ChatListScreen.tsx`, `ConversationScreen.tsx`, `ChatFoldersScreen.tsx` |
+| Dịch và kiểm tra | `src/i18n/locales/vi.json`, `src/i18n/locales/en.json`, `tests/phase2.test.ts`, `scripts/smoke-phase2.mjs`, `package.json`, `README.md` |
+
+### Danh sách kiểm tra trên cả Android và iPhone
+
+Chạy toàn bộ danh sách sau trên từng thiết bị thật; hiện chưa có xác nhận kiểm thử trực tiếp trên thiết bị:
+
+- [ ] Đăng nhập, mở lại app, đổi vi/en và sáng/tối/hệ thống; quay lại Hằng ngày và Thư viện để kiểm tra hồi quy.
+- [ ] Phân tích một câu Nhật, chọn/sao chép nghĩa, mẫu và ví dụ; đổi ngôn ngữ khi API đang chạy; thử lỗi mạng.
+- [ ] Chọn hồ sơ N1/N2, kiểm tra thông báo chuyển N3; tìm mẫu, chọn/bỏ dạng, chọn 5/10/20 và nguồn ngân hàng.
+- [ ] Làm đủ bốn dạng: điền chỗ trống, sắp xếp (kể cả từ lặp), đúng/sai, chia từ với bàn phím Nhật. Kiểm tra đáp án, ví dụ, thời gian và kết quả theo mẫu.
+- [ ] Bấm đáp án/tiếp liên tiếp, thử mất mạng trước và sau khi gửi; đảm bảo app không gửi lại tự động. Thử kết thúc để xem kết quả phần đã lưu.
+- [ ] Android Back/iOS vuốt quay lại giữa bài phải hỏi; thử làm lại câu sai và mở trang Tiến độ, kéo làm mới.
+- [ ] AI/mixed: kiểm tra tạo chậm, hủy, hết thời gian, hạn mức và trường hợp server trả ít câu; không có vòng chờ vô hạn.
+- [ ] Mở Chat mới rồi thoát trước khi gửi: danh sách không có hội thoại mới; gửi tin đầu tiên và tin tiếp theo vào cùng hội thoại.
+- [ ] Gửi tin nhiều dòng, mở bàn phím Nhật, xoay màn hình, chạm ô nhập cuối trang; nội dung và nút Gửi không bị bàn phím/thanh hệ thống che.
+- [ ] Đủ trên 30 tin: cuộn lên tải cũ không nhảy vị trí; gửi tin mới tự xuống cuối; chọn/sao chép câu trả lời, kiểm tra nguồn có/không có ID Thư viện và nguồn nội bộ bị ẩn.
+- [ ] Tìm tiêu đề/nội dung, tải thêm danh sách, ghim/bỏ ghim; tạo/đổi tên thư mục, chuyển hội thoại, đóng/mở thư mục.
+- [ ] Xóa hội thoại, xóa thư mục giữ hội thoại và xóa cả hội thoại; Hủy xác nhận phải giữ nguyên dữ liệu.
+- [ ] Ngắt mạng khi gửi, bật lại và Thử lại đọc server; không tạo câu trùng. Thử token hết hạn quay về Đăng nhập.
+- [ ] Nếu có ID voice hợp lệ, mở chỉ xem, huy hiệu/thông báo voice và không có ô nhập. Việc không xuất hiện voice trong danh sách là giới hạn API đã nêu.
+
+### Android/iOS và phần web khó chuyển
+
+Chưa trực tiếp quan sát khác biệt trên thiết bị, nên các mục dưới là khác biệt đã xử lý trong mã và cần xác nhận bằng danh sách trên: iOS dùng KeyboardAvoidingView `padding`, Android dùng `adjustResize` sẵn có; iOS vuốt quay lại và Android nút Back đi qua bảo vệ điều hướng; khoảng đệm dưới lấy safe-area cho thanh Home iPhone và điều hướng Android; menu chọn/copy văn bản do hệ điều hành cung cấp. Danh sách đảo chiều cần thử vị trí cuộn trên cả hai hệ điều hành. Máy Windows chạy Metro/backend được cho iPhone thật; iOS Simulator cục bộ cần macOS/Xcode. Xem lưu ý phiên bản Expo Go bên dưới trước khi thử SDK hiện tại.
+
+Web dùng HTML/Tailwind, sidebar thư mục, `<details>`, thao tác clipboard trình duyệt và danh sách DOM nên phải viết lại bằng thành phần native. Thành phần câu hỏi đã dùng chung trong mobile; không nhập UI web. Chat Markdown hiện hiển thị văn bản chọn được, không đưa HTML vào ứng dụng; có thể thấy dấu Markdown trong nội dung AI. Không có ghi âm, vẽ kanji, luyện nghe, thông báo hoặc cửa hàng giao diện trong Giai đoạn 2.
 
 ## Giai đoạn 1 — kết quả và giới hạn thực tế
 
@@ -320,3 +520,9 @@ Mở `http://localhost:3000` trên máy tính (hoặc IP LAN cổng 3000 trên �
 - API JWT hiện không có refresh token; backend trả ngày nhiệm vụ theo múi giờ server. Mobile không tự tính lại ngày bằng đồng hồ thiết bị và không tự giả lập refresh token.
 
 Ngoài phạm vi Giai đoạn 0 ban đầu: Chat thật, Thư viện thật, bài luyện tập, ghi âm, vẽ kanji, thông báo đẩy, cửa hàng giao diện. Giai đoạn 1 đã bổ sung Hằng ngày và Thư viện như báo cáo đầu tài liệu; Chat, luyện tập độc lập, ghi âm, vẽ kanji, thông báo và cửa hàng vẫn chưa triển khai.
+# Nhận dạng kanji và luyện viết
+
+Trong Kanji, chọn **Nhận dạng chữ** để vẽ bằng ngón tay; trong chi tiết chữ chọn **Luyện viết** để viết theo mẫu, kiểm tra và chuyển chữ tiếp theo. Chạy bằng Expo Go hỗ trợ SDK của dự án; SVG đã được cài qua Expo. Nhận dạng gửi ảnh/nét lên server, và server hiện lưu các mẫu này. Phạm vi nhận dạng đọc từ API: kiểm tra hiện tại có 245 chữ N5/N4, không bao gồm mọi chữ trong từ điển.
+
+Hợp đồng dữ liệu, giới hạn mô hình, khác biệt với web và checklist Android/iPhone: [KANJI_WRITING.md](docs/KANJI_WRITING.md). Chưa đo độ chính xác viết tay hoặc hiệu năng bằng điện thoại thật; xuất bundle không thay thế kiểm tra thiết bị.
+

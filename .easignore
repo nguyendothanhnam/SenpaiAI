@@ -1,0 +1,30 @@
+# EAS runs from mobile/ but reads this file at the Git repository root.
+# Upload the mobile application and the shared web data it imports directly.
+/*
+!/mobile
+!/frontend
+/frontend/*
+!/frontend/src
+/frontend/src/*
+!/frontend/src/i18n
+/frontend/src/i18n/*
+!/frontend/src/i18n/locales
+!/frontend/src/themes
+/frontend/src/themes/*
+!/frontend/src/themes/themes.ts
+
+/mobile/node_modules/
+/mobile/.expo/
+/mobile/dist/
+/mobile/coverage/
+/mobile/android/
+/mobile/ios/
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+!/mobile/.env.example
+**/credentials.json
+**/*.keystore
+**/*.jks
+**/*.p12
+**/*.mobileprovision

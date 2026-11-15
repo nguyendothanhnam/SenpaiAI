@@ -10,7 +10,7 @@ import { DailySubmission } from '../features/daily/submission'
 import { detailCode, mixedLevels, nextUnanswered } from '../features/daily/logic'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import { AppText, Button, ErrorNotice, Loading, Muted, Progress, Screen, Title } from '../components/ui'
-import { DailyQuestion } from '../components/daily/DailyQuestion'
+import { QuestionCard } from '../components/questions/QuestionCard'
 import { RewardSummary } from '../components/daily/RewardSummary'
 
 export function DailyExerciseScreen() {
@@ -81,7 +81,7 @@ export function DailyExerciseScreen() {
     {task.isError && <ErrorNotice message={getErrorMessage(task.error, i18n)} retry={() => void task.refetch()} />}
     {mixedLevels(current, user?.current_jlpt_level) && <Muted>{i18n.t('mixedLevels', { ns: 'dailyStatus', level: user?.current_jlpt_level })}</Muted>}
     <Progress current={current.progress.answered_items} total={current.progress.total_items} />
-    {activeItem && current.status !== 'completed' && <DailyQuestion key={`${current.task_id}:${activeItem.id}`} item={activeItem} index={current.items.findIndex((item) => item.id === activeItem.id)} total={current.items.length} busy={answering.isLoading || answering.isError} result={activeFeedback} onAnswer={(answer, time) => {
+    {activeItem && current.status !== 'completed' && <QuestionCard key={`${current.task_id}:${activeItem.id}`} item={activeItem} index={current.items.findIndex((item) => item.id === activeItem.id)} total={current.items.length} busy={answering.isLoading || answering.isError} result={activeFeedback} onAnswer={(answer, time) => {
       if (answerLock.current) return
       answerLock.current = true
       answering.mutate({ snapshot: current, itemId: activeItem.id, answer, time })

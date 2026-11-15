@@ -1,0 +1,17 @@
+{
+  "questions": [
+    {
+      "question": "猫 nghĩa là gì?",
+      "options": [
+        "Chó",
+        "Mèo",
+        "Cá",
+        "Chim"
+      ],
+      "correct_answer": "B",
+      "explanation": "猫 là mèo.",
+      "jlpt_level": "N5",
+      "category": "Animals"
+    }
+  ]
+}

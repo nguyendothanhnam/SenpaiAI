@@ -12,6 +12,7 @@ import { formatCountdown, formatServerDate, recentServerDates, remainingToServer
 import { mixedLevels } from '../features/daily/logic'
 import { AppText, Badge, Button, Card, ErrorNotice, Muted, Progress, Screen, Title, styles } from '../components/ui'
 import { RewardSummary } from '../components/daily/RewardSummary'
+import { SkeletonList } from '../components/SkeletonList'
 
 export function DailyScreen() {
   const { user } = useAuth()
@@ -34,7 +35,7 @@ export function DailyScreen() {
   const refresh = () => { void task.refetch(); void rewards.refetch(); void history.refetch(); setNow(performance.now()) }
   return <Screen pullToRefresh refreshing={task.isFetching || rewards.isFetching || history.isFetching} onRefresh={refresh}>
     <View style={[styles.row, { alignItems: 'center', justifyContent: 'space-between' }]}><View><Muted>{t('daily.practiceEveryDay')}</Muted><Title>{t('daily.title')}</Title></View><Ionicons name="flame-outline" size={36} color={colors.primary} /></View>
-    {task.isLoading && <AppText>{t('daily.loading')}</AppText>}
+    {task.isLoading && <SkeletonList />}
     {task.isError && <ErrorNotice message={getErrorMessage(task.error, i18n)} retry={refresh} />}
     {current && <>
       <Muted>{formatServerDate(current.date, i18n.language, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</Muted>

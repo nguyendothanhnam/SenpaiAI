@@ -13,7 +13,8 @@ export default function TabLayout() {
     headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text,
     tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
     tabBarActiveTintColor: colors.primary, tabBarInactiveTintColor: colors.textMuted,
-    sceneStyle: { backgroundColor: colors.bg },
+    tabBarHideOnKeyboard: true,
+    sceneStyle: { backgroundColor: colors.screen },
   }}>
     <Tabs.Screen name="daily" options={{ title: t('daily'), tabBarIcon: ({ color, size }) => <Ionicons name="today-outline" color={typeof color === 'string' ? color : colors.primary} size={size} /> }} />
     <Tabs.Screen name="chat" options={{ title: t('chat'), tabBarIcon: ({ color, size }) => <Ionicons name="chatbubbles-outline" color={typeof color === 'string' ? color : colors.primary} size={size} /> }} />

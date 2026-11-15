@@ -13,6 +13,9 @@ export interface User {
 }
 
 export interface Rewards {
+  active_theme_id?: string
+  active_background_id?: string | null
+  unlocked?: { themes: string[]; backgrounds: string[] }
   points_balance: number
   current_streak: number
   longest_streak: number

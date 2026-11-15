@@ -11,7 +11,7 @@ export function ChoiceSheet({ title, value, options, visible, onClose, onSelect 
   const { colors } = useTheme()
   const { t } = useTranslation('mobile')
   return <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-    <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: '#00000077' }}>
+    <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.scrim }}>
       <Pressable style={{ flex: 1 }} accessibilityRole="button" accessibilityLabel={t('phase1.library.closePicker')} onPress={onClose} />
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.card, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '80%', padding: 20 }} accessibilityViewIsModal>
         <AppText accessibilityRole="header" style={{ fontSize: 20, fontWeight: '700', marginBottom: 14 }}>{title}</AppText>

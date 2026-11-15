@@ -1,5 +1,6 @@
+import { KeyboardInput as TextInput } from '../components/KeyboardLayout'
 import { useEffect, useRef, useState } from 'react'
-import { Alert, TextInput, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { router, useLocalSearchParams, usePreventRemove } from 'expo-router'
 import { useMutation, useQuery } from 'react-query'
 import { useTranslation } from 'react-i18next'

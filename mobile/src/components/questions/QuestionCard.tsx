@@ -1,14 +1,17 @@
-import { useState } from 'react'
-import { TextInput, View } from 'react-native'
+import { KeyboardInput as TextInput } from '../KeyboardLayout'
+import { useRef, useState } from 'react'
+import { View } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import type { DailyAnswerResult, DailyItem } from '../../api/types'
 import { elapsedAnswerTime, toggleToken } from '../../features/daily/logic'
 import { useTheme } from '../../theme/ThemeProvider'
 import { AppText, Badge, Button, Card, Muted, Title, styles } from '../ui'
 
-export function DailyQuestion({ item, index, total, busy, result, onAnswer, onNext }: {
+export function QuestionCard({ item, index, total, busy, result, onAnswer, onNext, choiceValues, choiceCorrect, typeLabel, lockOnAnswer = false }: {
   item: DailyItem; index: number; total: number; busy: boolean; result?: DailyAnswerResult
   onAnswer: (answer: unknown, time: number) => void; onNext: () => void
+  choiceValues?: string[]; choiceCorrect?: boolean[]; typeLabel?: string
+  lockOnAnswer?: boolean
 }) {
   const { t, i18n } = useTranslation('common')
   const { t: mobile } = useTranslation('mobile')
@@ -17,19 +20,28 @@ export function DailyQuestion({ item, index, total, busy, result, onAnswer, onNe
   const [text, setText] = useState('')
   const [indexes, setIndexes] = useState<number[]>([])
   const [selected, setSelected] = useState<unknown>()
+  const answerLocked = useRef(false)
   const payload = item.payload
   const disabled = busy || !!result
-  const submit = (answer: unknown) => { setSelected(answer); onAnswer(answer, elapsedAnswerTime(startedAt, performance.now())) }
+  const submit = (answer: unknown) => {
+    if (disabled || (lockOnAnswer && answerLocked.current)) return
+    if (lockOnAnswer) answerLocked.current = true
+    setSelected(answer); onAnswer(answer, elapsedAnswerTime(startedAt, performance.now()))
+  }
   const answerLabel = (answer: unknown): string => typeof answer === 'boolean' ? mobile(answer ? 'phase1.daily.true' : 'phase1.daily.false') : Array.isArray(answer) ? answer.join('') : answer === null || answer === undefined ? mobile('phase1.daily.noAnswer') : String(answer)
   const choices = item.item_type === 'vocab' || item.item_type === 'kanji' || (item.item_type === 'grammar' && item.question_type === 'fill_blank')
   const known = choices || item.item_type === 'flashcard' || (item.item_type === 'grammar' && ['reorder', 'true_false', 'conjugation'].includes(item.question_type))
   return <Card>
-    <View style={[styles.row, { justifyContent: 'space-between' }]}><Badge>{t(`daily.types.${item.item_type}`)}</Badge><AppText>{t('daily.questionProgress', { current: index + 1, total })}</AppText></View>
+    <View style={[styles.row, { justifyContent: 'space-between' }]}><Badge>{typeLabel || t(`daily.types.${item.item_type}`)}</Badge><AppText>{t('daily.questionProgress', { current: index + 1, total })}</AppText></View>
     {(payload.level || payload.jlpt_level) && <Muted>{mobile('phase1.daily.actualLevel', { level: payload.level || payload.jlpt_level })}</Muted>}
     {(payload.kanji || payload.word) && <AppText selectable style={{ fontSize: item.item_type === 'kanji' ? 62 : 34, lineHeight: 76, textAlign: 'center', color: colors.primary, fontWeight: '700' }}>{payload.kanji || payload.word}</AppText>}
     {payload.reading && <AppText selectable style={{ textAlign: 'center', color: colors.textMuted }}>{payload.reading}</AppText>}
     {item.item_type !== 'flashcard' && payload.prompt && <Title>{payload.prompt}</Title>}
-    {choices && <View style={{ gap: 10 }}>{(payload.options ?? []).map((option, n) => <Button key={`${n}:${option}`} title={option} disabled={disabled} selected={selected === option} secondary={selected !== option} onPress={() => submit(option)} />)}</View>}
+    {choices && <View style={{ gap: 10 }}>{(payload.options ?? []).map((option, n) => {
+      const value = choiceValues?.[n] ?? option
+      const feedback = result && choiceCorrect && (choiceCorrect[n] || selected === value) ? `${t(choiceCorrect[n] ? 'shared.correct' : 'shared.incorrect')} · ` : ''
+      return <Button key={`${n}:${option}`} title={`${feedback}${option}`} disabled={disabled} selected={selected === value} secondary={selected !== value} onPress={() => submit(value)} />
+    })}</View>}
     {item.item_type === 'grammar' && item.question_type === 'true_false' && <>
       <Muted>{mobile('phase1.daily.statement')}</Muted><AppText selectable style={{ fontSize: 19, lineHeight: 30 }}>{payload.statement || payload.prompt}</AppText>
       <Button title={mobile('phase1.daily.true')} secondary={selected !== true} disabled={disabled} onPress={() => submit(true)} />
@@ -57,7 +69,7 @@ export function DailyQuestion({ item, index, total, busy, result, onAnswer, onNe
       {!!result.explanation && <AppText selectable>{result.explanation}</AppText>}
       {!!result.examples?.length && <Muted>{t('library.documentTypes.example')}</Muted>}
       {(result.examples ?? []).map((example, n) => <View key={`${n}:${example.ja}`} style={{ gap: 5 }}><AppText selectable style={{ fontWeight: '600' }}>{example.ja}</AppText><AppText selectable>{i18n.language === 'en' ? example.en || example.vi : example.vi || example.en}</AppText></View>)}
-      <Button title={t(result.all_answered ? 'daily.viewSummary' : 'daily.nextQuestion')} onPress={onNext} />
+      <Button title={t(result.all_answered ? 'daily.viewSummary' : 'daily.nextQuestion')} disabled={busy} onPress={onNext} />
     </Card>}
   </Card>
 }

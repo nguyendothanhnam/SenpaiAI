@@ -1,6 +1,6 @@
 {
   "name": "senpai-ai-mobile",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": "^22.13.0 || ^24.3.0 || >=26.0.0"
@@ -8,17 +8,24 @@
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start --go",
+    "start:clean": "expo start --go --clear",
+    "themes:sync": "tsx scripts/sync-theme-assets.mts",
     "android": "expo start --android --go",
     "ios": "expo start --ios --go",
     "start:tunnel": "expo start --tunnel --go",
     "start:dev": "expo start --dev-client",
+    "build:android:dev": "npx eas-cli@latest build --platform android --profile development",
     "typecheck": "node scripts/generate-routes.mjs && tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "test": "tsx --test tests/*.test.ts",
-    "i18n:check": "node scripts/check-i18n.mjs",
+    "i18n:check": "node scripts/check-i18n.mjs && node scripts/lint-ui-text.mjs",
     "backend:check": "node --env-file-if-exists=.env scripts/check-backend.mjs",
     "smoke:api": "node --env-file-if-exists=.env scripts/smoke-api.mjs",
     "smoke:phase1": "node --env-file-if-exists=.env scripts/smoke-phase1.mjs",
+    "smoke:phase2": "node --env-file-if-exists=.env scripts/smoke-phase2.mjs",
+    "audit:backend": "node --env-file-if-exists=.env scripts/audit-backend.mjs",
+    "smoke:phase3": "node --env-file-if-exists=.env scripts/smoke-phase3.mjs",
+    "smoke:phase4": "node --env-file-if-exists=.env scripts/smoke-study-import.mjs",
     "check": "npm run typecheck && npm run lint && npm test && npm run i18n:check",
     "export:check": "expo export --platform all --output-dir dist"
   },
@@ -33,7 +40,11 @@
     "expo-build-properties": "~58.0.12",
     "expo-constants": "~58.0.15",
     "expo-dev-client": "~58.0.18",
+    "expo-document-picker": "~58.0.5",
+    "expo-file-system": "~58.0.13",
     "expo-font": "~58.0.11",
+    "expo-haptics": "~58.0.8",
+    "expo-linear-gradient": "~58.0.3",
     "expo-linking": "~58.0.16",
     "expo-localization": "~58.0.5",
     "expo-router": "~58.0.30",
@@ -48,6 +59,7 @@
     "react-native": "0.88.1",
     "react-native-safe-area-context": "~5.11.1",
     "react-native-screens": "~4.30.1",
+    "react-native-svg": "15.16.0",
     "react-query": "3.39.3"
   },
   "devDependencies": {

@@ -36,7 +36,7 @@ export function LibraryDetailScreen() {
   if (!document) return <Screen><ErrorNotice message={query.isError ? getErrorMessage(query.error, i18n) : mobile('phase1.library.missingDocument')} retry={() => void query.refetch()} /></Screen>
   const permissions = query.isError ? { edit: false, remove: false } : documentPermissions(document)
   const confirmDelete = () => Alert.alert(t('library.deleteConfirmation.title'), t('library.deleteConfirmation.message', { title: document.title }), [{ text: t('library.cancel'), style: 'cancel' }, { text: t('library.delete'), style: 'destructive', onPress: () => removal.mutate() }])
-  return <View style={{ flex: 1, backgroundColor: colors.bg }}><FlatList
+  return <View style={{ flex: 1, backgroundColor: colors.screen }}><FlatList
     data={[document.content]} keyExtractor={() => String(document.id)}
     contentContainerStyle={{ padding: 20, paddingBottom: insets.bottom + 30, maxWidth: 720, width: '100%', alignSelf: 'center', gap: 16 }}
     refreshing={query.isRefetching} onRefresh={() => void query.refetch()}

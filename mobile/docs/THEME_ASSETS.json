@@ -1,0 +1,66 @@
+{
+  "source": "frontend/public",
+  "assets": [
+    {
+      "path": "/themes/background1.webp",
+      "bytes": 107920
+    },
+    {
+      "path": "/themes/background2.webp",
+      "bytes": 166998
+    },
+    {
+      "path": "/themes/background3.webp",
+      "bytes": 71112
+    },
+    {
+      "path": "/themes/background4.webp",
+      "bytes": 100018
+    },
+    {
+      "path": "/themes/background5.webp",
+      "bytes": 80756
+    },
+    {
+      "path": "/themes/background6.webp",
+      "bytes": 70582
+    },
+    {
+      "path": "/themes/background7.webp",
+      "bytes": 96470
+    },
+    {
+      "path": "/themes/background8.webp",
+      "bytes": 84712
+    },
+    {
+      "path": "/themes/background9.webp",
+      "bytes": 113036
+    },
+    {
+      "path": "/themes/background10.webp",
+      "bytes": 76620
+    },
+    {
+      "path": "/themes/background11.webp",
+      "bytes": 62920
+    },
+    {
+      "path": "/themes/background12.webp",
+      "bytes": 69502
+    },
+    {
+      "path": "/themes/background13.webp",
+      "bytes": 126878
+    },
+    {
+      "path": "/themes/than-khe/cat.webp",
+      "missing": true
+    },
+    {
+      "path": "/themes/sakura/cat.webp",
+      "missing": true
+    }
+  ],
+  "packagedBytes": 1227524
+}

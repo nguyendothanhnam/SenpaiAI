@@ -1,2 +1,1 @@
-import { PlaceholderScreen } from '../../src/screens/PlaceholderScreen'
-export default function Chat() { return <PlaceholderScreen titleKey="nav:chat" /> }
+export { ChatListScreen as default } from '../../src/screens/ChatListScreen'
