@@ -13,7 +13,6 @@ import { accountAppearance, mergeCatalog, mobilePalette, nativeThemes, type Cata
 import type { ShopItem, ShopItemType } from '../features/shop/types'
 import { themeImages } from '../theme/assets'
 import { useTheme } from '../theme/ThemeProvider'
-import { imageOverlay } from '../theme/nativeStyle'
 import { getErrorMessage } from '../utils/getErrorMessage'
 
 const imagePaths = new Set(Object.keys(themeImages))
@@ -93,11 +92,20 @@ export function ThemeShopScreen() {
 function ShopPreview({ entry }: { entry: CatalogEntry }) {
   const { t } = useTranslation('common'), { t: mobile } = useTranslation('mobile'), { resolvedMode, activeTheme } = useTheme()
   const [mode, setMode] = useState<'light' | 'dark'>(resolvedMode)
-  const palette = mobilePalette(entry.item.item_type === 'theme' ? entry.item.id : activeTheme, mode)
+  const [failedPath, setFailedPath] = useState<string | null>(null)
+  const isTheme = entry.item.item_type === 'theme'
+  const palette = mobilePalette(isTheme ? entry.item.id : activeTheme, mode)
   const path = entry.item.item_type === 'theme' ? entry.supported ? nativeThemes[entry.item.id].background[mode] : null : entry.imagePath
   const image = path ? themeImages[path] : undefined
-  return <View style={{ gap: 10 }}><View style={styles.row}>{(['light', 'dark'] as const).map(value => <Button key={value} secondary={mode !== value} selected={mode === value} title={t(`themeShop.${value}`)} onPress={() => setMode(value)} />)}</View><View style={{ borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: palette.border, backgroundColor: palette.bg }}>
-    {image && <><Image source={image} resizeMode="cover" style={{ position: 'absolute', width: '100%', height: '100%' }} /><View style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: imageOverlay(palette, mode) }} /></>}
-    <View style={{ padding: 16, gap: 10 }}><AppText style={{ color: palette.text, fontWeight: '700' }}>{t('themeShop.preview')}</AppText><AppText style={{ color: palette.textMuted }}>{mobile('shop.previewText')}</AppText><View style={{ backgroundColor: palette.card, borderColor: palette.border, borderWidth: 1, borderRadius: 12, padding: 12 }}><AppText style={{ color: palette.text }}>{t('themeShop.brandTagline')}</AppText></View><View style={{ backgroundColor: palette.primary, padding: 12, borderRadius: 12 }}><AppText style={{ color: palette.primaryContrast }}>{t('themeShop.dailyTask')}</AppText></View></View>
-  </View></View>
+  return <View style={{ gap: 10, minWidth: 0, maxWidth: '100%' }}>
+    {isTheme && <View style={styles.row}>{(['light', 'dark'] as const).map(value => <Button key={value} secondary={mode !== value} selected={mode === value} title={t(`themeShop.${value}`)} onPress={() => setMode(value)} />)}</View>}
+    {image && failedPath !== path ? <View style={{ width: '100%', height: 180, flexShrink: 0, borderRadius: 16, overflow: 'hidden', backgroundColor: palette.accent }}>
+      <Image key={path} source={image} accessibilityLabel={t('themeShop.preview')} resizeMode="contain" onError={() => setFailedPath(path)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }} />
+    </View> : (path || !isTheme) ? <ErrorNotice message={mobile('shop.imageUnavailable')} /> : null}
+    {isTheme && <View style={{ padding: 14, gap: 10, borderRadius: 16, borderWidth: 1, borderColor: palette.border, backgroundColor: palette.bg }}>
+      <AppText style={{ color: palette.text, fontWeight: '700' }}>{t('themeShop.preview')}</AppText>
+      <View style={{ backgroundColor: palette.card, borderColor: palette.border, borderWidth: 1, borderRadius: 12, padding: 12 }}><AppText style={{ color: palette.text }}>{t('themeShop.brandTagline')}</AppText></View>
+      <View style={{ backgroundColor: palette.primary, padding: 12, borderRadius: 12 }}><AppText style={{ color: palette.primaryContrast }}>{t('themeShop.dailyTask')}</AppText></View>
+    </View>}
+  </View>
 }

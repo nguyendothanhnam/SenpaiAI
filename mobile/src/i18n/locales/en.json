@@ -1,5 +1,6 @@
 {
   "shop": {
+    "imageUnavailable": "Could not load the preview image. Reload the app and try again.",
     "unknownName": "Item without a translation: {{id}}",
     "unknownDescription": "This item is in the server catalog, but the app has no matching description yet.",
     "unsupported": "Display data is unavailable in this mobile version. The item stays visible; purchase and apply are disabled so points are not spent on an item that cannot be displayed.",
@@ -234,6 +235,9 @@
     }
   },
   "phase2": {
+    "chatActions": "Actions for {{title}}",
+    "assistantLevel": "SenpaiAI · {{level}}",
+    "latestMessages": "Jump to latest message",
     "noQuestions": "The server has no matching questions or could not generate them. Change the pattern or types, or use the question bank.",
     "partialResults": "These results cover the attempts saved by the server and may be incomplete. After a lost response, wait and refresh the results.",
     "alreadyAnswered": "The server already received this answer. View the saved results; the app will not resend it.",
@@ -402,17 +406,17 @@
     "scope": "The model currently supports {{count}} characters across {{levels}}. It cannot recognize every character; unsupported characters may be mistaken for another.",
     "none": "no levels yet",
     "privacy": "Recognizing or checking sends your image and strokes to the server. The server currently stores samples to improve the model.",
-    "unavailable": "The recognition model is unavailable on the server.",
+    "unavailable": "The recognition model is unavailable. You can still practice writing in the canvas below.",
     "unsupported": "{{character}} is outside the current recognition labels. You can view the guide and trace it, but model checking is unavailable.",
     "practiceHint": "Trace the faint guide. Feedback compares the recognized character and stroke count; it does not precisely grade stroke order or individual strokes.",
-    "processing": "Recognizing?",
+    "processing": "Recognizing…",
     "check": "Check writing",
     "noResult": "No character recognized. Try writing more clearly.",
     "match": "The top candidate matches your target",
     "mismatch": "The top candidate does not match your target",
     "strokeComparison": "You wrote {{actual}} strokes; the reference has {{expected}}.",
     "lowConfidence": "Low confidence. Compare the candidates; this is not a certain assessment.",
-    "candidate": "{{character}} ? {{confidence}}% confidence ? view details",
+    "candidate": "{{character}} · {{confidence}}% confidence · View details",
     "retry": "Write again",
     "next": "Practice next character",
     "samples": "Reference handwriting samples",

@@ -4,7 +4,7 @@ import { useColorScheme, type ImageSourcePropType } from 'react-native'
 import { type ThemeMode, type ThemePalette } from '../../../frontend/src/themes/themes'
 import { activeImagePath, hasTheme, mobilePalette, nativeThemes } from '../features/shop/catalog'
 import { themeImages } from './assets'
-import { colorAlpha, imageOverlay } from './nativeStyle'
+import { backdropPalette, colorAlpha, imageOverlay } from './nativeStyle'
 
 export type MobileColors = Pick<ThemePalette, 'bg' | 'bgElevated' | 'card' | 'cardGlass' | 'bgImage' | 'primaryGradient' | 'text' | 'textMuted' | 'border' | 'primary' | 'primaryContrast' | 'accent'> & { screen: string; scrim: string; imageOverlay: string }
 // Shared web palettes; account ownership is checked by the bridge and equip API.
@@ -24,8 +24,9 @@ interface ThemeContextValue {
   error: boolean
   setMode: (mode: ThemeMode) => Promise<void>
 }
-function colorsFor(id: string, mode: 'light' | 'dark'): MobileColors {
-  const palette = mobilePalette(id, mode)
+function colorsFor(id: string, mode: 'light' | 'dark', hasImage = false): MobileColors {
+  const base = mobilePalette(id, mode)
+  const palette = hasImage ? backdropPalette(base) : base
   return { ...palette, screen: 'transparent', scrim: colorAlpha(palette.bg, 0.84), imageOverlay: imageOverlay(palette, mode) }
 }
 const Context = createContext<ThemeContextValue>({ mode: 'system', resolvedMode: 'light', activeTheme: 'classic', activeBackground: null, backgroundImage: null, setAccountAppearance: () => undefined, colors: colorsFor('classic', 'light'), ready: false, error: false, setMode: async () => undefined })
@@ -51,7 +52,10 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     updateMode(next)
     try { await AsyncStorage.setItem(KEY, next); setError(false) } catch { setError(true) }
   }, [])
-  const value = useMemo(() => ({ mode, resolvedMode, activeTheme: appearance.themeId, activeBackground: appearance.backgroundId, backgroundImage: themeImages[activeImagePath(appearance.themeId, appearance.backgroundId, resolvedMode) || ''] || null, setAccountAppearance, colors: colorsFor(appearance.themeId, resolvedMode), ready, error, setMode }), [mode, resolvedMode, appearance, setAccountAppearance, ready, error, setMode])
+  const value = useMemo(() => {
+    const backgroundImage = themeImages[activeImagePath(appearance.themeId, appearance.backgroundId, resolvedMode) || ''] || null
+    return { mode, resolvedMode, activeTheme: appearance.themeId, activeBackground: appearance.backgroundId, backgroundImage, setAccountAppearance, colors: colorsFor(appearance.themeId, resolvedMode, !!backgroundImage), ready, error, setMode }
+  }, [mode, resolvedMode, appearance, setAccountAppearance, ready, error, setMode])
   return <Context.Provider value={value}>{children}</Context.Provider>
 }
 

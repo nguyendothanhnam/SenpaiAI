@@ -409,8 +409,8 @@ export const libraryAPI = {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
-  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number }) =>
-    api.post('/library/search', data),
+  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number }, language?: 'vi' | 'en') =>
+    api.post('/library/search', data, { params: { language } }),
   getCategories: () => api.get('/library/categories'),
   getStats: () => api.get('/library/stats'),
   quiz: (params: { mode?: string; jlpt?: string; count?: number } = {}) =>

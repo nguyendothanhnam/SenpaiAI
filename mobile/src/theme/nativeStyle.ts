@@ -39,12 +39,16 @@ export function readableText(background: string, preferred: string, alternatives
   if (contrastRatio(background, preferred) >= 4.5) return preferred
   return [preferred, ...alternatives].reduce((best, color) => contrastRatio(background, color) > contrastRatio(background, best) ? color : best, preferred)
 }
+export function backdropPalette<T extends { text: string; textMuted: string }>(palette: T): T {
+  // Stronger secondary text lets the image remain visible without sacrificing contrast.
+  return { ...palette, textMuted: palette.text }
+}
 export function imageOverlay(palette: { bg: string; text: string; textMuted: string }, mode: 'light' | 'dark') {
   const bg = rgbChannels(palette.bg), texts = [rgbChannels(palette.text), rgbChannels(palette.textMuted)]
   if (!bg || texts.some(text => !text)) return colorAlpha(palette.bg, 0.98)
   // Choose the least tint that keeps both text tokens readable, even if the
   // image beneath is entirely black/white. A fixed tint was too weak for mint.
-  for (let percent = mode === 'dark' ? 88 : 86; percent <= 98; percent++) {
+  for (let percent = mode === 'dark' ? 45 : 35; percent <= 98; percent++) {
     const opacity = percent / 100
     const lower = luminance(bg.map(channel => channel * opacity))
     const upper = luminance(bg.map(channel => channel * opacity + 255 * (1 - opacity)))

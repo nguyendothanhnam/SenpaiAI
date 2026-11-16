@@ -41,13 +41,14 @@ export function KanjiWritingScreen() {
     finally { if (pending.current === request) { pending.current = null; setBusy(false) } }
   }
   const next = () => {
-    const candidates = model.data?.supported_kanji.filter(k => supported.data?.kanji.includes(k)) || []
+    const guided = supported.data?.kanji || []
+    const recognized = guided.filter(kanji => model.data?.supported_kanji.includes(kanji))
+    const candidates = model.data?.available && recognized.length ? recognized : guided
     if (candidates.length) { change([]); setTarget(candidates[(candidates.indexOf(target) + 1) % candidates.length]) }
   }
   return <Screen scrollEnabled={!drawing}>
     <Title>{t(target ? 'writing.practice' : 'writing.recognize')}</Title>
     <Muted>{t('writing.scope', { levels: model.data?.supported_jlpt.join(', ') || t('writing.none'), count: model.data?.classes_count || 0 })}</Muted>
-    <Muted>{t('writing.privacy')}</Muted>
     {model.isLoading && <Muted>{t('loading')}</Muted>}
     {model.isError && <ErrorNotice message={getErrorMessage(model.error, i18n)} retry={() => void model.refetch()} />}
     {model.data && !model.data.available && <ErrorNotice message={t('writing.unavailable')} />}
@@ -56,10 +57,11 @@ export function KanjiWritingScreen() {
     {target && reference.isLoading && <Muted>{t('loading')}</Muted>}
     {target && reference.isError && <ErrorNotice message={getErrorMessage(reference.error, i18n)} retry={() => void reference.refetch()} />}
     {target && reference.data && !hasReference && <Muted>{t('phase3.strokesUnsupported')}</Muted>}
-    {(!target || hasReference) && <>
+    <>
       <KanjiDrawingCanvas strokes={strokes} onChange={change} onDrawing={begin} reference={target ? reference.data : undefined} />
       <Button title={t(busy ? 'writing.processing' : target ? 'writing.check' : 'writing.recognize')} disabled={busy || drawing || !strokes.length || !model.data?.available || !targetSupported} onPress={() => void recognize()} />
-    </>}
+    </>
+    <Muted>{t('writing.privacy')}</Muted>
     {error && <ErrorNotice message={error} />}
     {result && <Card>
       {!!target && result.success && !!result.predictions.length && <Title>{t(result.predictions[0].kanji === target ? 'writing.match' : 'writing.mismatch')}</Title>}
@@ -71,7 +73,7 @@ export function KanjiWritingScreen() {
     </Card>}
     {!!target && <>
       {supported.isError && <ErrorNotice message={getErrorMessage(supported.error, i18n)} retry={() => void supported.refetch()} />}
-      <Button secondary title={t('writing.next')} disabled={!model.data?.supported_kanji.length || !supported.data?.kanji.length || drawing} onPress={next} />
+      <Button secondary title={t('writing.next')} disabled={!supported.data?.kanji.length || drawing} onPress={next} />
       {hasReference && <StrokeAnimation data={reference.data!} />}
       {samples.isError && <ErrorNotice message={getErrorMessage(samples.error, i18n)} retry={() => void samples.refetch()} />}
       {!!samples.data?.items.length && <Card><AppText>{t('writing.samples')}</AppText><View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{samples.data.items.map(item => <Image key={item.filename} accessibilityLabel={t('writing.sample', { character: target })} source={{ uri: item.image_data }} style={{ width: 80, height: 80 }} />)}</View></Card>}
