@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { confirmDialog } from '../features/dialogs/queue'
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
@@ -46,6 +48,7 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export default function InternshipRoleplay() {
+  const { t } = useTranslation('common')
   const queryClient = useQueryClient()
 
   // State
@@ -184,8 +187,8 @@ export default function InternshipRoleplay() {
             setDistToBoss(dist)
             setCanTalkToBoss(canTalk)
           }}
-          onExit={() => {
-            if (window.confirm('Bạn có chắc muốn tạm dừng phiên làm việc 3D này không?')) {
+          onExit={async () => {
+            if (await confirmDialog(t('dialogs.exitInterview'), { tone: 'warning' })) {
               setCurrentSession(null)
             }
           }}

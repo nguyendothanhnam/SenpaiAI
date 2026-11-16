@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { useAuth } from './services/auth'
 import Layout from './components/Layout'
 import Login from './pages/Login'
@@ -8,6 +9,7 @@ import Library from './pages/Library'
 import Profile from './pages/Profile'
 import LoadingSpinner from './components/LoadingSpinner'
 import GameHub from './pages/GameHub'
+const MiniGame = lazy(() => import('./pages/MiniGame'))
 import Quiz from './pages/Quiz.jsx'
 import Kanji from './pages/Kanji.jsx'
 import QuizManual from './pages/QuizManual.jsx'
@@ -17,7 +19,6 @@ import Flashcard from './pages/Flashcard.jsx'
 import FlashcardManual from './pages/FlashcardManual.jsx'
 import FlashcardPlay from './pages/FlashcardPlay.jsx'
 import Analytics from './pages/Analytics.jsx'
-import KanjiMinigame from './pages/KanjiMinigame.jsx'
 import Settings from './pages/Settings'
 import GrammarPractice from './pages/GrammarPractice'
 import ThemeShop from './pages/ThemeShop'
@@ -57,7 +58,8 @@ function App() {
         <Route path="/grammar/practice" element={<GrammarPractice />} />
         <Route path="/library" element={<Library />} />
         <Route path="/games" element={<GameHub />} />
-        <Route path="/games/kanji" element={<KanjiMinigame />} />
+        <Route path="/games/kanji" element={<Navigate to="/kanji?mode=study" replace />} />
+        <Route path="/games/:gameId" element={<Suspense fallback={<LoadingSpinner />}><MiniGame /></Suspense>} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/quiz/manual" element={<QuizManual />} />
         <Route path="/quiz/upload" element={<QuizUpload />} />

@@ -1,3 +1,4 @@
+import { confirmDialog } from '../features/dialogs/queue'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -18,7 +19,7 @@ type FolderDialogState = { mode: 'create' | 'rename' | 'move'; folder?: ChatFold
 const pageSize = 30
 
 function updateConversationPages(queryClient: ReturnType<typeof useQueryClient>, id: string, update: Partial<ChatConversation>) {
-  ;(queryClient as any).setQueriesData(['chatConversations'], (page: ChatConversationPage | undefined) => page && ({
+  (queryClient as any).setQueriesData(['chatConversations'], (page: ChatConversationPage | undefined) => page && ({
     ...page,
     items: page.items.map((item) => item.id === id ? { ...item, ...update } : item),
   }))
@@ -75,7 +76,7 @@ export default function Chat() {
     },
   )
 
-  const conversations = conversationsQuery.data?.items || []
+  const conversations = useMemo(() => conversationsQuery.data?.items || [], [conversationsQuery.data])
   const folders = foldersQuery.data || []
   const activeConversation = conversationQuery.data || conversations.find((item) => item.id === conversationId) || null
   const targetFolderId = selectedFolderId === undefined ? activeConversation?.folder_id || null : selectedFolderId
@@ -100,9 +101,10 @@ export default function Chat() {
     }
   }, [conversationQuery.isError, conversationQuery.error, navigate])
 
+  const activeTitle = activeConversation?.title, activeId = activeConversation?.id
   useEffect(() => {
-    if (activeConversation) setTitleDraft(activeConversation.title)
-  }, [activeConversation?.id, activeConversation?.title])
+    if (activeId) setTitleDraft(activeTitle || '')
+  }, [activeId, activeTitle])
 
   const refreshChat = (id?: string) => {
     void queryClient.invalidateQueries(['chatConversations'])
@@ -275,7 +277,7 @@ export default function Chat() {
     try {
       const allMessages = [] as Awaited<ReturnType<typeof chatAPI.getConversationMessages>>['data']['items']
       let offset = 0
-      while (true) {
+      for (;;) {
         const { data } = await chatAPI.getConversationMessages(conversationId, 100, offset)
         allMessages.push(...data.items)
         if (!data.has_more) break
@@ -322,8 +324,8 @@ export default function Chat() {
             const conversation = conversations.find((item) => item.id === id)
             if (conversation) moveConversationMutation.mutate({ conversation, folder_id: folderId })
           }}
-          onDeleteConversation={(conversation) => {
-            if (window.confirm(t('chat.confirmDeleteConversation', { title: conversation.title }))) deleteConversationMutation.mutate(conversation.id)
+          onDeleteConversation={async (conversation) => {
+            if (await confirmDialog(t('chat.confirmDeleteConversation', { title: conversation.title }), { tone: 'danger' })) deleteConversationMutation.mutate(conversation.id)
           }}
           onRenameFolder={(folder) => setFolderDialog({ mode: 'rename', folder })}
           onDeleteFolder={(folder, deleteConversations) => deleteFolderMutation.mutate({ folder, deleteConversations })}
@@ -352,7 +354,7 @@ export default function Chat() {
             <button type="button" onClick={() => setMenuOpen((open) => !open)} aria-label={t('chat.moreActions')} aria-expanded={menuOpen} className="rounded-xl p-2.5 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)]"><MoreVertical className="h-5 w-5" /></button>
             {menuOpen && <div className="absolute right-0 top-full z-40 mt-1 w-56 rounded-xl border border-[color:var(--border)] bg-[color:var(--card)] p-1 shadow-xl">
               {conversationId && <button type="button" onClick={() => { void exportConversation(); setMenuOpen(false) }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-[color:var(--text)] hover:bg-[color:var(--accent)]"><Download className="h-4 w-4" />{t('chat.downloadConversation')}</button>}
-              <button type="button" onClick={() => { setMenuOpen(false); if (window.confirm(t('chat.confirmClearHistory'))) clearHistoryMutation.mutate() }} disabled={clearHistoryMutation.isLoading} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-[color:var(--accent)]"><Trash2 className="h-4 w-4" />{t('chat.clearAllConversations')}</button>
+              <button type="button" onClick={async () => { setMenuOpen(false); if (await confirmDialog(t('chat.confirmClearHistory'), { tone: 'danger' })) clearHistoryMutation.mutate() }} disabled={clearHistoryMutation.isLoading} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-[color:var(--accent)]"><Trash2 className="h-4 w-4" />{t('chat.clearAllConversations')}</button>
             </div>}
           </div>
         </header>

@@ -1,5 +1,29 @@
 # SenpaiAI Mobile — Giai đoạn 0 đến 4
 
+## Minigame đợt 2 trên Expo
+
+Mỗi thẻ có nút **Cách chơi** với mục tiêu, ba bước và mẹo riêng dùng chung bản dịch vi/en với web. Trong ván, nút dấu hỏi tạm dừng rồi mở hướng dẫn. Hộp xác nhận thoát minigame dùng modal theo theme, có lựa chọn ở lại rõ ràng; đóng hướng dẫn/xác nhận không tự tiếp tục ván.
+
+**Luyện tập → Trò chơi** có thêm Nối từ đánh quái, Xưởng ghép từ, Tìm từ ẩn, Ninja chém từ và Kanji mất nét. Dùng nguyên reducer/luật Đợt 2 trong `../shared-games` và khung ván Đợt 1; không sao chép luật, sửa web/backend hoặc thêm dependency. Điểm không cộng vào ví; điểm cao và công thức lưu riêng theo tài khoản trên thiết bị.
+
+Bốn trò dùng từ hiện hỗ trợ N3; Kanji mất nét hỗ trợ N5/N4/N3 với bộ lọc theo độ khó. Pool API tải xong trước ván, nét SVG dùng kho chung đóng gói sẵn và lọc theo pool kanji. Không gọi mạng giữa ván. Xưởng dùng chạm thẻ, lưu công thức sau mỗi từ đúng; hai trò vuốt khóa cuộn trong cử chỉ, dùng PanResponder sẵn có. Ninja dùng native driver, tối đa 4 từ; Reduce Motion tắt vệt chém và hiệu ứng sát thương.
+
+Xem [kiểm kê dữ liệu, kiến trúc, giới hạn và checklist Android/iPhone riêng từng trò](docs/MINIGAMES_WAVE2.md). Typecheck, lint, **107 test mobile**, **71 test engine**, kiểm tra khóa dịch web/mobile và export Android/iOS đạt. Chạy `npm.cmd run export:check` để tạo bundle cho hai hệ điều hành; không phát hành lên cửa hàng.
+
+**Chưa nghiệm thu thiết bị thật:** chưa đo FPS, nhiệt/pin, chưa xác nhận vuốt/Back/cuộc gọi trên Android và iPhone. Cần chạy checklist và ẩn trò gặp lỗi hoặc không đạt hiệu năng trước khi phát hành. Bản triển khai hiện có đủ năm trò để kiểm thử.
+
+## Minigame đợt 1 trên Expo
+
+Vào **Luyện tập → Trò chơi**: Kanji rơi, Shiritori chọn từ, Mật mã Kana, Chuỗi nhớ Kana. Dùng trực tiếp engine TypeScript `../shared-games` qua alias `@games/*`, không sao chép luật chơi. Tải dữ liệu API đầy đủ trước ván, cache từ điển 10 phút; không gọi mạng khi trả lời và không cộng điểm vào ví. Điểm cao/thống kê lưu AsyncStorage phiên bản 1 theo tài khoản/cấp/độ khó/biến thể.
+
+Dữ liệu hiện tại: Kanji rơi hỗ trợ N5 và N3; ba trò dùng từ hỗ trợ N3. Các cấp thiếu dữ liệu bị khóa kèm số mục; kiểm tra lại pool API trước khi bắt đầu. Bàn phím Kana nằm trong ứng dụng, có tạm dừng khi xuống nền/cuộc gọi làm ứng dụng inactive, xác nhận thoát và hỗ trợ Reduce Motion. Không thêm thư viện.
+
+Xem [kiến trúc, số liệu dữ liệu, giới hạn và checklist riêng cho Android/iPhone](docs/MINIGAMES.md). Kiểm tra bằng `npm.cmd run check`, `npm.cmd run export:check`; từ `frontend/` chạy `npm.cmd run test:minigames` và `npm.cmd run i18n:check`. Export tạo bundle Android/iOS; không phát hành cửa hàng.
+
+Kiểm tra tự động: typecheck, lint, **102 test mobile**, **66 test engine**, khóa dịch web/mobile và export Android/iOS đạt. Không sửa web/backend hoặc thêm dependency trong phần triển khai mobile này.
+
+**Chưa kiểm chứng trên thiết bị thật**: cuộc gọi, Back/cử chỉ, màn hình nhỏ, FPS, nhiệt và pin; các checklist trong tài liệu vẫn để trống. Không coi export thành công là nghiệm thu hiệu năng thiết bị.
+
 ## Cửa hàng giao diện — mua và áp dụng
 
 Cửa hàng hiện giữ toàn bộ danh mục giao diện/hình nền từ server, có preview sáng/tối, xác nhận giá/số dư trước-sau, mua bằng điểm và áp dụng ngay. Mục đã sở hữu gọi equip; theme/nền đồng bộ theo tài khoản trên server, mode sáng/tối/hệ thống vẫn lưu trên thiết bị. Không sửa web/backend hoặc thêm native library.

@@ -1,3 +1,4 @@
+import { chooseDialog } from '../../features/dialogs/queue'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import {
   ArrowDown, ArrowUp, Check, ChevronDown, ChevronRight, MoreHorizontal, Folder, FolderPlus,
@@ -82,10 +83,9 @@ export default function ChatConversationSidebar(props: Props) {
     return next
   })
 
-  const deleteFolder = (folder: ChatFolder) => {
-    if (!window.confirm(t('chat.confirmDeleteFolder', { name: folder.name }))) return
-    const deleteConversations = window.confirm(t('chat.confirmDeleteFolderConversations'))
-    props.onDeleteFolder(folder, deleteConversations)
+  const deleteFolder = async (folder: ChatFolder) => {
+    const result = await chooseDialog({ title: t('chat.confirmDeleteFolder', { name: folder.name }), message: t('chat.confirmDeleteFolderConversations'), tone: 'danger', secondaryLabel: t('dialogs.keepConversations'), confirmLabel: t('dialogs.deleteWithConversations') })
+    if (result !== null) props.onDeleteFolder(folder, result === 'confirm')
   }
 
   const renderConversation = (conversation: ChatConversation) => (

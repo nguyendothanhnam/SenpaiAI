@@ -150,6 +150,16 @@
     box-shadow: var(--shadow-card);
   }
 
+  /* A readable surface for study-page headings in every theme. */
+  .theme-hero {
+    background: linear-gradient(120deg, var(--accent), var(--bg-elevated));
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .theme-hero :is(h1, h2, h3) { color: var(--text); }
+  .theme-hero p { color: var(--text-muted); }
+
   .theme-shell {
     background-image: var(--bg-image);
     background-size: cover;

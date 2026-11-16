@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Headphones, Search } from 'lucide-react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { Link } from 'react-router-dom'
+import { readLevel } from '../features/gameHub/catalog'
+import { Link, useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { libraryAPI, listeningAPI } from '../services/api'
 import { localizeListeningLesson } from '../utils/listeningLocale'
 
 export default function ListeningLessons() {
   const { t } = useTranslation('common')
-  const [level, setLevel] = useState('')
+  const [params] = useSearchParams()
+  const [level, setLevel] = useState(() => readLevel(params.toString()) || '')
   const [topic, setTopic] = useState('')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(0)

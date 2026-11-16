@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Volume2, VolumeX, Eye, EyeOff, Target } from 'lucide-react'
 
@@ -22,10 +22,10 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   const [showVi, setShowVi] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
 
-  const updatePlayingState = (playing: boolean) => {
+  const updatePlayingState = useCallback((playing: boolean) => {
     setIsPlayingAudio(playing)
     onSpeakingChange?.(playing)
-  }
+  }, [onSpeakingChange])
 
   // Speak Japanese text via Web Speech API
   const handlePlayAudio = () => {
@@ -66,7 +66,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
         window.speechSynthesis.cancel()
       }
     }
-  }, [messageJa])
+  }, [messageJa, updatePlayingState])
 
   return (
     <motion.div

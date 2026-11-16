@@ -7,7 +7,7 @@
     "resolveJsonModule": true,
     "types": ["react", "react-native", "node"],
     "ignoreDeprecations": "6.0",
-    "paths": { "@/*": ["./src/*"] }
+    "paths": { "@/*": ["./src/*"], "@games/*": ["../shared-games/*"] }
   },
-  "include": ["app/**/*.tsx", "src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "app.config.ts", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": ["app/**/*.tsx", "src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "../shared-games/*.ts", "app.config.ts", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

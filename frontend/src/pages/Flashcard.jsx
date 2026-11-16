@@ -1,7 +1,9 @@
-﻿import { motion } from 'framer-motion'
+import { confirmDialog } from '../features/dialogs/queue'
+import { readLevel } from '../features/gameHub/catalog'
+import { motion } from 'framer-motion'
 import { ArrowLeft, Copy, FileUp, PencilLine, PlayCircle, Plus, Search, Trash2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { importFlashcard } from '../services/api.js'
 import {
@@ -20,9 +22,11 @@ function formatDate(value) {
 export default function Flashcard() {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const requestedLevel = readLevel(params.toString())
   const [sets, setSets] = useState(() => getStoredFlashcardSets())
   const [search, setSearch] = useState('')
-  const [filters, setFilters] = useState({ jlpt: 'all', category: 'all', source: 'all' })
+  const [filters, setFilters] = useState({ jlpt: requestedLevel || 'all', category: 'all', source: 'all' })
   const [importError, setImportError] = useState('')
 
   const totalCards = sets.reduce((sum, set) => sum + (set.cards?.length || 0), 0)
@@ -38,9 +42,9 @@ export default function Flashcard() {
   const aggregateAccuracy = aggregateTotal ? Math.round((aggregateStats.correct / aggregateTotal) * 100) : 0
 
   const filterOptions = useMemo(() => ({
-    jlpt: [...new Set(sets.map((set) => set.jlpt_level).filter(Boolean))],
+    jlpt: [...new Set([...sets.map((set) => set.jlpt_level).filter(Boolean), ...[requestedLevel].filter(Boolean)])],
     category: [...new Set(sets.map((set) => set.category).filter(Boolean))],
-  }), [sets])
+  }), [sets, requestedLevel])
 
   const visibleSets = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -55,8 +59,8 @@ export default function Flashcard() {
 
   const refreshSets = () => setSets(getStoredFlashcardSets())
 
-  const handleDelete = (set) => {
-    if (!window.confirm(t('flashcard.confirmDelete'))) return
+  const handleDelete = async (set) => {
+    if (!await confirmDialog(t('flashcard.confirmDelete'), { tone: 'danger' })) return
     setSets(deleteFlashcardSet(set.id))
   }
 

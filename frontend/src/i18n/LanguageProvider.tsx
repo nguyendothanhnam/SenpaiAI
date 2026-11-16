@@ -39,7 +39,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } else {
       void authAPI.updateMe({ ui_language: language }).catch((error) => console.warn('Could not initialize language preference', error))
     }
-  }, [user?.id, user?.ui_language])
+  }, [user, language])
 
   return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>
 }

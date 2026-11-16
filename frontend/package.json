@@ -8,6 +8,9 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx,js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "test:minigames": "tsc -p ../shared-games/tsconfig.json --noEmit false --module commonjs --moduleResolution node --outDir ../tmp/minigames-tests && node --test ../shared-games/tests/*.test.mjs",
+    "typecheck:games": "tsc -p ../shared-games/tsconfig.json",
+    "lint:games": "eslint ../shared-games --ext .ts --config .eslintrc.cjs --report-unused-disable-directives --max-warnings 0",
     "i18n:check": "node scripts/check-i18n.mjs",
     "i18n:lint": "node scripts/lint-i18n-literals.mjs"
   },

@@ -1,3 +1,6 @@
+import { confirmDialog } from '../features/dialogs/queue'
+import i18n from '../i18n'
+import { readLevel } from '../features/gameHub/catalog'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BookOpenCheck, Brain, Check, ChevronRight, HelpCircle, Clock3, Loader2, Sparkles } from 'lucide-react'
 import { useMutation, useQuery } from 'react-query'
@@ -38,11 +41,12 @@ function errorMessage(error: any, fallback: string) {
 export default function GrammarPractice() {
   const [screen, setScreen] = useState<Screen>('setup')
   const location = useLocation()
+  const requestedLevel = readLevel(location.search)
   const navigate = useNavigate()
   const startedLibraryPractice = useRef(false)
   const { user } = useAuth()
   const { t: tGrammar } = useTranslation('grammarStatus')
-  const [level, setLevel] = useState<JlptLevel>((user?.current_jlpt_level as JlptLevel) || 'N5')
+  const [level, setLevel] = useState<JlptLevel>(requestedLevel || (user?.current_jlpt_level as JlptLevel) || 'N5')
   const [isAutomaticFallback, setIsAutomaticFallback] = useState(false)
   const [ruleId, setRuleId] = useState<number | null>(null)
   const [questionTypes, setQuestionTypes] = useState<GrammarQuestionType[]>(['fill_blank', 'reorder', 'true_false', 'conjugation'])
@@ -82,12 +86,12 @@ export default function GrammarPractice() {
     () => grammarPracticeAPI.generateFromLibrary({ document_id: Number(libraryDocumentId), jlpt_level: level, question_type: libraryKind, count: libraryCount }),
     { onSuccess: ({ data }) => setLibraryResult(data), onError: (error: any) => { toast.error(errorMessage(error, tGrammar('libraryGenerateError'))) } },
   )
-  const patternsByLevel = patternsQuery.data || {} as Record<JlptLevel, GrammarPattern[]>
+  const patternsByLevel = useMemo(() => patternsQuery.data || {} as Record<JlptLevel, GrammarPattern[]>, [patternsQuery.data])
   const availableLevels = levels.filter((itemLevel) => (patternsByLevel[itemLevel] || []).length > 0)
   const fallbackLevel = [level, ...levels.filter((itemLevel) => levels.indexOf(itemLevel) < levels.indexOf(level)).reverse(), ...levels.filter((itemLevel) => levels.indexOf(itemLevel) > levels.indexOf(level))]
     .find((itemLevel) => availableLevels.includes(itemLevel))
   const effectiveLevel = fallbackLevel || level
-  const patterns = patternsByLevel[effectiveLevel] || []
+  const patterns = useMemo(() => patternsByLevel[effectiveLevel] || [], [patternsByLevel, effectiveLevel])
 
   useEffect(() => {
     if (ruleId !== null && !patterns.some((pattern) => pattern.id === ruleId)) setRuleId(null)
@@ -105,11 +109,11 @@ export default function GrammarPractice() {
   }, [patternsQuery.isLoading, fallbackLevel, level, user?.current_jlpt_level])
 
   useEffect(() => {
-    if (user?.current_jlpt_level) {
+    if (!requestedLevel && user?.current_jlpt_level) {
       setLevel(user.current_jlpt_level as JlptLevel)
       setIsAutomaticFallback(false)
     }
-  }, [user?.current_jlpt_level])
+  }, [user?.current_jlpt_level, requestedLevel])
 
   const startMutation = useMutation(
     (payload: SessionConfig & { question_ids?: number[] }) => grammarPracticeAPI.createSession(payload).then((response) => response.data),
@@ -236,11 +240,14 @@ export default function GrammarPractice() {
       if (!target || target.target === '_blank' || target.hasAttribute('download')) return
       const destination = new URL(target.href, window.location.href)
       if (destination.origin === window.location.origin && destination.pathname === window.location.pathname) return
-      if (!window.confirm('Bạn đang ở giữa buổi luyện. Rời trang sẽ kết thúc phần làm bài hiện tại. Bạn có muốn rời đi không?')) {
-        event.preventDefault()
-        event.stopPropagation()
-        event.stopImmediatePropagation()
-      }
+      event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation()
+      void confirmDialog(i18n.t('dialogs.exitGrammar', { ns: 'common' }), { tone: 'warning' }).then(confirmed => {
+        if (!confirmed) return
+        activeSessionRef.current = false
+        if (destination.origin === window.location.origin) navigate(destination.pathname + destination.search + destination.hash)
+        else window.location.assign(destination.href)
+      })
+
     }
     window.addEventListener('beforeunload', beforeUnload)
     document.addEventListener('click', confirmInternalNavigation, true)
@@ -248,7 +255,7 @@ export default function GrammarPractice() {
       window.removeEventListener('beforeunload', beforeUnload)
       document.removeEventListener('click', confirmInternalNavigation, true)
     }
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     if (!currentQuestion || screen !== 'session') return

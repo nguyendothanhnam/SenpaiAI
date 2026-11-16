@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Headphones, Pause, Play, Repeat1, SkipBack, SkipForward } from 'lucide-react'
 import { useQuery } from 'react-query'
@@ -15,7 +15,7 @@ export default function ListeningPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [audioUrl, setAudioUrl] = useState('')
   const [audioLoading, setAudioLoading] = useState(false)
-  const [audioError, setAudioError] = useState(false)
+  const [audioError, setAudioError] = useState('')
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [playing, setPlaying] = useState(false)
@@ -38,10 +38,12 @@ export default function ListeningPlayer() {
     const requestId = ++audioRequestId.current
     clipEnd.current = null
     setAudioLoading(true)
-    setAudioError(false)
+    setAudioError('')
     setPlaying(false)
     setCurrentTime(0)
     setDuration(0)
+    audioRef.current?.pause()
+    setAudioUrl('')
     try {
       const { data } = await listeningAPI.getAudio(id)
       if (requestId !== audioRequestId.current) return
@@ -51,8 +53,9 @@ export default function ListeningPlayer() {
       setAudioUrl(nextUrl)
       // Audio generation also writes the authoritative per-sentence timestamps.
       void lessonQuery.refetch()
-    } catch {
-      if (requestId === audioRequestId.current) setAudioError(true)
+    } catch (error) {
+      const status = (error as { response?: { status?: number } }).response?.status
+      if (requestId === audioRequestId.current) setAudioError(status === 503 ? 'listening.audioServiceUnavailable' : 'listening.audioUnavailable')
     } finally {
       if (requestId === audioRequestId.current) setAudioLoading(false)
     }
@@ -68,14 +71,14 @@ export default function ListeningPlayer() {
     }
   }, [id, Boolean(lesson)]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const segments = lesson?.segments ?? []
+  const segments = useMemo(() => lesson?.segments ?? [], [lesson?.segments])
   const audioDuration = duration || (lesson?.duration_ms || 0) / 1000
   const formatTime = (time: number) => `${Math.floor(time / 60)}:${String(Math.floor(time % 60)).padStart(2, '0')}`
   const activeIndex = useMemo(() => {
     const index = segments.findIndex((segment) => currentTime * 1000 >= (segment.start_ms ?? 0) && currentTime * 1000 < (segment.end_ms ?? Number.MAX_SAFE_INTEGER))
     return index < 0 ? 0 : index
   }, [segments, currentTime])
-  const seekTo = (index: number, sentenceOnly = false) => {
+  const seekTo = useCallback((index: number, sentenceOnly = false) => {
     const segment = segments[index]
     if (!segment || !audioRef.current) return
     if (sentenceOnly && ((segment.end_ms ?? 0) <= (segment.start_ms ?? 0))) {
@@ -86,7 +89,7 @@ export default function ListeningPlayer() {
     audioRef.current.currentTime = (segment.start_ms ?? 0) / 1000
     setCurrentTime(audioRef.current.currentTime)
     void audioRef.current.play().then(() => setPlaying(true)).catch(() => undefined)
-  }
+  }, [segments, t])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -107,11 +110,11 @@ export default function ListeningPlayer() {
     setLoopA(null)
     setLoopB(null)
   }, [activity, id])
-  const togglePlay = () => {
+  const togglePlay = useCallback(() => {
     if (!audioRef.current) return
     if (playing) audioRef.current.pause()
     else void audioRef.current.play().catch(() => toast.error(t('listening.audioPlayError')))
-  }
+  }, [playing, t])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -141,7 +144,7 @@ export default function ListeningPlayer() {
     audio.addEventListener('ended', ended)
     window.addEventListener('keydown', keydown)
     return () => { audio.removeEventListener('timeupdate', update); audio.removeEventListener('play', onPlay); audio.removeEventListener('pause', onPause); audio.removeEventListener('ended', ended); window.removeEventListener('keydown', keydown) }
-  }, [activeIndex, playing, repeatSegment, segments.length])
+  }, [activeIndex, playing, repeatSegment, segments.length, seekTo, togglePlay])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -166,13 +169,13 @@ export default function ListeningPlayer() {
       <button type="button" onClick={() => setActivity('exercises')} aria-pressed={activity === 'exercises'} className={`min-h-10 rounded-xl px-5 text-sm font-semibold transition ${activity === 'exercises' ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'text-[color:var(--text-muted)] hover:bg-[color:var(--accent)]'}`}>{t('listening.exercises.title')}</button>
     </div>
     <section className="theme-card overflow-hidden rounded-3xl border border-[color:var(--border)] shadow-[var(--shadow-card)]" aria-label={t('listening.audioSectionTitle')}>
-      <audio ref={audioRef} src={audioUrl || undefined} preload="metadata" onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} onDurationChange={() => setDuration(audioRef.current?.duration || 0)} onError={() => { if (audioUrl) { setAudioError(true); setPlaying(false); toast.error(t('listening.audioFileError')) } }} />
+      <audio ref={audioRef} src={audioUrl || undefined} preload="metadata" onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} onDurationChange={() => setDuration(audioRef.current?.duration || 0)} onError={() => { if (audioUrl) { setAudioError('listening.audioFileError'); setPlaying(false); toast.error(t('listening.audioFileError')) } }} />
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-5 py-4 sm:px-6">
         <div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]"><Headphones className="h-5 w-5" /></span><div><h2 className="font-bold">{t('listening.audioSectionTitle')}</h2><p className="text-xs text-[color:var(--text-muted)]">{t('listening.generatedAudio')}</p></div></div>
         <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${audioError ? 'bg-red-100 text-red-700 dark:bg-red-950/40 dark:text-red-300' : audioLoading ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300' : 'bg-[color:var(--accent)] text-[color:var(--primary)]'}`}><span className={`h-2 w-2 rounded-full ${audioError ? 'bg-red-500' : audioLoading ? 'animate-pulse bg-amber-500' : 'bg-emerald-500'}`} />{audioError ? t('listening.audioStatusError') : audioLoading ? t('listening.audioStatusLoading') : t('listening.audioStatusReady')}</span>
       </div>
       <div className="space-y-6 p-5 sm:p-7">
-        {audioError && <div role="alert" className="flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/30 dark:text-red-200 sm:flex-row sm:items-center sm:justify-between"><span>{t('listening.audioUnavailable')}</span><button type="button" disabled={audioLoading} onClick={() => void loadAudio()} className="btn btn-outline w-full border-current px-4 py-2 text-current disabled:opacity-50 sm:w-auto">{audioLoading ? t('listening.audioGenerating') : t('listening.retryAudio')}</button></div>}
+        {audioError && <div role="alert" className="flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/30 dark:text-red-200 sm:flex-row sm:items-center sm:justify-between"><span>{t(audioError)}</span><button type="button" disabled={audioLoading} onClick={() => void loadAudio()} className="btn btn-outline w-full border-current px-4 py-2 text-current disabled:opacity-50 sm:w-auto">{audioLoading ? t('listening.audioGenerating') : t('listening.retryAudio')}</button></div>}
         {audioLoading && <p role="status" className="rounded-2xl bg-[color:var(--accent)] px-4 py-3 text-sm font-medium text-[color:var(--primary)]">{t('listening.audioGenerating')}</p>}
         <div className="flex items-center justify-center gap-4 sm:gap-6">
           <button type="button" onClick={() => seekTo(Math.max(0, activeIndex - 1))} disabled={!audioUrl || !segments.length} className="grid h-11 w-11 place-items-center rounded-full text-[color:var(--text-muted)] transition hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)] disabled:opacity-40" aria-label={t('listening.previousSentence')}><SkipBack className="h-5 w-5" /></button>

@@ -52,6 +52,8 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   onSitDownRequest,
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null)
+  const speakingRef = useRef(isSpeaking)
+  speakingRef.current = isSpeaking
   const [viewMode, setViewMode] = useState<CameraViewMode>('pov')
   const [stance, setStance] = useState<'sitting' | 'standing'>('sitting')
   const [distToBoss, setDistToBoss] = useState<number>(2.75)
@@ -857,7 +859,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
 
       // Talking Lipsync
       if (mouthRef.current) {
-        if (isSpeaking) {
+        if (speakingRef.current) {
           mouthRef.current.scale.y = 1 + Math.abs(Math.sin(elapsedTime * 14)) * 3.5
         } else {
           mouthRef.current.scale.y = 1

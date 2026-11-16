@@ -1,12 +1,13 @@
 import { kanjiText as k } from '../utils/kanjiLocale'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { BookOpen, Compass, MessageCircle, Pause, PenLine, Play, RotateCcw, Search, SkipBack, SkipForward } from 'lucide-react'
 import KanjiCanvas from '../components/kanji/KanjiCanvas'
 import KanjiInfoPanel from '../components/kanji/KanjiInfoPanel'
 import KanjiStrokeOrder from '../components/kanji/KanjiStrokeOrder'
+import KanjiStudy from '../components/kanji/KanjiStudy'
 import PredictionResult from '../components/kanji/PredictionResult'
 import { kanjiDataAPI, kanjiRecognitionAPI } from '../services/api'
 import { useTranslation } from 'react-i18next'
@@ -155,6 +156,7 @@ const kanjiDictionary = [
 ]
 
 const modes = [
+  { id: 'study', label: 'Study', icon: BookOpen },
   { id: 'recognize', label: 'Recognize', icon: Search },
   { id: 'practice', label: 'Practice', icon: PenLine },
   { id: 'stroke', label: 'Stroke Order', icon: Play },
@@ -340,7 +342,7 @@ function StrokeOrderViewer({ info, step, setStep }) {
           )}
           {!strokeQuery.isLoading && !strokeData?.available && (
             <p className="mt-3 text-xs font-semibold text-red-600">
-              {t('unsupportedCharacter', { kanji: info.kanji })}
+              {t('noStrokeData')}
             </p>
           )}
         </div>
@@ -486,7 +488,8 @@ export default function Kanji() {
   const { t } = useTranslation('kanjiStatus')
   const navigate = useNavigate()
   const canvasRef = useRef(null)
-  const [mode, setMode] = useState('recognize')
+  const [params] = useSearchParams()
+  const [mode, setMode] = useState(() => params.get('mode') === 'study' ? 'study' : 'recognize')
   const [targetKanji, setTargetKanji] = useState('月')
   const [status, setStatus] = useState('idle')
   const [predictions, setPredictions] = useState([])
@@ -549,11 +552,6 @@ export default function Kanji() {
       retry: false,
     }
   )
-  const selectedHandwritingQuery = useQuery(
-    ['kanjiHandwritingSamplesForRecognition', selectedInfo.kanji],
-    () => kanjiDataAPI.getHandwritingSamples(selectedInfo.kanji, 1).then((response) => response.data),
-    { enabled: Boolean(selectedInfo.kanji) && mode === 'recognize', retry: false, staleTime: 60_000 },
-  )
   const modelInfoQuery = useQuery(
     'kanjiModelInfo',
     () => kanjiRecognitionAPI.getModelInfo().then((response) => response.data),
@@ -594,13 +592,6 @@ export default function Kanji() {
       setPredictions([])
       setSelectedKanjiSource(null)
       setError('')
-      return
-    }
-
-    if (selectedKanjiSource === 'manual' && selectedHandwritingQuery.data?.total === 0) {
-      setStatus('error')
-      setPredictions([])
-      setError(t('unsupportedCharacter', { kanji: selectedInfo.kanji }))
       return
     }
 
@@ -710,7 +701,7 @@ export default function Kanji() {
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[color:var(--text-muted)]">{k("Recognize handwriting, practice with feedback, explore kanji, and study verified stroke order.")}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[color:var(--bg-elevated)] p-1 sm:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[color:var(--bg-elevated)] p-1 sm:grid-cols-3 xl:grid-cols-5">
             {modes.map((item) => {
               const Icon = item.icon
               return (
@@ -724,7 +715,7 @@ export default function Kanji() {
         </div>
       </div>
 
-      {mode === 'explore' ? (
+      {mode === 'study' ? <KanjiStudy /> : mode === 'explore' ? (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
           <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-6 shadow-sm">
             <div className="flex items-center gap-3">
@@ -868,6 +859,7 @@ export default function Kanji() {
               <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-5 py-4 text-sm font-medium text-[color:var(--text)] shadow-sm">
                 {k('Model: {{state}}; {{count}} classes.', { state: k(modelInfoQuery.data?.available || modelInfoQuery.data?.model_loaded ? 'loaded' : 'not loaded'), count: modelInfoQuery.data?.total_classes ?? modelInfoQuery.data?.classes_count ?? 0 })}
                 <p className="mt-2 text-xs">{t('modelCoverage', { levels: modelInfoQuery.data?.supported_jlpt?.join(', ') || t('noTrainedLevels') })}</p>
+                {modelInfoQuery.data?.available && modelInfoQuery.data?.dictionary_classes > modelInfoQuery.data?.classes_count && <p className="mt-2 text-xs" role="status">{t('coverageGap', { count: modelInfoQuery.data.classes_count, total: modelInfoQuery.data.dictionary_classes })}</p>}
               </div>
             )}
 

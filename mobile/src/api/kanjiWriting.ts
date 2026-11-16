@@ -1,6 +1,6 @@
 import { api } from './services'
 import type { recognitionPayload } from '../features/kanji/handwriting'
-export type ModelInfo = { available: boolean; model_loaded: boolean; supported_jlpt: string[]; supported_kanji: string[]; classes_count: number; message?: string }
+export type ModelInfo = { available: boolean; model_loaded: boolean; supported_jlpt: string[]; supported_kanji: string[]; classes_count: number; dictionary_classes?: number; message?: string }
 export type Prediction = { kanji: string; confidence: number; meaning: string; onyomi: string[]; kunyomi: string[]; stroke_count?: number; jlpt?: string }
 export type Recognition = { success: boolean; predictions: Prediction[]; engine: string; low_confidence: boolean; message?: string }
 export const writingAPI = {
