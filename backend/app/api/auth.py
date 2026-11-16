@@ -71,8 +71,10 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
 async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
     """Login user and return access token."""
 
-    # Authenticate user
-    user = db.query(UserDB).filter(UserDB.email == user_credentials.email).first()
+    # Authenticate user by email or username
+    user = db.query(UserDB).filter(
+        (UserDB.email == user_credentials.email) | (UserDB.username == user_credentials.email)
+    ).first()
 
     if not user or not verify_password(user_credentials.password, user.hashed_password):
         raise HTTPException(
@@ -99,6 +101,8 @@ async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=User)
 async def get_current_user_info(current_user: User = Depends(get_current_active_user)):
     """Get current user information."""
+    if getattr(current_user, "learning_goals", None) is None:
+        current_user.learning_goals = []
     return current_user
 
 

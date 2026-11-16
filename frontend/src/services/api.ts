@@ -391,8 +391,26 @@ export const libraryAPI = {
   updateDocument: (documentId: number, data: any) => api.put(`/library/documents/${documentId}`, data),
   deleteDocument: (documentId: number) => api.delete(`/library/documents/${documentId}`),
   fetchUrl: (url: string) => api.post('/library/fetch-url', { url }),
-  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number }, language?: 'vi' | 'en') =>
-    api.post('/library/search', data, { params: { language } }),
+  parseFile: (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post<{ title: string; content: string; file_name: string }>('/library/parse-file', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+  uploadDocument: (file: File, extra?: { title?: string; document_type?: string; jlpt_level?: string; tags?: string }) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    if (extra?.title) formData.append('title', extra.title)
+    if (extra?.document_type) formData.append('document_type', extra.document_type)
+    if (extra?.jlpt_level) formData.append('jlpt_level', extra.jlpt_level)
+    if (extra?.tags) formData.append('tags', extra.tags)
+    return api.post('/library/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+  searchDocuments: (data: { query: string; document_type?: string | null; jlpt_level?: string | null; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number }) =>
+    api.post('/library/search', data),
   getCategories: () => api.get('/library/categories'),
   getStats: () => api.get('/library/stats'),
   quiz: (params: { mode?: string; jlpt?: string; count?: number } = {}) =>
@@ -425,4 +443,158 @@ export const kanjiDataAPI = {
   getHandwritingSamples: (kanji: string, limit = 5) =>
     api.get(`/kanji/${encodeURIComponent(kanji)}/handwriting-samples`, { params: { limit } }),
 }
+
+export interface InternshipProfile {
+  user_id: number
+  username: string
+  current_industry: string
+  current_level: number
+  exp_points: number
+  next_level_exp: number
+  prev_level_exp: number
+  company_name: string
+  job_title: string
+  interview_passed: boolean
+  total_interviews: number
+  total_scenarios_completed: number
+  manner_score_avg: number
+  keigo_score_avg: number
+  recent_sessions: Array<{
+    id: string
+    session_type: 'interview' | 'workplace'
+    industry: string
+    level: number
+    status: string
+    overall_score: number
+    created_at: string | null
+  }>
+}
+
+export interface IndustryInterviewer {
+  name: string
+  title: string
+  avatar_type: string
+  personality: string
+}
+
+export interface WorkplaceScenario {
+  id: string
+  level: number
+  level_name: string
+  title: string
+  npc_name: string
+  npc_title: string
+  goal: string
+  turns: Array<{
+    npc_ja: string
+    npc_vi: string
+    hints: string[]
+  }>
+}
+
+export interface IndustryInfo {
+  id: string
+  name: string
+  name_ja: string
+  icon: string
+  company_name: string
+  company_desc: string
+  location: string
+  interviewer: IndustryInterviewer
+  scenarios: WorkplaceScenario[]
+}
+
+export interface TurnData {
+  turn: number
+  speaker: string
+  npc_name: string
+  npc_title: string
+  npc_emotion?: 'neutral' | 'happy' | 'thinking' | 'surprised' | 'strict'
+  message_ja: string
+  message_vi: string
+  focus?: string
+  hints?: string[]
+  user_response?: string | null
+  feedback?: {
+    corrected_sentence: string
+    advice_vi: string
+  } | null
+  scores?: {
+    grammar: number
+    keigo: number
+    manner: number
+  } | null
+}
+
+export interface OfferLetter {
+  passed: boolean
+  company_name: string
+  company_location: string
+  candidate_name: string
+  assigned_level: number
+  assigned_position: string
+  interviewer_name: string
+  overall_score: number
+  scores_breakdown: {
+    grammar: number
+    keigo: number
+    manner: number
+  }
+  monthly_stipend_exp: number
+  points_reward: number
+  hanko_seal_text: string
+  date: string
+  ceo_message: string
+}
+
+export interface InternshipSession {
+  id: string
+  session_type: 'interview' | 'workplace'
+  industry: string
+  industry_name: string
+  company_name: string
+  level: number
+  scenario_id: string
+  scenario_title: string
+  status: 'in_progress' | 'completed' | 'failed'
+  current_turn: number
+  max_turns: number
+  overall_score: number
+  grammar_score: number
+  keigo_score: number
+  manner_score: number
+  turns: TurnData[]
+  offer_letter?: OfferLetter | null
+  created_at: string | null
+  completed_at: string | null
+}
+
+export interface BusinessHandbookItem {
+  id: string
+  title: string
+  icon: string
+  summary: string
+  details: Array<{
+    name: string
+    usage: string
+  }>
+  pro_tip: string
+}
+
+export const internshipAPI = {
+  getProfile: () => api.get<InternshipProfile>('/internship/profile'),
+  getIndustries: () => api.get<Record<string, IndustryInfo>>('/internship/industries'),
+  getHandbook: () => api.get<BusinessHandbookItem[]>('/internship/handbook'),
+  startInterview: (industry_id = 'it', target_level = 1) =>
+    api.post<InternshipSession>('/internship/interview/start', { industry_id, target_level }),
+  startWorkplace: (industry_id: string, scenario_id: string) =>
+    api.post<InternshipSession>('/internship/workplace/start', { industry_id, scenario_id }),
+  submitTurnAnswer: (session_id: string, user_response: string) =>
+    api.post<InternshipSession>(`/internship/sessions/${session_id}/turn`, { user_response }),
+  getSessionDetail: (session_id: string) =>
+    api.get<InternshipSession>(`/internship/sessions/${session_id}`),
+  listSessions: (limit = 20, offset = 0) =>
+    api.get<{ total: number; items: any[] }>('/internship/sessions', { params: { limit, offset } }),
+}
+
 

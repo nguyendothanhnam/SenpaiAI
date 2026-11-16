@@ -29,6 +29,71 @@ def needs_history(question: str) -> bool:
     return bool(re.search(r'câu (?:trên|trước|đó)|giải thích thêm|ví dụ (?:khác|thêm)|tiếp tục|như trên|\b(?:previous|above|that|it|more|continue|follow.up)\b', question, re.IGNORECASE))
 
 
+def is_chitchat_query(question: str) -> bool:
+    folded = _fold(question.strip().lower())
+    if re.search(r'^(?:xin\s+)?chao(?:\s+(?:ban|senpai|ai|ad|em|anh|chi))?\s*[!?.]*$', folded):
+        return True
+    if re.search(r'^(?:hello|hi|hey|good\s+(?:morning|afternoon|evening))\b', folded):
+        return True
+    if re.search(r'^(?:ban|senpai)\s+(?:la\s+ai|ten\s+gi|la\s+gi)\b', folded):
+        return True
+    if re.search(r'^(?:who\s+are\s+you|what\s+is\s+your\s+name)\b', folded):
+        return True
+    if re.search(r'^(?:cam\s+on|thank\s+you|thanks|arigato|arigatou)\b', folded):
+        return True
+    if re.search(r'^(?:tam\s+biet|bye|goodbye|sayonara)\b', folded):
+        return True
+    return False
+
+
+def chitchat_direct_answer(question: str, language: str = 'vi') -> str | None:
+    folded = _fold(question.strip().lower())
+    if re.search(r'^(?:xin\s+)?chao(?:\s+(?:ban|senpai|ai|ad|em|anh|chi))?\s*[!?.]*$', folded) or re.search(r'^(?:hello|hi|hey)\b', folded):
+        if language == 'en':
+            return (
+                "Hello! I am **SenpaiAI** — your intelligent Japanese learning tutor.\n\n"
+                "How can I help you today? Feel free to ask me about:\n"
+                "- 📖 Japanese grammar (JLPT N5 ~ N1)\n"
+                "- 🈸 Vocabulary and Kanji lookups\n"
+                "- ⚖️ Differentiating confusing grammar points\n"
+                "- 💬 Sentence translation and conversation practice\n\n"
+                "What would you like to study?"
+            )
+        return (
+            "Chào bạn! Tôi là **SenpaiAI** — trợ lý và gia sư hỗ trợ học tiếng Nhật của bạn.\n\n"
+            "Hôm nay bạn muốn học gì nào? Tôi có thể hỗ trợ bạn:\n"
+            "- 📖 Giải thích ngữ pháp tiếng Nhật từ N5 đến N1\n"
+            "- 🈸 Tra cứu từ vựng, chữ Hán (Kanji) và ví dụ thực tế\n"
+            "- ⚖️ Phân biệt các cấu trúc ngữ pháp hay nhầm lẫn\n"
+            "- 💬 Dịch câu và luyện tập mẫu câu giao tiếp\n"
+            "- 📝 Luyện giải bài tập và đề thi JLPT\n\n"
+            "Hãy đặt câu hỏi cho tôi bất cứ lúc nào nhé!"
+        )
+
+    if re.search(r'^(?:ban|senpai)\s+(?:la\s+ai|ten\s+gi|la\s+gi)\b', folded) or re.search(r'^(?:who\s+are\s+you|what\s+is\s+your\s+name)\b', folded):
+        if language == 'en':
+            return (
+                "I am **SenpaiAI**, your dedicated AI Japanese tutor built on standard JLPT curriculum and verified learning knowledge. "
+                "I'm here to help you master Japanese vocabulary, Kanji, grammar, and reading comprehension!"
+            )
+        return (
+            "Tôi là **SenpaiAI**, trợ lý AI đồng hành học tiếng Nhật được xây dựng dựa trên giáo trình chuẩn JLPT (N5 ~ N1) và thư viện học liệu chuyên sâu. "
+            "Tôi luôn sẵn sàng giải đáp thắc mắc về ngữ pháp, từ vựng, chữ Hán và luyện thi tiếng Nhật cho bạn!"
+        )
+
+    if re.search(r'^(?:cam\s+on|thank\s+you|thanks|arigato|arigatou)\b', folded):
+        if language == 'en':
+            return "You're very welcome! Keep up the great work with your Japanese studies! (どういたしまして！ 頑張ってください！)"
+        return "Không có gì đâu bạn! Chúc bạn học tiếng Nhật thật tốt và tiến bộ mỗi ngày nhé! Nếu có cấu trúc nào chưa hiểu, hãy cứ hỏi tôi nha. (どういたしまして！ 頑張ってください！)"
+
+    if re.search(r'^(?:tam\s+biet|bye|goodbye|sayonara)\b', folded):
+        if language == 'en':
+            return "Goodbye! See you next time! (またね！)"
+        return "Tạm biệt bạn! Hẹn gặp lại bạn trong buổi học tiếp theo nhé! (またね！)"
+
+    return None
+
+
 def is_translation_question(question: str) -> bool:
     return bool(re.search(r'\b(?:dich|nghia la gi|translate|translation|meaning|mean)\b', _fold(question)))
 

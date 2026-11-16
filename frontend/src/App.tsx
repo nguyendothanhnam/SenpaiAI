@@ -25,6 +25,7 @@ import DailyChallenge from './pages/DailyChallenge'
 import RemindersSettings from './pages/RemindersSettings'
 import ListeningLessons from './pages/ListeningLessons'
 import ListeningPlayer from './pages/ListeningPlayer'
+import InternshipRoleplay from './pages/InternshipRoleplay'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -73,6 +74,8 @@ function App() {
         <Route path="/settings/reminders" element={<RemindersSettings />} />
         <Route path="/listening" element={<ListeningLessons />} />
         <Route path="/listening/:id" element={<ListeningPlayer />} />
+        <Route path="/interview" element={<InternshipRoleplay />} />
+        <Route path="/internship" element={<Navigate to="/interview" replace />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Layout>

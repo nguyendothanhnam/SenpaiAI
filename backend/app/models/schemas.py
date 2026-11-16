@@ -23,15 +23,24 @@ class UserLogin(BaseModel):
 class User(UserBase):
     id: int
     is_active: bool
-    current_jlpt_level: str
-    learning_goals: List[str]
-    exercise_points: int
+    current_jlpt_level: Optional[str] = "N5"
+    learning_goals: Optional[List[str]] = Field(default_factory=list)
+    exercise_points: Optional[int] = 0
     created_at: datetime
     updated_at: Optional[datetime] = None
     ui_language: Optional[Literal["vi", "en"]] = None
 
     class Config:
         from_attributes = True
+
+    @field_validator("learning_goals", mode="before")
+    @classmethod
+    def set_learning_goals(cls, v):
+        if v is None:
+            return []
+        if isinstance(v, list):
+            return v
+        return []
 
 
 class UserUpdate(BaseModel):
@@ -232,6 +241,12 @@ class DocumentFetchUrlResponse(BaseModel):
     source_url: str
 
 
+class DocumentParseFileResponse(BaseModel):
+    title: str
+    content: str
+    file_name: str
+
+
 class DocumentCreate(BaseModel):
     title: str
     content: str
@@ -243,7 +258,7 @@ class DocumentCreate(BaseModel):
     @field_validator("document_type")
     @classmethod
     def validate_document_type(cls, value: str) -> str:
-        allowed = {"vocabulary", "grammar", "lesson", "culture", "example"}
+        allowed = {"vocabulary", "grammar", "kanji", "conversation", "lesson", "culture", "example"}
         if value not in allowed:
             raise ValueError("Invalid document type")
         return value
@@ -253,9 +268,7 @@ class DocumentCreate(BaseModel):
     def validate_source_url(cls, value: Optional[str]) -> Optional[str]:
         if not value:
             return value
-        if not value.startswith(("http://", "https://")):
-            raise ValueError("Source URL must be a valid URL")
-        return value
+        return value.strip()
 
 
 class DocumentUpdate(BaseModel):
@@ -271,7 +284,7 @@ class DocumentUpdate(BaseModel):
     def validate_update_document_type(cls, value: Optional[str]) -> Optional[str]:
         if value is None:
             return value
-        allowed = {"vocabulary", "grammar", "lesson", "culture", "example"}
+        allowed = {"vocabulary", "grammar", "kanji", "conversation", "lesson", "culture", "example"}
         if value not in allowed:
             raise ValueError("Invalid document type")
         return value
@@ -281,9 +294,7 @@ class DocumentUpdate(BaseModel):
     def validate_update_source_url(cls, value: Optional[str]) -> Optional[str]:
         if not value:
             return value
-        if not value.startswith(("http://", "https://")):
-            raise ValueError("Source URL must be a valid URL")
-        return value
+        return value.strip()
 
 
 JlptLevel = Literal["N5", "N4", "N3", "N2", "N1"]

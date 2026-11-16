@@ -12,6 +12,7 @@
     "i18n:lint": "node scripts/lint-i18n-literals.mjs"
   },
   "dependencies": {
+    "@types/three": "^0.187.0",
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
     "framer-motion": "^12.38.0",
@@ -26,7 +27,8 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.20.1",
     "romkan": "^1.0.2",
-    "tailwind-merge": "^2.0.0"
+    "tailwind-merge": "^2.0.0",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

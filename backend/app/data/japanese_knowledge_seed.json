@@ -1,0 +1,1635 @@
+[
+  {
+    "type": "kanji",
+    "level": "N5",
+    "japanese": "日",
+    "reading": "ニチ, ジツ / ひ, -び, -か",
+    "meaning_vi": "Mặt trời, ngày, Nhật Bản (Hán Việt: NHẬT)",
+    "stroke_count": 4,
+    "tags": ["kanji", "N5", "cơ bản", "thời gian"],
+    "examples": [
+      {
+        "sentence_ja": "日本は桜がとても綺麗です。",
+        "reading": "にほん は さくら が とても きれい です",
+        "meaning_vi": "Nước Nhật hoa anh đào rất đẹp."
+      },
+      {
+        "sentence_ja": "日曜日に友達と映画を見ます。",
+        "reading": "にちようび に ともだち と えいが を みます",
+        "meaning_vi": "Chủ nhật tôi xem phim cùng bạn bè."
+      }
+    ],
+    "notes": "Chữ cơ bản nhất biểu thị mặt trời, ngày trong tuần và nước Nhật."
+  },
+  {
+    "type": "kanji",
+    "level": "N5",
+    "japanese": "月",
+    "reading": "ゲツ, ガツ / つき",
+    "meaning_vi": "Mặt trăng, tháng, thứ hai (Hán Việt: NGUYỆT)",
+    "stroke_count": 4,
+    "tags": ["kanji", "N5", "cơ bản", "thời gian"],
+    "examples": [
+      {
+        "sentence_ja": "今夜は月がとても明るいです。",
+        "reading": "こんや は つき が とても あかるい です",
+        "meaning_vi": "Tối nay trăng rất sáng."
+      },
+      {
+        "sentence_ja": "来月、東京へ旅行に行きます。",
+        "reading": "らいげつ、とうきょう へ りょこう に いきます",
+        "meaning_vi": "Tháng sau tôi đi du lịch Tokyo."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N5",
+    "japanese": "学",
+    "reading": "ガク / まな・ぶ",
+    "meaning_vi": "Học tập, trường học (Hán Việt: HỌC)",
+    "stroke_count": 8,
+    "tags": ["kanji", "N5", "trường học"],
+    "examples": [
+      {
+        "sentence_ja": "私は大学で情報工学を学んでいます。",
+        "reading": "わたし は だいがく で じょうほうこうがく を まなんでいます",
+        "meaning_vi": "Tôi đang học ngành công nghệ thông tin ở trường đại học."
+      },
+      {
+        "sentence_ja": "彼は真面目な学生です。",
+        "reading": "かれ は まじめ な がくせい です",
+        "meaning_vi": "Anh ấy là một học sinh chăm chỉ."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N5",
+    "japanese": "人",
+    "reading": "ジン, ニン / ひと",
+    "meaning_vi": "Con người, người (Hán Việt: NHÂN)",
+    "stroke_count": 2,
+    "tags": ["kanji", "N5", "con người"],
+    "examples": [
+      {
+        "sentence_ja": "あの人は日本語の先生です。",
+        "reading": "あの ひと は にほんご の せんせい です",
+        "meaning_vi": "Người kia là giáo viên dạy tiếng Nhật."
+      },
+      {
+        "sentence_ja": "私はベトナム人です。",
+        "reading": "わたし は ベトナムじん です",
+        "meaning_vi": "Tôi là người Việt Nam."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N4",
+    "japanese": "会",
+    "reading": "カイ, エ / あ・う",
+    "meaning_vi": "Gặp gỡ, hội họp (Hán Việt: HỘI)",
+    "stroke_count": 6,
+    "tags": ["kanji", "N4", "giao tiếp", "công việc"],
+    "examples": [
+      {
+        "sentence_ja": "明日、駅の前で会いましょう。",
+        "reading": "あした、えき の まえ で あいましょう",
+        "meaning_vi": "Ngày mai hãy gặp nhau ở trước nhà ga nhé."
+      },
+      {
+        "sentence_ja": "午後から重要な会議があります。",
+        "reading": "ごご から じゅうよう な かいぎ が あります",
+        "meaning_vi": "Từ buổi chiều có cuộc họp quan trọng."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N4",
+    "japanese": "社",
+    "reading": "シャ / やしろ",
+    "meaning_vi": "Công ty, xã hội, đền (Hán Việt: XÃ)",
+    "stroke_count": 7,
+    "tags": ["kanji", "N4", "công ty"],
+    "examples": [
+      {
+        "sentence_ja": "日本のIT会社で働きたいです。",
+        "reading": "にほん の アイティー がいしゃ で はたらきたい です",
+        "meaning_vi": "Tôi muốn làm việc tại một công ty IT Nhật Bản."
+      },
+      {
+        "sentence_ja": "彼は大手企業の社員です。",
+        "reading": "かれ は おおて きぎょう の しゃいん です",
+        "meaning_vi": "Anh ấy là nhân viên của một doanh nghiệp lớn."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N4",
+    "japanese": "言",
+    "reading": "ゲン, ゴン / い・う, こと",
+    "meaning_vi": "Nói, lời nói (Hán Việt: NGÔN)",
+    "stroke_count": 7,
+    "tags": ["kanji", "N4", "giao tiếp"],
+    "examples": [
+      {
+        "sentence_ja": "先生は何とおっしゃいましたか。",
+        "reading": "せんせい は なん と おっしゃいました か",
+        "meaning_vi": "Thầy giáo đã nói điều gì vậy?"
+      },
+      {
+        "sentence_ja": "自分の意見をはっきり言うことが大切です。",
+        "reading": "じぶん の いけん を はっきり いう こと が たいせつ です",
+        "meaning_vi": "Việc nói rõ ràng ý kiến của bản thân là rất quan trọng."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N4",
+    "japanese": "話",
+    "reading": "ワ / はな・す, はなし",
+    "meaning_vi": "Nói chuyện, câu chuyện (Hán Việt: THOẠI)",
+    "stroke_count": 13,
+    "tags": ["kanji", "N4", "giao tiếp"],
+    "examples": [
+      {
+        "sentence_ja": "日本語で電話をかける練習をします。",
+        "reading": "にほんご で でんわ を かける れんしゅう を します",
+        "meaning_vi": "Tôi luyện tập gọi điện thoại bằng tiếng Nhật."
+      },
+      {
+        "sentence_ja": "先輩と今後のキャリアについて話しました。",
+        "reading": "せんぱい と こんご の キャリア について はなしました",
+        "meaning_vi": "Tôi đã nói chuyện với tiền bối về sự nghiệp sắp tới."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N3",
+    "japanese": "情",
+    "reading": "ジョウ, セイ / なさ・け",
+    "meaning_vi": "Thông tin, tình cảm, sự tình (Hán Việt: TÌNH)",
+    "stroke_count": 11,
+    "tags": ["kanji", "N3", "công nghệ", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "最新のIT情報をインターネットで調べます。",
+        "reading": "さいしん の アイティー じょうほう を インターネット で しらべます",
+        "meaning_vi": "Tôi tìm kiếm thông tin IT mới nhất trên internet."
+      },
+      {
+        "sentence_ja": "お客様の個人情報は厳重に管理されます。",
+        "reading": "おきゃくさま の こじんじょうほう は げんじゅう に かんり されます",
+        "meaning_vi": "Thông tin cá nhân của khách hàng được quản lý nghiêm ngặt."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N3",
+    "japanese": "報",
+    "reading": "ホウ / むく・いる",
+    "meaning_vi": "Báo cáo, thông báo, báo đáp (Hán Việt: BÁO)",
+    "stroke_count": 12,
+    "tags": ["kanji", "N3", "công sở", "Ho-Ren-So"],
+    "examples": [
+      {
+        "sentence_ja": "毎朝プロジェクトの進捗を上司に報告します。",
+        "reading": "まいあさ プロジェクト の しんちょく を じょうし に ほうこく します",
+        "meaning_vi": "Mỗi sáng tôi báo cáo tiến độ dự án cho sếp."
+      },
+      {
+        "sentence_ja": "日報を書いてから退社します。",
+        "reading": "にっぽう を かいて から たいしゃ します",
+        "meaning_vi": "Tôi viết báo cáo ngày trước khi rời công ty."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N3",
+    "japanese": "連",
+    "reading": "レン / つら・なる, つ・れる",
+    "meaning_vi": "Liên lạc, dẫn theo (Hán Việt: LIÊN)",
+    "stroke_count": 10,
+    "tags": ["kanji", "N3", "giao tiếp", "Ho-Ren-So"],
+    "examples": [
+      {
+        "sentence_ja": "問題が発生した場合は直ちに連絡してください。",
+        "reading": "もんだい が はっせい した ばあい は ただちに れんらく して ください",
+        "meaning_vi": "Trong trường hợp phát sinh vấn đề, hãy liên lạc ngay lập tức."
+      },
+      {
+        "sentence_ja": "関連する資料をメールで送付いたします。",
+        "reading": "かんれん する しりょう を メール で そうふ いたします",
+        "meaning_vi": "Tôi xin gửi các tài liệu liên quan qua email."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N3",
+    "japanese": "相",
+    "reading": "ソウ, ショウ / あい-",
+    "meaning_vi": "Tương hỗ, cùng nhau, thảo luận (Hán Việt: TƯƠNG / TƯỚNG)",
+    "stroke_count": 9,
+    "tags": ["kanji", "N3", "công sở", "Ho-Ren-So"],
+    "examples": [
+      {
+        "sentence_ja": "困ったときは一人で悩まず先輩に相談しましょう。",
+        "reading": "こまった とき は ひとり で なやまづ せんぱい に そうだん しましょう",
+        "meaning_vi": "Khi gặp khó khăn, đừng tự loay hoay mà hãy thảo luận với tiền bối."
+      },
+      {
+        "sentence_ja": "相手の立場に立って考えることが重要です。",
+        "reading": "あいて の たちば に たって かんがえる こと が じゅうよう です",
+        "meaning_vi": "Việc đặt mình vào vị trí của đối phương để suy nghĩ là rất quan trọng."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N2",
+    "japanese": "議",
+    "reading": "ギ",
+    "meaning_vi": "Nghị luận, bàn bạc, hội nghị (Hán Việt: NGHỊ)",
+    "stroke_count": 20,
+    "tags": ["kanji", "N2", "hội họp", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "会議の議事録を作成してチームに共有しました。",
+        "reading": "かいぎ の ぎじろく を さくせい して チーム に きょうゆう しました",
+        "meaning_vi": "Tôi đã lập biên bản cuộc họp và chia sẻ cho toàn đội."
+      },
+      {
+        "sentence_ja": "本日の議題は新機能のリリーススケジュールです。",
+        "reading": "ほんじつ の ぎだい は しんきのう の リリース スケジュール です",
+        "meaning_vi": "Chủ đề cuộc họp hôm nay là lịch trình phát hành tính năng mới."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N2",
+    "japanese": "求",
+    "reading": "キュウ / もと・める",
+    "meaning_vi": "Yêu cầu, tìm kiếm (Hán Việt: CẦU)",
+    "stroke_count": 7,
+    "tags": ["kanji", "N2", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "お客様のニーズに応じた品質を追求します。",
+        "reading": "おきゃくさま の ニーズ に おうじた ひんしつ を ついきゅう します",
+        "meaning_vi": "Chúng tôi theo đuổi chất lượng đáp ứng nhu cầu của khách hàng."
+      },
+      {
+        "sentence_ja": "開発チームへの要求事項を整理しました。",
+        "reading": "かいはつ チーム への ようきゅうじこう を せいり しました",
+        "meaning_vi": "Tôi đã sắp xếp lại các hạng mục yêu cầu đối với đội ngũ phát triển."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N2",
+    "japanese": "職",
+    "reading": "ショク",
+    "meaning_vi": "Nghề nghiệp, chức vụ (Hán Việt: CHỨC)",
+    "stroke_count": 18,
+    "tags": ["kanji", "N2", "sự nghiệp"],
+    "examples": [
+      {
+        "sentence_ja": "日本での就職活動に向けて履歴書を準備しています。",
+        "reading": "にほん で の しゅうしょく かつどう に むけて りれきしょ を じゅんび しています",
+        "meaning_vi": "Tôi đang chuẩn bị CV cho hoạt động tìm việc tại Nhật Bản."
+      },
+      {
+        "sentence_ja": "職場でのチームワークを大切にしています。",
+        "reading": "しょくば で の チームワーク を たいせつ に しています",
+        "meaning_vi": "Tôi rất trân trọng tinh thần làm việc nhóm tại nơi làm việc."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N2",
+    "japanese": "務",
+    "reading": "ム / つと・める",
+    "meaning_vi": "Nhiệm vụ, công việc (Hán Việt: VỤ)",
+    "stroke_count": 11,
+    "tags": ["kanji", "N2", "công việc"],
+    "examples": [
+      {
+        "sentence_ja": "日々の業務を効率化するために自動化ツールを導入しました。",
+        "reading": "ひび の ぎょうむ を こうりつか する ため に じどうか ツール を どうにゅう しました",
+        "meaning_vi": "Tôi đã áp dụng công cụ tự động hóa để nâng cao hiệu suất công việc hàng ngày."
+      },
+      {
+        "sentence_ja": "事務所の受付でお待ちしております。",
+        "reading": "じむしょ の うけつけ で おまち して おります",
+        "meaning_vi": "Tôi xin phép chờ quý khách tại bàn lễ tân của văn phòng."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N1",
+    "japanese": "謝",
+    "reading": "シャ / あやま・る",
+    "meaning_vi": "Cảm ơn, xin lỗi, tạ lỗi (Hán Việt: TẠ)",
+    "stroke_count": 17,
+    "tags": ["kanji", "N1", "kính ngữ", "văn hóa công sở"],
+    "examples": [
+      {
+        "sentence_ja": "システム障害が発生し、お客様に深く謝罪いたしました。",
+        "reading": "システム しょうがい が はっせい し、おきゃくさま に ふかく しゃざい いたしました",
+        "meaning_vi": "Hệ thống phát sinh sự cố, chúng tôi đã tạ lỗi sâu sắc tới khách hàng."
+      },
+      {
+        "sentence_ja": "日頃のご支援に心より感謝申し上げます。",
+        "reading": "ひごろ の ごしえん に こころ より かんしゃ もうしあげます",
+        "meaning_vi": "Tôi xin chân thành cảm tạ sự hỗ trợ quý báu của quý vị trong suốt thời gian qua."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N1",
+    "japanese": "審",
+    "reading": "シン",
+    "meaning_vi": "Xem xét kỹ, thẩm tra, xét duyệt (Hán Việt: THẨM)",
+    "stroke_count": 15,
+    "tags": ["kanji", "N1", "thủ tục", "pháp lý"],
+    "examples": [
+      {
+        "sentence_ja": "新製品の安全性に関する厳格な審査が行われました。",
+        "reading": "しんせいひん の あんぜんせい に かんする げんかく な しんさ が おこなわれました",
+        "meaning_vi": "Quá trình thẩm tra nghiêm ngặt về tính an toàn của sản phẩm mới đã được tiến hành."
+      },
+      {
+        "sentence_ja": "コードレビューで仕様の妥当性を審議します。",
+        "reading": "コード レビュー で しよう の だとうせい を しんぎ します",
+        "meaning_vi": "Chúng tôi thẩm nghị tính thỏa đáng của đặc tả trong buổi code review."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N1",
+    "japanese": "弊",
+    "reading": "ヘイ",
+    "meaning_vi": "Tệ, khiêm nhường xưng công ty mình (Hán Việt: TỆ)",
+    "stroke_count": 15,
+    "tags": ["kanji", "N1", "kính ngữ", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "弊社はクラウドサービスの開発を手がけております。",
+        "reading": "へいしゃ は クラウド サービス の かいはつ を てがけて おります",
+        "meaning_vi": "Công ty chúng tôi chuyên thực hiện phát triển các dịch vụ điện toán đám mây."
+      },
+      {
+        "sentence_ja": "長年の制度による弊害を是正する方針です。",
+        "reading": "ながねん の せいど による へいがい を ぜせい する ほうしん です",
+        "meaning_vi": "Chủ trương là khắc phục các tệ hại do cơ chế lâu năm gây ra."
+      }
+    ]
+  },
+  {
+    "type": "kanji",
+    "level": "N1",
+    "japanese": "貴",
+    "reading": "キ / たっと・い, とうと・い",
+    "meaning_vi": "Quý, tôn kính xưng công ty bạn (Hán Việt: QUÝ)",
+    "stroke_count": 12,
+    "tags": ["kanji", "N1", "kính ngữ", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "貴社のますますのご発展を心よりお祈り申し上げます。",
+        "reading": "きしゃ の ますます の ごはってん を こころ より おいのり もうしあげます",
+        "meaning_vi": "Tôi xin kính chúc quý công ty ngày càng phát triển thịnh vượng."
+      },
+      {
+        "sentence_ja": "貴重なご意見をいただき、誠にありがとうございます。",
+        "reading": "きちょう な ごいけん を いただき、まことに ありがとう ございます",
+        "meaning_vi": "Xin chân thành cảm ơn vì đã nhận được ý kiến đóng góp vô cùng quý giá."
+      }
+    ]
+  },
+
+  {
+    "type": "vocabulary",
+    "level": "N5",
+    "japanese": "食べる",
+    "reading": "たべる (taberu)",
+    "meaning_vi": "Ăn (động từ nhóm 2)",
+    "tags": ["từ vựng", "N5", "động từ", "đời sống"],
+    "examples": [
+      {
+        "sentence_ja": "朝ごはんにパンと卵を食べました。",
+        "reading": "あさごはん に パン と たまご を たべました",
+        "meaning_vi": "Tôi đã ăn bánh mì và trứng vào bữa sáng."
+      },
+      {
+        "sentence_ja": "日本料理を食べたことがありますか。",
+        "reading": "にほんりょうり を たべた こと が あります か",
+        "meaning_vi": "Bạn đã từng ăn món ăn Nhật Bản chưa?"
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N5",
+    "japanese": "行く",
+    "reading": "いく (iku)",
+    "meaning_vi": "Đi (động từ nhóm 1)",
+    "tags": ["từ vựng", "N5", "động từ", "di chuyển"],
+    "examples": [
+      {
+        "sentence_ja": "毎朝8時に学校へ行きます。",
+        "reading": "まいあさ はちじ に がっこう へ いきます",
+        "meaning_vi": "Mỗi sáng tôi đến trường lúc 8 giờ."
+      },
+      {
+        "sentence_ja": "週末に友達と京都へ行きたいです。",
+        "reading": "しゅうまつ に ともだち と きょうと へ いきたい です",
+        "meaning_vi": "Cuối tuần tôi muốn cùng bạn bè đi Kyoto."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N5",
+    "japanese": "勉強する",
+    "reading": "べんきょうする (benkyou suru)",
+    "meaning_vi": "Học tập, nghiên cứu (động từ nhóm 3)",
+    "tags": ["từ vựng", "N5", "động từ", "học tập"],
+    "examples": [
+      {
+        "sentence_ja": "図書館で静かに日本語を勉強します。",
+        "reading": "としょかん で しずか に にほんご を べんきょう します",
+        "meaning_vi": "Tôi học tiếng Nhật yên tĩnh tại thư viện."
+      },
+      {
+        "sentence_ja": "JLPTに合格するために毎日3時間勉強しています。",
+        "reading": "ジェイエルピーティー に ごうかく する ため に まいにち さんじかん べんきょう しています",
+        "meaning_vi": "Tôi học 3 tiếng mỗi ngày để thi đỗ JLPT."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N5",
+    "japanese": "友達",
+    "reading": "ともだち (tomodachi)",
+    "meaning_vi": "Bạn bè (danh từ)",
+    "tags": ["từ vựng", "N5", "danh từ", "quan hệ"],
+    "examples": [
+      {
+        "sentence_ja": "ベトナムにたくさんの友達がいます。",
+        "reading": "ベトナム に たくさん の ともだち が います",
+        "meaning_vi": "Tôi có rất nhiều bạn bè ở Việt Nam."
+      },
+      {
+        "sentence_ja": "友達と一緒に日本語の宿題をしました。",
+        "reading": "ともだち と いっしょ に にほんご の しゅくだい を しました",
+        "meaning_vi": "Tôi đã làm bài tập tiếng Nhật cùng với bạn."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N4",
+    "japanese": "手伝う",
+    "reading": "てつだう (tetsudau)",
+    "meaning_vi": "Giúp đỡ, phụ giúp (động từ nhóm 1)",
+    "tags": ["từ vựng", "N4", "động từ", "giao tiếp"],
+    "examples": [
+      {
+        "sentence_ja": "荷物が多いですね。何か手伝いましょうか。",
+        "reading": "にもつ が おおい です ね。なにか てつだいましょう か",
+        "meaning_vi": "Hành lý nhiều quá nhỉ. Tôi giúp bạn một tay nhé?"
+      },
+      {
+        "sentence_ja": "同僚の仕事を手伝ってプロジェクトを終わらせました。",
+        "reading": "どうりょう の しごと を てつだって プロジェクト を おわらせました",
+        "meaning_vi": "Tôi đã phụ giúp công việc của đồng nghiệp để hoàn thành dự án."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N4",
+    "japanese": "用意する",
+    "reading": "よういする (youi suru)",
+    "meaning_vi": "Chuẩn bị sẵn sàng (động từ nhóm 3)",
+    "tags": ["từ vựng", "N4", "động từ", "công việc"],
+    "examples": [
+      {
+        "sentence_ja": "会議の前に必要な資料を用意しておきます。",
+        "reading": "かいぎ の まえ に ひつよう な しりょう を ようい して おきます",
+        "meaning_vi": "Tôi chuẩn bị sẵn các tài liệu cần thiết trước cuộc họp."
+      },
+      {
+        "sentence_ja": "プレゼンの準備を完璧に用意しました。",
+        "reading": "プレゼン の じゅんび を かんぺき に ようい しました",
+        "meaning_vi": "Tôi đã chuẩn bị hoàn hảo cho bài thuyết trình."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N4",
+    "japanese": "案内する",
+    "reading": "あんないする (annai suru)",
+    "meaning_vi": "Hướng dẫn, dẫn đường (động từ nhóm 3)",
+    "tags": ["từ vựng", "N4", "động từ", "tiếp khách"],
+    "examples": [
+      {
+        "sentence_ja": "お客様を会議室へご案内いたします。",
+        "reading": "おきゃくさま を かいぎしつ へ ごあんない いたします",
+        "meaning_vi": "Tôi xin phép dẫn quý khách tới phòng họp."
+      },
+      {
+        "sentence_ja": "新入社員に社内を案内しました。",
+        "reading": "しんにゅうしゃいん に しゃない を あんない しました",
+        "meaning_vi": "Tôi đã hướng dẫn nhân viên mới tham quan công ty."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N4",
+    "japanese": "故障",
+    "reading": "こしょう (koshou)",
+    "meaning_vi": "Hỏng hóc, sự cố (danh từ)",
+    "tags": ["từ vựng", "N4", "kỹ thuật", "sự cố"],
+    "examples": [
+      {
+        "sentence_ja": "パソコンが故障して動かなくなりました。",
+        "reading": "パソコン が こしょう して うごかなく なりました",
+        "meaning_vi": "Máy tính bị hỏng và không hoạt động được nữa."
+      },
+      {
+        "sentence_ja": "機械の故障の原因を調査しています。",
+        "reading": "きかい の こしょう の げんいん を ちょうさ しています",
+        "meaning_vi": "Chúng tôi đang điều tra nguyên nhân hỏng hóc của máy móc."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N3",
+    "japanese": "確認する",
+    "reading": "かくにんする (kakunin suru)",
+    "meaning_vi": "Xác nhận, kiểm tra lại (động từ nhóm 3)",
+    "tags": ["từ vựng", "N3", "công sở", "Ho-Ren-So"],
+    "examples": [
+      {
+        "sentence_ja": "送信する前にメールの宛先をもう一度確認してください。",
+        "reading": "そうしん する まえ に メール の あてさき を もう いちど かくにん して ください",
+        "meaning_vi": "Hãy kiểm tra lại địa chỉ người nhận email một lần nữa trước khi gửi."
+      },
+      {
+        "sentence_ja": "仕様書の内容を確認の上、ご返信いたします。",
+        "reading": "しようしょ の ないよう を かくにん の うえ、ごへんしん いたします",
+        "meaning_vi": "Sau khi xác nhận nội dung tài liệu đặc tả, tôi xin phép phản hồi."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N3",
+    "japanese": "連絡",
+    "reading": "れんらく (renraku)",
+    "meaning_vi": "Liên lạc, thông báo phát sinh (danh từ, động từ nhóm 3)",
+    "tags": ["từ vựng", "N3", "Ho-Ren-So", "giao tiếp"],
+    "examples": [
+      {
+        "sentence_ja": "電車が遅延したため、上司に遅刻の連絡を入れました。",
+        "reading": "でんしゃ が ちえん した ため、じょうし に ちこく の れんらく を いれました",
+        "meaning_vi": "Vì tàu điện trễ chuyến, tôi đã liên lạc báo đi muộn cho sếp."
+      },
+      {
+        "sentence_ja": "結果が分かり次第、すぐにご連絡いたします。",
+        "reading": "けっか が わかり しだい、すぐ に ごれんらく いたします",
+        "meaning_vi": "Ngay khi có kết quả, tôi xin phép liên lạc với quý vị ngay."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N3",
+    "japanese": "相談",
+    "reading": "そうだん (soudan)",
+    "meaning_vi": "Thảo luận, trao đổi xin ý kiến (danh từ, động từ nhóm 3)",
+    "tags": ["từ vựng", "N3", "Ho-Ren-So", "công sở"],
+    "examples": [
+      {
+        "sentence_ja": "設計方針についてテックリードに相談しました。",
+        "reading": "せっけい ほうしん について テックリード に そうだん しました",
+        "meaning_vi": "Tôi đã trao đổi với Tech Lead về định hướng thiết kế."
+      },
+      {
+        "sentence_ja": "少しお時間よろしいでしょうか。ご相談したい件がございます。",
+        "reading": "すこし おじかん よろしい でしょう か。ごそうだん したい けん が ございます",
+        "meaning_vi": "Anh/chị có chút thời gian không ạ? Em có việc muốn xin ý kiến thảo luận."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N3",
+    "japanese": "進捗",
+    "reading": "しんちょく (shinchoku)",
+    "meaning_vi": "Tiến độ công việc (danh từ)",
+    "tags": ["từ vựng", "N3", "quản lý dự án", "công sở"],
+    "examples": [
+      {
+        "sentence_ja": "開発の進捗状況はオンスケジュールで順調です。",
+        "reading": "かいはつ の しんちょく じょうきょう は オンスケジュール で じゅんちょう です",
+        "meaning_vi": "Tình hình tiến độ phát triển đang đúng lịch trình và thuận lợi."
+      },
+      {
+        "sentence_ja": "毎日の朝会で各自の進捗を共有します。",
+        "reading": "まいにち の あさかい で かくじ の しんちょく を きょうゆう します",
+        "meaning_vi": "Tại cuộc họp Scrum buổi sáng mỗi ngày, mọi người chia sẻ tiến độ của mình."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N2",
+    "japanese": "担当する",
+    "reading": "たんとうする (tantou suru)",
+    "meaning_vi": "Phụ trách, chịu trách nhiệm mảng việc (động từ nhóm 3)",
+    "tags": ["từ vựng", "N2", "công việc", "vai trò"],
+    "examples": [
+      {
+        "sentence_ja": "今回の案件でバックエンド開発を担当しております。",
+        "reading": "こんかい の あんけん で バックエンド かいはつ を たんとう して おります",
+        "meaning_vi": "Tôi phụ trách mảng phát triển backend trong dự án lần này."
+      },
+      {
+        "sentence_ja": "こちらの製品の担当者は高橋でございます。",
+        "reading": "こちら の せいひん の たんとうしゃ は たかはし で ございます",
+        "meaning_vi": "Người phụ trách dòng sản phẩm này bên em là anh Takahashi ạ."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N2",
+    "japanese": "把握する",
+    "reading": "はあくする (haaku suru)",
+    "meaning_vi": "Nắm vững, thấu hiểu rõ tình hình (động từ nhóm 3)",
+    "tags": ["từ vựng", "N2", "tư duy", "quản lý"],
+    "examples": [
+      {
+        "sentence_ja": "全体のアーキテクチャを正確に把握しておく必要があります。",
+        "reading": "ぜんたい の アーキテクチャ を せいかく に はあく して おく ひつよう が あります",
+        "meaning_vi": "Cần phải nắm bắt chính xác toàn bộ kiến trúc tổng thể hệ thống."
+      },
+      {
+        "sentence_ja": "顧客の要望を十分に把握した上で提案書を作成します。",
+        "reading": "こきゃく の ようぼう を じゅうぶん に はあく した うえ で ていあんしょ を さくせい します",
+        "meaning_vi": "Tôi soạn thảo bản đề xuất sau khi đã thấu hiểu đầy đủ nguyện vọng của khách hàng."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N2",
+    "japanese": "検討する",
+    "reading": "けんとうする (kentou suru)",
+    "meaning_vi": "Cân nhắc, xem xét phương án (động từ nhóm 3)",
+    "tags": ["từ vựng", "N2", "kinh doanh", "đàm phán"],
+    "examples": [
+      {
+        "sentence_ja": "ご提示いただいた条件について社内で前向きに検討いたします。",
+        "reading": "ごていじ いただいた じょうけん について しゃない で まえむき に けんとう いたします",
+        "meaning_vi": "Chúng tôi xin phép cân nhắc tích cực trong nội bộ về các điều kiện quý đối tác đã đề xuất."
+      },
+      {
+        "sentence_ja": "代替案の導入コストを慎重に検討する必要があります。",
+        "reading": "だいたいあん の どうにゅう コスト を しんちょう に けんとう する ひつよう が あります",
+        "meaning_vi": "Cần cân nhắc thận trọng chi phí triển khai của phương án thay thế."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N2",
+    "japanese": "対応する",
+    "reading": "たいおうする (taiou suru)",
+    "meaning_vi": "Xử lý, ứng phó, đối ứng (động từ nhóm 3)",
+    "tags": ["từ vựng", "N2", "chăm sóc khách hàng", "kỹ thuật"],
+    "examples": [
+      {
+        "sentence_ja": "緊急のバグに対して迅速に対応しました。",
+        "reading": "きんきゅう の バグ に たいして じんそく に たいおう しました",
+        "meaning_vi": "Chúng tôi đã xử lý nhanh chóng đối với lỗi khẩn cấp."
+      },
+      {
+        "sentence_ja": "お客様からのクレームには誠心誠意対応することが基本です。",
+        "reading": "おきゃくさま から の クレーム に は せいしんせいい たいおう する こと が きほん です",
+        "meaning_vi": "Xử lý bằng cả sự chân thành đối với khiếu nại của khách hàng là nguyên tắc cơ bản."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N1",
+    "japanese": "遵守する",
+    "reading": "じゅんしゅする (junshu suru)",
+    "meaning_vi": "Tuân thủ nghiêm ngặt quy định, pháp luật (động từ nhóm 3)",
+    "tags": ["từ vựng", "N1", "pháp lý", "doanh nghiệp"],
+    "examples": [
+      {
+        "sentence_ja": "セキュリティポリシーおよび関連法規を厳格に遵守いたします。",
+        "reading": "セキュリティ ポリシー および かんれんほうき を げんかく に じゅんしゅ いたします",
+        "meaning_vi": "Chúng tôi tuân thủ nghiêm ngặt chính sách an ninh bảo mật và các quy định pháp luật liên quan."
+      },
+      {
+        "sentence_ja": "コンプライアンスの遵守は企業の社会的信用の基盤です。",
+        "reading": "コンプライアンス の じゅんしゅ は きぎょう の しゃかいてき しんよう の きばん です",
+        "meaning_vi": "Tuân thủ tính pháp lý là nền tảng cho uy tín xã hội của doanh nghiệp."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N1",
+    "japanese": "迅速",
+    "reading": "じんそく (jinsoku)",
+    "meaning_vi": "Mau lẹ, nhanh chóng và chính xác (tính từ đuôi Na)",
+    "tags": ["từ vựng", "N1", "tác phong công sở"],
+    "examples": [
+      {
+        "sentence_ja": "お客様の問い合わせに対して迅速かつ丁寧な回答を心がけております。",
+        "reading": "おきゃくさま の といあわせ に たいして じんそく かつ ていねい な かいとう を こころがけて おります",
+        "meaning_vi": "Chúng tôi luôn ghi nhớ phản hồi nhanh chóng và chu đáo đối với thắc mắc của khách hàng."
+      },
+      {
+        "sentence_ja": "障害発生時の迅速な初動対応が被害を最小限に抑えました。",
+        "reading": "しょうがい はっせいじ の じんそく な しょどうたいおう が ひがい を さいしょうげん に おさえました",
+        "meaning_vi": "Phản ứng ban đầu nhanh chóng khi phát sinh sự cố đã giảm thiểu thiệt hại xuống mức thấp nhất."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N1",
+    "japanese": "尽力する",
+    "reading": "じんりょくする (jinryoku suru)",
+    "meaning_vi": "Dốc hết sức lực cống hiến (kính ngữ khiêm nhường)",
+    "tags": ["từ vựng", "N1", "kính ngữ", "phỏng vấn"],
+    "examples": [
+      {
+        "sentence_ja": "貴社の事業拡大に向けて全力を尽くして尽力いたします。",
+        "reading": "きしゃ の じぎょう かくだい に むけて ぜんりょく を つくして じんりょく いたします",
+        "meaning_vi": "Em xin dốc hết sức lực để cống hiến cho sự mở rộng kinh doanh của quý công ty."
+      },
+      {
+        "sentence_ja": "プロジェクトの成功のためにチーム一丸となって尽力してまいります。",
+        "reading": "プロジェクト の せいこう の ため に チーム いちがん と なって じんりょく して まいります",
+        "meaning_vi": "Toàn đội đồng lòng dốc sức vì sự thành công của dự án."
+      }
+    ]
+  },
+  {
+    "type": "vocabulary",
+    "level": "N1",
+    "japanese": "相違",
+    "reading": "そうい (soui)",
+    "meaning_vi": "Sự khác biệt, điểm sai lệch (danh từ, văn phong trang trọng)",
+    "tags": ["từ vựng", "N1", "hợp đồng", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "契約書の内容に相違ございませんでしょうか。",
+        "reading": "けいやくしょ の ないよう に そうい ございません でしょう か",
+        "meaning_vi": "Nội dung trong bản hợp đồng có điểm nào sai lệch với thỏa thuận không ạ?"
+      },
+      {
+        "sentence_ja": "認識の相違を防ぐため、要件定義書を詳細に作成しました。",
+        "reading": "にんしき の そうい を ふせぐ ため、ようけんていぎしょ を しょうさい に さくせい しました",
+        "meaning_vi": "Để phòng tránh sự sai lệch trong nhận thức, tôi đã soạn thảo tài liệu định nghĩa yêu cầu thật chi tiết."
+      }
+    ]
+  },
+
+  {
+    "type": "grammar",
+    "level": "N5",
+    "japanese": "〜は〜です",
+    "reading": "wa... desu",
+    "meaning_vi": "Thì, là... (Khẳng định cơ bản danh từ)",
+    "tags": ["ngữ pháp", "N5", "cơ bản", "khẳng định"],
+    "examples": [
+      {
+        "sentence_ja": "私はグエン・ヴァン・ナムです。",
+        "reading": "わたし は グエン・ヴァン・ナム です",
+        "meaning_vi": "Tôi là Nguyễn Văn Nam."
+      },
+      {
+        "sentence_ja": "これは日本語の教科書です。",
+        "reading": "これ は にほんご の きょうかしょ です",
+        "meaning_vi": "Đây là sách giáo khoa tiếng Nhật."
+      }
+    ],
+    "notes": "Trợ từ は (đọc là wa) đóng vai trò đánh dấu chủ đề của câu. です mang tính lịch sự chuẩn mực."
+  },
+  {
+    "type": "grammar",
+    "level": "N5",
+    "japanese": "〜てください",
+    "reading": "te kudasai",
+    "meaning_vi": "Xin vui lòng hãy... (Yêu cầu lịch sự)",
+    "tags": ["ngữ pháp", "N5", "động từ thể te", "yêu cầu"],
+    "examples": [
+      {
+        "sentence_ja": "この書類に名前と電話番号を書いてください。",
+        "reading": "この しょるい に なまえ と でんわばんごう を かいて ください",
+        "meaning_vi": "Xin vui lòng viết tên và số điện thoại vào tờ giấy này."
+      },
+      {
+        "sentence_ja": "日本語でゆっくり話してください。",
+        "reading": "にほんご で ゆっくり はなして ください",
+        "meaning_vi": "Xin vui lòng nói chậm lại bằng tiếng Nhật."
+      }
+    ],
+    "notes": "Cấu trúc: V(thể te) + ください. Dùng để nhờ vả, yêu cầu người khác làm gì."
+  },
+  {
+    "type": "grammar",
+    "level": "N5",
+    "japanese": "〜てもいいですか",
+    "reading": "te mo ii desu ka",
+    "meaning_vi": "Làm... có được không? (Xin phép)",
+    "tags": ["ngữ pháp", "N5", "xin phép", "lịch sự"],
+    "examples": [
+      {
+        "sentence_ja": "ここに座ってもいいですか。",
+        "reading": "ここ に すわっても いい です か",
+        "meaning_vi": "Tôi ngồi ở đây có được không ạ?"
+      },
+      {
+        "sentence_ja": "辞書を使ってもいいですか。",
+        "reading": "じしょ を つかっても いい です か",
+        "meaning_vi": "Tôi sử dụng từ điển có được không ạ?"
+      }
+    ],
+    "notes": "Cấu trúc: V(thể te) + もいいですか. Dùng khi xin phép đối phương để làm một hành động."
+  },
+  {
+    "type": "grammar",
+    "level": "N5",
+    "japanese": "〜てはいけません",
+    "reading": "te wa ikemasen",
+    "meaning_vi": "Không được làm... (Cấm đoán lịch sự)",
+    "tags": ["ngữ pháp", "N5", "cấm đoán", "nội quy"],
+    "examples": [
+      {
+        "sentence_ja": "試験中に携帯電話を使ってはいけません。",
+        "reading": "しけんちゅう に けいたいでんわ を つかって は いけません",
+        "meaning_vi": "Trong giờ thi không được sử dụng điện thoại di động."
+      },
+      {
+        "sentence_ja": "ここで写真を撮ってはいけません。",
+        "reading": "ここで しゃしん を とって は いけません",
+        "meaning_vi": "Không được chụp ảnh ở đây."
+      }
+    ],
+    "notes": "Cấu trúc: V(thể te) + はいけません. Thường dùng trong quy định công cộng hoặc trường lớp."
+  },
+  {
+    "type": "grammar",
+    "level": "N4",
+    "japanese": "〜なければなりません",
+    "reading": "nakereba narimasen",
+    "meaning_vi": "Phải làm... (Bắt buộc)",
+    "tags": ["ngữ pháp", "N4", "nghĩa vụ", "bắt buộc"],
+    "examples": [
+      {
+        "sentence_ja": "明日の午後5時までにレポートを提出しなければなりません。",
+        "reading": "あした の ごご ごじ まで に レポート を ていしゅつ しなければ なりません",
+        "meaning_vi": "Phải nộp báo cáo trước 5 giờ chiều mai."
+      },
+      {
+        "sentence_ja": "毎日薬を飲まなければなりません。",
+        "reading": "まいにち くすり を のまなければ なりません",
+        "meaning_vi": "Mỗi ngày phải uống thuốc đầy đủ."
+      }
+    ],
+    "notes": "Cấu trúc: V(thể nai bỏ i) + ければなりません. Biểu thị bổn phận, trách nhiệm bắt buộc."
+  },
+  {
+    "type": "grammar",
+    "level": "N4",
+    "japanese": "〜たことがあります",
+    "reading": "ta koto ga arimasu",
+    "meaning_vi": "Đã từng làm... (Kinh nghiệm trong quá khứ)",
+    "tags": ["ngữ pháp", "N4", "kinh nghiệm"],
+    "examples": [
+      {
+        "sentence_ja": "日本へ行ったことがありますか。",
+        "reading": "にほん へ いった こと が あります か",
+        "meaning_vi": "Bạn đã từng đi Nhật Bản lần nào chưa?"
+      },
+      {
+        "sentence_ja": "富士山に登ったことがあります。",
+        "reading": "ふじさん に のぼった こと が あります",
+        "meaning_vi": "Tôi đã từng leo núi Phú Sĩ."
+      }
+    ],
+    "notes": "Cấu trúc: V(thể ta) + ことがあります. Dùng để nói về trải nghiệm đã từng diễn ra."
+  },
+  {
+    "type": "grammar",
+    "level": "N4",
+    "japanese": "〜つもりです",
+    "reading": "tsumori desu",
+    "meaning_vi": "Dự định làm... (Ý định cá nhân)",
+    "tags": ["ngữ pháp", "N4", "kế hoạch", "ý định"],
+    "examples": [
+      {
+        "sentence_ja": "来年日本の大学院に進学するつもりです。",
+        "reading": "らいねん にほん の だいがくいん に しんがく する つもり です",
+        "meaning_vi": "Tôi dự định sang năm sẽ học lên cao học ở Nhật Bản."
+      },
+      {
+        "sentence_ja": "週末は家でゆっくり休むつもりです。",
+        "reading": "しゅうまつ は いえ で ゆっくり やすむ つもり です",
+        "meaning_vi": "Cuối tuần tôi dự định ở nhà nghỉ ngơi thong thả."
+      }
+    ],
+    "notes": "Cấu trúc: V(nguyên thể/thể nai) + つもりです. Thể hiện ý chí quyết tâm của người nói."
+  },
+  {
+    "type": "grammar",
+    "level": "N4",
+    "japanese": "〜てしまいます",
+    "reading": "te shimaimasu",
+    "meaning_vi": "Lỡ làm / Đã hoàn thành xong việc gì đó",
+    "tags": ["ngữ pháp", "N4", "hoàn thành", "nuối tiếc"],
+    "examples": [
+      {
+        "sentence_ja": "電車の中に傘を忘れてしまいました。",
+        "reading": "でんしゃ の なか に かさ を わすれて しまいました",
+        "meaning_vi": "Tôi đã lỡ để quên cây dù ở trên tàu điện mất rồi."
+      },
+      {
+        "sentence_ja": "宿題を全部やってしまいました。",
+        "reading": "しゅくだい を ぜんぶ やって しまいました",
+        "meaning_vi": "Tôi đã làm xong hết toàn bộ bài tập rồi."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N3",
+    "japanese": "〜ようにする",
+    "reading": "you ni suru",
+    "meaning_vi": "Cố gắng làm... / Rèn luyện thói quen làm gì",
+    "tags": ["ngữ pháp", "N3", "thói quen", "nỗ lực"],
+    "examples": [
+      {
+        "sentence_ja": "健康のために毎日野菜をたくさん食べるようにしています。",
+        "reading": "けんこう の ため に まいにち やさい を たくさん たべる ように しています",
+        "meaning_vi": "Vì sức khỏe, tôi đang cố gắng ăn nhiều rau củ mỗi ngày."
+      },
+      {
+        "sentence_ja": "遅刻しないように、早起きするようにしてください。",
+        "reading": "ちこく しない ように、はやおき する ように して ください",
+        "meaning_vi": "Để không bị muộn, hãy cố gắng dậy sớm nhé."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N3",
+    "japanese": "〜ために / 〜ように",
+    "reading": "tame ni / you ni",
+    "meaning_vi": "Để mà... (Chỉ mục đích)",
+    "tags": ["ngữ pháp", "N3", "mục đích", "so sánh"],
+    "examples": [
+      {
+        "sentence_ja": "日本で働くために、毎日一生懸命日本語を勉強しています。",
+        "reading": "にほん で はたらく ため に、まいにち いっしょうけんめい にほんご を べんきょう しています",
+        "meaning_vi": "Để làm việc tại Nhật Bản, mỗi ngày tôi đều học tiếng Nhật thật chăm chỉ."
+      },
+      {
+        "sentence_ja": "後ろの人にもよく聞こえるように、マイクを使います。",
+        "reading": "うしろ の ひと に も よく きこえる ように、マイク を つかいます",
+        "meaning_vi": "Để người ngồi phía sau cũng nghe rõ được, tôi sẽ dùng micro."
+      }
+    ],
+    "notes": "Phân biệt: ために đi với hành động có ý chí của cùng chủ ngữ; ように đi với động từ khả năng hoặc thể phủ định không mang ý chí."
+  },
+  {
+    "type": "grammar",
+    "level": "N3",
+    "japanese": "〜はずです",
+    "reading": "hazu desu",
+    "meaning_vi": "Chắc chắn là... (Phán đoán dựa trên căn cứ)",
+    "tags": ["ngữ pháp", "N3", "phán đoán", "logic"],
+    "examples": [
+      {
+        "sentence_ja": "田中さんは昨日資料を送ったと言っていたので、届いているはずです。",
+        "reading": "たなかさん は きのう しりょう を おくった と いっていた ので、とどいている はず です",
+        "meaning_vi": "Anh Tanaka hôm qua bảo đã gửi tài liệu rồi nên chắc chắn là đã tới nơi rồi."
+      },
+      {
+        "sentence_ja": "しっかりテストしたから、バグはないはずです。",
+        "reading": "しっかり テスト した から、バグ は ない はず です",
+        "meaning_vi": "Vì đã kiểm thử kỹ càng rồi nên chắc chắn không có lỗi."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N3",
+    "japanese": "〜によって / 〜による",
+    "reading": "ni yotte / ni yoru",
+    "meaning_vi": "Do, bởi vì, tùy thuộc vào...",
+    "tags": ["ngữ pháp", "N3", "nguyên nhân", "phương thức"],
+    "examples": [
+      {
+        "sentence_ja": "人によって考え方が異なります。",
+        "reading": "ひと によって かんがえかた が ことなります",
+        "meaning_vi": "Tùy vào mỗi người mà cách suy nghĩ sẽ khác nhau."
+      },
+      {
+        "sentence_ja": "台風によって電車が運転を見合わせました。",
+        "reading": "たいふう によって でんしゃ が うんてん を みあわせました",
+        "meaning_vi": "Do bão lớn nên các chuyến tàu điện đã tạm hoãn hoạt động."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N2",
+    "japanese": "〜に際して / 〜にあたって",
+    "reading": "ni saishite / ni atatte",
+    "meaning_vi": "Nhân dịp, khi chuẩn bị tiến hành... (Văn phong trang trọng)",
+    "tags": ["ngữ pháp", "N2", "kinh doanh", "trang trọng"],
+    "examples": [
+      {
+        "sentence_ja": "プロジェクトの開始に際して、関係各位のご協力をお願い申し上げます。",
+        "reading": "プロジェクト の かいし に さいして、かんけい かくい の ごきょうりょく を おねがい もうしあげます",
+        "meaning_vi": "Nhân dịp khởi động dự án, tôi kính mong nhận được sự hợp tác từ các bên liên quan."
+      },
+      {
+        "sentence_ja": "新システム導入にあたって、従業員向けの説明会を開催します。",
+        "reading": "しんシステム どうにゅう に あたって、じゅうぎょういん むけ の せつめいかい を かいさい します",
+        "meaning_vi": "Khi chuẩn bị triển khai hệ thống mới, chúng tôi sẽ tổ chức buổi phổ biến cho nhân viên."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N2",
+    "japanese": "〜お / ご...いただく / くださる",
+    "reading": "o/go... itadaku / kudasaru",
+    "meaning_vi": "Được quý khách làm cho / Quý khách vui lòng làm cho (Kính ngữ)",
+    "tags": ["ngữ pháp", "N2", "kính ngữ", "Keigo"],
+    "examples": [
+      {
+        "sentence_ja": "こちらの添付ファイルをご確認いただけますでしょうか。",
+        "reading": "こちら の てんぷ ファイル を ごかくにん いただけます でしょう か",
+        "meaning_vi": "Kính mong quý khách vui lòng kiểm tra tệp đính kèm này giúp em được không ạ?"
+      },
+      {
+        "sentence_ja": "ご多忙のところ、お時間をいただき誠にありがとうございます。",
+        "reading": "ごたぼう の ところ、おじかん を いただき まことに ありがとう ございます",
+        "meaning_vi": "Em xin chân thành cảm ơn anh/chị đã dành thời gian quý báu trong lúc bận rộn."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N2",
+    "japanese": "〜に基づいて",
+    "reading": "ni motozuite",
+    "meaning_vi": "Dựa trên, căn cứ vào...",
+    "tags": ["ngữ pháp", "N2", "pháp lý", "tiêu chuẩn"],
+    "examples": [
+      {
+        "sentence_ja": "最新の調査データに基づいて、今後のマーケティング戦略を立案します。",
+        "reading": "さいしん の ちょうさ データ に もとづいて、こんご の マーケティング せんりゃく を りつあん します",
+        "meaning_vi": "Căn cứ vào dữ liệu khảo sát mới nhất, chúng tôi lập chiến lược marketing sắp tới."
+      },
+      {
+        "sentence_ja": "社内規定に基づいて公正に評価を行います。",
+        "reading": "しゃない きてい に もとづいて こうせい に ひょうか を おこないます",
+        "meaning_vi": "Chúng tôi tiến hành đánh giá công bằng dựa trên quy chế nội bộ công ty."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N2",
+    "japanese": "〜わけにはいかない",
+    "reading": "wake ni wa ikanai",
+    "meaning_vi": "Không thể (về mặt đạo lý, nguyên tắc, lương tâm)",
+    "tags": ["ngữ pháp", "N2", "nguyên tắc", "trách nhiệm"],
+    "examples": [
+      {
+        "sentence_ja": "大切なクライアントとの約束ですから、遅刻するわけにはいきません。",
+        "reading": "たいせつ な クライアント と の やくそく です から、ちこく する わけ に は いきません",
+        "meaning_vi": "Vì là cuộc hẹn với khách hàng quan trọng, tôi không thể nào đến muộn được."
+      },
+      {
+        "sentence_ja": "チームメンバーが頑張っているのに、自分だけ先に帰るわけにはいかない。",
+        "reading": "チームメンバー が がんばっている のに、じぶん だけ さき に かえる わけ に は いかない",
+        "meaning_vi": "Mọi người trong đội đang nỗ lực, tôi không thể nào một mình về trước được."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N1",
+    "japanese": "〜を禁じ得ない",
+    "reading": "o kinjienai",
+    "meaning_vi": "Không kìm nén được cảm xúc...",
+    "tags": ["ngữ pháp", "N1", "cảm xúc", "văn viết"],
+    "examples": [
+      {
+        "sentence_ja": "未曽有の災害の被害状況を見て、深い悲しみを禁じ得ない。",
+        "reading": "みぞう の さいがい の ひがい じょうきょう を みて、ふかい かなしみ を きんじえない",
+        "meaning_vi": "Nhìn cảnh tượng thiệt hại của thảm họa chưa từng có, tôi không thể kìm nén được nỗi đau buồn sâu sắc."
+      },
+      {
+        "sentence_ja": "若手エンジニアの目覚ましい成長に驚きを禁じ得ません。",
+        "reading": "わかて エンジニア の めざましい せいちょう に おどろき を きんじえません",
+        "meaning_vi": "Tôi không khỏi ngạc nhiên trước sự trưởng thành vượt bậc của kỹ sư trẻ."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N1",
+    "japanese": "〜にたえない",
+    "reading": "ni taenai",
+    "meaning_vi": "Không thể chịu đựng nổi / Vô cùng... (Khen ngợi, cảm kích)",
+    "tags": ["ngữ pháp", "N1", "văn phong trang trọng"],
+    "examples": [
+      {
+        "sentence_ja": "皆様方の温かいご支援に、感謝の念に堪えません。",
+        "reading": "みなさまがた の あたたかい ごしえん に、かんしゃ の ねん に たえません",
+        "meaning_vi": "Trước sự giúp đỡ nồng ấm của quý vị, lòng tôi tràn ngập niềm biết ơn khôn xiết."
+      },
+      {
+        "sentence_ja": "このような不祥事を起こしてしまい、慙愧に堪えません。",
+        "reading": "この ような ふしょうじ を おこして しまい、ざんき に たえません",
+        "meaning_vi": "Để xảy ra vụ việc tai tiếng này, chúng tôi vô cùng xấu hổ và day dứt."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N1",
+    "japanese": "〜を皮切りに（して）",
+    "reading": "o kawakiri ni (shite)",
+    "meaning_vi": "Khởi đầu bằng..., mở màn với...",
+    "tags": ["ngữ pháp", "N1", "kinh doanh", "chuỗi sự kiện"],
+    "examples": [
+      {
+        "sentence_ja": "東京公演を皮切りに、全国10都市でのツアーが始まります。",
+        "reading": "とうきょう こうえん を かわきり に、ぜんこく じゅっとし で の ツアー が はじまります",
+        "meaning_vi": "Khởi đầu bằng buổi diễn ở Tokyo, chuyến lưu diễn qua 10 thành phố trên toàn quốc sẽ bắt đầu."
+      },
+      {
+        "sentence_ja": "日本市場での成功を皮切りに、東南アジア諸国への海外進出を加速させます。",
+        "reading": "にほん しじょう で の せいこう を かわきり に、とうなんアジア しょこく への かいがい しんしゅつ を かそく させます",
+        "meaning_vi": "Mở đầu bằng thành công tại thị trường Nhật Bản, chúng tôi sẽ đẩy mạnh việc tiến ra các nước Đông Nam Á."
+      }
+    ]
+  },
+  {
+    "type": "grammar",
+    "level": "N1",
+    "japanese": "〜極まりない / 〜極まる",
+    "reading": "kiwamarinai / kiwamaru",
+    "meaning_vi": "Cực kỳ, vô cùng... (Mức độ tối đa, trang trọng)",
+    "tags": ["ngữ pháp", "N1", "mức độ", "trang trọng"],
+    "examples": [
+      {
+        "sentence_ja": "事前の確認を怠ったことによるミスは、遺憾極まりない事態でございます。",
+        "reading": "じぜん の かくにん を おこたった こと による ミス は、いかん きわまりない じたい で ございます",
+        "meaning_vi": "Sai sót do lơ là kiểm tra trước là một tình huống vô cùng đáng tiếc."
+      },
+      {
+        "sentence_ja": "重要な商談での失礼な態度は、無礼極まりない。",
+        "reading": "じゅうよう な しょうだん で の しつれい な たいど は、ぶれい きわまりない",
+        "meaning_vi": "Thái độ thất lễ trong buổi đàm phán quan trọng là vô cùng khiếm nhã."
+      }
+    ]
+  },
+
+  {
+    "type": "conversation",
+    "level": "N5",
+    "japanese": "Chào hỏi ngày đầu tiên tại công ty",
+    "reading": "Chuỗi chào hỏi nhập môn (Self-introduction on Day 1)",
+    "meaning_vi": "Mẫu hội thoại giới thiệu bản thân và chào hỏi đồng nghiệp trong ngày đầu đi làm",
+    "tags": ["hội thoại", "N5", "chào hỏi", "ngày đầu đi làm"],
+    "examples": [
+      {
+        "sentence_ja": "はじめまして。本日より入社いたしましたグエンと申します。ベトナムのハノイ出身です。",
+        "reading": "はじめまして。ほんじつ より にゅうしゃ いたしました グエン と もうします。ベトナム の ハノイ しゅっしん です",
+        "meaning_vi": "Rất vui được gặp các anh/chị. Em tên là Nguyen, gia nhập công ty từ ngày hôm nay ạ. Em đến từ Hà Nội, Việt Nam."
+      },
+      {
+        "sentence_ja": "IT開発部で一生懸命頑張りますので、ご指導のほどよろしくお願いいたします。",
+        "reading": "アイティー かいはつぶ で いっしょうけんめい がんばります ので、ごしどう の ほど よろしく おねがいいたします",
+        "meaning_vi": "Em sẽ nỗ lực hết mình tại phòng phát triển IT, kính mong được các anh/chị tận tình chỉ dạy ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N5",
+    "japanese": "Hỏi đường đến nhà ga hoặc bến xe",
+    "reading": "Hội thoại hỏi đường thực tế (Asking directions)",
+    "meaning_vi": "Cách hỏi người đi đường hoặc cảnh sát ga tàu cách di chuyển",
+    "tags": ["hội thoại", "N5", "hỏi đường", "đời sống"],
+    "examples": [
+      {
+        "sentence_ja": "すみません、東京駅へ行きたいのですが、この道で合っていますか。",
+        "reading": "すみません、とうきょう えき へ いきたい の です が、この みち で あっています か",
+        "meaning_vi": "Xin lỗi, tôi muốn đến ga Tokyo thì đi đường này có đúng không ạ?"
+      },
+      {
+        "sentence_ja": "はい、この道をまっすぐ行って、信号を右に曲がるとすぐ見えますよ。",
+        "reading": "はい、この みち を まっすぐ いって、しんごう を みぎ に まがると すぐ みえます よ",
+        "meaning_vi": "Đúng rồi, bạn cứ đi thẳng đường này, qua đèn đỏ rẽ phải là thấy ngay nhé."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N5",
+    "japanese": "Gọi món tại quán ăn Nhật Bản",
+    "reading": "Đặt đồ ăn (Ordering at restaurant)",
+    "meaning_vi": "Cách gọi món ăn, hỏi nước uống và xin hóa đơn",
+    "tags": ["hội thoại", "N5", "nhà hàng", "giao tiếp"],
+    "examples": [
+      {
+        "sentence_ja": "すみません、注文をお願いします。牛丼を一つとお茶をください。",
+        "reading": "すみません、ちゅうもん を おねがいします。ぎゅうどん を ひとつ と おちゃ を ください",
+        "meaning_vi": "Xin lỗi cho tôi gọi món. Cho tôi một tô cơm bò và một ly trà nhé."
+      },
+      {
+        "sentence_ja": "お会計をお願いします。別々で払えますか。",
+        "reading": "おかいけい を おねがいします。べつべつ で はらえます か",
+        "meaning_vi": "Cho tôi xin thanh toán ạ. Chúng tôi thanh toán riêng từng người được không?"
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N5",
+    "japanese": "Hỏi giờ và lịch hoạt động",
+    "reading": "Hỏi giờ giấc (Asking time & schedule)",
+    "meaning_vi": "Hỏi giờ mở cửa thư viện, siêu thị, ngân hàng",
+    "tags": ["hội thoại", "N5", "thời gian", "mua sắm"],
+    "examples": [
+      {
+        "sentence_ja": "市役所の窓口は何時から何時まで開いていますか。",
+        "reading": "しやくしょ の まどぐち は なんじ から なんじ まで あいています か",
+        "meaning_vi": "Quầy làm việc của ủy ban thành phố mở cửa từ mấy giờ đến mấy giờ ạ?"
+      },
+      {
+        "sentence_ja": "平日午前9時から午後5時まで営業しております。",
+        "reading": "へいじつ ごぜん くじ から ごご ごじ まで えいぎょう して おります",
+        "meaning_vi": "Ngày thường mở cửa phục vụ từ 9 giờ sáng đến 5 giờ chiều ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N4",
+    "japanese": "Xin phép nghỉ phép vì ốm",
+    "reading": "Báo ốm nghỉ việc (Calling in sick)",
+    "meaning_vi": "Cách gọi điện thoại xin phép quản lý nghỉ làm do bị sốt, ốm",
+    "tags": ["hội thoại", "N4", "xin phép", "công sở"],
+    "examples": [
+      {
+        "sentence_ja": "おはようございます。今朝から熱があり頭痛がするため、病院へ行きたく存じます。本日はお休みをいただいてもよろしいでしょうか。",
+        "reading": "おはよう ございます。けさ から ねつ が あり ずつう が する ため、びょういん へ いきたく ぞんじます。ほんじつ は おやすみ を いただいても よろしい でしょう か",
+        "meaning_vi": "Em chào sếp. Sáng nay em bị sốt và đau đầu nên muốn đi khám ở bệnh viện. Hôm nay cho em xin phép nghỉ một ngày được không ạ?"
+      },
+      {
+        "sentence_ja": "大丈夫ですか。無理をせず病院に行ってゆっくり休んでください。診断結果が分かったら連絡してくださいね。",
+        "reading": "だいじょうぶ です か。むり を せず びょういん に いって ゆっくり やすんで ください。しんだんけっか が わかったら れんらく して ください ね",
+        "meaning_vi": "Em có sao không? Đừng gắng sức, cứ đi bệnh viện rồi nghỉ ngơi cho khỏe nhé. Khi nào có kết quả khám thì nhắn tin báo lại cho sếp biết."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N4",
+    "japanese": "Mượn dụng cụ và tài liệu văn phòng",
+    "reading": "Mượn đồ dùng công sở (Borrowing office equipment)",
+    "meaning_vi": "Cách hỏi mượn máy in, dây cáp, sách hướng dẫn trong công ty",
+    "tags": ["hội thoại", "N4", "giao tiếp", "văn phòng"],
+    "examples": [
+      {
+        "sentence_ja": "先輩、HDMIケーブルをお借りしてもよろしいでしょうか。午後のミーティングで使いたいのですが。",
+        "reading": "せんぱい、エイチディーエムアイ ケーブル を おかり しても よろしい でしょう か。ごご の ミーティング で つかいたい の です が",
+        "meaning_vi": "Tiền bối ơi, em có thể mượn dây cáp HDMI được không ạ? Em cần dùng trong cuộc họp chiều nay."
+      },
+      {
+        "sentence_ja": "ええ、どうぞ。引き出しの二段目に入っているから使ってね。",
+        "reading": "ええ、どうぞ。ひきだし の にだんめ に はいっている から つかって ね",
+        "meaning_vi": "Ừ, cứ lấy đi. Ở ngăn kéo thứ hai đấy, em cứ tự nhiên dùng."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N4",
+    "japanese": "Nhờ tiền bối giải thích công việc",
+    "reading": "Nhờ hướng dẫn nghiệp vụ (Asking for guidance)",
+    "meaning_vi": "Hỏi xin hướng dẫn khi chưa hiểu rõ quy trình làm việc",
+    "tags": ["hội thoại", "N4", "học hỏi", "tiền bối"],
+    "examples": [
+      {
+        "sentence_ja": "すみません、このタスクの進め方について分からない点があるのですが、今お時間よろしいでしょうか。",
+        "reading": "すみません、この タスク の すすめかた について わからない てん が ある の です が、いま おじかん よろしい でしょう か",
+        "meaning_vi": "Xin lỗi tiền bối, về cách triển khai nhiệm vụ này em có chỗ chưa hiểu rõ, bây giờ anh/chị có chút thời gian không ạ?"
+      },
+      {
+        "sentence_ja": "はい、大丈夫ですよ。どの部分で詰まっていますか。画面を見せてください。",
+        "reading": "はい、だいじょうぶ です よ。どの ぶぶん で つまっています か。がめん を みせて ください",
+        "meaning_vi": "Được chứ, không sao đâu. Em đang bị vướng mắc ở phần nào? Chiếu màn hình cho anh xem nào."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N4",
+    "japanese": "Từ chối lời mời một cách lịch sự",
+    "reading": "Từ chối khéo léo (Polite refusal)",
+    "meaning_vi": "Từ chối lời rủ đi nhậu hoặc đi chơi vì bận việc riêng",
+    "tags": ["hội thoại", "N4", "từ chối khéo", "Nomikai"],
+    "examples": [
+      {
+        "sentence_ja": "せっかくお誘いいただいたのに大変申し訳ありませんが、今夜はあいにく先約がございまして。",
+        "reading": "せっかく おさそい いただいた のに たいへん もうしわけ ありません が、こんや は あいにく せんやく が ございまして",
+        "meaning_vi": "Anh/chị đã có lòng rủ mà em rất tiếc và xin lỗi, tối nay em lại có hẹn từ trước mất rồi ạ."
+      },
+      {
+        "sentence_ja": "またぜひ次回お誘いいただけますと幸いです。",
+        "reading": "また ぜひ じかい おさそい いただけます と さいわい です",
+        "meaning_vi": "Lần tới nếu được anh/chị rủ tiếp thì em rất vinh hạnh ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N3",
+    "japanese": "Báo cáo tiến độ Daily Scrum buổi sáng",
+    "reading": "Báo cáo Scrum hàng ngày (Daily Scrum report)",
+    "meaning_vi": "Báo cáo việc đã làm hôm qua, việc làm hôm nay và vướng mắc",
+    "tags": ["hội thoại", "N3", "Ho-Ren-So", "Scrum", "IT"],
+    "examples": [
+      {
+        "sentence_ja": "昨日はユーザー認証APIの実装を完了させました。本日は決済機能の単体テストを実施する予定です。",
+        "reading": "きのう は ユーザー にんしょう エーピーアイ の じっそう を かんりょう させました。ほんじつ は けっさい きのう の たんたい テスト を じっし する よてい です",
+        "meaning_vi": "Hôm qua em đã hoàn thành việc triển khai API xác thực người dùng. Hôm nay em dự kiến thực hiện unit test cho tính năng thanh toán."
+      },
+      {
+        "sentence_ja": "特にブロッカーはありませんので、予定通りスプリントゴールを達成できる見込みです。",
+        "reading": "とくに ブロッカー は ありません ので、よていどおり スプリント ゴール を たっせい できる みこみ です",
+        "meaning_vi": "Hiện tại không có rào cản kỹ thuật nào, dự kiến sẽ đạt mục tiêu Sprint theo đúng kế hoạch."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N3",
+    "japanese": "Nhận cuộc gọi điện thoại tại công ty",
+    "reading": "Nghe điện thoại công sở (Handling office phone calls)",
+    "meaning_vi": "Chào hỏi khi bắt máy và xin thông tin chuyển máy",
+    "tags": ["hội thoại", "N3", "nghe điện thoại", "kính ngữ"],
+    "examples": [
+      {
+        "sentence_ja": "お電話ありがとうございます。株式会社SenpaiAIでございます。",
+        "reading": "おでんわ ありがとう ございます。かぶしきがいしゃ センパイエーアイ で ございます",
+        "meaning_vi": "Cảm ơn quý khách đã gọi điện thoại. Đây là công ty cổ phần SenpaiAI xin nghe ạ."
+      },
+      {
+        "sentence_ja": "あいにく担当の山田はただいま席を外しております。戻り次第、こちらから折り返しお電話いたしましょうか。",
+        "reading": "あいにく たんとう の やまだ は ただいま せき を はずして おります。もどり しだい、こちら から おりかえし おでんわ いたしましょう か",
+        "meaning_vi": "Rất tiếc người phụ trách là anh Yamada hiện tại đang vắng mặt tại bàn làm việc. Ngay khi anh ấy quay lại, bên em xin phép gọi điện lại cho quý khách được không ạ?"
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N3",
+    "japanese": "Giao tiếp trong tiệc công ty (Nomikai)",
+    "reading": "Quy tắc tiệc công ty Nomikai (Company drinking party)",
+    "meaning_vi": "Văn hóa rót rượu, cảm ơn cấp trên và nâng ly",
+    "tags": ["hội thoại", "N3", "Nomikai", "văn hóa công sở"],
+    "examples": [
+      {
+        "sentence_ja": "部長、お疲れ様です。お注ぎしてもよろしいでしょうか。",
+        "reading": "ぶちょう、おつかれさま です。おつぎ しても よろしい でしょう か",
+        "meaning_vi": "Thưa Trưởng phòng, anh đã vất vả rồi ạ. Em xin phép được rót bia cho anh nhé."
+      },
+      {
+        "sentence_ja": "本日はこのような素晴らしい席を設けていただき、心より感謝申し上げます。",
+        "reading": "ほんじつ は この ような すばらしい せき を もうけて いただき、こころ より かんしゃ もうしあげます",
+        "meaning_vi": "Hôm nay được sếp tổ chức một bữa tiệc tuyệt vời như thế này, em xin chân thành cảm ơn ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N3",
+    "japanese": "Trao đổi danh thiếp (Meishi Koukan)",
+    "reading": "Quy tắc trao đổi danh thiếp (Business card exchange)",
+    "meaning_vi": "Lời chào và động tác chuẩn mực khi nhận và trao danh thiếp đối tác Nhật",
+    "tags": ["hội thoại", "N3", "Meishi", "tiếp khách"],
+    "examples": [
+      {
+        "sentence_ja": "頂戴いたします。株式会社SenpaiAIのグエンと申します。どうぞよろしくお願い申し上げます。",
+        "reading": "ちょうだい いたします。かぶしきがいしゃ センパイエーアイ の グエン と もうします。どうぞ よろしく おねがいもうしあげます",
+        "meaning_vi": "Em xin phép được nhận ạ (cầm bằng hai tay). Em là Nguyen thuộc công ty cổ phần SenpaiAI. Kính mong được hợp tác và chỉ giáo."
+      },
+      {
+        "sentence_ja": "お名刺を拝見いたします。高橋様とお呼びすればよろしいでしょうか。",
+        "reading": "おめいし を はいけん いたします。たかはしさま と および すれば よろしい でしょう か",
+        "meaning_vi": "Em xin phép xem qua danh thiếp ạ. Em xin phép gọi quý anh là Takahashi-sama có đúng không ạ?"
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N2",
+    "japanese": "Đón tiếp đối tác khách hàng đến thăm công ty",
+    "reading": "Tiếp khách công sở (Client reception)",
+    "meaning_vi": "Chào đón đối tác tại sảnh, mời vào phòng họp và phục vụ trà",
+    "tags": ["hội thoại", "N2", "tiếp khách", "kính ngữ", "Keigo"],
+    "examples": [
+      {
+        "sentence_ja": "いらっしゃいませ。本日14時にお約束をいただいておりますABC商事の田中様でいらっしゃいますね。",
+        "reading": "いらっしゃいませ。ほんじつ じゅうよじ に おやくそく を いただいて おります エービーシー しょうじ の たなかさま で いらっしゃいます ね",
+        "meaning_vi": "Kính chào quý khách! Quý anh là Tanaka-sama thuộc tập đoàn thương mại ABC có hẹn lúc 14 giờ hôm nay đúng không ạ?"
+      },
+      {
+        "sentence_ja": "足元の悪い中お越しいただき恐縮でございます。奥の第2会議室へご案内いたします。",
+        "reading": "あしもと の わるい なか おこし いただき きょうしゅく で ございます。おく の だいに かいぎしつ へ ごあんない いたします",
+        "meaning_vi": "Thời tiết mưa gió mà quý khách không quản ngại ghé thăm, chúng em thật vô cùng cảm kích. Em xin phép dẫn quý khách vào phòng họp số 2 phía trong ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N2",
+    "japanese": "Tạ lỗi khách hàng khi xảy ra lỗi hệ thống (Shazai)",
+    "reading": "Xin lỗi khách hàng trang trọng (Apology for incident)",
+    "meaning_vi": "Giải thích nguyên nhân, tạ lỗi và đưa ra cam kết phòng ngừa tái phát",
+    "tags": ["hội thoại", "N2", "tạ lỗi", "Shazai", "sự cố"],
+    "examples": [
+      {
+        "sentence_ja": "この度はサーバーの不具合により、貴社の業務に多大なるご迷惑をおかけしましたことを、深くお詫び申し上げます。",
+        "reading": "このたび は サーバー の ふぐあい により、きしゃ の ぎょうむ に ただい なる ごめいわく を おかけ しました こと を、ふかく おわび もうしあげます",
+        "meaning_vi": "Lần này do sự cố máy chủ đã gây ra nhiều phiền toái to lớn đối với công việc của quý công ty, chúng tôi xin thành tâm tạ lỗi sâu sắc."
+      },
+      {
+        "sentence_ja": "現在バックアップからデータを復旧させ、再発防止策として冗長化構成を強化しております。",
+        "reading": "げんざい バックアップ から データ を ふっきゅう させ、さいはつぼうしさく として じょうちょうか こうせい を きょうか しております",
+        "meaning_vi": "Hiện tại chúng tôi đã phục hồi dữ liệu từ bản sao lưu và đang tăng cường cấu hình dự phòng để tuyệt đối không tái phát."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N2",
+    "japanese": "Đàm phán lùi hạn chót (Deadline adjustment)",
+    "reading": "Đàm phán deadline lịch sự (Deadline negotiation)",
+    "meaning_vi": "Trình bày nguyên nhân phát sinh thay đổi phạm vi và xin dời lịch giao hàng",
+    "tags": ["hội thoại", "N2", "đàm phán", "tiến độ", "công sở"],
+    "examples": [
+      {
+        "sentence_ja": "追加のご要望に伴い検証工数が増加いたしましたため、納期を2日ほど延長していただけないでしょうか。",
+        "reading": "ついか の ごようぼう に ともない けんしょう こうすう が ぞうか いたしました ため、のうき を ふつか ほど えんちょう していただけない でしょう か",
+        "meaning_vi": "Do phát sinh các yêu cầu bổ sung dẫn đến khối lượng công việc kiểm thử tăng lên, bên em có thể xin phép kéo dài thời hạn giao hàng thêm 2 ngày được không ạ?"
+      },
+      {
+        "sentence_ja": "その代わり、品質を担保した上で週明け月曜日の朝一番に納品いたします。",
+        "reading": "その かわり、ひんしつ を たんぽ した うえ で しゅうあけ げつようび の あさいちばん に のうひん いたします",
+        "meaning_vi": "Đổi lại, chúng em đảm bảo chất lượng hoàn hảo và sẽ bàn giao ngay đầu giờ sáng thứ hai đầu tuần tới ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N2",
+    "japanese": "Nhờ cấp trên duyệt tài liệu (Approval request)",
+    "reading": "Xin phê duyệt Ringi (Ringisho approval request)",
+    "meaning_vi": "Cách xin ý kiến sếp để ký duyệt đề án, chi phí hoặc kế hoạch",
+    "tags": ["hội thoại", "N2", "phê duyệt", "công sở"],
+    "examples": [
+      {
+        "sentence_ja": "課長、来期のサーバー増設に関する稟議書を作成いたしました。お目通しいただけますでしょうか。",
+        "reading": "かちょう、らいき の サーバー ぞうせつ に かんする りんぎしょ を さくせい いたしました。おめどおし いただけます でしょう か",
+        "meaning_vi": "Thưa Trưởng phòng, em đã soạn xong tờ trình Ringisho về việc mở rộng cụm máy chủ cho kỳ tới. Anh xem qua giúp em được không ạ?"
+      },
+      {
+        "sentence_ja": "見積もりと費用対効果の根拠を添付してありますので、問題がなければご承認のほどお願いいたします。",
+        "reading": "みつもり と ひようたいこうか の こんきょ を てんぷ して あります ので、もんだい が なければ ごしょうにん の ほど おねがいいたします",
+        "meaning_vi": "Em đã đính kèm bảng báo giá và căn cứ hiệu quả chi phí, nếu không có vấn đề gì kính mong anh phê duyệt giúp em ạ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N1",
+    "japanese": "Thuyết trình đề xuất giải pháp kỹ thuật cấp cao",
+    "reading": "Thuyết trình giải pháp IT (Technical solution pitch)",
+    "meaning_vi": "Trình bày kiến trúc Microservices và tối ưu hóa chi phí cho ban giám đốc",
+    "tags": ["hội thoại", "N1", "thuyết trình", "kiến trúc phần mềm", "kinh doanh"],
+    "examples": [
+      {
+        "sentence_ja": "本日は弊社のクラウドネイティブ移行提案につきまして、お時間を賜り厚く御礼申し上げます。",
+        "reading": "ほんじつ は へいしゃ の クラウド ネイティブ いこう ていあん に つきまして、おじかん を たまわり あつく おんれい もうしあげます",
+        "meaning_vi": "Hôm nay về đề xuất chuyển đổi lên nền tảng Cloud Native của công ty chúng tôi, tôi xin gửi lời cảm tạ chân thành vì đã được quý vị dành thời gian quý báu."
+      },
+      {
+        "sentence_ja": "現行のモノリス構造からマイクロサービスへ段階的に移行することで、可用性を高めつつ運用保守費用の30%削減を実現可能です。",
+        "reading": "げんこう の モノリス こうぞう から マイクロサービス へ だんかいてき に いこう する こと で、かようせい を たかめつつ うんよう ほしゅ ひよう の さんじゅっぱーせんと さくげん を じつげん かのう です",
+        "meaning_vi": "Bằng cách chuyển đổi từng bước từ kiến trúc Monolith hiện tại sang Microservices, chúng ta có thể nâng cao tính sẵn sàng đồng thời giảm được 30% chi phí vận hành bảo trì."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N1",
+    "japanese": "Đàm phán điều khoản hợp đồng đối tác chiến lược",
+    "reading": "Đàm phán hợp đồng cấp cao (Contract terms negotiation)",
+    "meaning_vi": "Thảo luận về cam kết SLA, bảo mật thông tin NDA và chia sẻ bản quyền",
+    "tags": ["hội thoại", "N1", "đàm phán", "hợp đồng", "pháp lý"],
+    "examples": [
+      {
+        "sentence_ja": "秘密保持契約（NDA）および知的財産権の帰属につきまして、双方の合意形成を図りたく存じます。",
+        "reading": "ひみつほじ けいやく（エヌディーエー）および ちてきざいさんけん の きぞく に つきまして、そうほう の ごうい けいせい を はかりたく ぞんじます",
+        "meaning_vi": "Về thỏa thuận bảo mật thông tin (NDA) và quyền sở hữu trí tuệ, chúng tôi mong muốn đạt được sự đồng thuận giữa hai bên."
+      },
+      {
+        "sentence_ja": "SLAにおきまして稼働率99.9%を保証し、万が一のインシデントにも24時間365日の体制で即応体制を敷いております。",
+        "reading": "エスエルエー におきまして かどうりつ きゅうじゅうきゅうてんきゅうぱーせんと を ほしょう し、まんがいち の インシデント に も にじゅうよじかん さんびゃくろくじゅうごにち の たいせい で そくおうたいせい を しいて おります",
+        "meaning_vi": "Chúng tôi cam kết đảm bảo thời gian hoạt động 99.9% trong thỏa thuận mức dịch vụ SLA, và luôn duy trì cơ chế phản ứng tức thì 24/7/365 trước mọi sự cố bất ngờ."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N1",
+    "japanese": "Chào hỏi đối tác nhân dịp Tết hoặc lễ chuyển giao",
+    "reading": "Chào hỏi kinh doanh trang trọng (Seasonal greeting)",
+    "meaning_vi": "Mẫu thư hoặc lời nói chúc mừng năm mới / cảm ơn đối tác thân thiết",
+    "tags": ["hội thoại", "N1", "chúc mừng", "kinh doanh", "văn hóa"],
+    "examples": [
+      {
+        "sentence_ja": "旧年中は並々ならぬご愛顧を賜り、心より御礼申し上げます。本年も変わらぬお引き立てを賜りますようお願い申し上げます。",
+        "reading": "きゅうねんちゅう は なみなみならぬ ごあいこ を たまわり、こころ より おんれい もうしあげます。ほんねん も かわらぬ おひきたて を たまわります よう おねがいもうしあげます",
+        "meaning_vi": "Trong năm vừa qua đã nhận được sự quan tâm ưu ái đặc biệt từ quý vị, tôi xin chân thành cảm tạ. Kính chúc năm mới chúng tôi tiếp tục nhận được sự ủng hộ quý báu từ quý đối tác."
+      },
+      {
+        "sentence_ja": "貴社の今後ますますのご隆盛と、皆様のご健勝を祈念いたしております。",
+        "reading": "きしゃ の こんご ますます の ごりゅうせい と、みなさま の ごけんしょう を きねん いたして おります",
+        "meaning_vi": "Kính chúc quý công ty ngày một hưng thịnh và chúc toàn thể quý vị luôn dồi dào sức khỏe."
+      }
+    ]
+  },
+  {
+    "type": "conversation",
+    "level": "N1",
+    "japanese": "Phỏng vấn ứng tuyển vị trí Kỹ sư cấp cao (Tech Lead)",
+    "reading": "Phỏng vấn xin việc cấp cao (Senior Engineer job interview)",
+    "meaning_vi": "Trả lời câu hỏi về triết lý quản trị đội ngũ và xử lý rủi ro dự án",
+    "tags": ["hội thoại", "N1", "phỏng vấn", "Tech Lead", "lãnh đạo"],
+    "examples": [
+      {
+        "sentence_ja": "私が最も重視しているのは、心理的安全性を確保しつつ技術的な挑戦を推奨するチーム文化の醸成です。",
+        "reading": "わたし が もっとも じゅうし している の は、しんりてき あんぜんせい を かくほ しつつ ぎじゅつてき な ちょうせん を すいしょう する チーム ぶんか の じょうせい です",
+        "meaning_vi": "Điều em chú trọng nhất là vun đắp một văn hóa đội ngũ vừa đảm bảo an toàn tâm lý vừa khuyến khích các thử thách đổi mới công nghệ."
+      },
+      {
+        "sentence_ja": "これまでの経験を生かし、国籍や文化の壁を越えたシナジーを生み出し、貴社のグローバル展開に寄与したいと考えております。",
+        "reading": "これ まで の けいけん を いかし、こくせき や ぶんか の かべ を こえた シナジー を うみだし、きしゃ の グローバル てんかい に きよ したい と かんがえて おります",
+        "meaning_vi": "Phát huy những kinh nghiệm đã tích lũy, em mong muốn tạo ra sức mạnh cộng hưởng vượt qua rào cản quốc tịch và văn hóa để đóng góp thiết thực cho sự phát triển toàn cầu của quý công ty."
+      }
+    ]
+  }
+]
+

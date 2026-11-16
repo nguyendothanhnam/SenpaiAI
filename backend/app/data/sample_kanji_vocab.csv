@@ -1,0 +1,22 @@
+type,level,japanese,reading,meaning_vi,examples,tags,notes
+kanji,N5,木,モク, ボク / き,Cây cối; mộc (thứ năm trong tuần),木の下で休みましょう。|きのしたで やすみましょう。|Hãy nghỉ dưới gốc cây.;;木曜日にテストがあります。|もくようび に てすと が あります。|Có bài kiểm tra vào thứ Năm.,"kanji,N5,cơ bản,thiên nhiên",Chữ tượng hình vẽ cái cây có cành và rễ.
+kanji,N5,水,スイ / みず,Nước (thủy),冷たい水を一杯ください。|つめたい みず を いっぱい ください。|Cho tôi một cốc nước lạnh.;;水曜日は定休日です。|すいようび は ていきゅうび です。|Thứ Tư là ngày nghỉ định kỳ.,"kanji,N5,cơ bản,thiên nhiên",Chữ tượng hình dòng nước chảy.
+kanji,N5,火,カ / ひ, -び, -ほ,Lửa (hỏa),火の用心をしてください。|ひ の ようじん を してください。|Hãy cẩn thận củi lửa.;;火曜日に会議があります。|かようび に かいぎ が あります。|Có cuộc họp vào thứ Ba.,"kanji,N5,cơ bản,thiên nhiên",Chữ tượng hình ngọn lửa bốc lên.
+kanji,N5,金,キン, コン / かね, -がね,Vàng; tiền bạc (kim),財布にお金が入っていません。|さいふ に おかね が はいっていません。|Trong ví không có tiền.;;金曜日に飲み会があります。|きんようび に のみかい が あります。|Thứ Sáu có tiệc nhậu.,"kanji,N5,cơ bản,tiền bạc",Biểu thị kim loại quý hoặc tiền.
+kanji,N5,土,ド, ト / つち,Đất; thổ (thứ bảy trong tuần),植物を土に植えます。|しょくぶつ を つち に うえます。|Trồng cây vào đất.;;土曜日は休みです。|どようび は やすみ です。|Thứ Bảy được nghỉ.,"kanji,N5,cơ bản,thiên nhiên",Biểu thị đất đai màu mỡ.
+kanji,N4,空,クウ / そら, から, あ・く,Bầu trời; trống rỗng (không),青空が広がっています。|あおぞら が ひろがっています。|Bầu trời xanh ngắt trải rộng.;;空席がありますか。|くうせき が ありますか。|Có chỗ trống không ạ?,"kanji,N4,thiên nhiên",Hán Việt KHÔNG.
+kanji,N4,海,カイ / うみ,Biển; đại dương (hải),夏休みに海へ行きます。|なつやすみ に うみ へ いきます。|Kỳ nghỉ hè tôi đi biển.;;海外旅行に行きたいです。|かいがい りょこう に いきたい です。|Tôi muốn đi du lịch nước ngoài.,"kanji,N4,thiên nhiên",Hán Việt HẢI.
+kanji,N4,車,シャ / くるま,Xe hơi; bánh xe (xa),新しい車を買いました。|あたらしい くるま を かいました。|Tôi đã mua xe hơi mới.;;電車で通勤しています。|でんしゃ で つうきん しています。|Tôi đi làm bằng tàu điện.,"kanji,N4,giao thông",Hán Việt XA.
+kanji,N3,資,シ,Tài sản; tư cách; tư liệu (tư),会議の資料を印刷しました。|かいぎ の しりょう を いんさつ しました。|Tôi đã in tài liệu cuộc họp.;;資本金を増やします。|しほんきん を ふやします。|Tăng vốn điều lệ.,"kanji,N3,kinh tế,công sở",Hán Việt TƯ trong tư liệu tài liệu.
+kanji,N3,経,ケイ, キョウ / へ・る,Kinh qua; trải qua; kinh tế (kinh),日本の経済を研究しています。|にほん の けいざい を けんきゅう しています。|Tôi đang nghiên cứu kinh tế Nhật Bản.;;長い年月を経て完成した。|ながい ねんげつ を へて かんせい した。|Được hoàn thành sau nhiều năm.,"kanji,N3,kinh tế",Hán Việt KINH trong kinh tế.
+vocabulary,N5,本,ほん (hon),Sách; gốc rễ,毎晩寝る前に本を読みます。|まいばん ねる まえ に ほん を よみます。|Mỗi tối trước khi ngủ tôi đều đọc sách.,"vocabulary,N5,đồ vật",Từ cơ bản N5.
+vocabulary,N5,水,みず (mizu),Nước uống,水をたくさん飲みましょう。|みず を たくさん のみましょう。|Hãy uống nhiều nước nhé.,"vocabulary,N5,đồ uống",Từ cơ bản N5.
+vocabulary,N5,先生,せんせい (sensei),Thầy cô giáo; bác sĩ,田中先生はとても優しいです。|たなか せんせい は とても やさしい です。|Thầy Tanaka rất hiền từ.,"vocabulary,N5,xưng hô",Dùng để gọi người dạy học hoặc bác sĩ.
+vocabulary,N5,学生,がくせい (gakusei),Học sinh; sinh viên,私はハノイ大学の学生です。|わたし は はのだいがく の がくせい です。|Tôi là sinh viên trường Đại học Hà Nội.,"vocabulary,N5,xưng hô",Từ chỉ học sinh sinh viên.
+vocabulary,N4,案内,あんない (annai),Hướng dẫn; dẫn đường,私が会場をご案内します。|わたし が かいじょう を ごあんない します。|Tôi xin phép hướng dẫn quý khách vào hội trường.,"vocabulary,N4,công sở",Thường dùng dạng khiêm nhường ご案内します.
+vocabulary,N4,約束,やくそく (yakusoku),Lời hứa; cuộc hẹn,友達と約束があります。|ともだち と やくそく が あります。|Tôi có hẹn với bạn bè.,"vocabulary,N4,đời sống",Hứa hẹn hoặc hẹn gặp.
+vocabulary,N3,打ち合わせ,うちあわせ (uchiawase),Cuộc họp ngắn; trao đổi nhanh công việc,午後からクライアントと打ち合わせがあります。|ごご から くらいあんと と うちあわせ が あります。|Buổi chiều tôi có cuộc họp thảo luận với khách hàng.,"vocabulary,N3,công sở",Từ rất phổ biến trong môi trường làm việc Nhật Bản.
+vocabulary,N3,改善,かいぜん (kaizen),Cải tiến; nâng cao hiệu suất làm việc,業務プロセスを改善しましょう。|ぎょうむ ぷろせす を かいぜん しましょう。|Hãy cùng cải tiến quy trình nghiệp vụ.,"vocabulary,N3,IT,sản xuất",Khái niệm Kaizen nổi tiếng thế giới.
+vocabulary,N2,納期,のうき (nouki),Hạn giao hàng; deadline dự án,納期に間に合うように開発を進めています。|のうき に まにあう ように かいはつ を すすめて います。|Chúng tôi đang xúc tiến phát triển để kịp hạn giao sản phẩm.,"vocabulary,N2,IT,dự án",Rất quan trọng trong các dự án IT phần mềm.
+vocabulary,N1,抜本的,ばっぽんてき (bapponteki),Triệt để; tận gốc rễ,抜本的な改革が必要です。|ばっぽんてき な かいかく が ひつよう です。|Cần phải có sự cải cách mang tính triệt để tận gốc rễ.,"vocabulary,N1,quản trị",Thường gặp trong văn kiện chính sách và kinh tế.
+

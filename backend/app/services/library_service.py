@@ -1,6 +1,8 @@
+import io
 import logging
 import re
 import random
+from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
 
@@ -16,7 +18,7 @@ from .vector_db import chroma_service
 from .library_localization import matching_sources
 
 
-DEFAULT_TYPES = ["vocabulary", "grammar", "lesson", "culture", "example"]
+DEFAULT_TYPES = ["vocabulary", "kanji", "grammar", "conversation", "lesson", "culture", "example"]
 JLPT_LEVELS = ["N5", "N4", "N3", "N2", "N1"]
 FETCH_TIMEOUT_SECONDS = 10
 MAX_FETCHED_CONTENT_LENGTH = 50000
@@ -306,6 +308,81 @@ class LibraryService:
             "content": content,
             "source_url": source_url,
         }
+
+    def extract_file_content(self, filename: str, file_bytes: bytes) -> tuple[str, str]:
+        """Extract title and text content from uploaded file (.pdf, .docx, .doc, .txt, .md)."""
+        suffix = Path(filename).suffix.lower()
+        title = Path(filename).stem.replace("_", " ").strip()
+        content = ""
+
+        if suffix == ".pdf":
+            try:
+                import pypdf
+                reader = pypdf.PdfReader(io.BytesIO(file_bytes))
+                extracted_pages = []
+                for page in reader.pages:
+                    page_text = page.extract_text() or ""
+                    if page_text.strip():
+                        extracted_pages.append(page_text.strip())
+                content = "\n\n".join(extracted_pages)
+                if reader.metadata and reader.metadata.title:
+                    meta_title = str(reader.metadata.title).strip()
+                    if meta_title:
+                        title = meta_title
+            except Exception as exc:
+                logger.warning(f"Failed to parse PDF {filename}: {exc}")
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                    detail=f"Không thể đọc file PDF: {str(exc)}",
+                )
+
+        elif suffix in [".docx", ".doc"]:
+            try:
+                import docx
+                doc = docx.Document(io.BytesIO(file_bytes))
+                paragraphs = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
+                for table in doc.tables:
+                    for row in table.rows:
+                        row_text = " | ".join(cell.text.strip() for cell in row.cells if cell.text.strip())
+                        if row_text:
+                            paragraphs.append(row_text)
+                content = "\n\n".join(paragraphs)
+            except Exception as exc:
+                try:
+                    text_decoded = file_bytes.decode("utf-8", errors="ignore")
+                    matches = re.findall(r"[\w\s\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff.,!?-]{4,}", text_decoded)
+                    content = "\n".join(m.strip() for m in matches if len(m.strip()) > 10)
+                except Exception:
+                    logger.warning(f"Failed to parse DOC/DOCX {filename}: {exc}")
+                    raise HTTPException(
+                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        detail=f"Không thể đọc file Word: {str(exc)}",
+                    )
+
+        elif suffix in [".txt", ".md", ".csv", ".json"]:
+            for encoding in ["utf-8", "utf-8-sig", "shift_jis", "cp932", "latin-1"]:
+                try:
+                    content = file_bytes.decode(encoding)
+                    break
+                except UnicodeDecodeError:
+                    continue
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                detail=f"Định dạng file '{suffix}' không được hỗ trợ. Vui lòng tải lên PDF, DOC, DOCX, TXT, hoặc MD.",
+            )
+
+        content = content.strip()
+        if len(content) > MAX_FETCHED_CONTENT_LENGTH:
+            content = content[:MAX_FETCHED_CONTENT_LENGTH].rsplit(" ", 1)[0].strip()
+
+        if not content:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="File không có nội dung văn bản có thể đọc được.",
+            )
+
+        return title, content
 
     def _filtered_query(
         self,

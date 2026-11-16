@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     llm_provider: str = "ollama"  # "openai" or "ollama"
     openai_api_key: Optional[str] = None
     ollama_base_url: str = "http://localhost:11434"
-    ollama_model: str = "gemma:2b"  # Default Gemma model
+    ollama_model: str = "qwen2.5:3b"  # Qwen 2.5 3B - high-accuracy multilingual model optimized with 6-thread & token capping
     
     # ChromaDB
     chroma_persist_directory: str = "./chroma_db"
@@ -59,6 +59,7 @@ class Settings(BaseSettings):
     listening_voicevox_speaker_id: int = 1
     
     class Config:
-        env_file = ".env"
+        env_file = str(Path(__file__).resolve().parents[2] / ".env")
+        extra = "ignore"
 
 settings = Settings()

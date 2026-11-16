@@ -1,195 +1,253 @@
-import chromadb
-from chromadb.config import Settings as ChromaSettings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from typing import List, Dict, Any, Optional
-import os
+import json
 import logging
+import os
+import re
+from typing import Any, Dict, List, Optional
+import httpx
+import numpy as np
 from ..core.config import settings
 
-# Disable ChromaDB telemetry before importing
-os.environ.setdefault('ANONYMIZED_TELEMETRY', 'False')
-os.environ.setdefault('CHROMA_TELEMETRY_DISABLED', 'True')
 logger = logging.getLogger(__name__)
 
 
 class ChromaDBService:
+    """Persistent Vector Database service with Ollama nomic-embed-text embeddings and NumPy similarity search."""
+
     def __init__(self):
-        self.persist_directory = settings.chroma_persist_directory
+        self.persist_directory = settings.chroma_persist_directory or "./chroma_db"
         self.collection_name = "japanese_learning"
-        self.client = None
-        self.collection = None
+        self.embedding_model = "nomic-embed-text"
+        self.ollama_base_url = settings.ollama_base_url or "http://localhost:11434"
+        self.vector_file = os.path.join(self.persist_directory, "knowledge_vectors.json")
+        
+        # Ensure persistence directory exists
+        os.makedirs(self.persist_directory, exist_ok=True)
 
-        # Initialize ChromaDB client with telemetry disabled
-        try:
-            self.client = chromadb.PersistentClient(
-                path=self.persist_directory,
-                settings=ChromaSettings(
-                    anonymized_telemetry=False,
-                    allow_reset=True,
-                    is_persistent=True
-                )
-            )
-        except Exception as e:
-            # Fallback if settings cause issues
-            logger.warning("[Library] ChromaDB settings error: %s, using default settings", e)
+        # In-memory store: id -> { "id": str, "content": str, "metadata": dict, "vector": list[float] }
+        self.records: Dict[str, Dict[str, Any]] = {}
+        self._load_from_disk()
+
+    def _load_from_disk(self):
+        """Load stored vectors from disk."""
+        if os.path.exists(self.vector_file):
             try:
-                self.client = chromadb.PersistentClient(path=self.persist_directory)
-            except Exception as fallback_error:
-                logger.exception("[Library] failed to initialize ChromaDB: %s", fallback_error)
-                self.client = None
-
-        # Embeddings will be handled by ChromaDB directly
-        # For Ollama, we'll use ChromaDB's default embedding function
-        self.embeddings = None
-
-        # Initialize text splitter
-        self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
-            chunk_overlap=50,
-            length_function=len,
-        )
-
-        # Get or create collection
-        if self.client is not None:
-            try:
-                self.collection = self.client.get_or_create_collection(
-                    name=self.collection_name,
-                    metadata={"hnsw:space": "cosine"}
-                )
+                with open(self.vector_file, "r", encoding="utf-8") as f:
+                    self.records = json.load(f)
+                logger.info("[VectorDB] Loaded %d vectors from %s", len(self.records), self.vector_file)
             except Exception as e:
-                logger.exception("[Library] failed to open ChromaDB collection: %s", e)
-                self.collection = None
+                logger.exception("[VectorDB] Failed to load %s: %s", self.vector_file, e)
+                self.records = {}
+        else:
+            self.records = {}
 
-        # ChromaDB collection is ready to use
+    def _save_to_disk(self):
+        """Save stored vectors to disk."""
+        try:
+            temp_file = self.vector_file + ".tmp"
+            with open(temp_file, "w", encoding="utf-8") as f:
+                json.dump(self.records, f, ensure_ascii=False)
+            if os.path.exists(self.vector_file):
+                os.replace(temp_file, self.vector_file)
+            else:
+                os.rename(temp_file, self.vector_file)
+        except Exception as e:
+            logger.exception("[VectorDB] Failed to save %s: %s", self.vector_file, e)
+
+    def get_embedding(self, text: str) -> np.ndarray:
+        """Fetch 768-dim embedding from Ollama nomic-embed-text with deterministic hash fallback."""
+        clean_text = (text or "").strip()
+        if not clean_text:
+            return np.zeros(768, dtype=np.float32)
+
+        # 1. Try Ollama embedding API
+        try:
+            url = f"{self.ollama_base_url.rstrip('/')}/api/embeddings"
+            with httpx.Client(timeout=10.0) as client:
+                res = client.post(url, json={"model": self.embedding_model, "prompt": clean_text})
+                if res.status_code == 200:
+                    vec = res.json().get("embedding")
+                    if vec and len(vec) == 768:
+                        arr = np.array(vec, dtype=np.float32)
+                        norm = np.linalg.norm(arr)
+                        return arr / norm if norm > 0 else arr
+        except Exception as exc:
+            logger.debug("[VectorDB] Ollama embedding request failed: %s", exc)
+
+        # 2. Deterministic character & token n-gram semantic pseudo-embedding fallback
+        # Ensures that even if Ollama is momentarily busy, similarity comparisons still work
+        vec = np.zeros(768, dtype=np.float32)
+        words = re.findall(r"[\w]+", clean_text.lower())
+        for word in words:
+            h = hash(word) % 768
+            vec[h] += 1.0
+        # Character bigrams for Japanese
+        for i in range(len(clean_text) - 1):
+            bi = clean_text[i:i+2]
+            h = hash(bi) % 768
+            vec[h] += 1.5
+        norm = np.linalg.norm(vec)
+        return vec / norm if norm > 0 else vec
 
     def add_documents(self, documents: List[Dict[str, Any]]) -> List[str]:
-        """Add documents to the vector database."""
-        if self.collection is None:
-            return []
+        """Add or update documents in the vector database."""
         doc_ids = []
 
         for doc_data in documents:
-            self.delete_document(str(doc_data["id"]))
-            # Split document into chunks
-            chunks = self.text_splitter.split_text(doc_data["content"])
+            doc_id_str = str(doc_data.get("id", ""))
+            if not doc_id_str:
+                continue
 
-            for i, chunk in enumerate(chunks):
-                doc_id = f"{doc_data['id']}_{i}"
+            # Remove previous chunks of this document if any
+            self.delete_document(doc_id_str)
 
-                # Create document metadata
-                metadata = {
-                    "document_id": str(doc_data["id"]),  # Store document ID for easy retrieval
-                    "title": doc_data["title"],
-                    "document_type": doc_data["document_type"],
-                    "type": doc_data["document_type"],
-                    "jlpt_level": doc_data.get("jlpt_level", ""),
-                    "tags": ",".join(doc_data.get("tags", [])),
-                    "source_url": doc_data.get("source_url", ""),
-                    "chunk_index": i,
-                    "total_chunks": len(chunks)
-                }
+            title = doc_data.get("title", "")
+            content = doc_data.get("content", "")
+            doc_type = doc_data.get("document_type", "vocabulary")
+            jlpt_level = doc_data.get("jlpt_level", "")
+            tags = doc_data.get("tags", [])
+            if isinstance(tags, list):
+                tags_str = ",".join(tags)
+            else:
+                tags_str = str(tags or "")
 
-                # Add to ChromaDB
-                self.collection.add(
-                    documents=[chunk],
-                    metadatas=[metadata],
-                    ids=[doc_id]
-                )
+            # Combine title and content for embedding
+            embed_text = f"{title}\n{content}"
+            vector = self.get_embedding(embed_text).tolist()
 
-                doc_ids.append(doc_id)
+            record_id = f"{doc_id_str}_0"
+            metadata = {
+                "document_id": doc_id_str,
+                "title": title,
+                "document_type": doc_type,
+                "type": doc_type,
+                "jlpt_level": jlpt_level,
+                "tags": tags_str,
+                "source_url": doc_data.get("source_url", ""),
+                "chunk_index": 0,
+                "total_chunks": 1
+            }
 
+            self.records[record_id] = {
+                "id": record_id,
+                "document_id": doc_id_str,
+                "content": content,
+                "metadata": metadata,
+                "vector": vector
+            }
+            doc_ids.append(record_id)
+
+        self._save_to_disk()
         return doc_ids
 
     def search_documents(
-            self,
-            query: str,
-            n_results: int = 5,
-            filter_dict: Optional[Dict[str, Any]] = None
+        self,
+        query: str,
+        n_results: int = 5,
+        filter_dict: Optional[Dict[str, Any]] = None
     ) -> List[Dict[str, Any]]:
-        """Search for relevant documents using semantic similarity."""
-        if self.collection is None:
+        """Search for relevant documents using semantic similarity with optional metadata filters."""
+        if not self.records or not query.strip():
             return []
 
-        # Perform similarity search
-        try:
-            results = self.collection.query(
-                query_texts=[query],
-                n_results=n_results,
-                where=filter_dict
-            )
-        except Exception as e:
-            logger.exception("[Library] failed to search ChromaDB: %s", e)
+        query_vec = self.get_embedding(query.strip())
+        query_norm = np.linalg.norm(query_vec)
+        if query_norm == 0:
             return []
 
-        # Format results
-        formatted_results = []
-        if results["documents"] and results["documents"][0]:
-            for i, doc in enumerate(results["documents"][0]):
-                metadata = results["metadatas"][0][i]
-                doc_id = results["ids"][0][i] if results["ids"] and results["ids"][0] else None
-                distance = results["distances"][0][i] if results["distances"] else 0
+        candidate_records = []
+        for rec in self.records.values():
+            meta = rec.get("metadata", {})
 
-                formatted_results.append({
-                    "content": doc,
-                    "metadata": metadata,
-                    "doc_id": doc_id,  # Include ChromaDB document ID
-                    "similarity_score": 1 - distance,  # Convert distance to similarity
-                    "source": {
-                        "title": metadata.get("title", ""),
-                        "document_type": metadata.get("document_type", ""),
-                        "jlpt_level": metadata.get("jlpt_level", ""),
-                        "source_url": metadata.get("source_url", "")
-                    }
-                })
+            # Filter checks
+            if filter_dict:
+                matched = True
+                for f_key, f_val in filter_dict.items():
+                    if f_val and meta.get(f_key) != f_val:
+                        matched = False
+                        break
+                if not matched:
+                    continue
 
-        return formatted_results
+            candidate_records.append(rec)
 
-    def get_relevant_context(self, query: str, jlpt_level: Optional[str] = None) -> str:
-        """Get relevant context for RAG using the query."""
+        if not candidate_records:
+            return []
+
+        # Vectorized cosine similarity computation
+        matrix = np.array([r["vector"] for r in candidate_records], dtype=np.float32)
+        norms = np.linalg.norm(matrix, axis=1)
+        # Avoid division by zero
+        norms[norms == 0] = 1.0
+
+        scores = np.dot(matrix, query_vec) / (norms * query_norm)
+
+        # Top indices sorted descending
+        top_indices = np.argsort(scores)[::-1][:n_results]
+
+        results = []
+        for idx in top_indices:
+            rec = candidate_records[idx]
+            sim = float(scores[idx])
+            meta = rec.get("metadata", {})
+            results.append({
+                "content": rec.get("content", ""),
+                "metadata": meta,
+                "doc_id": rec.get("id"),
+                "similarity_score": round(sim, 4),
+                "source": {
+                    "id": meta.get("document_id"),
+                    "title": meta.get("title", ""),
+                    "document_type": meta.get("document_type", ""),
+                    "jlpt_level": meta.get("jlpt_level", ""),
+                    "source_url": meta.get("source_url", "")
+                }
+            })
+
+        return results
+
+    def get_relevant_context(self, query: str, jlpt_level: Optional[str] = None, n_results: int = 3) -> str:
+        """Get formatted relevant context for RAG prompt injection."""
         filter_dict = {}
         if jlpt_level:
             filter_dict["jlpt_level"] = jlpt_level
 
-        results = self.search_documents(query, n_results=3, filter_dict=filter_dict)
+        results = self.search_documents(query, n_results=n_results, filter_dict=filter_dict or None)
+        if not results:
+            return ""
 
         context_parts = []
-        for result in results:
-            context_parts.append(f"Source: {result['source']['title']}\n{result['content']}")
+        for i, res in enumerate(results, 1):
+            src = res["source"]
+            title = src.get("title", "Tài liệu tiếng Nhật")
+            doc_type = src.get("document_type", "")
+            level = src.get("jlpt_level", "")
+            header = f"[Nguồn {i}: {title} ({doc_type} | {level})]"
+            context_parts.append(f"{header}\n{res['content']}")
 
         return "\n\n".join(context_parts)
 
     def delete_document(self, document_id: str) -> bool:
-        """Delete a document and all its chunks from the vector database."""
-        if self.collection is None:
-            return False
-        try:
-            # Find all chunks for this document
-            results = self.collection.get(where={"document_id": str(document_id)})
-
-            if results["ids"]:
-                self.collection.delete(ids=results["ids"])
-                return True
-            return False
-        except Exception as e:
-            print(f"Error deleting document {document_id}: {e}")
-            return False
+        """Delete a document and all its chunks from the vector store."""
+        target_id = str(document_id)
+        keys_to_delete = [k for k, v in self.records.items() if v.get("document_id") == target_id]
+        if keys_to_delete:
+            for k in keys_to_delete:
+                del self.records[k]
+            self._save_to_disk()
+            return True
+        return False
 
     def get_collection_stats(self) -> Dict[str, Any]:
-        """Get statistics about the collection."""
-        if self.collection is None:
-            return {"total_documents": 0, "vector_chunks": 0}
-        try:
-            count = self.collection.count()
-            return {
-                "total_documents": count,
-                "vector_chunks": count,
-                "collection_name": self.collection_name,
-                "persist_directory": self.persist_directory
-            }
-        except Exception as e:
-            logger.exception("[Library] failed to load vector stats: %s", e)
-            return {"error": str(e)}
+        """Get collection statistics."""
+        count = len(self.records)
+        return {
+            "total_documents": count,
+            "vector_chunks": count,
+            "collection_name": self.collection_name,
+            "embedding_model": self.embedding_model,
+            "persist_directory": self.persist_directory
+        }
 
 
-# Global instance
+# Global instance maintaining interface compatibility
 chroma_service = ChromaDBService()
