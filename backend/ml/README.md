@@ -1,5 +1,9 @@
 # Kanji CNN training and evaluation
 
+Deployment diagnosis (16/11/2026): the active model covers 245 N5/N4 classes, while the dictionary contains 612 characters. N3 is not yet covered by the active weights. Missing ETL10 preview thumbnails do not mean a character is unsupported; the web's thumbnail-based recognition block has been removed. See [the diagnosis and regression results](../../docs/KANJI_RECOGNITION_DIAGNOSIS.md). Run `python ml/scripts/audit_kanji_recognition.py` from `backend/` to audit actual model coverage without changing artifacts.
+
+Current diagnosis (16/11/2026): the active model has 245 N5/N4 classes while the dictionary contains 612 N5/N4/N3 characters. Separately, the web used to reject trained characters such as 語/東 when no ETL10 preview thumbnail existed; that incorrect UI gate has been removed. Blank/transparent PNG preprocessing is covered by regression tests. See [coverage, reproduction and model-training limits](../../docs/KANJI_RECOGNITION_DIAGNOSIS.md); existing model artifacts are preserved.
+
 This pipeline builds its ordered class list from `backend/app/data/kanji_dictionary.json` (N5/N4/N3). Missing stroke counts are resolved from the local KanjiVG SVG files; an entry missing its JLPT level or both dictionary and SVG stroke data stops the run with the affected characters listed. Duplicate labels also stop the run. The running model files remain `models/kanji_model.pt` and `models/label_map.json`; all retraining commands below write to `models/n3_candidate`.
 
 `kanji_recognizer.py` reads the number of classes from `label_map.json`; `get_model_info()` derives the supported JLPT levels from those labels and dictionary metadata. Once candidate files are deliberately copied into the standard model paths and the backend restarts, the status endpoint and UI report levels automatically.

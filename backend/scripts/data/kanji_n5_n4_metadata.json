@@ -1,0 +1,4413 @@
+{
+  "日": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 1,
+    "meanings": [
+      "Day",
+      "Sun",
+      "Japan",
+      "Counter For Days"
+    ],
+    "readings_on": [
+      "にち",
+      "じつ"
+    ],
+    "readings_kun": [
+      "ひ",
+      "-び",
+      "-か"
+    ]
+  },
+  "一": {
+    "strokes": 1,
+    "grade": 1,
+    "freq": 2,
+    "meanings": [
+      "One",
+      "One Radical (no.1)"
+    ],
+    "readings_on": [
+      "いち",
+      "いつ"
+    ],
+    "readings_kun": [
+      "ひと-",
+      "ひと.つ"
+    ]
+  },
+  "国": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 3,
+    "meanings": [
+      "Country"
+    ],
+    "readings_on": [
+      "こく"
+    ],
+    "readings_kun": [
+      "くに"
+    ]
+  },
+  "人": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 5,
+    "meanings": [
+      "Person"
+    ],
+    "readings_on": [
+      "じん",
+      "にん"
+    ],
+    "readings_kun": [
+      "ひと",
+      "-り",
+      "-と"
+    ]
+  },
+  "年": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 6,
+    "meanings": [
+      "Year",
+      "Counter For Years"
+    ],
+    "readings_on": [
+      "ねん"
+    ],
+    "readings_kun": [
+      "とし"
+    ]
+  },
+  "大": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 7,
+    "meanings": [
+      "Large",
+      "Big"
+    ],
+    "readings_on": [
+      "だい",
+      "たい"
+    ],
+    "readings_kun": [
+      "おお-",
+      "おお.きい",
+      "-おお.いに"
+    ]
+  },
+  "十": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 8,
+    "meanings": [
+      "Ten"
+    ],
+    "readings_on": [
+      "じゅう",
+      "じっ",
+      "じゅっ"
+    ],
+    "readings_kun": [
+      "とお",
+      "と"
+    ]
+  },
+  "二": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 9,
+    "meanings": [
+      "Two",
+      "Two Radical (no. 7)"
+    ],
+    "readings_on": [
+      "に",
+      "じ"
+    ],
+    "readings_kun": [
+      "ふた",
+      "ふた.つ",
+      "ふたたび"
+    ]
+  },
+  "本": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 10,
+    "meanings": [
+      "Book",
+      "Present",
+      "Main",
+      "Origin",
+      "True",
+      "Real",
+      "Counter For Long Cylindrical Things"
+    ],
+    "readings_on": [
+      "ほん"
+    ],
+    "readings_kun": [
+      "もと"
+    ]
+  },
+  "中": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 11,
+    "meanings": [
+      "In",
+      "Inside",
+      "Middle",
+      "Mean",
+      "Center"
+    ],
+    "readings_on": [
+      "ちゅう"
+    ],
+    "readings_kun": [
+      "なか",
+      "うち",
+      "あた.る"
+    ]
+  },
+  "長": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 12,
+    "meanings": [
+      "Long",
+      "Leader",
+      "Superior",
+      "Senior"
+    ],
+    "readings_on": [
+      "ちょう"
+    ],
+    "readings_kun": [
+      "なが.い",
+      "おさ"
+    ]
+  },
+  "出": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 13,
+    "meanings": [
+      "Exit",
+      "Leave",
+      "Go Out",
+      "Come Out",
+      "Put Out",
+      "Protrude"
+    ],
+    "readings_on": [
+      "しゅつ",
+      "すい"
+    ],
+    "readings_kun": [
+      "で.る",
+      "-で",
+      "だ.す",
+      "-だ.す",
+      "い.でる",
+      "い.だす"
+    ]
+  },
+  "三": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 14,
+    "meanings": [
+      "Three"
+    ],
+    "readings_on": [
+      "さん",
+      "ぞう"
+    ],
+    "readings_kun": [
+      "み",
+      "み.つ",
+      "みっ.つ"
+    ]
+  },
+  "時": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 16,
+    "meanings": [
+      "Time",
+      "Hour"
+    ],
+    "readings_on": [
+      "じ"
+    ],
+    "readings_kun": [
+      "とき",
+      "-どき"
+    ]
+  },
+  "行": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 20,
+    "meanings": [
+      "Going",
+      "Journey",
+      "Carry Out",
+      "Conduct",
+      "Act",
+      "Line",
+      "Row",
+      "Bank"
+    ],
+    "readings_on": [
+      "こう",
+      "ぎょう",
+      "あん"
+    ],
+    "readings_kun": [
+      "い.く",
+      "ゆ.く",
+      "-ゆ.き",
+      "-ゆき",
+      "-い.き",
+      "-いき",
+      "おこな.う",
+      "おこ.なう"
+    ]
+  },
+  "見": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 22,
+    "meanings": [
+      "See",
+      "Hopes",
+      "Chances",
+      "Idea",
+      "Opinion",
+      "Look At",
+      "Visible"
+    ],
+    "readings_on": [
+      "けん"
+    ],
+    "readings_kun": [
+      "み.る",
+      "み.える",
+      "み.せる"
+    ]
+  },
+  "月": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 23,
+    "meanings": [
+      "Month",
+      "Moon"
+    ],
+    "readings_on": [
+      "げつ",
+      "がつ"
+    ],
+    "readings_kun": [
+      "つき"
+    ]
+  },
+  "後": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 26,
+    "meanings": [
+      "Behind",
+      "Back",
+      "Later"
+    ],
+    "readings_on": [
+      "ご",
+      "こう"
+    ],
+    "readings_kun": [
+      "のち",
+      "うし.ろ",
+      "うしろ",
+      "あと",
+      "おく.れる"
+    ]
+  },
+  "前": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 27,
+    "meanings": [
+      "In Front",
+      "Before"
+    ],
+    "readings_on": [
+      "ぜん"
+    ],
+    "readings_kun": [
+      "まえ",
+      "-まえ"
+    ]
+  },
+  "生": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 29,
+    "meanings": [
+      "Life",
+      "Genuine",
+      "Birth"
+    ],
+    "readings_on": [
+      "せい",
+      "しょう"
+    ],
+    "readings_kun": [
+      "い.きる",
+      "い.かす",
+      "い.ける",
+      "う.まれる",
+      "うま.れる",
+      "う.まれ",
+      "うまれ",
+      "う.む",
+      "お.う",
+      "は.える",
+      "は.やす",
+      "き",
+      "なま",
+      "なま-",
+      "な.る",
+      "な.す",
+      "む.す",
+      "-う"
+    ]
+  },
+  "五": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 31,
+    "meanings": [
+      "Five"
+    ],
+    "readings_on": [
+      "ご"
+    ],
+    "readings_kun": [
+      "いつ",
+      "いつ.つ"
+    ]
+  },
+  "間": {
+    "strokes": 12,
+    "grade": 2,
+    "freq": 33,
+    "meanings": [
+      "Interval",
+      "Space"
+    ],
+    "readings_on": [
+      "かん",
+      "けん"
+    ],
+    "readings_kun": [
+      "あいだ",
+      "ま",
+      "あい"
+    ]
+  },
+  "上": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 35,
+    "meanings": [
+      "Above",
+      "Up"
+    ],
+    "readings_on": [
+      "じょう",
+      "しょう",
+      "しゃん"
+    ],
+    "readings_kun": [
+      "うえ",
+      "-うえ",
+      "うわ-",
+      "かみ",
+      "あ.げる",
+      "-あ.げる",
+      "あ.がる",
+      "-あ.がる",
+      "あ.がり",
+      "-あ.がり",
+      "のぼ.る",
+      "のぼ.り",
+      "のぼ.せる",
+      "のぼ.す",
+      "たてまつ.る"
+    ]
+  },
+  "東": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 37,
+    "meanings": [
+      "East"
+    ],
+    "readings_on": [
+      "とう"
+    ],
+    "readings_kun": [
+      "ひがし"
+    ]
+  },
+  "四": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 47,
+    "meanings": [
+      "Four"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "よ",
+      "よ.つ",
+      "よっ.つ",
+      "よん"
+    ]
+  },
+  "今": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 49,
+    "meanings": [
+      "Now"
+    ],
+    "readings_on": [
+      "こん",
+      "きん"
+    ],
+    "readings_kun": [
+      "いま"
+    ]
+  },
+  "金": {
+    "strokes": 8,
+    "grade": 1,
+    "freq": 53,
+    "meanings": [
+      "Gold"
+    ],
+    "readings_on": [
+      "きん",
+      "こん",
+      "ごん"
+    ],
+    "readings_kun": [
+      "かね",
+      "かな-",
+      "-がね"
+    ]
+  },
+  "九": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 55,
+    "meanings": [
+      "Nine"
+    ],
+    "readings_on": [
+      "きゅう",
+      "く"
+    ],
+    "readings_kun": [
+      "ここの",
+      "ここの.つ"
+    ]
+  },
+  "入": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 56,
+    "meanings": [
+      "Enter",
+      "Insert"
+    ],
+    "readings_on": [
+      "にゅう",
+      "じゅ"
+    ],
+    "readings_kun": [
+      "い.る",
+      "-い.る",
+      "-い.り",
+      "い.れる",
+      "-い.れ",
+      "はい.る"
+    ]
+  },
+  "学": {
+    "strokes": 8,
+    "grade": 1,
+    "freq": 63,
+    "meanings": [
+      "Study",
+      "Learning",
+      "Science"
+    ],
+    "readings_on": [
+      "がく"
+    ],
+    "readings_kun": [
+      "まな.ぶ"
+    ]
+  },
+  "高": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 65,
+    "meanings": [
+      "Tall",
+      "High",
+      "Expensive"
+    ],
+    "readings_on": [
+      "こう"
+    ],
+    "readings_kun": [
+      "たか.い",
+      "たか",
+      "-だか",
+      "たか.まる",
+      "たか.める"
+    ]
+  },
+  "円": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 69,
+    "meanings": [
+      "Circle",
+      "Yen",
+      "Round"
+    ],
+    "readings_on": [
+      "えん"
+    ],
+    "readings_kun": [
+      "まる.い",
+      "まる",
+      "まど",
+      "まど.か",
+      "まろ.やか"
+    ]
+  },
+  "子": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 72,
+    "meanings": [
+      "Child",
+      "Sign Of The Rat",
+      "11pm-1am",
+      "First Sign Of Chinese Zodiac"
+    ],
+    "readings_on": [
+      "し",
+      "す",
+      "つ"
+    ],
+    "readings_kun": [
+      "こ",
+      "-こ",
+      "ね"
+    ]
+  },
+  "外": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 81,
+    "meanings": [
+      "Outside"
+    ],
+    "readings_on": [
+      "がい",
+      "げ"
+    ],
+    "readings_kun": [
+      "そと",
+      "ほか",
+      "はず.す",
+      "はず.れる",
+      "と-"
+    ]
+  },
+  "八": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 92,
+    "meanings": [
+      "Eight",
+      "Eight Radical (no. 12)"
+    ],
+    "readings_on": [
+      "はち"
+    ],
+    "readings_kun": [
+      "や",
+      "や.つ",
+      "やっ.つ",
+      "よう"
+    ]
+  },
+  "六": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 93,
+    "meanings": [
+      "Six"
+    ],
+    "readings_on": [
+      "ろく",
+      "りく"
+    ],
+    "readings_kun": [
+      "む",
+      "む.つ",
+      "むっ.つ",
+      "むい"
+    ]
+  },
+  "下": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 97,
+    "meanings": [
+      "Below",
+      "Down",
+      "Descend",
+      "Give",
+      "Low",
+      "Inferior"
+    ],
+    "readings_on": [
+      "か",
+      "げ"
+    ],
+    "readings_kun": [
+      "した",
+      "しも",
+      "もと",
+      "さ.げる",
+      "さ.がる",
+      "くだ.る",
+      "くだ.り",
+      "くだ.す",
+      "-くだ.す",
+      "くだ.さる",
+      "お.ろす",
+      "お.りる"
+    ]
+  },
+  "来": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 102,
+    "meanings": [
+      "Come",
+      "Due",
+      "Next",
+      "Cause",
+      "Become"
+    ],
+    "readings_on": [
+      "らい",
+      "たい"
+    ],
+    "readings_kun": [
+      "く.る",
+      "きた.る",
+      "きた.す",
+      "き.たす",
+      "き.たる",
+      "き",
+      "こ"
+    ]
+  },
+  "気": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 113,
+    "meanings": [
+      "Spirit",
+      "Mind",
+      "Air",
+      "Atmosphere",
+      "Mood"
+    ],
+    "readings_on": [
+      "き",
+      "け"
+    ],
+    "readings_kun": [
+      "いき"
+    ]
+  },
+  "小": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 114,
+    "meanings": [
+      "Little",
+      "Small"
+    ],
+    "readings_on": [
+      "しょう"
+    ],
+    "readings_kun": [
+      "ちい.さい",
+      "こ-",
+      "お-",
+      "さ-"
+    ]
+  },
+  "七": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 115,
+    "meanings": [
+      "Seven"
+    ],
+    "readings_on": [
+      "しち"
+    ],
+    "readings_kun": [
+      "なな",
+      "なな.つ",
+      "なの"
+    ]
+  },
+  "山": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 131,
+    "meanings": [
+      "Mountain"
+    ],
+    "readings_on": [
+      "さん",
+      "せん"
+    ],
+    "readings_kun": [
+      "やま"
+    ]
+  },
+  "話": {
+    "strokes": 13,
+    "grade": 2,
+    "freq": 134,
+    "meanings": [
+      "Tale",
+      "Talk"
+    ],
+    "readings_on": [
+      "わ"
+    ],
+    "readings_kun": [
+      "はな.す",
+      "はなし"
+    ]
+  },
+  "女": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 151,
+    "meanings": [
+      "Woman",
+      "Female"
+    ],
+    "readings_on": [
+      "じょ",
+      "にょ",
+      "にょう"
+    ],
+    "readings_kun": [
+      "おんな",
+      "め"
+    ]
+  },
+  "北": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 153,
+    "meanings": [
+      "North"
+    ],
+    "readings_on": [
+      "ほく"
+    ],
+    "readings_kun": [
+      "きた"
+    ]
+  },
+  "午": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 154,
+    "meanings": [
+      "Noon",
+      "Sign Of The Horse",
+      "11am-1pm",
+      "Seventh Sign Of Chinese Zodiac"
+    ],
+    "readings_on": [
+      "ご"
+    ],
+    "readings_kun": [
+      "うま"
+    ]
+  },
+  "百": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 163,
+    "meanings": [
+      "Hundred"
+    ],
+    "readings_on": [
+      "ひゃく",
+      "びゃく"
+    ],
+    "readings_kun": [
+      "もも"
+    ]
+  },
+  "書": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 169,
+    "meanings": [
+      "Write"
+    ],
+    "readings_on": [
+      "しょ"
+    ],
+    "readings_kun": [
+      "か.く",
+      "-が.き",
+      "-がき"
+    ]
+  },
+  "先": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 173,
+    "meanings": [
+      "Before",
+      "Ahead",
+      "Previous",
+      "Future",
+      "Precedence"
+    ],
+    "readings_on": [
+      "せん"
+    ],
+    "readings_kun": [
+      "さき",
+      "ま.ず"
+    ]
+  },
+  "名": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 177,
+    "meanings": [
+      "Name",
+      "Noted",
+      "Distinguished",
+      "Reputation"
+    ],
+    "readings_on": [
+      "めい",
+      "みょう"
+    ],
+    "readings_kun": [
+      "な",
+      "-な"
+    ]
+  },
+  "川": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 181,
+    "meanings": [
+      "Stream",
+      "River",
+      "River Or Three-stroke River Radical (no. 47)"
+    ],
+    "readings_on": [
+      "せん"
+    ],
+    "readings_kun": [
+      "かわ"
+    ]
+  },
+  "千": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 195,
+    "meanings": [
+      "Thousand"
+    ],
+    "readings_on": [
+      "せん"
+    ],
+    "readings_kun": [
+      "ち"
+    ]
+  },
+  "水": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 223,
+    "meanings": [
+      "Water"
+    ],
+    "readings_on": [
+      "すい"
+    ],
+    "readings_kun": [
+      "みず",
+      "みず-"
+    ]
+  },
+  "半": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 224,
+    "meanings": [
+      "Half",
+      "Middle",
+      "Odd Number",
+      "Semi-",
+      "Part-"
+    ],
+    "readings_on": [
+      "はん"
+    ],
+    "readings_kun": [
+      "なか.ば"
+    ]
+  },
+  "男": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 240,
+    "meanings": [
+      "Male"
+    ],
+    "readings_on": [
+      "だん",
+      "なん"
+    ],
+    "readings_kun": [
+      "おとこ",
+      "お"
+    ]
+  },
+  "西": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 259,
+    "meanings": [
+      "West",
+      "Spain"
+    ],
+    "readings_on": [
+      "せい",
+      "さい",
+      "す"
+    ],
+    "readings_kun": [
+      "にし"
+    ]
+  },
+  "電": {
+    "strokes": 13,
+    "grade": 2,
+    "freq": 268,
+    "meanings": [
+      "Electricity"
+    ],
+    "readings_on": [
+      "でん"
+    ],
+    "readings_kun": []
+  },
+  "校": {
+    "strokes": 10,
+    "grade": 1,
+    "freq": 294,
+    "meanings": [
+      "Exam",
+      "School",
+      "Printing",
+      "Proof",
+      "Correction"
+    ],
+    "readings_on": [
+      "こう",
+      "きょう"
+    ],
+    "readings_kun": []
+  },
+  "語": {
+    "strokes": 14,
+    "grade": 2,
+    "freq": 301,
+    "meanings": [
+      "Word",
+      "Speech",
+      "Language"
+    ],
+    "readings_on": [
+      "ご"
+    ],
+    "readings_kun": [
+      "かた.る",
+      "かた.らう"
+    ]
+  },
+  "土": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 307,
+    "meanings": [
+      "Soil",
+      "Earth",
+      "Ground",
+      "Turkey"
+    ],
+    "readings_on": [
+      "ど",
+      "と"
+    ],
+    "readings_kun": [
+      "つち"
+    ]
+  },
+  "木": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 317,
+    "meanings": [
+      "Tree",
+      "Wood"
+    ],
+    "readings_on": [
+      "ぼく",
+      "もく"
+    ],
+    "readings_kun": [
+      "き",
+      "こ-"
+    ]
+  },
+  "聞": {
+    "strokes": 14,
+    "grade": 2,
+    "freq": 319,
+    "meanings": [
+      "Hear",
+      "Ask",
+      "Listen"
+    ],
+    "readings_on": [
+      "ぶん",
+      "もん"
+    ],
+    "readings_kun": [
+      "き.く",
+      "き.こえる"
+    ]
+  },
+  "食": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 328,
+    "meanings": [
+      "Eat",
+      "Food"
+    ],
+    "readings_on": [
+      "しょく",
+      "じき"
+    ],
+    "readings_kun": [
+      "く.う",
+      "く.らう",
+      "た.べる",
+      "は.む"
+    ]
+  },
+  "車": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 333,
+    "meanings": [
+      "Car"
+    ],
+    "readings_on": [
+      "しゃ"
+    ],
+    "readings_kun": [
+      "くるま"
+    ]
+  },
+  "何": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 340,
+    "meanings": [
+      "What"
+    ],
+    "readings_on": [
+      "か"
+    ],
+    "readings_kun": [
+      "なに",
+      "なん",
+      "なに-",
+      "なん-"
+    ]
+  },
+  "南": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 341,
+    "meanings": [
+      "South"
+    ],
+    "readings_on": [
+      "なん",
+      "な"
+    ],
+    "readings_kun": [
+      "みなみ"
+    ]
+  },
+  "万": {
+    "strokes": 3,
+    "grade": 2,
+    "freq": 375,
+    "meanings": [
+      "Ten Thousand",
+      "10,000"
+    ],
+    "readings_on": [
+      "まん",
+      "ばん"
+    ],
+    "readings_kun": [
+      "よろず"
+    ]
+  },
+  "毎": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 436,
+    "meanings": [
+      "Every"
+    ],
+    "readings_on": [
+      "まい"
+    ],
+    "readings_kun": [
+      "ごと",
+      "-ごと.に"
+    ]
+  },
+  "白": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 483,
+    "meanings": [
+      "White"
+    ],
+    "readings_on": [
+      "はく",
+      "びゃく"
+    ],
+    "readings_kun": [
+      "しろ",
+      "しら-",
+      "しろ.い"
+    ]
+  },
+  "天": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 512,
+    "meanings": [
+      "Heavens",
+      "Sky",
+      "Imperial"
+    ],
+    "readings_on": [
+      "てん"
+    ],
+    "readings_kun": [
+      "あまつ",
+      "あめ",
+      "あま-"
+    ]
+  },
+  "母": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 570,
+    "meanings": [
+      "Mother"
+    ],
+    "readings_on": [
+      "ぼ"
+    ],
+    "readings_kun": [
+      "はは",
+      "も"
+    ]
+  },
+  "火": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 574,
+    "meanings": [
+      "Fire"
+    ],
+    "readings_on": [
+      "か"
+    ],
+    "readings_kun": [
+      "ひ",
+      "-び",
+      "ほ-"
+    ]
+  },
+  "右": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 602,
+    "meanings": [
+      "Right"
+    ],
+    "readings_on": [
+      "う",
+      "ゆう"
+    ],
+    "readings_kun": [
+      "みぎ"
+    ]
+  },
+  "読": {
+    "strokes": 14,
+    "grade": 2,
+    "freq": 618,
+    "meanings": [
+      "Read"
+    ],
+    "readings_on": [
+      "どく",
+      "とく",
+      "とう"
+    ],
+    "readings_kun": [
+      "よ.む",
+      "-よ.み"
+    ]
+  },
+  "友": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 622,
+    "meanings": [
+      "Friend"
+    ],
+    "readings_on": [
+      "ゆう"
+    ],
+    "readings_kun": [
+      "とも"
+    ]
+  },
+  "左": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 630,
+    "meanings": [
+      "Left"
+    ],
+    "readings_on": [
+      "さ",
+      "しゃ"
+    ],
+    "readings_kun": [
+      "ひだり"
+    ]
+  },
+  "休": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 642,
+    "meanings": [
+      "Rest",
+      "Day Off",
+      "Retire",
+      "Sleep"
+    ],
+    "readings_on": [
+      "きゅう"
+    ],
+    "readings_kun": [
+      "やす.む",
+      "やす.まる",
+      "やす.める"
+    ]
+  },
+  "父": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 646,
+    "meanings": [
+      "Father"
+    ],
+    "readings_on": [
+      "ふ"
+    ],
+    "readings_kun": [
+      "ちち"
+    ]
+  },
+  "雨": {
+    "strokes": 8,
+    "grade": 1,
+    "freq": 950,
+    "meanings": [
+      "Rain"
+    ],
+    "readings_on": [
+      "う"
+    ],
+    "readings_kun": [
+      "あめ",
+      "あま-",
+      "-さめ"
+    ]
+  },
+  "会": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 4,
+    "meanings": [
+      "Meeting",
+      "Meet",
+      "Party",
+      "Association",
+      "Interview",
+      "Join"
+    ],
+    "readings_on": [
+      "かい",
+      "え"
+    ],
+    "readings_kun": [
+      "あ.う",
+      "あ.わせる",
+      "あつ.まる"
+    ]
+  },
+  "同": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 15,
+    "meanings": [
+      "Same",
+      "Agree",
+      "Equal"
+    ],
+    "readings_on": [
+      "どう"
+    ],
+    "readings_kun": [
+      "おな.じ"
+    ]
+  },
+  "事": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 18,
+    "meanings": [
+      "Matter",
+      "Thing",
+      "Fact",
+      "Business",
+      "Reason",
+      "Possibly"
+    ],
+    "readings_on": [
+      "じ",
+      "ず"
+    ],
+    "readings_kun": [
+      "こと",
+      "つか.う",
+      "つか.える"
+    ]
+  },
+  "自": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 19,
+    "meanings": [
+      "Oneself"
+    ],
+    "readings_on": [
+      "じ",
+      "し"
+    ],
+    "readings_kun": [
+      "みずか.ら",
+      "おの.ずから",
+      "おの.ずと"
+    ]
+  },
+  "社": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 21,
+    "meanings": [
+      "Company",
+      "Firm",
+      "Office",
+      "Association",
+      "Shrine"
+    ],
+    "readings_on": [
+      "しゃ"
+    ],
+    "readings_kun": [
+      "やしろ"
+    ]
+  },
+  "発": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 32,
+    "meanings": [
+      "Departure",
+      "Discharge",
+      "Publish",
+      "Emit",
+      "Start From",
+      "Disclose",
+      "Counter For Gunshots"
+    ],
+    "readings_on": [
+      "はつ",
+      "ほつ"
+    ],
+    "readings_kun": [
+      "た.つ",
+      "あば.く",
+      "おこ.る",
+      "つか.わす",
+      "はな.つ"
+    ]
+  },
+  "者": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 38,
+    "meanings": [
+      "Someone",
+      "Person"
+    ],
+    "readings_on": [
+      "しゃ"
+    ],
+    "readings_kun": [
+      "もの"
+    ]
+  },
+  "地": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 40,
+    "meanings": [
+      "Ground",
+      "Earth"
+    ],
+    "readings_on": [
+      "ち",
+      "じ"
+    ],
+    "readings_kun": []
+  },
+  "業": {
+    "strokes": 13,
+    "grade": 3,
+    "freq": 43,
+    "meanings": [
+      "Business",
+      "Vocation",
+      "Arts",
+      "Performance"
+    ],
+    "readings_on": [
+      "ぎょう",
+      "ごう"
+    ],
+    "readings_kun": [
+      "わざ"
+    ]
+  },
+  "方": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 46,
+    "meanings": [
+      "Direction",
+      "Person",
+      "Alternative"
+    ],
+    "readings_on": [
+      "ほう"
+    ],
+    "readings_kun": [
+      "かた",
+      "-かた",
+      "-がた"
+    ]
+  },
+  "新": {
+    "strokes": 13,
+    "grade": 2,
+    "freq": 51,
+    "meanings": [
+      "New"
+    ],
+    "readings_on": [
+      "しん"
+    ],
+    "readings_kun": [
+      "あたら.しい",
+      "あら.た",
+      "あら-",
+      "にい-"
+    ]
+  },
+  "場": {
+    "strokes": 12,
+    "grade": 2,
+    "freq": 52,
+    "meanings": [
+      "Location",
+      "Place"
+    ],
+    "readings_on": [
+      "じょう",
+      "ちょう"
+    ],
+    "readings_kun": [
+      "ば"
+    ]
+  },
+  "員": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 54,
+    "meanings": [
+      "Employee",
+      "Member",
+      "Number",
+      "The One In Charge"
+    ],
+    "readings_on": [
+      "いん"
+    ],
+    "readings_kun": []
+  },
+  "立": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 58,
+    "meanings": [
+      "Stand Up",
+      "Rise",
+      "Set Up",
+      "Erect"
+    ],
+    "readings_on": [
+      "りつ",
+      "りゅう",
+      "りっとる"
+    ],
+    "readings_kun": [
+      "た.つ",
+      "-た.つ",
+      "た.ち-",
+      "た.てる",
+      "-た.てる",
+      "た.て-",
+      "たて-",
+      "-た.て",
+      "-だ.て",
+      "-だ.てる"
+    ]
+  },
+  "開": {
+    "strokes": 12,
+    "grade": 3,
+    "freq": 59,
+    "meanings": [
+      "Open",
+      "Unfold",
+      "Unseal"
+    ],
+    "readings_on": [
+      "かい"
+    ],
+    "readings_kun": [
+      "ひら.く",
+      "ひら.き",
+      "-びら.き",
+      "ひら.ける",
+      "あ.く",
+      "あ.ける"
+    ]
+  },
+  "手": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 60,
+    "meanings": [
+      "Hand"
+    ],
+    "readings_on": [
+      "しゅ",
+      "ず"
+    ],
+    "readings_kun": [
+      "て",
+      "て-",
+      "-て",
+      "た-"
+    ]
+  },
+  "力": {
+    "strokes": 2,
+    "grade": 1,
+    "freq": 62,
+    "meanings": [
+      "Power",
+      "Strength",
+      "Strong",
+      "Strain",
+      "Bear Up",
+      "Exert"
+    ],
+    "readings_on": [
+      "りょく",
+      "りき",
+      "りい"
+    ],
+    "readings_kun": [
+      "ちから"
+    ]
+  },
+  "問": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 64,
+    "meanings": [
+      "Question",
+      "Ask",
+      "Problem"
+    ],
+    "readings_on": [
+      "もん"
+    ],
+    "readings_kun": [
+      "と.う",
+      "と.い",
+      "とん"
+    ]
+  },
+  "代": {
+    "strokes": 5,
+    "grade": 3,
+    "freq": 66,
+    "meanings": [
+      "Substitute",
+      "Change",
+      "Convert",
+      "Replace",
+      "Period",
+      "Age",
+      "Counter For Decades Of Ages, Eras, Etc.",
+      "Generation",
+      "Charge",
+      "Rate",
+      "Fee"
+    ],
+    "readings_on": [
+      "だい",
+      "たい"
+    ],
+    "readings_kun": [
+      "か.わる",
+      "かわ.る",
+      "かわ.り",
+      "か.わり",
+      "-がわ.り",
+      "-が.わり",
+      "か.える",
+      "よ",
+      "しろ"
+    ]
+  },
+  "明": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 67,
+    "meanings": [
+      "Bright",
+      "Light"
+    ],
+    "readings_on": [
+      "めい",
+      "みょう",
+      "みん"
+    ],
+    "readings_kun": [
+      "あ.かり",
+      "あか.るい",
+      "あか.るむ",
+      "あか.らむ",
+      "あき.らか",
+      "あ.ける",
+      "-あ.け",
+      "あ.く",
+      "あ.くる",
+      "あ.かす"
+    ]
+  },
+  "動": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 73,
+    "meanings": [
+      "Move",
+      "Motion",
+      "Change",
+      "Confusion",
+      "Shift",
+      "Shake"
+    ],
+    "readings_on": [
+      "どう"
+    ],
+    "readings_kun": [
+      "うご.く",
+      "うご.かす"
+    ]
+  },
+  "京": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 74,
+    "meanings": [
+      "Capital",
+      "10**16"
+    ],
+    "readings_on": [
+      "きょう",
+      "けい",
+      "きん"
+    ],
+    "readings_kun": [
+      "みやこ"
+    ]
+  },
+  "目": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 76,
+    "meanings": [
+      "Eye",
+      "Class",
+      "Look",
+      "Insight",
+      "Experience",
+      "Care",
+      "Favor"
+    ],
+    "readings_on": [
+      "もく",
+      "ぼく"
+    ],
+    "readings_kun": [
+      "め",
+      "-め",
+      "ま-"
+    ]
+  },
+  "通": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 80,
+    "meanings": [
+      "Traffic",
+      "Pass Through",
+      "Avenue",
+      "Commute",
+      "Counter For Letters, Notes, Documents, Etc."
+    ],
+    "readings_on": [
+      "つう",
+      "つ"
+    ],
+    "readings_kun": [
+      "とお.る",
+      "とお.り",
+      "-とお.り",
+      "-どお.り",
+      "とお.す",
+      "とお.し",
+      "-どお.し",
+      "かよ.う"
+    ]
+  },
+  "言": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 83,
+    "meanings": [
+      "Say",
+      "Word"
+    ],
+    "readings_on": [
+      "げん",
+      "ごん"
+    ],
+    "readings_kun": [
+      "い.う",
+      "こと"
+    ]
+  },
+  "理": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 86,
+    "meanings": [
+      "Logic",
+      "Arrangement",
+      "Reason",
+      "Justice",
+      "Truth"
+    ],
+    "readings_on": [
+      "り"
+    ],
+    "readings_kun": [
+      "ことわり"
+    ]
+  },
+  "体": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 88,
+    "meanings": [
+      "Body",
+      "Substance",
+      "Object",
+      "Reality",
+      "Counter For Images"
+    ],
+    "readings_on": [
+      "たい",
+      "てい"
+    ],
+    "readings_kun": [
+      "からだ",
+      "かたち"
+    ]
+  },
+  "田": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 90,
+    "meanings": [
+      "Rice Field",
+      "Rice Paddy"
+    ],
+    "readings_on": [
+      "でん"
+    ],
+    "readings_kun": [
+      "た"
+    ]
+  },
+  "主": {
+    "strokes": 5,
+    "grade": 3,
+    "freq": 95,
+    "meanings": [
+      "Lord",
+      "Chief",
+      "Master",
+      "Main Thing",
+      "Principal"
+    ],
+    "readings_on": [
+      "しゅ",
+      "す",
+      "しゅう"
+    ],
+    "readings_kun": [
+      "ぬし",
+      "おも",
+      "あるじ"
+    ]
+  },
+  "題": {
+    "strokes": 18,
+    "grade": 3,
+    "freq": 96,
+    "meanings": [
+      "Topic",
+      "Subject"
+    ],
+    "readings_on": [
+      "だい"
+    ],
+    "readings_kun": []
+  },
+  "意": {
+    "strokes": 13,
+    "grade": 3,
+    "freq": 99,
+    "meanings": [
+      "Idea",
+      "Mind",
+      "Heart",
+      "Taste",
+      "Thought",
+      "Desire",
+      "Care",
+      "Liking"
+    ],
+    "readings_on": [
+      "い"
+    ],
+    "readings_kun": []
+  },
+  "不": {
+    "strokes": 4,
+    "grade": 4,
+    "freq": 101,
+    "meanings": [
+      "Negative",
+      "Non-",
+      "Bad",
+      "Ugly",
+      "Clumsy"
+    ],
+    "readings_on": [
+      "ふ",
+      "ぶ"
+    ],
+    "readings_kun": []
+  },
+  "作": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 103,
+    "meanings": [
+      "Make",
+      "Production",
+      "Prepare",
+      "Build"
+    ],
+    "readings_on": [
+      "さく",
+      "さ"
+    ],
+    "readings_kun": [
+      "つく.る",
+      "つく.り",
+      "-づく.り"
+    ]
+  },
+  "用": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 107,
+    "meanings": [
+      "Utilize",
+      "Business",
+      "Service",
+      "Use",
+      "Employ"
+    ],
+    "readings_on": [
+      "よう"
+    ],
+    "readings_kun": [
+      "もち.いる"
+    ]
+  },
+  "度": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 110,
+    "meanings": [
+      "Degrees",
+      "Occurrence",
+      "Time",
+      "Counter For Occurrences",
+      "Consider",
+      "Attitude"
+    ],
+    "readings_on": [
+      "ど",
+      "と",
+      "たく"
+    ],
+    "readings_kun": [
+      "たび",
+      "-た.い"
+    ]
+  },
+  "強": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 112,
+    "meanings": [
+      "Strong"
+    ],
+    "readings_on": [
+      "きょう",
+      "ごう"
+    ],
+    "readings_kun": [
+      "つよ.い",
+      "つよ.まる",
+      "つよ.める",
+      "し.いる",
+      "こわ.い"
+    ]
+  },
+  "公": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 118,
+    "meanings": [
+      "Public",
+      "Prince",
+      "Official",
+      "Governmental"
+    ],
+    "readings_on": [
+      "こう",
+      "く"
+    ],
+    "readings_kun": [
+      "おおやけ"
+    ]
+  },
+  "持": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 119,
+    "meanings": [
+      "Hold",
+      "Have"
+    ],
+    "readings_on": [
+      "じ"
+    ],
+    "readings_kun": [
+      "も.つ",
+      "-も.ち",
+      "も.てる"
+    ]
+  },
+  "野": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 120,
+    "meanings": [
+      "Plains",
+      "Field",
+      "Rustic",
+      "Civilian Life"
+    ],
+    "readings_on": [
+      "や",
+      "しょ"
+    ],
+    "readings_kun": [
+      "の",
+      "の-"
+    ]
+  },
+  "以": {
+    "strokes": 5,
+    "grade": 4,
+    "freq": 126,
+    "meanings": [
+      "By Means Of",
+      "Because",
+      "In View Of",
+      "Compared With"
+    ],
+    "readings_on": [
+      "い"
+    ],
+    "readings_kun": [
+      "もっ.て"
+    ]
+  },
+  "思": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 132,
+    "meanings": [
+      "Think"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "おも.う",
+      "おもえら.く",
+      "おぼ.す"
+    ]
+  },
+  "家": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 133,
+    "meanings": [
+      "House",
+      "Home",
+      "Family",
+      "Professional",
+      "Expert",
+      "Performer"
+    ],
+    "readings_on": [
+      "か",
+      "け"
+    ],
+    "readings_kun": [
+      "いえ",
+      "や",
+      "うち"
+    ]
+  },
+  "世": {
+    "strokes": 5,
+    "grade": 3,
+    "freq": 135,
+    "meanings": [
+      "Generation",
+      "World",
+      "Society",
+      "Public"
+    ],
+    "readings_on": [
+      "せい",
+      "せ",
+      "そう"
+    ],
+    "readings_kun": [
+      "よ"
+    ]
+  },
+  "多": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 139,
+    "meanings": [
+      "Many",
+      "Frequent",
+      "Much"
+    ],
+    "readings_on": [
+      "た"
+    ],
+    "readings_kun": [
+      "おお.い",
+      "まさ.に",
+      "まさ.る"
+    ]
+  },
+  "正": {
+    "strokes": 5,
+    "grade": 1,
+    "freq": 143,
+    "meanings": [
+      "Correct",
+      "Justice",
+      "Righteous",
+      "10**40"
+    ],
+    "readings_on": [
+      "せい",
+      "しょう"
+    ],
+    "readings_kun": [
+      "ただ.しい",
+      "ただ.す",
+      "まさ",
+      "まさ.に"
+    ]
+  },
+  "安": {
+    "strokes": 6,
+    "grade": 3,
+    "freq": 144,
+    "meanings": [
+      "Relax",
+      "Cheap",
+      "Low",
+      "Quiet",
+      "Rested",
+      "Contented",
+      "Peaceful"
+    ],
+    "readings_on": [
+      "あん"
+    ],
+    "readings_kun": [
+      "やす.い",
+      "やす.まる",
+      "やす",
+      "やす.らか"
+    ]
+  },
+  "院": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 150,
+    "meanings": [
+      "Inst.",
+      "Institution",
+      "Temple",
+      "Mansion",
+      "School"
+    ],
+    "readings_on": [
+      "いん"
+    ],
+    "readings_kun": []
+  },
+  "心": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 157,
+    "meanings": [
+      "Heart",
+      "Mind",
+      "Spirit",
+      "Heart Radical (no. 61)"
+    ],
+    "readings_on": [
+      "しん"
+    ],
+    "readings_kun": [
+      "こころ",
+      "-ごころ"
+    ]
+  },
+  "界": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 158,
+    "meanings": [
+      "World",
+      "Boundary"
+    ],
+    "readings_on": [
+      "かい"
+    ],
+    "readings_kun": []
+  },
+  "教": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 166,
+    "meanings": [
+      "Teach",
+      "Faith",
+      "Doctrine"
+    ],
+    "readings_on": [
+      "きょう"
+    ],
+    "readings_kun": [
+      "おし.える",
+      "おそ.わる"
+    ]
+  },
+  "文": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 190,
+    "meanings": [
+      "Sentence",
+      "Literature",
+      "Style",
+      "Art",
+      "Decoration",
+      "Figures",
+      "Plan",
+      "Literary Radical (no. 67)"
+    ],
+    "readings_on": [
+      "ぶん",
+      "もん"
+    ],
+    "readings_kun": [
+      "ふみ",
+      "あや"
+    ]
+  },
+  "元": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 192,
+    "meanings": [
+      "Beginning",
+      "Former Time",
+      "Origin"
+    ],
+    "readings_on": [
+      "げん",
+      "がん"
+    ],
+    "readings_kun": [
+      "もと"
+    ]
+  },
+  "重": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 193,
+    "meanings": [
+      "Heavy",
+      "Important",
+      "Esteem",
+      "Respect",
+      "Heap Up",
+      "Pile Up",
+      "Nest Of Boxes",
+      "-fold"
+    ],
+    "readings_on": [
+      "じゅう",
+      "ちょう"
+    ],
+    "readings_kun": [
+      "え",
+      "おも.い",
+      "おも.り",
+      "おも.なう",
+      "かさ.ねる",
+      "かさ.なる",
+      "おも"
+    ]
+  },
+  "近": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 194,
+    "meanings": [
+      "Near",
+      "Early",
+      "Akin",
+      "Tantamount"
+    ],
+    "readings_on": [
+      "きん",
+      "こん"
+    ],
+    "readings_kun": [
+      "ちか.い"
+    ]
+  },
+  "考": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 196,
+    "meanings": [
+      "Consider",
+      "Think Over"
+    ],
+    "readings_on": [
+      "こう"
+    ],
+    "readings_kun": [
+      "かんが.える",
+      "かんが.え"
+    ]
+  },
+  "画": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 199,
+    "meanings": [
+      "Brush-stroke",
+      "Picture"
+    ],
+    "readings_on": [
+      "が",
+      "かく",
+      "え",
+      "かい"
+    ],
+    "readings_kun": [
+      "えが.く",
+      "かく.する",
+      "かぎ.る",
+      "はかりごと",
+      "はか.る"
+    ]
+  },
+  "海": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 200,
+    "meanings": [
+      "Sea",
+      "Ocean"
+    ],
+    "readings_on": [
+      "かい"
+    ],
+    "readings_kun": [
+      "うみ"
+    ]
+  },
+  "売": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 202,
+    "meanings": [
+      "Sell"
+    ],
+    "readings_on": [
+      "ばい"
+    ],
+    "readings_kun": [
+      "う.る",
+      "う.れる"
+    ]
+  },
+  "知": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 205,
+    "meanings": [
+      "Know",
+      "Wisdom"
+    ],
+    "readings_on": [
+      "ち"
+    ],
+    "readings_kun": [
+      "し.る",
+      "し.らせる"
+    ]
+  },
+  "道": {
+    "strokes": 12,
+    "grade": 2,
+    "freq": 207,
+    "meanings": [
+      "Road-way",
+      "Street",
+      "District",
+      "Journey",
+      "Course",
+      "Moral",
+      "Teachings"
+    ],
+    "readings_on": [
+      "どう",
+      "とう"
+    ],
+    "readings_kun": [
+      "みち",
+      "いう"
+    ]
+  },
+  "集": {
+    "strokes": 12,
+    "grade": 3,
+    "freq": 210,
+    "meanings": [
+      "Gather",
+      "Meet",
+      "Congregate",
+      "Swarm",
+      "Flock"
+    ],
+    "readings_on": [
+      "しゅう"
+    ],
+    "readings_kun": [
+      "あつ.まる",
+      "あつ.める",
+      "つど.う"
+    ]
+  },
+  "別": {
+    "strokes": 7,
+    "grade": 4,
+    "freq": 214,
+    "meanings": [
+      "Separate",
+      "Branch Off",
+      "Diverge",
+      "Fork",
+      "Another",
+      "Extra",
+      "Specially"
+    ],
+    "readings_on": [
+      "べつ"
+    ],
+    "readings_kun": [
+      "わか.れる",
+      "わ.ける"
+    ]
+  },
+  "物": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 215,
+    "meanings": [
+      "Thing",
+      "Object",
+      "Matter"
+    ],
+    "readings_on": [
+      "ぶつ",
+      "もつ"
+    ],
+    "readings_kun": [
+      "もの",
+      "もの-"
+    ]
+  },
+  "使": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 219,
+    "meanings": [
+      "Use",
+      "Send On A Mission",
+      "Order",
+      "Messenger",
+      "Envoy",
+      "Ambassador",
+      "Cause"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "つか.う",
+      "つか.い",
+      "-つか.い",
+      "-づか.い"
+    ]
+  },
+  "品": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 225,
+    "meanings": [
+      "Goods",
+      "Refinement",
+      "Dignity",
+      "Article",
+      "Counter For Meal Courses"
+    ],
+    "readings_on": [
+      "ひん",
+      "ほん"
+    ],
+    "readings_kun": [
+      "しな"
+    ]
+  },
+  "計": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 228,
+    "meanings": [
+      "Plot",
+      "Plan",
+      "Scheme",
+      "Measure"
+    ],
+    "readings_on": [
+      "けい"
+    ],
+    "readings_kun": [
+      "はか.る",
+      "はか.らう"
+    ]
+  },
+  "死": {
+    "strokes": 6,
+    "grade": 3,
+    "freq": 229,
+    "meanings": [
+      "Death",
+      "Die"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "し.ぬ",
+      "し.に-"
+    ]
+  },
+  "特": {
+    "strokes": 10,
+    "grade": 4,
+    "freq": 234,
+    "meanings": [
+      "Special"
+    ],
+    "readings_on": [
+      "とく"
+    ],
+    "readings_kun": []
+  },
+  "私": {
+    "strokes": 7,
+    "grade": 6,
+    "freq": 242,
+    "meanings": [
+      "Private",
+      "I",
+      "Me"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "わたくし",
+      "わたし"
+    ]
+  },
+  "始": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 244,
+    "meanings": [
+      "Commence",
+      "Begin"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "はじ.める",
+      "-はじ.める",
+      "はじ.まる"
+    ]
+  },
+  "朝": {
+    "strokes": 12,
+    "grade": 2,
+    "freq": 248,
+    "meanings": [
+      "Morning",
+      "Dynasty",
+      "Regime",
+      "Epoch",
+      "Period",
+      "(north) Korea"
+    ],
+    "readings_on": [
+      "ちょう"
+    ],
+    "readings_kun": [
+      "あさ"
+    ]
+  },
+  "運": {
+    "strokes": 12,
+    "grade": 3,
+    "freq": 255,
+    "meanings": [
+      "Carry",
+      "Luck",
+      "Destiny",
+      "Fate",
+      "Lot",
+      "Transport",
+      "Progress",
+      "Advance"
+    ],
+    "readings_on": [
+      "うん"
+    ],
+    "readings_kun": [
+      "はこ.ぶ"
+    ]
+  },
+  "終": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 256,
+    "meanings": [
+      "End",
+      "Finish"
+    ],
+    "readings_on": [
+      "しゅう"
+    ],
+    "readings_kun": [
+      "お.わる",
+      "-お.わる",
+      "おわ.る",
+      "お.える",
+      "つい",
+      "つい.に"
+    ]
+  },
+  "台": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 262,
+    "meanings": [
+      "Pedestal",
+      "A Stand",
+      "Counter For Machines And Vehicles"
+    ],
+    "readings_on": [
+      "だい",
+      "たい"
+    ],
+    "readings_kun": [
+      "うてな",
+      "われ",
+      "つかさ"
+    ]
+  },
+  "広": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 263,
+    "meanings": [
+      "Wide",
+      "Broad",
+      "Spacious"
+    ],
+    "readings_on": [
+      "こう"
+    ],
+    "readings_kun": [
+      "ひろ.い",
+      "ひろ.まる",
+      "ひろ.める",
+      "ひろ.がる",
+      "ひろ.げる"
+    ]
+  },
+  "住": {
+    "strokes": 7,
+    "grade": 3,
+    "freq": 270,
+    "meanings": [
+      "Dwell",
+      "Reside",
+      "Live",
+      "Inhabit"
+    ],
+    "readings_on": [
+      "じゅう",
+      "ぢゅう",
+      "ちゅう"
+    ],
+    "readings_kun": [
+      "す.む",
+      "す.まう",
+      "-ず.まい"
+    ]
+  },
+  "真": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 279,
+    "meanings": [
+      "True",
+      "Reality",
+      "Buddhist Sect"
+    ],
+    "readings_on": [
+      "しん"
+    ],
+    "readings_kun": [
+      "ま",
+      "ま-",
+      "まこと"
+    ]
+  },
+  "有": {
+    "strokes": 6,
+    "grade": 3,
+    "freq": 282,
+    "meanings": [
+      "Possess",
+      "Have",
+      "Exist",
+      "Happen",
+      "Occur",
+      "Approx"
+    ],
+    "readings_on": [
+      "ゆう",
+      "う"
+    ],
+    "readings_kun": [
+      "あ.る"
+    ]
+  },
+  "口": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 284,
+    "meanings": [
+      "Mouth"
+    ],
+    "readings_on": [
+      "こう",
+      "く"
+    ],
+    "readings_kun": [
+      "くち"
+    ]
+  },
+  "少": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 287,
+    "meanings": [
+      "Few",
+      "Little"
+    ],
+    "readings_on": [
+      "しょう"
+    ],
+    "readings_kun": [
+      "すく.ない",
+      "すこ.し"
+    ]
+  },
+  "町": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 292,
+    "meanings": [
+      "Town",
+      "Village",
+      "Block",
+      "Street"
+    ],
+    "readings_on": [
+      "ちょう"
+    ],
+    "readings_kun": [
+      "まち"
+    ]
+  },
+  "料": {
+    "strokes": 10,
+    "grade": 4,
+    "freq": 295,
+    "meanings": [
+      "Fee",
+      "Materials"
+    ],
+    "readings_on": [
+      "りょう"
+    ],
+    "readings_kun": []
+  },
+  "工": {
+    "strokes": 3,
+    "grade": 2,
+    "freq": 299,
+    "meanings": [
+      "Craft",
+      "Construction",
+      "Katakana E Radical (no. 48)"
+    ],
+    "readings_on": [
+      "こう",
+      "く",
+      "ぐ"
+    ],
+    "readings_kun": []
+  },
+  "建": {
+    "strokes": 9,
+    "grade": 4,
+    "freq": 300,
+    "meanings": [
+      "Build"
+    ],
+    "readings_on": [
+      "けん",
+      "こん"
+    ],
+    "readings_kun": [
+      "た.てる",
+      "た.て",
+      "-だ.て",
+      "た.つ"
+    ]
+  },
+  "空": {
+    "strokes": 8,
+    "grade": 1,
+    "freq": 304,
+    "meanings": [
+      "Empty",
+      "Sky",
+      "Void",
+      "Vacant",
+      "Vacuum"
+    ],
+    "readings_on": [
+      "くう"
+    ],
+    "readings_kun": [
+      "そら",
+      "あ.く",
+      "あ.き",
+      "あ.ける",
+      "から",
+      "す.く",
+      "す.かす",
+      "むな.しい"
+    ]
+  },
+  "急": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 309,
+    "meanings": [
+      "Hurry",
+      "Emergency",
+      "Sudden",
+      "Steep"
+    ],
+    "readings_on": [
+      "きゅう"
+    ],
+    "readings_kun": [
+      "いそ.ぐ",
+      "いそ.ぎ",
+      "せ.く"
+    ]
+  },
+  "止": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 310,
+    "meanings": [
+      "Stop",
+      "Halt"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "と.まる",
+      "-ど.まり",
+      "と.める",
+      "-と.める",
+      "-ど.め",
+      "とど.める",
+      "とど.め",
+      "とど.まる",
+      "や.める",
+      "や.む",
+      "-や.む",
+      "よ.す",
+      "-さ.す",
+      "-さ.し"
+    ]
+  },
+  "送": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 311,
+    "meanings": [
+      "Escort",
+      "Send"
+    ],
+    "readings_on": [
+      "そう"
+    ],
+    "readings_kun": [
+      "おく.る"
+    ]
+  },
+  "切": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 324,
+    "meanings": [
+      "Cut",
+      "Cutoff",
+      "Be Sharp"
+    ],
+    "readings_on": [
+      "せつ",
+      "さい"
+    ],
+    "readings_kun": [
+      "き.る",
+      "-き.る",
+      "き.り",
+      "-き.り",
+      "-ぎ.り",
+      "き.れる",
+      "-き.れる",
+      "き.れ",
+      "-き.れ",
+      "-ぎ.れ"
+    ]
+  },
+  "転": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 327,
+    "meanings": [
+      "Revolve",
+      "Turn Around",
+      "Change"
+    ],
+    "readings_on": [
+      "てん"
+    ],
+    "readings_kun": [
+      "ころ.がる",
+      "ころ.げる",
+      "ころ.がす",
+      "ころ.ぶ",
+      "まろ.ぶ",
+      "うたた",
+      "うつ.る",
+      "くる.めく"
+    ]
+  },
+  "研": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 336,
+    "meanings": [
+      "Polish",
+      "Study Of",
+      "Sharpen"
+    ],
+    "readings_on": [
+      "けん"
+    ],
+    "readings_kun": [
+      "と.ぐ"
+    ]
+  },
+  "足": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 343,
+    "meanings": [
+      "Leg",
+      "Foot",
+      "Be Sufficient",
+      "Counter For Pairs Of Footwear"
+    ],
+    "readings_on": [
+      "そく"
+    ],
+    "readings_kun": [
+      "あし",
+      "た.りる",
+      "た.る",
+      "た.す"
+    ]
+  },
+  "究": {
+    "strokes": 7,
+    "grade": 3,
+    "freq": 368,
+    "meanings": [
+      "Research",
+      "Study"
+    ],
+    "readings_on": [
+      "きゅう",
+      "く"
+    ],
+    "readings_kun": [
+      "きわ.める"
+    ]
+  },
+  "楽": {
+    "strokes": 13,
+    "grade": 2,
+    "freq": 373,
+    "meanings": [
+      "Music",
+      "Comfort",
+      "Ease"
+    ],
+    "readings_on": [
+      "がく",
+      "らく",
+      "ごう"
+    ],
+    "readings_kun": [
+      "たの.しい",
+      "たの.しむ",
+      "この.む"
+    ]
+  },
+  "起": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 374,
+    "meanings": [
+      "Rouse",
+      "Wake Up",
+      "Get Up"
+    ],
+    "readings_on": [
+      "き"
+    ],
+    "readings_kun": [
+      "お.きる",
+      "お.こる",
+      "お.こす",
+      "おこ.す",
+      "た.つ"
+    ]
+  },
+  "着": {
+    "strokes": 12,
+    "grade": 3,
+    "freq": 376,
+    "meanings": [
+      "Don",
+      "Arrive",
+      "Wear",
+      "Counter For Suits Of Clothing"
+    ],
+    "readings_on": [
+      "ちゃく",
+      "じゃく"
+    ],
+    "readings_kun": [
+      "き.る",
+      "-ぎ",
+      "き.せる",
+      "-き.せ",
+      "つ.く",
+      "つ.ける"
+    ]
+  },
+  "店": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 378,
+    "meanings": [
+      "Store",
+      "Shop"
+    ],
+    "readings_on": [
+      "てん"
+    ],
+    "readings_kun": [
+      "みせ",
+      "たな"
+    ]
+  },
+  "病": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 384,
+    "meanings": [
+      "Ill",
+      "Sick"
+    ],
+    "readings_on": [
+      "びょう",
+      "へい"
+    ],
+    "readings_kun": [
+      "や.む",
+      "-や.み",
+      "やまい"
+    ]
+  },
+  "質": {
+    "strokes": 15,
+    "grade": 5,
+    "freq": 389,
+    "meanings": [
+      "Substance",
+      "Quality",
+      "Matter",
+      "Temperament"
+    ],
+    "readings_on": [
+      "しつ",
+      "しち",
+      "ち"
+    ],
+    "readings_kun": [
+      "たち",
+      "ただ.す",
+      "もと",
+      "わりふ"
+    ]
+  },
+  "待": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 391,
+    "meanings": [
+      "Wait",
+      "Depend On"
+    ],
+    "readings_on": [
+      "たい"
+    ],
+    "readings_kun": [
+      "ま.つ",
+      "-ま.ち"
+    ]
+  },
+  "試": {
+    "strokes": 13,
+    "grade": 4,
+    "freq": 392,
+    "meanings": [
+      "Test",
+      "Try",
+      "Attempt",
+      "Experiment",
+      "Ordeal"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "こころ.みる",
+      "ため.す"
+    ]
+  },
+  "族": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 393,
+    "meanings": [
+      "Tribe",
+      "Family"
+    ],
+    "readings_on": [
+      "ぞく"
+    ],
+    "readings_kun": []
+  },
+  "銀": {
+    "strokes": 14,
+    "grade": 3,
+    "freq": 395,
+    "meanings": [
+      "Silver"
+    ],
+    "readings_on": [
+      "ぎん"
+    ],
+    "readings_kun": [
+      "しろがね"
+    ]
+  },
+  "早": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 402,
+    "meanings": [
+      "Early",
+      "Fast"
+    ],
+    "readings_on": [
+      "そう",
+      "さっ"
+    ],
+    "readings_kun": [
+      "はや.い",
+      "はや",
+      "はや-",
+      "はや.まる",
+      "はや.める",
+      "さ-"
+    ]
+  },
+  "映": {
+    "strokes": 9,
+    "grade": 6,
+    "freq": 404,
+    "meanings": [
+      "Reflect",
+      "Reflection",
+      "Projection"
+    ],
+    "readings_on": [
+      "えい"
+    ],
+    "readings_kun": [
+      "うつ.る",
+      "うつ.す",
+      "は.える",
+      "-ば.え"
+    ]
+  },
+  "親": {
+    "strokes": 16,
+    "grade": 2,
+    "freq": 406,
+    "meanings": [
+      "Parent",
+      "Intimacy",
+      "Relative",
+      "Familiarity",
+      "Dealer (cards)"
+    ],
+    "readings_on": [
+      "しん"
+    ],
+    "readings_kun": [
+      "おや",
+      "おや-",
+      "した.しい",
+      "した.しむ"
+    ]
+  },
+  "験": {
+    "strokes": 18,
+    "grade": 4,
+    "freq": 410,
+    "meanings": [
+      "Verification",
+      "Effect",
+      "Testing"
+    ],
+    "readings_on": [
+      "けん",
+      "げん"
+    ],
+    "readings_kun": [
+      "あかし",
+      "しるし",
+      "ため.す",
+      "ためし"
+    ]
+  },
+  "英": {
+    "strokes": 8,
+    "grade": 4,
+    "freq": 430,
+    "meanings": [
+      "England",
+      "English",
+      "Hero",
+      "Outstanding",
+      "Calyx"
+    ],
+    "readings_on": [
+      "えい"
+    ],
+    "readings_kun": [
+      "はなぶさ"
+    ]
+  },
+  "医": {
+    "strokes": 7,
+    "grade": 3,
+    "freq": 437,
+    "meanings": [
+      "Doctor",
+      "Medicine"
+    ],
+    "readings_on": [
+      "い"
+    ],
+    "readings_kun": [
+      "い.やす",
+      "い.する",
+      "くすし"
+    ]
+  },
+  "仕": {
+    "strokes": 5,
+    "grade": 3,
+    "freq": 439,
+    "meanings": [
+      "Attend",
+      "Doing",
+      "Official",
+      "Serve"
+    ],
+    "readings_on": [
+      "し",
+      "じ"
+    ],
+    "readings_kun": [
+      "つか.える"
+    ]
+  },
+  "去": {
+    "strokes": 5,
+    "grade": 3,
+    "freq": 440,
+    "meanings": [
+      "Gone",
+      "Past",
+      "Quit",
+      "Leave",
+      "Elapse",
+      "Eliminate",
+      "Divorce"
+    ],
+    "readings_on": [
+      "きょ",
+      "こ"
+    ],
+    "readings_kun": [
+      "さ.る",
+      "-さ.る"
+    ]
+  },
+  "味": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 442,
+    "meanings": [
+      "Flavor",
+      "Taste"
+    ],
+    "readings_on": [
+      "み"
+    ],
+    "readings_kun": [
+      "あじ",
+      "あじ.わう"
+    ]
+  },
+  "写": {
+    "strokes": 5,
+    "grade": 3,
+    "freq": 453,
+    "meanings": [
+      "Copy",
+      "Be Photographed",
+      "Describe"
+    ],
+    "readings_on": [
+      "しゃ",
+      "じゃ"
+    ],
+    "readings_kun": [
+      "うつ.す",
+      "うつ.る",
+      "うつ-",
+      "うつ.し"
+    ]
+  },
+  "字": {
+    "strokes": 6,
+    "grade": 1,
+    "freq": 485,
+    "meanings": [
+      "Character",
+      "Letter",
+      "Word",
+      "Section Of Village"
+    ],
+    "readings_on": [
+      "じ"
+    ],
+    "readings_kun": [
+      "あざ",
+      "あざな",
+      "-な"
+    ]
+  },
+  "答": {
+    "strokes": 12,
+    "grade": 2,
+    "freq": 486,
+    "meanings": [
+      "Solution",
+      "Answer"
+    ],
+    "readings_on": [
+      "とう"
+    ],
+    "readings_kun": [
+      "こた.える",
+      "こた.え"
+    ]
+  },
+  "夜": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 487,
+    "meanings": [
+      "Night",
+      "Evening"
+    ],
+    "readings_on": [
+      "や"
+    ],
+    "readings_kun": [
+      "よ",
+      "よる"
+    ]
+  },
+  "音": {
+    "strokes": 9,
+    "grade": 1,
+    "freq": 491,
+    "meanings": [
+      "Sound",
+      "Noise"
+    ],
+    "readings_on": [
+      "おん",
+      "いん",
+      "-のん"
+    ],
+    "readings_kun": [
+      "おと",
+      "ね"
+    ]
+  },
+  "注": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 497,
+    "meanings": [
+      "Pour",
+      "Irrigate",
+      "Shed (tears)",
+      "Flow Into",
+      "Concentrate On",
+      "Notes",
+      "Comment",
+      "Annotate"
+    ],
+    "readings_on": [
+      "ちゅう"
+    ],
+    "readings_kun": [
+      "そそ.ぐ",
+      "さ.す",
+      "つ.ぐ"
+    ]
+  },
+  "帰": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 504,
+    "meanings": [
+      "Homecoming",
+      "Arrive At",
+      "Lead To",
+      "Result In"
+    ],
+    "readings_on": [
+      "き"
+    ],
+    "readings_kun": [
+      "かえ.る",
+      "かえ.す",
+      "おく.る",
+      "とつ.ぐ"
+    ]
+  },
+  "古": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 509,
+    "meanings": [
+      "Old"
+    ],
+    "readings_on": [
+      "こ"
+    ],
+    "readings_kun": [
+      "ふる.い",
+      "ふる-",
+      "-ふる.す"
+    ]
+  },
+  "歌": {
+    "strokes": 14,
+    "grade": 2,
+    "freq": 519,
+    "meanings": [
+      "Song",
+      "Sing"
+    ],
+    "readings_on": [
+      "か"
+    ],
+    "readings_kun": [
+      "うた",
+      "うた.う"
+    ]
+  },
+  "買": {
+    "strokes": 12,
+    "grade": 2,
+    "freq": 520,
+    "meanings": [
+      "Buy"
+    ],
+    "readings_on": [
+      "ばい"
+    ],
+    "readings_kun": [
+      "か.う"
+    ]
+  },
+  "悪": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 530,
+    "meanings": [
+      "Bad",
+      "Vice",
+      "Rascal",
+      "False",
+      "Evil",
+      "Wrong"
+    ],
+    "readings_on": [
+      "あく",
+      "お"
+    ],
+    "readings_kun": [
+      "わる.い",
+      "わる-",
+      "あ.し",
+      "にく.い",
+      "-にく.い",
+      "ああ",
+      "いずくに",
+      "いずくんぞ",
+      "にく.む"
+    ]
+  },
+  "図": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 539,
+    "meanings": [
+      "Map",
+      "Drawing",
+      "Plan",
+      "Extraordinary",
+      "Audacious"
+    ],
+    "readings_on": [
+      "ず",
+      "と"
+    ],
+    "readings_kun": [
+      "え",
+      "はか.る"
+    ]
+  },
+  "週": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 540,
+    "meanings": [
+      "Week"
+    ],
+    "readings_on": [
+      "しゅう"
+    ],
+    "readings_kun": []
+  },
+  "室": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 550,
+    "meanings": [
+      "Room",
+      "Apartment",
+      "Chamber",
+      "Greenhouse",
+      "Cellar"
+    ],
+    "readings_on": [
+      "しつ"
+    ],
+    "readings_kun": [
+      "むろ"
+    ]
+  },
+  "歩": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 554,
+    "meanings": [
+      "Walk",
+      "Counter For Steps"
+    ],
+    "readings_on": [
+      "ほ",
+      "ぶ",
+      "ふ"
+    ],
+    "readings_kun": [
+      "ある.く",
+      "あゆ.む"
+    ]
+  },
+  "風": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 558,
+    "meanings": [
+      "Wind",
+      "Air",
+      "Style",
+      "Manner"
+    ],
+    "readings_on": [
+      "ふう",
+      "ふ"
+    ],
+    "readings_kun": [
+      "かぜ",
+      "かざ-",
+      "-かぜ"
+    ]
+  },
+  "紙": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 559,
+    "meanings": [
+      "Paper"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "かみ"
+    ]
+  },
+  "黒": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 573,
+    "meanings": [
+      "Black"
+    ],
+    "readings_on": [
+      "こく"
+    ],
+    "readings_kun": [
+      "くろ",
+      "くろ.ずむ",
+      "くろ.い"
+    ]
+  },
+  "花": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 578,
+    "meanings": [
+      "Flower"
+    ],
+    "readings_on": [
+      "か",
+      "け"
+    ],
+    "readings_kun": [
+      "はな"
+    ]
+  },
+  "春": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 579,
+    "meanings": [
+      "Springtime",
+      "Spring (season)"
+    ],
+    "readings_on": [
+      "しゅん"
+    ],
+    "readings_kun": [
+      "はる"
+    ]
+  },
+  "赤": {
+    "strokes": 7,
+    "grade": 1,
+    "freq": 584,
+    "meanings": [
+      "Red"
+    ],
+    "readings_on": [
+      "せき",
+      "しゃく"
+    ],
+    "readings_kun": [
+      "あか",
+      "あか-",
+      "あか.い",
+      "あか.らむ",
+      "あか.らめる"
+    ]
+  },
+  "青": {
+    "strokes": 8,
+    "grade": 1,
+    "freq": 589,
+    "meanings": [
+      "Blue",
+      "Green"
+    ],
+    "readings_on": [
+      "せい",
+      "しょう"
+    ],
+    "readings_kun": [
+      "あお",
+      "あお-",
+      "あお.い"
+    ]
+  },
+  "館": {
+    "strokes": 16,
+    "grade": 3,
+    "freq": 613,
+    "meanings": [
+      "Building",
+      "Mansion",
+      "Large Building",
+      "Palace"
+    ],
+    "readings_on": [
+      "かん"
+    ],
+    "readings_kun": [
+      "やかた",
+      "たて"
+    ]
+  },
+  "屋": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 616,
+    "meanings": [
+      "Roof",
+      "House",
+      "Shop",
+      "Dealer",
+      "Seller"
+    ],
+    "readings_on": [
+      "おく"
+    ],
+    "readings_kun": [
+      "や"
+    ]
+  },
+  "色": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 621,
+    "meanings": [
+      "Color"
+    ],
+    "readings_on": [
+      "しょく",
+      "しき"
+    ],
+    "readings_kun": [
+      "いろ"
+    ]
+  },
+  "走": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 626,
+    "meanings": [
+      "Run"
+    ],
+    "readings_on": [
+      "そう"
+    ],
+    "readings_kun": [
+      "はし.る"
+    ]
+  },
+  "秋": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 635,
+    "meanings": [
+      "Autumn"
+    ],
+    "readings_on": [
+      "しゅう"
+    ],
+    "readings_kun": [
+      "あき",
+      "とき"
+    ]
+  },
+  "夏": {
+    "strokes": 10,
+    "grade": 2,
+    "freq": 659,
+    "meanings": [
+      "Summer"
+    ],
+    "readings_on": [
+      "か",
+      "が",
+      "げ"
+    ],
+    "readings_kun": [
+      "なつ"
+    ]
+  },
+  "習": {
+    "strokes": 11,
+    "grade": 3,
+    "freq": 706,
+    "meanings": [
+      "Learn"
+    ],
+    "readings_on": [
+      "しゅう",
+      "じゅ"
+    ],
+    "readings_kun": [
+      "なら.う",
+      "なら.い"
+    ]
+  },
+  "駅": {
+    "strokes": 14,
+    "grade": 3,
+    "freq": 724,
+    "meanings": [
+      "Station"
+    ],
+    "readings_on": [
+      "えき"
+    ],
+    "readings_kun": []
+  },
+  "洋": {
+    "strokes": 9,
+    "grade": 3,
+    "freq": 763,
+    "meanings": [
+      "Ocean",
+      "Sea",
+      "Foreign",
+      "Western Style"
+    ],
+    "readings_on": [
+      "よう"
+    ],
+    "readings_kun": []
+  },
+  "旅": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 783,
+    "meanings": [
+      "Trip",
+      "Travel"
+    ],
+    "readings_on": [
+      "りょ"
+    ],
+    "readings_kun": [
+      "たび"
+    ]
+  },
+  "服": {
+    "strokes": 8,
+    "grade": 3,
+    "freq": 873,
+    "meanings": [
+      "Clothing",
+      "Admit",
+      "Obey",
+      "Discharge"
+    ],
+    "readings_on": [
+      "ふく"
+    ],
+    "readings_kun": []
+  },
+  "夕": {
+    "strokes": 3,
+    "grade": 1,
+    "freq": 924,
+    "meanings": [
+      "Evening"
+    ],
+    "readings_on": [
+      "せき"
+    ],
+    "readings_kun": [
+      "ゆう"
+    ]
+  },
+  "借": {
+    "strokes": 10,
+    "grade": 4,
+    "freq": 932,
+    "meanings": [
+      "Borrow",
+      "Rent"
+    ],
+    "readings_on": [
+      "しゃく"
+    ],
+    "readings_kun": [
+      "か.りる"
+    ]
+  },
+  "曜": {
+    "strokes": 18,
+    "grade": 2,
+    "freq": 940,
+    "meanings": [
+      "Weekday"
+    ],
+    "readings_on": [
+      "よう"
+    ],
+    "readings_kun": []
+  },
+  "飲": {
+    "strokes": 12,
+    "grade": 3,
+    "freq": 969,
+    "meanings": [
+      "Drink",
+      "Smoke",
+      "Take"
+    ],
+    "readings_on": [
+      "いん",
+      "おん"
+    ],
+    "readings_kun": [
+      "の.む",
+      "-の.み"
+    ]
+  },
+  "肉": {
+    "strokes": 6,
+    "grade": 2,
+    "freq": 986,
+    "meanings": [
+      "Meat"
+    ],
+    "readings_on": [
+      "にく"
+    ],
+    "readings_kun": [
+      "しし"
+    ]
+  },
+  "貸": {
+    "strokes": 12,
+    "grade": 5,
+    "freq": 995,
+    "meanings": [
+      "Lend"
+    ],
+    "readings_on": [
+      "たい"
+    ],
+    "readings_kun": [
+      "か.す",
+      "か.し-",
+      "かし-"
+    ]
+  },
+  "堂": {
+    "strokes": 11,
+    "grade": 4,
+    "freq": 1010,
+    "meanings": [
+      "Public Chamber",
+      "Hall"
+    ],
+    "readings_on": [
+      "どう"
+    ],
+    "readings_kun": []
+  },
+  "鳥": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 1043,
+    "meanings": [
+      "Bird",
+      "Chicken"
+    ],
+    "readings_on": [
+      "ちょう"
+    ],
+    "readings_kun": [
+      "とり"
+    ]
+  },
+  "飯": {
+    "strokes": 12,
+    "grade": 4,
+    "freq": 1046,
+    "meanings": [
+      "Meal",
+      "Boiled Rice"
+    ],
+    "readings_on": [
+      "はん"
+    ],
+    "readings_kun": [
+      "めし"
+    ]
+  },
+  "勉": {
+    "strokes": 10,
+    "grade": 3,
+    "freq": 1066,
+    "meanings": [
+      "Exertion",
+      "Endeavour",
+      "Encourage",
+      "Strive",
+      "Make Effort",
+      "Diligent"
+    ],
+    "readings_on": [
+      "べん"
+    ],
+    "readings_kun": [
+      "つと.める"
+    ]
+  },
+  "冬": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 1090,
+    "meanings": [
+      "Winter"
+    ],
+    "readings_on": [
+      "とう"
+    ],
+    "readings_kun": [
+      "ふゆ"
+    ]
+  },
+  "昼": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 1115,
+    "meanings": [
+      "Daytime",
+      "Noon"
+    ],
+    "readings_on": [
+      "ちゅう"
+    ],
+    "readings_kun": [
+      "ひる"
+    ]
+  },
+  "茶": {
+    "strokes": 9,
+    "grade": 2,
+    "freq": 1116,
+    "meanings": [
+      "Tea"
+    ],
+    "readings_on": [
+      "ちゃ",
+      "さ"
+    ],
+    "readings_kun": []
+  },
+  "弟": {
+    "strokes": 7,
+    "grade": 2,
+    "freq": 1161,
+    "meanings": [
+      "Younger Brother",
+      "Faithful Service To Elders"
+    ],
+    "readings_on": [
+      "てい",
+      "だい",
+      "で"
+    ],
+    "readings_kun": [
+      "おとうと"
+    ]
+  },
+  "牛": {
+    "strokes": 4,
+    "grade": 2,
+    "freq": 1202,
+    "meanings": [
+      "Cow"
+    ],
+    "readings_on": [
+      "ぎゅう"
+    ],
+    "readings_kun": [
+      "うし"
+    ]
+  },
+  "魚": {
+    "strokes": 11,
+    "grade": 2,
+    "freq": 1208,
+    "meanings": [
+      "Fish"
+    ],
+    "readings_on": [
+      "ぎょ"
+    ],
+    "readings_kun": [
+      "うお",
+      "さかな",
+      "-ざかな"
+    ]
+  },
+  "兄": {
+    "strokes": 5,
+    "grade": 2,
+    "freq": 1219,
+    "meanings": [
+      "Elder Brother",
+      "Big Brother"
+    ],
+    "readings_on": [
+      "けい",
+      "きょう"
+    ],
+    "readings_kun": [
+      "あに"
+    ]
+  },
+  "犬": {
+    "strokes": 4,
+    "grade": 1,
+    "freq": 1326,
+    "meanings": [
+      "Dog"
+    ],
+    "readings_on": [
+      "けん"
+    ],
+    "readings_kun": [
+      "いぬ",
+      "いぬ-"
+    ]
+  },
+  "妹": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 1446,
+    "meanings": [
+      "Younger Sister"
+    ],
+    "readings_on": [
+      "まい"
+    ],
+    "readings_kun": [
+      "いもうと"
+    ]
+  },
+  "姉": {
+    "strokes": 8,
+    "grade": 2,
+    "freq": 1473,
+    "meanings": [
+      "Elder Sister"
+    ],
+    "readings_on": [
+      "し"
+    ],
+    "readings_kun": [
+      "あね",
+      "はは"
+    ]
+  },
+  "漢": {
+    "strokes": 13,
+    "grade": 3,
+    "freq": 1487,
+    "meanings": [
+      "Sino-",
+      "China"
+    ],
+    "readings_on": [
+      "かん"
+    ],
+    "readings_kun": []
+  }
+}

@@ -66,6 +66,17 @@ class KanjiRecognitionService:
             )
 
         ml_predictions = self._ml_predictions(payload)
+        if not ml_predictions and get_recognition_error and get_recognition_error() in {
+            "empty_canvas", "invalid_or_empty_image", "model_unavailable"
+        }:
+            # Do not persist corrupt/empty PNGs as future training samples.
+            return schemas.KanjiRecognitionResponse(
+                success=False,
+                predictions=[],
+                engine=model_info.get("engine") or "kanji-cnn-v1",
+                isDemo=False,
+                message=self._recognition_error_message(),
+            )
         target_unsupported = (
             payload.target_kanji
             and model_info.get("supported_kanji")
