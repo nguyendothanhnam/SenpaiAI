@@ -1,0 +1,9 @@
+{
+  "cli": { "version": ">= 16.0.0", "appVersionSource": "local" },
+  "build": {
+    "development": { "developmentClient": true, "distribution": "internal", "environment": "development", "android": { "buildType": "apk" }, "env": { "SENPAIAI_DEV_BUILD": "1" } },
+    "development-simulator": { "developmentClient": true, "distribution": "internal", "environment": "development", "ios": { "simulator": true } },
+    "preview": { "distribution": "internal", "environment": "preview", "android": { "buildType": "apk" } },
+    "production": {}
+  }
+}

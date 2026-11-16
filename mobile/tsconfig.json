@@ -1,0 +1,13 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "types": ["react", "react-native", "node"],
+    "ignoreDeprecations": "6.0",
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": ["app/**/*.tsx", "src/**/*.ts", "src/**/*.tsx", "tests/**/*.ts", "app.config.ts", ".expo/types/**/*.ts", "expo-env.d.ts"]
+}

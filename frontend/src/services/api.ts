@@ -384,9 +384,9 @@ export const grammarPracticeAPI = {
 }
 
 export const libraryAPI = {
-  getDocuments: (params: { document_type?: string; jlpt_level?: string; tag?: string; sort?: string; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number } = {}) =>
+  getDocuments: (params: { document_type?: string; jlpt_level?: string; tag?: string; sort?: string; scope?: 'all' | 'mine' | 'system'; limit?: number; offset?: number; language?: 'vi' | 'en' } = {}) =>
     api.get('/library/documents', { params }),
-  getDocument: (documentId: number) => api.get(`/library/documents/${documentId}`),
+  getDocument: (documentId: number, language?: 'vi' | 'en') => api.get(`/library/documents/${documentId}`, { params: { language } }),
   createDocument: (data: any) => api.post('/library/documents', data),
   updateDocument: (documentId: number, data: any) => api.put(`/library/documents/${documentId}`, data),
   deleteDocument: (documentId: number) => api.delete(`/library/documents/${documentId}`),

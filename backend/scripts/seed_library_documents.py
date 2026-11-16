@@ -103,7 +103,7 @@ def upsert_documents(db, model, docs, index_fn, delete_vectors_fn):
         existing = query.first()
 
         if existing is None:
-            document = model(title=title, **values)
+            document = model(**values)
             db.add(document)
             db.commit()
             db.refresh(document)

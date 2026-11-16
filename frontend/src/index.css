@@ -371,6 +371,10 @@
     line-height: 1.8;
   }
 
+  .library-text {
+    font-family: 'Inter', 'Noto Sans JP', 'Segoe UI', system-ui, sans-serif;
+  }
+
   .listening-japanese {
     font-family: 'Noto Sans JP', 'Yu Gothic UI', 'Yu Gothic', Meiryo, 'Hiragino Kaku Gothic ProN', system-ui, sans-serif;
     font-synthesis: none;

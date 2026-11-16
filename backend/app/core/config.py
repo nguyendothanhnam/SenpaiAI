@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     
     # CORS
     allowed_origins: list = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    allowed_hosts: list[str] = ["localhost", "127.0.0.1", "0.0.0.0", "10.0.2.2"]
     
     # Rate Limiting
     rate_limit_per_minute: int = 60
