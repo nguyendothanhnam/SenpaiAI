@@ -648,6 +648,8 @@
     "confirmDeleteConversation": "Delete this conversation?",
     "backToList": "Back to conversations",
     "renameConversation": "Rename conversation",
+    "collapseSidebar": "Collapse conversation sidebar",
+    "expandSidebar": "Expand conversation sidebar",
     "save": "Save",
     "rename": "Rename",
     "unfiled": "Unfiled",

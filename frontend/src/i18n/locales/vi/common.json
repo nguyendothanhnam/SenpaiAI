@@ -648,6 +648,8 @@
     "confirmDeleteConversation": "Xóa cuộc trò chuyện này?",
     "backToList": "Quay lại danh sách",
     "renameConversation": "Đổi tên cuộc trò chuyện",
+    "collapseSidebar": "Thu gọn danh sách hội thoại",
+    "expandSidebar": "Mở danh sách hội thoại",
     "save": "Lưu",
     "rename": "Đổi tên",
     "unfiled": "Chưa phân thư mục",

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ArrowLeft, Download, MessageCircle, MoreVertical, Pin, Trash2 } from 'lucide-react'
+import { ArrowLeft, Download, MessageCircle, MoreVertical, PanelLeftClose, PanelLeftOpen, Pin, Trash2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import ChatComposer from '../components/chat/ChatComposer'
 import ChatConversationSidebar from '../components/chat/ChatConversationSidebar'
@@ -38,6 +38,9 @@ export default function Chat() {
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [folderDialog, setFolderDialog] = useState<FolderDialogState>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try { return localStorage.getItem('senpaiai.chat.sidebar-collapsed') === 'true' } catch { return false }
+  })
   const [editingTitle, setEditingTitle] = useState(false)
   const [titleDraft, setTitleDraft] = useState('')
   const [exporting, setExporting] = useState(false)
@@ -46,6 +49,10 @@ export default function Chat() {
   const newConversationState = params.has('new')
   const listState = params.has('list')
   const showMobileChat = Boolean(conversationId || newConversationState)
+
+  useEffect(() => {
+    try { localStorage.setItem('senpaiai.chat.sidebar-collapsed', String(sidebarCollapsed)) } catch { /* Optional layout preference. */ }
+  }, [sidebarCollapsed])
 
   const conversationsQuery = useQuery(
     ['chatConversations', debouncedSearch],
@@ -134,7 +141,9 @@ export default function Chat() {
       if (!(event.ctrlKey || event.metaKey) || event.altKey) return
       if (event.key.toLowerCase() === 'k') {
         event.preventDefault()
-        searchRef.current?.focus()
+        setSidebarCollapsed(false)
+        if (!window.matchMedia('(min-width: 768px)').matches) navigate('/chat?list=1')
+        requestAnimationFrame(() => searchRef.current?.focus())
       } else if (event.shiftKey && event.key.toLowerCase() === 'o') {
         event.preventDefault()
         startNewConversation()
@@ -142,7 +151,7 @@ export default function Chat() {
     }
     window.addEventListener('keydown', onShortcut)
     return () => window.removeEventListener('keydown', onShortcut)
-  }, [startNewConversation])
+  }, [startNewConversation, navigate])
 
   const renameConversationMutation = useMutation(
     ({ id, title }: { id: string; title: string }) => chatAPI.renameConversation(id, title),
@@ -290,8 +299,8 @@ export default function Chat() {
   const displayTitle = editingTitle ? titleDraft : (activeConversation?.title || t('chat.newConversation'))
 
   return <div className="h-[calc(100dvh-8rem)] min-h-[480px] overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] shadow-[var(--shadow-card)]">
-    <div className="grid h-full grid-cols-1 md:grid-cols-[270px_minmax(0,1fr)] lg:grid-cols-[290px_minmax(0,1fr)]">
-      <div className={`${showMobileChat ? 'hidden' : 'flex'} min-h-0 md:flex`}>
+    <div className={`grid h-full grid-cols-1 ${sidebarCollapsed ? '' : 'md:grid-cols-[270px_minmax(0,1fr)] lg:grid-cols-[290px_minmax(0,1fr)]'}`}>
+      <div id="chat-conversation-sidebar" className={`${showMobileChat ? 'hidden' : 'flex'} min-h-0 ${sidebarCollapsed ? 'md:hidden' : 'md:flex'}`}>
         <ChatConversationSidebar
           conversations={conversations}
           folders={folders}
@@ -324,6 +333,7 @@ export default function Chat() {
 
       <main className={`${showMobileChat ? 'flex' : 'hidden'} min-h-0 min-w-0 flex-col md:flex`}>
         <header className="flex min-h-[76px] shrink-0 items-center gap-3 border-b border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-4 sm:px-6">
+          <button type="button" onClick={() => setSidebarCollapsed(value => !value)} aria-controls="chat-conversation-sidebar" aria-expanded={!sidebarCollapsed} aria-label={t(sidebarCollapsed ? 'chat.expandSidebar' : 'chat.collapseSidebar')} title={t(sidebarCollapsed ? 'chat.expandSidebar' : 'chat.collapseSidebar')} className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[color:var(--text-muted)] hover:bg-[color:var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--primary)] md:inline-flex">{sidebarCollapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}</button>
           <button type="button" onClick={returnToList} className="rounded-xl p-2 text-[color:var(--text-muted)] hover:bg-[color:var(--accent)] md:hidden" aria-label={t('chat.backToList')}><ArrowLeft className="h-5 w-5" /></button>
           <span className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color:var(--accent)] text-[color:var(--primary)] sm:flex"><MessageCircle className="h-5 w-5" /></span>
           <div className="min-w-0 flex-1">

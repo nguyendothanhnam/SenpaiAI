@@ -6,7 +6,7 @@ import { themes, themeBackgrounds } from '../../frontend/src/themes/themes'
 import { accountAppearance, activeImagePath, mergeCatalog, mobilePalette, nativeThemes } from '../src/features/shop/catalog'
 import { ShopActions, ShopError, errorCode, type ShopTransport } from '../src/features/shop/actions'
 import type { EquipPayload, ShopItemType, ShopSnapshot } from '../src/features/shop/types'
-import { colorAlpha, imageOverlay } from '../src/theme/nativeStyle'
+import { backdropPalette, colorAlpha, contrastRatio, imageOverlay } from '../src/theme/nativeStyle'
 import { resources } from '../src/i18n/resources'
 
 function seed(): ShopSnapshot {
@@ -81,6 +81,19 @@ test('background tint preserves at least 4.5 contrast for normal and muted text 
     for (const image of [0, 127, 255]) for (const token of [palette.text, palette.textMuted]) {
       const a = luminance(channels(palette.bg).map(c => c * alpha + image * (1 - alpha))), b = luminance(channels(token))
       assert.ok((Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) >= 4.5, theme.id + mode)
+    }
+  }
+})
+test('equipped wallpapers retain visible image detail in every theme and mode', () => {
+  for (const theme of Object.values(themes)) for (const mode of ['light', 'dark'] as const) {
+    const palette = backdropPalette(theme.palettes[mode])
+    const overlay = imageOverlay(palette, mode)
+    const alpha = Number(overlay.match(/, ([\d.]+)\)$/)?.[1] || 1)
+    assert.ok(alpha <= .8, `${theme.id}/${mode} must leave at least 20% of the wallpaper visible`)
+    const bg = [1, 3, 5].map(index => parseInt(palette.bg.slice(index, index + 2), 16))
+    for (const image of [0, 127, 255]) {
+      const surface = `rgb(${bg.map(channel => Math.round(channel * alpha + image * (1 - alpha))).join(',')})`
+      assert.ok(contrastRatio(surface, palette.textMuted) >= 4.5, `${theme.id}/${mode}: text on wallpaper`)
     }
   }
 })
