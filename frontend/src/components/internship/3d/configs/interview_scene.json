@@ -1,0 +1,31 @@
+{
+  "scene_id": "interview_corporate_01",
+  "name": "Japanese Corporate Interview Room",
+  "name_ja": "面接室",
+  "environment": {
+    "dimensions": { "width": 8.0, "height": 3.2, "depth": 9.0 },
+    "floor_color": "0x8a5a36",
+    "wall_color": "0xf1f5f9",
+    "window_view": "tokyo_skyline"
+  },
+  "lighting": {
+    "hemisphere": { "sky": "0xfff5ea", "ground": "0x8c827a", "intensity": 0.95 },
+    "directional": {
+      "color": "0xffe2be",
+      "intensity": 2.2,
+      "position": [4.5, 7.5, 3.5]
+    }
+  },
+  "camera": {
+    "default_view": "pov",
+    "intro_dolly": true,
+    "idle_sway": true
+  },
+  "npc": {
+    "node_name": "NPC_Interviewer",
+    "position": [0, 0, -0.9],
+    "rotation": [0, 0, 0],
+    "default_suit": "navy_charcoal",
+    "tie_color": "formal_red"
+  }
+}

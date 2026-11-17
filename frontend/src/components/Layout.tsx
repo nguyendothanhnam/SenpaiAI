@@ -21,11 +21,12 @@ export default function Layout({ children }: LayoutProps) {
   const { user, logout } = useAuth()
   const { data: rewards } = useRewardsMe(user?.id)
   const { mode, resolvedMode, setMode, themeId, backgroundId } = useTheme()
-  const theme = themes[themeId]
+  const theme = themes[themeId] || themes['classic']
   const isDark = resolvedMode === 'dark'
-  const palette = theme.palettes[isDark ? 'dark' : 'light']
-  const mascot = theme.mascot || catImage
-  const background = themeBackgrounds.find((item) => item.id === backgroundId)?.image || theme.background[isDark ? 'dark' : 'light']
+  const fallbackPalette = themes['classic']?.palettes?.light
+  const palette = theme?.palettes?.[isDark ? 'dark' : 'light'] || fallbackPalette
+  const mascot = theme?.mascot || catImage
+  const background = themeBackgrounds.find((item) => item.id === backgroundId)?.image || theme?.background?.[isDark ? 'dark' : 'light'] || ''
   const toggleMode = () => setMode(isDark ? 'light' : 'dark')
   const brand = <div className="theme-brand flex h-16 shrink-0 items-center gap-2 px-4">
     <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/20 shadow-sm"><img src={mascot} onError={(event) => { event.currentTarget.src = catImage }} alt="SenpaiAI" className="h-11 w-11 object-contain" /></div>
@@ -34,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return <div className="theme-shell relative isolate min-h-screen bg-[color:var(--bg)] text-[color:var(--text)]">
     {background && <img src={background} alt="" aria-hidden="true" loading="lazy" onError={(event) => { event.currentTarget.style.display = 'none' }} className="pointer-events-none fixed inset-0 z-0 h-full w-full object-cover opacity-60" />}
-    <div aria-hidden="true" className="theme-overlay pointer-events-none fixed inset-0 z-0" style={{ backgroundColor: palette.bgOverlay }} />
+    <div aria-hidden="true" className="theme-overlay pointer-events-none fixed inset-0 z-0" style={{ backgroundColor: palette?.bgOverlay || 'transparent' }} />
     <div className="relative z-10 min-h-screen">
       {/* Mobile drawer */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
