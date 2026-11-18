@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { confirmDialog } from '../features/dialogs/queue'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import toast from 'react-hot-toast'
@@ -29,10 +29,12 @@ import {
   type IndustryInfo,
   type InternshipSession,
 } from '../services/api'
-import InterviewRoom3D from '../components/internship/InterviewRoom3D'
+import InterviewRoom3D, { type EtiquetteStage } from '../components/internship/InterviewRoom3D'
+import { eventBridge } from '../components/internship/3d/EventBridge'
 import DialogueBox from '../components/internship/DialogueBox'
 import PlayerControl from '../components/internship/PlayerControl'
 import FeedbackBubble from '../components/internship/FeedbackBubble'
+import MangaSpeechBubble from '../components/internship/MangaSpeechBubble'
 import OfferLetterModal from '../components/internship/OfferLetterModal'
 import HandbookModal from '../components/internship/HandbookModal'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -60,8 +62,11 @@ export default function InternshipRoleplay() {
   const [showHandbook, setShowHandbook] = useState(false)
   const [showOfferModal, setShowOfferModal] = useState(false)
   const [isDialogueCollapsed, setIsDialogueCollapsed] = useState(false)
+  const [isFeedbackDismissed, setIsFeedbackDismissed] = useState(false)
+  const [showMangaBubble, setShowMangaBubble] = useState(true)
   const [distToBoss, setDistToBoss] = useState(2.75)
   const [canTalkToBoss, setCanTalkToBoss] = useState(true)
+  const [etiquetteStage, setEtiquetteStage] = useState<EtiquetteStage>('dress_check')
 
   // Fetch Profile
   const { data: profile, isLoading: isProfileLoading } = useQuery(
@@ -104,7 +109,8 @@ export default function InternshipRoleplay() {
     {
       onSuccess: (res) => {
         setCurrentSession(res.data)
-        toast.success('Đã vào phòng phỏng vấn! Hãy chào hỏi nhà tuyển dụng.')
+        setEtiquetteStage('dress_check')
+        toast.success('Đã vào phòng phỏng vấn! Hãy chuẩn bị trang phục và gõ cửa.')
       },
       onError: () => {
         toast.error('Không thể bắt đầu phỏng vấn. Vui lòng thử lại.')
@@ -135,10 +141,16 @@ export default function InternshipRoleplay() {
       const res = await internshipAPI.submitTurnAnswer(currentSession.id, userText)
       const updated = res.data
       setCurrentSession(updated)
+      setIsFeedbackDismissed(false)
 
       // If finished and has offer letter
       if (updated.status === 'completed' && updated.offer_letter) {
-        setShowOfferModal(true)
+        if (updated.session_type === 'interview') {
+          // Do not pop modal immediately: allow the candidate to perform the authentic Japanese exit protocol
+          toast.success('Phỏng vấn hoàn tất! Hãy đứng dậy thực hiện nghi thức chào cảm ơn khi ra về.')
+        } else {
+          setShowOfferModal(true)
+        }
         queryClient.invalidateQueries(['internshipProfile'])
         queryClient.invalidateQueries(['rewardsMe'])
       } else if (updated.status === 'completed') {
@@ -153,6 +165,70 @@ export default function InternshipRoleplay() {
     }
   }
 
+  const selectedIndustryData: IndustryInfo | undefined = industries?.[selectedIndustry]
+  const currentTurnData = currentSession?.turns?.[currentSession.current_turn - 1]
+  const previousTurnData =
+    currentSession && currentSession.current_turn > 1
+      ? currentSession.turns[currentSession.current_turn - 2]
+      : null
+
+  const handleDistanceChange = useCallback((dist: number, canTalk: boolean) => {
+    setDistToBoss(dist)
+    setCanTalkToBoss(canTalk)
+  }, [])
+
+  const handleEtiquetteStageChange = useCallback((stage: EtiquetteStage) => {
+    setEtiquetteStage(stage)
+  }, [])
+
+  // Replay Boss Speech Audio via Web Speech API
+  const handleReplayBossAudio = useCallback(() => {
+    if (!currentTurnData?.message_ja || typeof window === 'undefined' || !('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    setIsSpeaking(true)
+    try {
+      const utterance = new SpeechSynthesisUtterance(currentTurnData.message_ja)
+      ;(window as any).__senpaiDialogueSpeech = utterance
+      utterance.lang = 'ja-JP'
+      utterance.rate = 0.92
+      utterance.pitch = 1.0
+      const voices = window.speechSynthesis.getVoices()
+      const jaVoice = voices.find((v) => v.lang.startsWith('ja') || v.name.includes('Japanese'))
+      if (jaVoice) utterance.voice = jaVoice
+      utterance.onend = () => {
+        setIsSpeaking(false)
+        delete (window as any).__senpaiDialogueSpeech
+      }
+      utterance.onerror = () => {
+        setIsSpeaking(false)
+        delete (window as any).__senpaiDialogueSpeech
+      }
+      window.speechSynthesis.speak(utterance)
+    } catch {
+      setIsSpeaking(false)
+    }
+  }, [currentTurnData?.message_ja])
+
+  // Auto-speak Japanese when boss asks question and trigger manga bubble
+  useEffect(() => {
+    if (
+      currentSession?.status === 'in_progress' &&
+      currentTurnData?.message_ja &&
+      (etiquetteStage === 'sitting_interview' || currentSession.session_type === 'workplace')
+    ) {
+      setShowMangaBubble(true)
+      const timer = setTimeout(() => {
+        handleReplayBossAudio()
+      }, 550)
+      return () => {
+        clearTimeout(timer)
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel()
+        }
+      }
+    }
+  }, [currentTurnData?.turn, currentTurnData?.message_ja, etiquetteStage, currentSession?.session_type, currentSession?.status, handleReplayBossAudio])
+
   if (isProfileLoading || isIndustriesLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -160,13 +236,6 @@ export default function InternshipRoleplay() {
       </div>
     )
   }
-
-  const selectedIndustryData: IndustryInfo | undefined = industries?.[selectedIndustry]
-  const currentTurnData = currentSession?.turns?.[currentSession.current_turn - 1]
-  const previousTurnData =
-    currentSession && currentSession.current_turn > 1
-      ? currentSession.turns[currentSession.current_turn - 2]
-      : null
 
   // Active Simulation Stage View (Full Screen 3D Game)
   if (currentSession) {
@@ -178,15 +247,16 @@ export default function InternshipRoleplay() {
           npcTitle={currentTurnData?.npc_title || 'Đại diện công ty'}
           npcEmotion={currentTurnData?.npc_emotion || 'neutral'}
           companyName={currentSession.company_name}
+          industryId={currentSession.industry || selectedIndustry || 'it'}
           isSpeaking={isSpeaking}
           sessionType={currentSession.session_type}
           currentTurn={currentSession.current_turn}
           maxTurns={currentSession.max_turns}
+          sessionStatus={currentSession.status}
           isFullScreenMode={true}
-          onDistanceChange={(dist, canTalk) => {
-            setDistToBoss(dist)
-            setCanTalkToBoss(canTalk)
-          }}
+          onDistanceChange={handleDistanceChange}
+          onEtiquetteStageChange={handleEtiquetteStageChange}
+          onViewOfferLetter={() => setShowOfferModal(true)}
           onExit={async () => {
             if (await confirmDialog(t('dialogs.exitInterview'), { tone: 'warning' })) {
               setCurrentSession(null)
@@ -195,51 +265,135 @@ export default function InternshipRoleplay() {
         />
 
         {/* 2. Top Right Floating Control (Sổ tay văn hóa) */}
-        <div className="relative z-20 flex justify-end p-4 sm:p-6 pointer-events-none pt-16 sm:pt-4">
+        <div className="absolute top-16 right-4 sm:right-6 z-20 pointer-events-auto">
           <button
             onClick={() => setShowHandbook(true)}
-            className="pointer-events-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-slate-900/85 backdrop-blur-md text-amber-300 text-xs font-bold hover:bg-slate-800 shadow-xl transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-slate-900/85 backdrop-blur-md text-amber-300 text-xs font-bold hover:bg-slate-800 shadow-xl transition-all"
           >
             <BookOpen className="w-3.5 h-3.5 text-amber-400" />
             <span>Sổ tay văn hóa</span>
           </button>
         </div>
 
-        {/* 3. Middle Area: Floating AI Evaluation Feedback */}
-        <div className="relative z-20 px-4 sm:px-6 pointer-events-none flex justify-end max-h-[30vh] overflow-y-auto">
-          {previousTurnData?.user_response && (
-            <div className="pointer-events-auto max-w-sm sm:max-w-md w-full shadow-2xl">
+        {/* 2b. Manga Speech Bubble over Boss in 3D (Typewriter Manga Effect) */}
+        {currentTurnData &&
+          (etiquetteStage === 'sitting_interview' || currentSession.session_type === 'workplace') && (
+            <div className="absolute top-20 sm:top-24 right-4 sm:right-12 md:right-24 z-30 pointer-events-none">
+              {showMangaBubble ? (
+                <MangaSpeechBubble
+                  speakerName={currentTurnData.npc_name}
+                  speakerTitle={currentTurnData.npc_title}
+                  textJa={currentTurnData.message_ja}
+                  textVi={currentTurnData.message_vi}
+                  isSpeaking={isSpeaking}
+                  onReplayAudio={handleReplayBossAudio}
+                  onClose={() => setShowMangaBubble(false)}
+                />
+              ) : (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  type="button"
+                  onClick={() => {
+                    setShowMangaBubble(true)
+                    handleReplayBossAudio()
+                  }}
+                  className="pointer-events-auto flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-950 border-2 border-slate-900 font-black text-xs shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-amber-100 transition-all active:scale-95"
+                >
+                  <MessageSquare className="w-3.5 h-3.5 text-amber-600" />
+                  <span>💬 Hiện đám mây Manga của Sếp</span>
+                </motion.button>
+              )}
+            </div>
+          )}
+
+        {/* 3. Floating AI Evaluation Feedback (Draggable & Dismissible) */}
+        {previousTurnData?.user_response && (
+          <div className="absolute top-20 left-4 sm:left-8 z-40 pointer-events-none">
+            {!isFeedbackDismissed ? (
               <FeedbackBubble
                 userResponse={previousTurnData.user_response}
                 correctedSentence={previousTurnData.feedback?.corrected_sentence}
                 adviceVi={previousTurnData.feedback?.advice_vi}
                 scores={previousTurnData.scores}
+                onClose={() => setIsFeedbackDismissed(true)}
               />
-            </div>
-          )}
-        </div>
-
-        {/* 4. Bottom Floating Visual Novel Console (Dialogue + Input) */}
-        <div className="relative z-20 w-full max-w-4xl mx-auto px-4 pb-4 sm:pb-6 space-y-2 pointer-events-auto">
-          {/* Collapse / Expand Toggle Bar */}
-          <div className="flex items-center justify-between text-xs px-2">
-            <span className="flex items-center gap-1.5 font-bold text-amber-400 drop-shadow">
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>
-                {canTalkToBoss
-                  ? `Đang đàm thoại trực tiếp với ${currentTurnData?.npc_name || 'Sếp'}`
-                  : `Khoảng cách tới Sếp: ${distToBoss.toFixed(1)}m (Bước lại gần bàn)`}
-              </span>
-            </span>
-            <button
-              type="button"
-              onClick={() => setIsDialogueCollapsed(!isDialogueCollapsed)}
-              className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white transition-all text-[11px] font-semibold shadow-md"
-            >
-              <Eye className="w-3.5 h-3.5 text-amber-400" />
-              <span>{isDialogueCollapsed ? '💬 Mở rộng hội thoại' : '− Thu gọn để ngắm phòng'}</span>
-            </button>
+            ) : (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                type="button"
+                onClick={() => setIsFeedbackDismissed(false)}
+                className="pointer-events-auto flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/95 hover:bg-slate-800 border border-amber-500/50 text-amber-300 text-xs font-bold shadow-2xl backdrop-blur-md transition-all active:scale-95"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Xem lại đánh giá</span>
+                {previousTurnData.scores && (
+                  <span className="px-1.5 py-0.5 rounded-md bg-amber-500/20 text-[10px] text-amber-300">
+                    {Math.round(
+                      (previousTurnData.scores.grammar +
+                        previousTurnData.scores.keigo +
+                        previousTurnData.scores.manner) /
+                        3
+                    )}
+                    đ
+                  </span>
+                )}
+              </motion.button>
+            )}
           </div>
+        )}
+
+        {/* 4. Bottom Floating Console: Etiquette Guidance Banner or Full Dialogue Console */}
+        {currentSession.session_type === 'interview' &&
+        etiquetteStage !== 'sitting_interview' &&
+        currentSession.status === 'in_progress' ? (
+          <div className="relative z-20 w-full max-w-xl mx-auto px-4 pb-4 sm:pb-6 pointer-events-auto">
+            <div className="p-3.5 rounded-3xl bg-slate-900/90 backdrop-blur-md border border-amber-500/40 shadow-2xl flex items-center justify-between gap-3 text-xs text-slate-200">
+              <span className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+                <span className="font-medium">
+                  {etiquetteStage === 'dress_check' && 'Đang chuẩn bị trang phục phỏng vấn công sở Nhật Bản...'}
+                  {(etiquetteStage === 'outside_door' || etiquetteStage === 'knocking') && 'Đang đứng trước cửa: Gõ 3 tiếng & đợi mời...'}
+                  {etiquetteStage === 'door_opened' && 'Cửa đã mở! Tiến vào phòng và khép cửa nhẹ nhàng...'}
+                  {etiquetteStage === 'standing_chair' && 'Đứng cạnh ghế: Cúi chào 30–45° và nói 失礼いたします...'}
+                  {etiquetteStage === 'waiting_sit' && 'Đợi nhà tuyển dụng mời ngồi...'}
+                  {(etiquetteStage === 'exit_standing' || etiquetteStage === 'exit_door') && 'Đang thực hiện nghi thức chào cảm ơn khi ra về...'}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setEtiquetteStage('sitting_interview')
+                  eventBridge.emit('skip_to_interview')
+                }}
+                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[11px] border border-amber-500/30 transition-all shrink-0 active:scale-95"
+              >
+                Vào bàn phỏng vấn ngay ⏩
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="relative z-20 w-full max-w-4xl mx-auto px-4 pb-4 sm:pb-6 space-y-2 pointer-events-auto">
+            {/* Collapse / Expand Toggle Bar */}
+            <div className="flex items-center justify-between text-xs px-2">
+              <span className="flex items-center gap-1.5 font-bold text-amber-400 drop-shadow">
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>
+                  {canTalkToBoss
+                    ? `Đang đàm thoại trực tiếp với ${currentTurnData?.npc_name || 'Sếp'}`
+                    : `Khoảng cách tới Sếp: ${distToBoss.toFixed(1)}m (Bước lại gần bàn)`}
+                </span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsDialogueCollapsed(!isDialogueCollapsed)}
+                className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white transition-all text-[11px] font-semibold shadow-md"
+              >
+                <Eye className="w-3.5 h-3.5 text-amber-400" />
+                <span>{isDialogueCollapsed ? '💬 Mở rộng hội thoại' : '− Thu gọn để ngắm phòng'}</span>
+              </button>
+            </div>
 
           {!isDialogueCollapsed ? (
             <>
@@ -261,6 +415,7 @@ export default function InternshipRoleplay() {
                     messageVi={currentTurnData.message_vi}
                     focus={currentTurnData.focus}
                     onSpeakingChange={setIsSpeaking}
+                    onClose={() => setIsDialogueCollapsed(true)}
                   />
                 </div>
               )}
@@ -318,6 +473,7 @@ export default function InternshipRoleplay() {
             </div>
           )}
         </div>
+      )}
 
         {/* Offer Letter Modal */}
         <OfferLetterModal
