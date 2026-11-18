@@ -169,7 +169,9 @@ def decode_image_data(image_data: str):
         if "," in image_data:
             image_data = image_data.split(",", 1)[1]
         raw = base64.b64decode(image_data, validate=True)
-        image = Image.open(BytesIO(raw)).convert("L")
+        # Keep alpha until preprocessing: converting transparent black pixels
+        # straight to L turns a transparent canvas into a solid black square.
+        image = Image.open(BytesIO(raw)).copy()
         logger.info("[Recognition] image decoded")
         return image
     except Exception as error:
@@ -181,7 +183,12 @@ def preprocess_pil_image(image, image_size: int = IMAGE_SIZE):
     if Image is None or ImageOps is None or torch is None:
         return None
 
-    image = ImageOps.grayscale(image)
+    if image.mode in {"RGBA", "LA"} or "transparency" in image.info:
+        rgba = image.convert("RGBA")
+        background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+        image = Image.alpha_composite(background, rgba).convert("L")
+    else:
+        image = ImageOps.grayscale(image)
     image = ImageOps.autocontrast(image)
     logger.info("[Preprocess] image size: %sx%s", image.width, image.height)
     array = np.asarray(image).astype(np.uint8)
@@ -190,7 +197,7 @@ def preprocess_pil_image(image, image_size: int = IMAGE_SIZE):
     ink_mask = array < 245
     if not ink_mask.any():
         logger.info("[Preprocess] empty canvas")
-        return Image.new("L", (image_size, image_size), 255)
+        return torch.zeros((1, 1, image_size, image_size), dtype=torch.float32)
     if ink_mask.any():
         ys, xs = np.where(ink_mask)
         left, right = xs.min(), xs.max() + 1

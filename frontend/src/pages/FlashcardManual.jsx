@@ -83,7 +83,7 @@ export default function FlashcardManual() {
       <ArrowLeft className="h-4 w-4" /> Back to Games
     </Link>
     <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-sm">
-      <div className="bg-[image:var(--primary-gradient)] px-6 py-8 text-[color:var(--primary-contrast)]">
+      <div className="theme-hero px-6 py-8">
         <h1 className="text-3xl font-semibold">{existingSet ? 'Edit Flashcard Set' : 'Create Flashcard Set'}</h1>
         <p className="mt-2 text-sm text-[color:var(--primary-contrast)] opacity-90">Manage one organized collection of flashcards.</p>
       </div>

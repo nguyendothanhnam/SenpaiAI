@@ -1,3 +1,4 @@
+import { confirmDialog } from '../features/dialogs/queue'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQueryClient } from 'react-query'
@@ -70,8 +71,8 @@ export default function ThemeShop() {
   [tab, shopData])
 
   const itemName = (item: ShopItem) => t(`${item.item_type === 'theme' ? 'themes' : 'backgrounds'}.${item.id}.name`)
-  const beginPurchase = (item: ShopItem) => {
-    if (!window.confirm(t('themeShop.confirmPurchase', { noun: t(item.item_type === 'theme' ? 'themeShop.themeNoun' : 'themeShop.backgroundNoun'), name: itemName(item), price: item.price }))) return
+  const beginPurchase = async (item: ShopItem) => {
+    if (!await confirmDialog(t('themeShop.confirmPurchase', { noun: t(item.item_type === 'theme' ? 'themeShop.themeNoun' : 'themeShop.backgroundNoun'), name: itemName(item), price: item.price }), { confirmLabel: t('dialogs.purchase') })) return
     purchase.mutate({ item_type: item.item_type, item_id: item.id, equip: true })
   }
 

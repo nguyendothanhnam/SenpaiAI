@@ -1,4 +1,265 @@
 {
+  "kanjiStudy": {
+    "sources": "Nguồn dữ liệu:",
+    "title": "Học Kanji",
+    "description": "Ôn nghĩa, cách đọc và ví dụ; tự kiểm tra ngay trên mỗi thẻ chữ.",
+    "search": "Tìm chữ, nghĩa hoặc cách đọc",
+    "listen": "Nghe phát âm",
+    "voiceUnavailable": "Trình duyệt chưa hỗ trợ đọc tiếng Nhật.",
+    "loading": "Đang tải thẻ Kanji…",
+    "loadError": "Chưa tải được thẻ Kanji. Vui lòng thử lại.",
+    "retry": "Thử lại",
+    "empty": "Không có chữ phù hợp với bộ lọc.",
+    "position": "Kanji {{current}} / {{total}}",
+    "meaning": "Ý nghĩa",
+    "romaji": "Romaji",
+    "strokes": "{{count}} nét",
+    "previous": "Chữ trước",
+    "next": "Đã ôn · Chữ tiếp",
+    "random": "Ngẫu nhiên",
+    "onyomi": "Âm On",
+    "kunyomi": "Âm Kun",
+    "noReading": "Không có cách đọc thuộc nhóm này trong từ điển.",
+    "examples": "Ví dụ",
+    "noExamples": "Chữ này chưa có ví dụ trong từ điển.",
+    "quickQuiz": "Quiz nhanh",
+    "readingQuiz": "Cách đọc",
+    "meaningQuiz": "Ý nghĩa",
+    "readingPrompt": "Chọn cách đọc của {{kanji}}.",
+    "meaningPrompt": "Chọn nghĩa của {{kanji}}.",
+    "correct": "Chính xác!",
+    "wrong": "Chưa đúng. Đáp án: {{answer}}.",
+    "notEnoughChoices": "Chưa đủ đáp án khác nhau cùng cấp để tạo quiz.",
+    "progress": "Tiến độ ôn tập",
+    "reviewed": "Đã ôn {{count}} / {{total}} chữ",
+    "sessionProgress": "Tiến độ trong phiên này; chữ chỉ được tính khi bạn xác nhận đã ôn hoặc trả lời đúng."
+  },
+  "dialogs": {
+    "confirmTitle": "Xác nhận một chút nhé",
+    "dangerTitle": "Xác nhận thao tác",
+    "continue": "Tiếp tục",
+    "cancel": "Hủy",
+    "close": "Đóng thông báo",
+    "delete": "Xóa",
+    "purchase": "Xác nhận mua",
+    "stay": "Ở lại",
+    "error": "Có điều cần kiểm tra",
+    "success": "Đã hoàn tất",
+    "loading": "Đang xử lý",
+    "info": "Thông báo cho bạn",
+    "keepConversations": "Giữ cuộc trò chuyện",
+    "deleteWithConversations": "Xóa cả cuộc trò chuyện",
+    "deleteQuiz": "Xóa “{{title}}”? Thao tác này xóa bộ câu hỏi đã lưu và giữ lại lịch sử làm bài.",
+    "exitInterview": "Tạm dừng và rời phiên làm việc 3D này?",
+    "exitGrammar": "Rời buổi luyện này? Phần làm bài hiện tại chưa hoàn tất sẽ kết thúc."
+  },
+  "gameHelp": {
+    "title": "Cách chơi",
+    "open": "Hướng dẫn chơi {{game}}",
+    "goal": "Mục tiêu",
+    "understood": "Đã hiểu",
+    "tip": "Mẹo nhỏ",
+    "inProgress": "Ván chơi vẫn tạm dừng khi bạn đọc hướng dẫn. Hãy tiếp tục khi sẵn sàng."
+  },
+  "gameGuides": {
+    "quiz": {
+      "goal": "Luyện từ vựng qua bộ câu hỏi bạn chọn.",
+      "steps": {
+        "1": "Chọn hoặc nhập một bộ Quiz, rồi chọn cấp JLPT phù hợp.",
+        "2": "Đọc từng câu hỏi và chọn đáp án trước khi kiểm tra.",
+        "3": "Xem kết quả, lời giải và luyện lại những câu trả lời sai."
+      },
+      "tip": "Thẻ này mở khu vực Quiz hiện có để bạn chọn bộ câu hỏi và chế độ học."
+    },
+    "flashcard": {
+      "goal": "Nhớ từ tiếng Nhật trước khi lật xem nghĩa.",
+      "steps": {
+        "1": "Chọn bộ thẻ ở cấp độ muốn luyện.",
+        "2": "Nhìn mặt trước, tự nhớ đáp án rồi lật thẻ để kiểm tra.",
+        "3": "Đánh dấu đã nhớ hoặc chưa nhớ và tiếp tục hết bộ thẻ."
+      },
+      "tip": "Thẻ ghi nhớ luyện nhớ từ; Chuỗi nhớ Kana yêu cầu lặp lại thứ tự các ô sáng."
+    },
+    "kanji": {
+      "goal": "Học Kanji qua các chế độ học, hỏi đáp, tìm kiếm và ghép cặp hiện có.",
+      "steps": {
+        "1": "Chọn cấp JLPT và một chế độ luyện Kanji.",
+        "2": "Xem cách đọc, nghĩa; trả lời Quiz; tìm chữ hoặc ghép từ vựng tương ứng.",
+        "3": "Xem lại lỗi và đổi chế độ để luyện cùng những chữ đó theo cách khác."
+      },
+      "tip": "Kanji Matching và Nối từ đánh quái cùng có ghép cặp; đánh quái bổ sung máu quái, combo theo thời gian và boss."
+    },
+    "listening": {
+      "goal": "Hiểu tiếng Nhật qua các bài luyện nghe hiện có.",
+      "steps": {
+        "1": "Chọn cấp độ và một bài nghe.",
+        "2": "Nghe các đoạn có sẵn và làm bài tập được hiển thị trong bài học.",
+        "3": "Nghe lại đoạn khó và đối chiếu nội dung bài học."
+      },
+      "tip": "Thẻ này mở khu vực luyện nghe, chưa phải một minigame riêng."
+    },
+    "falling": {
+      "goal": "Trả lời đúng từng Kanji trước khi chữ rơi chạm đáy.",
+      "steps": {
+        "1": "Chọn cấp, độ khó và chế độ cách đọc hoặc nghĩa.",
+        "2": "Chọn chữ đang rơi rồi chọn một trong bốn đáp án. Trên web, phím số 1–4 trả lời cho chữ đang chọn.",
+        "3": "Trả lời sớm để được nhiều điểm. Trả lời sai hoặc để rơi mất chữ sẽ mất mạng; hết mạng thì kết thúc."
+      },
+      "tip": "Ưu tiên chữ sắp chạm đáy. Tốc độ và số chữ cùng lúc sẽ tăng theo tiến độ."
+    },
+    "shiritori": {
+      "goal": "Tạo chuỗi dài nhất bằng cách nối âm cuối thành âm đầu của từ tiếp theo.",
+      "steps": {
+        "1": "Đọc từ hiện tại và âm đầu cần chọn.",
+        "2": "Chọn từ có cách đọc bắt đầu bằng âm đó. Trò chơi xử lý chuẩn âm nhỏ và dấu kéo dài.",
+        "3": "Tránh từ đã dùng và từ kết thúc bằng ん. Ván kết thúc khi gặp ん, hết lựa chọn hợp lệ hoặc hết mạng."
+      },
+      "tip": "Đọc kana thay vì đoán theo chữ Kanji cuối. Phản hồi sẽ giải thích âm đúng hoặc sai."
+    },
+    "cipher": {
+      "goal": "Giải mã mười cách đọc từ vựng bằng bảng thay thế Kana ngẫu nhiên.",
+      "steps": {
+        "1": "Đối chiếu từ đã mã hóa với bảng: mỗi ký hiệu mã tương ứng một kana gốc.",
+        "2": "Nhập cách đọc đã giải bằng các nút kana có sẵn, rồi kiểm tra đáp án.",
+        "3": "Dùng gợi ý để mở một chữ khi bí. Mỗi gợi ý giảm điểm câu đó; trả lời sai mất một mạng."
+      },
+      "tip": "Trong một câu, cùng ký hiệu mã luôn ứng với cùng chữ gốc. Dùng xóa hoặc hoàn tác để sửa phần nhập."
+    },
+    "memory": {
+      "goal": "Lặp lại chuỗi dài dần và đạt mười sáu chữ Kana.",
+      "steps": {
+        "1": "Quan sát thứ tự các ô sáng. Giai đoạn này chưa nhận thao tác nhập.",
+        "2": "Đến lượt bạn, chạm các ô theo đúng thứ tự vừa thấy.",
+        "3": "Lặp đúng sẽ được điểm và thêm một ô vào chuỗi. Sai sẽ mất mạng rồi xem lại chuỗi."
+      },
+      "tip": "Chia chuỗi thành nhóm ngắn để dễ nhớ. Một kana lặp lại vẫn cần chạm thêm một lần."
+    },
+    "battle": {
+      "goal": "Vượt năm màn quái, với boss ở màn ba và màn năm.",
+      "steps": {
+        "1": "Chọn một thẻ từ rồi chọn thẻ nghĩa tương ứng.",
+        "2": "Ghép đúng gây sát thương. Nối tiếp các cặp đúng trong năm giây để tăng combo.",
+        "3": "Ghép sai hoặc bị quái đánh sẽ mất mạng. Hạ boss cuối để thắng; hết mạng thì thua."
+      },
+      "tip": "Đọc các nghĩa trước khi chọn. Ghép nhanh nhưng sai sẽ làm đứt combo và mất mạng."
+    },
+    "workshop": {
+      "goal": "Ghép đúng tám từ có thật và sưu tầm công thức của chúng.",
+      "steps": {
+        "1": "Dựa vào nghĩa và cách đọc đang hiển thị để xác định từ cần ghép.",
+        "2": "Chạm các thẻ Kanji theo thứ tự của từ. Chữ lặp cần thẻ riêng; dùng xóa một hoặc xóa hết để sửa.",
+        "3": "Nộp từ đủ chữ. Ghép đúng được điểm và thêm vào bộ công thức cục bộ; ghép sai mất mạng."
+      },
+      "tip": "Chữ đích và thẻ nhiễu đều thuộc cùng cấp. Công thức được lưu riêng theo tài khoản."
+    },
+    "wordsearch": {
+      "goal": "Tìm toàn bộ từ đích ẩn trong lưới Kana.",
+      "steps": {
+        "1": "Đọc danh sách từ và gợi ý nghĩa để tìm vị trí của từ.",
+        "2": "Kéo hoặc vuốt từ ô đầu tới ô cuối theo hàng, cột hoặc đường chéo, rồi thả để kiểm tra.",
+        "3": "Từ đã tìm được sẽ được tô và không cộng điểm lần nữa. Chọn sai một đường thẳng mất mạng; tìm hết từ để thắng."
+      },
+      "tip": "Mức khó có thể đặt từ đảo chiều. Trên điện thoại, đường chọn tự khớp thẳng và cuộn bị khóa trong lúc vuốt."
+    },
+    "ninja": {
+      "goal": "Chém các từ bay đúng với cách đọc hoặc nghĩa đang yêu cầu.",
+      "steps": {
+        "1": "Đọc yêu cầu hiện tại trước khi các từ bay vào vùng chơi.",
+        "2": "Kéo hoặc vuốt chém qua từ phù hợp. Để nguyên các từ gây nhiễu.",
+        "3": "Chém đúng được điểm. Chém sai hoặc bỏ lỡ từ đích mất mạng; đạt đủ số mục tiêu để thắng."
+      },
+      "tip": "Từ đúng và từ nhiễu có cùng hình thức. Chú ý yêu cầu; bật giảm chuyển động để tắt vệt chém."
+    },
+    "missing": {
+      "goal": "Khôi phục mười Kanji bằng cách chọn nét bị thiếu.",
+      "steps": {
+        "1": "Quan sát chữ chưa hoàn chỉnh và vị trí các nét còn lại.",
+        "2": "So sánh bốn phương án nét vector, chọn nét đúng cả hình dạng lẫn vị trí.",
+        "3": "Trả lời đúng sớm được nhiều điểm hơn. Chọn sai mất mạng; hoàn thành mười chữ để thắng."
+      },
+      "tip": "Chỉ dùng chữ có dữ liệu nét hợp lệ. Độ khó còn quyết định giới hạn số nét của chữ."
+    }
+  },
+  "arcade": {
+    "eyebrow": "SenpaiAI • Chơi mà học",
+    "smallSteps": "Chơi một chút. Tiến bộ mỗi ngày.",
+    "featured": "Thử thách hôm nay",
+    "heroTitle": "Một ván chơi nhỏ.",
+    "heroAccent": "Một bước tiến tiếng Nhật.",
+    "heroDescription": "Thử sức cùng Kanji rơi ở cấp độ của bạn. Luyện tập một chút, vượt kỷ lục cũ và tận hưởng hành trình học.",
+    "heroPlay": "Chơi ngay",
+    "heroReward": "+50 Xu mẫu",
+    "catMessage": "Bạn làm được mà! Cùng học điều mới hôm nay nhé.",
+    "mascotAlt": "Linh vật mèo giáo viên vui vẻ của SenpaiAI",
+    "localRecords": "Kỷ lục cá nhân trên thiết bị",
+    "noSound": "Thoải mái chơi, không âm thanh",
+    "libraryTitle": "Hôm nay bạn muốn chơi gì?",
+    "libraryDescription": "Chọn một thử thách nhỏ, học thêm một điều hay.",
+    "resultCount": "{{count}} hoạt động",
+    "filterLabel": "Lọc trò chơi theo kỹ năng",
+    "categories": {
+      "all": "Tất cả",
+      "vocabulary": "Từ vựng",
+      "kanji": "Kanji",
+      "grammar": "Ngữ pháp",
+      "reflex": "Phản xạ nhanh",
+      "ranked": "Đấu hạng"
+    },
+    "searchLabel": "Tìm trò chơi",
+    "searchPlaceholder": "Tìm trò chơi yêu thích…",
+    "clearSearch": "Xóa tìm kiếm",
+    "labels": {
+      "hot": "Hot",
+      "new": "Mới"
+    },
+    "noRecord": "Chờ kỷ lục mới",
+    "score": "{{score}}đ",
+    "brandStamp": "SENPAI / PLAY",
+    "progressLabel": "Cấp đã chinh phục",
+    "progress": "{{completed}}/{{total}} cấp",
+    "chooseYourLevel": "Hành trình của bạn",
+    "activitySetup": "Chọn bộ học hoặc chế độ tại trang tiếp theo.",
+    "allLevels": "N5 → N1",
+    "reward": "+{{count}} Xu mẫu / ván",
+    "playGame": "Chơi {{game}}",
+    "chooseLevel": "Chọn cấp độ JLPT",
+    "levelHelp": "Chọn cấp độ có đủ dữ liệu. Bạn có thể chỉnh độ khó trước khi bắt đầu ván chơi.",
+    "activityHelp": "Chọn cấp độ để lọc hoạt động học hiện có. Bạn sẽ chọn bài học hoặc bộ câu hỏi ở màn hình tiếp theo.",
+    "availableLevel": "Chọn cấp {{level}}",
+    "unavailableLevel": "{{level}}: chưa đủ dữ liệu trò chơi",
+    "missingLevels": "{{levels}} chưa có đủ dữ liệu cho trò này.",
+    "continueGame": "Tiếp tục với {{level}}",
+    "continueActivity": "Mở thiết lập học {{level}}",
+    "closeModal": "Đóng bảng chọn cấp độ",
+    "emptyTitle": "Chưa tìm thấy trò phù hợp",
+    "emptyDescription": "Thử từ khóa khác hoặc khám phá một kỹ năng mới nhé.",
+    "resetFilters": "Khám phá tất cả trò chơi",
+    "rankedNotice": "Đấu hạng sẽ có trong thời gian tới. Bạn có thể thử vượt kỷ lục cá nhân ở các danh mục khác trước nhé.",
+    "activityNotice": "Quiz, thẻ nhớ, nghe và ngữ pháp mở màn hình chọn bộ hoặc bài học. Kỷ lục minigame lưu trên thiết bị, riêng theo từng tài khoản.",
+    "rewardNotice": "Số Xu là phần minh họa thiết kế. Chơi minigame không cộng Xu vào ví tài khoản.",
+    "games": {
+      "quiz": {
+        "name": "Quiz Siêu Tốc",
+        "description": "Khởi động vốn từ qua bộ câu hỏi của bạn. Chọn một bộ Quiz và thử sức ngay."
+      },
+      "flashcard": {
+        "name": "Lật Thẻ Ghi Nhớ",
+        "description": "Lật một tấm thẻ, nhớ thêm một từ. Cùng xây vốn tiếng Nhật vững vàng mỗi ngày."
+      },
+      "kanji": {
+        "name": "Đấu Trường Kanji",
+        "description": "Gặp lại những chữ quen và chinh phục các chế độ luyện Kanji hiện có."
+      },
+      "shiritori": {
+        "name": "Nối Từ Thần Tốc",
+        "description": "Nối âm cuối thành từ mới. Bạn có thể giữ chuỗi dài đến đâu?"
+      },
+      "listening": {
+        "name": "Thử Thách Nghe Chép",
+        "description": "Luyện đôi tai qua bài nghe tiếng Nhật trong khu vực luyện nghe hiện có."
+      }
+    }
+  },
   "appTitle": "SenpaiAI — Học tiếng Nhật",
   "language": "Ngôn ngữ",
   "vietnamese": "Tiếng Việt",
@@ -234,7 +495,8 @@
     "pageInput": "Số trang",
     "goToPage": "Đi",
     "audioGenerating": "Đang tạo âm thanh cho bài học. Vui lòng chờ một chút.",
-    "audioUnavailable": "Chưa tải được âm thanh. Hãy kiểm tra VOICEVOX rồi thử lại.",
+    "audioUnavailable": "Chưa tải được âm thanh. Hãy kiểm tra kết nối rồi thử lại.",
+    "audioServiceUnavailable": "Dịch vụ tạo âm thanh đang tạm ngừng. Hãy thử lại sau ít phút.",
     "retryAudio": "Thử lại",
     "topics": {
       "giao_tiep": "Giao tiếp",
@@ -849,5 +1111,179 @@
       "speaking": "Đang nói",
       "ended": "Đã kết thúc"
     }
+  },
+  "minigames": {
+    "eyebrow": "Khu trò chơi · Đợt 1 + 2",
+    "title": "Chơi một chút, nhớ lâu hơn",
+    "localOnly": "Thành tích trên máy này",
+    "localNotice": "Điểm minigame chỉ lưu trên thiết bị theo tài khoản. Không cộng vào ví điểm và không dùng để mua hình nền.",
+    "highScore": "Kỷ lục: {{score}}",
+    "back": "Về trang trò chơi",
+    "level": "Cấp độ JLPT",
+    "difficulty": "Độ khó",
+    "levelAvailable": "{{level}} · {{count}} mục",
+    "levelUnavailable": "{{level}} · thiếu dữ liệu ({{count}} mục)",
+    "answerMode": "Kiểu đáp án",
+    "alphabet": "Bảng chữ",
+    "dataReport": "Có {{count}} mục hợp lệ. Cần tối thiểu {{minimum}} mục và đủ đáp án hoặc ký tự khác nhau.",
+    "suggestLevels": "Cấp độ có thể chơi: {{levels}}",
+    "noLevels": "chưa có cấp phù hợp",
+    "insufficientData": "Lựa chọn này chưa đủ dữ liệu. Hãy chọn cấp độ hoặc độ khó khác.",
+    "meaningNotice": "Chế độ nghĩa sử dụng nghĩa tiếng Việt từ từ điển nguồn, kể cả khi giao diện là tiếng Anh.",
+    "start": "Bắt đầu ván",
+    "score": "Điểm ván",
+    "lives": "Mạng",
+    "best": "Điểm cao",
+    "finished": "Kết thúc ván",
+    "longestChain": "Chuỗi đúng dài nhất",
+    "correct": "Lượt đúng",
+    "played": "Đã chơi {{count}} ván với lựa chọn này",
+    "replay": "Chơi lại",
+    "changeLevel": "Đổi cấp độ / độ khó",
+    "pause": "Tạm dừng",
+    "resume": "Tiếp tục",
+    "quit": "Kết thúc ván",
+    "confirmExit": "Bạn muốn kết thúc ván đang chơi? Thành tích hiện tại sẽ được lưu trên máy.",
+    "paused": "Ván chơi đã tạm dừng",
+    "pausedHelp": "Thời gian và lượt chơi đang được giữ nguyên. Tiếp tục khi bạn sẵn sàng.",
+    "storageError": "Không lưu được thành tích trên trình duyệt. Hãy kiểm tra quyền lưu trữ hoặc dung lượng trống.",
+    "retrySave": "Thử lưu lại",
+    "fallingControls": "Chọn chữ đang rơi rồi chọn đáp án. Phím 1–4 trả lời cho chữ có viền nổi. Càng chơi đúng, chữ rơi càng nhanh.",
+    "fallingArena": "Khu vực Kanji rơi",
+    "selectKanji": "Chọn chữ {{kanji}}",
+    "shiritoriControls": "Chọn từ bắt đầu bằng âm cuối của từ trước. Không lặp từ; từ kết thúc bằng ん làm kết thúc ván.",
+    "nextKana": "Âm bắt đầu cần chọn: {{kana}}",
+    "chain": "Chuỗi hiện tại: {{count}}",
+    "cipherControls": "Dùng bảng mã để giải cách đọc của từ. Mỗi cặp hiển thị mã → chữ gốc. Bạn có thể gõ Kana hoặc bấm vào bảng.",
+    "encryptedWord": "Từ đã mã hóa",
+    "decodedWord": "Cách đọc đã giải mã",
+    "check": "Kiểm tra",
+    "hint": "Gợi ý · trừ 25 điểm thưởng",
+    "erase": "Xóa ký tự cuối",
+    "cipherTable": "Bảng thay thế Kana",
+    "tableControls": "Bấm một cặp để thêm chữ gốc vào đáp án. Enter để kiểm tra.",
+    "codePair": "Mã {{code}} tương ứng chữ {{plain}}",
+    "watch": "Ghi nhớ thứ tự các ô sáng",
+    "repeat": "Đến lượt bạn!",
+    "memoryProgress": "Độ dài: {{length}} · Đã nhập: {{entered}}",
+    "kanaKey": "Chữ {{kana}}, phím {{key}}",
+    "memoryControls": "Chạm các ô theo đúng thứ tự hoặc dùng phím số 1–9. Ô sáng là tín hiệu hình ảnh; trò chơi không có âm thanh.",
+    "difficulties": {
+      "easy": "Dễ",
+      "normal": "Vừa",
+      "hard": "Khó"
+    },
+    "modes": {
+      "reading": "Cách đọc",
+      "meaning": "Nghĩa tiếng Việt"
+    },
+    "alphabets": {
+      "hiragana": "Hiragana",
+      "katakana": "Katakana"
+    },
+    "endReasons": {
+      "lives": "Bạn đã dùng hết mạng. Thử lại để phá kỷ lục nhé!",
+      "completed": "Bạn đã hoàn thành thử thách!",
+      "exhausted": "Bạn đã dùng hết câu hỏi hoặc không còn lượt nối từ phù hợp. Ván kết thúc an toàn, không trừ mạng.",
+      "endsN": "Từ kết thúc bằng ん: chuỗi nối từ kết thúc.",
+      "quit": "Ván đã kết thúc theo lựa chọn của bạn."
+    },
+    "feedback": {
+      "correct": "Chính xác!",
+      "wrong": "Chưa đúng — bạn mất một mạng.",
+      "hint": "Đã tiết lộ một chữ; điểm thưởng câu này giảm 25."
+    },
+    "games": {
+      "falling": {
+        "name": "Kanji rơi",
+        "description": "Bắt nhịp chữ đang rơi, chọn đúng cách đọc hoặc nghĩa trước khi chạm đáy.",
+        "rules": "Mỗi chữ có bốn đáp án cùng cấp. Trả lời sớm nhận nhiều điểm hơn. Sai hoặc bỏ lỡ mất một mạng; tốc độ và số chữ tăng theo tiến độ."
+      },
+      "shiritori": {
+        "name": "Shiritori chọn từ",
+        "description": "Nối âm cuối với âm đầu và xây chuỗi từ dài nhất có thể.",
+        "rules": "Trong bốn từ có một từ nối đúng. Âm nhỏ được đổi về âm lớn; dấu kéo dài lấy nguyên âm cuối. Không dùng lại từ. Chọn từ kết thúc bằng ん làm kết thúc ván; hết từ thì ván kết thúc và giữ điểm."
+      },
+      "cipher": {
+        "name": "Mật mã Kana",
+        "description": "Giải bảng chữ bí mật, khám phá từ ẩn sau các ký tự thay thế.",
+        "rules": "Mỗi chữ Kana được thay bằng một chữ khác theo bảng mã ngẫu nhiên. Giải cách đọc bằng Kana; dùng gợi ý sẽ giảm điểm thưởng. Từ dài dần theo tiến độ; hoàn thành 10 từ để thắng."
+      },
+      "memory": {
+        "name": "Chuỗi nhớ Kana",
+        "description": "Quan sát các ô sáng và tái hiện chuỗi Kana ngày càng dài.",
+        "rules": "Ghi nhớ thứ tự các ô sáng rồi bấm lại. Đúng cả chuỗi sẽ thêm một ký tự và nhận điểm theo độ dài. Sai mất một mạng và được xem lại chuỗi. Đạt 16 ký tự để hoàn thành."
+      },
+      "battle": {
+        "name": "Nối từ đánh quái",
+        "description": "Ghép từ với nghĩa, nối combo và vượt năm màn cùng hai quái trùm.",
+        "rules": "Chọn cặp từ–nghĩa đúng để gây sát thương. Combo tăng nếu ghép liên tiếp trong 5 giây. Sai hoặc bị quái tấn công mất mạng. Màn 3 và 5 có boss; hạ boss cuối để thắng."
+      },
+      "workshop": {
+        "name": "Xưởng ghép từ",
+        "description": "Biến những thẻ Kanji thành từ thật và mở bộ sưu tập công thức của riêng bạn.",
+        "rules": "Ghép từ theo nghĩa và cách đọc bằng các thẻ Kanji. Tất cả chữ trong từ và thẻ nhiễu cùng cấp đã chọn. Sai mất mạng. Ghép đúng 8 từ hoàn thành ván; công thức lưu cục bộ theo tài khoản."
+      },
+      "wordsearch": {
+        "name": "Tìm từ ẩn",
+        "description": "Lần theo các hàng, cột và đường chéo để tìm từ Kana giữa lưới chữ.",
+        "rules": "Tìm đủ các từ trong danh sách. Từ mục tiêu có một vị trí duy nhất và không chứa nhau. Dễ/Vừa không đảo chiều; Khó có đảo chiều. Chọn đường thẳng sai mất một mạng; chọn lại từ đã tìm không tính thêm điểm."
+      },
+      "ninja": {
+        "name": "Ninja chém từ",
+        "description": "Theo dõi từ đang bay, chém đúng yêu cầu và né những từ gây nhiễu.",
+        "rules": "Kéo chuột chém từ theo cách đọc hoặc nghĩa được yêu cầu. Mỗi đợt có đúng một từ đúng. Từ sai và từ đúng trông giống nhau. Chém sai hoặc bỏ lỡ từ đúng mất mạng; tốc độ và số từ tăng theo tiến độ."
+      },
+      "missing": {
+        "name": "Kanji mất nét",
+        "description": "Quan sát chữ còn thiếu và tìm nét vector hoàn thiện đúng hình dạng.",
+        "rules": "Chỉ dùng Kanji có ít nhất hai nét mẫu. Chọn một trong bốn nét cùng cấp, chú ý hình dạng và vị trí. Sai mất mạng, đúng sớm nhận điểm cao hơn. Khôi phục 10 chữ để hoàn thành."
+      }
+    }
+  },
+  "minigames2": {
+    "stage": "Màn {{stage}} / {{total}}",
+    "combo": "Combo ×{{count}}",
+    "boss": "Quái trùm",
+    "monster": "Quái từ vựng",
+    "hp": "Máu quái",
+    "monsterHp": "Máu: {{hp}} / {{max}}",
+    "attackIn": "Quái tấn công sau {{seconds}} giây",
+    "battleControls": "Chọn một từ bên trái, rồi chọn nghĩa tương ứng bên phải để tấn công. Nối đúng trong 5 giây để giữ combo. Ghép sai hoặc để quái tấn công sẽ mất mạng.",
+    "wordColumn": "Từ",
+    "meaningColumn": "Nghĩa",
+    "collection": "Sưu tầm công thức: {{count}} / {{total}}",
+    "collectionEmpty": "Chưa có công thức nào. Ghép đúng từ trong xưởng để thêm vào bộ sưu tập trên máy này.",
+    "recipeProgress": "Đã ghép {{count}} / {{total}} từ",
+    "workshopControls": "Dựa vào nghĩa và cách đọc, chọn các thẻ Kanji theo đúng thứ tự. Mỗi thẻ chỉ dùng một lần; thẻ nhiễu cùng cấp JLPT.",
+    "assembledWord": "Từ đang ghép",
+    "forge": "Ghép từ",
+    "undoCard": "Bỏ thẻ cuối",
+    "clearCards": "Xóa các thẻ đã chọn",
+    "searchControls": "Kéo từ ô đầu đến ô cuối theo hàng, cột hoặc đường chéo. Với bàn phím: phím mũi tên để di chuyển, Enter hoặc Space để chọn hai đầu.",
+    "reverseOn": "Độ khó này có từ đặt đảo chiều; có thể chọn từ hai đầu.",
+    "reverseOff": "Tìm theo chiều đọc của từ, không chọn ngược.",
+    "gridCell": "Hàng {{row}}, cột {{col}}: {{kana}}",
+    "wordFound": "Đã tìm thấy",
+    "searchProgress": "Đã tìm {{count}} / {{total}} từ",
+    "ninjaControls": "Đọc gợi ý rồi giữ và kéo chuột xuyên qua thẻ từ phù hợp. Không cần chém những từ khác.",
+    "ninjaMission": "Mục tiêu của ván",
+    "ninjaScoring": "Chém đúng: +50–150 điểm và tiến gần mục tiêu. Chém nhầm hoặc bỏ lỡ từ đúng: mất 1 mạng. Điểm chỉ lưu kỷ lục, không đổi thành xu.",
+    "ninjaPoints": "+{{count}} điểm · Chém đúng!",
+    "ninjaLostLife": "−{{count}} mạng · Chém nhầm hoặc bỏ lỡ từ đúng",
+    "ninjaNoHit": "Chưa trúng thẻ nào. Giữ chuột và kéo xuyên qua thẻ từ.",
+    "ninjaReading": "Chém từ có cách đọc: {{value}}",
+    "ninjaMeaning": "Chém từ có nghĩa: {{value}}",
+    "ninjaArena": "Khu vực chém từ bằng thao tác kéo",
+    "ninjaProgress": "Đã chém đúng {{count}} / {{total}} · Đợt từ {{wave}}",
+    "missingControls": "Một nét đã bị ẩn. Chọn nét còn thiếu trong các phương án vector bên dưới. Chú ý cả hình dạng lẫn vị trí của nét trong ô mẫu; trả lời sớm nhận nhiều điểm hơn.",
+    "strokeProgress": "Đã khôi phục {{count}} / {{total}} chữ",
+    "answerTime": "Thời gian câu này: {{seconds}} giây",
+    "incompleteKanji": "Chữ Kanji đã ẩn một nét",
+    "strokeOption": "Phương án nét {{index}}",
+    "strokeSource": "Nét chữ: KanjiVG · Ulrich Apel",
+    "strokeLicense": "CC BY-SA 3.0",
+    "meaningData": "Nghĩa từ trong trò này được lấy từ từ điển nguồn tiếng Việt; chọn tiếng Anh chỉ đổi các nhãn và hướng dẫn giao diện.",
+    "generationError": "Chưa tạo được ván với dữ liệu hiện tại. Hãy thử lại hoặc chọn độ khó/cấp độ khác; ứng dụng không tự trộn dữ liệu cấp khác."
   }
 }

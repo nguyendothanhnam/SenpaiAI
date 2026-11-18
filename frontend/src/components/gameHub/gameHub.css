@@ -1,0 +1,36 @@
+.game-hub .gh-hero { background: linear-gradient(115deg, #0f5132, #147a5e 58%, #1d9a78); box-shadow: 0 16px 40px -25px #0f5132a0; }
+.game-hub .gh-glass { background: color-mix(in srgb, var(--card) 85%, transparent); border: 1px solid color-mix(in srgb, var(--border) 75%, transparent); backdrop-filter: blur(12px); box-shadow: 0 5px 24px -18px #153e3038; }
+.game-hub .gh-bamboo { background: linear-gradient(to bottom, transparent, var(--bg) 95%), url('/themes/background4.webp') center top / cover; opacity: .12; }
+.game-hub .gh-game-card:hover { border-color: #147a5e80; box-shadow: 0 14px 32px -22px #0f513270; }
+.game-hub .gh-tone-mint { --visual: #ddf3e9; --ink: #146a52; }
+.game-hub .gh-tone-cream { --visual: #fff0cb; --ink: #956216; }
+.game-hub .gh-tone-peach { --visual: #ffe5e1; --ink: #b45551; }
+.game-hub .gh-tone-sky { --visual: #dff1f5; --ink: #24758b; }
+.game-hub .gh-tone-lavender { --visual: #ede7fb; --ink: #7d60b4; }
+.game-hub .gh-tone-rose { --visual: #f9e3ed; --ink: #af5686; }
+.game-hub .gh-visual { background: var(--visual); color: var(--ink); }
+.game-hub .gh-icon-disc { background: color-mix(in srgb, white 60%, var(--visual)); }
+.game-hub .gh-skill, .game-hub .gh-record { background: #ffffffc9; color: #31443c; }
+.game-hub .gh-reward { color: #94620b; }
+.game-hub .gh-search::-webkit-search-cancel-button { display: none; }
+.dark .game-hub .gh-bamboo { opacity: .055; }
+.dark .game-hub .gh-visual { background: color-mix(in srgb, var(--card) 88%, var(--visual)); color: var(--visual); }
+.dark .game-hub .gh-icon-disc { background: color-mix(in srgb, var(--card) 75%, var(--ink)); border-color: #ffffff20; }
+.dark .game-hub .gh-skill, .dark .game-hub .gh-record { background: #111c22b3; color: #edf4ee; }
+.dark .game-hub .gh-reward { color: #fbbf24; }
+@media (prefers-reduced-motion: no-preference) {
+  .game-hub .gh-mascot { animation: gh-bob 5s ease-in-out infinite; }
+  .game-hub .gh-float { animation: gh-bob 6s ease-in-out infinite reverse; }
+}
+@keyframes gh-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@media (max-width: 480px) { .game-hub .gh-hero { padding: 24px 20px; } .game-hub .gh-speech { font-size: 12px; } }
+@media (prefers-reduced-motion: reduce) { .game-hub *, .game-hub *::before, .game-hub *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+@media (max-width: 767px) {
+  .game-hub .gh-scene { max-width: none; flex-direction: row-reverse; gap: 12px; padding: 0; }
+  .game-hub .gh-scene .gh-speech { align-self: center; flex: 1; }
+  .game-hub .gh-cat-stage { margin-top: 0; flex-shrink: 0; }
+  .game-hub .gh-mascot { width: 112px; height: 112px; }
+  .game-hub .gh-scene .gh-float, .game-hub .gh-orbit-kana, .game-hub .gh-shadow { display: none; }
+}
+@media (max-width: 480px) { .game-hub .gh-hero h1 { font-size: 26px; } }

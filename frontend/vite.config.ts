@@ -12,6 +12,7 @@ export default defineConfig({
     },
   },
   server: {
+    fs: { allow: [path.resolve(__dirname), path.resolve(__dirname, '../shared-games')] },
     host: true,
     port: 3000,
     proxy: {

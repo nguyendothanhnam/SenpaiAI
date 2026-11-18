@@ -2,7 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { Toaster } from 'react-hot-toast'
+import AppToaster from './components/feedback/AppToaster'
+import AppDialogHost from './components/feedback/AppDialogHost'
 import App from './App.tsx'
 import { AuthProvider } from './services/auth'
 import { ThemeProvider } from './themes/ThemeProvider'
@@ -29,8 +30,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <ErrorBoundary>
           <App />
+          <AppToaster />
+          <AppDialogHost />
         </ErrorBoundary>
-        <Toaster />
       </BrowserRouter>
       </ThemeProvider>
       </LanguageProvider>

@@ -1,6 +1,6 @@
 import { kanjiText as k } from '../../utils/kanjiLocale'
 import { useTranslation } from 'react-i18next'
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState, useCallback, useMemo } from 'react'
 import { Eraser, Play, RotateCcw, Search, Sparkles } from 'lucide-react'
 
 const CANVAS_WIDTH = 720
@@ -119,7 +119,7 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
   useTranslation('kanjiUI')
 
   const canvasRef = useRef(null)
-  const normalizedReferenceStrokes = Array.isArray(referenceStrokes) ? referenceStrokes : []
+  const normalizedReferenceStrokes = useMemo(() => Array.isArray(referenceStrokes) ? referenceStrokes : [], [referenceStrokes])
   const strokesRef = useRef([])
   const activeStrokeRef = useRef(null)
   const activePointerIdRef = useRef(null)
@@ -128,7 +128,7 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
   const [isDrawing, setIsDrawing] = useState(false)
   const [isReplaying, setIsReplaying] = useState(false)
 
-  const redraw = (previewStrokes = strokesRef.current) => {
+  const redraw = useCallback((previewStrokes = strokesRef.current) => {
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -192,7 +192,7 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
     }
 
     previewStrokes.forEach((stroke) => drawSmoothStroke(ctx, stroke))
-  }
+  }, [mode, normalizedReferenceStrokes, templateKanji])
 
   const commitStrokes = (nextStrokes) => {
     strokesRef.current = nextStrokes
@@ -210,7 +210,7 @@ const KanjiCanvas = forwardRef(function KanjiCanvas(
 
   useEffect(() => {
     redraw()
-  }, [mode, templateKanji, normalizedReferenceStrokes])
+  }, [redraw])
 
   useEffect(() => () => stopReplay(), [])
 

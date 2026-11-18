@@ -1,4 +1,265 @@
 {
+  "kanjiStudy": {
+    "sources": "Data sources:",
+    "title": "Kanji Study",
+    "description": "Review meanings, readings and examples, then test yourself on each card.",
+    "search": "Search characters, meanings or readings",
+    "listen": "Hear pronunciation",
+    "voiceUnavailable": "This browser does not support Japanese speech.",
+    "loading": "Loading Kanji cards…",
+    "loadError": "Could not load Kanji cards. Please try again.",
+    "retry": "Try again",
+    "empty": "No characters match your filters.",
+    "position": "Kanji {{current}} / {{total}}",
+    "meaning": "Meaning",
+    "romaji": "Romaji",
+    "strokes": "{{count}} strokes",
+    "previous": "Previous",
+    "next": "Reviewed · Next",
+    "random": "Random",
+    "onyomi": "On readings",
+    "kunyomi": "Kun readings",
+    "noReading": "The dictionary has no reading in this category.",
+    "examples": "Examples",
+    "noExamples": "This character has no dictionary examples yet.",
+    "quickQuiz": "Quick quiz",
+    "readingQuiz": "Reading",
+    "meaningQuiz": "Meaning",
+    "readingPrompt": "Choose a reading for {{kanji}}.",
+    "meaningPrompt": "Choose the meaning of {{kanji}}.",
+    "correct": "Correct!",
+    "wrong": "Not quite. Answer: {{answer}}.",
+    "notEnoughChoices": "There are not enough distinct answers at this level for a quiz.",
+    "progress": "Review progress",
+    "reviewed": "Reviewed {{count}} / {{total}} characters",
+    "sessionProgress": "Progress for this session; a character counts after you mark it reviewed or answer correctly."
+  },
+  "dialogs": {
+    "confirmTitle": "One quick confirmation",
+    "dangerTitle": "Confirm this action",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "close": "Close notification",
+    "delete": "Delete",
+    "purchase": "Confirm purchase",
+    "stay": "Stay here",
+    "error": "Something went wrong",
+    "success": "All done",
+    "loading": "Working on it",
+    "info": "A quick update",
+    "keepConversations": "Keep conversations",
+    "deleteWithConversations": "Delete conversations too",
+    "deleteQuiz": "Delete “{{title}}”? This removes the saved set and keeps its quiz history.",
+    "exitInterview": "Pause this 3D work session and leave?",
+    "exitGrammar": "Leave this practice session? Your current unfinished work will end."
+  },
+  "gameHelp": {
+    "title": "How to play",
+    "open": "How to play {{game}}",
+    "goal": "Your goal",
+    "understood": "Got it",
+    "tip": "A little tip",
+    "inProgress": "The round stays paused while you read. Resume when you are ready."
+  },
+  "gameGuides": {
+    "quiz": {
+      "goal": "Practice vocabulary with a quiz set you choose.",
+      "steps": {
+        "1": "Choose or import a quiz set, then select the matching JLPT level.",
+        "2": "Read each question and select your answer before checking it.",
+        "3": "Review the result and explanations, then practice the questions you missed."
+      },
+      "tip": "This card opens the existing Quiz area, where you choose the set and study mode."
+    },
+    "flashcard": {
+      "goal": "Recall Japanese words before revealing their meanings.",
+      "steps": {
+        "1": "Choose a flashcard set at the level you want to practice.",
+        "2": "Look at the front, recall the answer, then flip the card to check.",
+        "3": "Mark whether you remembered it and continue through the set."
+      },
+      "tip": "Flashcards practice word recall; Kana Memory instead asks you to repeat a sequence of lights."
+    },
+    "kanji": {
+      "goal": "Learn Kanji with the existing study, quiz, search and matching modes.",
+      "steps": {
+        "1": "Choose a JLPT level and a Kanji study mode.",
+        "2": "Study the reading and meaning, answer quiz questions, search for a character or match its vocabulary.",
+        "3": "Review mistakes and switch modes to practice the same characters in another way."
+      },
+      "tip": "Kanji Matching and Word Battle both use matching; Word Battle adds enemy health, timed combos and bosses."
+    },
+    "listening": {
+      "goal": "Understand Japanese through the existing listening lessons.",
+      "steps": {
+        "1": "Choose your level and a listening lesson.",
+        "2": "Listen to the available segments and follow the lesson's exercises.",
+        "3": "Replay difficult parts and compare with the lesson's reading material."
+      },
+      "tip": "This card opens the listening practice area; it is not a separate arcade game."
+    },
+    "falling": {
+      "goal": "Answer each falling Kanji before it reaches the bottom.",
+      "steps": {
+        "1": "Choose a level, difficulty and reading or meaning mode.",
+        "2": "Select a falling character, then choose one of its four answers. On web, number keys 1–4 answer the selected character.",
+        "3": "Answer quickly for more points. Wrong answers or missed characters cost lives; the round ends when lives run out."
+      },
+      "tip": "Select a character nearing the bottom first. Speed and simultaneous characters increase as you progress."
+    },
+    "shiritori": {
+      "goal": "Build the longest chain by connecting the last sound to the next first sound.",
+      "steps": {
+        "1": "Read the current word and the required starting sound.",
+        "2": "Choose a word whose reading begins with that sound. Small Kana and long vowel marks are normalized by the game.",
+        "3": "Avoid repeated words and words ending in ん. The round ends on ん, no playable continuation, or no lives."
+      },
+      "tip": "Read the Kana rather than guessing from the final Kanji. The result shows why a choice was valid or invalid."
+    },
+    "cipher": {
+      "goal": "Decode ten word readings with a shuffled Kana substitution table.",
+      "steps": {
+        "1": "Compare the encoded word with the table: each code represents an original Kana.",
+        "2": "Enter the decoded reading using the available Kana controls, then check your answer.",
+        "3": "Use a hint to reveal a character if stuck. Each hint lowers that question's reward; wrong answers cost a life."
+      },
+      "tip": "The same code always maps to the same original character within a question. Use delete or undo to correct your input."
+    },
+    "memory": {
+      "goal": "Repeat a growing sequence and reach sixteen Kana.",
+      "steps": {
+        "1": "Watch the grid carefully while the tiles light up. Input is disabled during this phase.",
+        "2": "When it is your turn, tap the tiles in the exact order shown.",
+        "3": "A completed sequence earns points and adds one tile. A mistake costs a life and replays the sequence."
+      },
+      "tip": "Group the sequence into small chunks. A repeated Kana still counts as a separate tap."
+    },
+    "battle": {
+      "goal": "Defeat five stages of enemies, including bosses at stages three and five.",
+      "steps": {
+        "1": "Select a word card and then its matching meaning.",
+        "2": "Correct pairs deal damage. Match consecutively within five seconds to increase your combo.",
+        "3": "Wrong matches and enemy attacks cost lives. Defeat the last boss to win; no lives ends the round."
+      },
+      "tip": "Read the meanings before selecting. A fast wrong match breaks your combo and costs a life."
+    },
+    "workshop": {
+      "goal": "Assemble eight real compounds and collect their recipes.",
+      "steps": {
+        "1": "Use the displayed meaning and reading to identify the target word.",
+        "2": "Tap Kanji cards in word order. Repeated characters need separate cards; use delete or clear to edit.",
+        "3": "Submit the full word. Correct words earn points and enter your local recipe collection; mistakes cost lives."
+      },
+      "tip": "All target characters and distractors come from the same level. Recipes are saved separately for each account."
+    },
+    "wordsearch": {
+      "goal": "Find all the target words hidden in the Kana grid.",
+      "steps": {
+        "1": "Read the target list and use the meaning hints to locate a word.",
+        "2": "Drag or swipe from its first tile to its last in a row, column or diagonal, then release to check.",
+        "3": "Found words stay highlighted and cannot score twice. A wrong straight selection costs a life; find all words to win."
+      },
+      "tip": "Hard mode may place words backwards. On mobile the selection snaps to a straight line and scrolling locks during the swipe."
+    },
+    "ninja": {
+      "goal": "Slash flying words matching the requested reading or meaning.",
+      "steps": {
+        "1": "Read the current prompt before the words fly into the arena.",
+        "2": "Drag or swipe across matching words. Leave distractors untouched.",
+        "3": "Correct slashes earn points. Wrong slashes or missed targets cost lives; reach the target count to win."
+      },
+      "tip": "Correct targets and distractors look alike. Focus on the prompt, and use Reduce Motion to hide the slash trail."
+    },
+    "missing": {
+      "goal": "Restore ten Kanji by choosing their missing reference strokes.",
+      "steps": {
+        "1": "Inspect the incomplete character and the position of its remaining strokes.",
+        "2": "Compare the four vector stroke choices and select the missing shape and position.",
+        "3": "Faster correct answers earn more points. Wrong choices cost lives; restore ten characters to win."
+      },
+      "tip": "Only characters with usable reference strokes appear. Difficulty also controls the eligible stroke counts."
+    }
+  },
+  "arcade": {
+    "eyebrow": "SenpaiAI • Play & learn",
+    "smallSteps": "A little play. A little progress.",
+    "featured": "Today's challenge",
+    "heroTitle": "A little challenge.",
+    "heroAccent": "A big step in Japanese.",
+    "heroDescription": "Take on Falling Kanji at your level. Practice a little, beat your own record, and enjoy the journey.",
+    "heroPlay": "Play now",
+    "heroReward": "+50 demo coins",
+    "catMessage": "You've got this! Let's learn something new today.",
+    "mascotAlt": "SenpaiAI's cheerful cat teacher",
+    "localRecords": "Your personal best, on this device",
+    "noSound": "Play without sound",
+    "libraryTitle": "What will you play today?",
+    "libraryDescription": "Find a little challenge that fits your mood.",
+    "resultCount": "{{count}} activities",
+    "filterLabel": "Filter games by skill",
+    "categories": {
+      "all": "All games",
+      "vocabulary": "Vocabulary",
+      "kanji": "Kanji",
+      "grammar": "Grammar",
+      "reflex": "Quick reflexes",
+      "ranked": "Ranked"
+    },
+    "searchLabel": "Search games",
+    "searchPlaceholder": "Find your next game…",
+    "clearSearch": "Clear search",
+    "labels": {
+      "hot": "Hot",
+      "new": "New"
+    },
+    "noRecord": "New best awaits",
+    "score": "{{score}} pts",
+    "brandStamp": "SENPAI / PLAY",
+    "progressLabel": "Levels conquered",
+    "progress": "{{completed}}/{{total}} levels",
+    "chooseYourLevel": "Your learning journey",
+    "activitySetup": "Choose your study set or mode on the next page.",
+    "allLevels": "N5 → N1",
+    "reward": "+{{count}} demo coins / round",
+    "playGame": "Play {{game}}",
+    "chooseLevel": "Choose your JLPT level",
+    "levelHelp": "Choose an available level. You can adjust the difficulty before starting your round.",
+    "activityHelp": "Choose a level to filter the existing study activity. You will choose your lesson or set on the next screen.",
+    "availableLevel": "Choose {{level}}",
+    "unavailableLevel": "{{level}}: not enough game data",
+    "missingLevels": "{{levels}} do not have enough data for this game yet.",
+    "continueGame": "Continue with {{level}}",
+    "continueActivity": "Open {{level}} study setup",
+    "closeModal": "Close level selection",
+    "emptyTitle": "No games found this time",
+    "emptyDescription": "Try another word or explore a different skill.",
+    "resetFilters": "Explore all games",
+    "rankedNotice": "Ranked challenges are coming later. In the meantime, try beating your personal best in the other categories.",
+    "activityNotice": "Quiz, flashcards, listening and grammar open your study setup. Minigame records stay on this device, separately for each account.",
+    "rewardNotice": "Coin amounts are design previews. Playing these minigames does not add coins to your wallet.",
+    "games": {
+      "quiz": {
+        "name": "Speed Quiz",
+        "description": "A quick vocabulary workout. Pick your quiz set and put your knowledge to the test."
+      },
+      "flashcard": {
+        "name": "Memory Flip",
+        "description": "Turn a card, recall a word, and build a stronger Japanese vocabulary."
+      },
+      "kanji": {
+        "name": "Kanji Arena",
+        "description": "Meet familiar characters and practice with the existing Kanji study modes."
+      },
+      "shiritori": {
+        "name": "Lightning Word Chain",
+        "description": "Connect the last sound to the next word. How long can you keep the chain going?"
+      },
+      "listening": {
+        "name": "Listen & Write Challenge",
+        "description": "Sharpen your ears with Japanese lessons in the existing listening practice area."
+      }
+    }
+  },
   "appTitle": "SenpaiAI — Learn Japanese",
   "language": "Language",
   "vietnamese": "Tiếng Việt",
@@ -234,7 +495,8 @@
     "pageInput": "Page number",
     "goToPage": "Go",
     "audioGenerating": "Generating audio for this lesson. This may take a moment.",
-    "audioUnavailable": "Audio could not be loaded. Check VOICEVOX and try again.",
+    "audioUnavailable": "Audio could not be loaded. Check your connection and try again.",
+    "audioServiceUnavailable": "Audio generation is temporarily unavailable. Please try again in a few minutes.",
     "retryAudio": "Retry",
     "topics": {
       "giao_tiep": "Communication",
@@ -849,5 +1111,179 @@
       "speaking": "Speaking",
       "ended": "Ended"
     }
+  },
+  "minigames": {
+    "eyebrow": "Arcade · Waves 1 + 2",
+    "title": "A little play, a lasting memory",
+    "localOnly": "Records on this device",
+    "localNotice": "Minigame scores are saved on this device per account. They do not add wallet points or buy backgrounds.",
+    "highScore": "Best: {{score}}",
+    "back": "Back to games",
+    "level": "JLPT level",
+    "difficulty": "Difficulty",
+    "levelAvailable": "{{level}} · {{count}} items",
+    "levelUnavailable": "{{level}} · insufficient data ({{count}} items)",
+    "answerMode": "Answer type",
+    "alphabet": "Alphabet",
+    "dataReport": "{{count}} usable items. At least {{minimum}} items and enough distinct answers or characters are required.",
+    "suggestLevels": "Available levels: {{levels}}",
+    "noLevels": "none available",
+    "insufficientData": "This selection does not have enough data. Choose another level or difficulty.",
+    "meaningNotice": "Meaning mode uses Vietnamese meanings from the source dictionary, including with an English interface.",
+    "start": "Start round",
+    "score": "Round score",
+    "lives": "Lives",
+    "best": "High score",
+    "finished": "Round finished",
+    "longestChain": "Longest correct streak",
+    "correct": "Correct turns",
+    "played": "{{count}} rounds played with these settings",
+    "replay": "Play again",
+    "changeLevel": "Change level / difficulty",
+    "pause": "Pause",
+    "resume": "Resume",
+    "quit": "End round",
+    "confirmExit": "End the current round? Your current record will be saved on this device.",
+    "paused": "Round paused",
+    "pausedHelp": "Time and progress are frozen. Resume when you are ready.",
+    "storageError": "Could not save your record in this browser. Check storage permissions or free space.",
+    "retrySave": "Retry saving",
+    "fallingControls": "Select a falling character, then its answer. Keys 1–4 answer the outlined character. Correct answers gradually increase speed.",
+    "fallingArena": "Falling Kanji arena",
+    "selectKanji": "Select {{kanji}}",
+    "shiritoriControls": "Choose a word beginning with the previous word’s final sound. No repeated words; ending with ん ends the round.",
+    "nextKana": "Required starting sound: {{kana}}",
+    "chain": "Current chain: {{count}}",
+    "cipherControls": "Decode the reading using the substitution table. Each pair shows code → original. Type Kana or tap the table.",
+    "encryptedWord": "Encoded word",
+    "decodedWord": "Decoded reading",
+    "check": "Check",
+    "hint": "Hint · costs 25 reward points",
+    "erase": "Delete last character",
+    "cipherTable": "Kana substitution table",
+    "tableControls": "Tap a pair to add the original character. Press Enter to check.",
+    "codePair": "Code {{code}} represents {{plain}}",
+    "watch": "Remember the order of the lights",
+    "repeat": "Your turn!",
+    "memoryProgress": "Length: {{length}} · Entered: {{entered}}",
+    "kanaKey": "{{kana}}, key {{key}}",
+    "memoryControls": "Tap the tiles in order or use number keys 1–9. Lights are visual cues; this game has no audio.",
+    "difficulties": {
+      "easy": "Easy",
+      "normal": "Normal",
+      "hard": "Hard"
+    },
+    "modes": {
+      "reading": "Reading",
+      "meaning": "Vietnamese meaning"
+    },
+    "alphabets": {
+      "hiragana": "Hiragana",
+      "katakana": "Katakana"
+    },
+    "endReasons": {
+      "lives": "No lives left. Try again to beat your record!",
+      "completed": "Challenge completed!",
+      "exhausted": "No unused questions or playable word choices remain. The round ends safely without losing a life.",
+      "endsN": "A word ending with ん ends the chain.",
+      "quit": "You ended this round."
+    },
+    "feedback": {
+      "correct": "Correct!",
+      "wrong": "Not quite — one life lost.",
+      "hint": "One character revealed; this question’s reward is reduced by 25."
+    },
+    "games": {
+      "falling": {
+        "name": "Falling Kanji",
+        "description": "Catch falling characters by choosing their reading or meaning before they land.",
+        "rules": "Each character has four answers from the same level. Earlier answers earn more points. Wrong or missed answers cost a life; speed and simultaneous characters increase as you progress."
+      },
+      "shiritori": {
+        "name": "Shiritori Choices",
+        "description": "Connect the last sound to the next first sound and build your longest word chain.",
+        "rules": "One of four words is a valid continuation. Small Kana expand to full size; a long vowel mark uses the final vowel. No repeated words. A word ending with ん ends the round; running out of choices ends safely and preserves your score."
+      },
+      "cipher": {
+        "name": "Kana Cipher",
+        "description": "Crack a secret alphabet and discover words hidden behind substituted characters.",
+        "rules": "Every Kana is replaced with another character in a random table. Decode the reading in Kana; hints reduce the reward. Words get longer as you progress. Complete 10 words to win."
+      },
+      "memory": {
+        "name": "Kana Memory Chain",
+        "description": "Watch the lights and repeat a growing sequence of Kana tiles.",
+        "rules": "Remember the tiles that light up, then repeat their order. Completing a sequence adds one character and awards points based on length. A mistake costs a life and replays the sequence. Reach 16 characters to complete the challenge."
+      },
+      "battle": {
+        "name": "Word Battle",
+        "description": "Match words to meanings, build combos and clear five stages with two bosses.",
+        "rules": "Match a word with its meaning to deal damage. Consecutive matches within 5 seconds increase the combo. Wrong matches and enemy attacks cost lives. Stages 3 and 5 have bosses; defeat the last boss to win."
+      },
+      "workshop": {
+        "name": "Word Workshop",
+        "description": "Turn Kanji cards into real compounds and discover your own recipe collection.",
+        "rules": "Use the meaning and reading to assemble a real compound. All its Kanji and distractors belong to the chosen level. Errors cost lives. Assemble 8 words to finish; recipes are stored locally per account."
+      },
+      "wordsearch": {
+        "name": "Hidden Word Search",
+        "description": "Follow rows, columns and diagonals to uncover Kana words in a letter grid.",
+        "rules": "Find every listed word. Each target has exactly one placement and targets do not contain one another. Easy/Normal use forward placements; Hard allows reversed ones. A wrong straight path costs a life; found words cannot score twice."
+      },
+      "ninja": {
+        "name": "Word Ninja",
+        "description": "Track flying words, slash the one matching your prompt and avoid distractors.",
+        "rules": "Drag to slash words matching the requested reading or meaning. Each wave has exactly one correct target. Correct and incorrect words look the same. Wrong slashes or missed targets cost lives; speed and word count grow with progress."
+      },
+      "missing": {
+        "name": "Missing Kanji Stroke",
+        "description": "Inspect an incomplete character and choose the vector stroke that restores it.",
+        "rules": "Only characters with at least two reference strokes are used. Choose one of four same-level strokes, checking shape and position. Mistakes cost lives; faster answers earn more points. Restore 10 characters to finish."
+      }
+    }
+  },
+  "minigames2": {
+    "stage": "Stage {{stage}} / {{total}}",
+    "combo": "Combo ×{{count}}",
+    "boss": "Boss",
+    "monster": "Vocabulary monster",
+    "hp": "Monster health",
+    "monsterHp": "HP: {{hp}} / {{max}}",
+    "attackIn": "Monster attacks in {{seconds}} seconds",
+    "battleControls": "Choose a word on the left, then its meaning on the right to attack. Match within 5 seconds to keep your combo. A wrong match or enemy attack costs a life.",
+    "wordColumn": "Word",
+    "meaningColumn": "Meaning",
+    "collection": "Recipe collection: {{count}} / {{total}}",
+    "collectionEmpty": "No recipes yet. Assemble words correctly to add them to your collection on this device.",
+    "recipeProgress": "Assembled {{count}} / {{total}} words",
+    "workshopControls": "Use the meaning and reading to arrange the Kanji cards. Each card can be used once; distractors are from the same JLPT level.",
+    "assembledWord": "Assembled word",
+    "forge": "Assemble",
+    "undoCard": "Undo last card",
+    "clearCards": "Clear selected cards",
+    "searchControls": "Drag from the first cell to the last in a row, column or diagonal. Keyboard: use arrow keys to move, then Enter or Space to select both ends.",
+    "reverseOn": "This difficulty includes reversed placements; either selection direction is accepted.",
+    "reverseOff": "Follow the word’s reading direction; reverse selection is disabled.",
+    "gridCell": "Row {{row}}, column {{col}}: {{kana}}",
+    "wordFound": "Found",
+    "searchProgress": "Found {{count}} / {{total}} words",
+    "ninjaControls": "Read the clue, then hold and drag through the matching word card. Leave the other words alone.",
+    "ninjaMission": "Round objective",
+    "ninjaScoring": "Correct slash: +50–150 points and progress toward the goal. A wrong slash or missed target costs 1 life. Points save your record; they do not become coins.",
+    "ninjaPoints": "+{{count}} points · Correct slash!",
+    "ninjaLostLife": "−{{count}} lives · Wrong slash or missed target",
+    "ninjaNoHit": "No card hit. Hold and drag through a word card.",
+    "ninjaReading": "Slash words read as: {{value}}",
+    "ninjaMeaning": "Slash words meaning: {{value}}",
+    "ninjaArena": "Drag-to-slash word arena",
+    "ninjaProgress": "Correct slashes {{count}} / {{total}} · Wave {{wave}}",
+    "missingControls": "One stroke is hidden. Choose its vector shape below. Check both its shape and position in the reference box; earlier answers earn more points.",
+    "strokeProgress": "Restored {{count}} / {{total}} characters",
+    "answerTime": "Time on this question: {{seconds}} seconds",
+    "incompleteKanji": "Kanji with one stroke hidden",
+    "strokeOption": "Stroke option {{index}}",
+    "strokeSource": "Strokes: KanjiVG · Ulrich Apel",
+    "strokeLicense": "CC BY-SA 3.0",
+    "meaningData": "Word meanings in this game come from the Vietnamese source dictionary. English changes interface labels and instructions.",
+    "generationError": "Could not generate a round from the current data. Retry or choose another difficulty/level; data from other levels is never mixed automatically."
   }
 }

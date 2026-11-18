@@ -13,7 +13,7 @@ from ..core.config import settings
 from ..core.database import get_db
 from ..models.database import Document, ListeningAttempt, ListeningLesson, User
 from ..models.schemas import TokenData
-from ..services.audio_service import VoicevoxProvider, VoicevoxError, choose_speaker_id, furigana_tokens, synthesize_segments
+from ..services.audio_service import VoicevoxProvider, VoicevoxError, cached_segments, choose_speaker_id, furigana_tokens, synthesize_segments
 from ..services.listening_from_library import generate_listening_draft
 from ..services.listening_exercises import build_exercises, public_questions, grade_questions
 
@@ -193,13 +193,16 @@ def get_lesson_audio(lesson_id: int, range_header: Optional[str] = Header(None, 
         raise HTTPException(404, detail="lesson_audio_not_found")
     if audio_file is None or not audio_file.is_file():
         try:
-            provider = VoicevoxProvider()
-            speaker_id = choose_speaker_id(provider, settings.listening_voicevox_speaker_id)
             if not lesson.segments:
                 raise VoicevoxError("Bài học chưa có nội dung câu để tạo audio.")
-            generated_name, assembled = synthesize_segments(
-                [segment["ja"] for segment in lesson.segments], speaker_id, provider
-            )
+            texts = [segment['ja'] for segment in lesson.segments]
+            cached = cached_segments(texts, settings.listening_voicevox_speaker_id)
+            if cached:
+                generated_name, assembled = cached
+            else:
+                provider = VoicevoxProvider()
+                speaker_id = choose_speaker_id(provider, settings.listening_voicevox_speaker_id)
+                generated_name, assembled = synthesize_segments(texts, speaker_id, provider)
             # Assign a new JSON value so SQLAlchemy persists the generated timings.
             lesson.segments = [
                 {**segment, **timing}

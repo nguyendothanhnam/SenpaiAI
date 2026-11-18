@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, useDragControls } from 'framer-motion'
 import {
   Volume2,
@@ -37,21 +37,16 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   const [sizeMode, setSizeMode] = useState<'normal' | 'maximized' | 'compact'>('normal')
   const dragControls = useDragControls()
 
-  const updatePlayingState = (playing: boolean) => {
+  const updatePlayingState = useCallback((playing: boolean) => {
     setIsPlayingAudio(playing)
     onSpeakingChange?.(playing)
-  }
+  }, [onSpeakingChange])
 
   // Speak Japanese text via Web Speech API
-  const handlePlayAudio = () => {
+  const speakJapanese = useCallback(() => {
     if (!('speechSynthesis' in window)) return
 
     window.speechSynthesis.cancel()
-
-    if (isPlayingAudio) {
-      updatePlayingState(false)
-      return
-    }
 
     try {
       const utterance = new SpeechSynthesisUtterance(messageJa)
@@ -80,6 +75,15 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
     } catch {
       updatePlayingState(false)
     }
+  }, [messageJa, updatePlayingState])
+
+  const handlePlayAudio = () => {
+    if (isPlayingAudio) {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+      updatePlayingState(false)
+    } else {
+      speakJapanese()
+    }
   }
 
   // Auto-speak when question loads or changes
@@ -89,7 +93,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
 
     // Slight delay so the user can orient before audio begins
     const timer = setTimeout(() => {
-      handlePlayAudio()
+      speakJapanese()
     }, 450)
 
     return () => {
@@ -98,7 +102,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
         window.speechSynthesis.cancel()
       }
     }
-  }, [messageJa])
+  }, [speakJapanese, updatePlayingState])
 
   return (
     <motion.div

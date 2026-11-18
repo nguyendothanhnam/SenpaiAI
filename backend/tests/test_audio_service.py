@@ -17,6 +17,8 @@ from app.services.audio_service import (
     assemble_wav,
     furigana_tokens,
     make_cache_key,
+    cached_segments,
+    synthesize_segments,
 )
 
 
@@ -107,3 +109,43 @@ def test_generated_audio_timings_survive_database_reload(monkeypatch, tmp_path):
                     for segment, timing in zip(lesson.segments, timings)] == timings
     finally:
         engine.dispose()
+
+
+def test_cached_lesson_can_restore_audio_without_live_voicevox(monkeypatch, tmp_path):
+    class Provider:
+        provider_name = 'voicevox'
+
+        def synthesize(self, text, speaker_id):
+            return _wav(1)
+
+    filename, audio = synthesize_segments(['first'], 1, Provider(), tmp_path)
+    engine = create_engine('sqlite://')
+    ListeningLesson.__table__.create(engine)
+    monkeypatch.setattr(listening.settings, 'listening_media_dir', str(tmp_path))
+    monkeypatch.setattr(listening.settings, 'listening_voicevox_speaker_id', 1)
+    def unavailable(*args):
+        raise AssertionError('Cached lessons must not contact VOICEVOX')
+    monkeypatch.setattr(listening, 'choose_speaker_id', unavailable)
+    try:
+        with Session(engine) as db:
+            lesson = ListeningLesson(title='Cached', jlpt_level='N5', topic='test',
+                source='seed', is_published=True, segments=[{'ja': 'first'}])
+            db.add(lesson)
+            db.commit()
+            response = listening.get_lesson_audio(lesson.id, range_header=None, current_user=None, db=db)
+            assert response.status_code == 200
+            assert lesson.audio_path == filename
+            assert lesson.duration_ms == audio.duration_ms
+    finally:
+        engine.dispose()
+
+
+def test_corrupt_audio_cache_is_not_reused(tmp_path):
+    class Provider:
+        provider_name = 'voicevox'
+        def synthesize(self, text, speaker_id):
+            return _wav(1)
+    name, _ = synthesize_segments(['text'], 1, Provider(), tmp_path)
+    assert cached_segments(['text'], 1, media_dir=tmp_path)
+    (tmp_path / name).write_bytes(b'broken')
+    assert cached_segments(['text'], 1, media_dir=tmp_path) is None

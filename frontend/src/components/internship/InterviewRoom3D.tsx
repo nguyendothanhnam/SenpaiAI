@@ -79,6 +79,8 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null)
   const sceneManagerRef = useRef<SceneManager | null>(null)
+  // Scene identity belongs to this mounted session, not to transient speech/HUD updates.
+  const initialSceneRef = useRef({ npcName, npcTitle, companyName, industryId, currentTurn })
 
   // 3D View & Stance
   const [viewMode, setViewMode] = useState<CameraView>('pov')
@@ -160,6 +162,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   // 1. Initialize SceneManager on mount
   useEffect(() => {
     if (!mountRef.current) return
+    const { npcName, npcTitle, companyName, industryId, currentTurn } = initialSceneRef.current
 
     // WebGL support check
     const canvas = document.createElement('canvas')

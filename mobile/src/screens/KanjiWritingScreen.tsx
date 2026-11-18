@@ -49,6 +49,7 @@ export function KanjiWritingScreen() {
   return <Screen scrollEnabled={!drawing}>
     <Title>{t(target ? 'writing.practice' : 'writing.recognize')}</Title>
     <Muted>{t('writing.scope', { levels: model.data?.supported_jlpt.join(', ') || t('writing.none'), count: model.data?.classes_count || 0 })}</Muted>
+    {model.data?.available && (model.data.dictionary_classes || 0) > model.data.classes_count && <ErrorNotice message={t('coverageGap', { ns: 'kanjiStatus', count: model.data.classes_count, total: model.data.dictionary_classes })} />}
     {model.isLoading && <Muted>{t('loading')}</Muted>}
     {model.isError && <ErrorNotice message={getErrorMessage(model.error, i18n)} retry={() => void model.refetch()} />}
     {model.data && !model.data.available && <ErrorNotice message={t('writing.unavailable')} />}

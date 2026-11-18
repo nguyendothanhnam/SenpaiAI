@@ -421,5 +421,36 @@
     "next": "Luyện chữ tiếp theo",
     "samples": "Mẫu chữ viết tay tham khảo",
     "sample": "Mẫu viết tay chữ {{character}}"
+  },
+  "minigames": {
+    "preparing": "Đang chuẩn bị toàn bộ dữ liệu ván chơi…",
+    "prepareError": "Không chuẩn bị được ván chơi. Kiểm tra kết nối rồi thử lại hoặc quay về.",
+    "undo": "Hoàn tác",
+    "fallingTouch": "Chạm chữ kanji để chọn, rồi chọn đáp án bên dưới.",
+    "reduced": "Đã giảm chuyển động: kanji đứng yên; thời gian trả lời vẫn chạy.",
+    "cipherTouch": "Chạm kana để điền ô trống kế tiếp. Các chữ đã gợi ý được giữ lại.",
+    "soundReason": "Âm đầu cần có: {{expected}} · Bạn chọn: {{actual}} · Âm cuối: {{tail}}",
+    "unavailableLevels": "Các cấp chưa đủ dữ liệu: {{levels}}. Hãy chọn cấp khác trong bảng chọn.",
+    "storageError": "Không đọc hoặc lưu được thống kê trên thiết bị. Kiểm tra dung lượng lưu trữ. Dữ liệu hỏng hoặc khác phiên bản sẽ được giữ nguyên, không ghi đè.",
+    "stay": "Ở lại (tiếp tục tạm dừng)",
+    "wave2": {
+      "monster": "Màn {{stage}} · Quái vật",
+      "boss": "Màn {{stage}} · Boss",
+      "health": "Máu: {{hp}} / {{max}}",
+      "combo": "Combo ×{{combo}}",
+      "damage": "Sát thương: {{damage}}",
+      "matchTouch": "Chọn từ bên trái, rồi chọn nghĩa tương ứng bên phải.",
+      "clear": "Xóa hết",
+      "searchTouch": "Vuốt qua các chữ. Đường chọn tự khớp hàng, cột hoặc đường chéo. Thả tay để kiểm tra.",
+      "missingTouch": "Nét đứt đánh dấu nét bị thiếu. So sánh hình dạng và vị trí với các phương án.",
+      "strokeOption": "Chọn nét {{index}}",
+      "license": "Dữ liệu nét: KanjiVG · CC BY-SA 3.0",
+      "ninjaTouch": "Vuốt chém từ bay đúng với yêu cầu. Tránh các từ còn lại.",
+      "ninjaPrompt": "Chém từ có: {{value}}",
+      "ninjaProgress": "Mục tiêu: {{hits}} / {{goal}}",
+      "recipes": "Công thức đã khám phá ({{count}})",
+      "emptyRecipes": "Chưa có công thức nào được khám phá.",
+      "reducedNinja": "Đã giảm chuyển động: tắt vệt chém. Chuyển động của từ vẫn cần thiết để chơi."
+    }
   }
 }

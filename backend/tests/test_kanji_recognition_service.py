@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from app.models.schemas import KanjiRecognitionRequest, KanjiStrokePoint
 import app.services.kanji_recognition_service as recognition_module
@@ -13,6 +14,26 @@ def stroke(points, stroke_id):
 
 
 class KanjiRecognitionServiceTest(unittest.TestCase):
+    def setUp(self):
+        samples = patch.object(recognition_module.kanji_sample_store, "save_sample", return_value="unit-test")
+        self.sample_save = samples.start()
+        self.addCleanup(samples.stop)
+        model = patch.object(recognition_module, "get_model_info", return_value={
+            "available": True, "model_loaded": True, "engine": "kanji-cnn-v1",
+            "supported_kanji": ["\u5c0f", "\u6708", "\u6c34"],
+        })
+        model.start()
+        self.addCleanup(model.stop)
+
+    def test_empty_or_invalid_images_return_failure_without_saving_training_data(self):
+        for error in ("empty_canvas", "invalid_or_empty_image"):
+            with self.subTest(error=error), patch.object(recognition_module, "predict_kanji", return_value=[]), patch.object(recognition_module, "get_recognition_error", return_value=error):
+                result = kanji_recognition_service.recognize(KanjiRecognitionRequest(image_data="not-an-image"))
+                self.assertFalse(result.success)
+                self.assertEqual(result.predictions, [])
+                self.assertIsNone(result.sample_id)
+                self.sample_save.assert_not_called()
+
     def test_cnn_predictions_are_reranked_with_stroke_count(self):
         original_predict = recognition_module.predict_kanji
         recognition_module.predict_kanji = lambda image_data, strokes, jlpt_level, top_k=20: [

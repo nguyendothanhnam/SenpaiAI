@@ -132,6 +132,33 @@ def assemble_wav(segments: Sequence[str], clips: Sequence[bytes], cache_key: str
     return AssembledAudio(output.getvalue(), duration_ms, timings, cache_key)
 
 
+def cached_segments(texts: Sequence[str], speaker_id: int = 1,
+                    provider_name: str = 'voicevox', media_dir: str | Path | None = None
+                    ) -> tuple[str, AssembledAudio] | None:
+    """Read a validated cache without needing a live TTS engine."""
+    root = Path(media_dir or settings.listening_media_dir)
+    key = make_cache_key(texts, speaker_id, provider_name)
+    wav_path, meta_path = root / f'{key}.wav', root / f'{key}.json'
+    try:
+        meta = json.loads(meta_path.read_text(encoding='utf-8'))
+        payload = wav_path.read_bytes()
+        params, frames = _read_wav(payload)
+        timings = meta['timings']
+        if not frames or len(timings) != len(texts) or meta['duration_ms'] <= 0:
+            return None
+        duration = round(params.nframes * 1000 / params.framerate)
+        if abs(duration - meta['duration_ms']) > 1:
+            return None
+        previous_end = 0
+        for timing in timings:
+            if not previous_end <= timing['start_ms'] < timing['end_ms'] <= duration:
+                return None
+            previous_end = timing['end_ms']
+        return wav_path.name, AssembledAudio(payload, duration, timings, key)
+    except (OSError, ValueError, KeyError, TypeError, EOFError, wave.Error):
+        return None
+
+
 def synthesize_segments(texts: Sequence[str], speaker_id: int = 1,
                         provider: TTSProvider | None = None,
                         media_dir: str | Path | None = None) -> tuple[str, AssembledAudio]:
@@ -141,12 +168,9 @@ def synthesize_segments(texts: Sequence[str], speaker_id: int = 1,
     key = make_cache_key(texts, speaker_id, provider.provider_name)
     wav_path = root / f"{key}.wav"
     meta_path = root / f"{key}.json"
-    if wav_path.is_file() and meta_path.is_file():
-        try:
-            meta = json.loads(meta_path.read_text(encoding="utf-8"))
-            return wav_path.name, AssembledAudio(wav_path.read_bytes(), meta["duration_ms"], meta["timings"], key)
-        except (OSError, ValueError, KeyError, json.JSONDecodeError):
-            pass
+    cached = cached_segments(texts, speaker_id, provider.provider_name, root)
+    if cached:
+        return cached
     clips = [provider.synthesize(text, speaker_id) for text in texts]
     assembled = assemble_wav(texts, clips, key)
     _atomic_write(wav_path, assembled.wav_bytes)

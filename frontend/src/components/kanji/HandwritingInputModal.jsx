@@ -1,3 +1,4 @@
+import { useQuery } from 'react-query'
 import { kanjiText as k } from '../../utils/kanjiLocale'
 import { useTranslation } from 'react-i18next'
 import { useRef, useState } from 'react'
@@ -27,6 +28,8 @@ function readableError(value, fallback = 'Kanji not recognized') {
 
 export default function HandwritingInputModal({ open, onClose, onSelect }) {
   useTranslation('kanjiUI')
+  const { t: statusText } = useTranslation('kanjiStatus')
+  const model = useQuery('kanjiModelInfo', () => kanjiRecognitionAPI.getModelInfo().then(response => response.data), { enabled: open, staleTime: 60_000, retry: false })
 
   const canvasRef = useRef(null)
   const [status, setStatus] = useState('idle')
@@ -58,7 +61,7 @@ export default function HandwritingInputModal({ open, onClose, onSelect }) {
 
       if (!nextPredictions.length) {
         setStatus('error')
-        setError('Kanji not recognized')
+        setError(readableError(response.data?.message))
         return
       }
 
@@ -79,6 +82,7 @@ export default function HandwritingInputModal({ open, onClose, onSelect }) {
   return (
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
       <div className="max-h-[92vh] w-full max-w-6xl overflow-y-auto rounded-3xl bg-[color:var(--card)] p-5 shadow-2xl">
+        {model.data?.available && model.data.dictionary_classes > model.data.classes_count && <p role="status" className="mb-4 rounded-xl bg-[color:var(--accent)] p-3 text-sm text-[color:var(--text)]">{statusText('coverageGap', { count: model.data.classes_count, total: model.data.dictionary_classes })}</p>}
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("Chat handwriting input")}</p>

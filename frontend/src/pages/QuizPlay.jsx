@@ -1,3 +1,6 @@
+import { useTranslation } from 'react-i18next'
+import { confirmDialog } from '../features/dialogs/queue'
+import { readLevel } from '../features/gameHub/catalog'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, PlayCircle, Trash2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
@@ -36,12 +39,13 @@ function formatDate(value) {
 }
 
 export default function QuizPlay() {
+  const { t } = useTranslation('common')
   const location = useLocation()
   const navigate = useNavigate()
   const [questions, setQuestions] = useState([])
   const [activeSet, setActiveSet] = useState(null)
   const [savedSets, setSavedSets] = useState([])
-  const [filters, setFilters] = useState({ jlpt: 'all', category: 'all', fileName: '' })
+  const [filters, setFilters] = useState({ jlpt: readLevel(location.search) || 'all', category: 'all', fileName: '' })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -121,10 +125,10 @@ export default function QuizPlay() {
   }, [location.state])
 
   const filterOptions = useMemo(() => {
-    const levels = [...new Set(savedSets.map((set) => set.jlpt_level).filter(Boolean))]
+    const levels = [...new Set([...savedSets.map((set) => set.jlpt_level).filter(Boolean), ...[readLevel(location.search)].filter(Boolean)])]
     const categories = [...new Set(savedSets.map((set) => set.category).filter(Boolean))]
     return { levels, categories }
-  }, [savedSets])
+  }, [savedSets, location.search])
 
   const filteredSets = useMemo(() => {
     return savedSets.filter((set) => {
@@ -136,8 +140,8 @@ export default function QuizPlay() {
     })
   }, [filters, savedSets])
 
-  const handleDeleteSet = (quizSet) => {
-    const confirmed = window.confirm(`Delete "${quizSet.title}"? This only removes this saved quiz set. Quiz history will not be deleted.`)
+  const handleDeleteSet = async (quizSet) => {
+    const confirmed = await confirmDialog(t('dialogs.deleteQuiz', { title: quizSet.title }), { tone: 'danger' })
     if (!confirmed) {
       return
     }

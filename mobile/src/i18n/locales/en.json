@@ -421,5 +421,36 @@
     "next": "Practice next character",
     "samples": "Reference handwriting samples",
     "sample": "Handwriting sample of {{character}}"
+  },
+  "minigames": {
+    "preparing": "Preparing the complete round…",
+    "prepareError": "Could not prepare this round. Check your connection and retry, or go back.",
+    "undo": "Undo",
+    "fallingTouch": "Tap a kanji to select it, then choose its answer below.",
+    "reduced": "Reduced motion: kanji stay still; the answer timer still runs.",
+    "cipherTouch": "Tap kana to fill the next empty position. Revealed letters are kept.",
+    "soundReason": "Required start: {{expected}} - Your start: {{actual}} - Your ending: {{tail}}",
+    "unavailableLevels": "Levels with insufficient data: {{levels}}. Choose another level in the picker.",
+    "storageError": "Could not read or save statistics on this device. Check available storage. Corrupt data or an unsupported version is preserved without overwriting.",
+    "stay": "Stay (keep paused)",
+    "wave2": {
+      "monster": "Stage {{stage}} · Monster",
+      "boss": "Stage {{stage}} · Boss",
+      "health": "Health: {{hp}} / {{max}}",
+      "combo": "Combo ×{{combo}}",
+      "damage": "Damage: {{damage}}",
+      "matchTouch": "Select a word on the left, then its meaning on the right.",
+      "clear": "Clear",
+      "searchTouch": "Swipe across letters. The selection snaps to a row, column or diagonal. Release to check.",
+      "missingTouch": "The dashed guide marks the missing stroke. Compare its shape and position with the options.",
+      "strokeOption": "Choose stroke {{index}}",
+      "license": "Stroke data: KanjiVG · CC BY-SA 3.0",
+      "ninjaTouch": "Swipe across the matching flying word. Avoid the other words.",
+      "ninjaPrompt": "Slash: {{value}}",
+      "ninjaProgress": "Targets: {{hits}} / {{goal}}",
+      "recipes": "Discovered recipes ({{count}})",
+      "emptyRecipes": "No recipes discovered yet.",
+      "reducedNinja": "Reduced motion: the slash trail is disabled. Target flight remains essential to play."
+    }
   }
 }

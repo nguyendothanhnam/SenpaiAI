@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { confirmDialog } from '../features/dialogs/queue'
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
@@ -48,6 +50,7 @@ const iconMap: Record<string, React.ElementType> = {
 }
 
 export default function InternshipRoleplay() {
+  const { t } = useTranslation('common')
   const queryClient = useQueryClient()
 
   // State
@@ -162,14 +165,6 @@ export default function InternshipRoleplay() {
     }
   }
 
-  if (isProfileLoading || isIndustriesLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <LoadingSpinner size="lg" />
-      </div>
-    )
-  }
-
   const selectedIndustryData: IndustryInfo | undefined = industries?.[selectedIndustry]
   const currentTurnData = currentSession?.turns?.[currentSession.current_turn - 1]
   const previousTurnData =
@@ -232,7 +227,15 @@ export default function InternshipRoleplay() {
         }
       }
     }
-  }, [currentTurnData?.turn, etiquetteStage, currentSession?.session_type, currentSession?.status, handleReplayBossAudio])
+  }, [currentTurnData?.turn, currentTurnData?.message_ja, etiquetteStage, currentSession?.session_type, currentSession?.status, handleReplayBossAudio])
+
+  if (isProfileLoading || isIndustriesLoading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    )
+  }
 
   // Active Simulation Stage View (Full Screen 3D Game)
   if (currentSession) {
@@ -254,8 +257,8 @@ export default function InternshipRoleplay() {
           onDistanceChange={handleDistanceChange}
           onEtiquetteStageChange={handleEtiquetteStageChange}
           onViewOfferLetter={() => setShowOfferModal(true)}
-          onExit={() => {
-            if (window.confirm('Bạn có chắc muốn tạm dừng phiên làm việc 3D này không?')) {
+          onExit={async () => {
+            if (await confirmDialog(t('dialogs.exitInterview'), { tone: 'warning' })) {
               setCurrentSession(null)
             }
           }}

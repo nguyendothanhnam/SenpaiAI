@@ -1,3 +1,4 @@
+import { confirmDialog } from '../features/dialogs/queue'
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
@@ -320,10 +321,10 @@ function DocumentFormModal({
     },
   })
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    if (form.content.trim() && !window.confirm('File mới sẽ ghi đè nội dung hiện tại. Tiếp tục?')) {
+    if (form.content.trim() && !await confirmDialog(t('library.replaceContentConfirm'), { tone: 'warning' })) {
       e.target.value = ''
       return
     }
@@ -344,7 +345,7 @@ function DocumentFormModal({
     onSubmit(initial ? buildPayload(form) : { ...buildPayload(form), scope })
   }
 
-  const fetchFromUrl = () => {
+  const fetchFromUrl = async () => {
     const sourceUrl = form.source_url.trim()
     setFetchError('')
     if (!sourceUrl) {
@@ -355,7 +356,7 @@ function DocumentFormModal({
       setErrors((current) => ({ ...current, source_url: t('library.validation.sourceUrlInvalid') }))
       return
     }
-    if (form.content.trim() && !window.confirm(t('library.replaceContentConfirm'))) return
+    if (form.content.trim() && !await confirmDialog(t('library.replaceContentConfirm'), { tone: 'warning' })) return
     fetchUrlMutation.mutate(sourceUrl)
   }
 

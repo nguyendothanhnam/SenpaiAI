@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowLeft, Brain, FileUp, PencilLine, PlayCircle } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { readLevel } from '../features/gameHub/catalog'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 const options = [
@@ -26,6 +27,8 @@ const options = [
 
 export default function Quiz() {
   const { t } = useTranslation('common')
+  const [params] = useSearchParams()
+  const level = readLevel(params.toString())
   return (
     <div className="space-y-4">
       <Link to="/games" className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-2 text-sm font-semibold text-[color:var(--text)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]">
@@ -33,7 +36,7 @@ export default function Quiz() {
       </Link>
 
       <div className="theme-card overflow-hidden rounded-3xl shadow-sm">
-      <div className="px-6 py-8" style={{ backgroundImage: 'var(--primary-gradient)' }}>
+      <div className="theme-hero px-6 py-8">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-[color:var(--primary)]">{t('quiz.eyebrow')}</p>
         <h1 className="mt-3 text-3xl font-bold text-[color:var(--text)]">{t('quiz.title')}</h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-[color:var(--text-muted)]">
@@ -52,7 +55,7 @@ export default function Quiz() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.08 }}
             >
-              <Link to={item.to} className="block h-full">
+              <Link to={level ? `${item.to}?level=${level}` : item.to} className="block h-full">
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ type: 'spring', stiffness: 260, damping: 18 }}

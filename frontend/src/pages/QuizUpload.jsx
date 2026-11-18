@@ -146,7 +146,7 @@ export default function QuizUpload() {
       animate={{ opacity: 1, y: 0 }}
       className="theme-card overflow-hidden rounded-3xl shadow-sm"
     >
-      <div className="px-6 py-8" style={{ backgroundImage: 'var(--primary-gradient)', color: 'var(--primary-contrast)' }}>
+      <div className="theme-hero px-6 py-8">
         <h1 className="text-3xl font-semibold">Upload Quiz File</h1>
         <p className="mt-2 text-sm opacity-90">Upload Excel or JSON and save it as a quiz set.</p>
       </div>

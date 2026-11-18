@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import { useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -81,7 +81,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       ? data.active_background_id
       : null
     setPreferences((current) => ({ ...current, themeId, backgroundId }))
-  }, [user?.id, rewards.data, rewards.isError])
+  }, [user, rewards.data, rewards.isError])
 
   useEffect(() => {
     const root = document.documentElement
@@ -115,7 +115,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ mode: preferences.mode })) } catch { /* optional preference */ }
   }, [preferences.mode])
 
-  const equipItem = async (payload: { theme_id?: string; background_id?: string | null }, next: Preferences) => {
+  const equipItem = useCallback(async (payload: { theme_id?: string; background_id?: string | null }, next: Preferences) => {
     if (!user || rewards.isError) {
       setPreferences((current) => ({ ...current, themeId: defaultThemeId, backgroundId: null }))
       return
@@ -139,7 +139,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       toast.error(t('themeShop.equipError'))
       void queryClient.invalidateQueries(rewardsMeKey(user.id))
     }
-  }
+  }, [user, rewards, preferences, queryClient, t])
 
   const value = useMemo<ThemeContextValue>(() => ({
     mode: preferences.mode,
@@ -165,7 +165,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       }
       if (preferences.backgroundId !== backgroundId) void equipItem({ background_id: backgroundId }, next)
     },
-  }), [preferences, isDark, user?.id, rewards.isError, rewards.data])
+  }), [preferences, isDark, rewards.data, equipItem])
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }

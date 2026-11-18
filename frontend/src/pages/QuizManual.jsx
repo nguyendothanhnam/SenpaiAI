@@ -102,7 +102,7 @@ export default function QuizManual() {
       animate={{ opacity: 1, y: 0 }}
       className="overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card)] shadow-sm"
     >
-      <div className="bg-[image:var(--primary-gradient)] px-6 py-8 text-[color:var(--primary-contrast)]">
+      <div className="theme-hero px-6 py-8">
         <h1 className="text-3xl font-semibold">Create Quiz Manually</h1>
         <p className="mt-2 text-sm text-[color:var(--primary-contrast)] opacity-90">Add one or more questions with four options each.</p>
       </div>

@@ -1,0 +1,11157 @@
+{
+  "kanji": [
+    {
+      "id": "日",
+      "level": "N5",
+      "readings": [
+        "ニチ",
+        "ジツ",
+        "ひ",
+        "び",
+        "か"
+      ],
+      "meaning": "ngày, mặt trời"
+    },
+    {
+      "id": "一",
+      "level": "N5",
+      "readings": [
+        "イチ",
+        "イツ"
+      ],
+      "meaning": "một"
+    },
+    {
+      "id": "国",
+      "level": "N5",
+      "readings": [
+        "コク",
+        "くに"
+      ],
+      "meaning": "đất nước"
+    },
+    {
+      "id": "人",
+      "level": "N5",
+      "readings": [
+        "ジン",
+        "ニン",
+        "ひと"
+      ],
+      "meaning": "người"
+    },
+    {
+      "id": "年",
+      "level": "N5",
+      "readings": [
+        "ネン",
+        "とし"
+      ],
+      "meaning": "năm"
+    },
+    {
+      "id": "大",
+      "level": "N5",
+      "readings": [
+        "ダイ",
+        "タイ"
+      ],
+      "meaning": "to, lớn"
+    },
+    {
+      "id": "十",
+      "level": "N5",
+      "readings": [
+        "ジュウ",
+        "ジッ",
+        "ジュッ",
+        "とお",
+        "と"
+      ],
+      "meaning": "mười"
+    },
+    {
+      "id": "二",
+      "level": "N5",
+      "readings": [
+        "ニ",
+        "ジ",
+        "ふた",
+        "ふたたび"
+      ],
+      "meaning": "hai"
+    },
+    {
+      "id": "本",
+      "level": "N5",
+      "readings": [
+        "ホン",
+        "もと"
+      ],
+      "meaning": "sách, gốc"
+    },
+    {
+      "id": "中",
+      "level": "N5",
+      "readings": [
+        "チュウ",
+        "なか"
+      ],
+      "meaning": "trong, ở giữa"
+    },
+    {
+      "id": "長",
+      "level": "N5",
+      "readings": [
+        "チョウ",
+        "おさ"
+      ],
+      "meaning": "dài, trưởng"
+    },
+    {
+      "id": "出",
+      "level": "N5",
+      "readings": [
+        "シュツ",
+        "スイ"
+      ],
+      "meaning": "ra, xuất hiện"
+    },
+    {
+      "id": "三",
+      "level": "N5",
+      "readings": [
+        "サン",
+        "ゾウ",
+        "み"
+      ],
+      "meaning": "ba"
+    },
+    {
+      "id": "時",
+      "level": "N5",
+      "readings": [
+        "ジ",
+        "とき"
+      ],
+      "meaning": "giờ, thời gian"
+    },
+    {
+      "id": "行",
+      "level": "N5",
+      "readings": [
+        "コウ",
+        "ギョウ"
+      ],
+      "meaning": "đi"
+    },
+    {
+      "id": "見",
+      "level": "N5",
+      "readings": [
+        "ケン"
+      ],
+      "meaning": "xem, nhìn"
+    },
+    {
+      "id": "月",
+      "level": "N5",
+      "readings": [
+        "ゲツ",
+        "ガツ",
+        "つき"
+      ],
+      "meaning": "tháng, mặt trăng"
+    },
+    {
+      "id": "後",
+      "level": "N5",
+      "readings": [
+        "ゴ",
+        "コウ",
+        "のち",
+        "うしろ",
+        "あと"
+      ],
+      "meaning": "sau, phía sau"
+    },
+    {
+      "id": "前",
+      "level": "N5",
+      "readings": [
+        "ゼン",
+        "まえ"
+      ],
+      "meaning": "trước, phía trước"
+    },
+    {
+      "id": "生",
+      "level": "N5",
+      "readings": [
+        "セイ",
+        "ショウ"
+      ],
+      "meaning": "sống, sinh ra"
+    },
+    {
+      "id": "五",
+      "level": "N5",
+      "readings": [
+        "ゴ",
+        "いつ"
+      ],
+      "meaning": "năm (số)"
+    },
+    {
+      "id": "間",
+      "level": "N5",
+      "readings": [
+        "カン",
+        "ケン",
+        "あいだ",
+        "ま",
+        "あい"
+      ],
+      "meaning": "khoảng, ở giữa"
+    },
+    {
+      "id": "上",
+      "level": "N5",
+      "readings": [
+        "ジョウ",
+        "うえ"
+      ],
+      "meaning": "trên, lên"
+    },
+    {
+      "id": "東",
+      "level": "N5",
+      "readings": [
+        "トウ",
+        "ひがし"
+      ],
+      "meaning": "phía đông"
+    },
+    {
+      "id": "四",
+      "level": "N5",
+      "readings": [
+        "シ",
+        "よ",
+        "よん"
+      ],
+      "meaning": "bốn"
+    },
+    {
+      "id": "今",
+      "level": "N5",
+      "readings": [
+        "コン",
+        "キン",
+        "いま"
+      ],
+      "meaning": "bây giờ"
+    },
+    {
+      "id": "金",
+      "level": "N5",
+      "readings": [
+        "キン",
+        "コン",
+        "かね"
+      ],
+      "meaning": "tiền, vàng"
+    },
+    {
+      "id": "九",
+      "level": "N5",
+      "readings": [
+        "キュウ",
+        "ク",
+        "ここの"
+      ],
+      "meaning": "chín"
+    },
+    {
+      "id": "入",
+      "level": "N5",
+      "readings": [
+        "ニュウ",
+        "ジュ"
+      ],
+      "meaning": "vào"
+    },
+    {
+      "id": "学",
+      "level": "N5",
+      "readings": [
+        "ガク"
+      ],
+      "meaning": "học"
+    },
+    {
+      "id": "高",
+      "level": "N5",
+      "readings": [
+        "コウ",
+        "たか"
+      ],
+      "meaning": "cao, đắt"
+    },
+    {
+      "id": "円",
+      "level": "N5",
+      "readings": [
+        "エン",
+        "まる",
+        "まど"
+      ],
+      "meaning": "yên, hình tròn"
+    },
+    {
+      "id": "子",
+      "level": "N5",
+      "readings": [
+        "シ",
+        "ス",
+        "こ"
+      ],
+      "meaning": "trẻ em, con"
+    },
+    {
+      "id": "外",
+      "level": "N5",
+      "readings": [
+        "ガイ",
+        "ゲ",
+        "そと",
+        "ほか"
+      ],
+      "meaning": "ngoài"
+    },
+    {
+      "id": "八",
+      "level": "N5",
+      "readings": [
+        "ハチ",
+        "や",
+        "よう"
+      ],
+      "meaning": "tám"
+    },
+    {
+      "id": "六",
+      "level": "N5",
+      "readings": [
+        "ロク",
+        "リク",
+        "む",
+        "むい"
+      ],
+      "meaning": "sáu"
+    },
+    {
+      "id": "下",
+      "level": "N5",
+      "readings": [
+        "カ",
+        "ゲ",
+        "した"
+      ],
+      "meaning": "dưới, xuống"
+    },
+    {
+      "id": "来",
+      "level": "N5",
+      "readings": [
+        "ライ"
+      ],
+      "meaning": "đến"
+    },
+    {
+      "id": "気",
+      "level": "N5",
+      "readings": [
+        "キ",
+        "ケ",
+        "いき"
+      ],
+      "meaning": "khí, tinh thần"
+    },
+    {
+      "id": "小",
+      "level": "N5",
+      "readings": [
+        "ショウ"
+      ],
+      "meaning": "nhỏ"
+    },
+    {
+      "id": "七",
+      "level": "N5",
+      "readings": [
+        "シチ",
+        "なな",
+        "なの"
+      ],
+      "meaning": "bảy"
+    },
+    {
+      "id": "山",
+      "level": "N5",
+      "readings": [
+        "サン",
+        "やま"
+      ],
+      "meaning": "núi"
+    },
+    {
+      "id": "話",
+      "level": "N5",
+      "readings": [
+        "ワ"
+      ],
+      "meaning": "nói chuyện"
+    },
+    {
+      "id": "女",
+      "level": "N5",
+      "readings": [
+        "ジョ",
+        "ニョ",
+        "おんな"
+      ],
+      "meaning": "nữ, phụ nữ"
+    },
+    {
+      "id": "北",
+      "level": "N5",
+      "readings": [
+        "ホク",
+        "きた"
+      ],
+      "meaning": "phía bắc"
+    },
+    {
+      "id": "午",
+      "level": "N5",
+      "readings": [
+        "ゴ",
+        "うま"
+      ],
+      "meaning": "buổi trưa"
+    },
+    {
+      "id": "百",
+      "level": "N5",
+      "readings": [
+        "ヒャク",
+        "ビャク",
+        "もも"
+      ],
+      "meaning": "một trăm"
+    },
+    {
+      "id": "書",
+      "level": "N5",
+      "readings": [
+        "ショ"
+      ],
+      "meaning": "viết"
+    },
+    {
+      "id": "先",
+      "level": "N5",
+      "readings": [
+        "セン",
+        "さき"
+      ],
+      "meaning": "trước, trước tiên"
+    },
+    {
+      "id": "名",
+      "level": "N5",
+      "readings": [
+        "メイ",
+        "ミョウ",
+        "な"
+      ],
+      "meaning": "tên"
+    },
+    {
+      "id": "川",
+      "level": "N5",
+      "readings": [
+        "セン",
+        "かわ"
+      ],
+      "meaning": "sông"
+    },
+    {
+      "id": "千",
+      "level": "N5",
+      "readings": [
+        "セン",
+        "ち"
+      ],
+      "meaning": "một nghìn"
+    },
+    {
+      "id": "水",
+      "level": "N5",
+      "readings": [
+        "スイ",
+        "みず"
+      ],
+      "meaning": "nước"
+    },
+    {
+      "id": "半",
+      "level": "N5",
+      "readings": [
+        "ハン"
+      ],
+      "meaning": "một nửa"
+    },
+    {
+      "id": "男",
+      "level": "N5",
+      "readings": [
+        "ダン",
+        "ナン",
+        "おとこ"
+      ],
+      "meaning": "nam, đàn ông"
+    },
+    {
+      "id": "西",
+      "level": "N5",
+      "readings": [
+        "セイ",
+        "サイ",
+        "ス",
+        "にし"
+      ],
+      "meaning": "phía tây"
+    },
+    {
+      "id": "電",
+      "level": "N5",
+      "readings": [
+        "デン"
+      ],
+      "meaning": "điện"
+    },
+    {
+      "id": "校",
+      "level": "N5",
+      "readings": [
+        "コウ",
+        "キョウ"
+      ],
+      "meaning": "trường học"
+    },
+    {
+      "id": "語",
+      "level": "N5",
+      "readings": [
+        "ゴ"
+      ],
+      "meaning": "language"
+    },
+    {
+      "id": "土",
+      "level": "N5",
+      "readings": [
+        "ド",
+        "ト",
+        "つち"
+      ],
+      "meaning": "đất"
+    },
+    {
+      "id": "木",
+      "level": "N5",
+      "readings": [
+        "モク",
+        "ボク",
+        "き",
+        "こ"
+      ],
+      "meaning": "cây, gỗ"
+    },
+    {
+      "id": "聞",
+      "level": "N5",
+      "readings": [
+        "ブン",
+        "モン"
+      ],
+      "meaning": "nghe, hỏi"
+    },
+    {
+      "id": "食",
+      "level": "N5",
+      "readings": [
+        "ショク"
+      ],
+      "meaning": "ăn"
+    },
+    {
+      "id": "車",
+      "level": "N5",
+      "readings": [
+        "シャ",
+        "くるま"
+      ],
+      "meaning": "xe"
+    },
+    {
+      "id": "何",
+      "level": "N5",
+      "readings": [
+        "カ",
+        "なに",
+        "なん"
+      ],
+      "meaning": "cái gì"
+    },
+    {
+      "id": "南",
+      "level": "N5",
+      "readings": [
+        "ナン",
+        "ナ",
+        "みなみ"
+      ],
+      "meaning": "phía nam"
+    },
+    {
+      "id": "万",
+      "level": "N5",
+      "readings": [
+        "マン",
+        "バン",
+        "よろず"
+      ],
+      "meaning": "mười nghìn"
+    },
+    {
+      "id": "毎",
+      "level": "N5",
+      "readings": [
+        "マイ",
+        "ごと"
+      ],
+      "meaning": "mỗi"
+    },
+    {
+      "id": "白",
+      "level": "N5",
+      "readings": [
+        "ハク",
+        "ビャク",
+        "しろ"
+      ],
+      "meaning": "trắng"
+    },
+    {
+      "id": "天",
+      "level": "N5",
+      "readings": [
+        "テン",
+        "あまつ",
+        "あめ"
+      ],
+      "meaning": "trời"
+    },
+    {
+      "id": "母",
+      "level": "N5",
+      "readings": [
+        "ボ",
+        "はは",
+        "も"
+      ],
+      "meaning": "mẹ"
+    },
+    {
+      "id": "火",
+      "level": "N5",
+      "readings": [
+        "カ",
+        "ひ"
+      ],
+      "meaning": "lửa"
+    },
+    {
+      "id": "右",
+      "level": "N5",
+      "readings": [
+        "ウ",
+        "ユウ",
+        "みぎ"
+      ],
+      "meaning": "bên phải"
+    },
+    {
+      "id": "読",
+      "level": "N5",
+      "readings": [
+        "ドク",
+        "トク"
+      ],
+      "meaning": "đọc"
+    },
+    {
+      "id": "友",
+      "level": "N5",
+      "readings": [
+        "ユウ",
+        "とも"
+      ],
+      "meaning": "bạn"
+    },
+    {
+      "id": "左",
+      "level": "N5",
+      "readings": [
+        "サ",
+        "シャ",
+        "ひだり"
+      ],
+      "meaning": "bên trái"
+    },
+    {
+      "id": "休",
+      "level": "N5",
+      "readings": [
+        "キュウ"
+      ],
+      "meaning": "nghỉ"
+    },
+    {
+      "id": "父",
+      "level": "N5",
+      "readings": [
+        "フ",
+        "ちち"
+      ],
+      "meaning": "cha"
+    },
+    {
+      "id": "雨",
+      "level": "N5",
+      "readings": [
+        "ウ",
+        "あめ"
+      ],
+      "meaning": "mưa"
+    },
+    {
+      "id": "会",
+      "level": "N4",
+      "readings": [
+        "カイ",
+        "エ"
+      ],
+      "meaning": "gặp"
+    },
+    {
+      "id": "同",
+      "level": "N4",
+      "readings": [
+        "ドウ"
+      ],
+      "meaning": "cùng, giống nhau"
+    },
+    {
+      "id": "事",
+      "level": "N4",
+      "readings": [
+        "ジ",
+        "ズ",
+        "こと"
+      ],
+      "meaning": "việc, sự việc"
+    },
+    {
+      "id": "自",
+      "level": "N4",
+      "readings": [
+        "ジ",
+        "シ"
+      ],
+      "meaning": "tự mình"
+    },
+    {
+      "id": "社",
+      "level": "N4",
+      "readings": [
+        "シャ",
+        "やしろ"
+      ],
+      "meaning": "công ty, đền"
+    },
+    {
+      "id": "発",
+      "level": "N4",
+      "readings": [
+        "ハツ",
+        "ホツ"
+      ],
+      "meaning": "phát ra, khởi hành"
+    },
+    {
+      "id": "者",
+      "level": "N4",
+      "readings": [
+        "シャ",
+        "もの"
+      ],
+      "meaning": "người"
+    },
+    {
+      "id": "地",
+      "level": "N4",
+      "readings": [
+        "チ",
+        "ジ"
+      ],
+      "meaning": "đất, địa điểm"
+    },
+    {
+      "id": "業",
+      "level": "N4",
+      "readings": [
+        "ギョウ",
+        "ゴウ",
+        "わざ"
+      ],
+      "meaning": "nghề, công việc"
+    },
+    {
+      "id": "方",
+      "level": "N4",
+      "readings": [
+        "ホウ",
+        "かた"
+      ],
+      "meaning": "phương hướng, cách"
+    },
+    {
+      "id": "新",
+      "level": "N4",
+      "readings": [
+        "シン"
+      ],
+      "meaning": "mới"
+    },
+    {
+      "id": "場",
+      "level": "N4",
+      "readings": [
+        "ジョウ",
+        "チョウ",
+        "ば"
+      ],
+      "meaning": "nơi, địa điểm"
+    },
+    {
+      "id": "員",
+      "level": "N4",
+      "readings": [
+        "イン"
+      ],
+      "meaning": "thành viên, nhân viên"
+    },
+    {
+      "id": "立",
+      "level": "N4",
+      "readings": [
+        "リツ",
+        "リュウ",
+        "リットル"
+      ],
+      "meaning": "đứng, lập nên"
+    },
+    {
+      "id": "開",
+      "level": "N4",
+      "readings": [
+        "カイ"
+      ],
+      "meaning": "mở"
+    },
+    {
+      "id": "手",
+      "level": "N4",
+      "readings": [
+        "シュ",
+        "ズ",
+        "て"
+      ],
+      "meaning": "tay"
+    },
+    {
+      "id": "力",
+      "level": "N4",
+      "readings": [
+        "リョク",
+        "リキ",
+        "リイ",
+        "ちから"
+      ],
+      "meaning": "sức mạnh"
+    },
+    {
+      "id": "問",
+      "level": "N4",
+      "readings": [
+        "モン",
+        "とん"
+      ],
+      "meaning": "hỏi, câu hỏi"
+    },
+    {
+      "id": "代",
+      "level": "N4",
+      "readings": [
+        "ダイ",
+        "タイ",
+        "よ",
+        "しろ"
+      ],
+      "meaning": "thay thế, thời đại"
+    },
+    {
+      "id": "明",
+      "level": "N4",
+      "readings": [
+        "メイ",
+        "ミョウ",
+        "ミン"
+      ],
+      "meaning": "sáng, rõ ràng"
+    },
+    {
+      "id": "動",
+      "level": "N4",
+      "readings": [
+        "ドウ"
+      ],
+      "meaning": "chuyển động"
+    },
+    {
+      "id": "京",
+      "level": "N4",
+      "readings": [
+        "キョウ",
+        "ケイ",
+        "キン",
+        "みやこ"
+      ],
+      "meaning": "kinh đô"
+    },
+    {
+      "id": "目",
+      "level": "N4",
+      "readings": [
+        "モク",
+        "ボク",
+        "め"
+      ],
+      "meaning": "eye"
+    },
+    {
+      "id": "通",
+      "level": "N4",
+      "readings": [
+        "ツウ",
+        "ツ"
+      ],
+      "meaning": "đi qua, thông suốt"
+    },
+    {
+      "id": "言",
+      "level": "N4",
+      "readings": [
+        "ゲン",
+        "ゴン",
+        "こと"
+      ],
+      "meaning": "nói, lời nói"
+    },
+    {
+      "id": "理",
+      "level": "N4",
+      "readings": [
+        "リ",
+        "ことわり"
+      ],
+      "meaning": "lý lẽ, nguyên lý"
+    },
+    {
+      "id": "体",
+      "level": "N4",
+      "readings": [
+        "タイ",
+        "テイ",
+        "からだ",
+        "かたち"
+      ],
+      "meaning": "cơ thể"
+    },
+    {
+      "id": "田",
+      "level": "N4",
+      "readings": [
+        "デン",
+        "た"
+      ],
+      "meaning": "ruộng"
+    },
+    {
+      "id": "主",
+      "level": "N4",
+      "readings": [
+        "シュ",
+        "ス",
+        "シュウ",
+        "ぬし",
+        "おも",
+        "あるじ"
+      ],
+      "meaning": "chủ, chính"
+    },
+    {
+      "id": "題",
+      "level": "N4",
+      "readings": [
+        "ダイ"
+      ],
+      "meaning": "đề tài, câu hỏi"
+    },
+    {
+      "id": "意",
+      "level": "N4",
+      "readings": [
+        "イ"
+      ],
+      "meaning": "ý nghĩ, ý định"
+    },
+    {
+      "id": "不",
+      "level": "N4",
+      "readings": [
+        "フ",
+        "ブ"
+      ],
+      "meaning": "không, bất"
+    },
+    {
+      "id": "作",
+      "level": "N4",
+      "readings": [
+        "サク",
+        "サ"
+      ],
+      "meaning": "làm, tạo ra"
+    },
+    {
+      "id": "用",
+      "level": "N4",
+      "readings": [
+        "ヨウ"
+      ],
+      "meaning": "use"
+    },
+    {
+      "id": "度",
+      "level": "N4",
+      "readings": [
+        "ド",
+        "ト",
+        "タク",
+        "たび"
+      ],
+      "meaning": "mức độ, lần"
+    },
+    {
+      "id": "強",
+      "level": "N4",
+      "readings": [
+        "キョウ",
+        "ゴウ"
+      ],
+      "meaning": "mạnh"
+    },
+    {
+      "id": "公",
+      "level": "N4",
+      "readings": [
+        "コウ",
+        "ク",
+        "おおやけ"
+      ],
+      "meaning": "công cộng"
+    },
+    {
+      "id": "持",
+      "level": "N4",
+      "readings": [
+        "ジ"
+      ],
+      "meaning": "cầm, giữ"
+    },
+    {
+      "id": "野",
+      "level": "N4",
+      "readings": [
+        "ヤ",
+        "ショ",
+        "の"
+      ],
+      "meaning": "đồng nội, hoang dã"
+    },
+    {
+      "id": "以",
+      "level": "N4",
+      "readings": [
+        "イ"
+      ],
+      "meaning": "lấy làm, kể từ"
+    },
+    {
+      "id": "思",
+      "level": "N4",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "nghĩ"
+    },
+    {
+      "id": "家",
+      "level": "N4",
+      "readings": [
+        "カ",
+        "ケ",
+        "いえ",
+        "や",
+        "うち"
+      ],
+      "meaning": "nhà, gia đình"
+    },
+    {
+      "id": "世",
+      "level": "N4",
+      "readings": [
+        "セイ",
+        "セ",
+        "ソウ",
+        "よ"
+      ],
+      "meaning": "thế giới, thế hệ"
+    },
+    {
+      "id": "多",
+      "level": "N4",
+      "readings": [
+        "タ"
+      ],
+      "meaning": "nhiều"
+    },
+    {
+      "id": "正",
+      "level": "N4",
+      "readings": [
+        "セイ",
+        "ショウ",
+        "まさ"
+      ],
+      "meaning": "đúng, chính xác"
+    },
+    {
+      "id": "安",
+      "level": "N4",
+      "readings": [
+        "アン",
+        "やす"
+      ],
+      "meaning": "yên ổn, rẻ"
+    },
+    {
+      "id": "院",
+      "level": "N4",
+      "readings": [
+        "イン"
+      ],
+      "meaning": "viện, cơ sở"
+    },
+    {
+      "id": "心",
+      "level": "N4",
+      "readings": [
+        "シン",
+        "こころ"
+      ],
+      "meaning": "tim, tấm lòng"
+    },
+    {
+      "id": "界",
+      "level": "N4",
+      "readings": [
+        "カイ"
+      ],
+      "meaning": "thế giới, ranh giới"
+    },
+    {
+      "id": "教",
+      "level": "N4",
+      "readings": [
+        "キョウ"
+      ],
+      "meaning": "dạy"
+    },
+    {
+      "id": "文",
+      "level": "N4",
+      "readings": [
+        "ブン",
+        "モン",
+        "ふみ",
+        "あや"
+      ],
+      "meaning": "văn, câu văn"
+    },
+    {
+      "id": "元",
+      "level": "N4",
+      "readings": [
+        "ゲン",
+        "ガン",
+        "もと"
+      ],
+      "meaning": "gốc, ban đầu"
+    },
+    {
+      "id": "重",
+      "level": "N4",
+      "readings": [
+        "ジュウ",
+        "チョウ",
+        "え",
+        "おも"
+      ],
+      "meaning": "nặng, chồng lên"
+    },
+    {
+      "id": "近",
+      "level": "N4",
+      "readings": [
+        "キン",
+        "コン"
+      ],
+      "meaning": "gần"
+    },
+    {
+      "id": "考",
+      "level": "N4",
+      "readings": [
+        "コウ"
+      ],
+      "meaning": "suy nghĩ, xem xét"
+    },
+    {
+      "id": "画",
+      "level": "N4",
+      "readings": [
+        "ガ",
+        "カク",
+        "エ",
+        "カイ",
+        "はかりごと"
+      ],
+      "meaning": "tranh, nét vẽ"
+    },
+    {
+      "id": "海",
+      "level": "N4",
+      "readings": [
+        "カイ",
+        "うみ"
+      ],
+      "meaning": "biển"
+    },
+    {
+      "id": "売",
+      "level": "N4",
+      "readings": [
+        "バイ"
+      ],
+      "meaning": "bán"
+    },
+    {
+      "id": "知",
+      "level": "N4",
+      "readings": [
+        "チ"
+      ],
+      "meaning": "biết"
+    },
+    {
+      "id": "道",
+      "level": "N4",
+      "readings": [
+        "ドウ",
+        "トウ",
+        "みち",
+        "いう"
+      ],
+      "meaning": "đường, đạo"
+    },
+    {
+      "id": "集",
+      "level": "N4",
+      "readings": [
+        "シュウ"
+      ],
+      "meaning": "tập hợp"
+    },
+    {
+      "id": "別",
+      "level": "N4",
+      "readings": [
+        "ベツ"
+      ],
+      "meaning": "khác, chia tay"
+    },
+    {
+      "id": "物",
+      "level": "N4",
+      "readings": [
+        "ブツ",
+        "モツ",
+        "もの"
+      ],
+      "meaning": "vật, đồ vật"
+    },
+    {
+      "id": "使",
+      "level": "N4",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "sử dụng"
+    },
+    {
+      "id": "品",
+      "level": "N4",
+      "readings": [
+        "ヒン",
+        "ホン",
+        "しな"
+      ],
+      "meaning": "hàng hóa, phẩm chất"
+    },
+    {
+      "id": "計",
+      "level": "N4",
+      "readings": [
+        "ケイ"
+      ],
+      "meaning": "tính toán, đo"
+    },
+    {
+      "id": "死",
+      "level": "N4",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "chết"
+    },
+    {
+      "id": "特",
+      "level": "N4",
+      "readings": [
+        "トク"
+      ],
+      "meaning": "đặc biệt"
+    },
+    {
+      "id": "私",
+      "level": "N4",
+      "readings": [
+        "シ",
+        "わたくし",
+        "わたし"
+      ],
+      "meaning": "tôi, riêng tư"
+    },
+    {
+      "id": "始",
+      "level": "N4",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "bắt đầu"
+    },
+    {
+      "id": "朝",
+      "level": "N4",
+      "readings": [
+        "チョウ",
+        "あさ"
+      ],
+      "meaning": "buổi sáng"
+    },
+    {
+      "id": "運",
+      "level": "N4",
+      "readings": [
+        "ウン"
+      ],
+      "meaning": "vận chuyển, vận may"
+    },
+    {
+      "id": "終",
+      "level": "N4",
+      "readings": [
+        "シュウ",
+        "つい"
+      ],
+      "meaning": "kết thúc"
+    },
+    {
+      "id": "台",
+      "level": "N4",
+      "readings": [
+        "ダイ",
+        "タイ",
+        "うてな",
+        "われ",
+        "つかさ"
+      ],
+      "meaning": "bệ, đài"
+    },
+    {
+      "id": "広",
+      "level": "N4",
+      "readings": [
+        "コウ"
+      ],
+      "meaning": "rộng"
+    },
+    {
+      "id": "住",
+      "level": "N4",
+      "readings": [
+        "ジュウ",
+        "ヂュウ",
+        "チュウ"
+      ],
+      "meaning": "sống, cư trú"
+    },
+    {
+      "id": "真",
+      "level": "N4",
+      "readings": [
+        "シン",
+        "ま",
+        "まこと"
+      ],
+      "meaning": "thật, chân thực"
+    },
+    {
+      "id": "有",
+      "level": "N4",
+      "readings": [
+        "ユウ",
+        "ウ"
+      ],
+      "meaning": "có, tồn tại"
+    },
+    {
+      "id": "口",
+      "level": "N4",
+      "readings": [
+        "コウ",
+        "ク",
+        "くち"
+      ],
+      "meaning": "miệng"
+    },
+    {
+      "id": "少",
+      "level": "N4",
+      "readings": [
+        "ショウ"
+      ],
+      "meaning": "ít"
+    },
+    {
+      "id": "町",
+      "level": "N4",
+      "readings": [
+        "チョウ",
+        "まち"
+      ],
+      "meaning": "thị trấn, phố"
+    },
+    {
+      "id": "料",
+      "level": "N4",
+      "readings": [
+        "リョウ"
+      ],
+      "meaning": "nguyên liệu, phí"
+    },
+    {
+      "id": "工",
+      "level": "N4",
+      "readings": [
+        "コウ",
+        "ク",
+        "グ"
+      ],
+      "meaning": "công việc, kỹ thuật"
+    },
+    {
+      "id": "建",
+      "level": "N4",
+      "readings": [
+        "ケン",
+        "コン"
+      ],
+      "meaning": "xây dựng"
+    },
+    {
+      "id": "空",
+      "level": "N4",
+      "readings": [
+        "クウ",
+        "そら",
+        "から"
+      ],
+      "meaning": "trời, trống rỗng"
+    },
+    {
+      "id": "急",
+      "level": "N4",
+      "readings": [
+        "キュウ"
+      ],
+      "meaning": "gấp, vội"
+    },
+    {
+      "id": "止",
+      "level": "N4",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "dừng"
+    },
+    {
+      "id": "送",
+      "level": "N4",
+      "readings": [
+        "ソウ"
+      ],
+      "meaning": "gửi, tiễn"
+    },
+    {
+      "id": "切",
+      "level": "N4",
+      "readings": [
+        "セツ",
+        "サイ"
+      ],
+      "meaning": "cắt"
+    },
+    {
+      "id": "転",
+      "level": "N4",
+      "readings": [
+        "テン",
+        "うたた"
+      ],
+      "meaning": "xoay, chuyển"
+    },
+    {
+      "id": "研",
+      "level": "N4",
+      "readings": [
+        "ケン"
+      ],
+      "meaning": "mài, nghiên cứu"
+    },
+    {
+      "id": "足",
+      "level": "N4",
+      "readings": [
+        "ソク",
+        "あし"
+      ],
+      "meaning": "chân, đủ"
+    },
+    {
+      "id": "究",
+      "level": "N4",
+      "readings": [
+        "キュウ",
+        "ク"
+      ],
+      "meaning": "nghiên cứu, tìm hiểu đến cùng"
+    },
+    {
+      "id": "楽",
+      "level": "N4",
+      "readings": [
+        "ガク",
+        "ラク",
+        "ゴウ"
+      ],
+      "meaning": "vui, âm nhạc"
+    },
+    {
+      "id": "起",
+      "level": "N4",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "thức dậy, xảy ra"
+    },
+    {
+      "id": "着",
+      "level": "N4",
+      "readings": [
+        "チャク",
+        "ジャク"
+      ],
+      "meaning": "mặc, đến nơi"
+    },
+    {
+      "id": "店",
+      "level": "N4",
+      "readings": [
+        "テン",
+        "みせ",
+        "たな"
+      ],
+      "meaning": "cửa hàng"
+    },
+    {
+      "id": "病",
+      "level": "N4",
+      "readings": [
+        "ビョウ",
+        "ヘイ",
+        "やまい"
+      ],
+      "meaning": "bệnh"
+    },
+    {
+      "id": "質",
+      "level": "N4",
+      "readings": [
+        "シツ",
+        "シチ",
+        "チ",
+        "たち",
+        "もと",
+        "わりふ"
+      ],
+      "meaning": "chất lượng, bản chất"
+    },
+    {
+      "id": "待",
+      "level": "N4",
+      "readings": [
+        "タイ"
+      ],
+      "meaning": "chờ"
+    },
+    {
+      "id": "試",
+      "level": "N4",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "thử, thi"
+    },
+    {
+      "id": "族",
+      "level": "N4",
+      "readings": [
+        "ゾク"
+      ],
+      "meaning": "gia tộc, nhóm"
+    },
+    {
+      "id": "銀",
+      "level": "N4",
+      "readings": [
+        "ギン",
+        "しろがね"
+      ],
+      "meaning": "bạc"
+    },
+    {
+      "id": "早",
+      "level": "N4",
+      "readings": [
+        "ソウ",
+        "サッ",
+        "はや"
+      ],
+      "meaning": "sớm"
+    },
+    {
+      "id": "映",
+      "level": "N4",
+      "readings": [
+        "エイ"
+      ],
+      "meaning": "chiếu, phản chiếu"
+    },
+    {
+      "id": "親",
+      "level": "N4",
+      "readings": [
+        "シン",
+        "おや"
+      ],
+      "meaning": "cha mẹ, thân thiết"
+    },
+    {
+      "id": "験",
+      "level": "N4",
+      "readings": [
+        "ケン",
+        "ゲン",
+        "あかし",
+        "しるし",
+        "ためし"
+      ],
+      "meaning": "kiểm nghiệm, kinh nghiệm"
+    },
+    {
+      "id": "英",
+      "level": "N4",
+      "readings": [
+        "エイ",
+        "はなぶさ"
+      ],
+      "meaning": "Anh, ưu tú"
+    },
+    {
+      "id": "医",
+      "level": "N4",
+      "readings": [
+        "イ",
+        "くすし"
+      ],
+      "meaning": "y, bác sĩ"
+    },
+    {
+      "id": "仕",
+      "level": "N4",
+      "readings": [
+        "シ",
+        "ジ"
+      ],
+      "meaning": "phục vụ, làm việc"
+    },
+    {
+      "id": "去",
+      "level": "N4",
+      "readings": [
+        "キョ",
+        "コ"
+      ],
+      "meaning": "rời đi, quá khứ"
+    },
+    {
+      "id": "味",
+      "level": "N4",
+      "readings": [
+        "ミ",
+        "あじ"
+      ],
+      "meaning": "vị, hương vị"
+    },
+    {
+      "id": "写",
+      "level": "N4",
+      "readings": [
+        "シャ",
+        "ジャ"
+      ],
+      "meaning": "chép, chụp"
+    },
+    {
+      "id": "字",
+      "level": "N4",
+      "readings": [
+        "ジ",
+        "あざ",
+        "あざな"
+      ],
+      "meaning": "chữ"
+    },
+    {
+      "id": "答",
+      "level": "N4",
+      "readings": [
+        "トウ"
+      ],
+      "meaning": "trả lời"
+    },
+    {
+      "id": "夜",
+      "level": "N4",
+      "readings": [
+        "ヤ",
+        "よ",
+        "よる"
+      ],
+      "meaning": "đêm"
+    },
+    {
+      "id": "音",
+      "level": "N4",
+      "readings": [
+        "オン",
+        "イン",
+        "おと",
+        "ね"
+      ],
+      "meaning": "âm thanh"
+    },
+    {
+      "id": "注",
+      "level": "N4",
+      "readings": [
+        "チュウ"
+      ],
+      "meaning": "rót, chú ý"
+    },
+    {
+      "id": "帰",
+      "level": "N4",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "trở về"
+    },
+    {
+      "id": "古",
+      "level": "N4",
+      "readings": [
+        "コ"
+      ],
+      "meaning": "cũ, cổ"
+    },
+    {
+      "id": "歌",
+      "level": "N4",
+      "readings": [
+        "カ",
+        "うた"
+      ],
+      "meaning": "bài hát, hát"
+    },
+    {
+      "id": "買",
+      "level": "N4",
+      "readings": [
+        "バイ"
+      ],
+      "meaning": "mua"
+    },
+    {
+      "id": "悪",
+      "level": "N4",
+      "readings": [
+        "アク",
+        "オ",
+        "ああ",
+        "いずくに",
+        "いずくんぞ"
+      ],
+      "meaning": "xấu, ác"
+    },
+    {
+      "id": "図",
+      "level": "N4",
+      "readings": [
+        "ズ",
+        "ト",
+        "え"
+      ],
+      "meaning": "hình, sơ đồ"
+    },
+    {
+      "id": "週",
+      "level": "N4",
+      "readings": [
+        "シュウ"
+      ],
+      "meaning": "tuần"
+    },
+    {
+      "id": "室",
+      "level": "N4",
+      "readings": [
+        "シツ",
+        "むろ"
+      ],
+      "meaning": "phòng"
+    },
+    {
+      "id": "歩",
+      "level": "N4",
+      "readings": [
+        "ホ",
+        "ブ",
+        "フ"
+      ],
+      "meaning": "đi bộ, bước"
+    },
+    {
+      "id": "風",
+      "level": "N4",
+      "readings": [
+        "フウ",
+        "フ",
+        "かぜ"
+      ],
+      "meaning": "gió, phong cách"
+    },
+    {
+      "id": "紙",
+      "level": "N4",
+      "readings": [
+        "シ",
+        "かみ"
+      ],
+      "meaning": "giấy"
+    },
+    {
+      "id": "黒",
+      "level": "N4",
+      "readings": [
+        "コク",
+        "くろ"
+      ],
+      "meaning": "đen"
+    },
+    {
+      "id": "花",
+      "level": "N4",
+      "readings": [
+        "カ",
+        "ケ",
+        "はな"
+      ],
+      "meaning": "hoa"
+    },
+    {
+      "id": "春",
+      "level": "N4",
+      "readings": [
+        "シュン",
+        "はる"
+      ],
+      "meaning": "mùa xuân"
+    },
+    {
+      "id": "赤",
+      "level": "N4",
+      "readings": [
+        "セキ",
+        "シャク",
+        "あか"
+      ],
+      "meaning": "đỏ"
+    },
+    {
+      "id": "青",
+      "level": "N4",
+      "readings": [
+        "セイ",
+        "ショウ",
+        "あお"
+      ],
+      "meaning": "xanh lam, xanh lục"
+    },
+    {
+      "id": "館",
+      "level": "N4",
+      "readings": [
+        "カン",
+        "やかた",
+        "たて"
+      ],
+      "meaning": "tòa nhà, quán"
+    },
+    {
+      "id": "屋",
+      "level": "N4",
+      "readings": [
+        "オク",
+        "や"
+      ],
+      "meaning": "nhà, cửa hàng"
+    },
+    {
+      "id": "色",
+      "level": "N4",
+      "readings": [
+        "ショク",
+        "シキ",
+        "いろ"
+      ],
+      "meaning": "màu sắc"
+    },
+    {
+      "id": "走",
+      "level": "N4",
+      "readings": [
+        "ソウ"
+      ],
+      "meaning": "chạy"
+    },
+    {
+      "id": "秋",
+      "level": "N4",
+      "readings": [
+        "シュウ",
+        "あき",
+        "とき"
+      ],
+      "meaning": "mùa thu"
+    },
+    {
+      "id": "夏",
+      "level": "N4",
+      "readings": [
+        "カ",
+        "ガ",
+        "ゲ",
+        "なつ"
+      ],
+      "meaning": "mùa hè"
+    },
+    {
+      "id": "習",
+      "level": "N4",
+      "readings": [
+        "シュウ",
+        "ジュ"
+      ],
+      "meaning": "học, luyện tập"
+    },
+    {
+      "id": "駅",
+      "level": "N4",
+      "readings": [
+        "エキ"
+      ],
+      "meaning": "ga"
+    },
+    {
+      "id": "洋",
+      "level": "N4",
+      "readings": [
+        "ヨウ"
+      ],
+      "meaning": "đại dương, phương Tây"
+    },
+    {
+      "id": "旅",
+      "level": "N4",
+      "readings": [
+        "リョ",
+        "たび"
+      ],
+      "meaning": "du lịch, chuyến đi"
+    },
+    {
+      "id": "服",
+      "level": "N4",
+      "readings": [
+        "フク"
+      ],
+      "meaning": "quần áo"
+    },
+    {
+      "id": "夕",
+      "level": "N4",
+      "readings": [
+        "セキ",
+        "ゆう"
+      ],
+      "meaning": "chiều tối"
+    },
+    {
+      "id": "借",
+      "level": "N4",
+      "readings": [
+        "シャク"
+      ],
+      "meaning": "mượn"
+    },
+    {
+      "id": "曜",
+      "level": "N4",
+      "readings": [
+        "ヨウ"
+      ],
+      "meaning": "ngày trong tuần"
+    },
+    {
+      "id": "飲",
+      "level": "N4",
+      "readings": [
+        "イン"
+      ],
+      "meaning": "uống"
+    },
+    {
+      "id": "肉",
+      "level": "N4",
+      "readings": [
+        "ニク",
+        "しし"
+      ],
+      "meaning": "thịt"
+    },
+    {
+      "id": "貸",
+      "level": "N4",
+      "readings": [
+        "タイ"
+      ],
+      "meaning": "cho mượn"
+    },
+    {
+      "id": "堂",
+      "level": "N4",
+      "readings": [
+        "ドウ"
+      ],
+      "meaning": "sảnh, tòa nhà"
+    },
+    {
+      "id": "鳥",
+      "level": "N4",
+      "readings": [
+        "チョウ",
+        "とり"
+      ],
+      "meaning": "chim"
+    },
+    {
+      "id": "飯",
+      "level": "N4",
+      "readings": [
+        "ハン",
+        "めし"
+      ],
+      "meaning": "cơm, bữa ăn"
+    },
+    {
+      "id": "勉",
+      "level": "N4",
+      "readings": [
+        "ベン"
+      ],
+      "meaning": "cố gắng, siêng năng"
+    },
+    {
+      "id": "冬",
+      "level": "N4",
+      "readings": [
+        "トウ",
+        "ふゆ"
+      ],
+      "meaning": "mùa đông"
+    },
+    {
+      "id": "昼",
+      "level": "N4",
+      "readings": [
+        "チュウ",
+        "ひる"
+      ],
+      "meaning": "ban ngày, buổi trưa"
+    },
+    {
+      "id": "茶",
+      "level": "N4",
+      "readings": [
+        "チャ",
+        "サ"
+      ],
+      "meaning": "trà"
+    },
+    {
+      "id": "弟",
+      "level": "N4",
+      "readings": [
+        "テイ",
+        "ダイ",
+        "デ",
+        "おとうと"
+      ],
+      "meaning": "em trai"
+    },
+    {
+      "id": "牛",
+      "level": "N4",
+      "readings": [
+        "ギュウ",
+        "うし"
+      ],
+      "meaning": "bò"
+    },
+    {
+      "id": "魚",
+      "level": "N4",
+      "readings": [
+        "ギョ",
+        "うお",
+        "さかな"
+      ],
+      "meaning": "cá"
+    },
+    {
+      "id": "兄",
+      "level": "N4",
+      "readings": [
+        "ケイ",
+        "キョウ",
+        "あに"
+      ],
+      "meaning": "anh trai"
+    },
+    {
+      "id": "犬",
+      "level": "N4",
+      "readings": [
+        "ケン",
+        "いぬ"
+      ],
+      "meaning": "chó"
+    },
+    {
+      "id": "妹",
+      "level": "N4",
+      "readings": [
+        "マイ",
+        "いもうと"
+      ],
+      "meaning": "em gái"
+    },
+    {
+      "id": "姉",
+      "level": "N4",
+      "readings": [
+        "シ",
+        "あね",
+        "はは"
+      ],
+      "meaning": "chị gái"
+    },
+    {
+      "id": "漢",
+      "level": "N4",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "Hán, Trung Hoa"
+    },
+    {
+      "id": "才",
+      "level": "N3",
+      "readings": [
+        "サイ"
+      ],
+      "meaning": "tài năng, tuổi"
+    },
+    {
+      "id": "王",
+      "level": "N3",
+      "readings": [
+        "オウ"
+      ],
+      "meaning": "vua"
+    },
+    {
+      "id": "石",
+      "level": "N3",
+      "readings": [
+        "セキ",
+        "シャク",
+        "コク",
+        "いし"
+      ],
+      "meaning": "đá"
+    },
+    {
+      "id": "内",
+      "level": "N3",
+      "readings": [
+        "ナイ",
+        "ダイ",
+        "うち"
+      ],
+      "meaning": "bên trong"
+    },
+    {
+      "id": "太",
+      "level": "N3",
+      "readings": [
+        "タイ",
+        "タ"
+      ],
+      "meaning": "béo, dày, to"
+    },
+    {
+      "id": "引",
+      "level": "N3",
+      "readings": [
+        "イン"
+      ],
+      "meaning": "kéo"
+    },
+    {
+      "id": "市",
+      "level": "N3",
+      "readings": [
+        "シ",
+        "いち"
+      ],
+      "meaning": "chợ, thành phố"
+    },
+    {
+      "id": "他",
+      "level": "N3",
+      "readings": [
+        "タ",
+        "ほか"
+      ],
+      "meaning": "khác"
+    },
+    {
+      "id": "号",
+      "level": "N3",
+      "readings": [
+        "ゴウ",
+        "よびな"
+      ],
+      "meaning": "số, hiệu"
+    },
+    {
+      "id": "平",
+      "level": "N3",
+      "readings": [
+        "ヘイ",
+        "ビョウ",
+        "ヒョウ",
+        "ひら"
+      ],
+      "meaning": "bằng phẳng, hòa bình"
+    },
+    {
+      "id": "打",
+      "level": "N3",
+      "readings": [
+        "ダ"
+      ],
+      "meaning": "đánh, đập"
+    },
+    {
+      "id": "申",
+      "level": "N3",
+      "readings": [
+        "シン",
+        "さる"
+      ],
+      "meaning": "thưa, nói (khiêm nhường)"
+    },
+    {
+      "id": "礼",
+      "level": "N3",
+      "readings": [
+        "レイ",
+        "ライ"
+      ],
+      "meaning": "lễ, cảm ơn"
+    },
+    {
+      "id": "耳",
+      "level": "N3",
+      "readings": [
+        "ジ",
+        "みみ"
+      ],
+      "meaning": "tai"
+    },
+    {
+      "id": "交",
+      "level": "N3",
+      "readings": [
+        "コウ"
+      ],
+      "meaning": "giao, trao đổi"
+    },
+    {
+      "id": "光",
+      "level": "N3",
+      "readings": [
+        "コウ",
+        "ひかり"
+      ],
+      "meaning": "ánh sáng"
+    },
+    {
+      "id": "回",
+      "level": "N3",
+      "readings": [
+        "カイ",
+        "エ"
+      ],
+      "meaning": "lần, quay vòng"
+    },
+    {
+      "id": "当",
+      "level": "N3",
+      "readings": [
+        "トウ"
+      ],
+      "meaning": "trúng, đúng"
+    },
+    {
+      "id": "米",
+      "level": "N3",
+      "readings": [
+        "ベイ",
+        "マイ",
+        "こめ",
+        "よね"
+      ],
+      "meaning": "gạo, nước Mỹ"
+    },
+    {
+      "id": "声",
+      "level": "N3",
+      "readings": [
+        "セイ",
+        "ショウ",
+        "こえ"
+      ],
+      "meaning": "giọng nói"
+    },
+    {
+      "id": "形",
+      "level": "N3",
+      "readings": [
+        "ケイ",
+        "ギョウ",
+        "かた",
+        "かたち",
+        "なり"
+      ],
+      "meaning": "hình dạng"
+    },
+    {
+      "id": "草",
+      "level": "N3",
+      "readings": [
+        "ソウ",
+        "くさ"
+      ],
+      "meaning": "cỏ"
+    },
+    {
+      "id": "化",
+      "level": "N3",
+      "readings": [
+        "カ",
+        "ケ"
+      ],
+      "meaning": "biến đổi"
+    },
+    {
+      "id": "両",
+      "level": "N3",
+      "readings": [
+        "リョウ",
+        "てる",
+        "ふたつ"
+      ],
+      "meaning": "cả hai"
+    },
+    {
+      "id": "全",
+      "level": "N3",
+      "readings": [
+        "ゼン"
+      ],
+      "meaning": "toàn bộ"
+    },
+    {
+      "id": "向",
+      "level": "N3",
+      "readings": [
+        "コウ"
+      ],
+      "meaning": "hướng về"
+    },
+    {
+      "id": "曲",
+      "level": "N3",
+      "readings": [
+        "キョク",
+        "くま"
+      ],
+      "meaning": "cong, bản nhạc"
+    },
+    {
+      "id": "次",
+      "level": "N3",
+      "readings": [
+        "ジ",
+        "シ",
+        "つぎ"
+      ],
+      "meaning": "tiếp theo"
+    },
+    {
+      "id": "直",
+      "level": "N3",
+      "readings": [
+        "チョク",
+        "ジキ",
+        "ジカ"
+      ],
+      "meaning": "thẳng, sửa chữa"
+    },
+    {
+      "id": "活",
+      "level": "N3",
+      "readings": [
+        "カツ"
+      ],
+      "meaning": "sống động, hoạt động"
+    },
+    {
+      "id": "点",
+      "level": "N3",
+      "readings": [
+        "テン"
+      ],
+      "meaning": "điểm"
+    },
+    {
+      "id": "科",
+      "level": "N3",
+      "readings": [
+        "カ"
+      ],
+      "meaning": "khoa, môn học"
+    },
+    {
+      "id": "首",
+      "level": "N3",
+      "readings": [
+        "シュ",
+        "くび"
+      ],
+      "meaning": "cổ, đứng đầu"
+    },
+    {
+      "id": "欠",
+      "level": "N3",
+      "readings": [
+        "ケツ",
+        "ケン"
+      ],
+      "meaning": "thiếu, vắng"
+    },
+    {
+      "id": "由",
+      "level": "N3",
+      "readings": [
+        "ユ",
+        "ユウ",
+        "ユイ",
+        "よし"
+      ],
+      "meaning": "lý do, nguyên do"
+    },
+    {
+      "id": "民",
+      "level": "N3",
+      "readings": [
+        "ミン",
+        "たみ"
+      ],
+      "meaning": "dân"
+    },
+    {
+      "id": "付",
+      "level": "N3",
+      "readings": [
+        "フ"
+      ],
+      "meaning": "gắn, kèm theo"
+    },
+    {
+      "id": "失",
+      "level": "N3",
+      "readings": [
+        "シツ"
+      ],
+      "meaning": "mất, thất bại"
+    },
+    {
+      "id": "必",
+      "level": "N3",
+      "readings": [
+        "ヒツ"
+      ],
+      "meaning": "nhất định, cần"
+    },
+    {
+      "id": "未",
+      "level": "N3",
+      "readings": [
+        "ミ",
+        "ビ",
+        "ひつじ"
+      ],
+      "meaning": "chưa"
+    },
+    {
+      "id": "末",
+      "level": "N3",
+      "readings": [
+        "マツ",
+        "バツ",
+        "すえ"
+      ],
+      "meaning": "cuối"
+    },
+    {
+      "id": "記",
+      "level": "N3",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "ghi chép"
+    },
+    {
+      "id": "組",
+      "level": "N3",
+      "readings": [
+        "ソ",
+        "くみ"
+      ],
+      "meaning": "nhóm, lắp ghép"
+    },
+    {
+      "id": "船",
+      "level": "N3",
+      "readings": [
+        "セン",
+        "ふね"
+      ],
+      "meaning": "thuyền, tàu"
+    },
+    {
+      "id": "雪",
+      "level": "N3",
+      "readings": [
+        "セツ",
+        "ゆき"
+      ],
+      "meaning": "tuyết"
+    },
+    {
+      "id": "支",
+      "level": "N3",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "chống đỡ, chi trả"
+    },
+    {
+      "id": "助",
+      "level": "N3",
+      "readings": [
+        "ジョ",
+        "すけ"
+      ],
+      "meaning": "giúp đỡ"
+    },
+    {
+      "id": "君",
+      "level": "N3",
+      "readings": [
+        "クン",
+        "きみ"
+      ],
+      "meaning": "bạn (cách gọi thân), quân"
+    },
+    {
+      "id": "対",
+      "level": "N3",
+      "readings": [
+        "タイ",
+        "ツイ",
+        "あいて"
+      ],
+      "meaning": "đối, đối diện"
+    },
+    {
+      "id": "局",
+      "level": "N3",
+      "readings": [
+        "キョク",
+        "つぼね"
+      ],
+      "meaning": "cục, đài"
+    },
+    {
+      "id": "役",
+      "level": "N3",
+      "readings": [
+        "ヤク",
+        "エキ"
+      ],
+      "meaning": "vai trò, nhiệm vụ"
+    },
+    {
+      "id": "投",
+      "level": "N3",
+      "readings": [
+        "トウ"
+      ],
+      "meaning": "ném"
+    },
+    {
+      "id": "決",
+      "level": "N3",
+      "readings": [
+        "ケツ"
+      ],
+      "meaning": "quyết định"
+    },
+    {
+      "id": "馬",
+      "level": "N3",
+      "readings": [
+        "バ",
+        "うま",
+        "ま"
+      ],
+      "meaning": "ngựa"
+    },
+    {
+      "id": "番",
+      "level": "N3",
+      "readings": [
+        "バン"
+      ],
+      "meaning": "số thứ tự, lượt"
+    },
+    {
+      "id": "絵",
+      "level": "N3",
+      "readings": [
+        "カイ",
+        "エ"
+      ],
+      "meaning": "tranh"
+    },
+    {
+      "id": "数",
+      "level": "N3",
+      "readings": [
+        "スウ",
+        "ス",
+        "サク",
+        "ソク",
+        "シュ",
+        "かず",
+        "しばしば"
+      ],
+      "meaning": "số, đếm"
+    },
+    {
+      "id": "所",
+      "level": "N3",
+      "readings": [
+        "ショ",
+        "ところ",
+        "どころ",
+        "とこ"
+      ],
+      "meaning": "nơi chốn"
+    },
+    {
+      "id": "具",
+      "level": "N3",
+      "readings": [
+        "グ"
+      ],
+      "meaning": "dụng cụ"
+    },
+    {
+      "id": "受",
+      "level": "N3",
+      "readings": [
+        "ジュ"
+      ],
+      "meaning": "nhận, chịu"
+    },
+    {
+      "id": "和",
+      "level": "N3",
+      "readings": [
+        "ワ",
+        "オ",
+        "カ"
+      ],
+      "meaning": "hòa, kiểu Nhật"
+    },
+    {
+      "id": "定",
+      "level": "N3",
+      "readings": [
+        "テイ",
+        "ジョウ"
+      ],
+      "meaning": "định, cố định"
+    },
+    {
+      "id": "実",
+      "level": "N3",
+      "readings": [
+        "ジツ",
+        "シツ",
+        "み",
+        "まこと",
+        "みの"
+      ],
+      "meaning": "thực, quả"
+    },
+    {
+      "id": "泳",
+      "level": "N3",
+      "readings": [
+        "エイ"
+      ],
+      "meaning": "bơi"
+    },
+    {
+      "id": "苦",
+      "level": "N3",
+      "readings": [
+        "ク"
+      ],
+      "meaning": "khổ, đắng"
+    },
+    {
+      "id": "表",
+      "level": "N3",
+      "readings": [
+        "ヒョウ",
+        "おもて"
+      ],
+      "meaning": "bề mặt, bảng, biểu"
+    },
+    {
+      "id": "部",
+      "level": "N3",
+      "readings": [
+        "ブ"
+      ],
+      "meaning": "bộ phận, phòng ban"
+    },
+    {
+      "id": "乗",
+      "level": "N3",
+      "readings": [
+        "ジョウ",
+        "ショウ"
+      ],
+      "meaning": "đi (xe), cưỡi"
+    },
+    {
+      "id": "客",
+      "level": "N3",
+      "readings": [
+        "キャク",
+        "カク"
+      ],
+      "meaning": "khách"
+    },
+    {
+      "id": "相",
+      "level": "N3",
+      "readings": [
+        "ソウ",
+        "ショウ"
+      ],
+      "meaning": "tương, lẫn nhau"
+    },
+    {
+      "id": "美",
+      "level": "N3",
+      "readings": [
+        "ビ",
+        "ミ"
+      ],
+      "meaning": "đẹp"
+    },
+    {
+      "id": "負",
+      "level": "N3",
+      "readings": [
+        "フ"
+      ],
+      "meaning": "thua, gánh vác"
+    },
+    {
+      "id": "談",
+      "level": "N3",
+      "readings": [
+        "ダン"
+      ],
+      "meaning": "nói chuyện"
+    },
+    {
+      "id": "要",
+      "level": "N3",
+      "readings": [
+        "ヨウ",
+        "かなめ"
+      ],
+      "meaning": "cần, quan trọng"
+    },
+    {
+      "id": "勝",
+      "level": "N3",
+      "readings": [
+        "ショウ",
+        "かつ"
+      ],
+      "meaning": "thắng"
+    },
+    {
+      "id": "速",
+      "level": "N3",
+      "readings": [
+        "ソク"
+      ],
+      "meaning": "nhanh"
+    },
+    {
+      "id": "配",
+      "level": "N3",
+      "readings": [
+        "ハイ"
+      ],
+      "meaning": "phân phát, lo lắng"
+    },
+    {
+      "id": "酒",
+      "level": "N3",
+      "readings": [
+        "シュ",
+        "さけ"
+      ],
+      "meaning": "rượu"
+    },
+    {
+      "id": "進",
+      "level": "N3",
+      "readings": [
+        "シン"
+      ],
+      "meaning": "tiến"
+    },
+    {
+      "id": "落",
+      "level": "N3",
+      "readings": [
+        "ラク"
+      ],
+      "meaning": "rơi"
+    },
+    {
+      "id": "葉",
+      "level": "N3",
+      "readings": [
+        "ヨウ",
+        "は"
+      ],
+      "meaning": "lá"
+    },
+    {
+      "id": "路",
+      "level": "N3",
+      "readings": [
+        "ロ",
+        "ル",
+        "みち"
+      ],
+      "meaning": "đường"
+    },
+    {
+      "id": "鳴",
+      "level": "N3",
+      "readings": [
+        "メイ"
+      ],
+      "meaning": "kêu, hót"
+    },
+    {
+      "id": "横",
+      "level": "N3",
+      "readings": [
+        "オウ",
+        "よこ"
+      ],
+      "meaning": "ngang, bên cạnh"
+    },
+    {
+      "id": "調",
+      "level": "N3",
+      "readings": [
+        "チョウ"
+      ],
+      "meaning": "điều tra, điệu"
+    },
+    {
+      "id": "頭",
+      "level": "N3",
+      "readings": [
+        "トウ",
+        "ズ",
+        "ト",
+        "あたま",
+        "かしら",
+        "かぶり"
+      ],
+      "meaning": "đầu"
+    },
+    {
+      "id": "顔",
+      "level": "N3",
+      "readings": [
+        "ガン",
+        "かお"
+      ],
+      "meaning": "mặt"
+    },
+    {
+      "id": "最",
+      "level": "N3",
+      "readings": [
+        "サイ",
+        "シュ",
+        "つま"
+      ],
+      "meaning": "nhất"
+    },
+    {
+      "id": "争",
+      "level": "N3",
+      "readings": [
+        "ソウ"
+      ],
+      "meaning": "tranh giành"
+    },
+    {
+      "id": "伝",
+      "level": "N3",
+      "readings": [
+        "デン",
+        "テン"
+      ],
+      "meaning": "truyền đạt"
+    },
+    {
+      "id": "共",
+      "level": "N3",
+      "readings": [
+        "キョウ",
+        "とも"
+      ],
+      "meaning": "cùng nhau"
+    },
+    {
+      "id": "好",
+      "level": "N3",
+      "readings": [
+        "コウ"
+      ],
+      "meaning": "thích"
+    },
+    {
+      "id": "成",
+      "level": "N3",
+      "readings": [
+        "セイ",
+        "ジョウ"
+      ],
+      "meaning": "thành, trở thành"
+    },
+    {
+      "id": "老",
+      "level": "N3",
+      "readings": [
+        "ロウ"
+      ],
+      "meaning": "già"
+    },
+    {
+      "id": "位",
+      "level": "N3",
+      "readings": [
+        "イ",
+        "くらい",
+        "ぐらい"
+      ],
+      "meaning": "vị trí, thứ hạng"
+    },
+    {
+      "id": "初",
+      "level": "N3",
+      "readings": [
+        "ショ",
+        "はつ"
+      ],
+      "meaning": "đầu tiên"
+    },
+    {
+      "id": "利",
+      "level": "N3",
+      "readings": [
+        "リ"
+      ],
+      "meaning": "lợi, có lợi"
+    },
+    {
+      "id": "努",
+      "level": "N3",
+      "readings": [
+        "ド"
+      ],
+      "meaning": "cố gắng"
+    },
+    {
+      "id": "労",
+      "level": "N3",
+      "readings": [
+        "ロウ",
+        "ねぎら"
+      ],
+      "meaning": "lao động, vất vả"
+    },
+    {
+      "id": "命",
+      "level": "N3",
+      "readings": [
+        "メイ",
+        "ミョウ",
+        "いのち"
+      ],
+      "meaning": "mạng sống, mệnh lệnh"
+    },
+    {
+      "id": "放",
+      "level": "N3",
+      "readings": [
+        "ホウ"
+      ],
+      "meaning": "thả, phóng"
+    },
+    {
+      "id": "昔",
+      "level": "N3",
+      "readings": [
+        "セキ",
+        "シャク",
+        "むかし"
+      ],
+      "meaning": "ngày xưa"
+    },
+    {
+      "id": "育",
+      "level": "N3",
+      "readings": [
+        "イク"
+      ],
+      "meaning": "nuôi dưỡng"
+    },
+    {
+      "id": "指",
+      "level": "N3",
+      "readings": [
+        "シ",
+        "ゆび"
+      ],
+      "meaning": "ngón tay, chỉ"
+    },
+    {
+      "id": "神",
+      "level": "N3",
+      "readings": [
+        "シン",
+        "ジン",
+        "かみ"
+      ],
+      "meaning": "thần"
+    },
+    {
+      "id": "追",
+      "level": "N3",
+      "readings": [
+        "ツイ"
+      ],
+      "meaning": "đuổi theo"
+    },
+    {
+      "id": "戦",
+      "level": "N3",
+      "readings": [
+        "セン",
+        "いくさ"
+      ],
+      "meaning": "chiến, đánh nhau"
+    },
+    {
+      "id": "良",
+      "level": "N3",
+      "readings": [
+        "リョウ"
+      ],
+      "meaning": "tốt"
+    },
+    {
+      "id": "便",
+      "level": "N3",
+      "readings": [
+        "ベン",
+        "ビン"
+      ],
+      "meaning": "tiện, thư từ"
+    },
+    {
+      "id": "働",
+      "level": "N3",
+      "readings": [
+        "ドウ"
+      ],
+      "meaning": "làm việc"
+    },
+    {
+      "id": "庭",
+      "level": "N3",
+      "readings": [
+        "テイ",
+        "にわ"
+      ],
+      "meaning": "sân vườn"
+    },
+    {
+      "id": "息",
+      "level": "N3",
+      "readings": [
+        "ソク",
+        "いき"
+      ],
+      "meaning": "hơi thở"
+    },
+    {
+      "id": "流",
+      "level": "N3",
+      "readings": [
+        "リュウ",
+        "ル"
+      ],
+      "meaning": "chảy, dòng"
+    },
+    {
+      "id": "消",
+      "level": "N3",
+      "readings": [
+        "ショウ"
+      ],
+      "meaning": "tắt, xóa"
+    },
+    {
+      "id": "都",
+      "level": "N3",
+      "readings": [
+        "ト",
+        "ツ",
+        "みやこ"
+      ],
+      "meaning": "thủ đô, đô thị"
+    },
+    {
+      "id": "商",
+      "level": "N3",
+      "readings": [
+        "ショウ"
+      ],
+      "meaning": "buôn bán"
+    },
+    {
+      "id": "深",
+      "level": "N3",
+      "readings": [
+        "シン"
+      ],
+      "meaning": "sâu"
+    },
+    {
+      "id": "球",
+      "level": "N3",
+      "readings": [
+        "キュウ",
+        "たま"
+      ],
+      "meaning": "quả cầu, bóng"
+    },
+    {
+      "id": "陽",
+      "level": "N3",
+      "readings": [
+        "ヨウ",
+        "ひ"
+      ],
+      "meaning": "dương, mặt trời"
+    },
+    {
+      "id": "寒",
+      "level": "N3",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "lạnh"
+    },
+    {
+      "id": "悲",
+      "level": "N3",
+      "readings": [
+        "ヒ"
+      ],
+      "meaning": "buồn"
+    },
+    {
+      "id": "期",
+      "level": "N3",
+      "readings": [
+        "キ",
+        "ゴ"
+      ],
+      "meaning": "thời kỳ, kỳ hạn"
+    },
+    {
+      "id": "歯",
+      "level": "N3",
+      "readings": [
+        "シ",
+        "よわい",
+        "は"
+      ],
+      "meaning": "răng"
+    },
+    {
+      "id": "港",
+      "level": "N3",
+      "readings": [
+        "コウ",
+        "みなと"
+      ],
+      "meaning": "cảng"
+    },
+    {
+      "id": "登",
+      "level": "N3",
+      "readings": [
+        "トウ",
+        "ト",
+        "ドウ",
+        "ショウ",
+        "チョウ"
+      ],
+      "meaning": "leo"
+    },
+    {
+      "id": "亡",
+      "level": "N3",
+      "readings": [
+        "ボウ",
+        "モウ"
+      ],
+      "meaning": "mất, chết"
+    },
+    {
+      "id": "合",
+      "level": "N3",
+      "readings": [
+        "ゴウ",
+        "ガッ",
+        "カッ"
+      ],
+      "meaning": "hợp, vừa"
+    },
+    {
+      "id": "予",
+      "level": "N3",
+      "readings": [
+        "ヨ",
+        "シャ"
+      ],
+      "meaning": "trước, dự"
+    },
+    {
+      "id": "反",
+      "level": "N3",
+      "readings": [
+        "ハン",
+        "ホン",
+        "タン",
+        "ホ"
+      ],
+      "meaning": "phản, ngược lại"
+    },
+    {
+      "id": "返",
+      "level": "N3",
+      "readings": [
+        "ヘン"
+      ],
+      "meaning": "trả lại"
+    },
+    {
+      "id": "宿",
+      "level": "N3",
+      "readings": [
+        "シュク",
+        "やど"
+      ],
+      "meaning": "trọ, nhà trọ"
+    },
+    {
+      "id": "想",
+      "level": "N3",
+      "readings": [
+        "ソウ",
+        "ソ"
+      ],
+      "meaning": "nghĩ, tưởng tượng"
+    },
+    {
+      "id": "感",
+      "level": "N3",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "cảm giác"
+    },
+    {
+      "id": "暗",
+      "level": "N3",
+      "readings": [
+        "アン"
+      ],
+      "meaning": "tối"
+    },
+    {
+      "id": "様",
+      "level": "N3",
+      "readings": [
+        "ヨウ",
+        "ショウ",
+        "さま",
+        "さん"
+      ],
+      "meaning": "ngài, kiểu cách"
+    },
+    {
+      "id": "福",
+      "level": "N3",
+      "readings": [
+        "フク"
+      ],
+      "meaning": "phúc"
+    },
+    {
+      "id": "殺",
+      "level": "N3",
+      "readings": [
+        "サツ",
+        "サイ",
+        "セツ"
+      ],
+      "meaning": "giết"
+    },
+    {
+      "id": "然",
+      "level": "N3",
+      "readings": [
+        "ゼン",
+        "ネン",
+        "しか",
+        "さ"
+      ],
+      "meaning": "tự nhiên, đương nhiên"
+    },
+    {
+      "id": "熱",
+      "level": "N3",
+      "readings": [
+        "ネツ"
+      ],
+      "meaning": "nóng, sốt"
+    },
+    {
+      "id": "選",
+      "level": "N3",
+      "readings": [
+        "セン"
+      ],
+      "meaning": "chọn"
+    },
+    {
+      "id": "願",
+      "level": "N3",
+      "readings": [
+        "ガン"
+      ],
+      "meaning": "nguyện vọng, xin"
+    },
+    {
+      "id": "情",
+      "level": "N3",
+      "readings": [
+        "ジョウ",
+        "セイ"
+      ],
+      "meaning": "tình cảm, tình hình"
+    },
+    {
+      "id": "疑",
+      "level": "N3",
+      "readings": [
+        "ギ"
+      ],
+      "meaning": "nghi ngờ"
+    },
+    {
+      "id": "皆",
+      "level": "N3",
+      "readings": [
+        "カイ",
+        "みな",
+        "みんな"
+      ],
+      "meaning": "mọi người"
+    },
+    {
+      "id": "例",
+      "level": "N3",
+      "readings": [
+        "レイ"
+      ],
+      "meaning": "ví dụ"
+    },
+    {
+      "id": "参",
+      "level": "N3",
+      "readings": [
+        "サン",
+        "シン",
+        "まじわる",
+        "みつ"
+      ],
+      "meaning": "tham gia, đến"
+    },
+    {
+      "id": "完",
+      "level": "N3",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "hoàn thành"
+    },
+    {
+      "id": "念",
+      "level": "N3",
+      "readings": [
+        "ネン"
+      ],
+      "meaning": "niệm, ý nghĩ"
+    },
+    {
+      "id": "折",
+      "level": "N3",
+      "readings": [
+        "セツ",
+        "シャク",
+        "おり"
+      ],
+      "meaning": "gấp, bẻ gãy"
+    },
+    {
+      "id": "望",
+      "level": "N3",
+      "readings": [
+        "ボウ",
+        "モウ",
+        "もち"
+      ],
+      "meaning": "mong, hy vọng"
+    },
+    {
+      "id": "束",
+      "level": "N3",
+      "readings": [
+        "ソク",
+        "たば",
+        "つか"
+      ],
+      "meaning": "bó, hẹn"
+    },
+    {
+      "id": "残",
+      "level": "N3",
+      "readings": [
+        "ザン",
+        "サン"
+      ],
+      "meaning": "còn lại"
+    },
+    {
+      "id": "求",
+      "level": "N3",
+      "readings": [
+        "キュウ",
+        "グ"
+      ],
+      "meaning": "yêu cầu, tìm kiếm"
+    },
+    {
+      "id": "約",
+      "level": "N3",
+      "readings": [
+        "ヤク"
+      ],
+      "meaning": "hẹn, khoảng chừng"
+    },
+    {
+      "id": "性",
+      "level": "N3",
+      "readings": [
+        "セイ",
+        "ショウ",
+        "さが"
+      ],
+      "meaning": "tính, giới tính"
+    },
+    {
+      "id": "格",
+      "level": "N3",
+      "readings": [
+        "カク",
+        "コウ",
+        "キャク",
+        "ゴウ"
+      ],
+      "meaning": "cách, tư cách"
+    },
+    {
+      "id": "能",
+      "level": "N3",
+      "readings": [
+        "ノウ"
+      ],
+      "meaning": "năng lực"
+    },
+    {
+      "id": "術",
+      "level": "N3",
+      "readings": [
+        "ジュツ",
+        "すべ"
+      ],
+      "meaning": "thuật, kỹ thuật"
+    },
+    {
+      "id": "晴",
+      "level": "N3",
+      "readings": [
+        "セイ"
+      ],
+      "meaning": "trời quang"
+    },
+    {
+      "id": "列",
+      "level": "N3",
+      "readings": [
+        "レツ",
+        "レ"
+      ],
+      "meaning": "hàng"
+    },
+    {
+      "id": "式",
+      "level": "N3",
+      "readings": [
+        "シキ"
+      ],
+      "meaning": "nghi lễ, kiểu"
+    },
+    {
+      "id": "信",
+      "level": "N3",
+      "readings": [
+        "シン"
+      ],
+      "meaning": "tin"
+    },
+    {
+      "id": "単",
+      "level": "N3",
+      "readings": [
+        "タン",
+        "ひとえ"
+      ],
+      "meaning": "đơn giản"
+    },
+    {
+      "id": "変",
+      "level": "N3",
+      "readings": [
+        "ヘン"
+      ],
+      "meaning": "lạ, thay đổi"
+    },
+    {
+      "id": "夫",
+      "level": "N3",
+      "readings": [
+        "フ",
+        "フウ",
+        "ブ",
+        "おっと",
+        "それ"
+      ],
+      "meaning": "chồng"
+    },
+    {
+      "id": "昨",
+      "level": "N3",
+      "readings": [
+        "サク"
+      ],
+      "meaning": "hôm qua, trước"
+    },
+    {
+      "id": "法",
+      "level": "N3",
+      "readings": [
+        "ホウ",
+        "ハッ",
+        "ホッ",
+        "フラン",
+        "のり"
+      ],
+      "meaning": "pháp luật, phương pháp"
+    },
+    {
+      "id": "晩",
+      "level": "N3",
+      "readings": [
+        "バン"
+      ],
+      "meaning": "tối"
+    },
+    {
+      "id": "猫",
+      "level": "N3",
+      "readings": [
+        "ビョウ",
+        "ねこ"
+      ],
+      "meaning": "mèo"
+    },
+    {
+      "id": "園",
+      "level": "N3",
+      "readings": [
+        "エン",
+        "その"
+      ],
+      "meaning": "vườn"
+    },
+    {
+      "id": "遠",
+      "level": "N3",
+      "readings": [
+        "エン",
+        "オン"
+      ],
+      "meaning": "xa"
+    },
+    {
+      "id": "係",
+      "level": "N3",
+      "readings": [
+        "ケイ",
+        "かかり"
+      ],
+      "meaning": "liên quan, phụ trách"
+    },
+    {
+      "id": "取",
+      "level": "N3",
+      "readings": [
+        "シュ",
+        "とり"
+      ],
+      "meaning": "lấy"
+    },
+    {
+      "id": "守",
+      "level": "N3",
+      "readings": [
+        "シュ",
+        "ス",
+        "もり",
+        "かみ"
+      ],
+      "meaning": "giữ, bảo vệ"
+    },
+    {
+      "id": "幸",
+      "level": "N3",
+      "readings": [
+        "コウ",
+        "さち"
+      ],
+      "meaning": "may mắn, hạnh phúc"
+    },
+    {
+      "id": "箱",
+      "level": "N3",
+      "readings": [
+        "ソウ",
+        "はこ"
+      ],
+      "meaning": "hộp"
+    },
+    {
+      "id": "面",
+      "level": "N3",
+      "readings": [
+        "メン",
+        "ベン",
+        "おも",
+        "おもて",
+        "つら"
+      ],
+      "meaning": "mặt, bề mặt"
+    },
+    {
+      "id": "喜",
+      "level": "N3",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "vui mừng"
+    },
+    {
+      "id": "治",
+      "level": "N3",
+      "readings": [
+        "ジ",
+        "チ"
+      ],
+      "meaning": "chữa trị, cai trị"
+    },
+    {
+      "id": "笑",
+      "level": "N3",
+      "readings": [
+        "ショウ"
+      ],
+      "meaning": "cười"
+    },
+    {
+      "id": "辞",
+      "level": "N3",
+      "readings": [
+        "ジ"
+      ],
+      "meaning": "từ, từ chức"
+    },
+    {
+      "id": "関",
+      "level": "N3",
+      "readings": [
+        "カン",
+        "せき",
+        "からくり",
+        "かんぬき"
+      ],
+      "meaning": "liên quan, cửa ải"
+    },
+    {
+      "id": "政",
+      "level": "N3",
+      "readings": [
+        "セイ",
+        "ショウ",
+        "まつりごと",
+        "まん"
+      ],
+      "meaning": "chính trị"
+    },
+    {
+      "id": "留",
+      "level": "N3",
+      "readings": [
+        "リュウ",
+        "ル",
+        "るうぶる"
+      ],
+      "meaning": "lưu lại, ở lại"
+    },
+    {
+      "id": "険",
+      "level": "N3",
+      "readings": [
+        "ケン"
+      ],
+      "meaning": "hiểm, hiểm trở"
+    },
+    {
+      "id": "危",
+      "level": "N3",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "nguy"
+    },
+    {
+      "id": "存",
+      "level": "N3",
+      "readings": [
+        "ソン",
+        "ゾン"
+      ],
+      "meaning": "tồn tại, biết"
+    },
+    {
+      "id": "原",
+      "level": "N3",
+      "readings": [
+        "ゲン",
+        "はら"
+      ],
+      "meaning": "nguyên, cánh đồng"
+    },
+    {
+      "id": "薬",
+      "level": "N3",
+      "readings": [
+        "ヤク",
+        "くすり"
+      ],
+      "meaning": "thuốc"
+    },
+    {
+      "id": "側",
+      "level": "N3",
+      "readings": [
+        "ソク",
+        "かわ",
+        "がわ",
+        "そば"
+      ],
+      "meaning": "bên, phía"
+    },
+    {
+      "id": "席",
+      "level": "N3",
+      "readings": [
+        "セキ",
+        "むしろ"
+      ],
+      "meaning": "chỗ ngồi"
+    },
+    {
+      "id": "敗",
+      "level": "N3",
+      "readings": [
+        "ハイ"
+      ],
+      "meaning": "thất bại"
+    },
+    {
+      "id": "果",
+      "level": "N3",
+      "readings": [
+        "カ"
+      ],
+      "meaning": "quả, kết quả"
+    },
+    {
+      "id": "因",
+      "level": "N3",
+      "readings": [
+        "イン"
+      ],
+      "meaning": "nguyên nhân"
+    },
+    {
+      "id": "常",
+      "level": "N3",
+      "readings": [
+        "ジョウ",
+        "つね"
+      ],
+      "meaning": "thường"
+    },
+    {
+      "id": "識",
+      "level": "N3",
+      "readings": [
+        "シキ"
+      ],
+      "meaning": "nhận thức"
+    },
+    {
+      "id": "非",
+      "level": "N3",
+      "readings": [
+        "ヒ"
+      ],
+      "meaning": "phi, không"
+    },
+    {
+      "id": "官",
+      "level": "N3",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "quan chức"
+    },
+    {
+      "id": "察",
+      "level": "N3",
+      "readings": [
+        "サツ"
+      ],
+      "meaning": "xét đoán, quan sát"
+    },
+    {
+      "id": "愛",
+      "level": "N3",
+      "readings": [
+        "アイ",
+        "まな"
+      ],
+      "meaning": "yêu"
+    },
+    {
+      "id": "警",
+      "level": "N3",
+      "readings": [
+        "ケイ"
+      ],
+      "meaning": "cảnh báo"
+    },
+    {
+      "id": "覚",
+      "level": "N3",
+      "readings": [
+        "カク"
+      ],
+      "meaning": "nhớ, tỉnh dậy"
+    },
+    {
+      "id": "説",
+      "level": "N3",
+      "readings": [
+        "セツ",
+        "ゼイ"
+      ],
+      "meaning": "giải thích, thuyết"
+    },
+    {
+      "id": "告",
+      "level": "N3",
+      "readings": [
+        "コク"
+      ],
+      "meaning": "báo, thông báo"
+    },
+    {
+      "id": "種",
+      "level": "N3",
+      "readings": [
+        "シュ",
+        "たね"
+      ],
+      "meaning": "loại, hạt giống"
+    },
+    {
+      "id": "達",
+      "level": "N3",
+      "readings": [
+        "タツ",
+        "ダ"
+      ],
+      "meaning": "đạt, (chỉ số nhiều)"
+    },
+    {
+      "id": "類",
+      "level": "N3",
+      "readings": [
+        "ルイ"
+      ],
+      "meaning": "loại"
+    },
+    {
+      "id": "報",
+      "level": "N3",
+      "readings": [
+        "ホウ"
+      ],
+      "meaning": "báo, tin tức"
+    },
+    {
+      "id": "等",
+      "level": "N3",
+      "readings": [
+        "トウ",
+        "など"
+      ],
+      "meaning": "vân vân, bằng nhau"
+    },
+    {
+      "id": "座",
+      "level": "N3",
+      "readings": [
+        "ザ"
+      ],
+      "meaning": "ngồi, chỗ ngồi"
+    },
+    {
+      "id": "忘",
+      "level": "N3",
+      "readings": [
+        "ボウ"
+      ],
+      "meaning": "quên"
+    },
+    {
+      "id": "洗",
+      "level": "N3",
+      "readings": [
+        "セン"
+      ],
+      "meaning": "rửa"
+    },
+    {
+      "id": "許",
+      "level": "N3",
+      "readings": [
+        "キョ",
+        "もと"
+      ],
+      "meaning": "cho phép"
+    },
+    {
+      "id": "静",
+      "level": "N3",
+      "readings": [
+        "セイ",
+        "ジョウ"
+      ],
+      "meaning": "yên tĩnh"
+    },
+    {
+      "id": "煙",
+      "level": "N3",
+      "readings": [
+        "エン",
+        "けむり"
+      ],
+      "meaning": "khói"
+    },
+    {
+      "id": "加",
+      "level": "N3",
+      "readings": [
+        "カ"
+      ],
+      "meaning": "thêm"
+    },
+    {
+      "id": "容",
+      "level": "N3",
+      "readings": [
+        "ヨウ"
+      ],
+      "meaning": "chứa, dung mạo"
+    },
+    {
+      "id": "易",
+      "level": "N3",
+      "readings": [
+        "エキ",
+        "イ"
+      ],
+      "meaning": "dễ, mậu dịch"
+    },
+    {
+      "id": "財",
+      "level": "N3",
+      "readings": [
+        "ザイ",
+        "サイ",
+        "ゾク",
+        "たから"
+      ],
+      "meaning": "của cải"
+    },
+    {
+      "id": "若",
+      "level": "N3",
+      "readings": [
+        "ジャク",
+        "ニャク",
+        "ニャ"
+      ],
+      "meaning": "trẻ"
+    },
+    {
+      "id": "忙",
+      "level": "N3",
+      "readings": [
+        "ボウ",
+        "モウ",
+        "うれえるさま"
+      ],
+      "meaning": "bận"
+    },
+    {
+      "id": "徒",
+      "level": "N3",
+      "readings": [
+        "ト",
+        "いたずら",
+        "あだ"
+      ],
+      "meaning": "đồ đệ, đi bộ"
+    },
+    {
+      "id": "得",
+      "level": "N3",
+      "readings": [
+        "トク"
+      ],
+      "meaning": "được, lợi"
+    },
+    {
+      "id": "続",
+      "level": "N3",
+      "readings": [
+        "ゾク",
+        "ショク",
+        "コウ",
+        "キョウ"
+      ],
+      "meaning": "tiếp tục"
+    },
+    {
+      "id": "連",
+      "level": "N3",
+      "readings": [
+        "レン"
+      ],
+      "meaning": "liên kết, dẫn theo"
+    },
+    {
+      "id": "困",
+      "level": "N3",
+      "readings": [
+        "コン"
+      ],
+      "meaning": "khó khăn"
+    },
+    {
+      "id": "機",
+      "level": "N3",
+      "readings": [
+        "キ",
+        "はた"
+      ],
+      "meaning": "máy móc, cơ hội"
+    },
+    {
+      "id": "飛",
+      "level": "N3",
+      "readings": [
+        "ヒ"
+      ],
+      "meaning": "bay"
+    },
+    {
+      "id": "害",
+      "level": "N3",
+      "readings": [
+        "ガイ"
+      ],
+      "meaning": "hại"
+    },
+    {
+      "id": "余",
+      "level": "N3",
+      "readings": [
+        "ヨ"
+      ],
+      "meaning": "thừa"
+    },
+    {
+      "id": "難",
+      "level": "N3",
+      "readings": [
+        "ナン"
+      ],
+      "meaning": "khó"
+    },
+    {
+      "id": "確",
+      "level": "N3",
+      "readings": [
+        "カク",
+        "コウ"
+      ],
+      "meaning": "chắc chắn"
+    },
+    {
+      "id": "在",
+      "level": "N3",
+      "readings": [
+        "ザイ"
+      ],
+      "meaning": "ở, tồn tại"
+    },
+    {
+      "id": "夢",
+      "level": "N3",
+      "readings": [
+        "ム",
+        "ボウ",
+        "ゆめ"
+      ],
+      "meaning": "giấc mơ"
+    },
+    {
+      "id": "産",
+      "level": "N3",
+      "readings": [
+        "サン"
+      ],
+      "meaning": "sinh, sản xuất"
+    },
+    {
+      "id": "倒",
+      "level": "N3",
+      "readings": [
+        "トウ",
+        "さかさま",
+        "さかさ"
+      ],
+      "meaning": "đổ, ngã"
+    },
+    {
+      "id": "妻",
+      "level": "N3",
+      "readings": [
+        "サイ",
+        "つま"
+      ],
+      "meaning": "vợ"
+    },
+    {
+      "id": "議",
+      "level": "N3",
+      "readings": [
+        "ギ"
+      ],
+      "meaning": "nghị, bàn bạc"
+    },
+    {
+      "id": "犯",
+      "level": "N3",
+      "readings": [
+        "ハン",
+        "ボン"
+      ],
+      "meaning": "phạm"
+    },
+    {
+      "id": "罪",
+      "level": "N3",
+      "readings": [
+        "ザイ",
+        "つみ"
+      ],
+      "meaning": "tội"
+    },
+    {
+      "id": "論",
+      "level": "N3",
+      "readings": [
+        "ロン"
+      ],
+      "meaning": "luận, tranh luận"
+    },
+    {
+      "id": "経",
+      "level": "N3",
+      "readings": [
+        "ケイ",
+        "キョウ",
+        "キン",
+        "たていと",
+        "のり"
+      ],
+      "meaning": "kinh, trải qua"
+    },
+    {
+      "id": "済",
+      "level": "N3",
+      "readings": [
+        "サイ",
+        "セイ"
+      ],
+      "meaning": "xong, cứu giúp"
+    },
+    {
+      "id": "判",
+      "level": "N3",
+      "readings": [
+        "ハン",
+        "バン"
+      ],
+      "meaning": "phán đoán, con dấu"
+    },
+    {
+      "id": "制",
+      "level": "N3",
+      "readings": [
+        "セイ"
+      ],
+      "meaning": "chế, hệ thống"
+    },
+    {
+      "id": "務",
+      "level": "N3",
+      "readings": [
+        "ム"
+      ],
+      "meaning": "nhiệm vụ"
+    },
+    {
+      "id": "資",
+      "level": "N3",
+      "readings": [
+        "シ"
+      ],
+      "meaning": "tài sản, vốn"
+    },
+    {
+      "id": "権",
+      "level": "N3",
+      "readings": [
+        "ケン",
+        "ゴン",
+        "おもり",
+        "かり"
+      ],
+      "meaning": "quyền"
+    },
+    {
+      "id": "件",
+      "level": "N3",
+      "readings": [
+        "ケン",
+        "くだん"
+      ],
+      "meaning": "vụ việc"
+    },
+    {
+      "id": "断",
+      "level": "N3",
+      "readings": [
+        "ダン"
+      ],
+      "meaning": "cắt đứt, từ chối"
+    },
+    {
+      "id": "任",
+      "level": "N3",
+      "readings": [
+        "ニン"
+      ],
+      "meaning": "nhiệm, giao phó"
+    },
+    {
+      "id": "責",
+      "level": "N3",
+      "readings": [
+        "セキ"
+      ],
+      "meaning": "trách, chỉ trích"
+    },
+    {
+      "id": "増",
+      "level": "N3",
+      "readings": [
+        "ゾウ"
+      ],
+      "meaning": "tăng"
+    },
+    {
+      "id": "解",
+      "level": "N3",
+      "readings": [
+        "カイ",
+        "ゲ"
+      ],
+      "meaning": "giải, hiểu"
+    },
+    {
+      "id": "際",
+      "level": "N3",
+      "readings": [
+        "サイ",
+        "きわ"
+      ],
+      "meaning": "dịp, ranh giới"
+    },
+    {
+      "id": "認",
+      "level": "N3",
+      "readings": [
+        "ニン"
+      ],
+      "meaning": "công nhận"
+    },
+    {
+      "id": "過",
+      "level": "N3",
+      "readings": [
+        "カ"
+      ],
+      "meaning": "quá, trải qua"
+    },
+    {
+      "id": "寝",
+      "level": "N3",
+      "readings": [
+        "シン",
+        "みたまや"
+      ],
+      "meaning": "ngủ"
+    },
+    {
+      "id": "置",
+      "level": "N3",
+      "readings": [
+        "チ"
+      ],
+      "meaning": "đặt"
+    },
+    {
+      "id": "費",
+      "level": "N3",
+      "readings": [
+        "ヒ"
+      ],
+      "meaning": "chi phí"
+    },
+    {
+      "id": "示",
+      "level": "N3",
+      "readings": [
+        "ジ",
+        "シ"
+      ],
+      "meaning": "chỉ ra"
+    },
+    {
+      "id": "観",
+      "level": "N3",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "quan sát"
+    },
+    {
+      "id": "値",
+      "level": "N3",
+      "readings": [
+        "チ",
+        "ね",
+        "あたい"
+      ],
+      "meaning": "giá trị, giá"
+    },
+    {
+      "id": "吸",
+      "level": "N3",
+      "readings": [
+        "キュウ"
+      ],
+      "meaning": "hút"
+    },
+    {
+      "id": "状",
+      "level": "N3",
+      "readings": [
+        "ジョウ"
+      ],
+      "meaning": "tình trạng, thư"
+    },
+    {
+      "id": "収",
+      "level": "N3",
+      "readings": [
+        "シュウ"
+      ],
+      "meaning": "thu"
+    },
+    {
+      "id": "職",
+      "level": "N3",
+      "readings": [
+        "ショク",
+        "ソク"
+      ],
+      "meaning": "nghề"
+    },
+    {
+      "id": "規",
+      "level": "N3",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "quy tắc"
+    },
+    {
+      "id": "割",
+      "level": "N3",
+      "readings": [
+        "カツ",
+        "わり"
+      ],
+      "meaning": "chia, tỷ lệ"
+    },
+    {
+      "id": "演",
+      "level": "N3",
+      "readings": [
+        "エン"
+      ],
+      "meaning": "biểu diễn"
+    },
+    {
+      "id": "師",
+      "level": "N3",
+      "readings": [
+        "シ",
+        "いくさ"
+      ],
+      "meaning": "thầy, chuyên gia"
+    },
+    {
+      "id": "備",
+      "level": "N3",
+      "readings": [
+        "ビ"
+      ],
+      "meaning": "chuẩn bị"
+    },
+    {
+      "id": "優",
+      "level": "N3",
+      "readings": [
+        "ユウ",
+        "ウ"
+      ],
+      "meaning": "hiền, ưu tú"
+    },
+    {
+      "id": "宅",
+      "level": "N3",
+      "readings": [
+        "タク"
+      ],
+      "meaning": "nhà"
+    },
+    {
+      "id": "現",
+      "level": "N3",
+      "readings": [
+        "ゲン",
+        "うつつ"
+      ],
+      "meaning": "hiện ra, hiện tại"
+    },
+    {
+      "id": "呼",
+      "level": "N3",
+      "readings": [
+        "コ"
+      ],
+      "meaning": "gọi"
+    },
+    {
+      "id": "違",
+      "level": "N3",
+      "readings": [
+        "イ"
+      ],
+      "meaning": "khác, sai"
+    },
+    {
+      "id": "差",
+      "level": "N3",
+      "readings": [
+        "サ"
+      ],
+      "meaning": "chênh lệch"
+    },
+    {
+      "id": "供",
+      "level": "N3",
+      "readings": [
+        "キョウ",
+        "ク",
+        "クウ",
+        "グ",
+        "とも"
+      ],
+      "meaning": "cung cấp, đi cùng"
+    },
+    {
+      "id": "限",
+      "level": "N3",
+      "readings": [
+        "ゲン"
+      ],
+      "meaning": "giới hạn"
+    },
+    {
+      "id": "与",
+      "level": "N3",
+      "readings": [
+        "ヨ",
+        "ともに"
+      ],
+      "meaning": "cho, trao"
+    },
+    {
+      "id": "渡",
+      "level": "N3",
+      "readings": [
+        "ト"
+      ],
+      "meaning": "qua, trao"
+    },
+    {
+      "id": "景",
+      "level": "N3",
+      "readings": [
+        "ケイ"
+      ],
+      "meaning": "cảnh"
+    },
+    {
+      "id": "抜",
+      "level": "N3",
+      "readings": [
+        "バツ",
+        "ハツ",
+        "ハイ"
+      ],
+      "meaning": "rút, vượt"
+    },
+    {
+      "id": "候",
+      "level": "N3",
+      "readings": [
+        "コウ",
+        "そうろう"
+      ],
+      "meaning": "thời tiết, khí hậu"
+    },
+    {
+      "id": "構",
+      "level": "N3",
+      "readings": [
+        "コウ"
+      ],
+      "meaning": "cấu trúc, bận tâm"
+    },
+    {
+      "id": "捕",
+      "level": "N3",
+      "readings": [
+        "ホ"
+      ],
+      "meaning": "bắt"
+    },
+    {
+      "id": "慣",
+      "level": "N3",
+      "readings": [
+        "カン"
+      ],
+      "meaning": "quen"
+    },
+    {
+      "id": "満",
+      "level": "N3",
+      "readings": [
+        "マン",
+        "バン"
+      ],
+      "meaning": "đầy"
+    },
+    {
+      "id": "掛",
+      "level": "N3",
+      "readings": [
+        "カイ",
+        "ケイ"
+      ],
+      "meaning": "treo, móc"
+    },
+    {
+      "id": "居",
+      "level": "N3",
+      "readings": [
+        "キョ",
+        "コ"
+      ],
+      "meaning": "ở, cư trú"
+    },
+    {
+      "id": "突",
+      "level": "N3",
+      "readings": [
+        "トツ",
+        "カ"
+      ],
+      "meaning": "đâm, đột ngột"
+    },
+    {
+      "id": "招",
+      "level": "N3",
+      "readings": [
+        "ショウ"
+      ],
+      "meaning": "mời"
+    },
+    {
+      "id": "段",
+      "level": "N3",
+      "readings": [
+        "ダン",
+        "タン"
+      ],
+      "meaning": "bậc, giai đoạn"
+    },
+    {
+      "id": "腹",
+      "level": "N3",
+      "readings": [
+        "フク",
+        "はら"
+      ],
+      "meaning": "bụng"
+    },
+    {
+      "id": "痛",
+      "level": "N3",
+      "readings": [
+        "ツウ"
+      ],
+      "meaning": "đau"
+    },
+    {
+      "id": "退",
+      "level": "N3",
+      "readings": [
+        "タイ"
+      ],
+      "meaning": "lui, rút"
+    },
+    {
+      "id": "迷",
+      "level": "N3",
+      "readings": [
+        "メイ"
+      ],
+      "meaning": "lạc, phân vân"
+    },
+    {
+      "id": "訪",
+      "level": "N3",
+      "readings": [
+        "ホウ"
+      ],
+      "meaning": "thăm"
+    },
+    {
+      "id": "怒",
+      "level": "N3",
+      "readings": [
+        "ド",
+        "ヌ"
+      ],
+      "meaning": "giận"
+    },
+    {
+      "id": "眠",
+      "level": "N3",
+      "readings": [
+        "ミン"
+      ],
+      "meaning": "ngủ"
+    },
+    {
+      "id": "靴",
+      "level": "N3",
+      "readings": [
+        "カ",
+        "くつ"
+      ],
+      "meaning": "giày"
+    },
+    {
+      "id": "途",
+      "level": "N3",
+      "readings": [
+        "ト",
+        "みち"
+      ],
+      "meaning": "đường, giữa chừng"
+    },
+    {
+      "id": "給",
+      "level": "N3",
+      "readings": [
+        "キュウ"
+      ],
+      "meaning": "cấp, lương"
+    },
+    {
+      "id": "冷",
+      "level": "N3",
+      "readings": [
+        "レイ"
+      ],
+      "meaning": "lạnh, nguội"
+    },
+    {
+      "id": "処",
+      "level": "N3",
+      "readings": [
+        "ショ",
+        "ところ"
+      ],
+      "meaning": "xử lý, nơi"
+    },
+    {
+      "id": "婦",
+      "level": "N3",
+      "readings": [
+        "フ",
+        "よめ"
+      ],
+      "meaning": "phụ nữ, vợ"
+    },
+    {
+      "id": "程",
+      "level": "N3",
+      "readings": [
+        "テイ",
+        "ほど"
+      ],
+      "meaning": "mức độ"
+    },
+    {
+      "id": "精",
+      "level": "N3",
+      "readings": [
+        "セイ",
+        "ショウ"
+      ],
+      "meaning": "tinh, tinh thần"
+    },
+    {
+      "id": "絶",
+      "level": "N3",
+      "readings": [
+        "ゼツ"
+      ],
+      "meaning": "tuyệt, cắt đứt"
+    },
+    {
+      "id": "杯",
+      "level": "N3",
+      "readings": [
+        "ハイ",
+        "さかずき"
+      ],
+      "meaning": "chén, cốc"
+    },
+    {
+      "id": "積",
+      "level": "N3",
+      "readings": [
+        "セキ"
+      ],
+      "meaning": "tích, chất, diện tích"
+    },
+    {
+      "id": "寄",
+      "level": "N3",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "ghé, tiến lại gần"
+    },
+    {
+      "id": "娘",
+      "level": "N3",
+      "readings": [
+        "ジョウ",
+        "むすめ",
+        "こ"
+      ],
+      "meaning": "con gái"
+    },
+    {
+      "id": "怖",
+      "level": "N3",
+      "readings": [
+        "フ",
+        "ホ"
+      ],
+      "meaning": "sợ"
+    },
+    {
+      "id": "恐",
+      "level": "N3",
+      "readings": [
+        "キョウ"
+      ],
+      "meaning": "sợ hãi"
+    },
+    {
+      "id": "婚",
+      "level": "N3",
+      "readings": [
+        "コン"
+      ],
+      "meaning": "kết hôn"
+    },
+    {
+      "id": "遊",
+      "level": "N3",
+      "readings": [
+        "ユウ",
+        "ユ"
+      ],
+      "meaning": "chơi"
+    },
+    {
+      "id": "貧",
+      "level": "N3",
+      "readings": [
+        "ヒン",
+        "ビン"
+      ],
+      "meaning": "nghèo"
+    },
+    {
+      "id": "適",
+      "level": "N3",
+      "readings": [
+        "テキ"
+      ],
+      "meaning": "thích hợp"
+    },
+    {
+      "id": "押",
+      "level": "N3",
+      "readings": [
+        "オウ"
+      ],
+      "meaning": "đẩy, ấn"
+    },
+    {
+      "id": "更",
+      "level": "N3",
+      "readings": [
+        "コウ",
+        "さら"
+      ],
+      "meaning": "thêm nữa, đổi mới"
+    },
+    {
+      "id": "浮",
+      "level": "N3",
+      "readings": [
+        "フ",
+        "む"
+      ],
+      "meaning": "nổi"
+    },
+    {
+      "id": "越",
+      "level": "N3",
+      "readings": [
+        "エツ",
+        "オツ"
+      ],
+      "meaning": "vượt, chuyển"
+    },
+    {
+      "id": "背",
+      "level": "N3",
+      "readings": [
+        "ハイ",
+        "せ",
+        "せい"
+      ],
+      "meaning": "lưng, chiều cao"
+    },
+    {
+      "id": "盗",
+      "level": "N3",
+      "readings": [
+        "トウ"
+      ],
+      "meaning": "ăn trộm"
+    },
+    {
+      "id": "除",
+      "level": "N3",
+      "readings": [
+        "ジョ",
+        "ジ"
+      ],
+      "meaning": "trừ, loại bỏ"
+    },
+    {
+      "id": "幾",
+      "level": "N3",
+      "readings": [
+        "キ"
+      ],
+      "meaning": "mấy, bao nhiêu"
+    },
+    {
+      "id": "散",
+      "level": "N3",
+      "readings": [
+        "サン"
+      ],
+      "meaning": "tản, rải rác"
+    },
+    {
+      "id": "似",
+      "level": "N3",
+      "readings": [
+        "ジ"
+      ],
+      "meaning": "giống"
+    },
+    {
+      "id": "富",
+      "level": "N3",
+      "readings": [
+        "フ",
+        "フウ",
+        "とみ"
+      ],
+      "meaning": "giàu"
+    },
+    {
+      "id": "探",
+      "level": "N3",
+      "readings": [
+        "タン"
+      ],
+      "meaning": "tìm"
+    },
+    {
+      "id": "迎",
+      "level": "N3",
+      "readings": [
+        "ゲイ"
+      ],
+      "meaning": "đón"
+    },
+    {
+      "id": "祖",
+      "level": "N3",
+      "readings": [
+        "ソ"
+      ],
+      "meaning": "tổ tiên"
+    },
+    {
+      "id": "雑",
+      "level": "N3",
+      "readings": [
+        "ザツ",
+        "ゾウ"
+      ],
+      "meaning": "tạp, lẫn lộn"
+    },
+    {
+      "id": "賛",
+      "level": "N3",
+      "readings": [
+        "サン"
+      ],
+      "meaning": "tán thành"
+    },
+    {
+      "id": "込",
+      "level": "N3",
+      "readings": [],
+      "meaning": "vào, chen vào"
+    },
+    {
+      "id": "欲",
+      "level": "N3",
+      "readings": [
+        "ヨク"
+      ],
+      "meaning": "muốn"
+    },
+    {
+      "id": "閉",
+      "level": "N3",
+      "readings": [
+        "ヘイ"
+      ],
+      "meaning": "đóng"
+    },
+    {
+      "id": "窓",
+      "level": "N3",
+      "readings": [
+        "ソウ",
+        "ス",
+        "まど",
+        "てんまど",
+        "けむだし"
+      ],
+      "meaning": "cửa sổ"
+    },
+    {
+      "id": "否",
+      "level": "N3",
+      "readings": [
+        "ヒ",
+        "いな",
+        "いや"
+      ],
+      "meaning": "phủ định, không"
+    },
+    {
+      "id": "暮",
+      "level": "N3",
+      "readings": [
+        "ボ"
+      ],
+      "meaning": "chiều tối, sinh sống"
+    },
+    {
+      "id": "誤",
+      "level": "N3",
+      "readings": [
+        "ゴ"
+      ],
+      "meaning": "sai lầm"
+    },
+    {
+      "id": "降",
+      "level": "N3",
+      "readings": [
+        "コウ",
+        "ゴ"
+      ],
+      "meaning": "rơi, xuống"
+    },
+    {
+      "id": "勤",
+      "level": "N3",
+      "readings": [
+        "キン",
+        "ゴン"
+      ],
+      "meaning": "làm việc, siêng năng"
+    },
+    {
+      "id": "刻",
+      "level": "N3",
+      "readings": [
+        "コク"
+      ],
+      "meaning": "khắc, thời khắc"
+    },
+    {
+      "id": "遅",
+      "level": "N3",
+      "readings": [
+        "チ"
+      ],
+      "meaning": "chậm, muộn"
+    },
+    {
+      "id": "破",
+      "level": "N3",
+      "readings": [
+        "ハ"
+      ],
+      "meaning": "rách, phá"
+    },
+    {
+      "id": "互",
+      "level": "N3",
+      "readings": [
+        "ゴ"
+      ],
+      "meaning": "lẫn nhau"
+    },
+    {
+      "id": "彼",
+      "level": "N3",
+      "readings": [
+        "ヒ",
+        "かれ",
+        "かの"
+      ],
+      "meaning": "anh ấy, kia"
+    },
+    {
+      "id": "恥",
+      "level": "N3",
+      "readings": [
+        "チ",
+        "はじ"
+      ],
+      "meaning": "xấu hổ"
+    },
+    {
+      "id": "払",
+      "level": "N3",
+      "readings": [
+        "フツ",
+        "ヒツ",
+        "ホツ"
+      ],
+      "meaning": "trả tiền, phủi"
+    },
+    {
+      "id": "舞",
+      "level": "N3",
+      "readings": [
+        "ブ",
+        "まい"
+      ],
+      "meaning": "múa"
+    },
+    {
+      "id": "頼",
+      "level": "N3",
+      "readings": [
+        "ライ"
+      ],
+      "meaning": "nhờ cậy"
+    },
+    {
+      "id": "戻",
+      "level": "N3",
+      "readings": [
+        "レイ"
+      ],
+      "meaning": "quay lại"
+    },
+    {
+      "id": "抱",
+      "level": "N3",
+      "readings": [
+        "ホウ"
+      ],
+      "meaning": "ôm"
+    },
+    {
+      "id": "緒",
+      "level": "N3",
+      "readings": [
+        "ショ",
+        "チョ",
+        "お",
+        "いとぐち"
+      ],
+      "meaning": "đầu mối"
+    },
+    {
+      "id": "逃",
+      "level": "N3",
+      "readings": [
+        "トウ"
+      ],
+      "meaning": "chạy trốn"
+    },
+    {
+      "id": "御",
+      "level": "N3",
+      "readings": [
+        "ギョ",
+        "ゴ"
+      ],
+      "meaning": "kính ngữ"
+    },
+    {
+      "id": "吹",
+      "level": "N3",
+      "readings": [
+        "スイ"
+      ],
+      "meaning": "thổi"
+    },
+    {
+      "id": "到",
+      "level": "N3",
+      "readings": [
+        "トウ"
+      ],
+      "meaning": "đến"
+    },
+    {
+      "id": "髪",
+      "level": "N3",
+      "readings": [
+        "ハツ",
+        "かみ"
+      ],
+      "meaning": "tóc"
+    },
+    {
+      "id": "疲",
+      "level": "N3",
+      "readings": [
+        "ヒ"
+      ],
+      "meaning": "mệt"
+    },
+    {
+      "id": "歳",
+      "level": "N3",
+      "readings": [
+        "サイ",
+        "セイ",
+        "とし",
+        "とせ",
+        "よわい"
+      ],
+      "meaning": "tuổi, năm"
+    },
+    {
+      "id": "偶",
+      "level": "N3",
+      "readings": [
+        "グウ",
+        "たま"
+      ],
+      "meaning": "ngẫu nhiên"
+    },
+    {
+      "id": "偉",
+      "level": "N3",
+      "readings": [
+        "イ"
+      ],
+      "meaning": "vĩ đại"
+    },
+    {
+      "id": "頂",
+      "level": "N3",
+      "readings": [
+        "チョウ",
+        "いただき"
+      ],
+      "meaning": "đỉnh, nhận"
+    }
+  ],
+  "words": [
+    {
+      "id": "才能",
+      "word": "才能",
+      "reading": "さいのう",
+      "level": "N3",
+      "meaning": "tài năng"
+    },
+    {
+      "id": "王様",
+      "word": "王様",
+      "reading": "おうさま",
+      "level": "N3",
+      "meaning": "nhà vua"
+    },
+    {
+      "id": "宝石",
+      "word": "宝石",
+      "reading": "ほうせき",
+      "level": "N3",
+      "meaning": "đá quý"
+    },
+    {
+      "id": "国内",
+      "word": "国内",
+      "reading": "こくない",
+      "level": "N3",
+      "meaning": "trong nước"
+    },
+    {
+      "id": "太陽",
+      "word": "太陽",
+      "reading": "たいよう",
+      "level": "N3",
+      "meaning": "mặt trời"
+    },
+    {
+      "id": "引っ越し",
+      "word": "引っ越し",
+      "reading": "ひっこし",
+      "level": "N3",
+      "meaning": "chuyển nhà"
+    },
+    {
+      "id": "市場",
+      "word": "市場",
+      "reading": "いちば",
+      "level": "N3",
+      "meaning": "chợ"
+    },
+    {
+      "id": "他人",
+      "word": "他人",
+      "reading": "たにん",
+      "level": "N3",
+      "meaning": "người khác"
+    },
+    {
+      "id": "番号",
+      "word": "番号",
+      "reading": "ばんごう",
+      "level": "N3",
+      "meaning": "số (điện thoại, thứ tự)"
+    },
+    {
+      "id": "平和",
+      "word": "平和",
+      "reading": "へいわ",
+      "level": "N3",
+      "meaning": "hòa bình"
+    },
+    {
+      "id": "打ち合わせ",
+      "word": "打ち合わせ",
+      "reading": "うちあわせ",
+      "level": "N3",
+      "meaning": "buổi bàn bạc trước"
+    },
+    {
+      "id": "申し込み",
+      "word": "申し込み",
+      "reading": "もうしこみ",
+      "level": "N3",
+      "meaning": "việc đăng ký"
+    },
+    {
+      "id": "失礼",
+      "word": "失礼",
+      "reading": "しつれい",
+      "level": "N3",
+      "meaning": "thất lễ, xin phép"
+    },
+    {
+      "id": "耳鼻科",
+      "word": "耳鼻科",
+      "reading": "じびか",
+      "level": "N3",
+      "meaning": "khoa tai mũi họng"
+    },
+    {
+      "id": "交通",
+      "word": "交通",
+      "reading": "こうつう",
+      "level": "N3",
+      "meaning": "giao thông"
+    },
+    {
+      "id": "日光",
+      "word": "日光",
+      "reading": "にっこう",
+      "level": "N3",
+      "meaning": "ánh nắng"
+    },
+    {
+      "id": "回数",
+      "word": "回数",
+      "reading": "かいすう",
+      "level": "N3",
+      "meaning": "số lần"
+    },
+    {
+      "id": "当然",
+      "word": "当然",
+      "reading": "とうぜん",
+      "level": "N3",
+      "meaning": "đương nhiên"
+    },
+    {
+      "id": "白米",
+      "word": "白米",
+      "reading": "はくまい",
+      "level": "N3",
+      "meaning": "gạo trắng"
+    },
+    {
+      "id": "大声",
+      "word": "大声",
+      "reading": "おおごえ",
+      "level": "N3",
+      "meaning": "giọng to"
+    },
+    {
+      "id": "人形",
+      "word": "人形",
+      "reading": "にんぎょう",
+      "level": "N3",
+      "meaning": "búp bê"
+    },
+    {
+      "id": "草原",
+      "word": "草原",
+      "reading": "そうげん",
+      "level": "N3",
+      "meaning": "đồng cỏ"
+    },
+    {
+      "id": "文化",
+      "word": "文化",
+      "reading": "ぶんか",
+      "level": "N3",
+      "meaning": "văn hóa"
+    },
+    {
+      "id": "両方",
+      "word": "両方",
+      "reading": "りょうほう",
+      "level": "N3",
+      "meaning": "cả hai bên"
+    },
+    {
+      "id": "全部",
+      "word": "全部",
+      "reading": "ぜんぶ",
+      "level": "N3",
+      "meaning": "toàn bộ"
+    },
+    {
+      "id": "方向",
+      "word": "方向",
+      "reading": "ほうこう",
+      "level": "N3",
+      "meaning": "phương hướng"
+    },
+    {
+      "id": "作曲",
+      "word": "作曲",
+      "reading": "さっきょく",
+      "level": "N3",
+      "meaning": "sáng tác nhạc"
+    },
+    {
+      "id": "次回",
+      "word": "次回",
+      "reading": "じかい",
+      "level": "N3",
+      "meaning": "lần tới"
+    },
+    {
+      "id": "直接",
+      "word": "直接",
+      "reading": "ちょくせつ",
+      "level": "N3",
+      "meaning": "trực tiếp"
+    },
+    {
+      "id": "生活",
+      "word": "生活",
+      "reading": "せいかつ",
+      "level": "N3",
+      "meaning": "cuộc sống"
+    },
+    {
+      "id": "点数",
+      "word": "点数",
+      "reading": "てんすう",
+      "level": "N3",
+      "meaning": "điểm số"
+    },
+    {
+      "id": "科学",
+      "word": "科学",
+      "reading": "かがく",
+      "level": "N3",
+      "meaning": "khoa học"
+    },
+    {
+      "id": "首都",
+      "word": "首都",
+      "reading": "しゅと",
+      "level": "N3",
+      "meaning": "thủ đô"
+    },
+    {
+      "id": "欠席",
+      "word": "欠席",
+      "reading": "けっせき",
+      "level": "N3",
+      "meaning": "vắng mặt"
+    },
+    {
+      "id": "自由",
+      "word": "自由",
+      "reading": "じゆう",
+      "level": "N3",
+      "meaning": "tự do"
+    },
+    {
+      "id": "国民",
+      "word": "国民",
+      "reading": "こくみん",
+      "level": "N3",
+      "meaning": "người dân"
+    },
+    {
+      "id": "受付",
+      "word": "受付",
+      "reading": "うけつけ",
+      "level": "N3",
+      "meaning": "quầy tiếp nhận"
+    },
+    {
+      "id": "失敗",
+      "word": "失敗",
+      "reading": "しっぱい",
+      "level": "N3",
+      "meaning": "thất bại"
+    },
+    {
+      "id": "必要",
+      "word": "必要",
+      "reading": "ひつよう",
+      "level": "N3",
+      "meaning": "cần thiết"
+    },
+    {
+      "id": "未来",
+      "word": "未来",
+      "reading": "みらい",
+      "level": "N3",
+      "meaning": "tương lai"
+    },
+    {
+      "id": "週末",
+      "word": "週末",
+      "reading": "しゅうまつ",
+      "level": "N3",
+      "meaning": "cuối tuần"
+    },
+    {
+      "id": "日記",
+      "word": "日記",
+      "reading": "にっき",
+      "level": "N3",
+      "meaning": "nhật ký"
+    },
+    {
+      "id": "番組",
+      "word": "番組",
+      "reading": "ばんぐみ",
+      "level": "N3",
+      "meaning": "chương trình (truyền hình)"
+    },
+    {
+      "id": "船便",
+      "word": "船便",
+      "reading": "ふなびん",
+      "level": "N3",
+      "meaning": "gửi bằng đường biển"
+    },
+    {
+      "id": "大雪",
+      "word": "大雪",
+      "reading": "おおゆき",
+      "level": "N3",
+      "meaning": "tuyết lớn"
+    },
+    {
+      "id": "支払い",
+      "word": "支払い",
+      "reading": "しはらい",
+      "level": "N3",
+      "meaning": "thanh toán"
+    },
+    {
+      "id": "助手",
+      "word": "助手",
+      "reading": "じょしゅ",
+      "level": "N3",
+      "meaning": "trợ lý"
+    },
+    {
+      "id": "君",
+      "word": "君",
+      "reading": "きみ",
+      "level": "N3",
+      "meaning": "cậu, bạn"
+    },
+    {
+      "id": "反対",
+      "word": "反対",
+      "reading": "はんたい",
+      "level": "N3",
+      "meaning": "phản đối"
+    },
+    {
+      "id": "郵便局",
+      "word": "郵便局",
+      "reading": "ゆうびんきょく",
+      "level": "N3",
+      "meaning": "bưu điện"
+    },
+    {
+      "id": "市役所",
+      "word": "市役所",
+      "reading": "しやくしょ",
+      "level": "N3",
+      "meaning": "tòa thị chính"
+    },
+    {
+      "id": "投票",
+      "word": "投票",
+      "reading": "とうひょう",
+      "level": "N3",
+      "meaning": "bỏ phiếu"
+    },
+    {
+      "id": "決定",
+      "word": "決定",
+      "reading": "けってい",
+      "level": "N3",
+      "meaning": "quyết định"
+    },
+    {
+      "id": "乗馬",
+      "word": "乗馬",
+      "reading": "じょうば",
+      "level": "N3",
+      "meaning": "cưỡi ngựa"
+    },
+    {
+      "id": "順番",
+      "word": "順番",
+      "reading": "じゅんばん",
+      "level": "N3",
+      "meaning": "thứ tự"
+    },
+    {
+      "id": "絵本",
+      "word": "絵本",
+      "reading": "えほん",
+      "level": "N3",
+      "meaning": "sách tranh"
+    },
+    {
+      "id": "数字",
+      "word": "数字",
+      "reading": "すうじ",
+      "level": "N3",
+      "meaning": "chữ số"
+    },
+    {
+      "id": "場所",
+      "word": "場所",
+      "reading": "ばしょ",
+      "level": "N3",
+      "meaning": "địa điểm"
+    },
+    {
+      "id": "道具",
+      "word": "道具",
+      "reading": "どうぐ",
+      "level": "N3",
+      "meaning": "dụng cụ"
+    },
+    {
+      "id": "受験",
+      "word": "受験",
+      "reading": "じゅけん",
+      "level": "N3",
+      "meaning": "dự thi"
+    },
+    {
+      "id": "和食",
+      "word": "和食",
+      "reading": "わしょく",
+      "level": "N3",
+      "meaning": "món ăn Nhật"
+    },
+    {
+      "id": "予定",
+      "word": "予定",
+      "reading": "よてい",
+      "level": "N3",
+      "meaning": "dự định"
+    },
+    {
+      "id": "実際",
+      "word": "実際",
+      "reading": "じっさい",
+      "level": "N3",
+      "meaning": "thực tế"
+    },
+    {
+      "id": "水泳",
+      "word": "水泳",
+      "reading": "すいえい",
+      "level": "N3",
+      "meaning": "bơi lội"
+    },
+    {
+      "id": "苦労",
+      "word": "苦労",
+      "reading": "くろう",
+      "level": "N3",
+      "meaning": "vất vả"
+    },
+    {
+      "id": "発表",
+      "word": "発表",
+      "reading": "はっぴょう",
+      "level": "N3",
+      "meaning": "phát biểu, công bố"
+    },
+    {
+      "id": "部屋",
+      "word": "部屋",
+      "reading": "へや",
+      "level": "N3",
+      "meaning": "căn phòng"
+    },
+    {
+      "id": "乗車",
+      "word": "乗車",
+      "reading": "じょうしゃ",
+      "level": "N3",
+      "meaning": "lên xe"
+    },
+    {
+      "id": "お客さん",
+      "word": "お客さん",
+      "reading": "おきゃくさん",
+      "level": "N3",
+      "meaning": "khách hàng"
+    },
+    {
+      "id": "相談",
+      "word": "相談",
+      "reading": "そうだん",
+      "level": "N3",
+      "meaning": "bàn bạc, tham khảo ý kiến"
+    },
+    {
+      "id": "美術",
+      "word": "美術",
+      "reading": "びじゅつ",
+      "level": "N3",
+      "meaning": "mỹ thuật"
+    },
+    {
+      "id": "勝負",
+      "word": "勝負",
+      "reading": "しょうぶ",
+      "level": "N3",
+      "meaning": "thắng bại, trận đấu"
+    },
+    {
+      "id": "冗談",
+      "word": "冗談",
+      "reading": "じょうだん",
+      "level": "N3",
+      "meaning": "lời nói đùa"
+    },
+    {
+      "id": "重要",
+      "word": "重要",
+      "reading": "じゅうよう",
+      "level": "N3",
+      "meaning": "quan trọng"
+    },
+    {
+      "id": "勝利",
+      "word": "勝利",
+      "reading": "しょうり",
+      "level": "N3",
+      "meaning": "chiến thắng"
+    },
+    {
+      "id": "速度",
+      "word": "速度",
+      "reading": "そくど",
+      "level": "N3",
+      "meaning": "tốc độ"
+    },
+    {
+      "id": "心配",
+      "word": "心配",
+      "reading": "しんぱい",
+      "level": "N3",
+      "meaning": "lo lắng"
+    },
+    {
+      "id": "お酒",
+      "word": "お酒",
+      "reading": "おさけ",
+      "level": "N3",
+      "meaning": "rượu"
+    },
+    {
+      "id": "進歩",
+      "word": "進歩",
+      "reading": "しんぽ",
+      "level": "N3",
+      "meaning": "tiến bộ"
+    },
+    {
+      "id": "落とし物",
+      "word": "落とし物",
+      "reading": "おとしもの",
+      "level": "N3",
+      "meaning": "đồ đánh rơi"
+    },
+    {
+      "id": "言葉",
+      "word": "言葉",
+      "reading": "ことば",
+      "level": "N3",
+      "meaning": "lời nói, từ ngữ"
+    },
+    {
+      "id": "道路",
+      "word": "道路",
+      "reading": "どうろ",
+      "level": "N3",
+      "meaning": "đường sá"
+    },
+    {
+      "id": "鳴き声",
+      "word": "鳴き声",
+      "reading": "なきごえ",
+      "level": "N3",
+      "meaning": "tiếng kêu"
+    },
+    {
+      "id": "横断歩道",
+      "word": "横断歩道",
+      "reading": "おうだんほどう",
+      "level": "N3",
+      "meaning": "vạch qua đường"
+    },
+    {
+      "id": "調査",
+      "word": "調査",
+      "reading": "ちょうさ",
+      "level": "N3",
+      "meaning": "điều tra"
+    },
+    {
+      "id": "頭痛",
+      "word": "頭痛",
+      "reading": "ずつう",
+      "level": "N3",
+      "meaning": "đau đầu"
+    },
+    {
+      "id": "笑顔",
+      "word": "笑顔",
+      "reading": "えがお",
+      "level": "N3",
+      "meaning": "nụ cười"
+    },
+    {
+      "id": "最近",
+      "word": "最近",
+      "reading": "さいきん",
+      "level": "N3",
+      "meaning": "gần đây"
+    },
+    {
+      "id": "戦争",
+      "word": "戦争",
+      "reading": "せんそう",
+      "level": "N3",
+      "meaning": "chiến tranh"
+    },
+    {
+      "id": "伝言",
+      "word": "伝言",
+      "reading": "でんごん",
+      "level": "N3",
+      "meaning": "lời nhắn"
+    },
+    {
+      "id": "共通",
+      "word": "共通",
+      "reading": "きょうつう",
+      "level": "N3",
+      "meaning": "chung, điểm chung"
+    },
+    {
+      "id": "好物",
+      "word": "好物",
+      "reading": "こうぶつ",
+      "level": "N3",
+      "meaning": "món ưa thích"
+    },
+    {
+      "id": "成功",
+      "word": "成功",
+      "reading": "せいこう",
+      "level": "N3",
+      "meaning": "thành công"
+    },
+    {
+      "id": "老人",
+      "word": "老人",
+      "reading": "ろうじん",
+      "level": "N3",
+      "meaning": "người già"
+    },
+    {
+      "id": "位置",
+      "word": "位置",
+      "reading": "いち",
+      "level": "N3",
+      "meaning": "vị trí"
+    },
+    {
+      "id": "初めて",
+      "word": "初めて",
+      "reading": "はじめて",
+      "level": "N3",
+      "meaning": "lần đầu tiên"
+    },
+    {
+      "id": "便利",
+      "word": "便利",
+      "reading": "べんり",
+      "level": "N3",
+      "meaning": "tiện lợi"
+    },
+    {
+      "id": "努力",
+      "word": "努力",
+      "reading": "どりょく",
+      "level": "N3",
+      "meaning": "nỗ lực"
+    },
+    {
+      "id": "労働",
+      "word": "労働",
+      "reading": "ろうどう",
+      "level": "N3",
+      "meaning": "lao động"
+    },
+    {
+      "id": "生命",
+      "word": "生命",
+      "reading": "せいめい",
+      "level": "N3",
+      "meaning": "sinh mệnh"
+    },
+    {
+      "id": "放送",
+      "word": "放送",
+      "reading": "ほうそう",
+      "level": "N3",
+      "meaning": "phát sóng"
+    },
+    {
+      "id": "昔話",
+      "word": "昔話",
+      "reading": "むかしばなし",
+      "level": "N3",
+      "meaning": "truyện cổ tích"
+    },
+    {
+      "id": "教育",
+      "word": "教育",
+      "reading": "きょういく",
+      "level": "N3",
+      "meaning": "giáo dục"
+    },
+    {
+      "id": "指輪",
+      "word": "指輪",
+      "reading": "ゆびわ",
+      "level": "N3",
+      "meaning": "nhẫn"
+    },
+    {
+      "id": "神社",
+      "word": "神社",
+      "reading": "じんじゃ",
+      "level": "N3",
+      "meaning": "đền thờ Thần đạo"
+    },
+    {
+      "id": "追加",
+      "word": "追加",
+      "reading": "ついか",
+      "level": "N3",
+      "meaning": "thêm vào"
+    },
+    {
+      "id": "戦い",
+      "word": "戦い",
+      "reading": "たたかい",
+      "level": "N3",
+      "meaning": "trận chiến"
+    },
+    {
+      "id": "改良",
+      "word": "改良",
+      "reading": "かいりょう",
+      "level": "N3",
+      "meaning": "cải tiến"
+    },
+    {
+      "id": "郵便",
+      "word": "郵便",
+      "reading": "ゆうびん",
+      "level": "N3",
+      "meaning": "bưu chính"
+    },
+    {
+      "id": "働く",
+      "word": "働く",
+      "reading": "はたらく",
+      "level": "N3",
+      "meaning": "làm việc"
+    },
+    {
+      "id": "庭園",
+      "word": "庭園",
+      "reading": "ていえん",
+      "level": "N3",
+      "meaning": "vườn"
+    },
+    {
+      "id": "息子",
+      "word": "息子",
+      "reading": "むすこ",
+      "level": "N3",
+      "meaning": "con trai (của mình)"
+    },
+    {
+      "id": "交流",
+      "word": "交流",
+      "reading": "こうりゅう",
+      "level": "N3",
+      "meaning": "giao lưu"
+    },
+    {
+      "id": "消費",
+      "word": "消費",
+      "reading": "しょうひ",
+      "level": "N3",
+      "meaning": "tiêu dùng"
+    },
+    {
+      "id": "都会",
+      "word": "都会",
+      "reading": "とかい",
+      "level": "N3",
+      "meaning": "thành phố lớn"
+    },
+    {
+      "id": "商売",
+      "word": "商売",
+      "reading": "しょうばい",
+      "level": "N3",
+      "meaning": "việc buôn bán"
+    },
+    {
+      "id": "深夜",
+      "word": "深夜",
+      "reading": "しんや",
+      "level": "N3",
+      "meaning": "đêm khuya"
+    },
+    {
+      "id": "野球",
+      "word": "野球",
+      "reading": "やきゅう",
+      "level": "N3",
+      "meaning": "bóng chày"
+    },
+    {
+      "id": "夕陽",
+      "word": "夕陽",
+      "reading": "ゆうひ",
+      "level": "N3",
+      "meaning": "ánh chiều tà"
+    },
+    {
+      "id": "寒気",
+      "word": "寒気",
+      "reading": "さむけ",
+      "level": "N3",
+      "meaning": "cảm giác ớn lạnh"
+    },
+    {
+      "id": "悲しい",
+      "word": "悲しい",
+      "reading": "かなしい",
+      "level": "N3",
+      "meaning": "buồn"
+    },
+    {
+      "id": "期間",
+      "word": "期間",
+      "reading": "きかん",
+      "level": "N3",
+      "meaning": "thời gian, kỳ hạn"
+    },
+    {
+      "id": "歯医者",
+      "word": "歯医者",
+      "reading": "はいしゃ",
+      "level": "N3",
+      "meaning": "nha sĩ"
+    },
+    {
+      "id": "空港",
+      "word": "空港",
+      "reading": "くうこう",
+      "level": "N3",
+      "meaning": "sân bay"
+    },
+    {
+      "id": "登山",
+      "word": "登山",
+      "reading": "とざん",
+      "level": "N3",
+      "meaning": "leo núi"
+    },
+    {
+      "id": "死亡",
+      "word": "死亡",
+      "reading": "しぼう",
+      "level": "N3",
+      "meaning": "tử vong"
+    },
+    {
+      "id": "合格",
+      "word": "合格",
+      "reading": "ごうかく",
+      "level": "N3",
+      "meaning": "đỗ, đạt"
+    },
+    {
+      "id": "予約",
+      "word": "予約",
+      "reading": "よやく",
+      "level": "N3",
+      "meaning": "đặt trước"
+    },
+    {
+      "id": "反応",
+      "word": "反応",
+      "reading": "はんのう",
+      "level": "N3",
+      "meaning": "phản ứng"
+    },
+    {
+      "id": "返事",
+      "word": "返事",
+      "reading": "へんじ",
+      "level": "N3",
+      "meaning": "hồi âm, câu trả lời"
+    },
+    {
+      "id": "宿題",
+      "word": "宿題",
+      "reading": "しゅくだい",
+      "level": "N3",
+      "meaning": "bài tập về nhà"
+    },
+    {
+      "id": "予想",
+      "word": "予想",
+      "reading": "よそう",
+      "level": "N3",
+      "meaning": "dự đoán"
+    },
+    {
+      "id": "感動",
+      "word": "感動",
+      "reading": "かんどう",
+      "level": "N3",
+      "meaning": "cảm động"
+    },
+    {
+      "id": "暗記",
+      "word": "暗記",
+      "reading": "あんき",
+      "level": "N3",
+      "meaning": "học thuộc lòng"
+    },
+    {
+      "id": "様子",
+      "word": "様子",
+      "reading": "ようす",
+      "level": "N3",
+      "meaning": "tình hình, dáng vẻ"
+    },
+    {
+      "id": "幸福",
+      "word": "幸福",
+      "reading": "こうふく",
+      "level": "N3",
+      "meaning": "hạnh phúc"
+    },
+    {
+      "id": "殺人",
+      "word": "殺人",
+      "reading": "さつじん",
+      "level": "N3",
+      "meaning": "giết người"
+    },
+    {
+      "id": "自然",
+      "word": "自然",
+      "reading": "しぜん",
+      "level": "N3",
+      "meaning": "thiên nhiên"
+    },
+    {
+      "id": "熱心",
+      "word": "熱心",
+      "reading": "ねっしん",
+      "level": "N3",
+      "meaning": "nhiệt tình"
+    },
+    {
+      "id": "選手",
+      "word": "選手",
+      "reading": "せんしゅ",
+      "level": "N3",
+      "meaning": "vận động viên"
+    },
+    {
+      "id": "お願い",
+      "word": "お願い",
+      "reading": "おねがい",
+      "level": "N3",
+      "meaning": "lời nhờ vả"
+    },
+    {
+      "id": "情報",
+      "word": "情報",
+      "reading": "じょうほう",
+      "level": "N3",
+      "meaning": "thông tin"
+    },
+    {
+      "id": "疑問",
+      "word": "疑問",
+      "reading": "ぎもん",
+      "level": "N3",
+      "meaning": "nghi vấn"
+    },
+    {
+      "id": "皆さん",
+      "word": "皆さん",
+      "reading": "みなさん",
+      "level": "N3",
+      "meaning": "mọi người"
+    },
+    {
+      "id": "例えば",
+      "word": "例えば",
+      "reading": "たとえば",
+      "level": "N3",
+      "meaning": "ví dụ như"
+    },
+    {
+      "id": "参加",
+      "word": "参加",
+      "reading": "さんか",
+      "level": "N3",
+      "meaning": "tham gia"
+    },
+    {
+      "id": "完全",
+      "word": "完全",
+      "reading": "かんぜん",
+      "level": "N3",
+      "meaning": "hoàn toàn"
+    },
+    {
+      "id": "残念",
+      "word": "残念",
+      "reading": "ざんねん",
+      "level": "N3",
+      "meaning": "tiếc"
+    },
+    {
+      "id": "折り紙",
+      "word": "折り紙",
+      "reading": "おりがみ",
+      "level": "N3",
+      "meaning": "gấp giấy"
+    },
+    {
+      "id": "希望",
+      "word": "希望",
+      "reading": "きぼう",
+      "level": "N3",
+      "meaning": "hy vọng"
+    },
+    {
+      "id": "約束",
+      "word": "約束",
+      "reading": "やくそく",
+      "level": "N3",
+      "meaning": "lời hứa, cuộc hẹn"
+    },
+    {
+      "id": "残業",
+      "word": "残業",
+      "reading": "ざんぎょう",
+      "level": "N3",
+      "meaning": "làm thêm giờ"
+    },
+    {
+      "id": "要求",
+      "word": "要求",
+      "reading": "ようきゅう",
+      "level": "N3",
+      "meaning": "yêu cầu"
+    },
+    {
+      "id": "節約",
+      "word": "節約",
+      "reading": "せつやく",
+      "level": "N3",
+      "meaning": "tiết kiệm"
+    },
+    {
+      "id": "性格",
+      "word": "性格",
+      "reading": "せいかく",
+      "level": "N3",
+      "meaning": "tính cách"
+    },
+    {
+      "id": "資格",
+      "word": "資格",
+      "reading": "しかく",
+      "level": "N3",
+      "meaning": "tư cách, chứng chỉ"
+    },
+    {
+      "id": "能力",
+      "word": "能力",
+      "reading": "のうりょく",
+      "level": "N3",
+      "meaning": "năng lực"
+    },
+    {
+      "id": "技術",
+      "word": "技術",
+      "reading": "ぎじゅつ",
+      "level": "N3",
+      "meaning": "kỹ thuật"
+    },
+    {
+      "id": "晴れ",
+      "word": "晴れ",
+      "reading": "はれ",
+      "level": "N3",
+      "meaning": "trời nắng"
+    },
+    {
+      "id": "行列",
+      "word": "行列",
+      "reading": "ぎょうれつ",
+      "level": "N3",
+      "meaning": "hàng người"
+    },
+    {
+      "id": "入学式",
+      "word": "入学式",
+      "reading": "にゅうがくしき",
+      "level": "N3",
+      "meaning": "lễ nhập học"
+    },
+    {
+      "id": "信じる",
+      "word": "信じる",
+      "reading": "しんじる",
+      "level": "N3",
+      "meaning": "tin tưởng"
+    },
+    {
+      "id": "簡単",
+      "word": "簡単",
+      "reading": "かんたん",
+      "level": "N3",
+      "meaning": "đơn giản"
+    },
+    {
+      "id": "大変",
+      "word": "大変",
+      "reading": "たいへん",
+      "level": "N3",
+      "meaning": "vất vả, nghiêm trọng"
+    },
+    {
+      "id": "夫婦",
+      "word": "夫婦",
+      "reading": "ふうふ",
+      "level": "N3",
+      "meaning": "vợ chồng"
+    },
+    {
+      "id": "昨日",
+      "word": "昨日",
+      "reading": "きのう",
+      "level": "N3",
+      "meaning": "hôm qua"
+    },
+    {
+      "id": "方法",
+      "word": "方法",
+      "reading": "ほうほう",
+      "level": "N3",
+      "meaning": "phương pháp"
+    },
+    {
+      "id": "今晩",
+      "word": "今晩",
+      "reading": "こんばん",
+      "level": "N3",
+      "meaning": "tối nay"
+    },
+    {
+      "id": "子猫",
+      "word": "子猫",
+      "reading": "こねこ",
+      "level": "N3",
+      "meaning": "mèo con"
+    },
+    {
+      "id": "公園",
+      "word": "公園",
+      "reading": "こうえん",
+      "level": "N3",
+      "meaning": "công viên"
+    },
+    {
+      "id": "遠足",
+      "word": "遠足",
+      "reading": "えんそく",
+      "level": "N3",
+      "meaning": "dã ngoại"
+    },
+    {
+      "id": "関係",
+      "word": "関係",
+      "reading": "かんけい",
+      "level": "N3",
+      "meaning": "quan hệ"
+    },
+    {
+      "id": "受け取る",
+      "word": "受け取る",
+      "reading": "うけとる",
+      "level": "N3",
+      "meaning": "nhận lấy"
+    },
+    {
+      "id": "留守",
+      "word": "留守",
+      "reading": "るす",
+      "level": "N3",
+      "meaning": "vắng nhà"
+    },
+    {
+      "id": "幸せ",
+      "word": "幸せ",
+      "reading": "しあわせ",
+      "level": "N3",
+      "meaning": "hạnh phúc"
+    },
+    {
+      "id": "ごみ箱",
+      "word": "ごみ箱",
+      "reading": "ごみばこ",
+      "level": "N3",
+      "meaning": "thùng rác"
+    },
+    {
+      "id": "場面",
+      "word": "場面",
+      "reading": "ばめん",
+      "level": "N3",
+      "meaning": "cảnh, tình huống"
+    },
+    {
+      "id": "喜ぶ",
+      "word": "喜ぶ",
+      "reading": "よろこぶ",
+      "level": "N3",
+      "meaning": "vui mừng"
+    },
+    {
+      "id": "治療",
+      "word": "治療",
+      "reading": "ちりょう",
+      "level": "N3",
+      "meaning": "điều trị"
+    },
+    {
+      "id": "笑う",
+      "word": "笑う",
+      "reading": "わらう",
+      "level": "N3",
+      "meaning": "cười"
+    },
+    {
+      "id": "辞書",
+      "word": "辞書",
+      "reading": "じしょ",
+      "level": "N3",
+      "meaning": "từ điển"
+    },
+    {
+      "id": "関心",
+      "word": "関心",
+      "reading": "かんしん",
+      "level": "N3",
+      "meaning": "quan tâm"
+    },
+    {
+      "id": "政治",
+      "word": "政治",
+      "reading": "せいじ",
+      "level": "N3",
+      "meaning": "chính trị"
+    },
+    {
+      "id": "留学",
+      "word": "留学",
+      "reading": "りゅうがく",
+      "level": "N3",
+      "meaning": "du học"
+    },
+    {
+      "id": "危険",
+      "word": "危険",
+      "reading": "きけん",
+      "level": "N3",
+      "meaning": "nguy hiểm"
+    },
+    {
+      "id": "危ない",
+      "word": "危ない",
+      "reading": "あぶない",
+      "level": "N3",
+      "meaning": "nguy hiểm"
+    },
+    {
+      "id": "存在",
+      "word": "存在",
+      "reading": "そんざい",
+      "level": "N3",
+      "meaning": "sự tồn tại"
+    },
+    {
+      "id": "原因",
+      "word": "原因",
+      "reading": "げんいん",
+      "level": "N3",
+      "meaning": "nguyên nhân"
+    },
+    {
+      "id": "薬局",
+      "word": "薬局",
+      "reading": "やっきょく",
+      "level": "N3",
+      "meaning": "hiệu thuốc"
+    },
+    {
+      "id": "右側",
+      "word": "右側",
+      "reading": "みぎがわ",
+      "level": "N3",
+      "meaning": "phía bên phải"
+    },
+    {
+      "id": "座席",
+      "word": "座席",
+      "reading": "ざせき",
+      "level": "N3",
+      "meaning": "chỗ ngồi"
+    },
+    {
+      "id": "勝敗",
+      "word": "勝敗",
+      "reading": "しょうはい",
+      "level": "N3",
+      "meaning": "thắng thua"
+    },
+    {
+      "id": "結果",
+      "word": "結果",
+      "reading": "けっか",
+      "level": "N3",
+      "meaning": "kết quả"
+    },
+    {
+      "id": "因果",
+      "word": "因果",
+      "reading": "いんが",
+      "level": "N3",
+      "meaning": "nhân quả"
+    },
+    {
+      "id": "日常",
+      "word": "日常",
+      "reading": "にちじょう",
+      "level": "N3",
+      "meaning": "thường ngày"
+    },
+    {
+      "id": "知識",
+      "word": "知識",
+      "reading": "ちしき",
+      "level": "N3",
+      "meaning": "kiến thức"
+    },
+    {
+      "id": "非常",
+      "word": "非常",
+      "reading": "ひじょう",
+      "level": "N3",
+      "meaning": "rất, khẩn cấp"
+    },
+    {
+      "id": "警官",
+      "word": "警官",
+      "reading": "けいかん",
+      "level": "N3",
+      "meaning": "cảnh sát"
+    },
+    {
+      "id": "警察",
+      "word": "警察",
+      "reading": "けいさつ",
+      "level": "N3",
+      "meaning": "cảnh sát"
+    },
+    {
+      "id": "愛情",
+      "word": "愛情",
+      "reading": "あいじょう",
+      "level": "N3",
+      "meaning": "tình yêu thương"
+    },
+    {
+      "id": "警告",
+      "word": "警告",
+      "reading": "けいこく",
+      "level": "N3",
+      "meaning": "cảnh báo"
+    },
+    {
+      "id": "覚える",
+      "word": "覚える",
+      "reading": "おぼえる",
+      "level": "N3",
+      "meaning": "ghi nhớ"
+    },
+    {
+      "id": "説明",
+      "word": "説明",
+      "reading": "せつめい",
+      "level": "N3",
+      "meaning": "giải thích"
+    },
+    {
+      "id": "広告",
+      "word": "広告",
+      "reading": "こうこく",
+      "level": "N3",
+      "meaning": "quảng cáo"
+    },
+    {
+      "id": "種類",
+      "word": "種類",
+      "reading": "しゅるい",
+      "level": "N3",
+      "meaning": "chủng loại"
+    },
+    {
+      "id": "友達",
+      "word": "友達",
+      "reading": "ともだち",
+      "level": "N3",
+      "meaning": "bạn bè"
+    },
+    {
+      "id": "書類",
+      "word": "書類",
+      "reading": "しょるい",
+      "level": "N3",
+      "meaning": "giấy tờ, tài liệu"
+    },
+    {
+      "id": "天気予報",
+      "word": "天気予報",
+      "reading": "てんきよほう",
+      "level": "N3",
+      "meaning": "dự báo thời tiết"
+    },
+    {
+      "id": "平等",
+      "word": "平等",
+      "reading": "びょうどう",
+      "level": "N3",
+      "meaning": "bình đẳng"
+    },
+    {
+      "id": "座る",
+      "word": "座る",
+      "reading": "すわる",
+      "level": "N3",
+      "meaning": "ngồi"
+    },
+    {
+      "id": "忘れ物",
+      "word": "忘れ物",
+      "reading": "わすれもの",
+      "level": "N3",
+      "meaning": "đồ để quên"
+    },
+    {
+      "id": "洗濯",
+      "word": "洗濯",
+      "reading": "せんたく",
+      "level": "N3",
+      "meaning": "giặt giũ"
+    },
+    {
+      "id": "許可",
+      "word": "許可",
+      "reading": "きょか",
+      "level": "N3",
+      "meaning": "cho phép"
+    },
+    {
+      "id": "静か",
+      "word": "静か",
+      "reading": "しずか",
+      "level": "N3",
+      "meaning": "yên tĩnh"
+    },
+    {
+      "id": "禁煙",
+      "word": "禁煙",
+      "reading": "きんえん",
+      "level": "N3",
+      "meaning": "cấm hút thuốc"
+    },
+    {
+      "id": "加入",
+      "word": "加入",
+      "reading": "かにゅう",
+      "level": "N3",
+      "meaning": "gia nhập"
+    },
+    {
+      "id": "内容",
+      "word": "内容",
+      "reading": "ないよう",
+      "level": "N3",
+      "meaning": "nội dung"
+    },
+    {
+      "id": "貿易",
+      "word": "貿易",
+      "reading": "ぼうえき",
+      "level": "N3",
+      "meaning": "mậu dịch, thương mại"
+    },
+    {
+      "id": "財布",
+      "word": "財布",
+      "reading": "さいふ",
+      "level": "N3",
+      "meaning": "ví tiền"
+    },
+    {
+      "id": "若者",
+      "word": "若者",
+      "reading": "わかもの",
+      "level": "N3",
+      "meaning": "người trẻ"
+    },
+    {
+      "id": "忙しい",
+      "word": "忙しい",
+      "reading": "いそがしい",
+      "level": "N3",
+      "meaning": "bận rộn"
+    },
+    {
+      "id": "生徒",
+      "word": "生徒",
+      "reading": "せいと",
+      "level": "N3",
+      "meaning": "học sinh"
+    },
+    {
+      "id": "得意",
+      "word": "得意",
+      "reading": "とくい",
+      "level": "N3",
+      "meaning": "sở trường"
+    },
+    {
+      "id": "続ける",
+      "word": "続ける",
+      "reading": "つづける",
+      "level": "N3",
+      "meaning": "tiếp tục"
+    },
+    {
+      "id": "連絡",
+      "word": "連絡",
+      "reading": "れんらく",
+      "level": "N3",
+      "meaning": "liên lạc"
+    },
+    {
+      "id": "困る",
+      "word": "困る",
+      "reading": "こまる",
+      "level": "N3",
+      "meaning": "gặp khó khăn"
+    },
+    {
+      "id": "飛行機",
+      "word": "飛行機",
+      "reading": "ひこうき",
+      "level": "N3",
+      "meaning": "máy bay"
+    },
+    {
+      "id": "飛ぶ",
+      "word": "飛ぶ",
+      "reading": "とぶ",
+      "level": "N3",
+      "meaning": "bay"
+    },
+    {
+      "id": "被害",
+      "word": "被害",
+      "reading": "ひがい",
+      "level": "N3",
+      "meaning": "thiệt hại"
+    },
+    {
+      "id": "余裕",
+      "word": "余裕",
+      "reading": "よゆう",
+      "level": "N3",
+      "meaning": "sự dư dả, thong thả"
+    },
+    {
+      "id": "難しい",
+      "word": "難しい",
+      "reading": "むずかしい",
+      "level": "N3",
+      "meaning": "khó"
+    },
+    {
+      "id": "確認",
+      "word": "確認",
+      "reading": "かくにん",
+      "level": "N3",
+      "meaning": "xác nhận"
+    },
+    {
+      "id": "現在",
+      "word": "現在",
+      "reading": "げんざい",
+      "level": "N3",
+      "meaning": "hiện tại"
+    },
+    {
+      "id": "悪夢",
+      "word": "悪夢",
+      "reading": "あくむ",
+      "level": "N3",
+      "meaning": "ác mộng"
+    },
+    {
+      "id": "お土産",
+      "word": "お土産",
+      "reading": "おみやげ",
+      "level": "N3",
+      "meaning": "quà lưu niệm"
+    },
+    {
+      "id": "倒れる",
+      "word": "倒れる",
+      "reading": "たおれる",
+      "level": "N3",
+      "meaning": "ngã, đổ"
+    },
+    {
+      "id": "夫妻",
+      "word": "夫妻",
+      "reading": "ふさい",
+      "level": "N3",
+      "meaning": "vợ chồng"
+    },
+    {
+      "id": "会議",
+      "word": "会議",
+      "reading": "かいぎ",
+      "level": "N3",
+      "meaning": "cuộc họp"
+    },
+    {
+      "id": "犯人",
+      "word": "犯人",
+      "reading": "はんにん",
+      "level": "N3",
+      "meaning": "thủ phạm"
+    },
+    {
+      "id": "犯罪",
+      "word": "犯罪",
+      "reading": "はんざい",
+      "level": "N3",
+      "meaning": "tội phạm"
+    },
+    {
+      "id": "議論",
+      "word": "議論",
+      "reading": "ぎろん",
+      "level": "N3",
+      "meaning": "tranh luận"
+    },
+    {
+      "id": "経験",
+      "word": "経験",
+      "reading": "けいけん",
+      "level": "N3",
+      "meaning": "kinh nghiệm"
+    },
+    {
+      "id": "経済",
+      "word": "経済",
+      "reading": "けいざい",
+      "level": "N3",
+      "meaning": "kinh tế"
+    },
+    {
+      "id": "裁判",
+      "word": "裁判",
+      "reading": "さいばん",
+      "level": "N3",
+      "meaning": "xét xử"
+    },
+    {
+      "id": "制度",
+      "word": "制度",
+      "reading": "せいど",
+      "level": "N3",
+      "meaning": "chế độ, hệ thống"
+    },
+    {
+      "id": "事務",
+      "word": "事務",
+      "reading": "じむ",
+      "level": "N3",
+      "meaning": "công việc văn phòng"
+    },
+    {
+      "id": "資料",
+      "word": "資料",
+      "reading": "しりょう",
+      "level": "N3",
+      "meaning": "tài liệu"
+    },
+    {
+      "id": "権利",
+      "word": "権利",
+      "reading": "けんり",
+      "level": "N3",
+      "meaning": "quyền lợi"
+    },
+    {
+      "id": "事件",
+      "word": "事件",
+      "reading": "じけん",
+      "level": "N3",
+      "meaning": "sự kiện, vụ án"
+    },
+    {
+      "id": "断る",
+      "word": "断る",
+      "reading": "ことわる",
+      "level": "N3",
+      "meaning": "từ chối"
+    },
+    {
+      "id": "責任",
+      "word": "責任",
+      "reading": "せきにん",
+      "level": "N3",
+      "meaning": "trách nhiệm"
+    },
+    {
+      "id": "責める",
+      "word": "責める",
+      "reading": "せめる",
+      "level": "N3",
+      "meaning": "trách móc"
+    },
+    {
+      "id": "増える",
+      "word": "増える",
+      "reading": "ふえる",
+      "level": "N3",
+      "meaning": "tăng lên"
+    },
+    {
+      "id": "理解",
+      "word": "理解",
+      "reading": "りかい",
+      "level": "N3",
+      "meaning": "hiểu, lý giải"
+    },
+    {
+      "id": "国際",
+      "word": "国際",
+      "reading": "こくさい",
+      "level": "N3",
+      "meaning": "quốc tế"
+    },
+    {
+      "id": "認める",
+      "word": "認める",
+      "reading": "みとめる",
+      "level": "N3",
+      "meaning": "thừa nhận"
+    },
+    {
+      "id": "過去",
+      "word": "過去",
+      "reading": "かこ",
+      "level": "N3",
+      "meaning": "quá khứ"
+    },
+    {
+      "id": "寝坊",
+      "word": "寝坊",
+      "reading": "ねぼう",
+      "level": "N3",
+      "meaning": "ngủ quên"
+    },
+    {
+      "id": "置く",
+      "word": "置く",
+      "reading": "おく",
+      "level": "N3",
+      "meaning": "đặt"
+    },
+    {
+      "id": "費用",
+      "word": "費用",
+      "reading": "ひよう",
+      "level": "N3",
+      "meaning": "chi phí"
+    },
+    {
+      "id": "表示",
+      "word": "表示",
+      "reading": "ひょうじ",
+      "level": "N3",
+      "meaning": "hiển thị"
+    },
+    {
+      "id": "観光",
+      "word": "観光",
+      "reading": "かんこう",
+      "level": "N3",
+      "meaning": "tham quan, du lịch"
+    },
+    {
+      "id": "値段",
+      "word": "値段",
+      "reading": "ねだん",
+      "level": "N3",
+      "meaning": "giá cả"
+    },
+    {
+      "id": "吸う",
+      "word": "吸う",
+      "reading": "すう",
+      "level": "N3",
+      "meaning": "hít, hút"
+    },
+    {
+      "id": "状態",
+      "word": "状態",
+      "reading": "じょうたい",
+      "level": "N3",
+      "meaning": "tình trạng"
+    },
+    {
+      "id": "収入",
+      "word": "収入",
+      "reading": "しゅうにゅう",
+      "level": "N3",
+      "meaning": "thu nhập"
+    },
+    {
+      "id": "職業",
+      "word": "職業",
+      "reading": "しょくぎょう",
+      "level": "N3",
+      "meaning": "nghề nghiệp"
+    },
+    {
+      "id": "規則",
+      "word": "規則",
+      "reading": "きそく",
+      "level": "N3",
+      "meaning": "quy tắc"
+    },
+    {
+      "id": "割合",
+      "word": "割合",
+      "reading": "わりあい",
+      "level": "N3",
+      "meaning": "tỷ lệ"
+    },
+    {
+      "id": "演奏",
+      "word": "演奏",
+      "reading": "えんそう",
+      "level": "N3",
+      "meaning": "biểu diễn nhạc"
+    },
+    {
+      "id": "医師",
+      "word": "医師",
+      "reading": "いし",
+      "level": "N3",
+      "meaning": "bác sĩ"
+    },
+    {
+      "id": "準備",
+      "word": "準備",
+      "reading": "じゅんび",
+      "level": "N3",
+      "meaning": "chuẩn bị"
+    },
+    {
+      "id": "優しい",
+      "word": "優しい",
+      "reading": "やさしい",
+      "level": "N3",
+      "meaning": "hiền, tốt bụng"
+    },
+    {
+      "id": "自宅",
+      "word": "自宅",
+      "reading": "じたく",
+      "level": "N3",
+      "meaning": "nhà riêng"
+    },
+    {
+      "id": "現代",
+      "word": "現代",
+      "reading": "げんだい",
+      "level": "N3",
+      "meaning": "hiện đại"
+    },
+    {
+      "id": "呼ぶ",
+      "word": "呼ぶ",
+      "reading": "よぶ",
+      "level": "N3",
+      "meaning": "gọi"
+    },
+    {
+      "id": "違う",
+      "word": "違う",
+      "reading": "ちがう",
+      "level": "N3",
+      "meaning": "khác, sai"
+    },
+    {
+      "id": "時差",
+      "word": "時差",
+      "reading": "じさ",
+      "level": "N3",
+      "meaning": "chênh lệch múi giờ"
+    },
+    {
+      "id": "子供",
+      "word": "子供",
+      "reading": "こども",
+      "level": "N3",
+      "meaning": "trẻ em"
+    },
+    {
+      "id": "制限",
+      "word": "制限",
+      "reading": "せいげん",
+      "level": "N3",
+      "meaning": "hạn chế"
+    },
+    {
+      "id": "与える",
+      "word": "与える",
+      "reading": "あたえる",
+      "level": "N3",
+      "meaning": "trao cho"
+    },
+    {
+      "id": "渡る",
+      "word": "渡る",
+      "reading": "わたる",
+      "level": "N3",
+      "meaning": "băng qua"
+    },
+    {
+      "id": "景色",
+      "word": "景色",
+      "reading": "けしき",
+      "level": "N3",
+      "meaning": "phong cảnh"
+    },
+    {
+      "id": "抜く",
+      "word": "抜く",
+      "reading": "ぬく",
+      "level": "N3",
+      "meaning": "rút ra"
+    },
+    {
+      "id": "天候",
+      "word": "天候",
+      "reading": "てんこう",
+      "level": "N3",
+      "meaning": "thời tiết"
+    },
+    {
+      "id": "構造",
+      "word": "構造",
+      "reading": "こうぞう",
+      "level": "N3",
+      "meaning": "cấu trúc"
+    },
+    {
+      "id": "捕まえる",
+      "word": "捕まえる",
+      "reading": "つかまえる",
+      "level": "N3",
+      "meaning": "bắt lấy"
+    },
+    {
+      "id": "習慣",
+      "word": "習慣",
+      "reading": "しゅうかん",
+      "level": "N3",
+      "meaning": "thói quen"
+    },
+    {
+      "id": "満員",
+      "word": "満員",
+      "reading": "まんいん",
+      "level": "N3",
+      "meaning": "đầy người"
+    },
+    {
+      "id": "掛ける",
+      "word": "掛ける",
+      "reading": "かける",
+      "level": "N3",
+      "meaning": "treo, gọi (điện)"
+    },
+    {
+      "id": "居間",
+      "word": "居間",
+      "reading": "いま",
+      "level": "N3",
+      "meaning": "phòng khách"
+    },
+    {
+      "id": "突然",
+      "word": "突然",
+      "reading": "とつぜん",
+      "level": "N3",
+      "meaning": "đột nhiên"
+    },
+    {
+      "id": "招待",
+      "word": "招待",
+      "reading": "しょうたい",
+      "level": "N3",
+      "meaning": "lời mời"
+    },
+    {
+      "id": "階段",
+      "word": "階段",
+      "reading": "かいだん",
+      "level": "N3",
+      "meaning": "cầu thang"
+    },
+    {
+      "id": "お腹",
+      "word": "お腹",
+      "reading": "おなか",
+      "level": "N3",
+      "meaning": "bụng"
+    },
+    {
+      "id": "痛い",
+      "word": "痛い",
+      "reading": "いたい",
+      "level": "N3",
+      "meaning": "đau"
+    },
+    {
+      "id": "退院",
+      "word": "退院",
+      "reading": "たいいん",
+      "level": "N3",
+      "meaning": "xuất viện"
+    },
+    {
+      "id": "迷子",
+      "word": "迷子",
+      "reading": "まいご",
+      "level": "N3",
+      "meaning": "trẻ đi lạc"
+    },
+    {
+      "id": "訪問",
+      "word": "訪問",
+      "reading": "ほうもん",
+      "level": "N3",
+      "meaning": "thăm viếng"
+    },
+    {
+      "id": "怒る",
+      "word": "怒る",
+      "reading": "おこる",
+      "level": "N3",
+      "meaning": "tức giận"
+    },
+    {
+      "id": "眠い",
+      "word": "眠い",
+      "reading": "ねむい",
+      "level": "N3",
+      "meaning": "buồn ngủ"
+    },
+    {
+      "id": "靴下",
+      "word": "靴下",
+      "reading": "くつした",
+      "level": "N3",
+      "meaning": "tất"
+    },
+    {
+      "id": "途中",
+      "word": "途中",
+      "reading": "とちゅう",
+      "level": "N3",
+      "meaning": "giữa đường"
+    },
+    {
+      "id": "給料",
+      "word": "給料",
+      "reading": "きゅうりょう",
+      "level": "N3",
+      "meaning": "tiền lương"
+    },
+    {
+      "id": "冷蔵庫",
+      "word": "冷蔵庫",
+      "reading": "れいぞうこ",
+      "level": "N3",
+      "meaning": "tủ lạnh"
+    },
+    {
+      "id": "処理",
+      "word": "処理",
+      "reading": "しょり",
+      "level": "N3",
+      "meaning": "xử lý"
+    },
+    {
+      "id": "主婦",
+      "word": "主婦",
+      "reading": "しゅふ",
+      "level": "N3",
+      "meaning": "nội trợ"
+    },
+    {
+      "id": "程度",
+      "word": "程度",
+      "reading": "ていど",
+      "level": "N3",
+      "meaning": "mức độ"
+    },
+    {
+      "id": "精神",
+      "word": "精神",
+      "reading": "せいしん",
+      "level": "N3",
+      "meaning": "tinh thần"
+    },
+    {
+      "id": "絶対",
+      "word": "絶対",
+      "reading": "ぜったい",
+      "level": "N3",
+      "meaning": "tuyệt đối"
+    },
+    {
+      "id": "乾杯",
+      "word": "乾杯",
+      "reading": "かんぱい",
+      "level": "N3",
+      "meaning": "cạn ly"
+    },
+    {
+      "id": "面積",
+      "word": "面積",
+      "reading": "めんせき",
+      "level": "N3",
+      "meaning": "diện tích"
+    },
+    {
+      "id": "寄る",
+      "word": "寄る",
+      "reading": "よる",
+      "level": "N3",
+      "meaning": "ghé qua"
+    },
+    {
+      "id": "娘",
+      "word": "娘",
+      "reading": "むすめ",
+      "level": "N3",
+      "meaning": "con gái (của mình)"
+    },
+    {
+      "id": "怖い",
+      "word": "怖い",
+      "reading": "こわい",
+      "level": "N3",
+      "meaning": "đáng sợ"
+    },
+    {
+      "id": "恐怖",
+      "word": "恐怖",
+      "reading": "きょうふ",
+      "level": "N3",
+      "meaning": "nỗi sợ"
+    },
+    {
+      "id": "結婚",
+      "word": "結婚",
+      "reading": "けっこん",
+      "level": "N3",
+      "meaning": "kết hôn"
+    },
+    {
+      "id": "遊ぶ",
+      "word": "遊ぶ",
+      "reading": "あそぶ",
+      "level": "N3",
+      "meaning": "chơi"
+    },
+    {
+      "id": "貧乏",
+      "word": "貧乏",
+      "reading": "びんぼう",
+      "level": "N3",
+      "meaning": "nghèo"
+    },
+    {
+      "id": "適当",
+      "word": "適当",
+      "reading": "てきとう",
+      "level": "N3",
+      "meaning": "thích hợp, qua loa"
+    },
+    {
+      "id": "押す",
+      "word": "押す",
+      "reading": "おす",
+      "level": "N3",
+      "meaning": "ấn, đẩy"
+    },
+    {
+      "id": "更新",
+      "word": "更新",
+      "reading": "こうしん",
+      "level": "N3",
+      "meaning": "cập nhật"
+    },
+    {
+      "id": "浮く",
+      "word": "浮く",
+      "reading": "うく",
+      "level": "N3",
+      "meaning": "nổi"
+    },
+    {
+      "id": "越える",
+      "word": "越える",
+      "reading": "こえる",
+      "level": "N3",
+      "meaning": "vượt qua"
+    },
+    {
+      "id": "背中",
+      "word": "背中",
+      "reading": "せなか",
+      "level": "N3",
+      "meaning": "lưng"
+    },
+    {
+      "id": "盗む",
+      "word": "盗む",
+      "reading": "ぬすむ",
+      "level": "N3",
+      "meaning": "ăn trộm"
+    },
+    {
+      "id": "掃除",
+      "word": "掃除",
+      "reading": "そうじ",
+      "level": "N3",
+      "meaning": "dọn dẹp"
+    },
+    {
+      "id": "幾つ",
+      "word": "幾つ",
+      "reading": "いくつ",
+      "level": "N3",
+      "meaning": "bao nhiêu cái"
+    },
+    {
+      "id": "散歩",
+      "word": "散歩",
+      "reading": "さんぽ",
+      "level": "N3",
+      "meaning": "đi dạo"
+    },
+    {
+      "id": "似る",
+      "word": "似る",
+      "reading": "にる",
+      "level": "N3",
+      "meaning": "giống"
+    },
+    {
+      "id": "富士山",
+      "word": "富士山",
+      "reading": "ふじさん",
+      "level": "N3",
+      "meaning": "núi Phú Sĩ"
+    },
+    {
+      "id": "探す",
+      "word": "探す",
+      "reading": "さがす",
+      "level": "N3",
+      "meaning": "tìm kiếm"
+    },
+    {
+      "id": "迎える",
+      "word": "迎える",
+      "reading": "むかえる",
+      "level": "N3",
+      "meaning": "đón"
+    },
+    {
+      "id": "祖父",
+      "word": "祖父",
+      "reading": "そふ",
+      "level": "N3",
+      "meaning": "ông"
+    },
+    {
+      "id": "雑誌",
+      "word": "雑誌",
+      "reading": "ざっし",
+      "level": "N3",
+      "meaning": "tạp chí"
+    },
+    {
+      "id": "賛成",
+      "word": "賛成",
+      "reading": "さんせい",
+      "level": "N3",
+      "meaning": "tán thành"
+    },
+    {
+      "id": "込む",
+      "word": "込む",
+      "reading": "こむ",
+      "level": "N3",
+      "meaning": "đông đúc"
+    },
+    {
+      "id": "欲しい",
+      "word": "欲しい",
+      "reading": "ほしい",
+      "level": "N3",
+      "meaning": "muốn có"
+    },
+    {
+      "id": "閉める",
+      "word": "閉める",
+      "reading": "しめる",
+      "level": "N3",
+      "meaning": "đóng"
+    },
+    {
+      "id": "窓口",
+      "word": "窓口",
+      "reading": "まどぐち",
+      "level": "N3",
+      "meaning": "quầy giao dịch"
+    },
+    {
+      "id": "否定",
+      "word": "否定",
+      "reading": "ひてい",
+      "level": "N3",
+      "meaning": "phủ định"
+    },
+    {
+      "id": "暮らす",
+      "word": "暮らす",
+      "reading": "くらす",
+      "level": "N3",
+      "meaning": "sinh sống"
+    },
+    {
+      "id": "誤解",
+      "word": "誤解",
+      "reading": "ごかい",
+      "level": "N3",
+      "meaning": "hiểu lầm"
+    },
+    {
+      "id": "降りる",
+      "word": "降りる",
+      "reading": "おりる",
+      "level": "N3",
+      "meaning": "xuống (xe)"
+    },
+    {
+      "id": "勤務",
+      "word": "勤務",
+      "reading": "きんむ",
+      "level": "N3",
+      "meaning": "làm việc"
+    },
+    {
+      "id": "遅刻",
+      "word": "遅刻",
+      "reading": "ちこく",
+      "level": "N3",
+      "meaning": "đến muộn"
+    },
+    {
+      "id": "遅い",
+      "word": "遅い",
+      "reading": "おそい",
+      "level": "N3",
+      "meaning": "chậm, muộn"
+    },
+    {
+      "id": "破る",
+      "word": "破る",
+      "reading": "やぶる",
+      "level": "N3",
+      "meaning": "xé, phá"
+    },
+    {
+      "id": "お互い",
+      "word": "お互い",
+      "reading": "おたがい",
+      "level": "N3",
+      "meaning": "lẫn nhau"
+    },
+    {
+      "id": "彼女",
+      "word": "彼女",
+      "reading": "かのじょ",
+      "level": "N3",
+      "meaning": "cô ấy, bạn gái"
+    },
+    {
+      "id": "恥ずかしい",
+      "word": "恥ずかしい",
+      "reading": "はずかしい",
+      "level": "N3",
+      "meaning": "xấu hổ"
+    },
+    {
+      "id": "払う",
+      "word": "払う",
+      "reading": "はらう",
+      "level": "N3",
+      "meaning": "trả (tiền)"
+    },
+    {
+      "id": "舞台",
+      "word": "舞台",
+      "reading": "ぶたい",
+      "level": "N3",
+      "meaning": "sân khấu"
+    },
+    {
+      "id": "頼む",
+      "word": "頼む",
+      "reading": "たのむ",
+      "level": "N3",
+      "meaning": "nhờ"
+    },
+    {
+      "id": "戻る",
+      "word": "戻る",
+      "reading": "もどる",
+      "level": "N3",
+      "meaning": "quay lại"
+    },
+    {
+      "id": "抱える",
+      "word": "抱える",
+      "reading": "かかえる",
+      "level": "N3",
+      "meaning": "ôm, gánh vác"
+    },
+    {
+      "id": "一緒",
+      "word": "一緒",
+      "reading": "いっしょ",
+      "level": "N3",
+      "meaning": "cùng nhau"
+    },
+    {
+      "id": "逃げる",
+      "word": "逃げる",
+      "reading": "にげる",
+      "level": "N3",
+      "meaning": "chạy trốn"
+    },
+    {
+      "id": "御飯",
+      "word": "御飯",
+      "reading": "ごはん",
+      "level": "N3",
+      "meaning": "cơm"
+    },
+    {
+      "id": "吹く",
+      "word": "吹く",
+      "reading": "ふく",
+      "level": "N3",
+      "meaning": "thổi"
+    },
+    {
+      "id": "到着",
+      "word": "到着",
+      "reading": "とうちゃく",
+      "level": "N3",
+      "meaning": "đến nơi"
+    },
+    {
+      "id": "髪型",
+      "word": "髪型",
+      "reading": "かみがた",
+      "level": "N3",
+      "meaning": "kiểu tóc"
+    },
+    {
+      "id": "疲れる",
+      "word": "疲れる",
+      "reading": "つかれる",
+      "level": "N3",
+      "meaning": "mệt"
+    },
+    {
+      "id": "二十歳",
+      "word": "二十歳",
+      "reading": "はたち",
+      "level": "N3",
+      "meaning": "hai mươi tuổi"
+    },
+    {
+      "id": "偶然",
+      "word": "偶然",
+      "reading": "ぐうぜん",
+      "level": "N3",
+      "meaning": "tình cờ"
+    },
+    {
+      "id": "偉い",
+      "word": "偉い",
+      "reading": "えらい",
+      "level": "N3",
+      "meaning": "giỏi, vĩ đại"
+    },
+    {
+      "id": "頂く",
+      "word": "頂く",
+      "reading": "いただく",
+      "level": "N3",
+      "meaning": "nhận (cách nói khiêm nhường)"
+    }
+  ],
+  "strokeMetadata": [
+    {
+      "id": "日",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "一",
+      "level": "N5",
+      "count": 1
+    },
+    {
+      "id": "国",
+      "level": "N5",
+      "count": 8
+    },
+    {
+      "id": "人",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "年",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "大",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "十",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "二",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "本",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "中",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "長",
+      "level": "N5",
+      "count": 8
+    },
+    {
+      "id": "出",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "三",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "時",
+      "level": "N5",
+      "count": 10
+    },
+    {
+      "id": "行",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "見",
+      "level": "N5",
+      "count": 7
+    },
+    {
+      "id": "月",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "後",
+      "level": "N5",
+      "count": 9
+    },
+    {
+      "id": "前",
+      "level": "N5",
+      "count": 9
+    },
+    {
+      "id": "生",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "五",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "間",
+      "level": "N5",
+      "count": 12
+    },
+    {
+      "id": "上",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "東",
+      "level": "N5",
+      "count": 8
+    },
+    {
+      "id": "四",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "今",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "金",
+      "level": "N5",
+      "count": 8
+    },
+    {
+      "id": "九",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "入",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "学",
+      "level": "N5",
+      "count": 8
+    },
+    {
+      "id": "高",
+      "level": "N5",
+      "count": 10
+    },
+    {
+      "id": "円",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "子",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "外",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "八",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "六",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "下",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "来",
+      "level": "N5",
+      "count": 7
+    },
+    {
+      "id": "気",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "小",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "七",
+      "level": "N5",
+      "count": 2
+    },
+    {
+      "id": "山",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "話",
+      "level": "N5",
+      "count": 13
+    },
+    {
+      "id": "女",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "北",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "午",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "百",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "書",
+      "level": "N5",
+      "count": 10
+    },
+    {
+      "id": "先",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "名",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "川",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "千",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "水",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "半",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "男",
+      "level": "N5",
+      "count": 7
+    },
+    {
+      "id": "西",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "電",
+      "level": "N5",
+      "count": 13
+    },
+    {
+      "id": "校",
+      "level": "N5",
+      "count": 10
+    },
+    {
+      "id": "語",
+      "level": "N5",
+      "count": 14
+    },
+    {
+      "id": "土",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "木",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "聞",
+      "level": "N5",
+      "count": 14
+    },
+    {
+      "id": "食",
+      "level": "N5",
+      "count": 9
+    },
+    {
+      "id": "車",
+      "level": "N5",
+      "count": 7
+    },
+    {
+      "id": "何",
+      "level": "N5",
+      "count": 7
+    },
+    {
+      "id": "南",
+      "level": "N5",
+      "count": 9
+    },
+    {
+      "id": "万",
+      "level": "N5",
+      "count": 3
+    },
+    {
+      "id": "毎",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "白",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "天",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "母",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "火",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "右",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "読",
+      "level": "N5",
+      "count": 14
+    },
+    {
+      "id": "友",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "左",
+      "level": "N5",
+      "count": 5
+    },
+    {
+      "id": "休",
+      "level": "N5",
+      "count": 6
+    },
+    {
+      "id": "父",
+      "level": "N5",
+      "count": 4
+    },
+    {
+      "id": "雨",
+      "level": "N5",
+      "count": 8
+    },
+    {
+      "id": "会",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "同",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "事",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "自",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "社",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "発",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "者",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "地",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "業",
+      "level": "N4",
+      "count": 13
+    },
+    {
+      "id": "方",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "新",
+      "level": "N4",
+      "count": 13
+    },
+    {
+      "id": "場",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "員",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "立",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "開",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "手",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "力",
+      "level": "N4",
+      "count": 2
+    },
+    {
+      "id": "問",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "代",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "明",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "動",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "京",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "目",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "通",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "言",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "理",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "体",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "田",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "主",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "題",
+      "level": "N4",
+      "count": 18
+    },
+    {
+      "id": "意",
+      "level": "N4",
+      "count": 13
+    },
+    {
+      "id": "不",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "作",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "用",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "度",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "強",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "公",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "持",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "野",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "以",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "思",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "家",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "世",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "多",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "正",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "安",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "院",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "心",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "界",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "教",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "文",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "元",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "重",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "近",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "考",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "画",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "海",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "売",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "知",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "道",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "集",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "別",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "物",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "使",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "品",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "計",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "死",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "特",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "私",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "始",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "朝",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "運",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "終",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "台",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "広",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "住",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "真",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "有",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "口",
+      "level": "N4",
+      "count": 3
+    },
+    {
+      "id": "少",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "町",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "料",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "工",
+      "level": "N4",
+      "count": 3
+    },
+    {
+      "id": "建",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "空",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "急",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "止",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "送",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "切",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "転",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "研",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "足",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "究",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "楽",
+      "level": "N4",
+      "count": 13
+    },
+    {
+      "id": "起",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "着",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "店",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "病",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "質",
+      "level": "N4",
+      "count": 15
+    },
+    {
+      "id": "待",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "試",
+      "level": "N4",
+      "count": 13
+    },
+    {
+      "id": "族",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "銀",
+      "level": "N4",
+      "count": 14
+    },
+    {
+      "id": "早",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "映",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "親",
+      "level": "N4",
+      "count": 16
+    },
+    {
+      "id": "験",
+      "level": "N4",
+      "count": 18
+    },
+    {
+      "id": "英",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "医",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "仕",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "去",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "味",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "写",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "字",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "答",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "夜",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "音",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "注",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "帰",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "古",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "歌",
+      "level": "N4",
+      "count": 14
+    },
+    {
+      "id": "買",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "悪",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "図",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "週",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "室",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "歩",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "風",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "紙",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "黒",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "花",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "春",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "赤",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "青",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "館",
+      "level": "N4",
+      "count": 16
+    },
+    {
+      "id": "屋",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "色",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "走",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "秋",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "夏",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "習",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "駅",
+      "level": "N4",
+      "count": 14
+    },
+    {
+      "id": "洋",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "旅",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "服",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "夕",
+      "level": "N4",
+      "count": 3
+    },
+    {
+      "id": "借",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "曜",
+      "level": "N4",
+      "count": 18
+    },
+    {
+      "id": "飲",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "肉",
+      "level": "N4",
+      "count": 6
+    },
+    {
+      "id": "貸",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "堂",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "鳥",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "飯",
+      "level": "N4",
+      "count": 12
+    },
+    {
+      "id": "勉",
+      "level": "N4",
+      "count": 10
+    },
+    {
+      "id": "冬",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "昼",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "茶",
+      "level": "N4",
+      "count": 9
+    },
+    {
+      "id": "弟",
+      "level": "N4",
+      "count": 7
+    },
+    {
+      "id": "牛",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "魚",
+      "level": "N4",
+      "count": 11
+    },
+    {
+      "id": "兄",
+      "level": "N4",
+      "count": 5
+    },
+    {
+      "id": "犬",
+      "level": "N4",
+      "count": 4
+    },
+    {
+      "id": "妹",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "姉",
+      "level": "N4",
+      "count": 8
+    },
+    {
+      "id": "漢",
+      "level": "N4",
+      "count": 13
+    },
+    {
+      "id": "才",
+      "level": "N3",
+      "count": 3
+    },
+    {
+      "id": "王",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "石",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "内",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "太",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "引",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "市",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "他",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "号",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "平",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "打",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "申",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "礼",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "耳",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "交",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "光",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "回",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "当",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "米",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "声",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "形",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "草",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "化",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "両",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "全",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "向",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "曲",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "次",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "直",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "活",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "点",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "科",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "首",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "欠",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "由",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "民",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "付",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "失",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "必",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "未",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "末",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "記",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "組",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "船",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "雪",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "支",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "助",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "君",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "対",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "局",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "役",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "投",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "決",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "馬",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "番",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "絵",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "数",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "所",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "具",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "受",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "和",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "定",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "実",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "泳",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "苦",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "表",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "部",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "乗",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "客",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "相",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "美",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "負",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "談",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "要",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "勝",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "速",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "配",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "酒",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "進",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "落",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "葉",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "路",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "鳴",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "横",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "調",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "頭",
+      "level": "N3",
+      "count": 16
+    },
+    {
+      "id": "顔",
+      "level": "N3",
+      "count": 18
+    },
+    {
+      "id": "最",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "争",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "伝",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "共",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "好",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "成",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "老",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "位",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "初",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "利",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "努",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "労",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "命",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "放",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "昔",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "育",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "指",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "神",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "追",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "戦",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "良",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "便",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "働",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "庭",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "息",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "流",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "消",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "都",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "商",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "深",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "球",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "陽",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "寒",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "悲",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "期",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "歯",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "港",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "登",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "亡",
+      "level": "N3",
+      "count": 3
+    },
+    {
+      "id": "合",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "予",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "反",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "返",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "宿",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "想",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "感",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "暗",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "様",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "福",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "殺",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "然",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "熱",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "選",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "願",
+      "level": "N3",
+      "count": 19
+    },
+    {
+      "id": "情",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "疑",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "皆",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "例",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "参",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "完",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "念",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "折",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "望",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "束",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "残",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "求",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "約",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "性",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "格",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "能",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "術",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "晴",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "列",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "式",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "信",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "単",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "変",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "夫",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "昨",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "法",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "晩",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "猫",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "園",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "遠",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "係",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "取",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "守",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "幸",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "箱",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "面",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "喜",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "治",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "笑",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "辞",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "関",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "政",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "留",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "険",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "危",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "存",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "原",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "薬",
+      "level": "N3",
+      "count": 16
+    },
+    {
+      "id": "側",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "席",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "敗",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "果",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "因",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "常",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "識",
+      "level": "N3",
+      "count": 19
+    },
+    {
+      "id": "非",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "官",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "察",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "愛",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "警",
+      "level": "N3",
+      "count": 19
+    },
+    {
+      "id": "覚",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "説",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "告",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "種",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "達",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "類",
+      "level": "N3",
+      "count": 18
+    },
+    {
+      "id": "報",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "等",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "座",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "忘",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "洗",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "許",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "静",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "煙",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "加",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "容",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "易",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "財",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "若",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "忙",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "徒",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "得",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "続",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "連",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "困",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "機",
+      "level": "N3",
+      "count": 16
+    },
+    {
+      "id": "飛",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "害",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "余",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "難",
+      "level": "N3",
+      "count": 18
+    },
+    {
+      "id": "確",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "在",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "夢",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "産",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "倒",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "妻",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "議",
+      "level": "N3",
+      "count": 20
+    },
+    {
+      "id": "犯",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "罪",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "論",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "経",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "済",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "判",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "制",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "務",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "資",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "権",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "件",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "断",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "任",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "責",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "増",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "解",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "際",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "認",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "過",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "寝",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "置",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "費",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "示",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "観",
+      "level": "N3",
+      "count": 18
+    },
+    {
+      "id": "値",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "吸",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "状",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "収",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "職",
+      "level": "N3",
+      "count": 18
+    },
+    {
+      "id": "規",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "割",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "演",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "師",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "備",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "優",
+      "level": "N3",
+      "count": 17
+    },
+    {
+      "id": "宅",
+      "level": "N3",
+      "count": 6
+    },
+    {
+      "id": "現",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "呼",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "違",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "差",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "供",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "限",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "与",
+      "level": "N3",
+      "count": 3
+    },
+    {
+      "id": "渡",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "景",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "抜",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "候",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "構",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "捕",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "慣",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "満",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "掛",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "居",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "突",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "招",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "段",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "腹",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "痛",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "退",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "迷",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "訪",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "怒",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "眠",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "靴",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "途",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "給",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "冷",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "処",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "婦",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "程",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "精",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "絶",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "杯",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "積",
+      "level": "N3",
+      "count": 16
+    },
+    {
+      "id": "寄",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "娘",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "怖",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "恐",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "婚",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "遊",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "貧",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "適",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "押",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "更",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "浮",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "越",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "背",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "盗",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "除",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "幾",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "散",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "似",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "富",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "探",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "迎",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "祖",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "雑",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "賛",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "込",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "欲",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "閉",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "窓",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "否",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "暮",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "誤",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "降",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "勤",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "刻",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "遅",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "破",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "互",
+      "level": "N3",
+      "count": 4
+    },
+    {
+      "id": "彼",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "恥",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "払",
+      "level": "N3",
+      "count": 5
+    },
+    {
+      "id": "舞",
+      "level": "N3",
+      "count": 15
+    },
+    {
+      "id": "頼",
+      "level": "N3",
+      "count": 16
+    },
+    {
+      "id": "戻",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "抱",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "緒",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "逃",
+      "level": "N3",
+      "count": 9
+    },
+    {
+      "id": "御",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "吹",
+      "level": "N3",
+      "count": 7
+    },
+    {
+      "id": "到",
+      "level": "N3",
+      "count": 8
+    },
+    {
+      "id": "髪",
+      "level": "N3",
+      "count": 14
+    },
+    {
+      "id": "疲",
+      "level": "N3",
+      "count": 10
+    },
+    {
+      "id": "歳",
+      "level": "N3",
+      "count": 13
+    },
+    {
+      "id": "偶",
+      "level": "N3",
+      "count": 11
+    },
+    {
+      "id": "偉",
+      "level": "N3",
+      "count": 12
+    },
+    {
+      "id": "頂",
+      "level": "N3",
+      "count": 11
+    }
+  ]
+}
