@@ -9,6 +9,7 @@ import { ThemeProvider } from './themes/ThemeProvider'
 import './index.css'
 import './i18n'
 import { LanguageProvider } from './i18n/LanguageProvider'
+import ErrorBoundary from './components/ErrorBoundary'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,7 +27,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <LanguageProvider>
       <ThemeProvider>
       <BrowserRouter>
-        <App />
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
         <Toaster />
       </BrowserRouter>
       </ThemeProvider>
