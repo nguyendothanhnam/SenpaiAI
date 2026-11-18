@@ -8,7 +8,7 @@
 - Ninja vẽ chữ bằng thẻ HTML, không kéo giãn chữ trong SVG; chỉ vệt chém dùng SVG. Hiển thị mục tiêu, quy tắc điểm/mạng, tiến độ, phản hồi cộng điểm/mất mạng và thông báo khi chém hụt. Không thay luật chơi chung hay cộng xu.
 - Kiểm chứng Chrome bằng thao tác pointer thật: chém đúng tăng điểm/tiến độ, chém nhầm mất mạng; điều hướng ba thẻ không mở modal, minigame vẫn chọn cấp độ. Kiểm tra 320/390px, sáng/tối; bốn tiêu đề đạt tương phản tối thiểu 4,5:1 trên theme thử nghiệm. Build, lint, kiểu và khóa dịch hai nền tảng đạt; 12 test web đạt, hai test tích hợp liên quan tiếp tục đạt sau khi bổ sung assertion. Chưa kiểm tra các thay đổi này trên thiết bị thật.
 
-Web có **12 thẻ**, mobile có **9 minigame**. Không có ID/đường dẫn bị lặp trong danh sách Game Hub hiện tại. Đã bỏ thẻ Thử Thách Nghe Chép khỏi hub theo yêu cầu; phần luyện nghe vẫn hoạt động tại `/listening`.
+Web có **11 thẻ**, mobile có **9 minigame**. Không có ID/đường dẫn bị lặp trong danh sách Game Hub hiện tại. Đã bỏ các thẻ Thử Thách Nghe Chép, Đấu Trường Kanji và Đua Xe Ngữ Pháp khỏi hub; học/luyện tập tương ứng vẫn nằm trong các mục riêng. Luyện ngữ pháp tiếp tục hoạt động tại `/grammar/practice`.
 
 ## Các tên giới thiệu đang mở chế độ đã có
 
@@ -17,9 +17,8 @@ Web có **12 thẻ**, mobile có **9 minigame**. Không có ID/đường dẫn b
 | Quiz Siêu Tốc | Khu vực Quiz hiện có | `/quiz` |
 | Lật Thẻ Ghi Nhớ | Flashcard hiện có | `/flashcard` |
 | Nối Từ Thần Tốc | Shiritori chọn từ của Đợt 1 | `/games/shiritori` |
-| Đua Xe Ngữ Pháp | Buổi luyện ngữ pháp hiện có; chưa có luật đua xe riêng | `/grammar/practice` |
 
-Đây là các tên thẻ giới thiệu cho hoạt động đã có. Riêng Nối Từ Thần Tốc và Shiritori là cùng một trò với hai tên giữa web/mobile; chỉ có một thẻ trong mỗi hub. Quiz, Flashcard, Đấu Trường Kanji và luyện ngữ pháp mở thẳng trang đích, không hỏi cấp độ ở hub. Các minigame dùng engine chung vẫn chọn cấp độ có dữ liệu.
+Đây là các tên thẻ giới thiệu cho hoạt động đã có. Riêng Nối Từ Thần Tốc và Shiritori là cùng một trò với hai tên giữa web/mobile; chỉ có một thẻ trong mỗi hub. Quiz và Flashcard mở thẳng trang đích, không hỏi cấp độ ở hub. Các minigame dùng engine chung vẫn chọn cấp độ có dữ liệu. Thẻ đua xe, biểu tượng và các khóa dịch/hướng dẫn riêng của thẻ đã được loại bỏ.
 
 ## Những nhóm gần nhau về cách chơi
 

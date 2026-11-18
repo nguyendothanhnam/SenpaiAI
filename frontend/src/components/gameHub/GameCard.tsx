@@ -1,9 +1,9 @@
 import type { MouseEventHandler } from 'react'
-import { BookOpen, ArrowDown, ArrowUpRight, Brain, Car, Coins, Hammer, Headphones, KeyRound, Layers3, Link2, PenTool, Scissors, Search, Swords, Trophy, Zap } from 'lucide-react'
+import { BookOpen, ArrowDown, ArrowUpRight, Brain, Coins, Hammer, Headphones, KeyRound, Layers3, Link2, PenTool, Scissors, Search, Swords, Trophy, Zap } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { HubGame } from '../../features/gameHub/catalog'
-const icons = { zap: Zap, layers: Layers3, swords: Swords, link: Link2, headphones: Headphones, car: Car, falling: ArrowDown, key: KeyRound, brain: Brain, hammer: Hammer, search: Search, scissors: Scissors, pen: PenTool }
+const icons = { zap: Zap, layers: Layers3, swords: Swords, link: Link2, headphones: Headphones, falling: ArrowDown, key: KeyRound, brain: Brain, hammer: Hammer, search: Search, scissors: Scissors, pen: PenTool }
 export default function GameCard({ game, record, onSelect, onGuide }: { game: HubGame; record: { high: number; completed: number; total: number }; onSelect: () => void; onGuide?: () => void }) {
   const { t, i18n } = useTranslation('common'), Icon = icons[game.icon as keyof typeof icons] || Brain
   const open: MouseEventHandler<HTMLAnchorElement> = event => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return; event.preventDefault(); event.stopPropagation(); onSelect() }

@@ -98,15 +98,6 @@
       },
       "tip": "This card opens the listening practice area; it is not a separate arcade game."
     },
-    "grammar": {
-      "goal": "Practice Japanese grammar through the existing question bank.",
-      "steps": {
-        "1": "Choose an available level, question types and number of questions.",
-        "2": "Answer each question in the format shown: choose, fill, reorder or conjugate.",
-        "3": "Read the feedback and finish the session to review your result."
-      },
-      "tip": "Grammar Grand Prix is the showcase card's name. It opens the existing grammar practice session."
-    },
     "falling": {
       "goal": "Answer each falling Kanji before it reaches the bottom.",
       "steps": {
@@ -266,10 +257,6 @@
       "listening": {
         "name": "Listen & Write Challenge",
         "description": "Sharpen your ears with Japanese lessons in the existing listening practice area."
-      },
-      "grammar": {
-        "name": "Grammar Grand Prix",
-        "description": "Move your grammar forward with the existing practice questions, one turn at a time."
       }
     }
   },

@@ -98,15 +98,6 @@
       },
       "tip": "Thẻ này mở khu vực luyện nghe, chưa phải một minigame riêng."
     },
-    "grammar": {
-      "goal": "Luyện ngữ pháp tiếng Nhật qua ngân hàng câu hỏi hiện có.",
-      "steps": {
-        "1": "Chọn cấp có dữ liệu, dạng câu hỏi và số câu muốn luyện.",
-        "2": "Làm theo dạng câu đang hiển thị: chọn đáp án, điền, sắp xếp hoặc chia động từ.",
-        "3": "Đọc phản hồi và hoàn tất buổi luyện để xem kết quả."
-      },
-      "tip": "Đua Xe Ngữ Pháp là tên thẻ giới thiệu; thẻ mở buổi luyện ngữ pháp hiện có."
-    },
     "falling": {
       "goal": "Trả lời đúng từng Kanji trước khi chữ rơi chạm đáy.",
       "steps": {
@@ -266,10 +257,6 @@
       "listening": {
         "name": "Thử Thách Nghe Chép",
         "description": "Luyện đôi tai qua bài nghe tiếng Nhật trong khu vực luyện nghe hiện có."
-      },
-      "grammar": {
-        "name": "Đua Xe Ngữ Pháp",
-        "description": "Tiến từng chặng ngữ pháp qua các câu hỏi luyện tập hiện có, mỗi lượt một chút."
       }
     }
   },

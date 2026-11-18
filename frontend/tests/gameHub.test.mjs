@@ -15,17 +15,17 @@ try {
   const { AuthProvider } = await server.ssrLoadModule('/src/services/auth.tsx')
   const engine = await server.ssrLoadModule(fileURLToPath(new URL('../../shared-games/index.ts', import.meta.url)))
   const { GAMES_DATA, filterGames, gameRecord, supportedLevels, gameDestination, readLevel } = catalog
-  assert.equal(GAMES_DATA.length, 12)
-  assert.equal(new Set(GAMES_DATA.map(game => game.id)).size, 12)
+  assert.equal(GAMES_DATA.length, 11)
+  assert.equal(new Set(GAMES_DATA.map(game => game.id)).size, 11)
   for (const game of engine.GAMES) assert.ok(GAMES_DATA.some(entry => entry.engine === game), game)
   assert.ok(!GAMES_DATA.some(game => game.id === 'listening' || game.to === '/listening'), 'Listening belongs only in listening practice')
-  for (const id of ['quiz', 'flashcard', 'grammar']) {
+  for (const id of ['quiz', 'flashcard']) {
     const game = GAMES_DATA.find(game => game.id === id)
     assert.equal(game.engine, undefined)
     assert.equal(gameDestination(game, 'N3'), game.to, 'Study shortcuts bypass the hub level picker')
   }
   assert.ok(!GAMES_DATA.some(game => game.id === 'kanji' || game.to === '/games/kanji'), 'Study belongs in Kanji practice')
-  assert.ok(!GAMES_DATA.some(game => game.id === 'kanji' || game.to === '/games/kanji'), 'Study belongs in Kanji practice')
+  assert.ok(!GAMES_DATA.some(game => game.id === 'grammar' || game.to === '/grammar/practice'), 'Grammar practice is not a separate racing game')
   const shiritori = GAMES_DATA.find(game => game.id === 'shiritori')
   assert.deepEqual(supportedLevels(shiritori), ['N3'])
   assert.equal(gameDestination(shiritori, 'N3'), '/games/shiritori?level=N3')
@@ -44,10 +44,10 @@ try {
     }
     assert.deepEqual(filterGames(GAMES_DATA, 'ranked', '', t), [])
     assert.equal(filterGames(GAMES_DATA, 'all', 'not-a-real-game-912', t).length, 0)
-    assert.ok(filterGames(GAMES_DATA, 'grammar', '', t).every(game => game.tags.includes('grammar')))
+    assert.deepEqual(filterGames(GAMES_DATA, 'grammar', '', t), [])
     if (language === 'vi') assert.equal(filterGames(GAMES_DATA, 'reflex', 'noi tu', t)[0].id, 'shiritori')
     const html = renderToStaticMarkup(React.createElement(MemoryRouter, null, React.createElement(AuthProvider, null, React.createElement(GameHub))))
-    assert.equal((html.match(/<article/g) || []).length, 12)
+    assert.equal((html.match(/<article/g) || []).length, 11)
     assert.ok(html.includes(t('arcade.heroTitle')))
     assert.ok(html.includes(t('arcade.rewardNotice')))
     assert.ok(!html.includes('arcade.'))

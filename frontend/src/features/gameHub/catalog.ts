@@ -13,7 +13,6 @@ export const GAMES_DATA: HubGame[] = [
   { id: 'quiz', title: 'arcade.games.quiz.name', description: 'arcade.games.quiz.description', to: '/quiz', category: 'vocabulary', tags: ['vocabulary', 'reflex'], tone: 'mint', icon: 'zap', glyph: '速', reward: 20, label: 'hot' },
   { id: 'flashcard', title: 'arcade.games.flashcard.name', description: 'arcade.games.flashcard.description', to: '/flashcard', category: 'vocabulary', tags: ['vocabulary'], tone: 'cream', icon: 'layers', glyph: '覚', reward: 15 },
   { id: 'shiritori', title: 'arcade.games.shiritori.name', description: 'arcade.games.shiritori.description', to: '/games/shiritori', category: 'reflex', tags: ['vocabulary', 'reflex'], tone: 'sky', icon: 'link', glyph: '繋', reward: 25, label: 'new', engine: 'shiritori' },
-  { id: 'grammar', title: 'arcade.games.grammar.name', description: 'arcade.games.grammar.description', to: '/grammar/practice', category: 'grammar', tags: ['grammar', 'reflex'], tone: 'rose', icon: 'car', glyph: '文', reward: 25 },
   ...([
     ['falling', 'kanji', ['kanji', 'reflex'], 'peach', 'falling', '落'],
     ['cipher', 'vocabulary', ['vocabulary'], 'lavender', 'key', '秘'],
