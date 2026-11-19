@@ -1,4 +1,87 @@
 {
+  "localReminders": {
+    "title": "Thông báo trên thiết bị",
+    "channel": "Nhắc học SenpaiAI",
+    "channelDescription": "Nhắc nhiệm vụ hằng ngày và giữ chuỗi học.",
+    "enable": "Cho phép nhắc trên thiết bị này",
+    "requesting": "Đang kiểm tra quyền…",
+    "openSettings": "Mở cài đặt hệ thống",
+    "settingsHelp": "Vào Thông báo trong cài đặt hệ thống, cho phép SenpaiAI (hoặc Expo Go khi chạy thử), rồi trở lại ứng dụng. Nếu kênh Nhắc học bị tắt trên Android, hãy bật lại kênh đó.",
+    "provisionalHelp": "iPhone đang cho phép thông báo yên lặng. Bạn có thể bật biểu ngữ trong cài đặt hệ thống.",
+    "refresh": "Cập nhật lịch trên thiết bị",
+    "error": "Chưa cập nhật được lịch trên thiết bị. Kiểm tra kết nối, quyền thông báo và thử lại. Nếu dùng bản development cũ, hãy build và cài lại để có module thông báo.",
+    "deliveryHelp": "Lưu cài đặt để áp dụng thay đổi. Lịch có hiệu lực cho 7 ngày tính từ hôm nay và được cập nhật khi mở lại ứng dụng. Chế độ tiết kiệm pin, Focus hoặc cài đặt hệ thống có thể làm thông báo đến muộn hoặc không hiện.",
+    "openDaily": "Mở nhiệm vụ hằng ngày",
+    "dismiss": "Đóng",
+    "permission": {
+      "off": "Chưa bật nhắc trên thiết bị này cho tài khoản hiện tại.",
+      "undetermined": "Chưa cấp quyền thông báo trên thiết bị.",
+      "denied": "Quyền thông báo đang bị từ chối.",
+      "granted": "Đã cấp quyền thông báo trên thiết bị.",
+      "provisional": "Đã cho phép thông báo yên lặng trên iPhone.",
+      "unsupported": "Môi trường hiện tại không hỗ trợ thông báo trên thiết bị. Hãy dùng Android hoặc iPhone với Expo Go tương thích SDK hoặc bản development."
+    },
+    "schedule": {
+      "idle": "Chưa kiểm tra lịch trên thiết bị.",
+      "syncing": "Đang cập nhật lịch trên thiết bị…",
+      "scheduled_one": "Đã hẹn {{count}} thông báo cho 7 ngày tính từ hôm nay.",
+      "scheduled_other": "Đã hẹn {{count}} thông báo cho 7 ngày tính từ hôm nay.",
+      "disabled": "Hiện không hẹn thông báo trên thiết bị.",
+      "permission": "Cần cho phép thông báo để hẹn lịch trên thiết bị.",
+      "error": "Lịch thông báo chưa được cập nhật thành công."
+    },
+    "copy": {
+      "daily_task": { "title": "Nhiệm vụ hôm nay đang chờ bạn", "body": "Dành vài phút học tiếng Nhật và hoàn thành nhiệm vụ hằng ngày nhé." },
+      "streak_risk": { "title": "Giữ chuỗi ngày học nhé!", "body": "Hoàn thành nhiệm vụ hôm nay để giữ chuỗi học của bạn." }
+    }
+  },
+  "reminders": {
+    "title": "Cài đặt nhắc học",
+    "description": "Chọn thời điểm và loại nhắc phù hợp với lịch học của bạn.",
+    "enabled": "Bật nhắc học",
+    "time": "Giờ nhắc chính (HH:MM)",
+    "timezone": "Múi giờ (IANA)",
+    "timezoneHelp": "Ví dụ: Asia/Ho_Chi_Minh hoặc America/New_York. Cài đặt nhắc theo múi giờ này, độc lập với múi giờ thiết bị.",
+    "days": "Ngày nhận nhắc",
+    "weekdays": { "0": "Thứ Hai", "1": "Thứ Ba", "2": "Thứ Tư", "3": "Thứ Năm", "4": "Thứ Sáu", "5": "Thứ Bảy", "6": "Chủ nhật" },
+    "types": "Loại lời nhắc",
+    "kinds": {
+      "daily_task": { "title": "Nhiệm vụ hằng ngày", "description": "Nhắc khi nhiệm vụ hôm nay chưa hoàn thành." },
+      "streak_risk": { "title": "Giữ chuỗi ngày học", "description": "Nhắc vào buổi tối nếu chuỗi học có nguy cơ đứt." },
+      "review_due": { "title": "Ôn tập nội dung", "description": "Gợi ý ôn lại những mục bạn thường trả lời sai. Hiển thị trong trung tâm thông báo." }
+    },
+    "quietStart": "Bắt đầu giờ yên lặng (HH:MM)",
+    "quietEnd": "Kết thúc giờ yên lặng (HH:MM)",
+    "quietHelp": "Giờ yên lặng có thể qua nửa đêm. Giờ bắt đầu bằng giờ kết thúc sẽ tắt nhắc cả ngày. Không chọn ngày hoặc loại nhắc nào sẽ không nhận nhắc.",
+    "max": "Tối đa mỗi ngày (1–20)",
+    "snoozed": "Đang tạm hoãn nhắc đến {{time}}.",
+    "save": "Lưu cài đặt",
+    "saving": "Đang lưu…",
+    "saved": "Đã lưu cài đặt nhắc học.",
+    "timeError": "Nhập giờ đúng định dạng HH:MM, từ 00:00 đến 23:59.",
+    "timezoneError": "Nhập múi giờ IANA hợp lệ, ví dụ Asia/Ho_Chi_Minh.",
+    "limitError": "Giới hạn mỗi ngày phải là số nguyên từ 1 đến 20.",
+    "daysError": "Chọn ngày hợp lệ và không trùng lặp.",
+    "typesError": "Chọn loại nhắc được hỗ trợ.",
+    "suggested": "Gợi ý giờ học",
+    "suggestion_one": "Bạn thường học lúc {{time}} ({{count}} lần ghi nhận; {{timezone}}).",
+    "suggestion_other": "Bạn thường học lúc {{time}} ({{count}} lần ghi nhận; {{timezone}}).",
+    "noSuggestion": "Cần thêm hoạt động học để gợi ý giờ phù hợp.",
+    "apply": "Dùng giờ này",
+    "applyHelp": "Chỉ cập nhật biểu mẫu. Nhấn Lưu cài đặt để xác nhận.",
+    "inAppOnly": "Cài đặt được đồng bộ theo tài khoản. Phiên bản này hiển thị lời nhắc trong trung tâm thông báo của ứng dụng. Thông báo trên thiết bị sẽ được bổ sung riêng.",
+    "markRead": "Đánh dấu đã đọc",
+    "remove": "Xóa thông báo",
+    "read": "Đã đọc",
+    "unread": "Chưa đọc",
+    "loadMore": "Tải thêm",
+    "listLimit": "Đang hiển thị 100 thông báo mới nhất, tối đa mà máy chủ hỗ trợ.",
+    "countError": "Thông báo: chưa cập nhật được số chưa đọc. Mở để thử lại.",
+    "badgeError": "!",
+    "badgeMax": "99+",
+    "unknownTime": "Không rõ thời gian",
+    "relative": { "now": "Vừa xong", "minutes_one": "{{count}} phút trước", "minutes_other": "{{count}} phút trước", "hours_one": "{{count}} giờ trước", "hours_other": "{{count}} giờ trước", "days_one": "{{count}} ngày trước", "days_other": "{{count}} ngày trước" }
+  },
   "shop": {
     "imageUnavailable": "Không tải được ảnh xem trước. Hãy tải lại ứng dụng rồi thử lại.",
     "unknownName": "Mục chưa có bản dịch: {{id}}",
@@ -423,6 +506,18 @@
     "sample": "Mẫu viết tay chữ {{character}}"
   },
   "minigames": {
+    "catalog": {
+      "notice": "Điểm lưu trên máy theo tài khoản.\nKhông cộng ví hoặc mua hình nền.",
+      "filterLabel": "Lọc trò chơi theo cấp độ JLPT",
+      "all": "Tất cả",
+      "empty": "Chưa có trò chơi hỗ trợ cấp độ này.",
+      "record": "Kỷ lục",
+      "japanese": {
+        "falling": "漢字ドロップ", "shiritori": "しりとり", "cipher": "かな暗号",
+        "memory": "かなメモリー", "battle": "ことばバトル", "workshop": "熟語工房",
+        "wordsearch": "ことば探し", "ninja": "ことば忍者", "missing": "漢字の欠けた一画"
+      }
+    },
     "preparing": "Đang chuẩn bị toàn bộ dữ liệu ván chơi…",
     "prepareError": "Không chuẩn bị được ván chơi. Kiểm tra kết nối rồi thử lại hoặc quay về.",
     "undo": "Hoàn tác",

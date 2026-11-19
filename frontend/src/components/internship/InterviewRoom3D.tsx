@@ -274,6 +274,11 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     }
   }
 
+  useEffect(() => {
+    sceneManagerRef.current?.setCandidateGender(candidateGender)
+    if (etiquetteStage === 'dress_check') handleViewChange('candidate_preview')
+  }, [candidateGender, etiquetteStage, handleViewChange])
+
   // --- ETIQUETTE PROTOCOL WORKFLOW STEPS ---
 
   // Step 1: Confirm Dress Code
@@ -455,6 +460,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   // Jump straight to seated interview view
   const handleSkipToInterview = useCallback(() => {
     setEtiquetteStage('sitting_interview')
+    sceneManagerRef.current?.setCandidateGender(candidateGender)
     sceneManagerRef.current?.setDoorOpen(false)
     sceneManagerRef.current?.setCandidateStance('seated')
     setTimeout(() => {
@@ -464,7 +470,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     setShowEtiquetteCard(false)
     onDistanceChangeRef.current?.(2.1, true)
     onSitDownRequestRef.current?.()
-  }, [handleViewChange])
+  }, [candidateGender, handleViewChange])
 
   // Listen to external skip_to_interview events (e.g. from Parent HUD banner)
   useEffect(() => {
@@ -576,7 +582,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
       </div>
 
       {/* Top Center: Japanese Etiquette Tracker Pill */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
+      <div className="absolute top-28 left-4 sm:left-6 z-20 pointer-events-auto">
         <button
           type="button"
           onClick={() => setShowEtiquetteCard((prev) => !prev)}
@@ -622,6 +628,15 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
 
         {/* Camera View Selector */}
         <div className="flex items-center p-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-lg text-xs">
+          <button
+            type="button"
+            onClick={() => handleViewChange(etiquetteStage === 'dress_check' || etiquetteStage === 'outside_door' || etiquetteStage === 'knocking' ? 'candidate_preview' : 'candidate')}
+            title={`Xem nhân vật ứng viên ${candidateGender === 'female' ? 'nữ' : 'nam'}. Góc POV nhìn qua mắt ứng viên nên sẽ ẩn avatar.`}
+            aria-pressed={viewMode === 'candidate' || viewMode === 'candidate_preview'}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${viewMode === 'candidate' || viewMode === 'candidate_preview' ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'text-slate-300 hover:text-white'}`}
+          >
+            <User className="w-3.5 h-3.5" /><span>Ứng viên {candidateGender === 'female' ? 'nữ' : 'nam'}</span>
+          </button>
           <button
             type="button"
             onClick={() => handleViewChange('pov')}
@@ -684,7 +699,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
       </div>
 
       {/* Middle Right Quick Manner Actions: Cúi chào (Ojigi) & Gật đầu */}
-      <div className="absolute right-4 sm:right-6 top-20 z-20 pointer-events-auto flex flex-col gap-2">
+      <div className="absolute right-4 sm:right-6 top-28 z-20 pointer-events-auto flex flex-col gap-2">
         <button
           type="button"
           onClick={handleTriggerBow}
@@ -737,7 +752,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         <motion.div
           drag
           dragMomentum={false}
-          className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[92%] max-w-lg cursor-move"
+          className={`absolute z-30 pointer-events-auto w-[92%] max-w-lg ${etiquetteStage === 'dress_check' ? 'bottom-20 right-4 max-h-[50dvh] overflow-y-auto lg:bottom-auto lg:top-24 lg:max-h-[calc(100dvh-10rem)] lg:max-w-sm' : 'top-16 sm:top-20 left-1/2 -translate-x-1/2 cursor-move'}`}
         >
           {/* STAGE 1: DRESS CODE CHECKLIST MODAL */}
           {etiquetteStage === 'dress_check' && (
@@ -767,6 +782,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
               <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-slate-800/80 border border-slate-700/60">
                 <button
                   type="button"
+                  aria-pressed={candidateGender === 'male'}
                   onClick={() => setCandidateGender('male')}
                   className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
                     candidateGender === 'male'
@@ -779,6 +795,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
                 </button>
                 <button
                   type="button"
+                  aria-pressed={candidateGender === 'female'}
                   onClick={() => setCandidateGender('female')}
                   className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
                     candidateGender === 'female'
@@ -792,6 +809,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
               </div>
 
               {/* Attire Specification Checklist */}
+              <p className="text-xs leading-relaxed text-slate-200">Đang xem ứng viên {candidateGender === 'female' ? 'nữ' : 'nam'} trong cảnh 3D. Khi ngồi vào bàn, chọn góc “Ứng viên” để xem lại; POV là góc nhìn qua mắt bạn.</p>
               <div className="p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/50 space-y-2 text-xs">
                 {candidateGender === 'male' ? (
                   <>
