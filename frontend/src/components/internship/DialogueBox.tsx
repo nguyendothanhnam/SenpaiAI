@@ -21,6 +21,7 @@ export interface DialogueBoxProps {
   focus?: string
   onSpeakingChange?: (speaking: boolean) => void
   onClose?: () => void
+  docked?: boolean
 }
 
 export const DialogueBox: React.FC<DialogueBoxProps> = ({
@@ -31,6 +32,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   focus,
   onSpeakingChange,
   onClose,
+  docked = false,
 }) => {
   const [showVi, setShowVi] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
@@ -106,7 +108,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
 
   return (
     <motion.div
-      drag
+      drag={!docked}
       dragListener={false}
       dragControls={dragControls}
       dragMomentum={false}
@@ -114,7 +116,9 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       className={`relative w-full rounded-3xl border-2 border-slate-700/90 bg-slate-950/95 backdrop-blur-2xl shadow-2xl transition-all text-white select-text pointer-events-auto ${
-        sizeMode === 'maximized'
+        docked
+          ? 'max-h-[30dvh] overflow-y-auto p-3 sm:p-4 mx-auto'
+          : sizeMode === 'maximized'
           ? 'p-6 sm:p-8 max-w-5xl mx-auto'
           : sizeMode === 'compact'
           ? 'p-3.5 sm:p-4 max-w-2xl mx-auto'
@@ -123,9 +127,9 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
     >
       {/* 1. Dialogue Header Bar */}
       <div
-        onPointerDown={(e) => dragControls.start(e)}
-        className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 cursor-move select-none"
-        title="Nhấp giữ để kéo di chuyển hộp thoại"
+        onPointerDown={(e) => { if (!docked) dragControls.start(e) }}
+        className={`flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 select-none ${docked ? '' : 'cursor-move'}`}
+        title={docked ? undefined : 'Nhấp giữ để kéo di chuyển hộp thoại'}
       >
         <div className="flex items-center gap-2">
           <GripHorizontal className="w-4 h-4 text-slate-500 hover:text-amber-400 transition-colors" />

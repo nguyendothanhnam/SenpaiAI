@@ -3,6 +3,7 @@ import { CameraRig } from './CameraRig'
 import { CharacterController, type CharacterJoints } from './CharacterController'
 import { QualityManager, type QualityConfig } from './QualityManager'
 import { eventBridge } from './EventBridge'
+import { createCandidateAppearance } from './CandidateAppearance'
 
 export interface SceneManagerOptions {
   container: HTMLElement
@@ -64,6 +65,7 @@ export class SceneManager {
   private candidateGender: 'male' | 'female' = 'male'
   private candidateTieMesh?: THREE.Mesh
   private candidateHairMesh?: THREE.Mesh
+  private candidateAppearance?: ReturnType<typeof createCandidateAppearance>
 
   // Candidate Walking & Sitting Animation
   private walkPhase = 0
@@ -1591,6 +1593,8 @@ export class SceneManager {
     this.candidateHairMesh.position.set(0, 0.15, 0.01)
     this.candidateHead.add(this.candidateHairMesh)
 
+    this.candidateAppearance = createCandidateAppearance({ head: this.candidateHead, jacket: chestMesh, tie: this.candidateTieMesh, hair: this.candidateHairMesh })
+    this.candidateAppearance.setGender(this.candidateGender)
     this.scene.add(this.candidateGroup)
   }
 
@@ -2367,16 +2371,8 @@ export class SceneManager {
 
   public setCandidateGender(gender: 'male' | 'female'): void {
     this.candidateGender = gender
-    if (this.candidateTieMesh) {
-      this.candidateTieMesh.visible = gender === 'male'
-    }
-    if (this.candidateHairMesh) {
-      if (gender === 'female') {
-        this.candidateHairMesh.scale.set(1.05, 1.25, 1.1)
-      } else {
-        this.candidateHairMesh.scale.set(1.0, 1.0, 1.0)
-      }
-    }
+    this.candidateAppearance?.setGender(gender)
+    if (this.candidateGroup) this.candidateGroup.userData.gender = gender
   }
 
   // --- MEMORY DISPOSAL ---

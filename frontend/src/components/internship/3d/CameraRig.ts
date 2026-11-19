@@ -5,6 +5,8 @@ export type CameraView =
   | 'door_outside'
   | 'door_enter'
   | 'candidate_standing'
+  | 'candidate_preview'
+  | 'candidate'
   | 'pov'
   | 'close'
   | 'isometric'
@@ -41,6 +43,16 @@ export class CameraRig {
     candidate_standing: {
       position: new THREE.Vector3(1.35, 1.55, 1.75), // 3/4 medium shot of candidate standing & bowing beside chair
       target: new THREE.Vector3(0.15, 1.25, 0.2),
+      fov: 48,
+    },
+    candidate_preview: {
+      position: new THREE.Vector3(1.8, 1.4, 4.05),
+      target: new THREE.Vector3(0, 0.8, 4.5),
+      fov: 48,
+    },
+    candidate: {
+      position: new THREE.Vector3(1.75, 1.5, -0.1),
+      target: new THREE.Vector3(0, 1.08, 1.1),
       fov: 48,
     },
     pov: {
