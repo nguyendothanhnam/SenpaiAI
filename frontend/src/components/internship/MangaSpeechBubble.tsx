@@ -74,22 +74,22 @@ export const MangaSpeechBubble: React.FC<MangaSpeechBubbleProps> = ({
       transition={{ type: 'spring', damping: 20, stiffness: 300 }}
       className="relative z-40 max-w-sm sm:max-w-md w-[90vw] sm:w-[420px] pointer-events-auto select-none"
     >
-      {/* Manga Speech Balloon Cel */}
-      <div className="relative rounded-[2rem] bg-white border-[2.5px] border-slate-900 shadow-[6px_6px_0px_0px_rgba(15,23,42,0.95)] p-4 sm:p-5 text-slate-950 transition-all">
+      {/* Executive Corporate Dialogue Console (ArchViz Serious Mode) */}
+      <div className="relative rounded-2xl bg-slate-900/95 backdrop-blur-2xl border border-slate-700/80 shadow-2xl p-4 sm:p-5 text-slate-100 transition-all">
         {/* 1. Header with Drag Handle, Speaker Badge & Controls */}
         <div
           onPointerDown={(e) => dragControls.start(e)}
-          className="flex items-center justify-between pb-2 mb-2 border-b-2 border-slate-900/15 cursor-move"
-          title="Nhấp giữ để kéo đám mây lời thoại"
+          className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800 cursor-move"
+          title="Nhấp giữ để kéo di chuyển bảng đàm thoại"
         >
           <div className="flex items-center gap-2">
-            <GripHorizontal className="w-4 h-4 text-slate-400 hover:text-slate-900 transition-colors" />
+            <GripHorizontal className="w-4 h-4 text-slate-400 hover:text-slate-200 transition-colors" />
             <div className="flex items-center gap-1.5">
-              <span className="font-black text-xs sm:text-sm text-slate-900 tracking-wide">
+              <span className="font-bold text-xs sm:text-sm text-slate-200 tracking-wide">
                 【 {speakerName} 】
               </span>
               {speakerTitle && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+                <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
                   {speakerTitle}
                 </span>
               )}
@@ -106,17 +106,17 @@ export const MangaSpeechBubble: React.FC<MangaSpeechBubbleProps> = ({
                   onReplayAudio()
                   setDisplayedLength(0)
                 }}
-                title="Nghe lại phát âm tiếng Nhật"
-                className={`p-1.5 rounded-xl border border-slate-900/20 text-xs font-bold transition-all flex items-center gap-1 ${
+                title="Nghe lại phát biểu tiếng Nhật"
+                className={`p-1.5 rounded-lg border text-xs font-semibold transition-all flex items-center gap-1 ${
                   isSpeaking
-                    ? 'bg-amber-400 text-slate-950 animate-pulse'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
+                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border-slate-700'
                 }`}
               >
                 {isSpeaking ? (
                   <VolumeX className="w-3.5 h-3.5" />
                 ) : (
-                  <Volume2 className="w-3.5 h-3.5 text-amber-700" />
+                  <Volume2 className="w-3.5 h-3.5 text-slate-300" />
                 )}
               </button>
             )}
@@ -130,13 +130,13 @@ export const MangaSpeechBubble: React.FC<MangaSpeechBubbleProps> = ({
                   setShowVi(!showVi)
                 }}
                 title={showVi ? 'Ẩn dịch nghĩa' : 'Xem dịch nghĩa tiếng Việt'}
-                className={`p-1.5 rounded-xl border border-slate-900/20 text-xs font-bold transition-all ${
+                className={`p-1.5 rounded-lg border text-xs font-semibold transition-all ${
                   showVi
-                    ? 'bg-amber-400 text-slate-950'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
+                    ? 'bg-slate-700 text-slate-100 border-slate-600'
+                    : 'bg-slate-800/80 hover:bg-slate-700 text-slate-400 border-slate-700'
                 }`}
               >
-                {showVi ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5 text-amber-700" />}
+                {showVi ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               </button>
             )}
 
@@ -148,8 +148,8 @@ export const MangaSpeechBubble: React.FC<MangaSpeechBubbleProps> = ({
                   e.stopPropagation()
                   onClose()
                 }}
-                title="Đóng đám mây lời thoại"
-                className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-100 text-slate-500 hover:text-red-600 transition-colors border border-slate-900/20"
+                title="Thu nhỏ bảng đàm thoại"
+                className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors border border-slate-700"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -163,46 +163,46 @@ export const MangaSpeechBubble: React.FC<MangaSpeechBubbleProps> = ({
           className="cursor-pointer select-text py-1"
           title="Nhấp để hiển thị nhanh toàn bộ câu"
         >
-          <p className="text-base sm:text-xl font-black text-slate-900 leading-relaxed tracking-wide font-sans">
-            <span className="text-amber-600 font-extrabold mr-1">「</span>
+          <p className="text-base sm:text-lg font-medium text-slate-100 leading-relaxed tracking-wide font-serif">
+            <span className="text-slate-400 font-serif mr-1">「</span>
             <span>{currentText}</span>
             {!isTypingComplete && (
-              <span className="inline-block w-2 h-4 sm:h-5 bg-amber-500 ml-1 animate-pulse align-middle" />
+              <span className="inline-block w-1.5 h-4 sm:h-5 bg-amber-400/80 ml-1 animate-pulse align-middle" />
             )}
-            <span className="text-amber-600 font-extrabold ml-1">」</span>
+            <span className="text-slate-400 font-serif ml-1">」</span>
           </p>
 
-          {/* Vietnamese Translation (Optional) */}
+          {/* Vietnamese Translation (Subtle Corporate Subtitle) */}
           {showVi && textVi && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
-              className="mt-2.5 pt-2 border-t border-dashed border-slate-300 text-xs sm:text-sm text-slate-700 font-semibold leading-relaxed"
+              className="mt-2.5 pt-2 border-t border-slate-800 text-xs sm:text-sm text-slate-300 font-normal leading-relaxed"
             >
-              <span className="text-amber-700 font-bold mr-1">🇻🇳 Dịch:</span>
+              <span className="text-amber-400 font-bold mr-1">🇻🇳 Dịch:</span>
               <span>{textVi}</span>
             </motion.div>
           )}
         </div>
 
         {/* 3. Manga Speaking Indicator Dots */}
-        <div className="flex items-center justify-between pt-2 mt-1 text-[11px] font-bold text-slate-500 border-t border-slate-100">
+        <div className="flex items-center justify-between pt-2 mt-1 text-[11px] font-bold text-slate-400 border-t border-slate-800">
           <div className="flex items-center gap-1.5">
             {isSpeaking ? (
-              <span className="inline-flex items-center gap-1 text-amber-600 font-black animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+              <span className="inline-flex items-center gap-1 text-amber-400 font-bold animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
                 <span>Đang phát biểu...</span>
               </span>
             ) : (
               <span className="text-slate-400">💡 Nhấp bóng thoại để đọc nhanh</span>
             )}
           </div>
-          <span className="text-[10px] text-slate-400 font-medium">Manga Bubble</span>
+          <span className="text-[10px] text-slate-400 font-medium">Bóng thoại 3D</span>
         </div>
 
         {/* 4. Comic Tail (Pointing Downward toward the Boss NPC) */}
-        <div className="absolute -bottom-3 right-10 sm:right-14 w-6 h-6 overflow-hidden pointer-events-none">
-          <div className="w-4 h-4 bg-white border-r-[2.5px] border-b-[2.5px] border-slate-900 rotate-45 transform origin-top-left shadow-[2px_2px_0px_0px_rgba(15,23,42,0.95)]" />
+        <div className="absolute -bottom-2.5 right-10 sm:right-14 w-5 h-5 overflow-hidden pointer-events-none">
+          <div className="w-3.5 h-3.5 bg-slate-900 border-r border-b border-slate-700/80 rotate-45 transform origin-top-left shadow-lg" />
         </div>
       </div>
     </motion.div>

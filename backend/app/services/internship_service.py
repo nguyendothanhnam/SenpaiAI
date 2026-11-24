@@ -10,6 +10,11 @@ from ..models.database import InternshipProfile, InternshipSession, User
 from .internship_data import BUSINESS_HANDBOOK, INDUSTRIES
 from .llm_service import japanese_service
 from .rewards_service import award_points
+from .cv_service import (
+    index_cv_into_rag,
+    generate_technical_questions_from_cv,
+    evaluate_turn_with_ai_rag
+)
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +92,72 @@ def start_interview_session(db: Session, user_id: int, industry_id: str, target_
         manner_score=0.0,
         turns_data=initial_turns,
         final_feedback=None,
+        offer_letter=None
+    )
+    db.add(session)
+    db.commit()
+    db.refresh(session)
+    
+    return format_session_response(session, industry)
+
+
+async def start_interview_session_with_cv(
+    db: Session,
+    user_id: int,
+    parsed_cv: Dict[str, Any],
+    raw_cv_text: str,
+    industry_id: str = "it"
+) -> Dict[str, Any]:
+    """Starts an interview session with technical questions generated via RAG based on the candidate's CV."""
+    industry = INDUSTRIES.get(industry_id, INDUSTRIES["it"])
+    session_id = uuid.uuid4()
+    
+    # 1. Index CV into RAG
+    index_cv_into_rag(user_id, parsed_cv, raw_cv_text)
+    
+    # 2. Generate 4 tailored technical interview questions using RAG
+    custom_questions = await generate_technical_questions_from_cv(user_id, parsed_cv, industry_id)
+    
+    interviewer = industry["interviewer"]
+    first_q = custom_questions[0]
+    
+    initial_turns = [
+        {
+            "turn": 1,
+            "speaker": "npc",
+            "npc_name": interviewer["name"],
+            "npc_title": interviewer["title"],
+            "npc_emotion": "neutral",
+            "message_ja": first_q["question_ja"],
+            "message_vi": first_q["question_vi"],
+            "focus": first_q.get("focus", "Kỹ năng lập trình & Tech stack trong CV"),
+            "expected_criteria": first_q.get("expected_criteria", ""),
+            "hints": first_q.get("hints", []),
+            "user_response": None,
+            "feedback": None,
+            "scores": None
+        }
+    ]
+    
+    session = InternshipSession(
+        id=session_id,
+        user_id=user_id,
+        session_type="interview",
+        industry=industry_id,
+        level=3,  # Technical interviews match Cấp 3 (N3+) standards
+        scenario_id="interview_cv",
+        status="in_progress",
+        current_turn=1,
+        max_turns=len(custom_questions),
+        overall_score=0.0,
+        grammar_score=0.0,
+        keigo_score=0.0,
+        manner_score=0.0,
+        turns_data=initial_turns,
+        final_feedback={
+            "cv_profile": parsed_cv,
+            "cv_questions": custom_questions
+        },
         offer_letter=None
     )
     db.add(session)
@@ -266,26 +337,40 @@ async def process_turn_answer(
         
     current_turn_data = turns_list[curr_turn_idx]
     
-    # AI Evaluation
-    evaluation = await evaluate_turn_with_ai(
-        industry_name=industry["name"],
-        npc_name=current_turn_data.get("npc_name", "NPC"),
-        question_ja=current_turn_data.get("message_ja", ""),
-        user_text=user_response,
-        session_type=session.session_type,
-        turn_number=session.current_turn
-    )
+    # AI Evaluation (Grounded with RAG if session is CV-based technical interview)
+    is_cv_interview = session.scenario_id == "interview_cv"
+    if is_cv_interview:
+        cv_profile = (session.final_feedback or {}).get("cv_profile")
+        evaluation = await evaluate_turn_with_ai_rag(
+            user_id=user_id,
+            question_data=current_turn_data,
+            user_text=user_response,
+            turn_number=session.current_turn,
+            parsed_cv=cv_profile
+        )
+    else:
+        evaluation = await evaluate_turn_with_ai(
+            industry_name=industry["name"],
+            npc_name=current_turn_data.get("npc_name", "NPC"),
+            question_ja=current_turn_data.get("message_ja", ""),
+            user_text=user_response,
+            session_type=session.session_type,
+            turn_number=session.current_turn
+        )
     
     # Save user response & feedback to current turn
     current_turn_data["user_response"] = user_response
     current_turn_data["feedback"] = {
         "corrected_sentence": evaluation["corrected_sentence"],
         "advice_vi": evaluation["advice_vi"],
+        "technical_advice_vi": evaluation.get("technical_advice_vi", "")
     }
     current_turn_data["scores"] = {
-        "grammar": evaluation["grammar_score"],
+        "grammar": evaluation.get("grammar_score", evaluation.get("keigo_score", 80)),
         "keigo": evaluation["keigo_score"],
-        "manner": evaluation["manner_score"]
+        "manner": evaluation["manner_score"],
+        "technical": evaluation.get("technical_score", 80),
+        "cv_alignment": evaluation.get("cv_alignment_score", 80)
     }
     current_turn_data["npc_emotion"] = evaluation["npc_reaction"]
     
@@ -295,7 +380,29 @@ async def process_turn_answer(
     
     if not is_last_turn:
         # Prepare next turn
-        if session.session_type == "interview":
+        if is_cv_interview:
+            custom_q_list = (session.final_feedback or {}).get("cv_questions", [])
+            if next_turn_num - 1 < len(custom_q_list):
+                q_info = custom_q_list[next_turn_num - 1]
+            else:
+                q_info = industry["interview_questions"][min(next_turn_num - 1, len(industry["interview_questions"]) - 1)]
+            interviewer = industry["interviewer"]
+            next_turn_data = {
+                "turn": next_turn_num,
+                "speaker": "npc",
+                "npc_name": interviewer["name"],
+                "npc_title": interviewer["title"],
+                "npc_emotion": "neutral",
+                "message_ja": q_info["question_ja"],
+                "message_vi": q_info["question_vi"],
+                "focus": q_info.get("focus", ""),
+                "expected_criteria": q_info.get("expected_criteria", ""),
+                "hints": q_info.get("hints", []),
+                "user_response": None,
+                "feedback": None,
+                "scores": None
+            }
+        elif session.session_type == "interview":
             q_info = industry["interview_questions"][next_turn_num - 1]
             interviewer = industry["interviewer"]
             next_turn_data = {
@@ -341,11 +448,21 @@ async def process_turn_answer(
         session.status = "completed"
         session.completed_at = datetime.now(timezone.utc)
         
-        # Calculate averages
-        grammar_avg = sum(t["scores"]["grammar"] for t in turns_list if t.get("scores")) / len(turns_list)
-        keigo_avg = sum(t["scores"]["keigo"] for t in turns_list if t.get("scores")) / len(turns_list)
-        manner_avg = sum(t["scores"]["manner"] for t in turns_list if t.get("scores")) / len(turns_list)
-        overall_avg = round((grammar_avg + keigo_avg + manner_avg) / 3, 1)
+        # Calculate averages across all criteria
+        valid_turns = [t for t in turns_list if t.get("scores")]
+        grammar_avg = sum(t["scores"].get("grammar", 80) for t in valid_turns) / len(valid_turns)
+        keigo_avg = sum(t["scores"].get("keigo", 80) for t in valid_turns) / len(valid_turns)
+        manner_avg = sum(t["scores"].get("manner", 80) for t in valid_turns) / len(valid_turns)
+        
+        has_technical = any("technical" in t["scores"] for t in valid_turns)
+        if has_technical:
+            technical_avg = sum(t["scores"].get("technical", 80) for t in valid_turns) / len(valid_turns)
+            cv_alignment_avg = sum(t["scores"].get("cv_alignment", 80) for t in valid_turns) / len(valid_turns)
+            overall_avg = round((technical_avg * 0.4) + (keigo_avg * 0.25) + (manner_avg * 0.2) + (cv_alignment_avg * 0.15), 1)
+        else:
+            technical_avg = None
+            cv_alignment_avg = None
+            overall_avg = round((grammar_avg + keigo_avg + manner_avg) / 3, 1)
         
         session.grammar_score = round(grammar_avg, 1)
         session.keigo_score = round(keigo_avg, 1)
@@ -364,28 +481,40 @@ async def process_turn_answer(
             elif overall_avg >= 75:
                 assigned_level = 2
                 
+            scores_breakdown = {
+                "grammar": session.grammar_score,
+                "keigo": session.keigo_score,
+                "manner": session.manner_score,
+            }
+            if technical_avg is not None:
+                scores_breakdown["technical"] = round(technical_avg, 1)
+            if cv_alignment_avg is not None:
+                scores_breakdown["cv_alignment"] = round(cv_alignment_avg, 1)
+
+            cv_profile = (session.final_feedback or {}).get("cv_profile")
+            candidate_display_name = cv_profile.get("candidate_name") if cv_profile else (profile.user.username if profile.user else "Bạn")
+
+            ceo_msg = (
+                f"Chúc mừng bạn đã vượt qua kỳ phỏng vấn kỹ thuật gia nhập {industry['company_name']}! "
+                "Hội đồng tuyển dụng và CTO đánh giá rất cao nền tảng chuyên môn, năng lực giải quyết vấn đề và tinh thần cầu thị của bạn."
+            ) if passed else "Bạn chưa đạt yêu cầu kỳ phỏng vấn này. Hãy trau dồi thêm thuật ngữ kỹ thuật và cấu trúc câu PREP để thử sức lại nhé!"
+
             offer_data = {
                 "passed": passed,
                 "company_name": industry["company_name"],
                 "company_location": industry["location"],
-                "candidate_name": profile.user.username if profile.user else "Bạn",
+                "candidate_name": candidate_display_name,
                 "assigned_level": assigned_level,
-                "assigned_position": f"Thực tập sinh {industry['name']} - Cấp {assigned_level}",
+                "assigned_position": f"Kỹ sư {industry['name']} - Cấp {assigned_level}",
                 "interviewer_name": industry["interviewer"]["name"],
                 "overall_score": overall_avg,
-                "scores_breakdown": {
-                    "grammar": session.grammar_score,
-                    "keigo": session.keigo_score,
-                    "manner": session.manner_score
-                },
-                "monthly_stipend_exp": 100 * assigned_level,
-                "points_reward": 50,
+                "scores_breakdown": scores_breakdown,
+                "monthly_stipend_exp": 120 * assigned_level,
+                "points_reward": 60 if is_cv_interview else 50,
                 "hanko_seal_text": "内定",
                 "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-                "ceo_message": (
-                    f"Chúc mừng bạn đã vượt qua buổi phỏng vấn gia nhập {industry['company_name']}! "
-                    "Hội đồng tuyển dụng đánh giá cao sự tự tin và tinh thần học hỏi văn hóa công sở Nhật Bản của bạn."
-                ) if passed else "Bạn chưa đạt điểm đậu kỳ này. Hãy rèn luyện thêm kính ngữ và tự tin thử sức lại nhé!"
+                "ceo_message": ceo_msg,
+                "is_cv_interview": is_cv_interview
             }
             session.offer_letter = offer_data
             

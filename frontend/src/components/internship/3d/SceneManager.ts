@@ -64,7 +64,7 @@ export class SceneManager {
   private candidateKnockDuration = 1.3
   private candidateGender: 'male' | 'female' = 'male'
   private candidateTieMesh?: THREE.Mesh
-  private candidateHairMesh?: THREE.Mesh
+  private candidateHairMesh?: THREE.Object3D
   private candidateAppearance?: ReturnType<typeof createCandidateAppearance>
 
   // Candidate Walking & Sitting Animation
@@ -139,6 +139,7 @@ export class SceneManager {
     this.sunLight.shadow.camera.top = 6
     this.sunLight.shadow.camera.bottom = -6
     this.sunLight.shadow.bias = -0.0005
+    this.sunLight.shadow.normalBias = 0.025
     this.scene.add(this.sunLight)
 
     // Gentle facial fill light for NPC
@@ -1585,16 +1586,75 @@ export class SceneManager {
 
     const headMesh = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.3, 0.24), handMat)
     headMesh.castShadow = true
+    headMesh.frustumCulled = false
     this.candidateHead.add(headMesh)
 
-    // Hair
-    const hairMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.9 })
-    this.candidateHairMesh = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.12, 0.26), hairMat)
-    this.candidateHairMesh.position.set(0, 0.15, 0.01)
-    this.candidateHead.add(this.candidateHairMesh)
+    // Hair material with polygonOffset to completely prevent co-planar Z-fighting and shadow acne
+    const hairMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.9,
+      polygonOffset: true,
+      polygonOffsetFactor: -1.0,
+      polygonOffsetUnits: -1.0,
+    })
 
-    this.candidateAppearance = createCandidateAppearance({ head: this.candidateHead, jacket: chestMesh, tie: this.candidateTieMesh, hair: this.candidateHairMesh })
+    const hairGroup = new THREE.Group()
+    hairGroup.name = 'Candidate_MaleHair'
+
+    // 1. Crown / Top Hair (covers crown and slightly overhangs front)
+    const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.282, 0.12, 0.27), hairMat)
+    hairTop.position.set(0, 0.155, 0.005)
+    hairTop.castShadow = true
+    hairGroup.add(hairTop)
+
+    // 2. Back Hair (covers entire rear occipital down to nape, eliminating bare skin & z-fighting)
+    // Head back is at z = -0.12. Back hair is at z = -0.135 with depth 0.05 (z extends to -0.16)
+    const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.22, 0.05), hairMat)
+    hairBack.position.set(0, 0.04, -0.135)
+    hairBack.castShadow = true
+    hairGroup.add(hairBack)
+
+    // 3. Sideburns (Left & Right)
+    const leftSide = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.14, 0.12), hairMat)
+    leftSide.position.set(-0.136, 0.05, -0.02)
+    leftSide.castShadow = true
+    hairGroup.add(leftSide)
+
+    const rightSide = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.14, 0.12), hairMat)
+    rightSide.position.set(0.136, 0.05, -0.02)
+    rightSide.castShadow = true
+    hairGroup.add(rightSide)
+
+    // 4. Front bangs / fringe
+    const hairBangs = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.05, 0.03), hairMat)
+    hairBangs.position.set(0, 0.115, 0.128)
+    hairBangs.castShadow = true
+    hairGroup.add(hairBangs)
+
+    hairGroup.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.frustumCulled = false
+      }
+    })
+
+    this.candidateHairMesh = hairGroup
+    this.candidateHead.add(hairGroup)
+
+    this.candidateAppearance = createCandidateAppearance({
+      head: this.candidateHead,
+      jacket: chestMesh,
+      tie: this.candidateTieMesh,
+      hair: this.candidateHairMesh,
+    })
     this.candidateAppearance.setGender(this.candidateGender)
+
+    // Ensure no child meshes in candidate get frustum culled
+    this.candidateGroup.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.frustumCulled = false
+      }
+    })
+
     this.scene.add(this.candidateGroup)
   }
 
@@ -1792,7 +1852,13 @@ export class SceneManager {
 
     // Hair Styling per Character (Female hairstyle with bun/bangs for Kaigo, slicked back for hospitality, crew cut for engineering, etc.)
     const hairColor = isFemale ? 0x5c3a21 : ind === 'engineering' ? 0x0f172a : 0x18181b
-    const hairMat = new THREE.MeshStandardMaterial({ color: hairColor, roughness: 0.9 })
+    const hairMat = new THREE.MeshStandardMaterial({
+      color: hairColor,
+      roughness: 0.9,
+      polygonOffset: true,
+      polygonOffsetFactor: -1.0,
+      polygonOffsetUnits: -1.0,
+    })
 
     if (isFemale) {
       // Elegant female bun & bangs (Suzuki Misaki)
@@ -1902,6 +1968,13 @@ export class SceneManager {
     rightArmFore.position.set(-0.05, 0.05, 0.14)
     rightArmFore.rotation.x = Math.PI / 2.8
     rightForearm.add(rightArmFore)
+
+    // Prevent any frustum culling on NPC body parts or head
+    root.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.frustumCulled = false
+      }
+    })
 
     this.scene.add(root)
 

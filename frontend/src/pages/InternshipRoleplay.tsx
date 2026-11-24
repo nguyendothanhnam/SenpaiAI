@@ -22,12 +22,15 @@ import {
   History,
   MessageSquare,
   Eye,
+  FileText,
+  Zap,
 } from 'lucide-react'
 
 import {
   internshipAPI,
   type IndustryInfo,
   type InternshipSession,
+  type ParsedCVProfile,
 } from '../services/api'
 import InterviewRoom3D, { type EtiquetteStage } from '../components/internship/InterviewRoom3D'
 import { eventBridge } from '../components/internship/3d/EventBridge'
@@ -37,6 +40,7 @@ import FeedbackBubble from '../components/internship/FeedbackBubble'
 import MangaSpeechBubble from '../components/internship/MangaSpeechBubble'
 import OfferLetterModal from '../components/internship/OfferLetterModal'
 import HandbookModal from '../components/internship/HandbookModal'
+import CVUploadModal from '../components/internship/CVUploadModal'
 import LoadingSpinner from '../components/LoadingSpinner'
 
 // Icon mapper for industry cards
@@ -61,9 +65,10 @@ export default function InternshipRoleplay() {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [showHandbook, setShowHandbook] = useState(false)
   const [showOfferModal, setShowOfferModal] = useState(false)
+  const [showCVModal, setShowCVModal] = useState(false)
+  const [showMangaBubble, setShowMangaBubble] = useState(true)
   const [isDialogueCollapsed, setIsDialogueCollapsed] = useState(false)
   const [isFeedbackDismissed, setIsFeedbackDismissed] = useState(false)
-  const [showMangaBubble, setShowMangaBubble] = useState(true)
   const [distToBoss, setDistToBoss] = useState(2.75)
   const [canTalkToBoss, setCanTalkToBoss] = useState(true)
   const [etiquetteStage, setEtiquetteStage] = useState<EtiquetteStage>('dress_check')
@@ -108,12 +113,42 @@ export default function InternshipRoleplay() {
     ({ industryId }: { industryId: string }) => internshipAPI.startInterview(industryId, 1),
     {
       onSuccess: (res) => {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel()
+        }
         setCurrentSession(res.data)
         setEtiquetteStage('dress_check')
         toast.success('Đã vào phòng phỏng vấn! Hãy chuẩn bị trang phục và gõ cửa.')
       },
       onError: () => {
         toast.error('Không thể bắt đầu phỏng vấn. Vui lòng thử lại.')
+      },
+    }
+  )
+
+  // Start Technical Interview with CV Mutation (AI + RAG)
+  const startInterviewWithCVMutation = useMutation(
+    ({
+      industryId,
+      cvText,
+      parsedCv,
+    }: {
+      industryId: string
+      cvText: string
+      parsedCv?: ParsedCVProfile
+    }) => internshipAPI.startInterviewWithCV(industryId, cvText, parsedCv),
+    {
+      onSuccess: (res) => {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel()
+        }
+        setShowCVModal(false)
+        setCurrentSession(res.data)
+        setEtiquetteStage('dress_check')
+        toast.success('Đã tạo 4 câu hỏi kỹ thuật theo CV & tải phòng phỏng vấn!')
+      },
+      onError: (err: any) => {
+        toast.error(err.response?.data?.detail || 'Không thể bắt đầu phỏng vấn kỹ thuật theo CV.')
       },
     }
   )
@@ -209,7 +244,7 @@ export default function InternshipRoleplay() {
     }
   }, [currentTurnData?.message_ja])
 
-  // Auto-speak Japanese when boss asks question and trigger manga bubble
+  // Auto-speak Japanese when boss asks question and show manga speech bubble ONLY when candidate has sat down in interview
   useEffect(() => {
     if (
       currentSession?.status === 'in_progress' &&
@@ -268,54 +303,54 @@ export default function InternshipRoleplay() {
         <div className="absolute top-16 right-4 sm:right-6 z-20 pointer-events-auto">
           <button
             onClick={() => setShowHandbook(true)}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-slate-900/85 backdrop-blur-md text-amber-300 text-xs font-bold hover:bg-slate-800 shadow-xl transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/90 backdrop-blur-md text-slate-300 hover:text-white text-xs shadow-md transition-all"
           >
-            <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+            <BookOpen className="w-3.5 h-3.5 text-slate-400" />
             <span>Sổ tay văn hóa</span>
           </button>
         </div>
 
-        {/* 2b. Manga Speech Bubble over Boss in 3D (Typewriter Manga Effect) */}
-        {currentTurnData &&
-          isDialogueCollapsed &&
+        {/* 2b. Manga Speech Bubble over Boss in 3D (Typewriter Manga Effect) - ONLY visible when seated at interview table */}
+        {currentTurnData?.message_ja &&
           (etiquetteStage === 'sitting_interview' || currentSession.session_type === 'workplace') && (
             <div className="absolute top-20 sm:top-24 right-4 sm:right-12 md:right-24 z-30 pointer-events-none">
-              {showMangaBubble ? (
-                <MangaSpeechBubble
-                  speakerName={currentTurnData.npc_name}
-                  speakerTitle={currentTurnData.npc_title}
-                  textJa={currentTurnData.message_ja}
-                  textVi={currentTurnData.message_vi}
-                  isSpeaking={isSpeaking}
-                  onReplayAudio={handleReplayBossAudio}
-                  onClose={() => setShowMangaBubble(false)}
-                />
-              ) : (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  type="button"
-                  onClick={() => {
-                    setShowMangaBubble(true)
-                    handleReplayBossAudio()
-                  }}
-                  className="pointer-events-auto flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-slate-950 border-2 border-slate-900 font-black text-xs shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:bg-amber-100 transition-all active:scale-95"
-                >
-                  <MessageSquare className="w-3.5 h-3.5 text-amber-600" />
-                  <span>💬 Hiện đám mây Manga của Sếp</span>
-                </motion.button>
-              )}
-            </div>
-          )}
+            {showMangaBubble ? (
+              <MangaSpeechBubble
+                speakerName={currentTurnData.npc_name}
+                speakerTitle={currentTurnData.npc_title}
+                textJa={currentTurnData.message_ja}
+                textVi={currentTurnData.message_vi}
+                isSpeaking={isSpeaking}
+                onReplayAudio={handleReplayBossAudio}
+                onClose={() => setShowMangaBubble(false)}
+              />
+            ) : (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                type="button"
+                onClick={() => {
+                  setShowMangaBubble(true)
+                  handleReplayBossAudio()
+                }}
+                className="pointer-events-auto flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-900/95 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs shadow-xl backdrop-blur-md transition-all active:scale-95"
+              >
+                <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
+                <span>💬 Hiện đám mây thoại của Sếp</span>
+              </motion.button>
+            )}
+          </div>
+        )}
 
         {/* 3. Floating AI Evaluation Feedback (Draggable & Dismissible) */}
         {previousTurnData?.user_response && (
-          <div className="absolute top-20 left-4 sm:left-8 z-40 pointer-events-none">
+          <div className="absolute top-16 left-4 sm:left-8 z-40 pointer-events-none">
             {!isFeedbackDismissed ? (
               <FeedbackBubble
                 userResponse={previousTurnData.user_response}
                 correctedSentence={previousTurnData.feedback?.corrected_sentence}
                 adviceVi={previousTurnData.feedback?.advice_vi}
+                technicalAdviceVi={previousTurnData.feedback?.technical_advice_vi}
                 scores={previousTurnData.scores}
                 onClose={() => setIsFeedbackDismissed(true)}
               />
@@ -325,12 +360,12 @@ export default function InternshipRoleplay() {
                 animate={{ opacity: 1, scale: 1 }}
                 type="button"
                 onClick={() => setIsFeedbackDismissed(false)}
-                className="pointer-events-auto flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/95 hover:bg-slate-800 border border-amber-500/50 text-amber-300 text-xs font-bold shadow-2xl backdrop-blur-md transition-all active:scale-95"
+                className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/95 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs shadow-xl backdrop-blur-md transition-all active:scale-95"
               >
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <Sparkles className="w-3.5 h-3.5 text-slate-400" />
                 <span>Xem lại đánh giá</span>
                 {previousTurnData.scores && (
-                  <span className="px-1.5 py-0.5 rounded-md bg-amber-500/20 text-[10px] text-amber-300">
+                  <span className="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300">
                     {Math.round(
                       (previousTurnData.scores.grammar +
                         previousTurnData.scores.keigo +
@@ -345,21 +380,21 @@ export default function InternshipRoleplay() {
           </div>
         )}
 
-        {/* 4. Bottom Floating Console: Etiquette Guidance Banner or Full Dialogue Console */}
+        {/* 4. Bottom Floating Console: Subtitle & Response Input */}
         {currentSession.session_type === 'interview' &&
         etiquetteStage !== 'sitting_interview' &&
         currentSession.status === 'in_progress' ? (
-          <div className="absolute bottom-0 left-1/2 z-20 w-full max-w-xl -translate-x-1/2 px-4 pb-4 sm:pb-6 pointer-events-auto">
-            <div className="p-3.5 rounded-3xl bg-slate-900/90 backdrop-blur-md border border-amber-500/40 shadow-2xl flex items-center justify-between gap-3 text-xs text-slate-200">
-              <span className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-                <span className="font-medium">
-                  {etiquetteStage === 'dress_check' && 'Đang chuẩn bị trang phục phỏng vấn công sở Nhật Bản...'}
-                  {(etiquetteStage === 'outside_door' || etiquetteStage === 'knocking') && 'Đang đứng trước cửa: Gõ 3 tiếng & đợi mời...'}
-                  {etiquetteStage === 'door_opened' && 'Cửa đã mở! Tiến vào phòng và khép cửa nhẹ nhàng...'}
-                  {etiquetteStage === 'standing_chair' && 'Đứng cạnh ghế: Cúi chào 30–45° và nói 失礼いたします...'}
-                  {etiquetteStage === 'waiting_sit' && 'Đợi nhà tuyển dụng mời ngồi...'}
-                  {(etiquetteStage === 'exit_standing' || etiquetteStage === 'exit_door') && 'Đang thực hiện nghi thức chào cảm ơn khi ra về...'}
+          <div className="absolute bottom-4 left-1/2 z-20 w-full max-w-lg -translate-x-1/2 px-4 pointer-events-auto font-sans">
+            <div className="p-3 rounded-xl bg-slate-900/95 backdrop-blur-md border border-slate-700 shadow-2xl flex items-center justify-between gap-3 text-xs text-slate-200">
+              <span className="flex items-center gap-2 truncate">
+                <span className="w-2 h-2 rounded-full bg-slate-400 animate-pulse shrink-0" />
+                <span className="font-normal truncate">
+                  {etiquetteStage === 'dress_check' && 'Kiểm tra trang phục công sở Nhật Bản'}
+                  {(etiquetteStage === 'outside_door' || etiquetteStage === 'knocking') && 'Đang đứng trước cửa: Gõ 3 tiếng & đợi mời'}
+                  {etiquetteStage === 'door_opened' && 'Cửa đã mở! Tiến vào phòng và khép cửa'}
+                  {etiquetteStage === 'standing_chair' && 'Đứng cạnh ghế: Cúi chào 30–45°'}
+                  {etiquetteStage === 'waiting_sit' && 'Đợi nhà tuyển dụng mời ngồi'}
+                  {(etiquetteStage === 'exit_standing' || etiquetteStage === 'exit_door') && 'Nghi thức chào cảm ơn khi ra về'}
                 </span>
               </span>
               <button
@@ -368,31 +403,28 @@ export default function InternshipRoleplay() {
                   setEtiquetteStage('sitting_interview')
                   eventBridge.emit('skip_to_interview')
                 }}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-[11px] border border-amber-500/30 transition-all shrink-0 active:scale-95"
+                className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs border border-slate-600 transition-all shrink-0"
               >
-                Vào bàn phỏng vấn ngay ⏩
+                Vào bàn ngay
               </button>
             </div>
           </div>
         ) : (
-          <div data-interview-console className="absolute bottom-0 left-1/2 z-20 max-h-[55dvh] w-full max-w-4xl -translate-x-1/2 overflow-y-auto px-3 pb-3 sm:px-4 sm:pb-4 space-y-2 pointer-events-auto">
+          <div data-interview-console className="absolute bottom-3 left-1/2 z-20 w-full max-w-3xl -translate-x-1/2 px-3 space-y-1.5 pointer-events-auto font-sans">
             {/* Collapse / Expand Toggle Bar */}
-            <div className="flex items-center justify-between text-xs px-2">
-              <span className="flex items-center gap-1.5 font-bold text-amber-400 drop-shadow">
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>
-                  {canTalkToBoss
-                    ? `Đang đàm thoại trực tiếp với ${currentTurnData?.npc_name || 'Sếp'}`
-                    : `Khoảng cách tới Sếp: ${distToBoss.toFixed(1)}m (Bước lại gần bàn)`}
-                </span>
+            <div className="flex items-center justify-between text-xs px-1">
+              <span className="text-slate-400 text-[11px] font-mono">
+                {canTalkToBoss
+                  ? `Đang đàm thoại với ${currentTurnData?.npc_name || 'Người phỏng vấn'}`
+                  : `Khoảng cách tới bàn: ${distToBoss.toFixed(1)}m`}
               </span>
               <button
                 type="button"
                 onClick={() => setIsDialogueCollapsed(!isDialogueCollapsed)}
-                className="flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white transition-all text-[11px] font-semibold shadow-md"
+                className="flex items-center gap-1 px-2.5 py-0.5 rounded bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-400 hover:text-white transition-all text-[11px]"
               >
-                <Eye className="w-3.5 h-3.5 text-amber-400" />
-                <span>{isDialogueCollapsed ? '💬 Mở rộng hội thoại' : '− Thu gọn để ngắm phòng'}</span>
+                <Eye className="w-3 h-3 text-slate-400" />
+                <span>{isDialogueCollapsed ? 'Mở phụ đề' : 'Ẩn bớt'}</span>
               </button>
             </div>
 
@@ -717,8 +749,39 @@ export default function InternshipRoleplay() {
 
           {/* Selected Industry Detail & Launch Interview Button */}
           {selectedIndustryData && (
-            <div className="overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:color-mix(in_srgb,var(--card)_98%,transparent)] p-5 shadow-lg backdrop-blur-lg sm:p-7">
-              <div className="flex flex-col justify-between gap-6 pb-6 xl:flex-row xl:items-center">
+            <div className="overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:color-mix(in_srgb,var(--card)_98%,transparent)] p-5 shadow-lg backdrop-blur-lg sm:p-7 space-y-6">
+              {/* RAG CV Technical Interview Banner */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-transparent border border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-sm">
+                    <FileText className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-extrabold text-sm sm:text-base text-[color:var(--text)]">
+                        Phỏng vấn Kỹ thuật Chuyên sâu theo CV (AI + RAG)
+                      </span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                        Đột phá mới
+                      </span>
+                    </div>
+                    <p className="text-xs text-[color:var(--text-muted)] mt-1 max-w-xl">
+                      Hệ thống tự động bóc tách CV, lập chỉ mục Vector DB và sinh 4 câu hỏi kỹ thuật xoay quanh đúng các dự án và tech stack trong CV của bạn.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowCVModal(true)}
+                  className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black text-xs sm:text-sm shadow-lg hover:opacity-90 transition-all cursor-pointer active:scale-95"
+                >
+                  <Zap className="w-4 h-4 fill-current" />
+                  <span>Nộp CV &amp; Tạo câu hỏi theo CV</span>
+                </button>
+              </div>
+
+              <div className="flex flex-col justify-between gap-6 pb-2 xl:flex-row xl:items-center">
                 <div className="flex min-w-0 flex-1 items-start gap-4 sm:items-center sm:gap-5">
                   <div aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl font-bold text-[color:var(--primary-contrast)] shadow-md [background:var(--primary-gradient)] sm:h-[4.5rem] sm:w-[4.5rem]">
                     {selectedIndustryData.interviewer.name.trim().slice(0, 1)}
@@ -740,19 +803,30 @@ export default function InternshipRoleplay() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    startInterviewMutation.mutate({ industryId: selectedIndustryData.id })
-                  }
-                  disabled={startInterviewMutation.isLoading}
-                  className="flex min-h-[56px] w-full shrink-0 items-center justify-center gap-2 rounded-2xl px-6 py-4 text-sm font-bold text-[color:var(--primary-contrast)] shadow-[0_8px_24px_color-mix(in_srgb,var(--primary)_22%,transparent)] transition-opacity [background:var(--primary-gradient)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--card)] disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:self-end xl:self-center"
-                >
-                  <Play className="w-4 h-4 fill-current" />
-                  <span>
-                    {startInterviewMutation.isLoading ? 'Đang vào phòng...' : 'Vào phòng phỏng vấn ngay'}
-                  </span>
-                </button>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowCVModal(true)}
+                    className="flex min-h-[52px] items-center justify-center gap-2 rounded-2xl border-2 border-amber-500/70 bg-amber-500/10 hover:bg-amber-500/20 px-5 py-3 text-xs sm:text-sm font-bold text-amber-300 transition-all cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>Phỏng vấn theo CV</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      startInterviewMutation.mutate({ industryId: selectedIndustryData.id })
+                    }
+                    disabled={startInterviewMutation.isLoading}
+                    className="flex min-h-[52px] shrink-0 items-center justify-center gap-2 rounded-2xl px-6 py-3 text-xs sm:text-sm font-bold text-[color:var(--primary-contrast)] shadow-[0_8px_24px_color-mix(in_srgb,var(--primary)_22%,transparent)] transition-opacity [background:var(--primary-gradient)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] disabled:cursor-wait disabled:opacity-60"
+                  >
+                    <Play className="w-4 h-4 fill-current" />
+                    <span>
+                      {startInterviewMutation.isLoading ? 'Đang vào phòng...' : 'Phỏng vấn thông thường'}
+                    </span>
+                  </button>
+                </div>
               </div>
 
               <div className="border-t border-[color:var(--border)] pt-6">
@@ -940,6 +1014,20 @@ export default function InternshipRoleplay() {
         isOpen={showHandbook}
         onClose={() => setShowHandbook(false)}
         handbook={handbook}
+      />
+
+      {/* CV Upload & RAG Technical Interview Modal */}
+      <CVUploadModal
+        isOpen={showCVModal}
+        onClose={() => setShowCVModal(false)}
+        onStartInterview={(cvText, parsedCv) =>
+          startInterviewWithCVMutation.mutate({
+            industryId: selectedIndustryData?.id || 'it',
+            cvText,
+            parsedCv,
+          })
+        }
+        isStarting={startInterviewWithCVMutation.isLoading}
       />
     </div>
   )
