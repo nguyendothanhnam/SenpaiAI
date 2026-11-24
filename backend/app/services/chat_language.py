@@ -26,7 +26,7 @@ def detect_chat_language(question: str, fallback: str | None = None) -> str:
 
 
 def needs_history(question: str) -> bool:
-    return bool(re.search(r'câu (?:trên|trước|đó)|giải thích thêm|ví dụ (?:khác|thêm)|tiếp tục|như trên|\b(?:previous|above|that|it|more|continue|follow.up)\b', question, re.IGNORECASE))
+    return bool(re.search(r'câu (?:trên|trước|đó)|giải thích thêm|ví dụ (?:khác|thêm)|tiếp tục|như trên|(?:mẫu|chữ|trợ từ) (?:vừa rồi|trên)|hai trợ từ trên|\b(?:previous|above|that|it|more|continue|follow.up)\b', question, re.IGNORECASE))
 
 
 def is_chitchat_query(question: str) -> bool:
@@ -48,27 +48,10 @@ def is_chitchat_query(question: str) -> bool:
 
 def chitchat_direct_answer(question: str, language: str = 'vi') -> str | None:
     folded = _fold(question.strip().lower())
+    if re.fullmatch(r'(?:こんにちは|こんばんは|おはようございます)[!！。\s]*',question.strip()) or re.match(r'^(?:good morning|good afternoon|good evening)\b',folded):
+        return 'Hello! I am SenpaiAI. What would you like to learn about Japanese today?' if language=='en' else 'Chào bạn! Tôi là SenpaiAI. Hôm nay bạn muốn học gì về tiếng Nhật?'
     if re.search(r'^(?:xin\s+)?chao(?:\s+(?:ban|senpai|ai|ad|em|anh|chi))?\s*[!?.]*$', folded) or re.search(r'^(?:hello|hi|hey)\b', folded):
-        if language == 'en':
-            return (
-                "Hello! I am **SenpaiAI** — your intelligent Japanese learning tutor.\n\n"
-                "How can I help you today? Feel free to ask me about:\n"
-                "- 📖 Japanese grammar (JLPT N5 ~ N1)\n"
-                "- 🈸 Vocabulary and Kanji lookups\n"
-                "- ⚖️ Differentiating confusing grammar points\n"
-                "- 💬 Sentence translation and conversation practice\n\n"
-                "What would you like to study?"
-            )
-        return (
-            "Chào bạn! Tôi là **SenpaiAI** — trợ lý và gia sư hỗ trợ học tiếng Nhật của bạn.\n\n"
-            "Hôm nay bạn muốn học gì nào? Tôi có thể hỗ trợ bạn:\n"
-            "- 📖 Giải thích ngữ pháp tiếng Nhật từ N5 đến N1\n"
-            "- 🈸 Tra cứu từ vựng, chữ Hán (Kanji) và ví dụ thực tế\n"
-            "- ⚖️ Phân biệt các cấu trúc ngữ pháp hay nhầm lẫn\n"
-            "- 💬 Dịch câu và luyện tập mẫu câu giao tiếp\n"
-            "- 📝 Luyện giải bài tập và đề thi JLPT\n\n"
-            "Hãy đặt câu hỏi cho tôi bất cứ lúc nào nhé!"
-        )
+        return 'Hello! I am SenpaiAI, your Japanese learning assistant. How can I help you today?' if language=='en' else 'Chào bạn! Tôi là SenpaiAI, trợ lý hỗ trợ học tiếng Nhật. Bạn muốn luyện ngữ pháp, từ vựng hay dịch câu hôm nay?'
 
     if re.search(r'^(?:ban|senpai)\s+(?:la\s+ai|ten\s+gi|la\s+gi)\b', folded) or re.search(r'^(?:who\s+are\s+you|what\s+is\s+your\s+name)\b', folded):
         if language == 'en':
@@ -118,8 +101,8 @@ def same_language_translation(question: str, language: str) -> str | None:
 
 
 def answer_needs_revision(answer: str, language: str, question: str = '') -> bool:
-    target_match = re.search(r'(?:sang|into|to)\s+(?:tieng\s+)?(anh|viet|english|vietnamese)\b', _fold(question))
-    target = ('en' if target_match[1] in ('anh', 'english') else 'vi') if target_match else None
+    target_match = re.search(r'(?:sang|into|to)\s+(?:tieng\s+)?(anh|viet|nhat|english|vietnamese|japanese)\b', _fold(question))
+    target = ('en' if target_match[1] in ('anh', 'english') else 'ja' if target_match[1] in ('nhat','japanese') else 'vi') if target_match else None
     # A requested translation may legitimately be in the other language. Check
     # the explanation separately and allow one paragraph for the translation.
     checked = []
@@ -141,7 +124,7 @@ def answer_needs_revision(answer: str, language: str, question: str = '') -> boo
     vi = len(re.findall(r'\b(?:la|cua|ban|toi|nghia|dich|cau|chu|ngu|de|danh|dau|nguoi|hoc|mot|nay|khong|trong|voi|duoc|gi|hom|muon|thanh)\b', folded))
     en = len(re.findall(r'\b(?:the|is|are|this|that|you|your|can|cannot|meaning|means|sentence|explanation|subject|topic|object|translate|translation|because|therefore|which|would)\b', folded))
     if not re.search(r'[a-zA-ZÀ-ỹ]', plain):
-        if allowed_translation:
+        if allowed_translation or target=='ja' and re.search(r'[ぁ-んァ-ヶ一-龯]',answer):
             return False
         return True
     if re.search(r'cannot (?:access|answer)|can.t (?:access|answer)|không thể truy cập.*từ điển', plain, re.IGNORECASE):

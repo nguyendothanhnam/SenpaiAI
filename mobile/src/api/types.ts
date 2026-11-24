@@ -35,6 +35,7 @@ export interface DailyOverview {
 
 export interface Example { ja: string; vi?: string; en?: string }
 export interface DailyPayload {
+  selection?: { requested_level: string; actual_level: string; fallback: boolean; review_mode: boolean; cooldown_relaxed: boolean }
   prompt?: string; statement?: string; options?: string[]; tokens?: string[]
   base_form?: string; target_form?: string; kanji?: string; word?: string; reading?: string
   level?: string; jlpt_level?: string; meaning?: string

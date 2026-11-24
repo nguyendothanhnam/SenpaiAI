@@ -7,7 +7,7 @@ import { cn } from '../../utils/helpers'
 type MenuItem = { key: string; href?: string; icon: typeof User; action?: () => void }
 
 export default function UserMenu({ username, level, points, onLogout, onNavigate }: {
-  username?: string; level?: string; points: number; onLogout: () => void; onNavigate?: () => void
+  username?: string; level?: string; points?: number; onLogout: () => void; onNavigate?: () => void
 }) {
   const { t } = useTranslation('nav')
   const { pathname } = useLocation()
@@ -70,7 +70,7 @@ export default function UserMenu({ username, level, points, onLogout, onNavigate
     </div>}
     <button ref={triggerRef} type="button" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((value) => !value)} className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-[color:var(--accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--primary)]">
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color:var(--primary)] text-sm font-bold text-[color:var(--primary-contrast)]">{username?.charAt(0).toUpperCase() || '?'}</span>
-      <span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold text-[color:var(--text)]">{username || t('profile')}</span><span className="block truncate text-xs text-[color:var(--primary)]">{level || '—'} · {points} {t('exercisePoints')}</span></span>
+      <span className="min-w-0 flex-1"><span className="block truncate text-sm font-semibold text-[color:var(--text)]">{username || t('profile')}</span><span title={t('rewardPoints')} className="block truncate text-xs text-[color:var(--primary)]">{level || '—'} · {points ?? '—'} {t('rewardPoints')}</span></span>
       <span aria-hidden="true" className="text-xs text-[color:var(--text-muted)]">⌃</span>
     </button>
   </div>

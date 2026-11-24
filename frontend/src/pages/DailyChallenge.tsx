@@ -10,6 +10,7 @@ import DailyQuestion from '../components/daily/DailyQuestion'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
+import ExerciseSelectionNotice from '../components/ExerciseSelectionNotice'
 
 type Screen = 'overview' | 'doing' | 'complete'
 const todayKey = (userId?: number) => ['daily', 'today', userId]
@@ -149,7 +150,8 @@ export default function DailyChallenge() {
   if (!task) return null
 
   if (screen === 'doing' && activeItem) return <div className="space-y-5">
-    {hasMixedLevels && <p className={`${panel} mx-auto max-w-3xl !py-3 text-sm text-[color:var(--text-muted)]`}>{tDailyStatus('mixedLevels', { level: user?.current_jlpt_level })}</p>}
+    <ExerciseSelectionNotice selections={task?.items.map(item => item.payload?.selection) || []} />
+    {hasMixedLevels && !task?.items.some(item => item.payload?.selection?.fallback) && <p className={`${panel} mx-auto max-w-3xl !py-3 text-sm text-[color:var(--text-muted)]`}>{tDailyStatus('mixedLevels', { level: user?.current_jlpt_level })}</p>}
     <button type="button" onClick={() => setScreen('overview')} className="inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--text-muted)] hover:text-[color:var(--primary)]"><ArrowLeft className="h-4 w-4" />{t('daily.overview')}</button>
     <div className={`${panel} mx-auto max-w-3xl !p-4 sm:!p-6`}>
       <div className="mb-2 flex justify-between text-sm font-semibold text-[color:var(--text-muted)]"><span>{t('daily.progress')}</span><span>{progress}/{task.progress.total_items}</span></div>
@@ -187,7 +189,8 @@ export default function DailyChallenge() {
       <div><p className="text-sm font-semibold text-[color:var(--primary)]">{t('daily.practiceEveryDay')}</p><h1 className="mt-1 text-3xl font-extrabold text-[color:var(--text)]">{t('daily.title')}</h1><p className="mt-2 flex items-center gap-2 text-[color:var(--text-muted)]"><CalendarDays className="h-4 w-4" />{formatDate(task.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })} · {t('daily.serverDate')}</p></div>
       <div className="inline-flex items-center gap-2 rounded-2xl bg-[color:var(--accent)] px-4 py-3 font-bold text-[color:var(--primary)]"><Flame className="h-5 w-5" />{t('daily.streak', { count: task.reward?.streak ?? rewards?.current_streak ?? 0 })}</div>
     </header>
-    {hasMixedLevels && <p className={`${panel} !py-3 text-sm text-[color:var(--text-muted)]`}>{tDailyStatus('mixedLevels', { level: user?.current_jlpt_level })}</p>}
+    <ExerciseSelectionNotice selections={task?.items.map(item => item.payload?.selection) || []} />
+    {hasMixedLevels && !task?.items.some(item => item.payload?.selection?.fallback) && <p className={`${panel} !py-3 text-sm text-[color:var(--text-muted)]`}>{tDailyStatus('mixedLevels', { level: user?.current_jlpt_level })}</p>}
     <section className={`${panel} grid gap-6 md:grid-cols-[1fr_auto] md:items-center`}>
       <div><div className="mb-2 flex justify-between"><h2 className="font-bold text-[color:var(--text)]">{t('daily.todayProgress')}</h2><span className="font-bold text-[color:var(--primary)]">{progress}/{task.progress.total_items}</span></div><div className="grid grid-cols-10 gap-1.5" aria-label={t('daily.answeredProgress', { progress, total: task.progress.total_items })}>
         {task.items.map((item) => <span key={item.id} className={`h-2.5 rounded-full ${item.answered ? 'bg-[color:var(--primary)]' : 'bg-[color:var(--accent)]'}`} />)}

@@ -10,7 +10,7 @@ export default function MiniGameCards() {
   const { t } = useTranslation('common'), { user } = useAuth()
   const entries = user ? loadStats(user.id).store.entries : {}
   return <section className="mg-section" aria-labelledby="minigames-title">
-    <div className="mg-section-heading"><div><p className="mg-eyebrow">{t('minigames.eyebrow')}</p><h2 id="minigames-title">{t('minigames.title')}</h2></div><span className="mg-pill">{t('minigames.localOnly')}</span></div>
+    <div className="mg-section-heading"><div><h2 id="minigames-title">{t('minigames.title')}</h2></div><span className="mg-pill">{t('minigames.localOnly')}</span></div>
     <p className="mg-muted">{t('minigames.localNotice')}</p>
     <div className="mg-cards">{GAMES.map((game, index) => {
       const Icon = icons[game], supported = LEVELS.filter(level => availability(game, level).enabled)

@@ -1,0 +1,525 @@
+{
+  "description": "Historical measurements, preserved without rerunning or changing scores. Each section retains its own cases and limits.",
+  "baseline": {
+    "seed": "codepoint*100+variant",
+    "character_count": 36,
+    "groups": {
+      "correct": {
+        "success": 255,
+        "total": 256,
+        "rate": 0.9961
+      },
+      "wrong_order": {
+        "success": 32,
+        "total": 32,
+        "rate": 1.0
+      },
+      "wrong_direction": {
+        "success": 32,
+        "total": 32,
+        "rate": 1.0
+      },
+      "missing": {
+        "success": 32,
+        "total": 32,
+        "rate": 1.0
+      },
+      "extra": {
+        "success": 32,
+        "total": 32,
+        "rate": 1.0
+      },
+      "wrong_shape": {
+        "success": 32,
+        "total": 32,
+        "rate": 1.0
+      },
+      "confusion": {
+        "success": 6,
+        "total": 6,
+        "rate": 1.0
+      }
+    },
+    "failures": [
+      {
+        "kanji": "屋",
+        "kind": "correct",
+        "variant": 6,
+        "score": 87,
+        "scores": {
+          "order": 89,
+          "direction": 89,
+          "shape": 69,
+          "completeness": 100
+        },
+        "statuses": [
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "wrong_shape"
+        ]
+      }
+    ],
+    "limitations": "Synthetic KanjiVG transforms; no claim about real handwriting accuracy. Error detection requires the corresponding error label, not merely failing the whole character."
+  },
+  "after": {
+    "easy": {
+      "version": "stroke-rules-v2",
+      "strictness": "easy",
+      "seed": "codepoint*100+variant",
+      "character_count": 36,
+      "groups": {
+        "correct": {
+          "success": 256,
+          "total": 256,
+          "rate": 1.0
+        },
+        "wrong_order": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "wrong_direction": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "missing": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "extra": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "wrong_shape": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "confusion": {
+          "success": 6,
+          "total": 6,
+          "rate": 1.0
+        }
+      },
+      "failures": [],
+      "correct_character_count": 32,
+      "correct_characters_by_level": {
+        "N5": [
+          "万",
+          "休",
+          "北",
+          "四",
+          "子",
+          "後",
+          "日",
+          "月",
+          "来",
+          "父",
+          "見",
+          "高"
+        ],
+        "N4": [
+          "不",
+          "写",
+          "図",
+          "屋",
+          "教",
+          "死",
+          "目",
+          "肉",
+          "送",
+          "黒"
+        ],
+        "N3": [
+          "与",
+          "冷",
+          "告",
+          "寄",
+          "恥",
+          "更",
+          "点",
+          "等",
+          "費",
+          "馬"
+        ]
+      },
+      "false_confusion_warnings_on_correct": 0,
+      "elapsed_seconds": 10.822,
+      "limitations": "Synthetic KanjiVG transforms; no claim about real handwriting accuracy. Error detection requires the corresponding error label, not merely failing the whole character."
+    },
+    "standard": {
+      "version": "stroke-rules-v2",
+      "strictness": "standard",
+      "seed": "codepoint*100+variant",
+      "character_count": 36,
+      "groups": {
+        "correct": {
+          "success": 256,
+          "total": 256,
+          "rate": 1.0
+        },
+        "wrong_order": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "wrong_direction": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "missing": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "extra": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "wrong_shape": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "confusion": {
+          "success": 6,
+          "total": 6,
+          "rate": 1.0
+        }
+      },
+      "failures": [],
+      "correct_character_count": 32,
+      "correct_characters_by_level": {
+        "N5": [
+          "万",
+          "休",
+          "北",
+          "四",
+          "子",
+          "後",
+          "日",
+          "月",
+          "来",
+          "父",
+          "見",
+          "高"
+        ],
+        "N4": [
+          "不",
+          "写",
+          "図",
+          "屋",
+          "教",
+          "死",
+          "目",
+          "肉",
+          "送",
+          "黒"
+        ],
+        "N3": [
+          "与",
+          "冷",
+          "告",
+          "寄",
+          "恥",
+          "更",
+          "点",
+          "等",
+          "費",
+          "馬"
+        ]
+      },
+      "false_confusion_warnings_on_correct": 0,
+      "elapsed_seconds": 13.012,
+      "limitations": "Synthetic KanjiVG transforms; no claim about real handwriting accuracy. Error detection requires the corresponding error label, not merely failing the whole character."
+    },
+    "strict": {
+      "version": "stroke-rules-v2",
+      "strictness": "strict",
+      "seed": "codepoint*100+variant",
+      "character_count": 36,
+      "groups": {
+        "correct": {
+          "success": 252,
+          "total": 256,
+          "rate": 0.9844
+        },
+        "wrong_order": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "wrong_direction": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "missing": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "extra": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "wrong_shape": {
+          "success": 32,
+          "total": 32,
+          "rate": 1.0
+        },
+        "confusion": {
+          "success": 6,
+          "total": 6,
+          "rate": 1.0
+        }
+      },
+      "failures": [
+        {
+          "kanji": "屋",
+          "kind": "correct",
+          "variant": 6,
+          "score": 91,
+          "scores": {
+            "order": 100,
+            "direction": 100,
+            "shape": 77,
+            "completeness": 100
+          },
+          "statuses": [
+            "correct",
+            "correct",
+            "correct",
+            "correct",
+            "wrong_shape",
+            "correct",
+            "correct",
+            "correct",
+            "wrong_shape"
+          ]
+        },
+        {
+          "kanji": "与",
+          "kind": "correct",
+          "variant": 7,
+          "score": 94,
+          "scores": {
+            "order": 100,
+            "direction": 100,
+            "shape": 86,
+            "completeness": 100
+          },
+          "statuses": [
+            "wrong_shape",
+            "correct",
+            "correct"
+          ]
+        },
+        {
+          "kanji": "告",
+          "kind": "correct",
+          "variant": 7,
+          "score": 92,
+          "scores": {
+            "order": 100,
+            "direction": 100,
+            "shape": 81,
+            "completeness": 100
+          },
+          "statuses": [
+            "correct",
+            "correct",
+            "correct",
+            "correct",
+            "correct",
+            "wrong_shape",
+            "correct"
+          ]
+        },
+        {
+          "kanji": "更",
+          "kind": "correct",
+          "variant": 7,
+          "score": 92,
+          "scores": {
+            "order": 100,
+            "direction": 100,
+            "shape": 79,
+            "completeness": 100
+          },
+          "statuses": [
+            "correct",
+            "wrong_shape",
+            "correct",
+            "correct",
+            "correct",
+            "correct",
+            "correct"
+          ]
+        }
+      ],
+      "correct_character_count": 32,
+      "correct_characters_by_level": {
+        "N5": [
+          "万",
+          "休",
+          "北",
+          "四",
+          "子",
+          "後",
+          "日",
+          "月",
+          "来",
+          "父",
+          "見",
+          "高"
+        ],
+        "N4": [
+          "不",
+          "写",
+          "図",
+          "屋",
+          "教",
+          "死",
+          "目",
+          "肉",
+          "送",
+          "黒"
+        ],
+        "N3": [
+          "与",
+          "冷",
+          "告",
+          "寄",
+          "恥",
+          "更",
+          "点",
+          "等",
+          "費",
+          "馬"
+        ]
+      },
+      "false_confusion_warnings_on_correct": 0,
+      "elapsed_seconds": 10.895,
+      "limitations": "Synthetic KanjiVG transforms; no claim about real handwriting accuracy. Error detection requires the corresponding error label, not merely failing the whole character."
+    }
+  },
+  "reproduction": {
+    "kanji": "月",
+    "source": "KanjiVG template, alternating per-stroke x offset ±12 SVG units; no stroke reversal or permutation",
+    "not_original_user_trace": true,
+    "before": {
+      "scores": {
+        "order": 0,
+        "direction": 0,
+        "shape": 36,
+        "completeness": 100
+      },
+      "overall_score": 34,
+      "statuses": [
+        "wrong_shape",
+        "wrong_shape",
+        "wrong_shape",
+        "wrong_shape"
+      ]
+    },
+    "after": {
+      "scores": {
+        "order": 100,
+        "direction": 100,
+        "shape": 61,
+        "completeness": 100
+      },
+      "overall_score": 84,
+      "passed": true,
+      "version": "stroke-rules-v2",
+      "strictness": "standard"
+    }
+  },
+  "legacy_v1_different_cases": {
+    "version": "stroke-rules-v1",
+    "seed": 20261122,
+    "template_count": 612,
+    "levels": {
+      "N5": 79,
+      "N4": 166,
+      "N3": 367
+    },
+    "groups": {
+      "exact_template": {
+        "cases": 612,
+        "expected_accepted": true,
+        "correct_decisions": 612,
+        "correct_decision_rate": 1.0
+      },
+      "mild_noise": {
+        "cases": 60,
+        "expected_accepted": true,
+        "correct_decisions": 60,
+        "correct_decision_rate": 1.0
+      },
+      "reversed_direction": {
+        "cases": 60,
+        "expected_accepted": false,
+        "correct_decisions": 60,
+        "correct_decision_rate": 1.0
+      },
+      "missing_stroke": {
+        "cases": 60,
+        "expected_accepted": false,
+        "correct_decisions": 60,
+        "correct_decision_rate": 1.0
+      },
+      "extra_stroke": {
+        "cases": 60,
+        "expected_accepted": false,
+        "correct_decisions": 60,
+        "correct_decision_rate": 1.0
+      },
+      "displaced_stroke": {
+        "cases": 60,
+        "expected_accepted": false,
+        "correct_decisions": 59,
+        "correct_decision_rate": 0.9833
+      },
+      "swapped_order": {
+        "cases": 59,
+        "expected_accepted": false,
+        "correct_decisions": 59,
+        "correct_decision_rate": 1.0
+      },
+      "manual_confusable": {
+        "cases": 6,
+        "expected_accepted": false,
+        "correct_decisions": 6,
+        "correct_decision_rate": 1.0
+      },
+      "correct_confusion_hint": {
+        "cases": 6,
+        "expected_accepted": true,
+        "correct_decisions": 6,
+        "correct_decision_rate": 1.0
+      }
+    },
+    "correct_acceptance_rate": 1.0,
+    "incorrect_rejection_rate": 0.9967213114754099,
+    "limitations": [
+      "Synthetic curves and mild noise only; not real-world handwriting accuracy.",
+      "Thresholds need independent teacher-labeled pen/touch samples; no held-out human calibration set.",
+      "Near-identical strokes can make geometric order ambiguous; partial feedback is provisional.",
+      "Uniform translation/scale are intentionally ignored; no pressure, penmanship or calligraphy grading."
+    ]
+  }
+}

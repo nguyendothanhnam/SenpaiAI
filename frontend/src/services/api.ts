@@ -27,7 +27,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const isLoginRequest = /(?:^|\/)auth\/login\/?(?:\?|$)/.test(error.config?.url || '')
+    if (error.response?.status === 401 && !isLoginRequest) {
       localStorage.removeItem('access_token')
       window.location.href = '/login'
     }
@@ -330,6 +331,7 @@ export interface GrammarPattern {
 }
 
 export interface GrammarPracticeQuestion {
+  selection?: ExerciseSelectionInfo
   id: number
   question_type: GrammarQuestionType
   jlpt_level: JlptLevel
@@ -340,6 +342,14 @@ export interface GrammarPracticeQuestion {
   statement?: string
   base_form?: string
   target_form?: string
+}
+
+export interface ExerciseSelectionInfo {
+  requested_level: string
+  actual_level: string
+  fallback: boolean
+  review_mode: boolean
+  cooldown_relaxed: boolean
 }
 
 export interface GrammarPracticeExample {

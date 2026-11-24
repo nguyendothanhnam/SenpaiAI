@@ -29,6 +29,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [loginError, setLoginError] = useState<unknown>(null)
   const { login, register } = useAuth()
 
   const loginForm = useForm<LoginFormData>()
@@ -38,13 +39,14 @@ export default function Login() {
     'w-full rounded-xl border border-[color:var(--border)] bg-[color:var(--card-glass)] px-4 py-3 text-sm text-[color:var(--text)] outline-none transition focus:border-[color:var(--border)] focus:ring-2 focus:ring-[color:var(--primary)]'
 
   const handleLogin = async (data: LoginFormData) => {
+    setLoginError(null)
     setIsLoading(true)
     try {
       await login(data.email, data.password)
       toast.success(t('welcome'))
       navigate('/chat')
     } catch (error: any) {
-      toast.error(getErrorMessage(error))
+      setLoginError(error)
     } finally {
       setIsLoading(false)
     }
@@ -84,7 +86,7 @@ export default function Login() {
             <div className="grid grid-cols-2 gap-1">
               <button
                 type="button"
-                onClick={() => setIsLogin(true)}
+                onClick={() => { setIsLogin(true); setLoginError(null) }}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                   isLogin
                     ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)] shadow-sm'
@@ -95,7 +97,7 @@ export default function Login() {
               </button>
               <button
                 type="button"
-                onClick={() => setIsLogin(false)}
+                onClick={() => { setIsLogin(false); setLoginError(null) }}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                   !isLogin
                     ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)] shadow-sm'
@@ -118,6 +120,11 @@ export default function Login() {
                 onSubmit={loginForm.handleSubmit(handleLogin)}
                 className="space-y-5"
               >
+                {Boolean(loginError) && (
+                  <p role="alert" className="rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3 text-sm text-[color:var(--text)]">
+                    {getErrorMessage(loginError)}
+                  </p>
+                )}
                 <div>
                   <label htmlFor="email" className="mb-2 block text-sm font-medium text-[color:var(--text)]">
                     {t('email')}

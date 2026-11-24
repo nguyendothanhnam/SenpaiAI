@@ -12,6 +12,7 @@ import FilterBar from './FilterBar'
 import GameCard from './GameCard'
 import LevelSelectModal from './LevelSelectModal'
 import './gameHub.css'
+import ArcadeDashboard from '../minigames/ArcadeDashboard'
 
 export default function GameHubContent() {
   const { t } = useTranslation('common'), { user } = useAuth(), navigate = useNavigate()
@@ -31,6 +32,7 @@ export default function GameHubContent() {
     <div className="gh-bamboo pointer-events-none absolute -inset-4 -z-10 rounded-[32px] sm:-inset-6" aria-hidden="true" />
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3"><div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--text-muted)]"><Gamepad2 size={17} aria-hidden="true" />{t('arcade.eyebrow')}</div><span className="gh-glass inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-semibold"><Sparkles size={12} aria-hidden="true" />{t('arcade.smallSteps')}</span></div>
     <HeroBanner onPlay={() => setSelected(GAMES_DATA.find(game => game.id === 'falling')!)} />
+    {user&&<ArcadeDashboard key={user.id} />}
     <section className="mt-8" aria-labelledby="gh-library-title"><div className="mb-4 flex flex-wrap items-end justify-between gap-2"><div><h2 id="gh-library-title" className="text-xl font-extrabold tracking-tight sm:text-2xl">{t('arcade.libraryTitle')}</h2><p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('arcade.libraryDescription')}</p></div><span role="status" aria-live="polite" className="text-xs font-semibold text-[color:var(--text-muted)]">{t('arcade.resultCount', { count: filtered.length })}</span></div>
       <FilterBar category={category} onCategory={setCategory} search={search} onSearch={setSearch} />
       {storageError && <p role="alert" className="mt-4 text-sm text-[color:var(--text-muted)]">{t('minigames.storageError')}</p>}

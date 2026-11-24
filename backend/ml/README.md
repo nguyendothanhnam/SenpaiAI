@@ -1,12 +1,39 @@
 # Kanji CNN training and evaluation
 
-Deployment diagnosis (16/11/2026): the active model covers 245 N5/N4 classes, while the dictionary contains 612 characters. N3 is not yet covered by the active weights. Missing ETL10 preview thumbnails do not mean a character is unsupported; the web's thumbnail-based recognition block has been removed. See [the diagnosis and regression results](../../docs/KANJI_RECOGNITION_DIAGNOSIS.md). Run `python ml/scripts/audit_kanji_recognition.py` from `backend/` to audit actual model coverage without changing artifacts.
+Active deployment (21/11/2026): the recognizer now uses all **612 dictionary classes: N5 79, N4 166, N3 367**. The deployed weights were initialized from the existing 612-class candidate and fine-tuned for three additional epochs. The installed checkpoint and its matching label map both cover all 612 classes. See `models/training_summary.json`, `models/evaluation.json` and `models/deployment.json` for the measured results, artifact hashes and backup location.
 
-Current diagnosis (16/11/2026): the active model has 245 N5/N4 classes while the dictionary contains 612 N5/N4/N3 characters. Separately, the web used to reject trained characters such as 語/東 when no ETL10 preview thumbnail existed; that incorrect UI gate has been removed. Blank/transparent PNG preprocessing is covered by regression tests. See [coverage, reproduction and model-training limits](../../docs/KANJI_RECOGNITION_DIAGNOSIS.md); existing model artifacts are preserved.
+The previous 245-class pair is preserved under `models/backups/`. The [16/11/2026 diagnosis](../../docs/KANJI_RECOGNITION_DIAGNOSIS.md) documents the earlier state. Missing ETL10 preview thumbnails still do not determine model support.
+
+Accuracy limits: the available training and validation corpus is synthetic. The font-render comparison is also synthetic, and the initial candidate may have seen these fonts and parts of this corpus during its earlier training. These measurements are not independent real-handwriting accuracy and do not promise that every handwritten rendition will be recognized correctly. Uncorrected user predictions were not treated as ground-truth labels or included in this fine-tuning run.
+
+## Reproduce the bounded CPU fine-tuning run
+
+Run from `backend/` (the pre-existing candidate and full 214,200-image corpus are retained):
+
+```powershell
+.\venv\Scripts\python.exe ml/train_kanji_model.py --artifact-dir ml/models/full_dictionary --dataset-dir ml/data/n3_candidate_synthetic --no-synthetic --no-user-samples --init-from ml/models/n3_candidate --cpu-threads 4 --max-training-samples-per-class 30 --epochs 3 --batch-size 64 --lr 0.00015
+```
+
+This uses 18,360 training images (30 per class) from the training split and retains all 32,130 validation images. `--max-training-samples-per-class 0` retains the original uncapped behavior. It does not generate images, alter the source candidate or use user-supplied handwriting. Validation computes overall and per-JLPT accuracy in the same inference pass. Source counts in the summary describe the full input corpus; the configuration records the actual split sizes used.
+
+Install a reviewed complete model with:
+
+```powershell
+.\venv\Scripts\python.exe ml/scripts/promote_kanji_model.py --source-dir ml/models/full_dictionary
+.\venv\Scripts\python.exe ml/scripts/audit_kanji_recognition.py
+```
+
+The installer checks exact dictionary coverage, contiguous unique indices, compatible weights and finite classifier outputs before replacing anything. It preserves the previous pair, stages both files, verifies their hashes and restores the previous pair if installation fails. Repeating an unchanged installation is a no-op. Temporary fine-tuning artifacts and deployment backups are ignored by Git; the active model, label map and reports are versioned.
+
+The running recognizer notices artifact changes on the next status or prediction request. It retains the working model while a replacement pair is incomplete. A backend already running code from before this change needs one restart to obtain this reload behavior. Refresh the web page or reopen the mobile screen to refresh cached model information. No API names or response fields have changed.
+
+To restore the earlier model, copy **both** files from the backup directory recorded in `models/deployment.json` into `models/`; the runtime then reloads that pair.
+
+## Full training pipeline
 
 This pipeline builds its ordered class list from `backend/app/data/kanji_dictionary.json` (N5/N4/N3). Missing stroke counts are resolved from the local KanjiVG SVG files; an entry missing its JLPT level or both dictionary and SVG stroke data stops the run with the affected characters listed. Duplicate labels also stop the run. The running model files remain `models/kanji_model.pt` and `models/label_map.json`; all retraining commands below write to `models/n3_candidate`.
 
-`kanji_recognizer.py` reads the number of classes from `label_map.json`; `get_model_info()` derives the supported JLPT levels from those labels and dictionary metadata. Once candidate files are deliberately copied into the standard model paths and the backend restarts, the status endpoint and UI report levels automatically.
+`kanji_recognizer.py` reads the number of classes from `label_map.json`; `get_model_info()` derives the supported JLPT levels from those labels and dictionary metadata. After a validated artifact pair replaces the standard model paths, the status endpoint and UI report the loaded levels automatically.
 
 ## Environment
 
@@ -61,7 +88,7 @@ The report shows top-1 and top-5 accuracy per N5/N4/N3, the 20 most frequent top
 
 ## Promote and restore manually
 
-Only after reviewing the real-handwriting comparison, back up both current artifacts together, then copy the candidate pair into the standard paths:
+For subsequent releases, evaluate an independent real-handwriting holdout whenever one is available. If only synthetic validation is available, record that limit explicitly. Prefer the validated installer above; for manual replacement, back up both current artifacts together and copy the pair into the standard paths:
 
 ```powershell
 Copy-Item ml/models/kanji_model.pt ml/models/kanji_model.pt.backup

@@ -9,6 +9,7 @@ import logging
 from .core.config import settings
 from .core.database import engine, Base
 from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening, internship
+from .api import placement, learning, kanji_writing, chat_feedback, kanji_notes, minigame_learning
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
 
@@ -23,7 +24,8 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    Base.metadata.create_all(bind=engine)
+    # Placement schema evolves through Alembic, including existing attempt columns.
+    Base.metadata.create_all(bind=engine, tables=[table for table in Base.metadata.sorted_tables if not table.name.startswith(("placement_", "exercise_", "weekly_learning_", "kanji_writing_", "chat_answer_feedback", "user_kanji_notes", "minigame_learning_"))])
     dictionary_report = kanji_dictionary_service.validate()
     logger.info("[Dictionary] total entries: %s", dictionary_report["total_entries"])
     logger.info("[Dictionary] valid entries: %s", dictionary_report["valid_entries"])
@@ -77,9 +79,21 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router)
+app.include_router(learning.router)
+app.include_router(learning.router, prefix="/api")
+app.include_router(kanji_writing.router)
+app.include_router(kanji_writing.router, prefix="/api")
+app.include_router(placement.router)
+app.include_router(placement.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(chat.router)
 app.include_router(chat.router, prefix="/api")
+app.include_router(chat_feedback.router)
+app.include_router(chat_feedback.router, prefix="/api")
+app.include_router(kanji_notes.router)
+app.include_router(kanji_notes.router, prefix="/api")
+app.include_router(minigame_learning.router)
+app.include_router(minigame_learning.router, prefix="/api")
 app.include_router(chat_conversations.router)
 app.include_router(chat_conversations.router, prefix="/api")
 app.include_router(analysis.router)

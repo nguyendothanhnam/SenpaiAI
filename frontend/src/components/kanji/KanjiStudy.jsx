@@ -7,6 +7,8 @@ import { kanjiDataAPI } from '../../services/api'
 import { normalizeKanjiItem, kanaToBasicRomaji } from '../../data/kanjiDataset'
 import { KANJI_DICTIONARY_LEVELS } from '../../constants/jlptLevels'
 import { makeStudyQuestion } from '../../features/kanji/study'
+import { useAuth } from '../../services/auth'
+import { placementDefault } from '../../utils/placementDefaults'
 
 function Speak({ text }) {
   const { t } = useTranslation('common')
@@ -22,7 +24,8 @@ function Speak({ text }) {
 export default function KanjiStudy() {
   const { t, i18n } = useTranslation('common')
   const [params] = useSearchParams()
-  const [level, setLevel] = useState(() => KANJI_DICTIONARY_LEVELS.includes(params.get('level')) ? params.get('level') : 'N5')
+  const { user } = useAuth()
+  const [level, setLevel] = useState(() => placementDefault(params.toString(), user?.current_jlpt_level, KANJI_DICTIONARY_LEVELS, 'N5'))
   const [search, setSearch] = useState(''), [index, setIndex] = useState(0)
   const [quiz, setQuiz] = useState(null), [answer, setAnswer] = useState(null), [reviewed, setReviewed] = useState([])
   const query = useQuery(['kanjiStudy', level], () => kanjiDataAPI.list({ jlpt: level, limit: 500 }).then(({ data }) => data.items), { staleTime: 60000, retry: 1 })

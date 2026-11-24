@@ -20,6 +20,7 @@ interface AuthContextType {
   register: (email: string, username: string, password: string) => Promise<void>
   logout: () => void
   isLoading: boolean
+  refreshUser: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -66,13 +67,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = () => {
+    if (user) sessionStorage.removeItem(`placement-skipped:${user.id}`)
     localStorage.removeItem('access_token')
     delete api.defaults.headers.common['Authorization']
     setUser(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isLoading, refreshUser: fetchUser }}>
       {children}
     </AuthContext.Provider>
   )

@@ -10,8 +10,10 @@ from ..core.auth import get_current_active_user
 from ..core.database import get_db
 from ..core.timezone import app_today
 from ..models.database import DailyTask, DailyTaskItem, User
+from ..services.exercise_selection import record_answer
 from ..services.daily_task_service import (
     DailyTaskError,
+    ensure_daily_history,
     complete_daily_task,
     get_or_create_daily_task,
     grade_daily_answer,
@@ -93,12 +95,15 @@ def get_today(current_user: User = Depends(get_current_active_user), db: Session
             task = db.query(DailyTask).filter(DailyTask.user_id == current_user.id, DailyTask.task_date == today).first()
             if task is None:
                 raise HTTPException(status_code=409, detail={"code": "task_creation_conflict", "message": "Không thể tạo nhiệm vụ, vui lòng thử lại."})
+    if ensure_daily_history(db, task):
+        db.commit()
     return _read_task(db, task)
 
 
 @router.post("/items/{item_id}/answer")
 def answer_item(item_id: int, payload: AnswerRequest, current_user: User = Depends(get_current_active_user),
                 db: Session = Depends(get_db)):
+    db.query(User.id).filter_by(id=current_user.id).with_for_update().one()
     joined = db.query(DailyTaskItem, DailyTask).join(DailyTask, DailyTask.id == DailyTaskItem.daily_task_id).filter(
         DailyTaskItem.id == item_id, DailyTask.user_id == current_user.id,
     ).first()
@@ -118,6 +123,7 @@ def answer_item(item_id: int, payload: AnswerRequest, current_user: User = Depen
     if item.answered_at is not None:
         raise HTTPException(status_code=409, detail={"code": "item_already_answered", "message": "Bạn đã trả lời mục này rồi"})
 
+    ensure_daily_history(db, task)
     is_correct = grade_daily_answer(item.item_type, item.question_type, payload.answer, item.answer_key or {})
     now = datetime.now(timezone.utc)
     item.user_answer = payload.answer
@@ -127,6 +133,8 @@ def answer_item(item_id: int, payload: AnswerRequest, current_user: User = Depen
     if item.item_type != "flashcard" and is_correct:
         task.correct_count = (task.correct_count or 0) + 1
     update_study_stats(db, current_user.id, item, is_correct, now)
+    record_answer(db, current_user.id, "vocab" if item.item_type == "flashcard" else item.item_type,
+                  item.source_id, "daily", str(task.id), is_correct, now=now)
     db.flush()
     unanswered = db.query(DailyTaskItem.id).filter(
         DailyTaskItem.daily_task_id == task.id, DailyTaskItem.answered_at.is_(None),

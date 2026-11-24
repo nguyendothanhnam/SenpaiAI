@@ -33,5 +33,6 @@
     "mainMenu": "Main navigation",
     "closeMenu": "Close menu",
     "userMenu": "User menu",
-    "dailyPending": "Today’s task is not complete"
+    "dailyPending": "Today’s task is not complete",
+    "learningProgress": "Roadmap and progress"
 }
