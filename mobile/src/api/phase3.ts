@@ -13,7 +13,7 @@ export const kanjiAPI = {
   quiz: (jlpt: string, count: number, mode = 'meaning_match') => api.get<{ items: KanjiQuestion[] }>('/kanji/quiz', { params: { jlpt, count, mode } }).then(r => r.data.items),
 }
 export const personalAPI = {
-  update: (payload: { username: string; current_jlpt_level: string; learning_goals: string[] }) => api.put<User>('/auth/me', payload).then(r => r.data),
+  update: (payload: { username: string; current_jlpt_level?: string; learning_goals: string[] }) => api.put<User>('/auth/me', payload).then(r => r.data),
   export: () => api.get<Record<string, unknown>>('/auth/me/export').then(r => r.data),
   reset: () => api.post('/auth/me/reset-progress'),
   remove: () => api.delete('/auth/me'),

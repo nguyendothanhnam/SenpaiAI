@@ -1,7 +1,9 @@
 import { readFile } from 'node:fs/promises'
+import { hasCorruptedTranslation } from './i18n-text-integrity.mjs'
 
 const locales = new URL('../src/i18n/locales/', import.meta.url)
-const namespaces = ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar']
+const namespaces = ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar', 'placement']
+const textIntegrityNamespaces = new Set(['placement', 'profile', 'errors'])
 function flatten(value, prefix = '') {
   return Object.entries(value).flatMap(([key, child]) => {
     const path = prefix ? `${prefix}.${key}` : key
@@ -18,6 +20,10 @@ for (const namespace of namespaces) {
   for (const [locale, entries] of [['vi', vi], ['en', en]]) {
     const empty = entries.filter(([, value]) => typeof value !== 'string' || !value.trim()).map(([key]) => key)
     if (empty.length) { failed = true; console.error(`${locale}/${namespace}: empty values: ${empty.join(', ')}`) }
+    const corrupted = textIntegrityNamespaces.has(namespace)
+      ? entries.filter(([, value]) => typeof value === 'string' && hasCorruptedTranslation(value)).map(([key]) => key)
+      : []
+    if (corrupted.length) { failed = true; console.error(`${locale}/${namespace}: corrupted text: ${corrupted.join(', ')}`) }
   }
 }
 if (failed) process.exit(1)

@@ -3,6 +3,8 @@ import random
 import logging
 from datetime import date, datetime, timezone
 from typing import Any, Mapping, Sequence
+from zoneinfo import ZoneInfo
+from ..core.config import settings
 
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -21,6 +23,7 @@ from ..core.rewards_config import (
 from ..models.database import (
     DailyTask,
     DailyTaskItem,
+    ExerciseDelivery,
     GrammarPracticeAttempt,
     GrammarQuestion,
     PointTransaction,
@@ -30,6 +33,8 @@ from ..models.database import (
 from .grammar_practice_service import grade_answer, public_question
 from .kanji_dictionary_service import kanji_dictionary_service
 from .rewards_service import award_points, get_or_create_profile, update_streak_on_completion
+from .exercise_content import grammar_content
+from .exercise_selection import Candidate, Selection, record_served, select_for_user
 
 logger = logging.getLogger(__name__)
 JLPT_LEVELS = ("N5", "N4", "N3", "N2", "N1")
@@ -142,11 +147,16 @@ def calculate_reward_breakdown(correct_count: int, gradable_count: int, streak: 
 
 def _wrong_counts(db: Session, user_id: int, item_type: str) -> dict[str, int]:
     if item_type in {"kanji", "vocab"}:
-        return {
+        result = {
             str(item_id): int(wrong_count or 0)
             for item_id, wrong_count in db.query(StudyItemStat.item_id, StudyItemStat.wrong_count)
             .filter(StudyItemStat.user_id == user_id, StudyItemStat.item_type == item_type).all()
         }
+        from .minigame_learning import pending_wrong_counts
+        for key,count in pending_wrong_counts(db,user_id,'kanji' if item_type=='kanji' else 'word').items():
+            source_id=key if item_type=='kanji' else f'minigame:{key}'
+            result[source_id]=result.get(source_id,0)+count
+        return result
     if item_type == "grammar":
         result: dict[str, int] = {}
         rows = db.query(GrammarPracticeAttempt.question_id, func.count(GrammarPracticeAttempt.id)).filter(
@@ -191,6 +201,7 @@ def _grammar_candidates(db: Session, user_id: int, level: str, yesterday: set[tu
         public = public_question(question, question.grammar_rule)
         candidates.append({
             "item_type": "grammar", "source_id": source_id, "question_type": question.question_type,
+            "selection_content": grammar_content(question), "selection_pattern": f"grammar:{question.grammar_rule_id}",
             "payload": {**{key: value for key, value in public.items() if key != "id"}, "level": question.jlpt_level},
             "answer_key": {"correct_answer": question.correct_answer,
                            "accepted_answers": question.accepted_answers or [],
@@ -200,7 +211,8 @@ def _grammar_candidates(db: Session, user_id: int, level: str, yesterday: set[tu
     return candidates
 
 
-def _kanji_candidates(db: Session, user_id: int, level: str, yesterday: set[tuple[str, str]]):
+def _kanji_candidates(db: Session, user_id: int, level: str, yesterday: set[tuple[str, str]], rng=None):
+    chooser = rng or random
     entries, _ = kanji_dictionary_service.list_entries(jlpt=level, limit=10000)
     weights = _wrong_counts(db, user_id, "kanji")
     candidates = []
@@ -211,8 +223,8 @@ def _kanji_candidates(db: Session, user_id: int, level: str, yesterday: set[tupl
             continue
         meaning = str(entry.get("meaning") or entry.get("meaning_vi") or "").strip()
         readings = list(dict.fromkeys([*(entry.get("onyomi") or []), *(entry.get("kunyomi") or [])]))
-        question_type = "kanji_reading" if readings and random.random() < 0.5 else "kanji_meaning"
-        correct = random.choice(readings) if question_type == "kanji_reading" else meaning
+        question_type = "kanji_reading" if readings and chooser.random() < 0.5 else "kanji_meaning"
+        correct = chooser.choice(readings) if question_type == "kanji_reading" else meaning
         distractors = []
         for other in usable:
             if other.get("kanji") == entry.get("kanji"):
@@ -225,13 +237,14 @@ def _kanji_candidates(db: Session, user_id: int, level: str, yesterday: set[tupl
         distractors = list(dict.fromkeys(value for value in distractors if value and value != correct))
         if not correct or len(distractors) < 3:
             continue
-        options = random.sample(distractors, 3) + [correct]
-        random.shuffle(options)
+        options = chooser.sample(distractors, 3) + [correct]
+        chooser.shuffle(options)
         all_readings = "、".join(readings)
         explanation = f"{entry['kanji']} có nghĩa là {meaning}. Cách đọc: {all_readings}." if meaning else f"Cách đọc của {entry['kanji']}: {all_readings}."
         prompt = f"Chọn cách đọc đúng của {entry['kanji']}" if question_type == "kanji_reading" else f"Chọn nghĩa đúng của {entry['kanji']}"
         candidates.append({
             "item_type": "kanji", "source_id": source_id, "question_type": question_type,
+            "selection_content": source_id,
             "payload": {"prompt": prompt, "kanji": entry["kanji"], "options": options, "jlpt_level": level, "level": entry.get("jlpt", level)},
             "answer_key": {"correct_answer": correct, "explanation": explanation},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("kanji", source_id),
@@ -255,12 +268,25 @@ def _vocab_candidates(db: Session, user_id: int, level: str, yesterday: set[tupl
         random.shuffle(options)
         candidates.append({
             "item_type": "vocab", "source_id": source_id, "question_type": "vocab_meaning",
+            "selection_content": f"{row.japanese_word} {row.reading or ''}",
             "payload": {"prompt": f"{row.japanese_word}（{row.reading}）có nghĩa là gì?", "word": row.japanese_word,
                         "reading": row.reading, "options": options, "jlpt_level": level, "level": row.jlpt_level},
             "answer_key": {"correct_answer": row.meaning.strip(),
                            "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {row.meaning.strip()}."},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("vocab", source_id),
         })
+    from .minigame_learning import words
+    game_words=[word for word in words().values() if word['level']==level and word.get('meaning')]
+    for word in game_words:
+        source_id=f"minigame:{word['id']}"
+        if not weights.get(source_id):continue
+        distractors=list(dict.fromkeys(w['meaning'] for w in game_words if w['meaning']!=word['meaning']))
+        if len(distractors)<3:continue
+        options=random.sample(distractors,3)+[word['meaning']];random.shuffle(options)
+        candidates.append({'item_type':'vocab','source_id':source_id,'question_type':'vocab_meaning',
+            'selection_content':f"{word['word']} {word['reading']}",'payload':{'prompt':f"{word['word']}（{word['reading']}）",'word':word['word'],'reading':word['reading'],'options':options,'jlpt_level':level,'level':level},
+            'answer_key':{'correct_answer':word['meaning'],'explanation':f"{word['word']}（{word['reading']}）: {word['meaning']}"},
+            'weight':1+3*weights[source_id],'unique_key':('vocab',source_id)})
     return candidates
 
 
@@ -274,6 +300,7 @@ def _flashcard_candidates(db: Session, user_id: int, level: str, yesterday: set[
             continue
         candidates.append({
             "item_type": "flashcard", "source_id": source_id, "question_type": "self_recall",
+            "selection_content": f"{row.japanese_word} {row.reading or ''}",
             "payload": {"prompt": "Bạn còn nhớ nghĩa của từ này không?", "word": row.japanese_word, "reading": row.reading,
                         "jlpt_level": level, "level": row.jlpt_level},
             "answer_key": {"correct_answer": "Đã nhớ", "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {row.meaning.strip()}.",
@@ -285,7 +312,9 @@ def _flashcard_candidates(db: Session, user_id: int, level: str, yesterday: set[
 
 def create_daily_task(db: Session, user_id: int, task_date: date, jlpt_level: str) -> DailyTask:
     """Build and add a task to the session; the caller owns commit/rollback."""
-    yesterday = _yesterday_sources(db, user_id, task_date)
+    # Shared history replaces the one-day exclusion. Keep all candidates so the
+    # selector can explicitly enter review mode when every source is exhausted.
+    yesterday = set()
     pools = {name: [] for name in ("grammar", "kanji", "vocab", "flashcard")}
     source_builders = {"grammar": _grammar_candidates, "kanji": _kanji_candidates,
                        "vocab": _vocab_candidates, "flashcard": _flashcard_candidates}
@@ -305,7 +334,20 @@ def create_daily_task(db: Session, user_id: int, task_date: date, jlpt_level: st
     for item in pools["vocab"]:
         item["unique_key"] = ("vocab-source", item["source_id"])
 
-    selected = select_daily_items(pools, level_order=daily_level_fallback_order(jlpt_level))
+    candidates = []
+    for name, pool in pools.items():
+        for item in pool:
+            source_type = "vocab" if name == "flashcard" else name
+            payload = item.get("payload", {})
+            content = item.get("selection_content") or payload.get("word") or payload.get("kanji") or payload.get("prompt") or f"{source_type}:{item['source_id']}"
+            candidates.append(Candidate(source_type, str(item["source_id"]), item["level"],
+                "vocab" if name == "flashcard" else name, item["question_type"], content,
+                pattern=item.get("selection_pattern", item["question_type"]), category=name, value=item))
+    local_now = datetime.now(ZoneInfo(settings.app_timezone))
+    served_at = datetime.combine(task_date, local_now.timetz()).astimezone(timezone.utc)
+    selection = select_for_user(db, user_id, jlpt_level, None, DAILY_ITEM_COUNT, "daily",
+        {"distribution": DAILY_ITEM_DISTRIBUTION}, candidates=candidates, now=served_at)
+    selected = [candidate.value for candidate in selection.items]
     if len(selected) < 5:
         logger.info("Daily insufficient content user=%s requested_level=%s counts_by_level=%s selected=%s minimum=5",
                     user_id, jlpt_level, level_counts, len(selected))
@@ -314,14 +356,37 @@ def create_daily_task(db: Session, user_id: int, task_date: date, jlpt_level: st
     task = DailyTask(user_id=user_id, task_date=task_date, status="in_progress", total_items=len(selected))
     db.add(task)
     db.flush()
-    for position, candidate in enumerate(selected, start=1):
+    for position, chosen in enumerate(selection.items, start=1):
+        candidate = chosen.value
         db.add(DailyTaskItem(
             daily_task_id=task.id, position=position, item_type=candidate["item_type"],
             source_id=str(candidate["source_id"]), question_type=candidate["question_type"],
-            payload=candidate["payload"], answer_key=candidate["answer_key"],
+            payload={**candidate["payload"], "selection": selection.metadata(chosen)},
+            answer_key={**candidate["answer_key"], "selection_content": chosen.content, "selection_pattern": chosen.pattern},
         ))
+    record_served(db, user_id, selection, "daily", str(task.id), now=served_at)
     db.flush()
     return task
+
+
+def ensure_daily_history(db: Session, task: DailyTask) -> bool:
+    """Bridge a cached/pre-migration daily task after history reset, without re-awarding it."""
+    if db.query(ExerciseDelivery.id).filter_by(user_id=task.user_id, context="daily", context_ref=str(task.id)).first():
+        return False
+    items = db.query(DailyTaskItem).filter_by(daily_task_id=task.id).order_by(DailyTaskItem.position).all()
+    grammar_ids = [int(item.source_id) for item in items if item.item_type == "grammar" and str(item.source_id).isdigit()]
+    grammar = {str(question.id): question for question in db.query(GrammarQuestion).filter(GrammarQuestion.id.in_(grammar_ids)).all()} if grammar_ids else {}
+    candidates = []
+    for item in items:
+        payload, private = item.payload or {}, item.answer_key or {}
+        source_type = "vocab" if item.item_type == "flashcard" else item.item_type
+        question = grammar.get(str(item.source_id))
+        content = private.get("selection_content") or (grammar_content(question) if question else None)
+        content = content or (f"{payload.get('word')} {payload.get('reading') or ''}" if payload.get('word') else payload.get('kanji') or payload.get('prompt') or f"{source_type}:{item.source_id}")
+        candidates.append(Candidate(source_type, str(item.source_id), payload.get("level") or payload.get("jlpt_level") or "N5",
+            "vocab" if item.item_type == "flashcard" else item.item_type, item.question_type, content))
+    record_served(db, task.user_id, Selection(candidates, "N5"), "daily", str(task.id))
+    return bool(candidates)
 
 
 def get_or_create_daily_task(db: Session, user_id: int, task_date: date, jlpt_level: str) -> tuple[DailyTask, bool]:

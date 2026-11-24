@@ -1,5 +1,6 @@
 import { KeyboardInput as TextInput, KeyboardFlatList as FlatList, KeyboardLayout } from '../components/KeyboardLayout'
 import { useEffect, useRef, useState } from 'react'
+import { ExerciseSelectionNotice } from '../components/ExerciseSelectionNotice'
 import { View } from 'react-native'
 import { router, usePreventRemove } from 'expo-router'
 import { Alert } from 'react-native'
@@ -86,6 +87,8 @@ export function GrammarScreen() {
   const q = session?.questions[index]
   if (session && !result) return <Screen>
     <Title>{t('phase2.grammar')}</Title><Progress current={index} total={session.questions.length} />
+    <ExerciseSelectionNotice selections={session.questions.map(question => question.selection)} />
+    {q && <Muted>{q.jlpt_level}</Muted>}
     {session.message && <Muted>{t('phase2.partialSession', { count: session.questions.length })}</Muted>}
     {partialGenerationNotice && <Card accessibilityLiveRegion="polite"><AppText>{t('phase3.mixedPartialNotice')}</AppText></Card>}
     {q && <QuestionCard key={`${session.session_id}:${q.id}`} item={{ id: q.id, position: index, item_type: 'grammar', question_type: q.question_type, payload: q, answered: !!feedback }} index={index} total={session.questions.length} busy={busy || uncertain} result={feedback ? { ...feedback, explanation: feedback.explanation_vi, all_answered: index === session.questions.length - 1 } : undefined} onAnswer={(answer, time) => void run(async () => {

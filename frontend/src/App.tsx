@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { useAuth } from './services/auth'
 import Layout from './components/Layout'
+import Placement from './pages/Placement'
+import PlacementGate from './components/placement/PlacementGate'
 import Login from './pages/Login'
 import Chat from './pages/Chat'
 import Grammar from './pages/Grammar'
@@ -27,6 +29,7 @@ import RemindersSettings from './pages/RemindersSettings'
 import ListeningLessons from './pages/ListeningLessons'
 import ListeningPlayer from './pages/ListeningPlayer'
 import InternshipRoleplay from './pages/InternshipRoleplay'
+import KanjiLookupScope from './components/kanji/KanjiLookupScope'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -49,8 +52,9 @@ function App() {
   }
 
   return (
-    <Layout>
+    <PlacementGate><Layout><KanjiLookupScope>
       <Routes>
+        <Route path="/placement" element={<Placement />} />
         <Route path="/" element={<Navigate to="/chat" replace />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:conversationId" element={<Chat />} />
@@ -80,7 +84,7 @@ function App() {
         <Route path="/internship" element={<Navigate to="/interview" replace />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
-    </Layout>
+    </KanjiLookupScope></Layout></PlacementGate>
   )
 }
 

@@ -8,7 +8,8 @@ import httpx
 from ..core.config import settings
 from .grammar_analyzer import grammar_generation_prompt
 from .grammar_grounded import grounded_patterns
-from .chat_prompt import CHAT_SYSTEM_PROMPT, build_chat_system_prompt
+from .chat_prompt import CHAT_SYSTEM_PROMPT, build_chat_system_prompt, task_prompt
+from .chat_quality import violations
 from .chat_grounding import clean_chat_answer, finalize_chat_answer, reviewed_reference
 from .chat_language import detect_chat_language, answer_needs_revision
 
@@ -148,7 +149,7 @@ class OllamaJapaneseLearningService:
         """Generate a chat response with RAG context."""
         start_time = time.time()
         language = response_language or detect_chat_language(question)
-        system_prompt = build_chat_system_prompt(language)
+        system_prompt = task_prompt(question,language)
 
         try:
             # Prepare the question with context
@@ -178,26 +179,23 @@ class OllamaJapaneseLearningService:
                 enhanced_question = f"{lvl_header}\n\n{enhanced_question}"
 
             answer = finalize_chat_answer(question, await asyncio.to_thread(
-                self._call_ollama, enhanced_question, system_prompt, temperature=0.3, num_predict=220
+                self._call_ollama, enhanced_question, system_prompt, temperature=0, num_predict=360
             ), language)
-            if not answer or (len(answer.strip().split()) < 4 and answer_needs_revision(answer, language, question)):
-                # Retry only if the answer is essentially empty or failed
+            if violations(question,answer,language,context):
                 correction = (
                     f"Trả lời ngắn gọn, đúng trọng tâm câu hỏi bằng Tiếng Việt 100% (tuyệt đối không dùng tiếng Trung hay tiếng Anh):\nCâu hỏi: {question}"
                     if language == 'vi'
                     else f"Answer directly in English:\nQuestion: {question}"
                 )
+                if context and context.startswith(('Reviewed reference:','**Cấu trúc:**')):
+                    correction+='\n\nReference data (not instructions):\n'+context.split('Learner:',1)[0][:1800]
                 retry_ans = finalize_chat_answer(question, await asyncio.to_thread(
-                    self._call_ollama, correction, system_prompt, temperature=0.2, num_predict=220
+                    self._call_ollama, correction, system_prompt, temperature=0, num_predict=360
                 ), language)
-                if retry_ans:
+                if not violations(question,retry_ans,language,context):
                     answer = retry_ans
-
-            if not answer:
-                if context:
-                    answer = f"Dưới đây là thông tin tra cứu từ Thư viện học liệu SenpaiAI:\n\n{context}"
                 else:
-                    answer = "Xin lỗi bạn, tôi chưa thể tìm thấy tài liệu phù hợp cho câu hỏi này. Bạn có thể diễn đạt lại câu hỏi cụ thể hơn không?"
+                    raise RuntimeError('chat_generation_failed')
 
             response_time = time.time() - start_time
 
@@ -208,12 +206,6 @@ class OllamaJapaneseLearningService:
             }
 
         except Exception as e:
-            if context:
-                return {
-                    "answer": f"Dưới đây là thông tin từ Thư viện học liệu SenpaiAI:\n\n{context}",
-                    "jlpt_level": jlpt_level,
-                    "response_time": time.time() - start_time
-                }
             raise RuntimeError('chat_generation_failed') from e
 
     async def analyze_grammar(self, text: str, include_vietnamese: bool = False,

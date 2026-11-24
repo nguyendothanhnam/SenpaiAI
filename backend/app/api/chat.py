@@ -21,7 +21,7 @@ from ..services import vocab_mcq_service
 from ..services.kanji_dictionary_service import kanji_dictionary_service
 from ..services.vector_db import chroma_service
 from ..services.chat_conversations import build_recent_chat_context, normalize_title
-from ..services.chat_grounding import reviewed_reference, relevant_chat_documents, finalize_chat_answer
+from ..services.chat_grounding import reviewed_reference, relevant_chat_documents, finalize_chat_answer, clean_chat_answer
 from ..services.chat_language import (
     detect_chat_language,
     needs_history,
@@ -30,6 +30,8 @@ from ..services.chat_language import (
     is_chitchat_query,
     chitchat_direct_answer,
 )
+from ..services.chat_quality import scope_reply,uncertainty,public_source,question_kind,violations,unverifiable_request
+from ..services.chat_knowledge import local_knowledge,library_knowledge,local_translation,reading
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -69,6 +71,17 @@ def _save_chat_entry(db: Session, conversation: ChatConversation, entry: ChatHis
     db.commit()
 
 
+def _grounded_reply(db,conversation,user,message,answer,sources,start_time):
+    sources=[source for source in sources if public_source(source)]
+    language=detect_chat_language(message.message,message.response_language or user.ui_language)
+    answer=clean_chat_answer(answer,language)
+    row=ChatHistory(user_id=user.id,question=message.message,answer=answer,
+        jlpt_level=message.jlpt_level or user.current_jlpt_level,grammar_points=[],translation=None,sources=sources)
+    _save_chat_entry(db,conversation,row)
+    return ChatResponse(answer=answer,jlpt_level=row.jlpt_level,grammar_points=[],translation=None,sources=sources,
+        response_time=time.time()-start_time,conversation_id=conversation.id)
+
+
 def find_single_kanji_request(text: str) -> str | None:
     if not re.search(r"\bkanji\b|漢字|chữ", text, re.IGNORECASE):
         return None
@@ -80,17 +93,21 @@ def contains_japanese(text: str) -> bool:
     return bool(re.search(r"[\u3040-\u30ff\u3400-\u9fff]", text or ""))
 
 
-def build_kanji_answer(entry: dict) -> str:
+def build_kanji_answer(entry: dict, language: str = 'vi') -> str:
     examples = entry.get("examples") or []
     example_lines = []
     for example in examples[:3]:
         word = example.get("word") or ""
         reading = example.get("reading") or ""
-        meaning = example.get("meaning") or ""
+        meaning = (example.get('meaning_vi') or example.get('meaning') or '') if language=='vi' else (example.get('meaning_en') or '')
         example_lines.append(f"- **{word}** ({reading}): {meaning}".strip())
     examples_text = "\n".join(example_lines) if example_lines else "- Chưa có ví dụ trong từ điển cục bộ."
     onyomi = ", ".join(entry.get("onyomi") or []) or "-"
     kunyomi = ", ".join(entry.get("kunyomi") or []) or "-"
+    if language=='en':
+        return (f"### Kanji: **{entry['kanji']}**\n\n- **Meaning:** {entry.get('meaning_en') or 'No checked English meaning available'}\n"
+            f"- **On readings:** {onyomi}\n- **Kun readings:** {kunyomi}\n- **Strokes:** {entry.get('stroke_count') or '-'}\n\n"
+            f"**Examples:**\n{examples_text}")
     return (
         f"### 🈸 Chữ Hán (Kanji): **{entry['kanji']}**\n\n"
         f"- **Ý nghĩa:** {entry.get('meaning') or entry.get('meaning_vi') or 'Chưa có dữ liệu'}\n"
@@ -185,13 +202,20 @@ async def send_message(
             conversation_context = ''
 
         language = detect_chat_language(message.message, message.response_language or current_user.ui_language)
+        scoped=scope_reply(message.message,language)
+        if scoped:
+            return _grounded_reply(db,conversation,current_user,message,scoped,[],start_time)
+        if unverifiable_request(message.message):
+            return _grounded_reply(db,conversation,current_user,message,uncertainty(language),[],start_time)
+        follow_up=needs_history(message.message) and bool(previous_turns)
+        focus_question=(previous_turns[-1].question+'\n'+message.message) if follow_up else message.message
 
         # 1. Single Kanji direct lookup (100% dictionary accuracy)
         kanji_char = find_single_kanji_request(message.message)
         if kanji_char:
             kanji_entry = kanji_dictionary_service.get_entry(kanji_char)
             if kanji_entry:
-                answer = build_kanji_answer(kanji_entry)
+                answer = build_kanji_answer(kanji_entry,language)
                 sources = [{
                     "title": f"Từ điển Kanji JLPT: {kanji_char}",
                     "type": "kanji_dictionary",
@@ -294,6 +318,26 @@ async def send_message(
 
         # 5. Get reviewed references or relevant context using smart RAG
         context, sources = reviewed_reference(message.message, language)
+        fallback_answer=context.replace('Reviewed reference:\n','').strip() if context else None
+        if not context and not follow_up and question_kind(message.message)=='translation':
+            context,sources,fallback_answer=local_translation(db,message.message,language)
+            if fallback_answer:
+                return _grounded_reply(db,conversation,current_user,message,fallback_answer,sources,start_time)
+        if not context:
+            context,sources,fallback_answer=local_knowledge(db,focus_question,language)
+            # Exact local lookups use catalog text rather than a small model rewriting facts.
+            if fallback_answer and not follow_up and question_kind(message.message) in ('grammar','vocabulary'):
+                return _grounded_reply(db,conversation,current_user,message,fallback_answer,sources,start_time)
+        if not context:
+            context,sources,fallback_answer=library_knowledge(db,focus_question,language)
+            if fallback_answer and not follow_up:
+                return _grounded_reply(db,conversation,current_user,message,fallback_answer,sources,start_time)
+        if follow_up:
+            fallback_answer=None
+        if not context and follow_up:
+            context,sources=reviewed_reference(previous_turns[-1].question,language)
+            # A follow-up may ask a transformation; do not silently replay the old answer.
+            fallback_answer=None
         if not context and not is_translation_question(message.message):
             user_level = message.jlpt_level or getattr(current_user, "current_jlpt_level", None)
             level_filter = {"jlpt_level": user_level} if user_level else None
@@ -302,15 +346,17 @@ async def send_message(
             raw_results = chroma_service.search_documents(
                 message.message, n_results=3, filter_dict=level_filter
             )
-            rag_results = relevant_chat_documents(raw_results, message.message)
+            rag_results = relevant_chat_documents(raw_results, focus_question)
 
             # Fallback: if filtered search yields no documents, fallback to all levels
             if not rag_results and level_filter:
                 raw_fallback = chroma_service.search_documents(
                     message.message, n_results=3, filter_dict=None
                 )
-                rag_results = relevant_chat_documents(raw_fallback, message.message)
+                rag_results = relevant_chat_documents(raw_fallback, focus_question)
 
+            rag_results=[r for r in rag_results if public_source({'type':r.get('source',{}).get('document_type',''),
+                'title':r.get('source',{}).get('title',''),'url':r.get('source',{}).get('source_url','')})]
             if rag_results:
                 context_parts = []
                 sources = []
@@ -334,15 +380,31 @@ async def send_message(
                     })
                 context = "\n\n".join(context_parts)
         response_context = "\n\n".join(part for part in (context, conversation_context) if part)
+        if not context and question_kind(focus_question) in ('grammar','vocabulary','kanji','culture','comparison'):
+            return _grounded_reply(db,conversation,current_user,message,uncertainty(language),[],start_time)
         
         # Generate AI response
-        response_data = await japanese_service.chat_response(
-            question=message.message,
-            context=response_context,
-            jlpt_level=message.jlpt_level or current_user.current_jlpt_level,
-            response_language=language,
-        )
+        try:
+            response_data = await japanese_service.chat_response(
+                question=message.message, context=response_context,
+                jlpt_level=message.jlpt_level or current_user.current_jlpt_level,response_language=language,
+            )
+        except RuntimeError:
+            if fallback_answer:
+                return _grounded_reply(db,conversation,current_user,message,fallback_answer,sources,start_time)
+            if question_kind(focus_question)!='general':
+                return _grounded_reply(db,conversation,current_user,message,uncertainty(language),[],start_time)
+            raise
         response_data["answer"] = finalize_chat_answer(message.message, response_data["answer"], language)
+        if fallback_answer and violations(message.message,response_data['answer'],language,context):
+            response_data['answer']=fallback_answer
+        if not context and question_kind(focus_question) in ('grammar','vocabulary','kanji','culture'):
+            response_data['answer']=uncertainty(language)
+            sources=[]
+        sources=[source for source in sources if public_source(source)]
+        if question_kind(message.message)=='translation' and not sources:
+            prefix='**Bản dịch gợi ý, chưa đối chiếu học liệu:**' if language=='vi' else '**Suggested translation, not checked against reference material:**'
+            response_data['answer']=prefix+'\n\n'+response_data['answer']
         
         # Extract grammar points if the response contains Japanese
         # A second model pass over its own answer produced contradictory cards.

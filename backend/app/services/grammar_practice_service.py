@@ -9,6 +9,7 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 from .vocab_mcq_service import normalize_kana
+from .exercise_content import similar_content
 
 QUESTION_TYPES = {"fill_blank", "reorder", "true_false", "conjugation"}
 JLPT_LEVELS = {"N5", "N4", "N3", "N2", "N1"}
@@ -157,8 +158,7 @@ def parse_generated_questions(raw: str, jlpt_level: str, question_type: str) -> 
 
 
 def is_duplicate_question(prompt: str, question_type: str, existing: Iterable[Tuple[str, str]]) -> bool:
-    key = (" ".join(prompt.casefold().split()), question_type)
-    return key in {(" ".join(p.casefold().split()), kind) for p, kind in existing}
+    return any(kind == question_type and similar_content(prompt, previous) for previous, kind in existing)
 
 
 async def generate_raw_questions(jlpt_level: str, rule_name: str, question_type: str, count: int) -> str:

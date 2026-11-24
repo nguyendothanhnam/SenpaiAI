@@ -1,4 +1,6 @@
 import i18n from 'i18next'
+import placementVi from './locales/vi/placement.json'
+import placementEn from './locales/en/placement.json'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 import commonVi from './locales/vi/common.json'
@@ -33,13 +35,13 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      vi: { common: commonVi, nav: navVi, auth: authVi, profile: profileVi, settings: settingsVi, errors: errorsVi, grammar: grammarVi, dailyStatus: dailyStatusVi, grammarStatus: grammarStatusVi, kanjiStatus: kanjiStatusVi },
-      en: { common: commonEn, nav: navEn, auth: authEn, profile: profileEn, settings: settingsEn, errors: errorsEn, grammar: grammarEn, dailyStatus: dailyStatusEn, grammarStatus: grammarStatusEn, kanjiStatus: kanjiStatusEn },
+      vi: { placement: placementVi, common: commonVi, nav: navVi, auth: authVi, profile: profileVi, settings: settingsVi, errors: errorsVi, grammar: grammarVi, dailyStatus: dailyStatusVi, grammarStatus: grammarStatusVi, kanjiStatus: kanjiStatusVi },
+      en: { placement: placementEn, common: commonEn, nav: navEn, auth: authEn, profile: profileEn, settings: settingsEn, errors: errorsEn, grammar: grammarEn, dailyStatus: dailyStatusEn, grammarStatus: grammarStatusEn, kanjiStatus: kanjiStatusEn },
     },
     supportedLngs: [...supportedLanguages],
     fallbackLng: 'vi',
     defaultNS: 'common',
-    ns: ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar', 'dailyStatus', 'grammarStatus', 'kanjiStatus'],
+    ns: ['common', 'nav', 'auth', 'profile', 'settings', 'errors', 'grammar', 'dailyStatus', 'grammarStatus', 'kanjiStatus', 'placement'],
     load: 'languageOnly',
     detection: {
       order: ['localStorage', 'navigator'],

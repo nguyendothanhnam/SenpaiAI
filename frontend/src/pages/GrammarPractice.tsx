@@ -17,6 +17,7 @@ import { useAuth } from '../services/auth'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { grammarPracticeAPI, libraryAPI } from '../services/api'
+import ExerciseSelectionNotice from '../components/ExerciseSelectionNotice'
 import type {
   GrammarAnswerResult, GrammarPattern, GrammarPracticeMode,
   GrammarPracticeQuestion, GrammarQuestionType, GrammarSessionResult, JlptLevel,
@@ -328,6 +329,7 @@ export default function GrammarPractice() {
       </>}
 
       {screen === 'session' && currentQuestion && <>
+        <ExerciseSelectionNotice selections={questions.map(question => question.selection)} />
         <section className="theme-card rounded-3xl p-4 shadow-[var(--shadow-card)] sm:p-6">
           <div className="mb-5 flex items-center justify-between gap-3">
             <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-bold text-[color:var(--primary)]">{currentQuestion.jlpt_level}</span><span className="text-sm font-semibold text-[color:var(--text-muted)]">{currentQuestion.grammar_rule?.rule_name || 'Luyện tổng hợp'}</span></div><p className="mt-2 text-xs text-[color:var(--text-muted)]">{currentQuestion.question_type === 'fill_blank' ? 'Điền vào chỗ trống' : currentQuestion.question_type === 'reorder' ? 'Sắp xếp câu' : currentQuestion.question_type === 'true_false' ? 'Đúng hay sai' : 'Chia động từ'}</p></div>

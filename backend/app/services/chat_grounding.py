@@ -6,12 +6,12 @@ MIN_CHAT_RELEVANCE = 0.68
 
 PARTICLE_COMPARISON = """**Phân biệt trợ từ は (wa) và が (ga):**
 
-1. **は (wa): Đánh dấu CHỦ ĐỀ của câu ("Nói về X thì...")**
+1. **は (wa): đánh dấu chủ đề của câu ("Nói về X thì...")**
 - Giới thiệu điều mà người nói muốn truyền đạt, thông tin quan trọng nằm ở vị ngữ phía sau.
 - Dùng để nhấn mạnh sự tương phản, đối chiếu.
 - Ví dụ: 私は学生です。(Watashi wa gakusei desu.) → Tôi là sinh viên.
 
-2. **が (ga): Đánh dấu CHỦ NGỮ hành động / Giới thiệu THÔNG TIN MỚI**
+2. **が (ga): đánh dấu chủ ngữ hành động / giới thiệu thông tin mới**
 - Xác định chính xác ai hoặc cái gì là chủ thể được nhắc đến ("Chính X là...").
 - Dùng cho câu trả lời cho từ để hỏi (Dare, nani...).
 - Dùng miêu tả hiện tượng tự nhiên hoặc sự tồn tại (いる / ある).
@@ -41,24 +41,15 @@ PARTICLE_NI_DE = """**Phân biệt trợ từ に (ni) và で (de) chỉ nơi c
 - Chỉ **ở/tồn tại** (います, あります) hoặc **đi tới đâu** (行きます) → dùng **に**.
 """
 
-KARA_NODE_COMPARISON = """**Phân biệt 〜から (kara) và 〜ので (node) - Đều mang nghĩa "Vì... nên...":**
+KARA_NODE_COMPARISON = """**Phân biệt から và ので:**
+Cả hai nối lý do với kết quả. から thường nêu lý do trực tiếp; ので thường tạo sắc thái mềm và lịch sự hơn, kể cả khi nói lý do cá nhân.
+Không nên coi đây là ranh giới tuyệt đối giữa “chủ quan” và “khách quan”; cần xét hoàn cảnh và cách nói.
 
-1. **〜から (kara): Lý do mang tính CHỦ QUAN của người nói**
-- Nhấn mạnh quan điểm, lý do cá nhân hoặc phán đoán của người nói.
-- Vế sau được phép dùng câu mệnh lệnh, rủ rê, khuyên bảo, nhờ vả (〜ましょう, 〜てください, 〜なさい).
-- Ví dụ:
-  - 時間がありません**から**、急ぎましょう。(Vì không có thời gian nên hãy nhanh lên nào! → Câu rủ rê).
-  - 危ない**から**、触らないでください。(Vì nguy hiểm nên xin đừng chạm vào! → Lời khuyên/nhờ vả).
-
-2. **〜ので (node): Lý do KHÁCH QUAN, LỊCH SỰ, TRANG TRỌNG**
-- Nhấn mạnh nguyên nhân tự nhiên hoặc hoàn cảnh khách quan đưa đến kết quả.
-- Mang sắc thái mềm mại, lịch sự, rất hay dùng khi xin phép, xin lỗi, từ chối hoặc giao tiếp với cấp trên, khách hàng.
-- Vế sau **KHÔNG** dùng với mệnh lệnh áp đặt.
-- Ví dụ:
-  - 熱がある**ので**、今日は休みます。(Vì bị sốt nên hôm nay em xin phép nghỉ. → Khách quan, lịch sự).
-  - 電車が遅れた**ので**、遅刻しました。(Vì tàu điện đến muộn nên tôi đã đi trễ.)
-
-**Mẹo nhớ:** Xin lỗi/xin phép/lịch sự → dùng **ので**; Rủ rê/mệnh lệnh/ý kiến cá nhân → dùng **から**.
+**Ví dụ đối chiếu:**
+- 雨が降っているから、家にいます。
+  (あめがふっているから、いえにいます。) → Vì trời đang mưa nên tôi ở nhà.
+- 雨が降っているので、家にいます。
+  (あめがふっているので、いえにいます。) → Vì trời đang mưa nên tôi ở nhà; cách nêu lý do mềm hơn.
 """
 
 PARTICLE_COMPARISON_EN = """**は (wa): marks the topic**
@@ -91,15 +82,17 @@ def reviewed_reference(question: str, language: str = 'vi') -> tuple[str, list[d
     # 2. Trợ từ ni và de
     if (("に" in question and "で" in question) or ("ni" in q_lower and "de" in q_lower and ("trợ từ" in q_lower or "particle" in q_lower or "địa điểm" in q_lower))) and re.search(r"khác|phân biệt|so sánh|difference|compare|khi nào", question, re.IGNORECASE):
         return (
-            "Reviewed reference:\n" + PARTICLE_NI_DE,
-            [{"title": "Trợ từ に (ni) và で (de) chỉ địa điểm", "type": "grammar_reference", "relevance": 1.0}]
+            "Reviewed reference:\n" + (PARTICLE_NI_DE if language=='vi' else
+                '**に vs で:** に marks a location of existence or a destination; で marks where an action takes place.\n\nExample: 部屋に猫がいます。(へやにねこがいます。) → There is a cat in the room.\n図書館で勉強します。(としょかんでべんきょうします。) → I study at the library.'),
+            [{"title": "Trợ từ に (ni) và で (de) chỉ địa điểm", "url":"https://a1.marugotoweb.jp/ja/grammar_topic5_10.php", "type": "grammar_reference", "relevance": 1.0}]
         )
 
     # 3. Phân biệt kara và node
     if (("から" in question and "ので" in question) or ("kara" in q_lower and "node" in q_lower)) and re.search(r"khác|phân biệt|so sánh|difference|compare|khi nào", question, re.IGNORECASE):
         return (
-            "Reviewed reference:\n" + KARA_NODE_COMPARISON,
-            [{"title": "Phân biệt 〜から và 〜ので", "type": "grammar_reference", "relevance": 1.0}]
+            "Reviewed reference:\n" + (KARA_NODE_COMPARISON if language=='vi' else
+                '**から vs ので:** Both give a reason. ので is often softer and more polite, including personal reasons; the difference is contextual, not an absolute subjective/objective division.\n\nExample: 雨が降っているので、家にいます。(あめがふっているので、いえにいます。) → I am staying home because it is raining.'),
+            [{"title": "Phân biệt 〜から và 〜ので", "url":"https://www.irodori.jpf.go.jp/assets/data/Grammar_all.pdf", "type": "grammar_reference", "relevance": 1.0}]
         )
 
     if '今日は何をしましたか' in question and is_translation_question(question):
@@ -121,13 +114,15 @@ GENERIC_QUERY_STOPWORDS = {
 
 
 def relevant_chat_documents(results: list[dict], question: str = '') -> list[dict]:
-    if not results or not question.strip():
+    if not results:
         return []
+    if not question.strip():
+        return [row for row in results if row.get('similarity_score',0)>=MIN_CHAT_RELEVANCE][:3]
 
     # Don't inject library documents for chitchat or short translation queries
     if is_chitchat_query(question):
         return []
-    if is_translation_question(question) and len(question.strip().split()) <= 5:
+    if is_translation_question(question):
         return []
 
     candidates = [result for result in results if result.get("similarity_score", 0) >= MIN_CHAT_RELEVANCE]
@@ -135,11 +130,11 @@ def relevant_chat_documents(results: list[dict], question: str = '') -> list[dic
         return []
 
     # 1. Japanese anchor check: if question has Japanese words (>= 2 chars), document MUST contain them
-    anchors = re.findall(r'[\u3040-\u30ff\u3400-\u9fff]{2,}', question)
+    anchors = re.findall(r'[\u3040-\u30ff\u3400-\u9fff]+', question)
     if anchors:
         matched = [
             result for result in candidates
-            if any(anchor in result.get('content', '') or anchor in result.get('source', {}).get('title', '') for anchor in anchors)
+            if all(anchor in result.get('content', '') or anchor in result.get('source', {}).get('title', '') for anchor in anchors)
         ]
         return matched[:3]
 
@@ -163,9 +158,8 @@ def relevant_chat_documents(results: list[dict], question: str = '') -> list[dic
         if matched:
             return matched[:3]
 
-    # 3. Very high confidence semantic fallback
-    very_high = [r for r in candidates if r.get("similarity_score", 0) >= 0.78]
-    return very_high[:2]
+    # A high embedding score alone is insufficient evidence of relevance.
+    return []
 
 
 CHINESE_GRAMMAR_TERMS = {
@@ -201,8 +195,19 @@ def finalize_chat_answer(question: str, answer: str, language: str = 'vi') -> st
     cleaned = clean_chat_answer(answer, language)
     reference, sources = reviewed_reference(question, language)
     if sources and sources[0].get('type') in ('reviewed_translation', 'grammar_reference'):
-        # For reviewed references (like wa vs ga, ni vs de, kara vs node), return the verified pedagogical text directly
         ref_text = reference.replace("Reviewed reference:\n", "").strip()
-        if ref_text:
+        # Preserve a correct explanation; repair known factual inversions rather than
+        # replacing every answer (which concealed generation failures and follow-ups).
+        particle_pair = ('は' in question and 'が' in question)
+        correct_pair = (all(term in cleaned.lower() for term in ('topic','subject')) if language=='en' else
+                        all(term in cleaned.lower() for term in ('chủ đề','chủ ngữ')))
+        wrong_pair = bool(re.search(r'が\s*(?:là|marks? the)\s*(?:tân ngữ|object)|は\s*(?:chỉ|là)\s*chủ ngữ',cleaned,re.I))
+        if particle_pair and correct_pair and not wrong_pair:
+            return cleaned
+        if ref_text and (particle_pair or sources[0].get('type')=='reviewed_translation' or not cleaned):
             return ref_text
+        if ref_text and sources[0].get('type')=='grammar_reference':
+            needed=('tồn tại','hành động') if 'に' in question and 'で' in question else ('lý do','lịch sự')
+            if language=='en':needed=('existence','action') if 'に' in question and 'で' in question else ('reason','polite')
+            if not all(term in cleaned.lower() for term in needed):return ref_text
     return cleaned

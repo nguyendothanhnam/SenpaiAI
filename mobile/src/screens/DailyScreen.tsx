@@ -13,6 +13,7 @@ import { mixedLevels } from '../features/daily/logic'
 import { AppText, Badge, Button, Card, ErrorNotice, Muted, Progress, Screen, Title, styles } from '../components/ui'
 import { RewardSummary } from '../components/daily/RewardSummary'
 import { SkeletonList } from '../components/SkeletonList'
+import { ExerciseSelectionNotice } from '../components/ExerciseSelectionNotice'
 
 export function DailyScreen() {
   const { user } = useAuth()
@@ -41,7 +42,8 @@ export function DailyScreen() {
       <Muted>{formatServerDate(current.date, i18n.language, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</Muted>
       <View style={styles.row}><Badge>{t('daily.streak', { count: rewards.data?.current_streak ?? current.reward?.streak ?? 0 })}</Badge><Badge>{t('daily.balance')}: {rewards.data?.points_balance ?? '—'}</Badge></View>
       {rewards.isError && <ErrorNotice message={getErrorMessage(rewards.error, i18n)} retry={() => void rewards.refetch()} />}
-      {mixedLevels(current, user?.current_jlpt_level) && <Muted>{i18n.t('mixedLevels', { ns: 'dailyStatus', level: user?.current_jlpt_level })}</Muted>}
+      <ExerciseSelectionNotice selections={current.items.map(item => item.payload.selection)} />
+      {mixedLevels(current, user?.current_jlpt_level) && !current.items.some(item => item.payload.selection?.fallback) && <Muted>{i18n.t('mixedLevels', { ns: 'dailyStatus', level: user?.current_jlpt_level })}</Muted>}
       <Card><Title>{t(current.status === 'completed' ? 'daily.alreadyCompleted' : 'daily.todayProgress')}</Title><AppText>{t('daily.answeredProgress', { progress: current.progress.answered_items, total: current.progress.total_items })}</AppText><Progress current={current.progress.answered_items} total={current.progress.total_items} /><Muted>{t('daily.progressHint')}</Muted><Button title={t(current.status === 'completed' || current.progress.all_answered ? 'daily.viewSummary' : current.progress.answered_items ? 'daily.continue' : 'daily.start')} disabled={task.isFetching} onPress={() => router.push('/daily-exercise')} /></Card>
       {current.reward && <RewardSummary reward={current.reward} balance={rewards.data?.points_balance} />}
       {current.status === 'completed' && <Card><AppText>{t('daily.nextTaskIn')}</AppText><Title>{remaining === null ? '—' : formatCountdown(remaining)}</Title><Muted>{remaining === null ? mobile('phase1.daily.noServerTime') : t('daily.midnightHint')}</Muted></Card>}
