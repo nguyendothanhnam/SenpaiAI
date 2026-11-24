@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { ExerciseSelectionNotice } from '../components/ExerciseSelectionNotice'
 import { Alert, AppState } from 'react-native'
 import { router, usePreventRemove } from 'expo-router'
 import { useMutation, useQuery } from 'react-query'
@@ -79,7 +80,8 @@ export function DailyExerciseScreen() {
   return <Screen>
     <Button secondary title={t('daily.overview')} onPress={() => router.back()} />
     {task.isError && <ErrorNotice message={getErrorMessage(task.error, i18n)} retry={() => void task.refetch()} />}
-    {mixedLevels(current, user?.current_jlpt_level) && <Muted>{i18n.t('mixedLevels', { ns: 'dailyStatus', level: user?.current_jlpt_level })}</Muted>}
+    <ExerciseSelectionNotice selections={current.items.map(item => item.payload.selection)} />
+    {mixedLevels(current, user?.current_jlpt_level) && !current.items.some(item => item.payload.selection?.fallback) && <Muted>{i18n.t('mixedLevels', { ns: 'dailyStatus', level: user?.current_jlpt_level })}</Muted>}
     <Progress current={current.progress.answered_items} total={current.progress.total_items} />
     {activeItem && current.status !== 'completed' && <QuestionCard key={`${current.task_id}:${activeItem.id}`} item={activeItem} index={current.items.findIndex((item) => item.id === activeItem.id)} total={current.items.length} busy={answering.isLoading || answering.isError} result={activeFeedback} onAnswer={(answer, time) => {
       if (answerLock.current) return

@@ -12,13 +12,17 @@ import LanguageSwitcher from './LanguageSwitcher'
 import NotificationBell from './notifications/NotificationBell'
 import SidebarNav from './layout/SidebarNav'
 import UserMenu from './layout/UserMenu'
+import { useQuery } from 'react-query'
+import { placementAPI } from '../services/placement'
 
-interface LayoutProps { children: ReactNode }
+interface LayoutProps { children: ReactNode; placementRequired?: boolean }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, placementRequired = false }: LayoutProps) {
   const { t } = useTranslation('nav')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user, logout } = useAuth()
+  const { data: placementStatus } = useQuery(['placement', 'status', user?.id], () => placementAPI.status().then(res => res.data), { enabled: Boolean(user) && !placementRequired, staleTime: 30000, retry: 1 })
+  const level = placementRequired || (placementStatus?.has_estimated_level === false && !placementStatus.has_manual_level) ? t('placement:unassessed') : user?.current_jlpt_level
   const { data: rewards } = useRewardsMe(user?.id)
   const { mode, resolvedMode, setMode, themeId, backgroundId } = useTheme()
   const theme = themes[themeId] || themes['classic']
@@ -43,7 +47,7 @@ export default function Layout({ children }: LayoutProps) {
         <aside className="theme-sidebar fixed inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col shadow-xl">
           <div className="flex items-center justify-between">{brand}<button type="button" onClick={() => setSidebarOpen(false)} aria-label={t('closeMenu')} className="mr-3 rounded-lg p-2 text-[color:var(--primary-contrast)] hover:bg-white/10"><X className="h-5 w-5" /></button></div>
           <SidebarNav onNavigate={() => setSidebarOpen(false)} />
-          <UserMenu username={user?.username} level={user?.current_jlpt_level} points={user?.exercise_points ?? 0} onLogout={logout} onNavigate={() => setSidebarOpen(false)} />
+          <UserMenu username={user?.username} level={level} points={rewards?.points_balance} onLogout={logout} onNavigate={() => setSidebarOpen(false)} />
         </aside>
       </div>
 
@@ -52,7 +56,7 @@ export default function Layout({ children }: LayoutProps) {
         <div className="theme-sidebar flex min-h-0 flex-1 flex-col border-r border-[color:var(--border)]">
           {brand}
           <SidebarNav />
-          <UserMenu username={user?.username} level={user?.current_jlpt_level} points={user?.exercise_points ?? 0} onLogout={logout} />
+          <UserMenu username={user?.username} level={level} points={rewards?.points_balance} onLogout={logout} />
         </div>
       </aside>
 
@@ -64,7 +68,7 @@ export default function Layout({ children }: LayoutProps) {
             <Link to="/shop" title={t('rewardPoints')} className="inline-flex items-center gap-1 rounded-pill bg-[color:var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-[color:var(--primary)] sm:px-3 sm:text-sm"><Coins className="h-4 w-4" /><span>{rewards?.points_balance ?? 0}</span></Link>
             <Link to="/daily" title={t('dailyStreak')} className="inline-flex items-center gap-1 rounded-pill bg-[color:var(--accent)] px-2.5 py-1.5 text-xs font-semibold text-[color:var(--primary)] sm:px-3 sm:text-sm"><Flame className="h-4 w-4" /><span>{rewards?.current_streak ?? 0}</span></Link>
             <span className="hidden text-sm text-[color:var(--text-muted)] md:inline">{t('jlptLevel')}</span>
-            <span className="rounded-pill bg-[color:var(--accent)] px-2 py-1 text-xs font-semibold text-[color:var(--primary)] sm:px-3 sm:text-sm">{user?.current_jlpt_level}</span>
+            <span className="rounded-pill bg-[color:var(--accent)] px-2 py-1 text-xs font-semibold text-[color:var(--primary)] sm:px-3 sm:text-sm">{level}</span>
             <LanguageSwitcher compact />
             <NotificationBell />
             <button type="button" onClick={toggleMode} aria-label={isDark ? t('switchLight') : t('switchDark')} title={t('mode', { mode })} className="rounded-full p-2 text-[color:var(--text-muted)] transition-colors hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]">{isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}</button>

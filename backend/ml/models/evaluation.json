@@ -1,0 +1,3071 @@
+{
+  "dataset": "new font renders, NOT independent real handwriting",
+  "fonts": [
+    "C:\\Windows\\Fonts\\UDDigiKyokashoN-R.ttc",
+    "C:\\Windows\\Fonts\\YuGothR.ttc"
+  ],
+  "samples": 1224,
+  "models": {
+    "previous": {
+      "classes": 245,
+      "by_level": {
+        "N5": {
+          "total": 158,
+          "top1": 157,
+          "top5": 158
+        },
+        "N4": {
+          "total": 332,
+          "top1": 332,
+          "top5": 332
+        },
+        "N3": {
+          "total": 734,
+          "top1": 0,
+          "top5": 0
+        }
+      },
+      "incorrect": [
+        {
+          "actual": "入",
+          "predicted": "人"
+        },
+        {
+          "actual": "才",
+          "predicted": "大"
+        },
+        {
+          "actual": "王",
+          "predicted": "工"
+        },
+        {
+          "actual": "石",
+          "predicted": "右"
+        },
+        {
+          "actual": "内",
+          "predicted": "肉"
+        },
+        {
+          "actual": "太",
+          "predicted": "大"
+        },
+        {
+          "actual": "引",
+          "predicted": "別"
+        },
+        {
+          "actual": "市",
+          "predicted": "右"
+        },
+        {
+          "actual": "他",
+          "predicted": "地"
+        },
+        {
+          "actual": "号",
+          "predicted": "場"
+        },
+        {
+          "actual": "平",
+          "predicted": "半"
+        },
+        {
+          "actual": "打",
+          "predicted": "切"
+        },
+        {
+          "actual": "申",
+          "predicted": "中"
+        },
+        {
+          "actual": "礼",
+          "predicted": "北"
+        },
+        {
+          "actual": "耳",
+          "predicted": "目"
+        },
+        {
+          "actual": "交",
+          "predicted": "夜"
+        },
+        {
+          "actual": "光",
+          "predicted": "北"
+        },
+        {
+          "actual": "回",
+          "predicted": "国"
+        },
+        {
+          "actual": "当",
+          "predicted": "者"
+        },
+        {
+          "actual": "米",
+          "predicted": "来"
+        },
+        {
+          "actual": "声",
+          "predicted": "売"
+        },
+        {
+          "actual": "形",
+          "predicted": "北"
+        },
+        {
+          "actual": "草",
+          "predicted": "車"
+        },
+        {
+          "actual": "化",
+          "predicted": "北"
+        },
+        {
+          "actual": "両",
+          "predicted": "画"
+        },
+        {
+          "actual": "全",
+          "predicted": "金"
+        },
+        {
+          "actual": "向",
+          "predicted": "色"
+        },
+        {
+          "actual": "曲",
+          "predicted": "出"
+        },
+        {
+          "actual": "次",
+          "predicted": "秋"
+        },
+        {
+          "actual": "直",
+          "predicted": "音"
+        },
+        {
+          "actual": "活",
+          "predicted": "話"
+        },
+        {
+          "actual": "点",
+          "predicted": "店"
+        },
+        {
+          "actual": "科",
+          "predicted": "料"
+        },
+        {
+          "actual": "首",
+          "predicted": "音"
+        },
+        {
+          "actual": "欠",
+          "predicted": "父"
+        },
+        {
+          "actual": "由",
+          "predicted": "出"
+        },
+        {
+          "actual": "民",
+          "predicted": "医"
+        },
+        {
+          "actual": "付",
+          "predicted": "代"
+        },
+        {
+          "actual": "失",
+          "predicted": "先"
+        },
+        {
+          "actual": "必",
+          "predicted": "送"
+        },
+        {
+          "actual": "未",
+          "predicted": "木"
+        },
+        {
+          "actual": "末",
+          "predicted": "木"
+        },
+        {
+          "actual": "記",
+          "predicted": "品"
+        },
+        {
+          "actual": "組",
+          "predicted": "紙"
+        },
+        {
+          "actual": "船",
+          "predicted": "始"
+        },
+        {
+          "actual": "雪",
+          "predicted": "事"
+        },
+        {
+          "actual": "支",
+          "predicted": "文"
+        },
+        {
+          "actual": "助",
+          "predicted": "動"
+        },
+        {
+          "actual": "君",
+          "predicted": "着"
+        },
+        {
+          "actual": "対",
+          "predicted": "力"
+        },
+        {
+          "actual": "局",
+          "predicted": "鳥"
+        },
+        {
+          "actual": "役",
+          "predicted": "夜"
+        },
+        {
+          "actual": "投",
+          "predicted": "教"
+        },
+        {
+          "actual": "決",
+          "predicted": "漢"
+        },
+        {
+          "actual": "馬",
+          "predicted": "特"
+        },
+        {
+          "actual": "番",
+          "predicted": "語"
+        },
+        {
+          "actual": "絵",
+          "predicted": "終"
+        },
+        {
+          "actual": "数",
+          "predicted": "教"
+        },
+        {
+          "actual": "所",
+          "predicted": "新"
+        },
+        {
+          "actual": "具",
+          "predicted": "員"
+        },
+        {
+          "actual": "受",
+          "predicted": "教"
+        },
+        {
+          "actual": "和",
+          "predicted": "知"
+        },
+        {
+          "actual": "定",
+          "predicted": "走"
+        },
+        {
+          "actual": "実",
+          "predicted": "英"
+        },
+        {
+          "actual": "泳",
+          "predicted": "別"
+        },
+        {
+          "actual": "苦",
+          "predicted": "音"
+        },
+        {
+          "actual": "表",
+          "predicted": "売"
+        },
+        {
+          "actual": "部",
+          "predicted": "野"
+        },
+        {
+          "actual": "乗",
+          "predicted": "来"
+        },
+        {
+          "actual": "客",
+          "predicted": "急"
+        },
+        {
+          "actual": "相",
+          "predicted": "花"
+        },
+        {
+          "actual": "美",
+          "predicted": "業"
+        },
+        {
+          "actual": "負",
+          "predicted": "貸"
+        },
+        {
+          "actual": "談",
+          "predicted": "教"
+        },
+        {
+          "actual": "要",
+          "predicted": "野"
+        },
+        {
+          "actual": "勝",
+          "predicted": "験"
+        },
+        {
+          "actual": "速",
+          "predicted": "送"
+        },
+        {
+          "actual": "配",
+          "predicted": "町"
+        },
+        {
+          "actual": "酒",
+          "predicted": "週"
+        },
+        {
+          "actual": "進",
+          "predicted": "送"
+        },
+        {
+          "actual": "落",
+          "predicted": "海"
+        },
+        {
+          "actual": "葉",
+          "predicted": "集"
+        },
+        {
+          "actual": "路",
+          "predicted": "強"
+        },
+        {
+          "actual": "鳴",
+          "predicted": "場"
+        },
+        {
+          "actual": "横",
+          "predicted": "族"
+        },
+        {
+          "actual": "調",
+          "predicted": "語"
+        },
+        {
+          "actual": "頭",
+          "predicted": "強"
+        },
+        {
+          "actual": "顔",
+          "predicted": "漢"
+        },
+        {
+          "actual": "最",
+          "predicted": "長"
+        },
+        {
+          "actual": "争",
+          "predicted": "字"
+        },
+        {
+          "actual": "伝",
+          "predicted": "体"
+        },
+        {
+          "actual": "共",
+          "predicted": "犬"
+        },
+        {
+          "actual": "好",
+          "predicted": "母"
+        },
+        {
+          "actual": "成",
+          "predicted": "試"
+        },
+        {
+          "actual": "老",
+          "predicted": "考"
+        },
+        {
+          "actual": "位",
+          "predicted": "金"
+        },
+        {
+          "actual": "初",
+          "predicted": "私"
+        },
+        {
+          "actual": "利",
+          "predicted": "私"
+        },
+        {
+          "actual": "努",
+          "predicted": "多"
+        },
+        {
+          "actual": "労",
+          "predicted": "考"
+        },
+        {
+          "actual": "命",
+          "predicted": "待"
+        },
+        {
+          "actual": "放",
+          "predicted": "校"
+        },
+        {
+          "actual": "昔",
+          "predicted": "音"
+        },
+        {
+          "actual": "育",
+          "predicted": "有"
+        },
+        {
+          "actual": "指",
+          "predicted": "始"
+        },
+        {
+          "actual": "神",
+          "predicted": "料"
+        },
+        {
+          "actual": "追",
+          "predicted": "道"
+        },
+        {
+          "actual": "戦",
+          "predicted": "教"
+        },
+        {
+          "actual": "良",
+          "predicted": "食"
+        },
+        {
+          "actual": "便",
+          "predicted": "使"
+        },
+        {
+          "actual": "働",
+          "predicted": "動"
+        },
+        {
+          "actual": "庭",
+          "predicted": "族"
+        },
+        {
+          "actual": "息",
+          "predicted": "自"
+        },
+        {
+          "actual": "流",
+          "predicted": "京"
+        },
+        {
+          "actual": "消",
+          "predicted": "洋"
+        },
+        {
+          "actual": "都",
+          "predicted": "教"
+        },
+        {
+          "actual": "商",
+          "predicted": "南"
+        },
+        {
+          "actual": "深",
+          "predicted": "来"
+        },
+        {
+          "actual": "球",
+          "predicted": "家"
+        },
+        {
+          "actual": "陽",
+          "predicted": "場"
+        },
+        {
+          "actual": "寒",
+          "predicted": "黒"
+        },
+        {
+          "actual": "悲",
+          "predicted": "悪"
+        },
+        {
+          "actual": "期",
+          "predicted": "朝"
+        },
+        {
+          "actual": "歯",
+          "predicted": "強"
+        },
+        {
+          "actual": "港",
+          "predicted": "送"
+        },
+        {
+          "actual": "登",
+          "predicted": "後"
+        },
+        {
+          "actual": "亡",
+          "predicted": "古"
+        },
+        {
+          "actual": "合",
+          "predicted": "台"
+        },
+        {
+          "actual": "予",
+          "predicted": "子"
+        },
+        {
+          "actual": "反",
+          "predicted": "長"
+        },
+        {
+          "actual": "返",
+          "predicted": "近"
+        },
+        {
+          "actual": "宿",
+          "predicted": "待"
+        },
+        {
+          "actual": "想",
+          "predicted": "週"
+        },
+        {
+          "actual": "感",
+          "predicted": "急"
+        },
+        {
+          "actual": "暗",
+          "predicted": "時"
+        },
+        {
+          "actual": "様",
+          "predicted": "後"
+        },
+        {
+          "actual": "福",
+          "predicted": "語"
+        },
+        {
+          "actual": "殺",
+          "predicted": "秋"
+        },
+        {
+          "actual": "然",
+          "predicted": "秋"
+        },
+        {
+          "actual": "熱",
+          "predicted": "楽"
+        },
+        {
+          "actual": "選",
+          "predicted": "運"
+        },
+        {
+          "actual": "願",
+          "predicted": "服"
+        },
+        {
+          "actual": "情",
+          "predicted": "借"
+        },
+        {
+          "actual": "疑",
+          "predicted": "楽"
+        },
+        {
+          "actual": "皆",
+          "predicted": "自"
+        },
+        {
+          "actual": "例",
+          "predicted": "切"
+        },
+        {
+          "actual": "参",
+          "predicted": "会"
+        },
+        {
+          "actual": "完",
+          "predicted": "売"
+        },
+        {
+          "actual": "念",
+          "predicted": "急"
+        },
+        {
+          "actual": "折",
+          "predicted": "新"
+        },
+        {
+          "actual": "望",
+          "predicted": "室"
+        },
+        {
+          "actual": "束",
+          "predicted": "東"
+        },
+        {
+          "actual": "残",
+          "predicted": "英"
+        },
+        {
+          "actual": "求",
+          "predicted": "水"
+        },
+        {
+          "actual": "約",
+          "predicted": "名"
+        },
+        {
+          "actual": "性",
+          "predicted": "世"
+        },
+        {
+          "actual": "格",
+          "predicted": "海"
+        },
+        {
+          "actual": "能",
+          "predicted": "発"
+        },
+        {
+          "actual": "術",
+          "predicted": "作"
+        },
+        {
+          "actual": "晴",
+          "predicted": "時"
+        },
+        {
+          "actual": "列",
+          "predicted": "外"
+        },
+        {
+          "actual": "式",
+          "predicted": "犬"
+        },
+        {
+          "actual": "信",
+          "predicted": "借"
+        },
+        {
+          "actual": "単",
+          "predicted": "堂"
+        },
+        {
+          "actual": "変",
+          "predicted": "夜"
+        },
+        {
+          "actual": "夫",
+          "predicted": "大"
+        },
+        {
+          "actual": "昨",
+          "predicted": "半"
+        },
+        {
+          "actual": "法",
+          "predicted": "送"
+        },
+        {
+          "actual": "晩",
+          "predicted": "院"
+        },
+        {
+          "actual": "猫",
+          "predicted": "始"
+        },
+        {
+          "actual": "園",
+          "predicted": "聞"
+        },
+        {
+          "actual": "遠",
+          "predicted": "送"
+        },
+        {
+          "actual": "係",
+          "predicted": "終"
+        },
+        {
+          "actual": "取",
+          "predicted": "歌"
+        },
+        {
+          "actual": "守",
+          "predicted": "字"
+        },
+        {
+          "actual": "幸",
+          "predicted": "事"
+        },
+        {
+          "actual": "箱",
+          "predicted": "館"
+        },
+        {
+          "actual": "面",
+          "predicted": "画"
+        },
+        {
+          "actual": "喜",
+          "predicted": "事"
+        },
+        {
+          "actual": "治",
+          "predicted": "持"
+        },
+        {
+          "actual": "笑",
+          "predicted": "英"
+        },
+        {
+          "actual": "辞",
+          "predicted": "音"
+        },
+        {
+          "actual": "関",
+          "predicted": "開"
+        },
+        {
+          "actual": "政",
+          "predicted": "女"
+        },
+        {
+          "actual": "留",
+          "predicted": "習"
+        },
+        {
+          "actual": "険",
+          "predicted": "院"
+        },
+        {
+          "actual": "危",
+          "predicted": "色"
+        },
+        {
+          "actual": "存",
+          "predicted": "海"
+        },
+        {
+          "actual": "原",
+          "predicted": "思"
+        },
+        {
+          "actual": "薬",
+          "predicted": "楽"
+        },
+        {
+          "actual": "側",
+          "predicted": "図"
+        },
+        {
+          "actual": "席",
+          "predicted": "南"
+        },
+        {
+          "actual": "敗",
+          "predicted": "教"
+        },
+        {
+          "actual": "果",
+          "predicted": "黒"
+        },
+        {
+          "actual": "因",
+          "predicted": "図"
+        },
+        {
+          "actual": "常",
+          "predicted": "弟"
+        },
+        {
+          "actual": "識",
+          "predicted": "試"
+        },
+        {
+          "actual": "非",
+          "predicted": "来"
+        },
+        {
+          "actual": "官",
+          "predicted": "自"
+        },
+        {
+          "actual": "察",
+          "predicted": "家"
+        },
+        {
+          "actual": "愛",
+          "predicted": "夏"
+        },
+        {
+          "actual": "警",
+          "predicted": "書"
+        },
+        {
+          "actual": "覚",
+          "predicted": "弟"
+        },
+        {
+          "actual": "説",
+          "predicted": "読"
+        },
+        {
+          "actual": "告",
+          "predicted": "牛"
+        },
+        {
+          "actual": "種",
+          "predicted": "運"
+        },
+        {
+          "actual": "達",
+          "predicted": "走"
+        },
+        {
+          "actual": "類",
+          "predicted": "親"
+        },
+        {
+          "actual": "報",
+          "predicted": "朝"
+        },
+        {
+          "actual": "等",
+          "predicted": "事"
+        },
+        {
+          "actual": "座",
+          "predicted": "度"
+        },
+        {
+          "actual": "忘",
+          "predicted": "意"
+        },
+        {
+          "actual": "洗",
+          "predicted": "先"
+        },
+        {
+          "actual": "許",
+          "predicted": "計"
+        },
+        {
+          "actual": "静",
+          "predicted": "者"
+        },
+        {
+          "actual": "煙",
+          "predicted": "理"
+        },
+        {
+          "actual": "加",
+          "predicted": "九"
+        },
+        {
+          "actual": "容",
+          "predicted": "答"
+        },
+        {
+          "actual": "易",
+          "predicted": "場"
+        },
+        {
+          "actual": "財",
+          "predicted": "開"
+        },
+        {
+          "actual": "若",
+          "predicted": "考"
+        },
+        {
+          "actual": "忙",
+          "predicted": "世"
+        },
+        {
+          "actual": "徒",
+          "predicted": "住"
+        },
+        {
+          "actual": "得",
+          "predicted": "特"
+        },
+        {
+          "actual": "続",
+          "predicted": "使"
+        },
+        {
+          "actual": "連",
+          "predicted": "運"
+        },
+        {
+          "actual": "困",
+          "predicted": "風"
+        },
+        {
+          "actual": "機",
+          "predicted": "後"
+        },
+        {
+          "actual": "飛",
+          "predicted": "死"
+        },
+        {
+          "actual": "害",
+          "predicted": "書"
+        },
+        {
+          "actual": "余",
+          "predicted": "会"
+        },
+        {
+          "actual": "難",
+          "predicted": "業"
+        },
+        {
+          "actual": "確",
+          "predicted": "曜"
+        },
+        {
+          "actual": "在",
+          "predicted": "左"
+        },
+        {
+          "actual": "夢",
+          "predicted": "事"
+        },
+        {
+          "actual": "産",
+          "predicted": "注"
+        },
+        {
+          "actual": "倒",
+          "predicted": "風"
+        },
+        {
+          "actual": "妻",
+          "predicted": "歩"
+        },
+        {
+          "actual": "議",
+          "predicted": "読"
+        },
+        {
+          "actual": "犯",
+          "predicted": "知"
+        },
+        {
+          "actual": "罪",
+          "predicted": "黒"
+        },
+        {
+          "actual": "論",
+          "predicted": "読"
+        },
+        {
+          "actual": "経",
+          "predicted": "終"
+        },
+        {
+          "actual": "済",
+          "predicted": "音"
+        },
+        {
+          "actual": "判",
+          "predicted": "朝"
+        },
+        {
+          "actual": "制",
+          "predicted": "朝"
+        },
+        {
+          "actual": "務",
+          "predicted": "後"
+        },
+        {
+          "actual": "資",
+          "predicted": "質"
+        },
+        {
+          "actual": "権",
+          "predicted": "海"
+        },
+        {
+          "actual": "件",
+          "predicted": "体"
+        },
+        {
+          "actual": "断",
+          "predicted": "野"
+        },
+        {
+          "actual": "任",
+          "predicted": "仕"
+        },
+        {
+          "actual": "責",
+          "predicted": "真"
+        },
+        {
+          "actual": "増",
+          "predicted": "始"
+        },
+        {
+          "actual": "解",
+          "predicted": "研"
+        },
+        {
+          "actual": "際",
+          "predicted": "曜"
+        },
+        {
+          "actual": "認",
+          "predicted": "語"
+        },
+        {
+          "actual": "過",
+          "predicted": "週"
+        },
+        {
+          "actual": "寝",
+          "predicted": "意"
+        },
+        {
+          "actual": "置",
+          "predicted": "聞"
+        },
+        {
+          "actual": "費",
+          "predicted": "買"
+        },
+        {
+          "actual": "示",
+          "predicted": "元"
+        },
+        {
+          "actual": "観",
+          "predicted": "銀"
+        },
+        {
+          "actual": "値",
+          "predicted": "借"
+        },
+        {
+          "actual": "吸",
+          "predicted": "映"
+        },
+        {
+          "actual": "状",
+          "predicted": "秋"
+        },
+        {
+          "actual": "収",
+          "predicted": "以"
+        },
+        {
+          "actual": "職",
+          "predicted": "間"
+        },
+        {
+          "actual": "規",
+          "predicted": "親"
+        },
+        {
+          "actual": "割",
+          "predicted": "動"
+        },
+        {
+          "actual": "演",
+          "predicted": "漢"
+        },
+        {
+          "actual": "師",
+          "predicted": "飯"
+        },
+        {
+          "actual": "備",
+          "predicted": "借"
+        },
+        {
+          "actual": "優",
+          "predicted": "医"
+        },
+        {
+          "actual": "宅",
+          "predicted": "考"
+        },
+        {
+          "actual": "現",
+          "predicted": "場"
+        },
+        {
+          "actual": "呼",
+          "predicted": "野"
+        },
+        {
+          "actual": "違",
+          "predicted": "運"
+        },
+        {
+          "actual": "差",
+          "predicted": "走"
+        },
+        {
+          "actual": "供",
+          "predicted": "映"
+        },
+        {
+          "actual": "限",
+          "predicted": "曜"
+        },
+        {
+          "actual": "与",
+          "predicted": "今"
+        },
+        {
+          "actual": "渡",
+          "predicted": "海"
+        },
+        {
+          "actual": "景",
+          "predicted": "早"
+        },
+        {
+          "actual": "抜",
+          "predicted": "友"
+        },
+        {
+          "actual": "候",
+          "predicted": "医"
+        },
+        {
+          "actual": "構",
+          "predicted": "借"
+        },
+        {
+          "actual": "捕",
+          "predicted": "帰"
+        },
+        {
+          "actual": "慣",
+          "predicted": "買"
+        },
+        {
+          "actual": "満",
+          "predicted": "海"
+        },
+        {
+          "actual": "掛",
+          "predicted": "強"
+        },
+        {
+          "actual": "居",
+          "predicted": "早"
+        },
+        {
+          "actual": "突",
+          "predicted": "英"
+        },
+        {
+          "actual": "招",
+          "predicted": "地"
+        },
+        {
+          "actual": "段",
+          "predicted": "以"
+        },
+        {
+          "actual": "腹",
+          "predicted": "度"
+        },
+        {
+          "actual": "痛",
+          "predicted": "海"
+        },
+        {
+          "actual": "退",
+          "predicted": "運"
+        },
+        {
+          "actual": "迷",
+          "predicted": "送"
+        },
+        {
+          "actual": "訪",
+          "predicted": "試"
+        },
+        {
+          "actual": "怒",
+          "predicted": "冬"
+        },
+        {
+          "actual": "眠",
+          "predicted": "服"
+        },
+        {
+          "actual": "靴",
+          "predicted": "秋"
+        },
+        {
+          "actual": "途",
+          "predicted": "注"
+        },
+        {
+          "actual": "給",
+          "predicted": "始"
+        },
+        {
+          "actual": "冷",
+          "predicted": "今"
+        },
+        {
+          "actual": "処",
+          "predicted": "理"
+        },
+        {
+          "actual": "婦",
+          "predicted": "帰"
+        },
+        {
+          "actual": "程",
+          "predicted": "悪"
+        },
+        {
+          "actual": "精",
+          "predicted": "特"
+        },
+        {
+          "actual": "絶",
+          "predicted": "物"
+        },
+        {
+          "actual": "杯",
+          "predicted": "新"
+        },
+        {
+          "actual": "積",
+          "predicted": "族"
+        },
+        {
+          "actual": "寄",
+          "predicted": "考"
+        },
+        {
+          "actual": "娘",
+          "predicted": "地"
+        },
+        {
+          "actual": "怖",
+          "predicted": "姉"
+        },
+        {
+          "actual": "恐",
+          "predicted": "私"
+        },
+        {
+          "actual": "婚",
+          "predicted": "始"
+        },
+        {
+          "actual": "遊",
+          "predicted": "送"
+        },
+        {
+          "actual": "貧",
+          "predicted": "貸"
+        },
+        {
+          "actual": "適",
+          "predicted": "通"
+        },
+        {
+          "actual": "押",
+          "predicted": "料"
+        },
+        {
+          "actual": "更",
+          "predicted": "英"
+        },
+        {
+          "actual": "浮",
+          "predicted": "場"
+        },
+        {
+          "actual": "越",
+          "predicted": "勉"
+        },
+        {
+          "actual": "背",
+          "predicted": "青"
+        },
+        {
+          "actual": "盗",
+          "predicted": "北"
+        },
+        {
+          "actual": "除",
+          "predicted": "験"
+        },
+        {
+          "actual": "幾",
+          "predicted": "楽"
+        },
+        {
+          "actual": "散",
+          "predicted": "教"
+        },
+        {
+          "actual": "似",
+          "predicted": "映"
+        },
+        {
+          "actual": "富",
+          "predicted": "高"
+        },
+        {
+          "actual": "探",
+          "predicted": "楽"
+        },
+        {
+          "actual": "迎",
+          "predicted": "理"
+        },
+        {
+          "actual": "祖",
+          "predicted": "私"
+        },
+        {
+          "actual": "雑",
+          "predicted": "始"
+        },
+        {
+          "actual": "賛",
+          "predicted": "後"
+        },
+        {
+          "actual": "込",
+          "predicted": "送"
+        },
+        {
+          "actual": "欲",
+          "predicted": "飲"
+        },
+        {
+          "actual": "閉",
+          "predicted": "開"
+        },
+        {
+          "actual": "窓",
+          "predicted": "急"
+        },
+        {
+          "actual": "否",
+          "predicted": "西"
+        },
+        {
+          "actual": "暮",
+          "predicted": "意"
+        },
+        {
+          "actual": "誤",
+          "predicted": "教"
+        },
+        {
+          "actual": "降",
+          "predicted": "後"
+        },
+        {
+          "actual": "勤",
+          "predicted": "動"
+        },
+        {
+          "actual": "刻",
+          "predicted": "切"
+        },
+        {
+          "actual": "遅",
+          "predicted": "運"
+        },
+        {
+          "actual": "破",
+          "predicted": "映"
+        },
+        {
+          "actual": "互",
+          "predicted": "五"
+        },
+        {
+          "actual": "彼",
+          "predicted": "使"
+        },
+        {
+          "actual": "恥",
+          "predicted": "町"
+        },
+        {
+          "actual": "払",
+          "predicted": "私"
+        },
+        {
+          "actual": "舞",
+          "predicted": "悪"
+        },
+        {
+          "actual": "頼",
+          "predicted": "親"
+        },
+        {
+          "actual": "戻",
+          "predicted": "長"
+        },
+        {
+          "actual": "抱",
+          "predicted": "地"
+        },
+        {
+          "actual": "緒",
+          "predicted": "終"
+        },
+        {
+          "actual": "逃",
+          "predicted": "送"
+        },
+        {
+          "actual": "御",
+          "predicted": "銀"
+        },
+        {
+          "actual": "吹",
+          "predicted": "女"
+        },
+        {
+          "actual": "到",
+          "predicted": "動"
+        },
+        {
+          "actual": "髪",
+          "predicted": "長"
+        },
+        {
+          "actual": "疲",
+          "predicted": "族"
+        },
+        {
+          "actual": "歳",
+          "predicted": "読"
+        },
+        {
+          "actual": "偶",
+          "predicted": "間"
+        },
+        {
+          "actual": "偉",
+          "predicted": "借"
+        },
+        {
+          "actual": "頂",
+          "predicted": "西"
+        },
+        {
+          "actual": "才",
+          "predicted": "子"
+        },
+        {
+          "actual": "王",
+          "predicted": "工"
+        },
+        {
+          "actual": "石",
+          "predicted": "百"
+        },
+        {
+          "actual": "内",
+          "predicted": "肉"
+        },
+        {
+          "actual": "太",
+          "predicted": "大"
+        },
+        {
+          "actual": "引",
+          "predicted": "別"
+        },
+        {
+          "actual": "市",
+          "predicted": "南"
+        },
+        {
+          "actual": "他",
+          "predicted": "地"
+        },
+        {
+          "actual": "号",
+          "predicted": "男"
+        },
+        {
+          "actual": "平",
+          "predicted": "半"
+        },
+        {
+          "actual": "打",
+          "predicted": "切"
+        },
+        {
+          "actual": "申",
+          "predicted": "中"
+        },
+        {
+          "actual": "礼",
+          "predicted": "北"
+        },
+        {
+          "actual": "耳",
+          "predicted": "百"
+        },
+        {
+          "actual": "交",
+          "predicted": "夜"
+        },
+        {
+          "actual": "光",
+          "predicted": "北"
+        },
+        {
+          "actual": "回",
+          "predicted": "国"
+        },
+        {
+          "actual": "当",
+          "predicted": "者"
+        },
+        {
+          "actual": "米",
+          "predicted": "来"
+        },
+        {
+          "actual": "声",
+          "predicted": "店"
+        },
+        {
+          "actual": "形",
+          "predicted": "死"
+        },
+        {
+          "actual": "草",
+          "predicted": "車"
+        },
+        {
+          "actual": "化",
+          "predicted": "北"
+        },
+        {
+          "actual": "両",
+          "predicted": "画"
+        },
+        {
+          "actual": "全",
+          "predicted": "金"
+        },
+        {
+          "actual": "向",
+          "predicted": "白"
+        },
+        {
+          "actual": "曲",
+          "predicted": "出"
+        },
+        {
+          "actual": "次",
+          "predicted": "女"
+        },
+        {
+          "actual": "直",
+          "predicted": "音"
+        },
+        {
+          "actual": "活",
+          "predicted": "海"
+        },
+        {
+          "actual": "点",
+          "predicted": "店"
+        },
+        {
+          "actual": "科",
+          "predicted": "料"
+        },
+        {
+          "actual": "首",
+          "predicted": "音"
+        },
+        {
+          "actual": "欠",
+          "predicted": "父"
+        },
+        {
+          "actual": "由",
+          "predicted": "出"
+        },
+        {
+          "actual": "民",
+          "predicted": "医"
+        },
+        {
+          "actual": "付",
+          "predicted": "代"
+        },
+        {
+          "actual": "失",
+          "predicted": "先"
+        },
+        {
+          "actual": "必",
+          "predicted": "私"
+        },
+        {
+          "actual": "未",
+          "predicted": "木"
+        },
+        {
+          "actual": "末",
+          "predicted": "来"
+        },
+        {
+          "actual": "記",
+          "predicted": "品"
+        },
+        {
+          "actual": "組",
+          "predicted": "勉"
+        },
+        {
+          "actual": "船",
+          "predicted": "始"
+        },
+        {
+          "actual": "雪",
+          "predicted": "事"
+        },
+        {
+          "actual": "支",
+          "predicted": "文"
+        },
+        {
+          "actual": "助",
+          "predicted": "動"
+        },
+        {
+          "actual": "君",
+          "predicted": "習"
+        },
+        {
+          "actual": "対",
+          "predicted": "力"
+        },
+        {
+          "actual": "局",
+          "predicted": "同"
+        },
+        {
+          "actual": "役",
+          "predicted": "父"
+        },
+        {
+          "actual": "投",
+          "predicted": "教"
+        },
+        {
+          "actual": "決",
+          "predicted": "漢"
+        },
+        {
+          "actual": "馬",
+          "predicted": "病"
+        },
+        {
+          "actual": "番",
+          "predicted": "語"
+        },
+        {
+          "actual": "絵",
+          "predicted": "後"
+        },
+        {
+          "actual": "数",
+          "predicted": "教"
+        },
+        {
+          "actual": "所",
+          "predicted": "雨"
+        },
+        {
+          "actual": "具",
+          "predicted": "員"
+        },
+        {
+          "actual": "受",
+          "predicted": "夏"
+        },
+        {
+          "actual": "和",
+          "predicted": "知"
+        },
+        {
+          "actual": "定",
+          "predicted": "走"
+        },
+        {
+          "actual": "実",
+          "predicted": "英"
+        },
+        {
+          "actual": "泳",
+          "predicted": "別"
+        },
+        {
+          "actual": "苦",
+          "predicted": "音"
+        },
+        {
+          "actual": "表",
+          "predicted": "去"
+        },
+        {
+          "actual": "部",
+          "predicted": "北"
+        },
+        {
+          "actual": "乗",
+          "predicted": "東"
+        },
+        {
+          "actual": "客",
+          "predicted": "冬"
+        },
+        {
+          "actual": "相",
+          "predicted": "花"
+        },
+        {
+          "actual": "美",
+          "predicted": "業"
+        },
+        {
+          "actual": "負",
+          "predicted": "貸"
+        },
+        {
+          "actual": "談",
+          "predicted": "教"
+        },
+        {
+          "actual": "要",
+          "predicted": "野"
+        },
+        {
+          "actual": "勝",
+          "predicted": "時"
+        },
+        {
+          "actual": "速",
+          "predicted": "運"
+        },
+        {
+          "actual": "配",
+          "predicted": "町"
+        },
+        {
+          "actual": "酒",
+          "predicted": "西"
+        },
+        {
+          "actual": "進",
+          "predicted": "送"
+        },
+        {
+          "actual": "落",
+          "predicted": "海"
+        },
+        {
+          "actual": "葉",
+          "predicted": "集"
+        },
+        {
+          "actual": "路",
+          "predicted": "強"
+        },
+        {
+          "actual": "鳴",
+          "predicted": "曜"
+        },
+        {
+          "actual": "横",
+          "predicted": "族"
+        },
+        {
+          "actual": "調",
+          "predicted": "開"
+        },
+        {
+          "actual": "頭",
+          "predicted": "服"
+        },
+        {
+          "actual": "顔",
+          "predicted": "漢"
+        },
+        {
+          "actual": "最",
+          "predicted": "長"
+        },
+        {
+          "actual": "争",
+          "predicted": "字"
+        },
+        {
+          "actual": "伝",
+          "predicted": "住"
+        },
+        {
+          "actual": "共",
+          "predicted": "英"
+        },
+        {
+          "actual": "好",
+          "predicted": "海"
+        },
+        {
+          "actual": "成",
+          "predicted": "服"
+        },
+        {
+          "actual": "老",
+          "predicted": "考"
+        },
+        {
+          "actual": "位",
+          "predicted": "色"
+        },
+        {
+          "actual": "初",
+          "predicted": "切"
+        },
+        {
+          "actual": "利",
+          "predicted": "料"
+        },
+        {
+          "actual": "努",
+          "predicted": "究"
+        },
+        {
+          "actual": "労",
+          "predicted": "弟"
+        },
+        {
+          "actual": "命",
+          "predicted": "金"
+        },
+        {
+          "actual": "放",
+          "predicted": "族"
+        },
+        {
+          "actual": "昔",
+          "predicted": "音"
+        },
+        {
+          "actual": "育",
+          "predicted": "有"
+        },
+        {
+          "actual": "指",
+          "predicted": "始"
+        },
+        {
+          "actual": "神",
+          "predicted": "料"
+        },
+        {
+          "actual": "追",
+          "predicted": "道"
+        },
+        {
+          "actual": "戦",
+          "predicted": "教"
+        },
+        {
+          "actual": "良",
+          "predicted": "度"
+        },
+        {
+          "actual": "便",
+          "predicted": "使"
+        },
+        {
+          "actual": "働",
+          "predicted": "動"
+        },
+        {
+          "actual": "庭",
+          "predicted": "起"
+        },
+        {
+          "actual": "息",
+          "predicted": "鳥"
+        },
+        {
+          "actual": "流",
+          "predicted": "売"
+        },
+        {
+          "actual": "消",
+          "predicted": "洋"
+        },
+        {
+          "actual": "都",
+          "predicted": "秋"
+        },
+        {
+          "actual": "商",
+          "predicted": "南"
+        },
+        {
+          "actual": "深",
+          "predicted": "黒"
+        },
+        {
+          "actual": "球",
+          "predicted": "家"
+        },
+        {
+          "actual": "陽",
+          "predicted": "場"
+        },
+        {
+          "actual": "寒",
+          "predicted": "黒"
+        },
+        {
+          "actual": "悲",
+          "predicted": "悪"
+        },
+        {
+          "actual": "期",
+          "predicted": "朝"
+        },
+        {
+          "actual": "歯",
+          "predicted": "強"
+        },
+        {
+          "actual": "港",
+          "predicted": "送"
+        },
+        {
+          "actual": "登",
+          "predicted": "金"
+        },
+        {
+          "actual": "亡",
+          "predicted": "古"
+        },
+        {
+          "actual": "合",
+          "predicted": "台"
+        },
+        {
+          "actual": "予",
+          "predicted": "子"
+        },
+        {
+          "actual": "反",
+          "predicted": "度"
+        },
+        {
+          "actual": "返",
+          "predicted": "近"
+        },
+        {
+          "actual": "宿",
+          "predicted": "南"
+        },
+        {
+          "actual": "想",
+          "predicted": "思"
+        },
+        {
+          "actual": "感",
+          "predicted": "思"
+        },
+        {
+          "actual": "暗",
+          "predicted": "時"
+        },
+        {
+          "actual": "様",
+          "predicted": "族"
+        },
+        {
+          "actual": "福",
+          "predicted": "海"
+        },
+        {
+          "actual": "殺",
+          "predicted": "秋"
+        },
+        {
+          "actual": "然",
+          "predicted": "妹"
+        },
+        {
+          "actual": "熱",
+          "predicted": "魚"
+        },
+        {
+          "actual": "選",
+          "predicted": "運"
+        },
+        {
+          "actual": "願",
+          "predicted": "服"
+        },
+        {
+          "actual": "情",
+          "predicted": "借"
+        },
+        {
+          "actual": "疑",
+          "predicted": "楽"
+        },
+        {
+          "actual": "皆",
+          "predicted": "音"
+        },
+        {
+          "actual": "例",
+          "predicted": "切"
+        },
+        {
+          "actual": "参",
+          "predicted": "歩"
+        },
+        {
+          "actual": "完",
+          "predicted": "売"
+        },
+        {
+          "actual": "念",
+          "predicted": "急"
+        },
+        {
+          "actual": "折",
+          "predicted": "新"
+        },
+        {
+          "actual": "望",
+          "predicted": "室"
+        },
+        {
+          "actual": "束",
+          "predicted": "東"
+        },
+        {
+          "actual": "残",
+          "predicted": "送"
+        },
+        {
+          "actual": "求",
+          "predicted": "水"
+        },
+        {
+          "actual": "約",
+          "predicted": "名"
+        },
+        {
+          "actual": "性",
+          "predicted": "世"
+        },
+        {
+          "actual": "格",
+          "predicted": "終"
+        },
+        {
+          "actual": "能",
+          "predicted": "発"
+        },
+        {
+          "actual": "術",
+          "predicted": "雨"
+        },
+        {
+          "actual": "晴",
+          "predicted": "時"
+        },
+        {
+          "actual": "列",
+          "predicted": "外"
+        },
+        {
+          "actual": "式",
+          "predicted": "犬"
+        },
+        {
+          "actual": "信",
+          "predicted": "借"
+        },
+        {
+          "actual": "単",
+          "predicted": "堂"
+        },
+        {
+          "actual": "変",
+          "predicted": "夜"
+        },
+        {
+          "actual": "夫",
+          "predicted": "大"
+        },
+        {
+          "actual": "昨",
+          "predicted": "作"
+        },
+        {
+          "actual": "法",
+          "predicted": "送"
+        },
+        {
+          "actual": "晩",
+          "predicted": "院"
+        },
+        {
+          "actual": "猫",
+          "predicted": "始"
+        },
+        {
+          "actual": "園",
+          "predicted": "聞"
+        },
+        {
+          "actual": "遠",
+          "predicted": "送"
+        },
+        {
+          "actual": "係",
+          "predicted": "終"
+        },
+        {
+          "actual": "取",
+          "predicted": "服"
+        },
+        {
+          "actual": "守",
+          "predicted": "字"
+        },
+        {
+          "actual": "幸",
+          "predicted": "事"
+        },
+        {
+          "actual": "箱",
+          "predicted": "館"
+        },
+        {
+          "actual": "面",
+          "predicted": "画"
+        },
+        {
+          "actual": "喜",
+          "predicted": "青"
+        },
+        {
+          "actual": "治",
+          "predicted": "着"
+        },
+        {
+          "actual": "笑",
+          "predicted": "英"
+        },
+        {
+          "actual": "辞",
+          "predicted": "音"
+        },
+        {
+          "actual": "関",
+          "predicted": "開"
+        },
+        {
+          "actual": "政",
+          "predicted": "女"
+        },
+        {
+          "actual": "留",
+          "predicted": "習"
+        },
+        {
+          "actual": "険",
+          "predicted": "院"
+        },
+        {
+          "actual": "危",
+          "predicted": "色"
+        },
+        {
+          "actual": "存",
+          "predicted": "待"
+        },
+        {
+          "actual": "原",
+          "predicted": "思"
+        },
+        {
+          "actual": "薬",
+          "predicted": "楽"
+        },
+        {
+          "actual": "側",
+          "predicted": "図"
+        },
+        {
+          "actual": "席",
+          "predicted": "南"
+        },
+        {
+          "actual": "敗",
+          "predicted": "教"
+        },
+        {
+          "actual": "果",
+          "predicted": "黒"
+        },
+        {
+          "actual": "因",
+          "predicted": "図"
+        },
+        {
+          "actual": "常",
+          "predicted": "弟"
+        },
+        {
+          "actual": "識",
+          "predicted": "試"
+        },
+        {
+          "actual": "非",
+          "predicted": "半"
+        },
+        {
+          "actual": "官",
+          "predicted": "自"
+        },
+        {
+          "actual": "察",
+          "predicted": "家"
+        },
+        {
+          "actual": "愛",
+          "predicted": "夏"
+        },
+        {
+          "actual": "警",
+          "predicted": "書"
+        },
+        {
+          "actual": "覚",
+          "predicted": "貸"
+        },
+        {
+          "actual": "説",
+          "predicted": "読"
+        },
+        {
+          "actual": "告",
+          "predicted": "台"
+        },
+        {
+          "actual": "種",
+          "predicted": "運"
+        },
+        {
+          "actual": "達",
+          "predicted": "送"
+        },
+        {
+          "actual": "類",
+          "predicted": "親"
+        },
+        {
+          "actual": "報",
+          "predicted": "教"
+        },
+        {
+          "actual": "等",
+          "predicted": "事"
+        },
+        {
+          "actual": "座",
+          "predicted": "度"
+        },
+        {
+          "actual": "忘",
+          "predicted": "店"
+        },
+        {
+          "actual": "洗",
+          "predicted": "先"
+        },
+        {
+          "actual": "許",
+          "predicted": "計"
+        },
+        {
+          "actual": "静",
+          "predicted": "計"
+        },
+        {
+          "actual": "煙",
+          "predicted": "理"
+        },
+        {
+          "actual": "加",
+          "predicted": "別"
+        },
+        {
+          "actual": "容",
+          "predicted": "答"
+        },
+        {
+          "actual": "易",
+          "predicted": "場"
+        },
+        {
+          "actual": "財",
+          "predicted": "物"
+        },
+        {
+          "actual": "若",
+          "predicted": "考"
+        },
+        {
+          "actual": "忙",
+          "predicted": "世"
+        },
+        {
+          "actual": "徒",
+          "predicted": "使"
+        },
+        {
+          "actual": "得",
+          "predicted": "電"
+        },
+        {
+          "actual": "続",
+          "predicted": "使"
+        },
+        {
+          "actual": "連",
+          "predicted": "運"
+        },
+        {
+          "actual": "困",
+          "predicted": "田"
+        },
+        {
+          "actual": "機",
+          "predicted": "後"
+        },
+        {
+          "actual": "飛",
+          "predicted": "研"
+        },
+        {
+          "actual": "害",
+          "predicted": "書"
+        },
+        {
+          "actual": "余",
+          "predicted": "会"
+        },
+        {
+          "actual": "難",
+          "predicted": "業"
+        },
+        {
+          "actual": "確",
+          "predicted": "曜"
+        },
+        {
+          "actual": "在",
+          "predicted": "左"
+        },
+        {
+          "actual": "夢",
+          "predicted": "事"
+        },
+        {
+          "actual": "産",
+          "predicted": "注"
+        },
+        {
+          "actual": "倒",
+          "predicted": "風"
+        },
+        {
+          "actual": "妻",
+          "predicted": "歩"
+        },
+        {
+          "actual": "議",
+          "predicted": "読"
+        },
+        {
+          "actual": "犯",
+          "predicted": "知"
+        },
+        {
+          "actual": "罪",
+          "predicted": "業"
+        },
+        {
+          "actual": "論",
+          "predicted": "読"
+        },
+        {
+          "actual": "経",
+          "predicted": "紙"
+        },
+        {
+          "actual": "済",
+          "predicted": "音"
+        },
+        {
+          "actual": "判",
+          "predicted": "朝"
+        },
+        {
+          "actual": "制",
+          "predicted": "朝"
+        },
+        {
+          "actual": "務",
+          "predicted": "後"
+        },
+        {
+          "actual": "資",
+          "predicted": "質"
+        },
+        {
+          "actual": "権",
+          "predicted": "海"
+        },
+        {
+          "actual": "件",
+          "predicted": "体"
+        },
+        {
+          "actual": "断",
+          "predicted": "野"
+        },
+        {
+          "actual": "任",
+          "predicted": "仕"
+        },
+        {
+          "actual": "責",
+          "predicted": "真"
+        },
+        {
+          "actual": "増",
+          "predicted": "始"
+        },
+        {
+          "actual": "解",
+          "predicted": "紙"
+        },
+        {
+          "actual": "際",
+          "predicted": "験"
+        },
+        {
+          "actual": "認",
+          "predicted": "語"
+        },
+        {
+          "actual": "過",
+          "predicted": "週"
+        },
+        {
+          "actual": "寝",
+          "predicted": "意"
+        },
+        {
+          "actual": "置",
+          "predicted": "道"
+        },
+        {
+          "actual": "費",
+          "predicted": "質"
+        },
+        {
+          "actual": "示",
+          "predicted": "不"
+        },
+        {
+          "actual": "観",
+          "predicted": "銀"
+        },
+        {
+          "actual": "値",
+          "predicted": "借"
+        },
+        {
+          "actual": "吸",
+          "predicted": "服"
+        },
+        {
+          "actual": "状",
+          "predicted": "代"
+        },
+        {
+          "actual": "収",
+          "predicted": "服"
+        },
+        {
+          "actual": "職",
+          "predicted": "間"
+        },
+        {
+          "actual": "規",
+          "predicted": "親"
+        },
+        {
+          "actual": "割",
+          "predicted": "動"
+        },
+        {
+          "actual": "演",
+          "predicted": "漢"
+        },
+        {
+          "actual": "師",
+          "predicted": "雨"
+        },
+        {
+          "actual": "備",
+          "predicted": "館"
+        },
+        {
+          "actual": "優",
+          "predicted": "医"
+        },
+        {
+          "actual": "宅",
+          "predicted": "弟"
+        },
+        {
+          "actual": "現",
+          "predicted": "場"
+        },
+        {
+          "actual": "呼",
+          "predicted": "野"
+        },
+        {
+          "actual": "違",
+          "predicted": "道"
+        },
+        {
+          "actual": "差",
+          "predicted": "走"
+        },
+        {
+          "actual": "供",
+          "predicted": "映"
+        },
+        {
+          "actual": "限",
+          "predicted": "服"
+        },
+        {
+          "actual": "与",
+          "predicted": "今"
+        },
+        {
+          "actual": "渡",
+          "predicted": "度"
+        },
+        {
+          "actual": "景",
+          "predicted": "長"
+        },
+        {
+          "actual": "抜",
+          "predicted": "友"
+        },
+        {
+          "actual": "候",
+          "predicted": "医"
+        },
+        {
+          "actual": "構",
+          "predicted": "借"
+        },
+        {
+          "actual": "捕",
+          "predicted": "帰"
+        },
+        {
+          "actual": "慣",
+          "predicted": "買"
+        },
+        {
+          "actual": "満",
+          "predicted": "海"
+        },
+        {
+          "actual": "掛",
+          "predicted": "強"
+        },
+        {
+          "actual": "居",
+          "predicted": "早"
+        },
+        {
+          "actual": "突",
+          "predicted": "英"
+        },
+        {
+          "actual": "招",
+          "predicted": "名"
+        },
+        {
+          "actual": "段",
+          "predicted": "以"
+        },
+        {
+          "actual": "腹",
+          "predicted": "度"
+        },
+        {
+          "actual": "痛",
+          "predicted": "海"
+        },
+        {
+          "actual": "退",
+          "predicted": "足"
+        },
+        {
+          "actual": "迷",
+          "predicted": "送"
+        },
+        {
+          "actual": "訪",
+          "predicted": "読"
+        },
+        {
+          "actual": "怒",
+          "predicted": "私"
+        },
+        {
+          "actual": "眠",
+          "predicted": "服"
+        },
+        {
+          "actual": "靴",
+          "predicted": "歌"
+        },
+        {
+          "actual": "途",
+          "predicted": "送"
+        },
+        {
+          "actual": "給",
+          "predicted": "待"
+        },
+        {
+          "actual": "冷",
+          "predicted": "持"
+        },
+        {
+          "actual": "処",
+          "predicted": "勉"
+        },
+        {
+          "actual": "婦",
+          "predicted": "帰"
+        },
+        {
+          "actual": "程",
+          "predicted": "悪"
+        },
+        {
+          "actual": "精",
+          "predicted": "特"
+        },
+        {
+          "actual": "絶",
+          "predicted": "勉"
+        },
+        {
+          "actual": "杯",
+          "predicted": "不"
+        },
+        {
+          "actual": "積",
+          "predicted": "意"
+        },
+        {
+          "actual": "寄",
+          "predicted": "考"
+        },
+        {
+          "actual": "娘",
+          "predicted": "銀"
+        },
+        {
+          "actual": "怖",
+          "predicted": "姉"
+        },
+        {
+          "actual": "恐",
+          "predicted": "思"
+        },
+        {
+          "actual": "婚",
+          "predicted": "始"
+        },
+        {
+          "actual": "遊",
+          "predicted": "送"
+        },
+        {
+          "actual": "貧",
+          "predicted": "貸"
+        },
+        {
+          "actual": "適",
+          "predicted": "通"
+        },
+        {
+          "actual": "押",
+          "predicted": "用"
+        },
+        {
+          "actual": "更",
+          "predicted": "夏"
+        },
+        {
+          "actual": "浮",
+          "predicted": "字"
+        },
+        {
+          "actual": "越",
+          "predicted": "勉"
+        },
+        {
+          "actual": "背",
+          "predicted": "青"
+        },
+        {
+          "actual": "盗",
+          "predicted": "強"
+        },
+        {
+          "actual": "除",
+          "predicted": "験"
+        },
+        {
+          "actual": "幾",
+          "predicted": "発"
+        },
+        {
+          "actual": "散",
+          "predicted": "教"
+        },
+        {
+          "actual": "似",
+          "predicted": "以"
+        },
+        {
+          "actual": "富",
+          "predicted": "高"
+        },
+        {
+          "actual": "探",
+          "predicted": "来"
+        },
+        {
+          "actual": "迎",
+          "predicted": "週"
+        },
+        {
+          "actual": "祖",
+          "predicted": "私"
+        },
+        {
+          "actual": "雑",
+          "predicted": "始"
+        },
+        {
+          "actual": "賛",
+          "predicted": "後"
+        },
+        {
+          "actual": "込",
+          "predicted": "送"
+        },
+        {
+          "actual": "欲",
+          "predicted": "飲"
+        },
+        {
+          "actual": "閉",
+          "predicted": "開"
+        },
+        {
+          "actual": "窓",
+          "predicted": "急"
+        },
+        {
+          "actual": "否",
+          "predicted": "西"
+        },
+        {
+          "actual": "暮",
+          "predicted": "春"
+        },
+        {
+          "actual": "誤",
+          "predicted": "黒"
+        },
+        {
+          "actual": "降",
+          "predicted": "後"
+        },
+        {
+          "actual": "勤",
+          "predicted": "動"
+        },
+        {
+          "actual": "刻",
+          "predicted": "究"
+        },
+        {
+          "actual": "遅",
+          "predicted": "運"
+        },
+        {
+          "actual": "破",
+          "predicted": "服"
+        },
+        {
+          "actual": "互",
+          "predicted": "百"
+        },
+        {
+          "actual": "彼",
+          "predicted": "使"
+        },
+        {
+          "actual": "恥",
+          "predicted": "服"
+        },
+        {
+          "actual": "払",
+          "predicted": "私"
+        },
+        {
+          "actual": "舞",
+          "predicted": "悪"
+        },
+        {
+          "actual": "頼",
+          "predicted": "親"
+        },
+        {
+          "actual": "戻",
+          "predicted": "長"
+        },
+        {
+          "actual": "抱",
+          "predicted": "地"
+        },
+        {
+          "actual": "緒",
+          "predicted": "終"
+        },
+        {
+          "actual": "逃",
+          "predicted": "送"
+        },
+        {
+          "actual": "御",
+          "predicted": "銀"
+        },
+        {
+          "actual": "吹",
+          "predicted": "映"
+        },
+        {
+          "actual": "到",
+          "predicted": "別"
+        },
+        {
+          "actual": "髪",
+          "predicted": "長"
+        },
+        {
+          "actual": "疲",
+          "predicted": "服"
+        },
+        {
+          "actual": "歳",
+          "predicted": "意"
+        },
+        {
+          "actual": "偶",
+          "predicted": "借"
+        },
+        {
+          "actual": "偉",
+          "predicted": "借"
+        },
+        {
+          "actual": "頂",
+          "predicted": "度"
+        }
+      ],
+      "seconds": 2.36
+    },
+    "candidate": {
+      "classes": 612,
+      "by_level": {
+        "N5": {
+          "total": 158,
+          "top1": 155,
+          "top5": 158
+        },
+        "N4": {
+          "total": 332,
+          "top1": 327,
+          "top5": 332
+        },
+        "N3": {
+          "total": 734,
+          "top1": 728,
+          "top5": 734
+        }
+      },
+      "incorrect": [
+        {
+          "actual": "入",
+          "predicted": "人"
+        },
+        {
+          "actual": "員",
+          "predicted": "買"
+        },
+        {
+          "actual": "教",
+          "predicted": "数"
+        },
+        {
+          "actual": "台",
+          "predicted": "合"
+        },
+        {
+          "actual": "末",
+          "predicted": "未"
+        },
+        {
+          "actual": "違",
+          "predicted": "達"
+        },
+        {
+          "actual": "勤",
+          "predicted": "動"
+        },
+        {
+          "actual": "大",
+          "predicted": "犬"
+        },
+        {
+          "actual": "語",
+          "predicted": "話"
+        },
+        {
+          "actual": "教",
+          "predicted": "数"
+        },
+        {
+          "actual": "買",
+          "predicted": "員"
+        },
+        {
+          "actual": "末",
+          "predicted": "未"
+        },
+        {
+          "actual": "妻",
+          "predicted": "髪"
+        },
+        {
+          "actual": "勤",
+          "predicted": "動"
+        }
+      ],
+      "seconds": 2.56
+    }
+  },
+  "deployed_sha256": {
+    "kanji_model.pt": "f0fe80e7f50d0367e01c78cb3f977d36a5cfdcd9e1920328e7748fe0ea1f1605",
+    "label_map.json": "dfea5bee6bbaa408d545b92d994227000c2909f615bf08fb77eb213192910dbb"
+  },
+  "previous_sha256": {
+    "kanji_model.pt": "57bde58d7d205621b676a957b43c9f980b76c536de221a17b1bb8a18ac2adcce",
+    "label_map.json": "755bea3c72ea3c5da20ebfacbab0137c58d5ee563dcba24fff9df2a72b165561"
+  },
+  "real_handwriting_accuracy_evaluated": false,
+  "synthetic_top1_regressions": {
+    "N5": {
+      "previous": 0.9936708860759493,
+      "deployed": 0.9810126582278481
+    },
+    "N4": {
+      "previous": 1.0,
+      "deployed": 0.9849397590361446
+    }
+  }
+}

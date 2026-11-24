@@ -84,7 +84,9 @@ try:
             items = client.get(f"/api/kanji/quiz?mode={mode}&jlpt=N5&count=5").json()["items"]
             assert len(items) == 5 and all(q["correct_answer"] in q["options"] for q in items)
         print("PASS kanji levels/paging/detail/strokes/unavailable strokes and all quiz modes")
-        update = client.put("/api/auth/me", json={"username": "phase3_updated", "current_jlpt_level": "N4", "learning_goals": ["JLPT N3"], "ui_language": "en"})
+        denied = client.put("/api/auth/me", json={"current_jlpt_level": "N4"})
+        assert denied.status_code == 403 and denied.json()["detail"] == "jlpt_level_requires_placement"
+        update = client.put("/api/auth/me", json={"username": "phase3_updated", "learning_goals": ["JLPT N3"], "ui_language": "en"})
         assert update.status_code == 200 and update.json()["learning_goals"] == ["JLPT N3"]
         profile = client.get("/api/rewards/me").json()
         with sessions() as session:

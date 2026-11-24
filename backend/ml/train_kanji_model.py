@@ -443,6 +443,7 @@ def evaluate(model, loader, criterion, device, levels_by_index=None):
     total_loss = 0.0
     correct = 0
     total = 0
+    level_totals = {level: [0, 0] for level in ("N5", "N4", "N3")}
     with torch.no_grad():
         for images, labels in loader:
             images, labels = images.to(device), labels.to(device)
@@ -451,20 +452,41 @@ def evaluate(model, loader, criterion, device, levels_by_index=None):
             total_loss += loss.item() * labels.size(0)
             correct += (logits.argmax(dim=1) == labels).sum().item()
             total += labels.size(0)
-    result = {"loss": total_loss / max(1, total), "accuracy": correct / max(1, total)}
-    if levels_by_index is not None:
-        level_totals = {level: [0, 0] for level in ("N5", "N4", "N3")}
-        with torch.no_grad():
-            for images, labels in loader:
-                logits = model(images.to(device))
-                guesses = logits.argmax(dim=1).cpu()
-                for actual, guess in zip(labels.tolist(), guesses.tolist()):
+            if levels_by_index is not None:
+                for actual, guess in zip(labels.cpu().tolist(), logits.argmax(dim=1).cpu().tolist()):
                     level = levels_by_index[actual]
                     level_totals[level][1] += 1
                     level_totals[level][0] += int(actual == guess)
+    result = {"loss": total_loss / max(1, total), "accuracy": correct / max(1, total)}
+    if levels_by_index is not None:
         result["by_level"] = {level: level_totals[level][0] / level_totals[level][1]
                               for level in level_totals if level_totals[level][1]}
     return result
+
+
+def cap_training_subset(subset, targets, per_class, seed=42):
+    """Bound CPU fine-tuning per class without moving validation samples into training."""
+    if per_class <= 0:
+        return subset
+    indices = list(subset.indices)
+    random.Random(seed).shuffle(indices)
+    counts = {}
+    selected = []
+    for index in indices:
+        target = targets[index]
+        if counts.get(target, 0) < per_class:
+            selected.append(index)
+            counts[target] = counts.get(target, 0) + 1
+    return Subset(subset.dataset, selected)
+
+
+def load_initial_weights(model, model_dir, label_map, device):
+    """Fail before training if an initial checkpoint uses another label ordering."""
+    initial_labels = json.loads((model_dir / "label_map.json").read_text(encoding="utf-8"))
+    if initial_labels != label_map:
+        raise ValueError("Initial model label map must exactly match training label indices.")
+    state = torch.load(model_dir / "kanji_model.pt", map_location=device, weights_only=True)
+    model.load_state_dict(state)
 
 
 def main():
@@ -487,9 +509,20 @@ def main():
     parser.add_argument("--batch-size", type=int, default=0, help="0 chooses an automatic batch size.")
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--resume", action="store_true", help="Resume from artifact-dir/checkpoint_last.pt when present.")
+    parser.add_argument("--init-from", type=Path, help="Initialize from a compatible trained model directory; keeps its artifacts unchanged.")
+    parser.add_argument("--cpu-threads", type=int, default=0, help="Bound Torch CPU threads; 0 keeps the runtime default.")
+    parser.add_argument("--max-training-samples-per-class", type=int, default=0, help="Cap the training split per class for bounded fine-tuning; validation is unchanged.")
     parser.add_argument("--min-samples-per-class", type=int, default=1, help="Fail if the combined source data has fewer samples for any class.")
     parser.add_argument("--font", action="append", default=[], help="Extra Japanese font path. Can be passed multiple times.")
     args = parser.parse_args()
+    if args.resume and args.init_from:
+        parser.error("Choose either --resume or --init-from.")
+    if args.init_from and args.init_from.resolve() == args.artifact_dir.resolve():
+        parser.error("--init-from must differ from --artifact-dir to preserve the initial model.")
+    if args.cpu_threads < 0 or args.max_training_samples_per_class < 0:
+        parser.error("CPU threads and training sample cap must be nonnegative.")
+    if args.cpu_threads:
+        torch.set_num_threads(args.cpu_threads)
 
     validate_training_dictionary()
 
@@ -593,6 +626,8 @@ def main():
     val_size = min(val_size, len(dataset) - 1)
     train_size = len(dataset) - val_size
     train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
+    train_dataset = cap_training_subset(train_dataset, dataset.targets, args.max_training_samples_per_class)
+    print(f"Split: {len(train_dataset)} training, {len(val_dataset)} validation images.", flush=True)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     batch_size = args.batch_size or (128 if device == "cuda" else 64)
@@ -609,6 +644,9 @@ def main():
 
     print(f"labels={len(labels)} samples={len(dataset)} batch_size={batch_size} epochs={args.epochs}")
     model = KanjiCNN(num_classes=len(labels), image_size=args.image_size).to(device)
+    if args.init_from:
+        load_initial_weights(model, args.init_from, label_map, device)
+        print(f"Initialized weights from {args.init_from}.", flush=True)
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
 
@@ -672,6 +710,10 @@ def main():
     summary = {"class_count": len(labels), "class_counts": dict(zip(labels, class_counts)),
                "source_counts": source_counts, "source_counts_by_jlpt": source_level_counts,
                "configuration": {"image_size": args.image_size, "samples_per_class": args.samples_per_class,
+                                 "initial_model_dir": str(args.init_from) if args.init_from else None,
+                                 "cpu_threads": args.cpu_threads,
+                                 "max_training_samples_per_class": args.max_training_samples_per_class,
+                                 "training_split_size": len(train_dataset), "validation_split_size": len(val_dataset),
                                  "epochs": args.epochs, "batch_size": batch_size, "learning_rate": args.lr,
                                  "synthetic_dir": str(args.synthetic_dir), "etl10_dir": str(args.etl10_dir),
                                  "user_samples_dir": str(args.user_samples_dir), "fonts": [str(font) for font in fonts] if not args.no_synthetic else []},

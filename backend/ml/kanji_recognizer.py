@@ -3,6 +3,8 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import pickle
+import threading
 from io import BytesIO
 from pathlib import Path
 from typing import Any, List
@@ -225,12 +227,47 @@ def preprocess_image_data(image_data: str, image_size: int = IMAGE_SIZE):
 _recognizer = KanjiRecognizer()
 
 
+def _artifact_signature():
+    try:
+        return tuple((path.stat().st_mtime_ns, path.stat().st_size) for path in (DEFAULT_MODEL_PATH, DEFAULT_LABEL_MAP_PATH))
+    except OSError:
+        return None
+
+
+_loaded_signature = _artifact_signature()
+_reload_lock = threading.Lock()
+
+
+def _current_recognizer():
+    """Pick up a replaced artifact pair without requiring a process restart.
+
+    Requests already running keep their own model reference. During a partially
+    replaced or invalid pair, retain the last working model and retry next time.
+    """
+    global _recognizer, _loaded_signature
+    signature = _artifact_signature()
+    if signature is None or signature == _loaded_signature:
+        return _recognizer
+    with _reload_lock:
+        signature = _artifact_signature()
+        if signature is None or signature == _loaded_signature:
+            return _recognizer
+        try:
+            replacement = KanjiRecognizer(DEFAULT_MODEL_PATH, DEFAULT_LABEL_MAP_PATH)
+            if replacement.available and signature == _artifact_signature():
+                _recognizer = replacement
+                _loaded_signature = signature
+        except (OSError, ValueError, RuntimeError, EOFError, KeyError, pickle.UnpicklingError) as error:
+            logger.warning("Retaining the previous kanji model while replacement artifacts are incomplete: %s", error)
+    return _recognizer
+
+
 def predict_kanji(image_data: str, strokes=None, jlpt_level: str | None = None, top_k: int = 5) -> List[dict[str, Any]]:
-    return _recognizer.predict(image_data, strokes=strokes, jlpt_level=jlpt_level, top_k=top_k)
+    return _current_recognizer().predict(image_data, strokes=strokes, jlpt_level=jlpt_level, top_k=top_k)
 
 
 def get_model_info() -> dict[str, Any]:
-    return _recognizer.info()
+    return _current_recognizer().info()
 
 
 def get_recognition_error() -> str | None:

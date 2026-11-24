@@ -10,6 +10,8 @@ from app.core.database import Base
 from app.models.database import (
     DailyTask,
     DailyTaskItem,
+    ExerciseHistory,
+    ExerciseDelivery,
     PointTransaction,
     StudyItemStat,
     User,
@@ -43,6 +45,8 @@ def db():
     tables = [
         User.__table__, UserGameProfile.__table__, PointTransaction.__table__, DailyTask.__table__,
         DailyTaskItem.__table__, StudyItemStat.__table__,
+        ExerciseHistory.__table__, ExerciseDelivery.__table__,
+        Base.metadata.tables['minigame_learning_events'],
     ]
     Base.metadata.create_all(engine, tables=tables)
     session = sessionmaker(bind=engine, autoflush=False)()

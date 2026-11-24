@@ -45,7 +45,10 @@ class User(UserBase):
 
 class UserUpdate(BaseModel):
     username: Optional[str] = None
-    current_jlpt_level: Optional[str] = None
+    current_jlpt_level: Optional[str] = Field(
+        default=None,
+        description="Compatibility field: accepts only the existing value. Change the level by completing and confirming a placement assessment.",
+    )
     learning_goals: Optional[List[str]] = None
     ui_language: Optional[Literal["vi", "en"]] = None
 

@@ -8,6 +8,9 @@ from sqlalchemy import func
 
 from app.core.database import SessionLocal
 from app.models.database import GrammarQuestion, GrammarRule
+from app.services.exercise_content import grammar_content, similar_content
+from app.services.exercise_catalog import lock_question_bank
+from types import SimpleNamespace
 
 
 # These are starter examples; have a Japanese-language reviewer check them before public use.
@@ -51,6 +54,8 @@ def seed(db=None) -> dict:
     db = db or SessionLocal()
     added_rules = added_questions = 0
     try:
+        lock_question_bank(db)
+        existing_content = [grammar_content(question) for question in db.query(GrammarQuestion).all()]
         for level, patterns in PATTERNS.items():
             for row in patterns:
                 (name, pattern, meaning, fill_prompt, options, fill_answer, tokens,
@@ -75,11 +80,15 @@ def seed(db=None) -> dict:
                     exists = db.query(GrammarQuestion.id).filter(GrammarQuestion.question_type == kind, GrammarQuestion.prompt == prompt).first()
                     if exists:
                         continue
+                    content = grammar_content(SimpleNamespace(question_type=kind, prompt=prompt, payload=payload))
+                    if any(similar_content(content, old) for old in existing_content):
+                        continue
                     db.add(GrammarQuestion(grammar_rule_id=rule.id, jlpt_level=level, question_type=kind,
                                            prompt=prompt, payload=payload, correct_answer=answer,
                                            accepted_answers=None, explanation_vi=explanation,
                                            examples=examples, source="seed", is_active=True))
                     added_questions += 1
+                    existing_content.append(content)
         db.commit()
         return {"rules_added": added_rules, "questions_added": added_questions}
     except Exception:
