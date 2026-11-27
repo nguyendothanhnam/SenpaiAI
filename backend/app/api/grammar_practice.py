@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from ..core.auth import get_current_active_user
 from ..core.database import get_db
+from ..services.answer_explanations import explain_grammar
 from ..models.database import Document, GrammarPracticeAttempt, GrammarQuestion, GrammarRule, LearningSession, User
 from ..services.grammar_practice_service import (
     QUESTION_TYPES, grade_answer, is_duplicate_question, parse_generated_questions, public_question,
@@ -211,7 +212,7 @@ async def answer_question(session_id: int, body: AnswerRequest, current_user: Us
     db.commit()
     return {"is_correct": is_correct, "correct_answer": question.correct_answer,
             "accepted_answers": question.accepted_answers or [], "explanation_vi": question.explanation_vi,
-            "examples": question.examples or []}
+            "examples": question.examples or [], "explanation_details": explain_grammar(question, body.answer, is_correct)}
 
 
 @router.post("/sessions/{session_id}/finish")

@@ -19,6 +19,7 @@ import { ConnectivityMonitor } from '../src/components/ConnectivityMonitor'
 import { AccountThemeBridge } from '../src/components/AccountThemeBridge'
 import { NotificationProvider } from '../src/features/reminders/NotificationProvider'
 import { LocalReminderProvider } from '../src/features/reminders/LocalReminderProvider'
+import { KanjiLookupProvider } from '../src/components/KanjiLookup'
 
 export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
   return <SafeAreaProvider><I18nextProvider i18n={i18n}><ThemeProvider><ThemeBackdrop><ErrorScreen retry={() => void retry()} /></ThemeBackdrop></ThemeProvider></I18nextProvider></SafeAreaProvider>
@@ -48,7 +49,7 @@ function Navigation() {
         <Stack.Screen name="(tabs)" />
         {['notifications', 'reminder-settings'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: name === 'notifications' ? i18n.t('notifications.title') : t('reminders.title'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
         {['games/index', 'games/[game]'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: i18n.t('minigames.title'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
-        {['study/index', 'study/quiz', 'study/flashcard', 'study/editor', 'study/import', 'study/quiz-play', 'study/flashcard-play'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: t('phase4.hub'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
+        {['study/index', 'study/quiz', 'study/flashcard', 'study/editor', 'study/import', 'study/quiz-play', 'study/flashcard-play', 'study/flashcard-detail', 'study/flashcard-editor', 'study/flashcard-learn', 'study/flashcard-test', 'study/flashcard-stats'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: t('phase4.hub'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
         {['kanji', 'kanji/[character]', 'kanji-quiz', 'kanji-write', 'theme-shop', 'export-data'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: t(name.startsWith('kanji') ? 'phase3.kanji' : name === 'theme-shop' ? 'phase3.themeShop' : 'phase3.exportData'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
         {['grammar', 'grammar-progress', 'chat-folders', 'conversation/[id]'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: t(name === 'grammar' ? 'phase2.grammar' : name === 'grammar-progress' ? 'phase2.progress' : name === 'chat-folders' ? 'phase2.manageFolders' : 'phase2.conversation'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
         <Stack.Screen name="daily-exercise" options={{ headerShown: true, title: i18n.t('daily.title'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />
@@ -61,5 +62,5 @@ function Navigation() {
 }
 
 export default function RootLayout() {
-  return <SafeAreaProvider><I18nextProvider i18n={i18n}><ThemeProvider><ThemeBackdrop><AppErrorBoundary><RuntimeGuard><QueryClientProvider client={queryClient}><AuthProvider><LanguageProvider><NotificationProvider><LocalReminderProvider><ConnectivityMonitor /><Navigation /></LocalReminderProvider></NotificationProvider></LanguageProvider></AuthProvider></QueryClientProvider></RuntimeGuard></AppErrorBoundary></ThemeBackdrop></ThemeProvider></I18nextProvider></SafeAreaProvider>
+  return <SafeAreaProvider><I18nextProvider i18n={i18n}><ThemeProvider><ThemeBackdrop><AppErrorBoundary><RuntimeGuard><QueryClientProvider client={queryClient}><AuthProvider><LanguageProvider><NotificationProvider><LocalReminderProvider><KanjiLookupProvider><ConnectivityMonitor /><Navigation /></KanjiLookupProvider></LocalReminderProvider></NotificationProvider></LanguageProvider></AuthProvider></QueryClientProvider></RuntimeGuard></AppErrorBoundary></ThemeBackdrop></ThemeProvider></I18nextProvider></SafeAreaProvider>
 }

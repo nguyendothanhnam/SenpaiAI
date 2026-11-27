@@ -12,7 +12,7 @@ export function mixedLevels(task: DailyOverview, userLevel: string | undefined) 
   return task.items.some((item) => (item.payload.level || item.payload.jlpt_level) && (item.payload.level || item.payload.jlpt_level) !== userLevel)
 }
 export function resultFromItem(task: DailyOverview, item: DailyItem): DailyAnswerResult {
-  return { is_correct: item.is_correct === true, correct_answer: item.correct_answer, explanation: item.explanation ?? '', examples: item.examples ?? [], all_answered: task.progress.all_answered }
+  return { is_correct: item.is_correct === true, correct_answer: item.correct_answer, explanation: item.explanation ?? '', examples: item.examples ?? [], ...(item.explanation_details ? { explanation_details: item.explanation_details } : {}), all_answered: task.progress.all_answered }
 }
 export function toggleToken(indexes: number[], index: number) {
   return indexes.includes(index) ? indexes.filter((value) => value !== index) : [...indexes, index]

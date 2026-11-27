@@ -6,6 +6,8 @@ SenpaiAI là một nền tảng học tiếng Nhật toàn diện được hỗ 
 
 ## 🏗️ Kiến trúc hệ thống
 
+Flashcard trên nhánh `mobile` có bộ thẻ riêng theo tài khoản, thẻ lật, Learn, Test và thống kê trên web/Expo; bộ cục bộ cũ được giữ và chỉ chuyển khi xác nhận. Trước khi chạy backend mới, từ thư mục `backend` chạy `venv/Scripts/python.exe -m alembic upgrade head` (Windows; hiện tại tới 0025). API `/game/flashcard/*` cũ vẫn được giữ. Expo dùng `expo-speech` cho giọng thiết bị, không tải mô hình. Thiết kế, giới hạn, kết quả kiểm tra và checklist: [docs/FLASHCARDS.md](docs/FLASHCARDS.md).
+
 - **Frontend**: React + Vite + TypeScript + TailwindCSS
 - **Backend**: Python FastAPI + LangChain (LLM + RAG)
 - **Database**: PostgreSQL (users, history, lessons, documents)

@@ -14,6 +14,7 @@ from ..models.database import User, KanjiWritingAttempt, KanjiWritingReport
 from ..services.kanji_stroke_geometry import length
 from ..services.kanji_writing_templates import templates, template_response, evaluate_character
 from ..services.kanji_writing_recognizer import recognizer_advice
+from ..core import kanji_writing_config as scoring_config
 
 router = APIRouter(prefix='/kanji-writing',tags=['kanji writing'])
 
@@ -28,7 +29,7 @@ class WritingRequest(BaseModel):
     strokes: list[list[Point]] = Field(max_length=40)
     final: bool = False
     mode: Literal['practice','test'] = 'practice'
-    strictness: Literal['easy','standard','strict'] = 'standard'
+    strictness: Literal['very_easy','easy','standard','strict','very_strict'] = 'standard'
     attempt_id: uuid.UUID | None = None
     include_recognizer_warning: bool = False
     elapsed_seconds: int = Field(default=0,ge=0,le=3600)
@@ -86,6 +87,15 @@ def reports(offset: int = Query(default=0,ge=0,le=100000), limit: int = Query(de
 def supported(level: Literal['N5','N4','N3'] | None = None):
     rows = [{'kanji':key,'level':item['level'],'stroke_count':len(item['raw'])} for key,item in templates().items() if not level or item['level']==level]
     return {'items':rows,'total':len(rows)}
+
+
+@router.get('/rules')
+def rules():
+    return {'version': scoring_config.VERSION, 'weights': scoring_config.SCORE_WEIGHTS,
+            'pass_score': scoring_config.PASS_SCORE,
+            'profiles': {key: scoring_config.PROFILES[key] for key in scoring_config.VISIBLE_PROFILES},
+            'shape_distance_tolerance': scoring_config.SHAPE_DISTANCE_TOLERANCE,
+            'shape_distance_multiplier': scoring_config.SHAPE_DISTANCE_MULTIPLIER}
 
 
 @router.get('/progress')

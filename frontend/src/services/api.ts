@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { ExplanationDetails } from '../components/questions/AnswerExplanation'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api'
 
@@ -43,6 +44,10 @@ export const authAPI = {
   register: (email: string, username: string, password: string) =>
     api.post('/auth/register', { email, username, password }),
   getMe: () => api.get('/auth/me'),
+  exportFile: (format: 'json' | 'zip' | 'html', language: 'vi' | 'en') =>
+    api.get<Blob>(format === 'html' ? '/auth/me/export/report' : '/auth/me/export/download', {
+      params: format === 'html' ? { language } : { format }, responseType: 'blob', timeout: 180000,
+    }),
   updateMe: (data: any) => api.put('/auth/me', data),
 }
 
@@ -83,7 +88,7 @@ export interface ListeningToken { text: string; reading?: string }
 export interface ListeningSegment {
   idx: number; start_ms?: number; end_ms?: number; ja: string; tokens?: ListeningToken[]; vi: string
 }
-export interface ListeningLesson extends ListeningLessonSummary { segments: ListeningSegment[] }
+export interface ListeningLesson extends ListeningLessonSummary { segments: ListeningSegment[]; video_url?: string | null; video_provider?: string | null; video_id?: string | null; source_note?: string | null }
 export type ListeningExerciseMode = 'dictation' | 'cloze' | 'comprehension'
 export interface ListeningExerciseQuestion {
   id: string
@@ -192,6 +197,7 @@ export interface DailyRewardBreakdown {
   total_points: number
 }
 export interface DailyAnswerResult {
+  explanation_details?: ExplanationDetails
   is_correct: boolean
   correct_answer: unknown
   explanation: string
@@ -358,6 +364,7 @@ export interface GrammarPracticeExample {
 }
 
 export interface GrammarAnswerResult {
+  explanation_details?: ExplanationDetails
   is_correct: boolean
   correct_answer: unknown
   accepted_answers?: unknown[]
@@ -447,7 +454,6 @@ export const kanjiDataAPI = {
     api.get('/kanji/word-matching-grid', { params }),
   getDictionaryStatus: () => api.get('/kanji/dictionary-status'),
   getSupported: () => api.get('/kanji/supported'),
-  getStrokeOrder: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}/stroke-order`),
   getStrokes: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}/strokes`),
   getMetadata: (kanji: string) => api.get(`/kanji/${encodeURIComponent(kanji)}/metadata`),
   getHandwritingSamples: (kanji: string, limit = 5) =>

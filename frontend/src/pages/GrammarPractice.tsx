@@ -49,7 +49,7 @@ export default function GrammarPractice() {
   const { t: tGrammar } = useTranslation('grammarStatus')
   const [level, setLevel] = useState<JlptLevel>(requestedLevel || (user?.current_jlpt_level as JlptLevel) || 'N5')
   const [isAutomaticFallback, setIsAutomaticFallback] = useState(false)
-  const [ruleId, setRuleId] = useState<number | null>(null)
+  const [ruleId, setRuleId] = useState<number | null>(() => { const value = Number(new URLSearchParams(location.search).get('rule')); return Number.isSafeInteger(value) && value > 0 ? value : null })
   const [questionTypes, setQuestionTypes] = useState<GrammarQuestionType[]>(['fill_blank', 'reorder', 'true_false', 'conjugation'])
   const [count, setCount] = useState<Count>(5)
   const [mode, setMode] = useState<GrammarPracticeMode>('bank')
@@ -95,8 +95,8 @@ export default function GrammarPractice() {
   const patterns = useMemo(() => patternsByLevel[effectiveLevel] || [], [patternsByLevel, effectiveLevel])
 
   useEffect(() => {
-    if (ruleId !== null && !patterns.some((pattern) => pattern.id === ruleId)) setRuleId(null)
-  }, [patterns, ruleId])
+    if (patternsQuery.isSuccess && ruleId !== null && !patterns.some((pattern) => pattern.id === ruleId)) setRuleId(null)
+  }, [patterns, ruleId, patternsQuery.isSuccess])
 
   useEffect(() => {
     if (patternsQuery.isError) toast.error('Không tải được mẫu ngữ pháp. Kiểm tra kết nối rồi thử tải lại trang.')
@@ -139,6 +139,14 @@ export default function GrammarPractice() {
   )
 
   useEffect(() => {
+    const lessonPractice = (location.state as any)?.lessonPractice
+    if (!startedLibraryPractice.current && lessonPractice?.question_ids?.length) {
+      startedLibraryPractice.current = true
+      startMutation.mutate({ jlpt_level: lessonPractice.jlpt_level, grammar_rule_id: lessonPractice.grammar_rule_id,
+        question_types: lessonPractice.question_types, count: 5, mode: 'bank', question_ids: lessonPractice.question_ids })
+      navigate(location.pathname, { replace: true, state: null })
+      return
+    }
     const libraryPractice = (location.state as any)?.libraryPractice
     if (startedLibraryPractice.current || !libraryPractice?.question_ids?.length) return
     startedLibraryPractice.current = true

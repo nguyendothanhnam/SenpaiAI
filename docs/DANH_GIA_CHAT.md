@@ -1,110 +1,104 @@
-# Đo và cải thiện chất lượng chat SenpaiAI
+# Đánh giá và kiểm soát chất lượng Chat SenpaiAI
 
-Thực hiện trên nhánh `mobile`, giữ nguyên hợp đồng `/chat/message` và các prop cũ. Backend cải thiện câu trả lời cho client dùng API hiện tại; web thêm nút **Hữu ích / Có lỗi** và ghi chú ngắn. Không đổi mô hình mặc định, không tải mô hình mới, không tạo tài khoản/hội thoại thử trong dữ liệu thật.
+Cập nhật 24/11/2026, nhánh `mobile`. Giữ hợp đồng API và mô hình mặc định `gemma:2b`. Không tải model, không migration mới. Đo bằng route thật và tài khoản SQLite tách biệt; không tạo lịch sử trong tài khoản thật.
 
-## Vì sao chọn phương pháp này
+## Thiết kế để trình bày khi bảo vệ
 
-Mô hình local hiện cấu hình `gemma:2b`, nhỏ và có thể tạo câu Nhật sai dù giải thích tiếng Việt trôi chảy. Chỉ sửa prompt không đủ. Dùng ba lớp: tra cứu chính xác trong học liệu; prompt theo loại câu hỏi và kiểm tra/thử lại một lần; thừa nhận thiếu căn cứ khi không thể xác minh. Không dùng chính mô hình nhỏ để tự tuyên bố câu trả lời của nó đúng.
+Mô hình nhỏ có thể viết trôi chảy nhưng sai kiến thức. Vì vậy dùng chuỗi xử lý: **chọn ngôn ngữ → phân loại ý định → tra học liệu → giới hạn prompt → sinh và kiểm tra → thử lại tối đa một lần → trả lời an toàn → lưu lịch sử/nguồn**. Không dùng chính model để tự chấm độ đúng của nó.
 
-Hiện trạng đã xác minh: có prompt vi/en, lọc nhãn nội bộ, kiểm tra ngôn ngữ, tham chiếu ngữ pháp và lọc RAG; trước thay đổi có 8 test Chat lỗi. Rà tay đầu ra cơ sở phát hiện mẫu てください bị giải thích như “phrasal verb”, ví dụ Nhật sai, chép hướng dẫn hệ thống, dịch Việt–Nhật nhưng chỉ lặp tiếng Việt và câu tiếp nối lệch yêu cầu.
+Ngôn ngữ mặc định lấy `response_language` nếu có, sau đó `ui_language`. Chỉ đổi khi có yêu cầu trả lời rõ ràng hoặc văn xuôi tiếng Anh đủ dấu hiệu và không có tiếng Việt. Phân tích bảng chữ, từ chức năng Anh/Việt và dạng mệnh đề; loại phần trích dẫn/ngoặc khỏi quyết định. Thuật ngữ Latin đơn lẻ, tiếng Việt không dấu, câu Nhật kèm furigana/JLPT/keigo/N3/te-form dùng lựa chọn mặc định. Nội dung dịch có ngôn ngữ đích riêng. Có **56 ca hồi quy**, gồm câu Nhật kèm furigana ở cả giao diện vi/en. Bộ nhận diện luật vẫn có thể nhầm câu trộn khó hoặc tiếng lóng.
 
-## Bộ đánh giá và quy trình chạy
+Ý định gồm Kanji, từ vựng, ngữ pháp, so sánh, dịch, phân tích, bài tập, văn hóa, chào hỏi, ngoài phạm vi và chưa rõ. Dùng từ điển Kanji, bảng từ vựng, mẫu ngữ pháp, câu ngân hàng công khai, bộ nhận dạng mẫu câu có sẵn và thư viện hệ thống. So sánh lấy hai mẫu; bài tập không lấy câu AI/riêng tư của người khác. Phân tích chỉ xác minh được một số thành phần thì ghi rõ giới hạn, không tự bịa bản dịch cả câu. Thiếu căn cứ thì nói chưa xác minh; câu mơ hồ hỏi lại một câu, ngoài chủ đề trả ngắn và dẫn về học tiếng Nhật.
 
-`backend/tests/data/chat_quality_cases.json` có **72 câu, 12 nhóm × 6**: ngữ pháp, so sánh, từ vựng, kanji, Nhật–Việt, Việt–Nhật, phân tích câu, chào hỏi, văn hóa, ngoài chủ đề, tiếp nối và thiếu căn cứ. Ca tiếp nối chạy cả câu hỏi trước qua pipeline thật trong cùng hội thoại. Mỗi ca có tham chiếu kỹ thuật, nhóm từ khóa bắt buộc, yêu cầu cách đọc/ví dụ/nguồn khi phù hợp; không tự coi tham chiếu là bộ chuẩn đã được giáo viên duyệt.
+Đã gỡ bốn phản hồi gắn câu cụ thể: phân tích `私は毎日学校へ行きます`, chọn mèo/chó, trắc nghiệm `学生`, dịch `今日は何をしましたか`. Mẫu cũ chuyển sang `tests/data/chat_legacy_regressions.json`; runtime không nhập đáp án kiểm thử. Trắc nghiệm dùng đối chiếu lựa chọn từ vựng tổng quát. Giữ **ba** tham chiếu theo mẫu đã rà soát (`は/が`, `に/で`, `から/ので`), vì đây là học liệu chứ không phải nhánh nhận diện nguyên câu hỏi. Dạng lịch sự `～ています` quy về `ている`, tránh khớp nhầm mẫu rộng `ます`.
 
-Runner gọi **hàm xử lý route thật**, dịch vụ Ollama thật và cơ chế truy xuất hiện có. Mỗi lượt dùng tài khoản/hội thoại trong SQLite riêng. Học liệu PostgreSQL chỉ đọc và chụp vào `tmp/chat-quality-catalog.json`: 34 tài liệu hệ thống, 25 mẫu ngữ pháp, bảng từ vựng hiện trống; từ điển kanji được dùng trực tiếp từ repo. Không thêm lịch sử đánh giá vào tài khoản người dùng thật.
+Nguồn chỉ hiển thị khi liên quan trực tiếp, URL hợp lệ và không mang loại nội bộ. Tiêu đề do server tạo có bản vi/en; không trình bày điểm vector như độ tin cậy kiến thức. Không dùng ba tài liệu gần nhất nếu chúng không liên quan.
 
-Chế độ `offline` ngắt đúng ranh giới sinh AI, không giả lập câu trả lời: các nhánh tra cứu/từ chối/fallback vẫn chạy pipeline thật. Chế độ `ai` dùng toàn bộ pipeline kết hợp tra cứu và mô hình, không phải phép đo mô hình thuần. Bản chụp học liệu và checksum bộ câu hỏi giống nhau ở mốc cơ sở và lượt cuối. `PYTHONHASHSEED=0` giữ ổn định phần fallback embedding theo hash.
+## Ngân sách và kiểm tra đầu ra
 
-Chấm tự động bảy tiêu chí: ngôn ngữ, cấu trúc theo loại câu hỏi, không lộ nhãn nội bộ, không có các dấu hiệu văn xuôi Trung Quốc đã biết, từ khóa nội dung, dấu hiệu cách đọc/nghĩa, nguồn có nhãn công khai và tiêu đề liên quan. **Không cấm toàn bộ chữ Hán**, vì tiếng Nhật cũng dùng Kanji. Kiểm tra từ khóa không chứng minh câu Nhật/bản dịch đúng; kiểm tra kana/romaji không chứng minh cách đọc đúng; tiêu đề nguồn liên quan không chứng minh từng nhận định được nguồn hỗ trợ.
+Chat dùng cấu hình riêng `CHAT_OLLAMA_CONTEXT=2048`, `CHAT_OUTPUT_TOKENS=350`; chưa tăng mặc định. Giữ toàn bộ system và câu hỏi hiện tại, ưu tiên căn cứ hơn lịch sử, bỏ lịch sử rồi cắt căn cứ khi thiếu chỗ. Câu hỏi và hướng dẫn đã quá dài thì đề nghị chia nhỏ. Ngân sách đầu vào dùng số byte UTF-8 bảo thủ và dự phòng template, **không gọi đó là số token đo được**. Phải kiểm tra lại biên này khi đổi tokenizer/model/template.
 
-Trong khi rà soát đã sửa lỗi rubric: văn bản Latin thông thường từng bị coi là phiên âm. Rubric cuối **`chat-quality-v2`** yêu cầu kana/romaji trong ngoặc hoặc nhãn cách đọc. Các đầu ra mốc cơ sở được chấm lại cùng rubric từ câu trả lời thô; tóm tắt rubric cũ vẫn được giữ trong JSON. Không sửa câu hỏi/tham chiếu để làm đẹp số điểm.
+Mỗi lần gọi `/api/chat` ghi token thật Ollama trả về: `prompt_eval_count`, `eval_count`, `done_reason`, thời gian nạp/sinh, model/options và bộ nhớ từ `/api/ps`. `prompt_budget` ghi lượng byte/lịch sử/căn cứ và việc cắt ngữ cảnh. Log vận hành không ghi câu hỏi, câu trả lời, token đăng nhập hay định danh. Lỗi kết nối ghi không có số token. File đánh giá có thêm đầu ra ứng viên của câu thử tổng hợp để rà lỗi; không áp dụng vào lịch sử thật.
 
-Kết quả đầy đủ, điểm từng nhóm, thời gian và câu lỗi kèm đầu ra: [mốc trước](ket_qua/chat_baseline.json), [mốc sau](ket_qua/chat_after.json). Báo cáo Markdown để rà tay được sinh vào `tmp/` bằng lệnh bên dưới, không lưu thêm một bản lặp của toàn bộ câu trả lời trong docs. Đây là điểm kiểm tra tự động, **không phải tỷ lệ chính xác tiếng Nhật**. Các ca qua hết kiểm tra vẫn cần rà tay.
+Kiểm tra văn bản thô trước khi lọc nhãn: ngôn ngữ, nhãn/prompt nội bộ, các cụm văn xuôi Trung Quốc nhận diện được, độ dài, cấu trúc theo ý định, ví dụ/cách đọc và căn cứ. Không cấm mọi chữ Hán: Kanji Nhật và chữ cũ được hỏi có thể hợp lệ. Phát hiện đầu ra hết hạn mức, chưa hoàn tất, khối code chưa đóng hoặc kết thúc dang dở. Vi phạm thử lại một lần, bỏ lịch sử không tin cậy và siết chỉ dẫn. Vẫn hỏng thì trả ngắn, đúng ngôn ngữ, thừa nhận thiếu căn cứ và đề nghị cung cấp ngữ cảnh. Các heuristic này không chứng minh câu qua kiểm tra là đúng; lọc Traditional Chinese cũng không bao phủ mọi trường hợp.
 
-| Chế độ — 72 ca | Điểm rubric trước → sau | Đạt mọi kiểm tra | Lỗi xử lý | Trung bình giây trước → sau |
-| --- | --- | --- | --- | --- |
-| Không AI | 19,05 → 83,53 | 12 → 34 | 58 → 0 | 0,007 → 0,023 |
-| Pipeline với gemma:2b | 78,57 → 83,53 | 19 → 33 | 0 → 0 | 2,237 → 0,553 |
+## Bộ đo và kết quả trước/sau
 
-Số liệu cùng rubric v2 và checksum học liệu/bộ ca, lấy từ hai JSON trên. Nhánh có AI cũng có thể trả bằng tra cứu mà không gọi model; bảng này không phải benchmark LLM thuần hoặc thử nghiệm nhiều model.
+`backend/tests/data/chat_quality_v3_cases.json`: **96 câu, 12 nhóm × 8** — ngữ pháp, so sánh, từ vựng, Kanji, dịch Nhật–Việt, Việt–Nhật, phân tích, văn hóa, chào hỏi, ngoài phạm vi, ngôn ngữ trộn/không dấu và tiếp nối. Mỗi câu có tham chiếu, từ khóa và hạn độ dài. JSON có `manual_review.correctness/notes`; báo cáo Markdown có phiếu rà tay cho mọi câu và danh sách lỗi kèm câu trả lời/nguồn.
 
-Khi bắt đầu đo, người dùng đang chuyển kho Ollama sang ổ D nên có một lượt không thấy model. Lượt đó không được dùng làm mốc so sánh. Sau khi kiểm tra lại, Ollama nhận `gemma:2b`; baseline và lượt cuối đều dùng model thật này. Chỉ có một model sinh văn bản được cài nên chưa xếp hạng được giữa nhiều model. Không tự chuyển sang mặc định `qwen2.5:3b` ghi trong mã cấu hình; giá trị cấu hình chạy thực tế vẫn là `gemma:2b`.
+Runner gọi `send_message` thật. Offline ngắt ở ranh giới sinh AI, vẫn chạy tra cứu/fallback. Catalog chụp chỉ đọc: **34 tài liệu, 25 mẫu ngữ pháp, 0 dòng Vocabulary**; từ điển Kanji và từ vựng nhỏ có sẵn trong mã vẫn dùng. Đây là giới hạn độ phủ thật, không thêm đáp án để làm đẹp điểm.
 
-Lệnh từ thư mục `backend`:
+Mốc trước chạy trước khi sửa runtime; bộ câu hỏi và checksum học liệu giữ nguyên. Rubric **v3.2** có tám tiêu chí: ngôn ngữ, cấu trúc, nhãn nội bộ, dấu hiệu văn xuôi Trung Quốc, từ khóa, cách đọc/nghĩa, nguồn, độ dài. Đã tách “thiếu bản dịch Nhật” khỏi “sai ngôn ngữ giải thích” và bổ sung các biến thể chữ Trung Quốc bị lọt khi rà tay. Chấm lại đáp án cũ trong bộ nhớ bằng cùng rubric, không sinh lại và không ghi đè baseline v3 gốc. Baseline có lỗi xử lý thật; vẫn giữ trong mẫu số.
 
-```powershell
+Kết quả cuối, cả hai mốc chấm bằng v3.2; baseline JSON vẫn giữ rubric gốc và câu trả lời gốc:
+
+| Chế độ | Điểm tự động trước → sau | Qua mọi kiểm tra / 96 | Qua từ khóa / 96 | Lỗi xử lý | Trung bình giây | p95 giây |
+| --- | --- | --- | --- | --- | --- | --- |
+| Không AI | 68,88 → 88,28 | 33 → 38 | 34 → 38 | 22 → 0 | 0,023 → 0,027 | 0,047 → 0,068 |
+| Pipeline gemma:2b | 88,28 → 90,10 | 39 → 46 | 41 → 47 | 1 → 0 | 1,811 → 1,922 | 5,932 → 7,090 |
+
+Kiểm tra ngôn ngữ: offline **76,04% → 100%**, có AI **96,88% → 100%**. Nhãn nội bộ và các dấu hiệu văn xuôi Trung Quốc trong rubric: sau sửa 100% ở cả hai chế độ. Nguồn 98,96%; cách đọc/nghĩa 83,33% offline, 85,42% AI. Đây đều là tỷ lệ qua heuristic, không phải xác minh chuyên môn.
+
+Theo nhóm ở pipeline AI (điểm tự động trước → sau): grammar 78,12 → 79,69; comparison 84,38 → 79,69; vocabulary 96,88 → 82,81; kanji 92,19 → 95,31; ja_vi 95,31 → 93,75; vi_ja 79,69 → 81,25; analysis 84,38 → 95,31; culture 93,75 → 96,88; greeting 100 → 96,88; off_topic 90,62 → 96,88; mixed_language 75 → 92,19; follow_up 89,06 → 90,62. Không che các nhóm suy giảm: gỡ đáp án nguyên câu, yêu cầu cách đọc rõ hơn và từ chối khi không xác minh làm giảm một số điểm nội dung. Rà thô phát hiện model vẫn có thể bịa phiên âm và đổi từ Nhật sang chữ Trung Quốc; bổ sung guard sau lượt trung gian rồi đo lại đầy đủ. Không sửa từ khóa/câu hỏi để nâng điểm.
+
+Dữ liệu đủ câu trả lời, lỗi và nhóm: [baseline 96 câu](ket_qua/chat_v3_baseline.json), [sau sửa 96 câu](ket_qua/chat_v3_after.json). Lượt cuối không lỗi thiết lập hội thoại; 54 lần trả kết quả model được ghi metadata cho các câu đích, prompt thật 133–390 token, đầu ra 19–116 token. Số lần thử trong JSON còn tính cả lượt tạo lịch sử; offline vẫn tính các lần chạm ranh giới sinh bị ngắt, không phải đã gọi Ollama. Thời gian trung bình/p95 AI tăng nhẹ do kiểm tra và thử lại; không tuyên bố tăng tốc.
+
+**Điểm tự động không phải độ chính xác tiếng Nhật.** Chỉ 46/96 ca AI qua hết tiêu chí và 47/96 qua từ khóa; độ phủ nội dung vẫn hạn chế. Từ khóa đúng không chứng minh ngữ pháp, bản dịch, cách đọc hoặc quan hệ nguồn–nhận định đúng. Từ chối an toàn vẫn trượt từ khóa/cấu trúc nếu chưa trả lời được yêu cầu.
+
+Chỉ **gemma:2b** khả dụng, chưa thể xếp hạng nhiều model. `--models available` chạy cùng corpus trên các model sinh văn bản Ollama liệt kê; không tải model hoặc đổi mặc định ứng dụng. Thời gian là một lượt local, có ảnh hưởng cache/tải máy; không phải SLA hay benchmark đồng thời.
+
+Các mốc 72 câu/rubric v2 [trước](ket_qua/chat_baseline.json), [sau](ket_qua/chat_after.json) là lịch sử; không so trực tiếp với bộ 96 câu.
+
+## Đo phần cứng trước khi đề xuất tăng context
+
+[Số liệu thí nghiệm](ket_qua/chat_context_profile.json): RAM vật lý khoảng **15,7 GiB**, còn **1,06 GiB** lúc bắt đầu. Cùng prompt tổng hợp, hai lần cho mỗi cấu hình; token thật 688 đầu vào/22 đầu ra trong các lượt thành công:
+
+| Context / giới hạn đầu ra | Lần đầu / lặp lại (giây) | Bộ nhớ model Ollama báo (GiB) |
+| --- | --- | --- |
+| 2048 / 350 | 2,900 / 2,780 | 1,70 |
+| 4096 / 640 | 9,898 / 2,646 | 1,74 |
+| 8192 / 640 | 9,349 / 2,574 | 1,93 |
+
+Ollama báo phần model này ở VRAM; đây không phải RSS cực đại hoặc tổng bộ nhớ hệ thống. Đổi context gây nạp lại nên không coi lần đầu là thời gian ổn định. Model vẫn trả tiếng Anh trong thí nghiệm yêu cầu tiếng Việt: tăng context/output riêng lẻ chưa giải quyết chất lượng. Giữ **2048/350**, ưu tiên prompt ngắn và kiểm tra đầu ra. Chưa đủ bằng chứng để khuyên tự tăng; nếu thử 4096/640 cần đo thêm nhiều câu dài và tải thực tế, nhất là khi RAM còn ít.
+
+## Chạy lại và rà soát
+
+Từ `backend`, giữ nguyên baseline và ghi lượt mới ra tệp khác:
+
+~~~powershell
 $env:PYTHONHASHSEED='0'
-# Giữ nguyên baseline đã lưu; lượt kiểm tra mới ghi ra tệp khác.
-.\venv\Scripts\python.exe scripts/evaluate_chat_quality.py --phase current --models available --modes offline,ai --output ../tmp/chat-quality-current.json
-# Script so sánh ghi lại JSON đầu vào: chỉ chạy trên bản sao để giữ mốc gốc.
-Copy-Item ../docs/ket_qua/chat_baseline.json ../tmp/chat-baseline-review.json
-Copy-Item ../docs/ket_qua/chat_after.json ../tmp/chat-after-review.json
-.\venv\Scripts\python.exe scripts/report_chat_quality.py --baseline ../tmp/chat-baseline-review.json --after ../tmp/chat-after-review.json --output ../tmp/chat-quality-comparison.md
-.\venv\Scripts\python.exe -m pytest tests/test_chat_quality.py tests/test_chat_grounding.py tests/test_chat_language.py tests/test_chat_conversations.py tests/test_chat_intent_rules.py -q
-```
+.\venv\Scripts\python.exe scripts/evaluate_chat_quality.py --dataset tests/data/chat_quality_v3_cases.json --snapshot ../tmp/chat-v3-catalog.json --phase current --models available --modes offline,ai --output ../tmp/chat-v3-current.json
+.\venv\Scripts\python.exe scripts/report_chat_quality.py --dataset tests/data/chat_quality_v3_cases.json --baseline ../docs/ket_qua/chat_v3_baseline.json --after ../docs/ket_qua/chat_v3_after.json --output ../tmp/chat-v3-comparison.md
+.\venv\Scripts\python.exe scripts/profile_chat_context.py --output ../tmp/chat-context-new.json
+.\venv\Scripts\python.exe -m pytest -q -p no:cacheprovider
+~~~
 
-`--models available` đo cùng bộ câu hỏi trên mọi mô hình sinh văn bản Ollama liệt kê; có thể chỉ định tên model đã cài. Chọn model chỉ trong tiến trình đánh giá và khôi phục sau chạy; không sửa cấu hình ứng dụng. Muốn tái tạo baseline phải dùng mã Chat trước thay đổi; không chạy mã sau sửa rồi ghi đè baseline. Các file Chat được sửa vốn ở commit `3fff19e849d5edf066dc45cb22f4c37705d4d3d3` trước lượt này; các thay đổi tính năng khác chưa commit từ trước vẫn được giữ nguyên.
+Tái tạo đúng catalog cần giữ bản chụp `tmp/chat-v3-catalog.json`; xóa nó sẽ đọc catalog hiện tại và checksum có thể khác. Script so sánh từ chối bộ câu hỏi/học liệu khác checksum. Baseline gốc thuộc mã trước thay đổi trong lượt này (HEAD nền `86862bfecf`); không chạy mã mới rồi gắn nhãn baseline.
 
-## Thay đổi pipeline
+Nút **Hữu ích / Có lỗi**, hộp ghi chú vi/en, API phản hồi và script xem đã có từ migration 0020; tái sử dụng, không tạo bảng/nút trùng. Phản hồi gắn chủ sở hữu câu trả lời/hội thoại, có trong xuất dữ liệu và xóa/reset. Test kiểm tra phân quyền, cập nhật, xuất dữ liệu, cascade. Để xem:
 
-- Phân loại câu hỏi để chọn hợp đồng trả lời gọn: công thức/ý nghĩa/ví dụ, so sánh đối chiếu, tra từ, dịch đúng hướng, phân tích từng phần hoặc văn hóa. Trợ lý không lặp nguyên hướng dẫn hệ thống.
-- Nhiệt độ 0; kiểm tra cả đáp án dài thay vì chỉ thử lại đáp án gần rỗng. Kiểm tra hướng dịch, ngôn ngữ, nhãn/tiếng Trung, ví dụ, phủ định được yêu cầu và câu Nhật mới không có trong ngữ cảnh đã đối chiếu. Thử lại tối đa một lần. Lượt sửa bỏ lịch sử không tin cậy, chỉ giữ tham chiếu có cấu trúc đã biết nếu có.
-- Từ điển Kanji, từ vựng và ví dụ ngữ pháp khớp chính xác trả trực tiếp, có nguồn. Dịch tra cứu chỉ dùng cặp câu khớp chính xác, không bỏ phủ định. Cách đọc từ bộ chuyển kana có sẵn là hỗ trợ hiển thị, vẫn cần rà các cách đọc theo ngữ cảnh.
-- Lọc RAG đòi hỏi neo/từ khóa câu hỏi; bỏ fallback chỉ dựa vào điểm vector cao. Nguồn nội bộ/URL không hợp lệ bị lọc. Nếu không có tham chiếu không bịa ngữ pháp, nghĩa từ hoặc thông tin văn hóa. Các ví dụ seed vẫn cần người dạy kiểm tra; không đổi nhãn thành “đã được giáo viên duyệt”.
-- Câu hỏi tiếp nối chỉ lấy lịch sử đúng người dùng/cuộc hội thoại và có giới hạn hiện có; nhận diện thêm “mẫu/chữ vừa rồi”. Yêu cầu biến đổi không được fallback sang đáp án cũ như thể đã làm đúng. Khi không thể đối chiếu ví dụ mới thì trả rõ chưa xác minh được.
-- Bỏ nhánh trả nguyên ngữ cảnh tài liệu khi model lỗi. Giữ lỗi 503 cũ cho lỗi sinh câu trả lời tổng quát không có phương án tra cứu; các nhánh có căn cứ hoặc yêu cầu đã nhận diện có phản hồi phù hợp. Bản dịch chỉ do model đề xuất được gắn nhãn chưa đối chiếu học liệu.
-
-Đã đối chiếu lại sắc thái から/ので để bỏ ranh giới “chủ quan/khách quan” tuyệt đối và bổ sung nguồn công khai: [Irodori – Japan Foundation](https://www.irodori.jpf.go.jp/assets/data/Grammar_all.pdf). Tham chiếu địa điểm に/で: [Marugoto – Japan Foundation](https://a1.marugotoweb.jp/ja/grammar_topic5_10.php). Hai kiểu giải thích có bản vi/en; không đưa prompt hoặc tên quy tắc nội bộ lên giao diện nguồn.
-
-## Phản hồi người học và đưa ca lỗi vào bộ đo
-
-Migration **0020 nối 0019**, tạo `chat_answer_feedback`: người dùng, mã câu trả lời, mã hội thoại từ câu trả lời, đánh giá, ghi chú tối đa 1.000 ký tự, thời điểm. Không dùng lại trường `ChatHistory.feedback` vốn chứa phản hồi ngôn ngữ. Khóa duy nhất theo người dùng/câu trả lời; đổi đánh giá cập nhật cùng bản ghi. Hai route bổ sung, được đăng ký cả có/không tiền tố `/api`:
-
-- `GET /api/chat/answers/{message_id}/feedback`
-- `PUT /api/chat/answers/{message_id}/feedback` với `{rating: "helpful" | "incorrect", comment}`.
-
-Mọi thao tác kiểm tra chủ sở hữu câu trả lời; không tin user/conversation ID từ client. Web chỉ đọc phản hồi cũ khi mở form, tránh một truy vấn cho từng tin nhắn đang hiển thị. Khi mất mạng giữ ghi chú; cache có khóa người dùng. Có dịch vi/en, token theme, nút tối thiểu 44px và giảm chuyển động. Nguồn được ghi nhãn dễ đọc, giữ liên kết học liệu, ẩn nguồn nội bộ/URL nguy hiểm; không hiển thị điểm vector như độ tin cậy nội dung.
-
-Xuất dữ liệu tài khoản có phản hồi; xóa câu trả lời/hội thoại/tài khoản hoặc đặt lại lịch sử sẽ xóa phản hồi tương ứng. Không đổi điểm thưởng, lịch sử chống thưởng trùng Hằng ngày hay năng lực hội thoại. Migration upgrade/downgrade chạy lại an toàn; downgrade từ chối nếu có dữ liệu. Đã áp dụng `0020` trên PostgreSQL local; không chạy lệnh xóa/reset/downgrade trên dữ liệu thật để thử.
-
-Xuất phục vụ rà tay, từ `backend`:
-
-```powershell
+~~~powershell
 .\venv\Scripts\python.exe scripts/review_chat_feedback.py --rating incorrect --limit 100 --offset 0 --output ../tmp/chat-feedback-review.json
-```
+~~~
 
-Mặc định bỏ user/conversation/message ID; chỉ thêm khi dùng `--include-identifiers` trên máy được phép rà soát. Ghi chú vẫn có thể chứa thông tin riêng tư: cần gỡ thông tin cá nhân trước khi thêm vào bộ câu hỏi. Script đã chạy thử đọc 0 phản hồi trong bảng mới, không ghi dữ liệu tài khoản.
+Mặc định ẩn định danh; ghi chú vẫn có thể chứa dữ liệu riêng tư. Người biết tiếng Nhật xác minh lỗi, ẩn thông tin cá nhân, viết tham chiếu rồi thêm ca hồi quy. Không tự nhập phản hồi chưa duyệt vào gold/học liệu. Nguồn ngữ pháp gồm [Irodori](https://www.irodori.jpf.go.jp/assets/data/Grammar_all.pdf), [Marugoto](https://a1.marugotoweb.jp/ja/grammar_topic5_10.php); ví dụ seed vẫn cần rà chuyên môn.
 
-Quy trình: người biết tiếng Nhật đọc câu hỏi/câu trả lời/nguồn → xác nhận lỗi và đáp án tham chiếu → ẩn dữ liệu cá nhân → thêm ca hồi quy → chạy lại và xem cả nhóm cải thiện lẫn suy giảm. **Không tự động đưa phản hồi chưa kiểm chứng vào gold hoặc học liệu sinh câu trả lời**; production không đọc bộ đáp án kiểm thử.
+## File thay đổi và kiểm chứng
 
-## Kiểm chứng và giới hạn
+- Runtime: `backend/app/api/chat.py`; `core/config.py`; `services/chat_language.py`, `chat_quality.py`, `chat_knowledge.py`, `chat_grounding.py`, `chat_prompt.py`, `ollama_service.py`, `vocab_mcq_service.py`; thêm `services/chat_budget.py`.
+- Đo lường: `services/chat_evaluation.py`; `scripts/evaluate_chat_quality.py`, `report_chat_quality.py`; thêm `scripts/profile_chat_context.py`.
+- Test: thêm `tests/test_chat_v3.py`, ba corpus `chat_language_v3_cases.json`, `chat_quality_v3_cases.json`, `chat_legacy_regressions.json`; sửa `test_chat_language.py`, `test_chat_grounding.py`, `test_chat_intent_rules.py`, `test_chat_conversations.py`.
+- Tài liệu: trang này, `docs/README.md`, ba tệp bằng chứng v3 trong `docs/ket_qua/`.
 
-- Toàn bộ pytest: **308 đạt, 6 subtest đạt**; 8 lỗi Chat ban đầu đã được sửa. 8 test mới kiểm tra corpus/rubric, lỗi hướng dịch/ví dụ chưa xác minh, tra cứu giữ phủ định, phản hồi đúng chủ sở hữu, xuất/reset/cascade và migration. Nhóm Chat liên quan 50 test đạt; rubric sửa sau đó được kiểm tra lại riêng.
-- **65 test web đạt**, gồm 4 test mới cho nguồn/vi-en, form gửi góp ý, giữ nội dung khi lỗi và hợp đồng API. Build frontend, i18n web/mobile, lint các file web đổi đều đạt; còn cảnh báo bundle lớn/Browserslist hiện hữu và cache pytest không ghi được trong sandbox.
-- Trình duyệt với thành phần thật, đáp án/học liệu từ lượt đo và API phản hồi mô phỏng: 1280/768/390/320px, vi/en, sáng/tối và giảm chuyển động; không tràn ngang, gửi góp ý/thành công/lỗi mạng giữ ghi chú hoạt động. Không phải kiểm chứng luồng đăng nhập và lưu phản hồi thật xuyên suốt ứng dụng.
-- Đo thời gian một lượt local, có ảnh hưởng cache/khởi động/tải máy. Nhanh hơn chủ yếu nhờ tra cứu và ít gọi model, không phải model được tăng tốc. Chưa benchmark nhiều người dùng đồng thời hay mô hình khác.
-- Bộ đo thiên về câu hỏi tiếng Việt (có một ca chào hỏi tiếng Anh); kiểm tra vi/en bổ sung trong test. Tham chiếu, đọc kana, ví dụ seed và quan hệ nguồn–nhận định còn cần người biết tiếng Nhật duyệt. Một số yêu cầu dịch/so sánh/ví dụ mới được từ chối vì chưa có căn cứ; số câu chưa đạt vẫn được giữ trong báo cáo, không tính từ chối là trả lời đúng nội dung.
+Toàn bộ pytest: **400 đạt, 6 subtest đạt**, 26 cảnh báo thư viện cũ; nhóm liên quan **134 đạt**. Web **79 test đạt**; build frontend, khóa dịch web/mobile và kiểu mobile đạt. Không sửa giao diện hoặc thêm chuỗi UI trong lượt này; phản hồi server mới có bản vi/en. Build còn cảnh báo Browserslist/bundle lớn.
 
-Checklist còn lại:
+Checklist thủ công chưa thay thế bằng test:
 
-- [ ] Hai tài khoản thật: gửi/sửa góp ý, tải lại, xuất dữ liệu; xác nhận không đọc được góp ý của nhau.
-- [ ] Kiểm tra trong shell ứng dụng đầy đủ, thiết bị thật, bàn phím và trình đọc màn hình.
-- [ ] Giáo viên chấm ngữ nghĩa từng câu, đặc biệt bản dịch, cách đọc và ví dụ mới; mở rộng ca ngoài bộ đã dùng chỉnh sửa.
-- [ ] Khi có mô hình khác đã cài, chạy cùng corpus/học liệu và lặp nhiều lượt đo; không đổi mặc định trước khi người dùng quyết định.
+- [ ] UI vi/en: hỏi Nhật kèm furigana, Việt không dấu, keigo/JLPT; kiểm tra ngôn ngữ và tiêu đề nguồn.
+- [ ] Yêu cầu rõ “trả lời bằng tiếng Anh”, văn xuôi tiếng Anh, tiếng Anh trích trong câu Việt; kiểm tra ngôn ngữ đích của bản dịch.
+- [ ] Tiếp nối trong hội thoại, hai tài khoản tách biệt, nguồn liên quan, không lộ nhãn nội bộ.
+- [ ] Ngắt Ollama, câu quá dài, đầu ra bị cắt: phản hồi an toàn, không trả mảnh câu hỏng.
+- [ ] Điện thoại thật/trình duyệt đầy đủ: góp ý, giữ ghi chú khi mất mạng, tải lại/xuất dữ liệu; sáng/tối và trình đọc màn hình.
+- [ ] Giáo viên rà ngữ nghĩa toàn bộ ca, đặc biệt bản dịch/ví dụ; thêm bộ giữ riêng chưa dùng hiệu chỉnh.
 
-Quyết định còn cần sau: ai phụ trách duyệt tham chiếu/ca lỗi và có muốn cài thêm model để so sánh hay không. Không có quyết định chặn chạy bản hiện tại.
-
-## Ngôn ngữ và hội thoại
-
-
-Ứng dụng tiếp tục dùng Ollama với model cấu hình trong `OLLAMA_MODEL` (hiện là `gemma:2b`).
-
-- Chat chỉ tạo hội thoại văn bản. API tạo hội thoại giọng nói không còn được đăng ký; dữ liệu hội thoại cũ được giữ trong cơ sở dữ liệu.
-- Ngôn ngữ của câu hỏi hiện tại được ưu tiên. Hỏi bằng tiếng Việt thì giải thích bằng tiếng Việt; hỏi bằng tiếng Anh thì giải thích bằng tiếng Anh. Khi chỉ nhập tiếng Nhật, ứng dụng dùng ngôn ngữ giao diện làm lựa chọn mặc định.
-- Câu yêu cầu dịch vẫn được dịch sang ngôn ngữ được chỉ định. Nếu nội dung đã ở đúng ngôn ngữ đích, Chat thông báo điều đó và hỏi ngôn ngữ người học thực sự muốn dịch sang.
-- Lịch sử chỉ được gửi khi câu hỏi có tham chiếu tới nội dung trước. Các yêu cầu hỏi nghĩa hoặc dịch câu không lấy các trang Library chỉ giống nhau về điểm tìm kiếm làm nguồn.
-- Các ví dụ ngữ pháp đã đối chiếu có bản tiếng Việt và tiếng Anh. Khi model giải thích sai các ví dụ này, ứng dụng dùng nội dung đã đối chiếu kèm nguồn.
-- Phản hồi sai ngôn ngữ được thử tạo lại một lần. Nếu vẫn thất bại hoặc Ollama không kết nối được, API trả lỗi để người dùng gửi lại; không lưu thông báo lỗi thành câu trả lời trong lịch sử.
-
-`gemma:2b` vẫn có thể trả lời chưa chính xác với nội dung ngoài phạm vi tài liệu đã kiểm chứng. Các kiểm tra này giảm lỗi định tuyến, ngôn ngữ và nguồn tham khảo; không phải hệ thống xác minh mọi kiến thức do model sinh ra.
+Chưa kiểm chứng ngữ nghĩa bởi giáo viên, tải đồng thời và thiết bị thật. Kho thiếu ví dụ/giải thích song ngữ nên nhiều câu bị từ chối thay vì suy đoán; cần bổ sung học liệu, không che bằng điểm ngôn ngữ cao. Quyết định còn cần: ai duyệt tham chiếu và có muốn cài thêm model để so sánh sau hay không. Không có quyết định chặn bản sửa này.

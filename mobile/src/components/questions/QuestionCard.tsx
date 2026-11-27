@@ -6,6 +6,8 @@ import type { DailyAnswerResult, DailyItem } from '../../api/types'
 import { elapsedAnswerTime, toggleToken } from '../../features/daily/logic'
 import { useTheme } from '../../theme/ThemeProvider'
 import { AppText, Badge, Button, Card, Muted, Title, styles } from '../ui'
+import { AnswerExplanation } from './AnswerExplanation'
+import { KanjiText } from '../KanjiLookup'
 
 export function QuestionCard({ item, index, total, busy, result, onAnswer, onNext, choiceValues, choiceCorrect, typeLabel, lockOnAnswer = false }: {
   item: DailyItem; index: number; total: number; busy: boolean; result?: DailyAnswerResult
@@ -36,14 +38,14 @@ export function QuestionCard({ item, index, total, busy, result, onAnswer, onNex
     {(payload.level || payload.jlpt_level) && <Muted>{mobile('phase1.daily.actualLevel', { level: payload.level || payload.jlpt_level })}</Muted>}
     {(payload.kanji || payload.word) && <AppText selectable style={{ fontSize: item.item_type === 'kanji' ? 62 : 34, lineHeight: 76, textAlign: 'center', color: colors.primary, fontWeight: '700' }}>{payload.kanji || payload.word}</AppText>}
     {payload.reading && <AppText selectable style={{ textAlign: 'center', color: colors.textMuted }}>{payload.reading}</AppText>}
-    {item.item_type !== 'flashcard' && payload.prompt && <Title>{payload.prompt}</Title>}
+    {item.item_type !== 'flashcard' && payload.prompt && <Title><KanjiText text={payload.prompt} /></Title>}
     {choices && <View style={{ gap: 10 }}>{(payload.options ?? []).map((option, n) => {
       const value = choiceValues?.[n] ?? option
       const feedback = result && choiceCorrect && (choiceCorrect[n] || selected === value) ? `${t(choiceCorrect[n] ? 'shared.correct' : 'shared.incorrect')} · ` : ''
       return <Button key={`${n}:${option}`} title={`${feedback}${option}`} disabled={disabled} selected={selected === value} secondary={selected !== value} onPress={() => submit(value)} />
     })}</View>}
     {item.item_type === 'grammar' && item.question_type === 'true_false' && <>
-      <Muted>{mobile('phase1.daily.statement')}</Muted><AppText selectable style={{ fontSize: 19, lineHeight: 30 }}>{payload.statement || payload.prompt}</AppText>
+      <Muted>{mobile('phase1.daily.statement')}</Muted><AppText selectable style={{ fontSize: 19, lineHeight: 30 }}><KanjiText text={payload.statement || payload.prompt || ''} /></AppText>
       <Button title={mobile('phase1.daily.true')} secondary={selected !== true} disabled={disabled} onPress={() => submit(true)} />
       <Button title={mobile('phase1.daily.false')} secondary={selected !== false} disabled={disabled} onPress={() => submit(false)} />
     </>}
@@ -66,9 +68,7 @@ export function QuestionCard({ item, index, total, busy, result, onAnswer, onNex
     {result && <Card accessibilityLiveRegion="polite" style={{ backgroundColor: result.is_correct ? colors.accent : colors.bgElevated }}>
       <Title>{item.item_type === 'flashcard' ? t(result.is_correct ? 'daily.rememberedFeedback' : 'daily.reviewFeedback') : t(result.is_correct ? 'shared.correct' : 'shared.incorrect')}</Title>
       {item.item_type !== 'flashcard' && <AppText selectable>{t('daily.answer')}: {answerLabel(result.correct_answer)}</AppText>}
-      {!!result.explanation && <AppText selectable>{result.explanation}</AppText>}
-      {!!result.examples?.length && <Muted>{t('library.documentTypes.example')}</Muted>}
-      {(result.examples ?? []).map((example, n) => <View key={`${n}:${example.ja}`} style={{ gap: 5 }}><AppText selectable style={{ fontWeight: '600' }}>{example.ja}</AppText><AppText selectable>{i18n.language === 'en' ? example.en || example.vi : example.vi || example.en}</AppText></View>)}
+      {result.explanation_details ? <AnswerExplanation details={result.explanation_details} incorrect={!result.is_correct} /> : <>{!!result.explanation && <AppText selectable>{result.explanation}</AppText>}{!!result.examples?.length && <Muted>{t('library.documentTypes.example')}</Muted>}{(result.examples ?? []).map((example, n) => <View key={`${n}:${example.ja}`} style={{ gap: 5 }}><AppText selectable style={{ fontWeight: '600' }}>{example.ja}</AppText><AppText selectable>{i18n.language === 'en' ? example.en || example.vi : example.vi || example.en}</AppText></View>)}</>}
       <Button title={t(result.all_answered ? 'daily.viewSummary' : 'daily.nextQuestion')} disabled={busy} onPress={onNext} />
     </Card>}
   </Card>

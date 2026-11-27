@@ -95,11 +95,6 @@ def reviewed_reference(question: str, language: str = 'vi') -> tuple[str, list[d
             [{"title": "Phân biệt 〜から và 〜ので", "url":"https://www.irodori.jpf.go.jp/assets/data/Grammar_all.pdf", "type": "grammar_reference", "relevance": 1.0}]
         )
 
-    if '今日は何をしましたか' in question and is_translation_question(question):
-        answer = ('**Translation:** What did you do today?\n\n今日は: today (topic); 何を: what (object); しました: did (polite past); か: question marker.'
-                  if language == 'en' else '**Bản dịch:** Hôm nay bạn đã làm gì?\n\n- 今日は: hôm nay (chủ đề)\n- 何を: cái gì (tân ngữ)\n- しました: đã làm (quá khứ lịch sự)\n- か: trợ từ nghi vấn.')
-        return answer, [{"title": "Bản dịch câu đã đối chiếu", "type": "reviewed_translation", "relevance": 1.0}]
-
     return "", []
 
 

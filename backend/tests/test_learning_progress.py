@@ -221,7 +221,9 @@ def test_bounded_queries_report_truncation_and_exclude_future_answers(context, m
         data = service.overview(snapshot)
     finally:
         sa.event.remove(db.get_bind(), 'before_cursor_execute', capture)
-    assert len(statements) <= 18
+    flashcard_queries = [query for query in statements if 'FROM flashcard_sessions' in query]
+    assert len(flashcard_queries) <= 1
+    assert len(statements) - len(flashcard_queries) <= 18  # Keep the original source budget; one bounded new adapter.
     assert all(activity.at <= NOW for activity in snapshot.activities)
     assert data['skills']['grammar']['samples'] == 3
     assert data['coverage']['partial'] and 'grammar' in data['coverage']['truncated_sources']

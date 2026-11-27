@@ -14,7 +14,23 @@
 .writing-score::-webkit-progress-bar { background:var(--border); border-radius:1rem; }
 .writing-score::-webkit-progress-value { background:var(--primary); border-radius:1rem; }
 .writing-score::-moz-progress-bar { background:var(--primary); border-radius:1rem; }
+.writing-scorecard { display:grid; gap:1rem; border:1px solid var(--border); border-radius:1.25rem; padding:1rem; background:var(--bg-elevated); }
+.writing-score-heading { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.writing-total { display:flex; align-items:baseline; flex-shrink:0; gap:.25rem; }
+.writing-total strong { font-size:2.6rem; letter-spacing:-.05em; line-height:1; }
+.writing-total span { font-size:.8rem; color:var(--text-muted); }
+.writing-criteria { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; }
+.writing-criteria > div { background:var(--card); border:1px solid var(--border); border-radius:1rem; padding:.8rem; }
+.writing-error-counts { display:flex; flex-wrap:wrap; gap:.5rem; }
+.writing-error-counts span,.writing-stroke-metric { padding:.4rem .7rem; border-radius:.75rem; background:var(--accent); font-size:.8rem; }
+.writing-pass-explanation { padding:.8rem; border-radius:.85rem; border:1px solid var(--primary); font-size:.85rem; line-height:1.5; }
+.writing-strictness-description { display:flex; gap:.75rem; align-items:start; padding:.8rem; background:var(--accent); border-radius:.85rem; font-size:.85rem; line-height:1.5; }
+.writing-strictness-description span { flex-shrink:0; font-weight:700; padding:.1rem .4rem; border-radius:.4rem; background:var(--card); }
+@media(max-width:420px){.writing-criteria { grid-template-columns:1fr; }.writing-total strong { font-size:2rem; }}
 @media (min-width:1024px) { .writing-workspace { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (min-width:1024px) and (min-height:700px) {
+  .writing-information { position:sticky; top:5rem; max-height:calc(100dvh - 6rem); overflow-y:auto; scrollbar-gutter:stable; }
+}
 @media (prefers-reduced-motion: no-preference) {
   .writing-hint { stroke-dasharray: 100; animation: writing-next-stroke 1.4s ease-out; }
   .writing-reference-stroke { stroke-dasharray:100; animation:writing-next-stroke .6s ease-out both; }

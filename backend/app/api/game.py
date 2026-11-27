@@ -30,6 +30,10 @@ def normalize_flashcard_column(column: Any) -> str:
         "jlpt": "jlpt_level",
         "jlptlevel": "jlpt_level",
         "category": "category",
+        "reading": "reading",
+        "kana": "reading",
+        "note": "note",
+        "example": "note",
     }.get(key, "")
 
 
@@ -54,7 +58,7 @@ def parse_flashcard_dataframe(df: Any) -> List[dict]:
             continue
 
         card = {"front": front, "back": back}
-        for optional_column in ("jlpt_level", "category"):
+        for optional_column in ("jlpt_level", "category", "reading", "note"):
             if optional_column in column_map:
                 card[optional_column] = clean_cell(row[column_map[optional_column]])
         cards.append(card)

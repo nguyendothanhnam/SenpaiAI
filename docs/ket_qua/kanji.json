@@ -1,4 +1,642 @@
 {
+  "ui_b_followup": {
+    "date": "2026-11-25",
+    "branch": "mobile",
+    "scope": "Web writing UI only; no scorer, public API or mobile implementation change",
+    "checks": {
+      "backend_tests": 441,
+      "backend_subtests": 6,
+      "web_tests": 85,
+      "writing_web_tests": 20,
+      "web_build": "passed; existing chunk-size warning",
+      "changed_typescript_lint": "passed",
+      "web_mobile_i18n": "passed",
+      "mobile_typecheck": "passed"
+    },
+    "browser": {
+      "engine": "Edge headless",
+      "viewport_widths": [1440, 1024, 768, 390, 320],
+      "horizontal_overflow": false,
+      "bounded_grid_height": 224,
+      "desktop_reference_and_canvas_visible": true,
+      "keyboard_search_empty_level": "passed",
+      "simulated_overlay_playback_test_mode_preferences": "passed",
+      "api": "mocked; real components and 612 catalog entries",
+      "pointer_events": "synthetic; pointer capture mocked",
+      "native_cdp_mouse": "inconclusive: harness did not create strokes",
+      "physical_device": false,
+      "real_account_end_to_end": false
+    },
+    "limitations": "Physical mouse, touch, pen, midrange device performance and real-network save require manual acceptance. See DANH_GIA_NET_KANJI.md."
+  },
+  "alignment_v3": {
+    "date": "2026-11-25",
+    "scope": "Part A on mobile only; count-gap correspondence refinement. Original strictness profiles unchanged; additional configurable gap-order confidence proof. No public API renaming.",
+    "before_version": "stroke-rules-v2",
+    "after_version": "stroke-rules-v3",
+    "before_evaluate_sha256": "0a65a7b8847ce65ec02708718ef2bb6b34c94eff1d96c93149b59b2cb70f5f76",
+    "after_evaluate_sha256": "3118b15890c69885951a3700d6311401cc2a7f456df6e4366a53c4bfe275365c",
+    "historical_v1_reproduction": {
+      "kanji": "月",
+      "source": "KanjiVG template, alternating per-stroke x offset ±12 SVG units; no stroke reversal or permutation",
+      "not_original_user_trace": true,
+      "before": {
+        "scores": {
+          "order": 0,
+          "direction": 0,
+          "shape": 36,
+          "completeness": 100
+        },
+        "overall_score": 34,
+        "statuses": [
+          "wrong_shape",
+          "wrong_shape",
+          "wrong_shape",
+          "wrong_shape"
+        ]
+      },
+      "after": {
+        "scores": {
+          "order": 100,
+          "direction": 100,
+          "shape": 61,
+          "completeness": 100
+        },
+        "overall_score": 84,
+        "passed": true,
+        "version": "stroke-rules-v3",
+        "strictness": "standard"
+      }
+    },
+    "profiles": {
+      "easy": {
+        "gap_dataset_sha256": "537caf249c635141f065b1fd13022a3f996a724bd3f560413f367f4326afebae",
+        "correct_characters_by_level": {
+          "N5": [
+            "万",
+            "休",
+            "北",
+            "四",
+            "子",
+            "後",
+            "日",
+            "月",
+            "来",
+            "父",
+            "見",
+            "高"
+          ],
+          "N4": [
+            "不",
+            "写",
+            "図",
+            "屋",
+            "教",
+            "死",
+            "目",
+            "肉",
+            "送",
+            "黒"
+          ],
+          "N3": [
+            "与",
+            "冷",
+            "告",
+            "寄",
+            "恥",
+            "更",
+            "点",
+            "等",
+            "費",
+            "馬"
+          ]
+        },
+        "original_calibration_before": {
+          "correct": {
+            "success": 256,
+            "total": 256,
+            "rate": 1
+          },
+          "wrong_order": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_direction": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "missing": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "extra": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_shape": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "confusion": {
+            "success": 6,
+            "total": 6,
+            "rate": 1
+          }
+        },
+        "original_calibration_after": {
+          "correct": {
+            "success": 256,
+            "total": 256,
+            "rate": 1
+          },
+          "wrong_order": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_direction": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "missing": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "extra": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_shape": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "confusion": {
+            "success": 6,
+            "total": 6,
+            "rate": 1
+          }
+        },
+        "gap_before": {
+          "missing_position": {
+            "total": 228,
+            "success": 32,
+            "correct_location": 32,
+            "no_false_order_penalty": 33,
+            "rate": 0.1404
+          },
+          "extra_position": {
+            "total": 260,
+            "success": 32,
+            "correct_location": 32,
+            "no_false_order_penalty": 64,
+            "rate": 0.1231
+          }
+        },
+        "gap_after": {
+          "missing_position": {
+            "total": 228,
+            "success": 228,
+            "correct_location": 228,
+            "no_false_order_penalty": 228,
+            "rate": 1
+          },
+          "extra_position": {
+            "total": 260,
+            "success": 260,
+            "correct_location": 260,
+            "no_false_order_penalty": 260,
+            "rate": 1
+          }
+        },
+        "false_confusion_warnings_after": 0,
+        "gap_direction_after": {
+          "total": 488,
+          "no_false_direction_penalty": 488,
+          "failures": []
+        },
+        "after_failures": []
+      },
+      "standard": {
+        "gap_dataset_sha256": "537caf249c635141f065b1fd13022a3f996a724bd3f560413f367f4326afebae",
+        "correct_characters_by_level": {
+          "N5": [
+            "万",
+            "休",
+            "北",
+            "四",
+            "子",
+            "後",
+            "日",
+            "月",
+            "来",
+            "父",
+            "見",
+            "高"
+          ],
+          "N4": [
+            "不",
+            "写",
+            "図",
+            "屋",
+            "教",
+            "死",
+            "目",
+            "肉",
+            "送",
+            "黒"
+          ],
+          "N3": [
+            "与",
+            "冷",
+            "告",
+            "寄",
+            "恥",
+            "更",
+            "点",
+            "等",
+            "費",
+            "馬"
+          ]
+        },
+        "original_calibration_before": {
+          "correct": {
+            "success": 256,
+            "total": 256,
+            "rate": 1
+          },
+          "wrong_order": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_direction": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "missing": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "extra": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_shape": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "confusion": {
+            "success": 6,
+            "total": 6,
+            "rate": 1
+          }
+        },
+        "original_calibration_after": {
+          "correct": {
+            "success": 256,
+            "total": 256,
+            "rate": 1
+          },
+          "wrong_order": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_direction": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "missing": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "extra": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_shape": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "confusion": {
+            "success": 6,
+            "total": 6,
+            "rate": 1
+          }
+        },
+        "gap_before": {
+          "missing_position": {
+            "total": 228,
+            "success": 32,
+            "correct_location": 32,
+            "no_false_order_penalty": 33,
+            "rate": 0.1404
+          },
+          "extra_position": {
+            "total": 260,
+            "success": 32,
+            "correct_location": 32,
+            "no_false_order_penalty": 64,
+            "rate": 0.1231
+          }
+        },
+        "gap_after": {
+          "missing_position": {
+            "total": 228,
+            "success": 228,
+            "correct_location": 228,
+            "no_false_order_penalty": 228,
+            "rate": 1
+          },
+          "extra_position": {
+            "total": 260,
+            "success": 260,
+            "correct_location": 260,
+            "no_false_order_penalty": 260,
+            "rate": 1
+          }
+        },
+        "false_confusion_warnings_after": 0,
+        "gap_direction_after": {
+          "total": 488,
+          "no_false_direction_penalty": 488,
+          "failures": []
+        },
+        "after_failures": []
+      },
+      "strict": {
+        "gap_dataset_sha256": "537caf249c635141f065b1fd13022a3f996a724bd3f560413f367f4326afebae",
+        "correct_characters_by_level": {
+          "N5": [
+            "万",
+            "休",
+            "北",
+            "四",
+            "子",
+            "後",
+            "日",
+            "月",
+            "来",
+            "父",
+            "見",
+            "高"
+          ],
+          "N4": [
+            "不",
+            "写",
+            "図",
+            "屋",
+            "教",
+            "死",
+            "目",
+            "肉",
+            "送",
+            "黒"
+          ],
+          "N3": [
+            "与",
+            "冷",
+            "告",
+            "寄",
+            "恥",
+            "更",
+            "点",
+            "等",
+            "費",
+            "馬"
+          ]
+        },
+        "original_calibration_before": {
+          "correct": {
+            "success": 252,
+            "total": 256,
+            "rate": 0.9844
+          },
+          "wrong_order": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_direction": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "missing": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "extra": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_shape": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "confusion": {
+            "success": 6,
+            "total": 6,
+            "rate": 1
+          }
+        },
+        "original_calibration_after": {
+          "correct": {
+            "success": 252,
+            "total": 256,
+            "rate": 0.9844
+          },
+          "wrong_order": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_direction": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "missing": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "extra": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "wrong_shape": {
+            "success": 32,
+            "total": 32,
+            "rate": 1
+          },
+          "confusion": {
+            "success": 6,
+            "total": 6,
+            "rate": 1
+          }
+        },
+        "gap_before": {
+          "missing_position": {
+            "total": 228,
+            "success": 32,
+            "correct_location": 32,
+            "no_false_order_penalty": 38,
+            "rate": 0.1404
+          },
+          "extra_position": {
+            "total": 260,
+            "success": 32,
+            "correct_location": 32,
+            "no_false_order_penalty": 64,
+            "rate": 0.1231
+          }
+        },
+        "gap_after": {
+          "missing_position": {
+            "total": 228,
+            "success": 228,
+            "correct_location": 228,
+            "no_false_order_penalty": 228,
+            "rate": 1
+          },
+          "extra_position": {
+            "total": 260,
+            "success": 260,
+            "correct_location": 260,
+            "no_false_order_penalty": 260,
+            "rate": 1
+          }
+        },
+        "false_confusion_warnings_after": 0,
+        "gap_direction_after": {
+          "total": 488,
+          "no_false_direction_penalty": 488,
+          "failures": []
+        },
+        "after_failures": [
+          {
+            "kanji": "屋",
+            "kind": "correct",
+            "variant": 6,
+            "score": 91,
+            "scores": {
+              "order": 100,
+              "direction": 100,
+              "shape": 77,
+              "completeness": 100
+            },
+            "statuses": [
+              "correct",
+              "correct",
+              "correct",
+              "correct",
+              "wrong_shape",
+              "correct",
+              "correct",
+              "correct",
+              "wrong_shape"
+            ]
+          },
+          {
+            "kanji": "与",
+            "kind": "correct",
+            "variant": 7,
+            "score": 94,
+            "scores": {
+              "order": 100,
+              "direction": 100,
+              "shape": 86,
+              "completeness": 100
+            },
+            "statuses": [
+              "wrong_shape",
+              "correct",
+              "correct"
+            ]
+          },
+          {
+            "kanji": "告",
+            "kind": "correct",
+            "variant": 7,
+            "score": 92,
+            "scores": {
+              "order": 100,
+              "direction": 100,
+              "shape": 81,
+              "completeness": 100
+            },
+            "statuses": [
+              "correct",
+              "correct",
+              "correct",
+              "correct",
+              "correct",
+              "wrong_shape",
+              "correct"
+            ]
+          },
+          {
+            "kanji": "更",
+            "kind": "correct",
+            "variant": 7,
+            "score": 92,
+            "scores": {
+              "order": 100,
+              "direction": 100,
+              "shape": 79,
+              "completeness": 100
+            },
+            "statuses": [
+              "correct",
+              "wrong_shape",
+              "correct",
+              "correct",
+              "correct",
+              "correct",
+              "correct"
+            ]
+          }
+        ]
+      }
+    },
+    "checks": {
+      "full_pytest_passed": 441,
+      "full_subtests_passed": 6,
+      "related_pytest_passed": 43,
+      "web_tests_passed": 80,
+      "frontend_build_exit_code": 0,
+      "changed_component_lint": "passed",
+      "web_mobile_i18n": "passed"
+    },
+    "limits": [
+      "Synthetic KanjiVG variations only; not validated against independent handwriting or physical devices.",
+      "Missing/extra location cannot be known uniquely for identical overlapping strokes.",
+      "Before here is the current v2 after data repairs; historical v1/v2 evidence remains separate and unchanged.",
+      "Old saved attempts keep their original version/scores and retry result. New attempts store stroke-rules-v3."
+    ]
+  },
   "description": "Historical measurements, preserved without rerunning or changing scores. Each section retains its own cases and limits.",
   "baseline": {
     "seed": "codepoint*100+variant",

@@ -1,6 +1,6 @@
 # Tài liệu SenpaiAI
 
-Tài liệu được gom theo chủ đề, cập nhật ngày 24/11/2026 từ workspace nhánh `mobile`. Một số chức năng mô tả trong tài liệu còn là thay đổi mã nguồn chưa commit; lần dọn tài liệu này không phát hành các thay đổi mã đó.
+Tài liệu được gom theo chủ đề, cập nhật ngày 24/11/2026 từ workspace nhánh `mobile`. Các mốc đo có thời điểm và phạm vi riêng; bản sửa Chat v3 hiện được kiểm chứng trong workspace.
 
 | Cần tìm | Tài liệu |
 | --- | --- |
@@ -12,15 +12,17 @@ Tài liệu được gom theo chủ đề, cập nhật ngày 24/11/2026 từ wo
 | Sổ câu đã phục vụ, chống trùng và báo cáo kho | [Chọn bài tập](DICH_VU_CHON_BAI_TAP.md) |
 | Năng lực, lộ trình, mục tiêu và báo cáo học tập | [Lộ trình và tiến độ](LO_TRINH_VA_TIEN_DO.md) |
 | Chín minigame, chiến dịch, XP và tra Kanji | [Minigame](MINIGAMES.md) |
+| Bộ thẻ theo tài khoản, thẻ lật/Learn/Test, thống kê và Expo | [Flashcard](FLASHCARDS.md) |
 | Bảng rà soát nghĩa và ví dụ của 367 chữ N3, kèm nguồn/giấy phép | [Rà soát Kanji N3](kanji_n3_review.md) |
 | Rà soát nội dung tài liệu mẫu | [Rà soát thư viện](library_documents_review.md) |
 
 ## Bằng chứng kiểm thử được giữ lại
 
 - [Chat trước](ket_qua/chat_baseline.json) và [Chat sau](ket_qua/chat_after.json): giữ nguyên câu trả lời, rubric, thời gian và checksum, không chỉ giữ điểm tổng.
+- [Chat v3 trước](ket_qua/chat_v3_baseline.json), [Chat v3 sau](ket_qua/chat_v3_after.json): bộ 96 câu mới; [đo context và bộ nhớ](ket_qua/chat_context_profile.json). Cách chấm lại cùng rubric và các giới hạn nằm trong [Đánh giá Chat](DANH_GIA_CHAT.md).
 - [Hiệu chỉnh Kanji](ket_qua/kanji.json): gộp baseline, ba mức chấm, ca tái hiện 34/100 và báo cáo v1 cũ có nhãn lịch sử. Các phép đo khác bộ ca không được so trực tiếp như cùng một benchmark.
 
-Các số đo có thời điểm và giới hạn riêng; không coi kết quả mô phỏng là độ chính xác với người học thật. Lần kiểm tra mã gần nhất trước khi dọn docs: 321 pytest + 6 subtest, 79 test web; không chạy lại build/test ứng dụng chỉ vì gộp tài liệu.
+Không coi kết quả mô phỏng là độ chính xác với người học thật. Kết quả kiểm tra hiện tại được ghi ở tài liệu từng chủ đề; không so trực tiếp các benchmark khác bộ ca.
 
 ## Quy ước duy trì
 

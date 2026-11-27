@@ -16,6 +16,7 @@ from ..models.schemas import TokenData
 from ..services.audio_service import VoicevoxProvider, VoicevoxError, cached_segments, choose_speaker_id, furigana_tokens, synthesize_segments
 from ..services.listening_from_library import generate_listening_draft
 from ..services.listening_exercises import build_exercises, public_questions, grade_questions
+from ..services.listening_video import video_url, parse_subtitles, validate_segments
 
 router = APIRouter(prefix="/listening", tags=["listening"])
 optional_bearer = HTTPBearer(auto_error=False)
@@ -79,6 +80,62 @@ class LibraryDraftRequest(BaseModel):
     topic: Optional[str] = Field(default=None, max_length=80)
 
 
+class SubtitleParseRequest(BaseModel):
+    url: str = Field(min_length=1, max_length=500)
+    subtitles: str = Field(min_length=1, max_length=1048576)
+
+
+class VideoSegment(BaseModel):
+    start_ms: int = Field(ge=0)
+    end_ms: int = Field(ge=0)
+    ja: str = Field(min_length=1, max_length=1000)
+    vi: str = Field(default='', max_length=1000)
+
+
+class VideoSaveRequest(BaseModel):
+    url: str = Field(min_length=1, max_length=500)
+    title: str = Field(min_length=1, max_length=200)
+    jlpt_level: Literal['N5', 'N4', 'N3', 'N2', 'N1']
+    topic: str = Field(min_length=1, max_length=80)
+    source_note: str = Field(default='', max_length=2000)
+    segments: list[VideoSegment] = Field(min_length=1, max_length=50)
+
+
+@router.post('/video/parse')
+def parse_video_subtitles(body: SubtitleParseRequest, user: User = Depends(get_current_active_user)):
+    try:
+        source = video_url(body.url)
+        return {'video': source, 'segments': parse_subtitles(body.subtitles)}
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+
+
+@router.post('/video/lessons', status_code=201)
+def create_video_lesson(body: VideoSaveRequest, user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    try:
+        source = video_url(body.url)
+        segments = [item.model_dump() for item in body.segments]
+        validate_segments(segments)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+    if not body.title.strip() or not body.topic.strip():
+        raise HTTPException(422, 'subtitle_invalid_text')
+    for index, segment in enumerate(segments):
+        segment['idx'] = index
+        segment['ja'] = segment['ja'].strip()
+        segment['vi'] = segment['vi'].strip()
+        try:
+            segment['tokens'] = furigana_tokens(segment['ja'])
+        except RuntimeError:
+            segment['tokens'] = []
+    lesson = ListeningLesson(title=body.title.strip(), jlpt_level=body.jlpt_level, topic=body.topic.strip(),
+        description='', segments=segments, duration_ms=segments[-1]['end_ms'], source='video', is_published=True,
+        created_by=user.id, video_url=source['url'], video_provider=source['provider'], video_id=source['video_id'],
+        source_note=body.source_note.strip())
+    db.add(lesson); db.commit(); db.refresh(lesson)
+    return {'id': lesson.id}
+
+
 class LibraryLessonSaveRequest(BaseModel):
     document_id: int
     title: str = Field(min_length=1, max_length=200)
@@ -102,7 +159,7 @@ def optional_current_user(credentials: Optional[HTTPAuthorizationCredentials] = 
 
 
 def _library_lesson_visible(lesson: ListeningLesson, user: Optional[User]) -> bool:
-    return lesson.source != "library" or (user is not None and lesson.created_by == user.id)
+    return lesson.source not in ("library", "video") or (user is not None and lesson.created_by == user.id)
 
 
 def parse_range_header(value: str, size: int) -> tuple[int, int] | None:
@@ -130,11 +187,13 @@ def list_lessons(jlpt_level: Optional[str] = None, topic: Optional[str] = None,
                  current_user: Optional[User] = Depends(optional_current_user), db: Session = Depends(get_db)):
     query = db.query(ListeningLesson).filter(ListeningLesson.is_published.is_(True))
     if current_user is None:
-        query = query.filter(ListeningLesson.source != "library")
+        query = query.filter(~ListeningLesson.source.in_(["library", "video"]))
     else:
-        query = query.filter((ListeningLesson.source != "library") | (ListeningLesson.created_by == current_user.id))
+        query = query.filter((~ListeningLesson.source.in_(["library", "video"])) | (ListeningLesson.created_by == current_user.id))
     if source == "library":
         query = query.filter(ListeningLesson.source == "library", ListeningLesson.created_by == (current_user.id if current_user else -1))
+    elif source == "video":
+        query = query.filter(ListeningLesson.source == "video", ListeningLesson.created_by == (current_user.id if current_user else -1))
     if jlpt_level:
         query = query.filter(ListeningLesson.jlpt_level == jlpt_level.upper())
     if topic:
@@ -176,7 +235,9 @@ def get_lesson(lesson_id: int, current_user: Optional[User] = Depends(optional_c
         db.commit()
     return {"id": lesson.id, "title": lesson.title, "jlpt_level": lesson.jlpt_level,
             "topic": lesson.topic, "description": lesson.description,
-            "segments": enriched_segments, "duration_ms": lesson.duration_ms, "source": lesson.source}
+            "segments": enriched_segments, "duration_ms": lesson.duration_ms, "source": lesson.source,
+            "video_url": lesson.video_url, "video_provider": lesson.video_provider, "video_id": lesson.video_id,
+            "source_note": lesson.source_note}
 
 
 @router.get("/lessons/{lesson_id}/audio")
@@ -187,6 +248,8 @@ def get_lesson_audio(lesson_id: int, range_header: Optional[str] = Header(None, 
                                               ListeningLesson.is_published.is_(True)).first()
     if not lesson or not _library_lesson_visible(lesson, current_user):
         raise HTTPException(404, detail="listening_lesson_not_found")
+    if lesson.source == 'video':
+        raise HTTPException(404, detail='lesson_audio_not_found')
     media_root = Path(settings.listening_media_dir).resolve()
     audio_file = (media_root / lesson.audio_path).resolve() if lesson.audio_path else None
     if audio_file is not None and not audio_file.is_relative_to(media_root):

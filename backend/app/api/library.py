@@ -21,6 +21,8 @@ from ..models.schemas import (
     LibraryStatsResponse,
 )
 from ..services.library_service import library_service
+from ..services.library_extract import MAX_FILE_BYTES, error
+from starlette.concurrency import run_in_threadpool
 from ..services.library_localization import localize_document
 
 router = APIRouter(prefix="/library", tags=["library"])
@@ -52,7 +54,7 @@ async def fetch_document_url(
 ):
     """Fetch a URL and return readable text for the Add Document form."""
     del current_user
-    return library_service.fetch_url_content(payload.url)
+    return await run_in_threadpool(library_service.fetch_url_content, payload.url)
 
 
 @router.post("/parse-file", response_model=DocumentParseFileResponse)
@@ -63,8 +65,10 @@ async def parse_document_file(
 ):
     """Parse uploaded file (PDF, DOC, DOCX, TXT, MD) and return extracted title and content."""
     del current_user
-    file_bytes = await file.read()
-    title, content = library_service.extract_file_content(file.filename or "uploaded_document", file_bytes)
+    file_bytes = await file.read(MAX_FILE_BYTES + 1)
+    if len(file_bytes) > MAX_FILE_BYTES:
+        error("library_file_too_large", 413)
+    title, content = await run_in_threadpool(library_service.extract_file_content, file.filename or "uploaded_document", file_bytes)
     return DocumentParseFileResponse(title=title, content=content, file_name=file.filename or "")
 
 
@@ -80,9 +84,10 @@ async def upload_document_file(
     db: Session = Depends(get_db),
 ):
     """Directly upload a document file (PDF, Word, etc.), parse, save to DB and index to ChromaDB."""
-    del current_user
-    file_bytes = await file.read()
-    extracted_title, content = library_service.extract_file_content(file.filename or "uploaded_document", file_bytes)
+    file_bytes = await file.read(MAX_FILE_BYTES + 1)
+    if len(file_bytes) > MAX_FILE_BYTES:
+        error("library_file_too_large", 413)
+    extracted_title, content = await run_in_threadpool(library_service.extract_file_content, file.filename or "uploaded_document", file_bytes)
     doc_title = title.strip() if title and title.strip() else extracted_title
 
     tag_list = [t.strip() for t in tags.split(",") if t.strip()] if tags else []
@@ -95,7 +100,7 @@ async def upload_document_file(
         tags=tag_list,
         source_url=file.filename,
     )
-    return library_service.create_document(db, payload)
+    return library_service.create_document(db, payload, user_id=current_user.id)
 
 
 @router.get("/documents", response_model=DocumentListResponse)
@@ -150,7 +155,7 @@ async def create_document(
     db: Session = Depends(get_db),
 ):
     """Create a document, then chunk and index it in ChromaDB."""
-    return library_service.create_document(db, payload)
+    return library_service.create_document(db, payload, user_id=current_user.id)
 
 
 @router.put("/documents/{document_id}", response_model=DocumentSchema)
