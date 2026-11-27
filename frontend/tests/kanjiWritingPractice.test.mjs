@@ -7,6 +7,19 @@ const exports={},stored=new Map()
 vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/features/kanjiWriting/practice.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{exports,localStorage:{getItem:key=>stored.get(key),setItem:(key,value)=>stored.set(key,value)}})
 const items=[{kanji:'月',level:'N5',stroke_count:4,meaning_vi:'mặt trăng, tháng',onyomi:['ゲツ'],kunyomi:['つき']},{kanji:'日',level:'N5',stroke_count:4,meaning_vi:'ngày, mặt trời'},{kanji:'屋',level:'N4',stroke_count:9,meaning_vi:'mái nhà'}]
 const history=[{kanji:'月',attempts:3,passed_count:2,last_passed:true,last_score:90,last_practiced:'2026-11-23T12:00:00Z'},{kanji:'日',attempts:2,passed_count:1,last_passed:false,last_score:40,last_practiced:'2026-11-24T12:00:00Z'}]
+
+test('score explanation counts simultaneous direction/order errors and never invents a missing-stroke shape score',()=>{
+ const result={strokes:[{status:'wrong_order',order_error:true,direction_error:true,metrics:{distance:.08,length_ratio:.6}},{status:'missing',metrics:null},{status:'extra',metrics:null}],thresholds:{distance:.16,length_ratio:.42},score_weights:{order:.2,direction:.2,shape:.4,completeness:.2},pass_score:80}
+ const summary=exports.writingScoreSummary(result)
+ assert.equal(summary.errors.wrong_order,1)
+ assert.equal(summary.errors.wrong_direction,1)
+ assert.equal(summary.errors.missing,1)
+ assert.equal(summary.errors.extra,1)
+ assert.equal(exports.strokeShapeScore(result.strokes[0],result),83)
+ assert.equal(exports.strokeShapeScore(result.strokes[1],result),null)
+ assert.equal(exports.strokeShapeScore(result.strokes[0],{...result,thresholds:undefined}),null)
+ assert.equal(exports.writingScoreSummary({strokes:[]}).passScore,80)
+})
 test('picker filters only supported entries by level, unaccented Vietnamese and kana variants',()=>{
  assert.equal(exports.filterCharacters(items,'N5','mat trang')[0].kanji,'月')
  assert.equal(exports.filterCharacters(items,'N5','げつ')[0].kanji,'月')
@@ -51,4 +64,33 @@ test('feedback describes only observed geometry and keeps server status authorit
  assert.equal(exports.strokeDetail(row,{template,user:[{x:0,y:0},{x:160,y:0}]}),'writingUI.tooLong')
  assert.equal(exports.strokeDetail(row,{template,user:[{x:10,y:0},{x:90,y:0}]}),'writingUI.tooRight')
  assert.equal(exports.strokeDetail({status:'wrong_direction'},{template,user:template}),'writing.status.wrong_direction')
+})
+
+test('reading search preserves voiced and semi-voiced kana while folding Vietnamese accents',()=>{
+ const bank=[{kanji:'学',level:'N5',onyomi:['ガク']},{kanji:'角',level:'N5',onyomi:['カク']},
+  {kanji:'派',level:'N5',onyomi:['パ']},{kanji:'波',level:'N5',onyomi:['ハ']}]
+ assert.deepEqual(Array.from(exports.filterCharacters(bank,'N5','がく'),r=>r.kanji),['学'])
+ assert.deepEqual(Array.from(exports.filterCharacters(bank,'N5','ｶﾞｸ'),r=>r.kanji),['学'])
+ assert.deepEqual(Array.from(exports.filterCharacters(bank,'N5','かく'),r=>r.kanji),['角'])
+ assert.deepEqual(Array.from(exports.filterCharacters(bank,'N5','ぱ'),r=>r.kanji),['派'])
+ assert.equal(exports.filterCharacters(items,'N5','MẶT TRĂNG')[0].kanji,'月')
+})
+
+test('keyboard movement is bounded and leaves unrelated keys to the browser',()=>{
+ for(const [key,from,expected]of[['ArrowRight',0,1],['ArrowDown',0,4],['ArrowUp',4,0],['ArrowLeft',0,0],['ArrowDown',10,11],['Home',8,0],['End',0,11],['Tab',4,-1]]){
+  assert.equal(exports.gridNavigationIndex(key,from,12,4),expected)
+ }
+ assert.equal(exports.gridNavigationIndex('ArrowRight',-1,12,4),-1)
+ assert.equal(exports.gridNavigationIndex('ArrowRight',0,0,4),-1)
+})
+
+test('v3 extra strokes in the middle have no invented target and missing strokes use expected_index',()=>{
+ const trace=[[{x:0,y:0},{x:100,y:0}],[{x:40,y:40},{x:50,y:50}],
+  [{x:100,y:0},{x:100,y:100}],[{x:0,y:100},{x:100,y:100}]]
+ const reference=exports.normalizeWriting([trace[0],trace[2],trace[3]])
+ const extra=exports.buildOverlay(trace,reference,{index:2,expected_index:null,status:'extra'})
+ assert.equal(extra.template.length,0);assert.equal(extra.user.length,32)
+ const missing=exports.buildOverlay(trace.slice(0,2),reference,{index:3,expected_index:1,status:'missing'})
+ assert.equal(missing.user.length,0);assert.equal(missing.template[0].x,10)
+ assert.equal(missing.template[0].y,10)
 })

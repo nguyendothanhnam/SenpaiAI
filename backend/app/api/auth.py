@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from datetime import timedelta, datetime
 
@@ -163,6 +163,27 @@ async def update_current_user(
         )
 
 
+@router.get("/me/export/download")
+def download_personal_data(
+        format: str = Query("json", pattern="^(json|zip)$"),
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)):
+    from ..services.personal_export import build_archive
+    return build_archive(db, current_user, format)
+
+
+@router.get("/me/export/report")
+def personal_learning_report(
+        language: str = Query("vi", pattern="^(vi|en)$"),
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)):
+    from fastapi.responses import Response
+    from ..services.personal_export import report_html, export_day
+    return Response(report_html(db, current_user, language), media_type="text/html",
+                    headers={"Cache-Control": "no-store", "Content-Disposition": f'attachment; filename="senpaiai-{export_day()}.html"',
+                             "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'", "X-Content-Type-Options": "nosniff"})
+
+
 @router.get("/me/export")
 async def export_user_data(
         current_user: User = Depends(get_current_active_user),
@@ -211,8 +232,10 @@ async def export_user_data(
         from ..models.database import ReminderSettings
         reminder_settings = db.query(ReminderSettings).filter(ReminderSettings.user_id == current_user.id).first()
 
+        from ..services.flashcards import export_data as export_flashcards
         # Format data for export
         export_data = {
+            "flashcards": export_flashcards(db, current_user.id),
             "learning_progress": export_progress(LearningSnapshot(db, current_user)),
             "minigame_learning_events": [{"event_id":row.event_key,"game":row.game,"source_type":row.source_type,"source_id":row.source_id,"action":row.action,"answer":row.answer,"level":row.jlpt_level,"created_at":row.created_at.isoformat()}
                 for row in db.query(MinigameLearningEvent).filter_by(user_id=current_user.id).order_by(MinigameLearningEvent.id).all()],
@@ -361,6 +384,8 @@ async def reset_user_progress(
 
     try:
         clear_history(db, current_user.id)
+        from ..services.flashcards import clear_data
+        clear_data(db, current_user.id)
         db.query(KanjiWritingReport).filter_by(user_id=current_user.id).delete(synchronize_session=False)
         db.query(KanjiWritingAttempt).filter_by(user_id=current_user.id).delete(synchronize_session=False)
         db.query(MinigameLearningEvent).filter_by(user_id=current_user.id).delete(synchronize_session=False)
@@ -385,9 +410,9 @@ async def reset_user_progress(
 
         return {
             "message": "Progress reset successfully",
-            "reset_items": ["chat_history", "chat_conversations", "voice_conversations", "learning_sessions", "grammar_practice_attempts", "exercise_history", "kanji_writing_attempts", "kanji_writing_reports", "chat_answer_feedback", "minigame_learning_events"],
+            "reset_items": ["chat_history", "chat_conversations", "voice_conversations", "learning_sessions", "grammar_practice_attempts", "exercise_history", "kanji_writing_attempts", "kanji_writing_reports", "chat_answer_feedback", "minigame_learning_events", "flashcard_progress", "flashcard_sessions", "flashcard_assessments"],
             "preserved_chat_items": ["chat_folders"],
-            "preserved_items": ["rewards", "daily_tasks", "study_item_stats", "reminder_settings", "push_subscriptions"],
+            "preserved_items": ["rewards", "daily_tasks", "study_item_stats", "reminder_settings", "push_subscriptions", "flashcard_decks", "flashcard_cards", "flashcard_transfers"],
             "preserved_reason": "Giữ điểm, nhiệm vụ và thống kê học để tránh làm lại nhằm nhận điểm lần nữa.",
         }
 
@@ -408,6 +433,8 @@ async def delete_current_user(
     from ..services.exercise_selection import clear_history
     try:
         clear_history(db, current_user.id)
+        from ..services.flashcards import clear_data
+        clear_data(db, current_user.id, decks=True)
         from ..models.database import (ChatConversation, ChatFolder, ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction, VoiceConversation, ListeningAttempt,
                                        UserGameProfile, UserUnlockedItem, DailyTask, DailyTaskItem, StudyItemStat,
                                        ReminderSettings, Notification, PushSubscription, PlacementAttempt, PlacementAttemptItem, WeeklyLearningGoal, KanjiWritingAttempt, KanjiWritingReport, ChatAnswerFeedback, UserKanjiNote, MinigameLearningEvent)

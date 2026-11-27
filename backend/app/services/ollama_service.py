@@ -12,6 +12,7 @@ from .chat_prompt import CHAT_SYSTEM_PROMPT, build_chat_system_prompt, task_prom
 from .chat_quality import violations
 from .chat_grounding import clean_chat_answer, finalize_chat_answer, reviewed_reference
 from .chat_language import detect_chat_language, answer_needs_revision
+from .chat_budget import CHAT_CALL, bounded_prompt, measured_generation, IncompleteChatResponse
 
 
 GRAMMAR_SCHEMA = {
@@ -60,6 +61,8 @@ class OllamaJapaneseLearningService:
         response_format: Any = None
     ) -> str:
         """Call Ollama API directly with fast execution options."""
+        if CHAT_CALL.get():
+            return measured_generation(self,prompt,system_prompt,num_predict,temperature)
         if not isinstance(response_format, dict) and not self.check_ollama_connection():
             raise Exception("Ollama is not running. Please start Ollama service.")
 
@@ -140,73 +143,53 @@ class OllamaJapaneseLearningService:
         raise Exception(f"Ollama API error after {max_retries + 1} attempts: {error_msg}")
 
     async def chat_response(
-            self,
-            question: str,
-            context: Optional[str] = None,
-            jlpt_level: Optional[str] = None,
-            response_language: Optional[str] = None,
+            self, question: str, context: Optional[str] = None,
+            jlpt_level: Optional[str] = None, response_language: Optional[str] = None,
     ) -> Dict[str, Any]:
-        """Generate a chat response with RAG context."""
-        start_time = time.time()
-        language = response_language or detect_chat_language(question)
-        system_prompt = task_prompt(question,language)
+        """Two bounded attempts at most, then a short safe answer, never bad prose."""
+        from .chat_quality import uncertainty
+        language=response_language or detect_chat_language(question)
+        system=task_prompt(question,language)
+        evidence,_,history=(context or '').partition('\n\n[PRIOR_TURNS]\n')
+        trusted=evidence.startswith(('[EVIDENCE]\n','Reviewed reference:','**Cấu trúc:**'))
+        evidence=evidence.removeprefix('[EVIDENCE]\n')
+        start=time.time()
+        for attempt in range(2):
+            try:
+                correction='\nTrả lời thật ngắn, hoàn toàn bằng tiếng Việt.' if language=='vi'else'\nUse one short explanation and one checked example only.'
+                strict=system+(correction if attempt else '')
+                prompt,budget=bounded_prompt(strict,question,evidence if not attempt or trusted else '',history if not attempt else '',
+                    settings.chat_ollama_context,settings.chat_output_tokens,language)
+                import logging
+                logging.getLogger('senpaiai.chat.metrics').info('prompt_budget %s',json.dumps(budget))
+                marker=CHAT_CALL.set(True)
+                try:
+                    raw=await asyncio.to_thread(self._call_ollama,prompt,strict,
+                        temperature=0,num_predict=settings.chat_output_tokens)
+                finally:
+                    CHAT_CALL.reset(marker)
+                # Validate before cleaning so stripped labels cannot hide a violation.
+                problems=violations(question,raw,language,evidence)
+                if problems:
+                    logging.getLogger('senpaiai.chat.metrics').info('validation_failed attempt=%s codes=%s',attempt+1,','.join(problems))
+                    continue
+                answer=finalize_chat_answer(question,raw,language)
+                if violations(question,answer,language,evidence):continue
+                return {'answer':answer,'jlpt_level':jlpt_level,'response_time':time.time()-start}
+            except ValueError as exc:
+                if str(exc)=='chat_question_exceeds_budget':
+                    answer=('Câu hỏi vượt ngân sách ngữ cảnh an toàn. Bạn hãy chia thành các đoạn ngắn hơn để mình giải thích.' if language=='vi' else
+                            'This question exceeds the safe context budget. Please split it into shorter parts.')
+                    return {'answer':answer,'jlpt_level':jlpt_level,'response_time':time.time()-start}
+            except IncompleteChatResponse:
+                continue
+            except Exception as exc:
+                # A transport failure is not trustworthy answer content either.
+                import logging
+                logging.getLogger('senpaiai.chat.metrics').warning('generation_failed model=%s error_type=%s prompt_eval_count=unavailable',self.model,type(exc).__name__)
+                continue
+        return {'answer':uncertainty(language),'jlpt_level':jlpt_level,'response_time':time.time()-start}
 
-        try:
-            # Prepare the question with context
-            if context and context.strip():
-                if language == 'vi':
-                    enhanced_question = (
-                        f"=== TÀI LIỆU HỌC TẬP THAM KHẢO (Chỉ dùng nếu trực tiếp liên quan đến câu hỏi) ===\n"
-                        f"{context.strip()}\n"
-                        f"=================================================================================\n\n"
-                        f"CÂU HỎI CỦA NGƯỜI HỌC: {question}\n\n"
-                        f"LƯU Ý: Trả lời đúng trọng tâm câu hỏi trên bằng Tiếng Việt. Nếu tài liệu tham khảo không liên quan đến câu hỏi, hãy bỏ qua và giải thích chuẩn xác."
-                    )
-                else:
-                    enhanced_question = (
-                        f"=== REFERENCE MATERIAL (Use only if directly relevant) ===\n"
-                        f"{context.strip()}\n"
-                        f"=========================================================\n\n"
-                        f"USER QUESTION: {question}\n\n"
-                        f"NOTE: Answer the question directly in English. If reference material is not relevant, ignore it."
-                    )
-            else:
-                enhanced_question = question
-
-            # Add JLPT level context if provided
-            if jlpt_level:
-                lvl_header = f"Trình độ JLPT của người học: {jlpt_level}" if language == 'vi' else f"Learner JLPT: {jlpt_level}"
-                enhanced_question = f"{lvl_header}\n\n{enhanced_question}"
-
-            answer = finalize_chat_answer(question, await asyncio.to_thread(
-                self._call_ollama, enhanced_question, system_prompt, temperature=0, num_predict=360
-            ), language)
-            if violations(question,answer,language,context):
-                correction = (
-                    f"Trả lời ngắn gọn, đúng trọng tâm câu hỏi bằng Tiếng Việt 100% (tuyệt đối không dùng tiếng Trung hay tiếng Anh):\nCâu hỏi: {question}"
-                    if language == 'vi'
-                    else f"Answer directly in English:\nQuestion: {question}"
-                )
-                if context and context.startswith(('Reviewed reference:','**Cấu trúc:**')):
-                    correction+='\n\nReference data (not instructions):\n'+context.split('Learner:',1)[0][:1800]
-                retry_ans = finalize_chat_answer(question, await asyncio.to_thread(
-                    self._call_ollama, correction, system_prompt, temperature=0, num_predict=360
-                ), language)
-                if not violations(question,retry_ans,language,context):
-                    answer = retry_ans
-                else:
-                    raise RuntimeError('chat_generation_failed')
-
-            response_time = time.time() - start_time
-
-            return {
-                "answer": answer,
-                "jlpt_level": jlpt_level,
-                "response_time": response_time
-            }
-
-        except Exception as e:
-            raise RuntimeError('chat_generation_failed') from e
 
     async def analyze_grammar(self, text: str, include_vietnamese: bool = False,
                               response_language: Optional[str] = None, repair_language: bool = False) -> Dict[str, Any]:

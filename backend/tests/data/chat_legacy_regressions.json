@@ -1,0 +1,21 @@
+{
+  "purpose": "Historical fixed responses moved to tests only; never runtime knowledge.",
+  "cases": [
+    {
+      "question": "Phân tích câu 私は毎日学校へ行きます。",
+      "legacy_answer": "Câu:\n私は毎日学校へ行きます。\n\nNghĩa:\nTôi đi đến trường mỗi ngày.\n\nTừ vựng chính:\n- 私: tôi\n- 毎日: mỗi ngày\n- 学校: trường học\n- 行きます: đi\n\nNgữ pháp chính:\n- は: trợ từ đánh dấu chủ đề của câu\n- へ: trợ từ chỉ hướng/điểm đến\n- Vます: dạng lịch sự của động từ\n\nCấu trúc câu:\n私は = chủ đề “tôi”; 毎日 = thời gian “mỗi ngày”; 学校へ = hướng đến “trường”; 行きます = hành động “đi”."
+    },
+    {
+      "question": "ねこといぬはどちらが好きですか。理由も教えてください。",
+      "legacy_answer": "[日本語]\n私はねこのほうが好きです。\nねこは静かでかわいいですし、一緒にいると落ち着くからです。\n\n[Tiếng Việt]\nTôi thích mèo hơn.\nVì mèo yên tĩnh, dễ thương và khi ở cùng mèo tôi cảm thấy thư giãn."
+    },
+    {
+      "question": "Chọn cách viết của がくせい: A. 先生 B. 学生 C. 会社 D. 学校",
+      "legacy_answer": "Đáp án đúng: B. 学生\n\nGiải thích:\n「がくせい」 là cách đọc của 「学生」, nghĩa là học sinh / sinh viên."
+    },
+    {
+      "question": "今日は何をしましたか có nghĩa là gì",
+      "legacy_answer": "**Bản dịch:** Hôm nay bạn đã làm gì?\n\n- 今日は: hôm nay (chủ đề)\n- 何を: cái gì (tân ngữ)\n- しました: đã làm (quá khứ lịch sự)\n- か: trợ từ nghi vấn."
+    }
+  ]
+}

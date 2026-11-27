@@ -1,6 +1,6 @@
-# Luyện viết Kanji — chấm nét v2 và giao diện
+# Luyện viết Kanji — chấm nét và giao diện
 
-Tài liệu duy nhất cho dịch vụ chấm và web luyện viết, gộp phần A/B. Cập nhật workspace 24/11/2026. Số kiểm thử trong từng phần là mốc lịch sử của đợt đó, không cộng dồn; mốc cuối: 321 pytest + 6 subtest, 79 test web.
+Tài liệu duy nhất cho dịch vụ chấm và web luyện viết, gộp phần A/B. Cập nhật workspace 25/11/2026. Số kiểm thử trong từng phần là mốc lịch sử của đợt đó, không cộng dồn; lượt mới phần A: 441 pytest + 6 subtest, 80 test web. Chấm hiện tại là `stroke-rules-v3`; các mục v1/v2 dưới đây giữ nhãn lịch sử.
 
 Nhận dạng ảnh CNN là bài toán khác, xem [Nhận dạng Kanji](KANJI_RECOGNITION_DIAGNOSIS.md). Bằng chứng trước/sau giữ nguyên trong [ket_qua/kanji.json](ket_qua/kanji.json); báo cáo v1 dùng bộ ca khác nằm ở `legacy_v1_different_cases`, không dùng thay baseline hiệu chỉnh v2.
 
@@ -240,7 +240,167 @@ Từ `backend`, ghi báo cáo mới vào `tmp/`, không ghi đè các mốc nghi
 
 Danh sách 2.456 cặp từng xuất đều là `needs_review`, không phải nhãn chuẩn. Sinh lại khi người biết tiếng Nhật cần rà; không giữ bản JSON gần 2,8 MB trong docs mỗi đợt.
 
-## Checklist nghiệm thu
+## Cập nhật phần A ngày 25/11/2026 — căn ghép khi thiếu/thừa nét
+
+### Nguyên nhân thật trước sửa
+
+Ca 34/100 đã được xử lý trong v2 trước lượt này: cùng nét mô phỏng 月, công thức v1 đóng băng cho 34, còn v2/v3 cho 84, thứ tự/hướng đều 100. Không tuyên bố đây là tọa độ gốc từ ảnh chụp.
+
+Kiểm tra thêm phát hiện lỗi đang tồn tại ở v2: bỏ nét đầu của 土 làm điểm thứ tự bằng 0 và báo thiếu nét cuối; thêm một nét ở giữa lại đánh dấu nét cuối hợp lệ là thừa. V2 so theo chỉ số hiện tại, chỉ xét tối đa số nét mẫu và bổ sung nhãn thiếu ở cuối. Vì vậy một khoảng trống/thừa ở giữa bị hiểu thành thay đổi thứ tự. Đã đo baseline v2 hiện tại trước khi sửa runtime; không thay baseline v1/v2 cũ trong JSON.
+
+### Sửa căn ghép, không nới ngưỡng
+
+- Khi số nét cuối khác mẫu, dùng quy hoạch động tìm căn ghép giữ thứ tự, cho phép bỏ qua đúng phần chênh lệch ở phía dài hơn. Không tùy ý bỏ các nét sai hình để làm đẹp điểm.
+- So với phương án ghép tự do Hungarian; chỉ kết luận sai thứ tự nếu có hai nét khớp chắc chắn bị đảo tương quan. Ngưỡng chứng cứ riêng trong `GAP_ORDER_PROOF`: khoảng cách tối đa 65% ngưỡng hình, đầu/cuối tối đa 75%, tỷ lệ dài ít nhất 75%, cải thiện so với căn ghép giữ thứ tự lớn hơn hai lần biên thứ tự. Hai nét giống nhau không đủ căn cứ để kết tội.
+- Nét thừa được đánh dấu ở đúng vị trí trong chuỗi người viết; nét thiếu chỉ đúng `expected_index` của mẫu. `index` của bản ghi thiếu vẫn duy nhất và nằm ngoài các nét người dùng thực sự vẽ, để không lấy nhầm nét cho lớp phủ/ghi chú. Web dùng `expected_index` khi ghi nhãn nét mẫu thiếu; định danh nội bộ dùng `index` như cũ.
+- Khi đủ số nét, giữ quy tắc v2; giữ ba profile, chuẩn hóa cả chữ, hướng trục y, trọng số điểm và điều kiện đạt. Chấm trước khi hoàn thành vẫn tạm tính, không tự kết luận thiếu các nét chưa viết. Cảnh báo chữ giống nhau và nhận dạng CNN không đổi điểm.
+- API không đổi endpoint, tên trường hoặc prop; không thêm migration. Kết quả mới có version v3; lần làm cũ, retry và báo chấm sai giữ kết quả/version đã lưu, không tự chấm lại lịch sử.
+
+### Đo trước/sau cùng dữ liệu
+
+Script `calibrate_kanji_writing_alignment.py`: giữ bộ cũ **32 chữ (12 N5, 10 N4, 10 N3), 256 biến thể đúng, 5 loại lỗi mỗi loại 32 ca và 6 cặp dễ nhầm**; thêm 228 ca xóa một nét và 260 ca thêm một nét tại mọi vị trí. Tổng 910 ca/mức, ba mức chấm. Chạy trước/sau cùng seed và checksum nét mô phỏng, không đổi từ khóa hay rubric sau khi xem kết quả.
+
+| Tiêu chí | V2 trước → V3 sau |
+| --- | --- |
+| Chấp nhận viết đúng — dễ/chuẩn | 100% → 100% (256/256) |
+| Chấp nhận viết đúng — nghiêm | 98,44% → 98,44% (252/256) |
+| Nhận đúng nhãn sai thứ tự, sai hướng | 100% → 100% (mỗi loại 32/32, cả ba mức) |
+| Nhận nhãn thiếu/thừa/sai hình ở bộ cũ | 100% → 100% (mỗi loại 32/32) |
+| Thiếu ở mọi vị trí: đúng vị trí và không trừ oan thứ tự | 14,04% → 100% (32/228 → 228/228) |
+| Thừa ở mọi vị trí: đúng vị trí và không trừ oan thứ tự | 12,31% → 100% (32/260 → 260/260) |
+| Kiểm tra hướng ở 488 ca khoảng trống/thừa, sau sửa | 488/488 không bị trừ oan, cả ba mức |
+| Cảnh báo nhầm chữ trên các mẫu đúng | 0 trước và sau |
+
+Hai hàng vị trí dùng tiêu chí chặt hơn việc chỉ phát hiện số lượng thiếu/thừa: phải chỉ đúng nét và không cáo buộc sai thứ tự. Không dùng các tỷ lệ này thay cho độ chính xác viết tay thật. Các mốc cũ có bộ nét nguồn khác được giữ riêng; lượt này so v2/v3 trên dữ liệu hiện tại sau cập nhật N5/N4. Kết quả gọn và checksum ở `ket_qua/kanji.json → alignment_v3`; đầy đủ lỗi/mẫu nghiêm còn lại ở `tmp/kanji-alignment-{before,after}.json`.
+
+Lệnh thực tế đã chạy từ backend:
+
+```powershell
+.\venv\Scripts\python.exe scripts/calibrate_kanji_writing_alignment.py --phase before --output ../tmp/kanji-alignment-before.json
+# Sau khi sửa, ghi tệp khác, không đè mốc trước.
+.\venv\Scripts\python.exe scripts/calibrate_kanji_writing_alignment.py --phase after --output ../tmp/kanji-alignment-after.json
+.\venv\Scripts\python.exe -m pytest tests/test_kanji_writing_alignment.py tests/test_kanji_writing.py -q -p no:cacheprovider
+.\venv\Scripts\python.exe -m pytest tests -q -p no:cacheprovider
+```
+
+Nhóm backend: **43 đạt**; toàn backend **441 đạt + 6 subtest**, 26 cảnh báo thư viện cũ. Web **80 test đạt**; build/TypeScript, lint `WritingFeedback.tsx`, i18n web/mobile đạt. Thêm 24 ca backend và 1 ca web; có trường hợp sai thứ tự/đảo hướng đi cùng thiếu nét, nét trùng nhau, preview, rỗng và chỉ số đúng của nhãn nét thiếu. Các kiểm thử cũ tiếp tục kiểm chứng lưu score/version, ba profile, báo chấm sai có consent, phân quyền, retry, export/reset/xóa. Không viết lại nút báo chấm sai đã có; cách xem ở mục 5 bên trên.
+
+Giới hạn: mô phỏng không bao quát nét viết tay rất méo, nhiều nét sai/thừa cùng lúc hoặc bút thật. Nét trùng hoàn toàn không thể xác định duy nhất “lần nào” bị thiếu/thừa chỉ từ tọa độ; không coi vị trí do bộ sinh đặt là nhãn chuẩn trong trường hợp đó. Nhiều nét thiếu có thể thay đổi khung bao và vẫn gây lỗi hình dạng; không giả vờ biết chắc ý định người viết. Chưa có bộ viết tay độc lập để hiệu chỉnh tiếp.
+
+Di động hiện tại: `mobile/src/api/kanjiWriting.ts`, `mobile/src/screens/KanjiWritingScreen.tsx` dùng nhận dạng ảnh `/kanji/*`, chưa gọi `/kanji-writing/evaluate`; không có caller Expo phải sửa trong lượt này. Nếu tích hợp chấm nét sau, đọc `version`, dùng `expected_index` cho nét mẫu thiếu và giữ attempt ID khi retry.
+
+File lượt này: `backend/app/core/kanji_writing_config.py`, `backend/app/services/kanji_stroke_geometry.py`, thêm `backend/scripts/calibrate_kanji_writing_alignment.py`, thêm `backend/tests/test_kanji_writing_alignment.py`, sửa test version trong `backend/tests/test_kanji_writing.py`; `frontend/src/components/kanji/WritingFeedback.tsx`, hai locale `common.json`, `frontend/tests/kanjiWriting.test.mjs`, tài liệu này và báo cáo Kanji. Không sửa bộ chọn chữ, bố cục hoặc các tab khác.
+
+## Hoàn thiện phần B trên nhánh mobile — 25/11/2026
+
+Giữ bộ chọn lưới và API đang có; hoàn thiện các lỗi tìm kiếm, truy cập bàn phím và đối chiếu kết quả v3. Không sửa thuật toán chấm, dữ liệu từ điển, lịch sử backend hay các tab Kanji khác trong phần B.
+
+- Tìm nghĩa Việt không dấu vẫn giữ dấu thanh của kana: không đánh đồng が với か hoặc ぱ với は; hỗ trợ kana nửa chiều rộng. Lưới cuộn trong khung 224px, có số kết quả, liên kết tab/panel và một điểm Tab theo focus hiện tại. Tách trạng thái bộ chọn khi đổi tài khoản; ghi nhớ chữ/cấp theo tài khoản.
+- Thẻ chữ ẩn ví dụ trống, thông tin phân biệt không có nét cụ thể và quy tắc trước khi nộp ở chế độ kiểm tra. Tái sử dụng toàn bộ khóa vi/en hiện có, token theme và cài đặt giảm chuyển động.
+- Desktop từ 1024px có hai cột; với chiều cao từ 700px, thẻ mẫu bám dưới thanh đầu trang và tự cuộn trong vùng giới hạn. Màn hình nhỏ dùng một cột. Chọn xem lỗi đưa khung vẽ vào vùng nhìn thấy.
+- Nét thừa có `expected_index=null` không được gán một nét mẫu theo chỉ số người viết. Nét thiếu dùng đúng `expected_index`. Phát lại toàn chữ hoạt động sau khi xem riêng một nét; xem lỗi mới quay về nét tương ứng. Nét thừa không tự phát một nét mẫu không liên quan.
+
+File sửa của phần B: `frontend/src/features/kanjiWriting/practice.ts`; `frontend/src/components/kanji/{KanjiWriting,WritingCharacterPicker,WritingCharacterInfo,WritingReference}.tsx`; `frontend/src/components/kanji/kanjiWriting.css`; `frontend/tests/{kanjiWritingPractice,kanjiWriting}.test.mjs`; thêm `frontend/tests/kanjiWritingReference.test.mjs`; cập nhật tài liệu này và `docs/ket_qua/kanji.json`. `WritingFeedback.tsx` và khóa dịch nét thiếu đã sửa ở phần A, không phải thay đổi mới của phần B.
+
+### Kết quả kiểm tra thật
+
+- Backend: `venv/Scripts/python.exe -m pytest tests -q -p no:cacheprovider` — **441 đạt, 6 subtest đạt**, 26 cảnh báo thư viện cũ.
+- Web: `node --test tests/*.test.mjs` — **85 đạt**, gồm 20 ca nhóm luyện viết. Thêm kiểm thử kana có dấu, bàn phím, lớp phủ thừa/thiếu v3, ẩn mục trống và phát toàn chữ sau khi xem một nét.
+- `npm run build` web — đạt (17,39 giây), có cảnh báo kích thước chunk hiện hữu. ESLint các file TypeScript sửa — đạt. Kiểm tra khóa dịch web/mobile và TypeScript mobile — đạt.
+- Edge headless: 1440×900 sáng/vi, 1024×768 tối/en, 768×1024 sáng/en, 390×844 tối/vi và 320×640 tối/en đều không tràn ngang. Desktop thấy mẫu và khung vẽ cùng lúc; lưới giữ 224px, bàn phím và thông báo cấp trống đạt. Đã xem ảnh desktop sáng và điện thoại tối.
+- Kiểm tra tương tác bằng sự kiện PointerEvent mô phỏng: lớp phủ, phát riêng/toàn chữ, nét thừa giữa chuỗi, bốn tiêu chí, ẩn gợi ý và không gọi preview ở chế độ kiểm tra, xem lại sau nộp và khôi phục chữ đã chọn đều đạt. **API xác thực/chấm/lịch sử được giả lập**, dùng thành phần thật và danh mục 612 chữ; pointer capture được giả lập. Thử sự kiện chuột native CDP chưa tạo được nét trong harness, nên không tính là kiểm chứng chuột/cảm ứng thật. Không sửa mã sản phẩm dựa riêng vào lỗi harness này.
+
+Giới hạn nghiệm thu: chưa kiểm chứng thiết bị thật, bút, máy tầm trung, thời gian phản hồi qua mạng thật hoặc lưu phiên end-to-end với tài khoản thật. Bộ thử backend kiểm tra lưu kết quả riêng; trình duyệt giả lập không thay thế kiểm tra tích hợp thật. Chưa có đo hiệu năng để khẳng định cần ảo hóa; lưới lớn nhất hiện có 367 chữ và đã ghi nhớ phép lọc/tổng hợp bằng memo.
+
+Expo vẫn dùng `mobile/src/api/kanjiWriting.ts` và `mobile/src/screens/KanjiWritingScreen.tsx` cho `/kanji/*`, chưa dùng `/kanji-writing/evaluate`. Không có thay đổi mobile hoặc hợp đồng API trong phần B.
+
+### Checklist phần B trên thiết bị thật
+
+- [ ] Desktop: mẫu và canvas cùng nhìn thấy; mở ví dụ/quy tắc không kéo dài cột mẫu; thử sáng/tối, vi/en, giảm chuyển động.
+- [ ] Tablet/điện thoại: một cột, không tràn ngang; chọn lỗi đưa canvas vào tầm nhìn; nét vẽ không cuộn trang khi dùng ngón tay/bút.
+- [ ] Lưới: tìm nghĩa Việt không dấu, On/Kun, kana có dấu; tab thiếu dữ liệu; phím mũi tên/Home/End; trước/sau/ngẫu nhiên, gợi ý, gần đây và trạng thái lịch sử.
+- [ ] Hoàn tác/viết lại/gợi ý/chấm/lưu với backend thật; kiểm tra điểm và chữ đúng sau tải lại, không lẫn hai tài khoản.
+- [ ] Đối chiếu nét thiếu/thừa, đảo hướng/thứ tự; phát một nét rồi toàn chữ. Chế độ kiểm tra không hiện mẫu/quy tắc/gợi ý trước nộp.
+- [ ] Kiểm tra lại các tab học chữ, nhận dạng, luyện viết và khám phá; báo chấm sai có xác nhận vẫn lưu được.
+
+## Năm mức chấm và phản hồi rõ hơn — 26/11/2026
+
+Giữ mẫu thứ tự nét để người học đối chiếu trong lúc luyện; chế độ kiểm tra
+vẫn ẩn mẫu và gợi ý trước khi nộp. Tab xem thứ tự nét riêng đã được loại bỏ;
+mẫu và gợi ý nét tiếp theo vẫn có trong chế độ học. Không dùng nhận dạng toàn chữ
+để quyết định điểm cho chữ mục tiêu.
+
+Phiên bản cấu hình `stroke-rules-v3.1` bổ sung hai mức ngoài ba mức cũ:
+
+| Mức | Mã API | Khoảng cách nét | Khoảng cách đầu/cuối | Tỉ lệ độ dài tối thiểu |
+| --- | --- | ---: | ---: | ---: |
+| Rất dễ | `very_easy` | 0,24 | 0,38 | 0,30 |
+| Dễ | `easy` | 0,20 | 0,32 | 0,35 |
+| Chuẩn | `standard` | 0,16 | 0,26 | 0,42 |
+| Nghiêm | `strict` | 0,10 | 0,17 | 0,60 |
+| Rất nghiêm | `very_strict` | 0,085 | 0,145 | 0,65 |
+
+Các khoảng cách dùng khung bao chuẩn hóa của cả chữ. Giữ nguyên ngưỡng và
+điểm số của `easy/standard/strict`; không tăng số mức bằng cách đổi nhãn cho
+cùng một ngưỡng. Mỗi kết quả vẫn lưu phiên bản, tên mức và ngưỡng đã dùng.
+API cũ và mặc định `standard` được giữ; phản hồi bổ sung `score_weights` và
+`pass_score`. Dữ liệu nằm trong JSON kết quả hiện có, không cần đổi bảng.
+
+Điểm tổng tiếp tục gồm thứ tự 20%, hướng 20%, hình dạng/vị trí 40%, đủ nét
+20%. Web hiển thị số điểm mỗi tiêu chí đóng góp, số lỗi từng loại, giải thích
+điều kiện đạt và mức khớp hình dạng/độ dài theo từng nét. Các số đo từng nét
+được tính từ metrics và ngưỡng của chính kết quả; không tạo điểm giả cho nét
+thiếu/thừa hoặc kết quả cũ thiếu metrics. Cảnh báo chữ dễ nhầm không trừ điểm.
+Điểm từ 80 nhưng còn lỗi vẫn không đạt; thông báo này được giải thích rõ.
+
+Đo bằng `scripts/calibrate_kanji_writing.py --strictness <mã> --output <file>`:
+32 chữ có biến thể viết đúng, trải đều N5/N4/N3; 256 biến thể viết đúng; 32 ca
+cho mỗi loại lỗi thứ tự, hướng, thiếu, thừa, sai hình; thêm 6 ca chữ dễ nhầm.
+Tổng 422 ca cho mỗi mức, 36 chữ khác nhau tính cả ca dễ nhầm.
+
+| Mức | Chấp nhận viết đúng trước | Sau | Phát hiện thứ tự/hướng sau |
+| --- | ---: | ---: | ---: |
+| Rất dễ | Chưa có | 256/256 (100%) | 32/32 mỗi loại |
+| Dễ | 256/256 | 256/256 (100%) | 32/32 mỗi loại |
+| Chuẩn | 256/256 | 256/256 (100%) | 32/32 mỗi loại |
+| Nghiêm | 252/256 | 252/256 (98,44%) | 32/32 mỗi loại |
+| Rất nghiêm | Chưa có | 238/256 (92,97%) | 32/32 mỗi loại |
+
+Cả năm mức phát hiện 32/32 ca thiếu, thừa, sai hình và 6/6 ca dễ nhầm; không
+cảnh báo nhầm trên 256 biến thể đúng. Đây là **dữ liệu mô phỏng từ KanjiVG**,
+không phải tỷ lệ đúng của người viết thật. Không tuyên bố cải thiện độ chính
+xác ba mức cũ; thay đổi lần này mở rộng lựa chọn và làm rõ phản hồi. Mức Rất
+nghiêm có thể từ chối dao động tay tự nhiên hơn; cần người biết tiếng Nhật
+rà soát nét tay thật, nhất là bút/ngón tay trên màn hình nhỏ. Dùng nút báo
+chấm sai có xác nhận để thu thập ca hiệu chỉnh, không tự coi báo cáo là nhãn đúng.
+
+Expo hiện chỉ dùng `/kanji/*` cho nhận dạng trong `mobile/src/api/kanjiWriting.ts`,
+chưa dùng dịch vụ chấm nét `/kanji-writing/evaluate`; lượt này không sửa màn
+di động. Khi tích hợp sau, có thể dùng lại năm mã mức và metadata điểm này.
+
+Web học chữ được thêm bước nhớ trước khi mở nghĩa, quiz che cách đọc/nghĩa
+trước khi trả lời, dải chọn nhanh và vòng tiến độ phiên. Mở nghĩa không tự
+tính đã ôn. Khối chuyển bộ thẻ cũ trên trình duyệt đã bỏ khỏi giao diện, nhưng
+không xóa dữ liệu cục bộ hoặc API chuyển dữ liệu.
+
+Tạo tài liệu từ file vẫn ở **Thư viện → Thêm tài liệu → Chọn file từ máy tính**;
+sau trích xuất cần xem lại nội dung và lưu. Không sửa bộ trích xuất trong lượt này.
+
+Kiểm thử: 108 test frontend; 518 pytest và 6 subtest đạt; các test mới bao gồm
+5 mức, lưu/retry riêng từng mức, ngưỡng cũ không đổi, thiếu/thừa không bị suy
+thành sai thứ tự, đếm đồng thời lỗi hướng/thứ tự và điều kiện điểm cao chưa đạt.
+Các kiểm tra trình duyệt dùng adapter riêng và kết quả chấm thật đã tính offline;
+không thay thế nghiệm thu mạng, tài khoản, thiết bị thật hay bút thật.
+
+### Checklist bổ sung
+
+- [ ] Thử cả năm mức với cùng một chữ/nét tay thật; so điểm và phản hồi giữa các mức.
+- [ ] Tổng trên 80 nhưng sai hướng/thứ tự phải giải thích chưa đạt; nét thiếu/thừa không có điểm hình dạng tự tạo.
+- [ ] Kiểm tra ẩn mẫu trong chế độ kiểm tra, chấm/lưu/retry, xem lỗi và gửi báo chấm sai.
+- [ ] Học chữ: mở nghĩa không tăng tiến độ; quiz không lộ cách đọc/nghĩa trước trả lời; chọn chữ và lọc cấp không lẫn tiến độ.
+- [ ] Không còn khối bộ thẻ cũ; dữ liệu cục bộ vẫn được giữ nguyên.
+
+## Checklist nghiệm thu (tổng thể)
 
 - [ ] Viết gần mẫu, đổi kích thước/vị trí; không trừ oan thứ tự/hướng vì lệch hình.
 - [ ] Hoán đổi, đảo hướng, thiếu/thừa/sai hình: đúng nhãn lỗi; thử cả ba mức chấm.

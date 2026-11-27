@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.services.kanji_stroke_geometry import resample
 from app.services.kanji_writing_templates import templates, comparison_templates, evaluate_character
-from app.core.kanji_writing_config import VERSION
+from app.core.kanji_writing_config import VERSION, PROFILES
 
 
 def cases():
@@ -80,7 +80,7 @@ def measure(strictness='standard'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--strictness',choices=('easy','standard','strict'),default='standard')
+    parser.add_argument('--strictness',choices=tuple(PROFILES),default='standard')
     args = parser.parse_args(); report = measure(args.strictness)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({k:v for k,v in report.items() if k != 'failures'}, ensure_ascii=True))

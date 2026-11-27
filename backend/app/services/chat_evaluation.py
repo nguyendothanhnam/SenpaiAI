@@ -4,9 +4,9 @@ import unicodedata
 from collections import defaultdict
 from statistics import mean
 
-RUBRIC_VERSION='chat-quality-v2'
+RUBRIC_VERSION='chat-quality-v3.2'
 INTERNAL=re.compile(r'(?im)(?:^|\n)\s*(?:\*\*)?(?:Intent|Task|Output|Classification|Reviewed reference|Conversation context|Nguồn \d+)\s*[:：]|===.*(?:THAM KHẢO|REFERENCE).*===')
-CHINESE=re.compile(r'动词|形容词|名词|助词|连体|这个|这是|因为|所以|我们|你们|学习|语法|谢谢|请问|汉语|中文')
+CHINESE=re.compile(r'动词|形容词|名词|助词|连体|这个|这是|因为|所以|我们|你们|学习|语法|谢谢|请问|汉语|中文|學習|這個|這是|因為|所以我們|我們|你們|請問|謝謝|漢語|詞彙|語法學|[图书电车门汉语说读听见]')
 
 
 def folded(text):
@@ -18,7 +18,6 @@ def grade(case,answer,sources,error=None):
     vi=len(re.findall(r'\b(?:la|cua|ban|toi|nghia|dich|cau|ngu|dau|nguoi|hoc|nay|khong|trong|voi|duoc|chua|mot|tieng|dung)\b',text))
     en=len(re.findall(r'\b(?:the|is|are|this|that|you|your|can|cannot|meaning|means|sentence|explanation|subject|topic|because|would)\b',text))
     language_ok=bool(answer.strip()) and ((en<4 or vi>=en) if language=='vi' else (vi<4 or en>=vi))
-    if group=='vi_ja': language_ok=language_ok and bool(re.search(r'[ぁ-んァ-ヶ]',answer))
     content=all(any(folded(term) in text for term in options) for options in case['required'])
     content=content and not any(folded(term) in text for term in case.get('forbidden',[]))
     # Ordinary Vietnamese/English prose is not a pronunciation guide. Require
@@ -29,11 +28,12 @@ def grade(case,answer,sources,error=None):
         reading=reading and bool(re.search(r'→|nghĩa|dịch|ví dụ|\):|：',answer,re.I))
     elif not case.get('reading'): reading=True
     structure=bool(answer.strip())
-    if group=='grammar': structure=bool(re.search(r'cấu trúc|mẫu|cách dùng|ý nghĩa|diễn tả',answer,re.I)) and bool(re.search(r'ví dụ|例|→',answer,re.I))
-    if group=='comparison': structure=all(any(term in answer for term in opts) for opts in case['required'][:2]) and bool(re.search(r'ví dụ|→|khác|trong khi',answer,re.I))
-    if group=='analysis': structure=bool(re.search(r'ngữ pháp|cấu trúc|chủ đề|trợ từ|thành phần',answer,re.I))
+    if group=='grammar': structure=bool(re.search(r'cấu trúc|mẫu|cách dùng|ý nghĩa|diễn tả|formula|usage|meaning|structure',answer,re.I)) and bool(re.search(r'ví dụ|example|例|→',answer,re.I))
+    if group=='comparison': structure=all(any(term in answer for term in opts) for opts in case['required'][:2]) and bool(re.search(r'ví dụ|example|difference|whereas|→|khác|trong khi',answer,re.I))
+    if group=='analysis': structure=bool(re.search(r'ngữ pháp|cấu trúc|chủ đề|trợ từ|thành phần|structure|particle|component|identified',answer,re.I))
     if group=='greeting': structure=len(answer.split())<=75
     if group in ('ja_vi','vi_ja'): structure=bool(answer.strip()) and not bool(re.search(r'Intent:|Cấu trúc chuẩn|USER QUESTION',answer,re.I))
+    if group=='vi_ja':structure=structure and bool(re.search(r'[ぁ-んァ-ヶ]',answer))
     public=[s for s in sources if not any(k in str(s.get('type','')).lower() for k in ('internal','system_rule','deterministic'))]
     source_ok=len(public)==len(sources)
     terms=case.get('source_terms',[])
@@ -41,9 +41,16 @@ def grade(case,answer,sources,error=None):
         source_ok=source_ok and bool(public) and all(any(folded(term) in folded(str(s.get('title',''))) for term in terms) for s in public)
     else:
         source_ok=source_ok and (not public if group in ('greeting','off_topic','uncertain') else True)
+    chinese_checked=answer
+    for phrase in CHINESE.findall(case.get('question','')):chinese_checked=chinese_checked.replace(phrase,'')
     checks={'language':language_ok,'structure':structure,'no_internal_labels':not bool(INTERNAL.search(answer)),
-            'no_chinese_prose':not bool(CHINESE.search(answer)),'content_keywords':content,'reading_and_meaning':reading,
+            'no_chinese_prose':not bool(CHINESE.search(chinese_checked)),'content_keywords':content,'reading_and_meaning':reading,
             'relevant_sources':source_ok}
+    if case.get('max_words'):
+        checks['length']=0<len(answer.split())<=case['max_words']
+        # A Japanese-only response is not an explanation in the selected UI language.
+        if group not in ('vi_ja','ja_vi'):
+            checks['language']=language_ok and bool(re.search(r'[a-zA-ZÀ-ỹ]{2,}',answer))
     if error: checks={key:False for key in checks}
     return checks
 

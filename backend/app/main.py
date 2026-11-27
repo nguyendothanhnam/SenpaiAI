@@ -8,8 +8,8 @@ import logging
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening, internship
-from .api import placement, learning, kanji_writing, chat_feedback, kanji_notes, minigame_learning
+from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, grammar_lessons, rewards, daily, reminders, notifications, push, listening, internship
+from .api import placement, learning, kanji_writing, chat_feedback, kanji_notes, minigame_learning, flashcards
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     # Placement schema evolves through Alembic, including existing attempt columns.
-    Base.metadata.create_all(bind=engine, tables=[table for table in Base.metadata.sorted_tables if not table.name.startswith(("placement_", "exercise_", "weekly_learning_", "kanji_writing_", "chat_answer_feedback", "user_kanji_notes", "minigame_learning_"))])
+    Base.metadata.create_all(bind=engine, tables=[table for table in Base.metadata.sorted_tables if not table.name.startswith(("placement_", "exercise_", "weekly_learning_", "kanji_writing_", "chat_answer_feedback", "user_kanji_notes", "minigame_learning_", "flashcard_"))])
     dictionary_report = kanji_dictionary_service.validate()
     logger.info("[Dictionary] total entries: %s", dictionary_report["total_entries"])
     logger.info("[Dictionary] valid entries: %s", dictionary_report["valid_entries"])
@@ -69,6 +69,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition", "X-Export-Summary", "X-Export-Truncated"],
 )
 
 # Add trusted host middleware
@@ -79,6 +80,8 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router)
+app.include_router(flashcards.router)
+app.include_router(flashcards.router, prefix="/api")
 app.include_router(learning.router)
 app.include_router(learning.router, prefix="/api")
 app.include_router(kanji_writing.router)
@@ -106,6 +109,8 @@ app.include_router(kanji.router)
 app.include_router(kanji.router, prefix="/api")
 app.include_router(grammar_practice.router)
 app.include_router(grammar_practice.router, prefix="/api")
+app.include_router(grammar_lessons.router)
+app.include_router(grammar_lessons.router, prefix="/api")
 app.include_router(rewards.router)
 app.include_router(rewards.router, prefix="/api")
 app.include_router(daily.router)

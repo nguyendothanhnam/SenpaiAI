@@ -20,9 +20,11 @@ import QuizPlay from './pages/QuizPlay.jsx'
 import Flashcard from './pages/Flashcard.jsx'
 import FlashcardManual from './pages/FlashcardManual.jsx'
 import FlashcardPlay from './pages/FlashcardPlay.jsx'
+import FlashcardPage from './features/flashcards/Flashcards'
 import Analytics from './pages/Analytics.jsx'
 import Settings from './pages/Settings'
 import GrammarPractice from './pages/GrammarPractice'
+import GrammarLessons from './pages/GrammarLessons'
 import ThemeShop from './pages/ThemeShop'
 import DailyChallenge from './pages/DailyChallenge'
 import RemindersSettings from './pages/RemindersSettings'
@@ -60,6 +62,8 @@ function App() {
         <Route path="/chat/:conversationId" element={<Chat />} />
         <Route path="/grammar" element={<Grammar />} />
         <Route path="/grammar/practice" element={<GrammarPractice />} />
+        <Route path="/grammar/lessons" element={<GrammarLessons />} />
+        <Route path="/grammar/lessons/:lessonId" element={<GrammarLessons />} />
         <Route path="/library" element={<Library />} />
         <Route path="/games" element={<GameHub />} />
         <Route path="/games/kanji" element={<Navigate to="/kanji?mode=study" replace />} />
@@ -71,6 +75,10 @@ function App() {
         <Route path="/flashcard" element={<Flashcard />} />
         <Route path="/flashcard/manual" element={<FlashcardManual />} />
         <Route path="/flashcard/play" element={<FlashcardPlay />} />
+        <Route path="/flashcard/learn" element={<FlashcardPage view="learn" />} />
+        <Route path="/flashcard/test" element={<FlashcardPage view="test" />} />
+        <Route path="/flashcard/stats" element={<FlashcardPage view="stats" />} />
+        <Route path="/flashcard/:deckId" element={<FlashcardPage view="detail" />} />
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/analytics" element={<Analytics />} />

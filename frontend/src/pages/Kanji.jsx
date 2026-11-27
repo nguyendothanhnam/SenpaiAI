@@ -1,12 +1,11 @@
 import { kanjiText as k } from '../utils/kanjiLocale'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
-import { BookOpen, Compass, MessageCircle, Pause, PenLine, Play, RotateCcw, Search, SkipBack, SkipForward } from 'lucide-react'
+import { BookOpen, Compass, MessageCircle, PenLine, Search } from 'lucide-react'
 import KanjiCanvas from '../components/kanji/KanjiCanvas'
 import KanjiInfoPanel from '../components/kanji/KanjiInfoPanel'
-import KanjiStrokeOrder from '../components/kanji/KanjiStrokeOrder'
 import KanjiStudy from '../components/kanji/KanjiStudy'
 import KanjiWriting from '../components/kanji/KanjiWriting'
 import PredictionResult from '../components/kanji/PredictionResult'
@@ -162,7 +161,6 @@ const modes = [
   { id: 'study', label: 'Study', icon: BookOpen },
   { id: 'recognize', label: 'Recognize', icon: Search },
   { id: 'practice', label: 'Practice', icon: PenLine },
-  { id: 'stroke', label: 'Stroke Order', icon: Play },
   { id: 'explore', label: 'Explore', icon: Compass },
 ]
 const RECOGNITION_CONFIDENCE_THRESHOLD = 0.65
@@ -240,122 +238,7 @@ function adaptKanjiEntry(entry, fallbackKanji = '') {
   }
 }
 
-function StrokeOrderViewer({ info, step, setStep }) {
-  const { t } = useTranslation('kanjiStatus')
-  const [playing, setPlaying] = useState(false)
-  const timerRef = useRef(null)
-  const strokeQuery = useQuery(
-    ['kanjivgStrokeOrder', info.kanji],
-    () => kanjiDataAPI.getStrokeOrder(info.kanji).then((response) => response.data),
-    {
-      enabled: Boolean(info?.kanji),
-      staleTime: 1000 * 60 * 60 * 24,
-      cacheTime: 1000 * 60 * 60 * 24,
-      retry: false,
-    }
-  )
-  const supportedQuery = useQuery(
-    'kanjivgSupported',
-    () => kanjiDataAPI.getSupported().then((response) => response.data),
-    {
-      staleTime: 1000 * 60 * 60 * 24,
-      cacheTime: 1000 * 60 * 60 * 24,
-      retry: false,
-    }
-  )
-
-  const strokeData = strokeQuery.data
-  const strokes = strokeData?.available ? (strokeData?.strokes || []) : []
-  const maxStep = strokes.length
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current)
-      }
-    }
-  }, [])
-
-  const pause = () => {
-    if (timerRef.current) {
-      window.clearInterval(timerRef.current)
-      timerRef.current = null
-    }
-    setPlaying(false)
-  }
-
-  const play = () => {
-    if (!maxStep) return
-    pause()
-    setPlaying(true)
-    let next = step >= maxStep ? 0 : step || 0
-    timerRef.current = window.setInterval(() => {
-      next += 1
-      setStep(Math.min(next, maxStep))
-      if (next >= maxStep) {
-        pause()
-        setPlaying(false)
-      }
-    }, 650)
-  }
-
-  const reset = () => {
-    pause()
-    setStep(0)
-  }
-
-  return (
-    <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-glass)] p-5 shadow-sm">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("KanjiVG stroke order")}</p>
-          <h2 className="mt-2 text-2xl font-bold text-[color:var(--text)]">{info.kanji}{k("stroke steps")}</h2>
-          <p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('strokeCoverage', { count: supportedQuery.data?.total ?? '...' })}</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => setStep(Math.max(0, step - 1))} disabled={!maxStep || step === 0} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 text-[color:var(--primary)]">
-            <SkipBack className="mr-2 h-4 w-4" />{k("Previous Stroke")}</button>
-          <button type="button" onClick={() => setStep(Math.min(maxStep, step + 1))} disabled={!maxStep || step >= maxStep} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3 text-[color:var(--primary)]">
-            <SkipForward className="mr-2 h-4 w-4" />{k("Next Stroke")}</button>
-          <button type="button" onClick={play} disabled={!maxStep || playing} className="btn btn-primary rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-3 text-[color:var(--text)] shadow-sm hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)]">
-            <Play className="mr-2 h-4 w-4" />{k("Auto Play")}</button>
-          <button type="button" onClick={pause} disabled={!playing} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3">
-            <Pause className="mr-2 h-4 w-4" />{k("Pause")}</button>
-          <button type="button" onClick={reset} disabled={!maxStep && step === 0} className="btn btn-outline rounded-xl border-[color:var(--border)] px-3">
-            <RotateCcw className="mr-2 h-4 w-4" />{k("Reset")}</button>
-        </div>
-      </div>
-
-      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_260px]">
-        <KanjiStrokeOrder kanji={info.kanji} strokeOrder={strokeData} strokes={strokes} step={step} viewBox={strokeData?.viewBox} />
-        <div className="rounded-3xl bg-[color:var(--accent)] p-5">
-          <p className="font-japanese text-7xl font-bold text-[color:var(--text)]">{info.kanji}</p>
-          <div className="mt-5 space-y-2 text-sm">
-            <p><span className="font-bold">{k("Meaning:")}</span> {k(info.meaning)}</p>
-            <p><span className="font-bold">{k("Onyomi:")}</span> {info.onyomi}</p>
-            <p><span className="font-bold">{k("Kunyomi:")}</span> {info.kunyomi}</p>
-            <p><span className="font-bold">{k("Stroke count:")}</span> {strokeData?.stroke_count || info.strokes || k("Unknown")}</p>
-            <p><span className="font-bold">JLPT:</span> {strokeData?.jlpt || info.jlpt}</p>
-          </div>
-          <p className="mt-4 rounded-2xl bg-[color:var(--card)] px-4 py-3 text-sm font-semibold text-[color:var(--primary)]">
-            {strokeQuery.isLoading ? k("Loading stroke data...") : k(`Step ${step} / ${maxStep || 'unavailable'}`)}
-          </p>
-          {strokeData && (
-            <p className="mt-3 text-xs font-semibold text-[color:var(--primary)]">{k("Source:")}{strokeData.source}. {strokeData.license}. {strokeData.source_url}
-            </p>
-          )}
-          {!strokeQuery.isLoading && !strokeData?.available && (
-            <p className="mt-3 text-xs font-semibold text-red-600">
-              {t('noStrokeData')}
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function MiniDictionary({ info, onAsk, onPractice, onStroke }) {
-  const { t } = useTranslation('kanjiStatus')
+function MiniDictionary({ info, onAsk, onPractice }) {
   const handwritingQuery = useQuery(
     ['kanjiHandwritingSamples', info?.kanji],
     () => kanjiDataAPI.getHandwritingSamples(info.kanji, 5).then((response) => response.data),
@@ -418,8 +301,6 @@ function MiniDictionary({ info, onAsk, onPractice, onStroke }) {
         <button type="button" onClick={onAsk} className="btn btn-primary rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] px-4 text-[color:var(--text)] shadow-sm hover:bg-[color:var(--primary)] hover:text-[color:var(--primary-contrast)]">
           <MessageCircle className="mr-2 h-4 w-4" />{k("Ask in Chat")}</button>
         <button type="button" onClick={onPractice} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)]">{k("Practice this Kanji")}</button>
-        <button type="button" onClick={onStroke} disabled={!info.has_stroke_data} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4 text-[color:var(--primary)] disabled:opacity-50">{t('viewStrokeOrder')}</button>
-        {!info.has_stroke_data && <p className="text-xs text-[color:var(--text-muted)]">{t('noStrokeData')}</p>}
       </div>
     </aside>
   )
@@ -444,7 +325,6 @@ export default function Kanji() {
   const [recognitionMessage, setRecognitionMessage] = useState('')
   const [lowConfidence, setLowConfidence] = useState(false)
   const [selectedKanjiSource, setSelectedKanjiSource] = useState(null)
-  const [strokeStep, setStrokeStep] = useState(0)
   const [exploreSearch, setExploreSearch] = useState('')
   const [exploreJlpt, setExploreJlpt] = useState(() => placementDefault(params.toString(), user?.current_jlpt_level, [...KANJI_DICTIONARY_LEVELS, 'all'], 'all'))
 
@@ -486,7 +366,6 @@ export default function Kanji() {
   const updateSelectedKanji = (kanji, source = 'manual') => {
     setTargetKanji(normalizeKanji(kanji))
     setSelectedKanjiSource(source)
-    setStrokeStep(0)
   }
 
   const recognize = async () => {
@@ -571,11 +450,6 @@ export default function Kanji() {
     requestAnimationFrame(() => canvasRef.current?.clear())
   }
 
-  const switchToStroke = (kanji = targetKanji) => {
-    updateSelectedKanji(kanji, 'manual')
-    setMode('stroke')
-  }
-
   const askInChat = () => {
     navigate('/chat', {
       state: {
@@ -599,10 +473,10 @@ export default function Kanji() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--primary)]">{k("SenpaiAI handwriting lab")}</p>
             <h1 className="mt-2 text-3xl font-bold text-[color:var(--text)]">{k("Kanji Canvas")}</h1>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[color:var(--text-muted)]">{k("Recognize handwriting, practice with feedback, explore kanji, and study verified stroke order.")}</p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[color:var(--text-muted)]">{k("Recognize handwriting, practice with feedback, and explore kanji.")}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[color:var(--bg-elevated)] p-1 sm:grid-cols-3 xl:grid-cols-5">
+          <div className="grid grid-cols-2 gap-2 rounded-2xl bg-[color:var(--bg-elevated)] p-1 sm:grid-cols-3 xl:grid-cols-4">
             {modes.map((item) => {
               const Icon = item.icon
               return (
@@ -660,12 +534,7 @@ export default function Kanji() {
               ))}
             </div>
           </div>
-          <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} onStroke={() => switchToStroke()} />
-        </div>
-      ) : mode === 'stroke' ? (
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <StrokeOrderViewer info={selectedInfo} step={strokeStep} setStep={setStrokeStep} />
-          <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} onStroke={() => switchToStroke()} />
+          <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} />
         </div>
       ) : (
         <div className="grid gap-6 xl:grid-cols-[290px_minmax(0,1fr)_360px]">
@@ -682,10 +551,10 @@ export default function Kanji() {
           {mode === 'recognize' ? (
             <div className="space-y-5">
               <PredictionResult predictions={predictions} status={status} error={error} isDemo={isDemo} correctionStatus={correctionStatus} recognitionMessage={recognitionMessage} lowConfidence={lowConfidence} modelInfo={modelInfoQuery.data} onSelect={(prediction) => updateSelectedKanji(prediction.kanji, 'manual')} onCorrect={submitCorrection} />
-              {canShowKanjiDetails && <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} onStroke={() => switchToStroke()} />}
+              {canShowKanjiDetails && <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} />}
             </div>
           ) : (
-            canShowKanjiDetails && <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} onStroke={() => switchToStroke()} />
+            canShowKanjiDetails && <MiniDictionary info={selectedInfo} onAsk={askInChat} onPractice={() => switchToPractice()} />
           )}
         </div>
       )}

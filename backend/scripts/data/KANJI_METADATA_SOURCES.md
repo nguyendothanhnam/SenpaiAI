@@ -25,6 +25,39 @@ characters and six fields, update the checksum/date above, review the diff and r
 the dictionary tests. Do not replace SenpaiAI's JLPT classifications with upstream
 classifications.
 
+## N5/N4 audit and stroke import — 2026-11-25
+
+The repair preview, write and repeated preview each reported **0 changed entries**.
+The main dictionary already contains the supplemental metadata; it remains byte-identical.
+N5/N4 core metadata completeness is 79/79 and 166/166. This does not include examples:
+only 39 N5 and 6 N4 entries have all example fields populated, and those examples repeat
+the character gloss and require human review. No meanings, readings or examples were invented.
+The 200 missing-example entries and 45 review entries are recorded in
+[`docs/ket_qua/kanji_n5_n4.json`](../../../docs/ket_qua/kanji_n5_n4.json).
+
+Official KanjiVG source: [KanjiVG/kanjivg](https://github.com/KanjiVG/kanjivg),
+commit `9d7220dfca09107dca2e0b0e45f90f696185e3c3` (2026-11-18), downloaded 2026-11-25.
+[Pinned archive](https://codeload.github.com/KanjiVG/kanjivg/zip/9d7220dfca09107dca2e0b0e45f90f696185e3c3),
+24,094,864 bytes, SHA-256 `d72cc091482dce754e57e074eb0755d0f056f2bfae22369c20805c06fbf42ba2`.
+245 canonical SVGs were selected; the existing importer produced a staging JSON.
+Only 234 missing records (68 N5, 166 N4) were appended to the main stroke JSON;
+all 378 previous records, all N3 data and the local SVG checkout were preserved.
+The JSON now contains all 612 dictionary characters. Repeating the merge adds zero records.
+No N5/N4 dictionary/path stroke-count discrepancy was found.
+
+KanjiVG is copyright **Ulrich Apel**, licensed **CC BY-SA 3.0**:
+[project attribution](https://kanjivg.tagaini.net/),
+[licence](https://creativecommons.org/licenses/by-sa/3.0/),
+[upstream COPYING](https://github.com/KanjiVG/kanjivg/blob/9d7220dfca09107dca2e0b0e45f90f696185e3c3/COPYING).
+SVG paths were converted to JSON and enriched with dictionary metadata. Retain the
+KanjiVG attribution/licence for those paths and the separate KANJIDIC attribution/licence
+for dictionary metadata; the existing per-record source/licence fields were not renamed.
+The source download includes COPYING and README.md in the local staging directory.
+This attribution does not license the CNN model, fonts or personal handwriting samples.
+
+Vietnamese report, complete missing-character lists, download/import commands and checks:
+[`docs/KANJI_RECOGNITION_DIAGNOSIS.md`](../../../docs/KANJI_RECOGNITION_DIAGNOSIS.md).
+
 ## kanji-data repository licence
 
 MIT License

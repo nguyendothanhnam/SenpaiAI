@@ -88,6 +88,10 @@ export function LibraryEditorScreen() {
     save.mutate()
   }
   const fields = ['title', 'tags', 'source_url', 'content'] as const
+  const letters = Array.from(form.content).filter(char => /\p{L}/u.test(char))
+  const japanese = letters.filter(char => /[\u3040-\u30ff\u3400-\u9fff]/u.test(char)).length
+  const vietnamese = letters.filter(char => /[a-zA-ZÀ-ỹĐđ]/u.test(char)).length
+  const levelHint = form.content.match(/\bN[1-5]\b/i)?.[0]?.toUpperCase()
   const labels = { title: 'library.fields.title', tags: 'library.fields.tags', source_url: 'library.fields.sourceUrl', content: 'library.fields.content' }
   return <Screen>
     <Title>{t(editing ? 'library.editDocument' : 'library.addNewDocument')}</Title>
@@ -96,11 +100,14 @@ export function LibraryEditorScreen() {
       <View style={styles.row}><Button secondary disabled={busy} title={t(`library.documentTypes.${form.document_type}`)} onPress={() => setPicker('type')} /><Button secondary disabled={busy} title={form.jlpt_level || t('library.noLevel')} onPress={() => setPicker('level')} /></View>
       {fields.map((field) => <View key={field} style={{ gap: 8 }}>
         <AppText>{t(labels[field])}</AppText>
-        <TextInput accessibilityLabel={t(labels[field])} value={form[field]} onChangeText={(value) => change(field, value)} editable={!busy && !uncertain} multiline={field === 'content'} scrollEnabled={field === 'content'} textAlignVertical="top" autoCapitalize={field === 'source_url' ? 'none' : 'sentences'} autoCorrect={false} keyboardType={field === 'source_url' ? 'url' : 'default'} style={[styles.field, { color: colors.text, backgroundColor: colors.bgElevated, borderColor: colors.border }, field === 'content' ? { minHeight: 300, maxHeight: 460, lineHeight: 26 } : {}]} />
+        <TextInput accessibilityLabel={t(labels[field])} value={form[field]} onChangeText={(value) => change(field, value)} maxLength={field === 'content' ? 50000 : undefined} editable={!busy && !uncertain} multiline={field === 'content'} scrollEnabled={field === 'content'} textAlignVertical="top" autoCapitalize={field === 'source_url' ? 'none' : 'sentences'} autoCorrect={false} keyboardType={field === 'source_url' ? 'url' : 'default'} style={[styles.field, { color: colors.text, backgroundColor: colors.bgElevated, borderColor: colors.border }, field === 'content' ? { height: 320, lineHeight: 26 } : {}]} />
         {errors[field] && <AppText accessibilityRole="alert">{i18n.t(errors[field]!)}</AppText>}
         {field === 'source_url' && <Button secondary title={t(importedPage.isLoading ? 'library.fetching' : 'library.fetchFromUrl')} disabled={busy || uncertain} onPress={importUrl} />}
       </View>)}
-      <Muted>{t('library.contentCharacterCount', { count: form.content.length })}</Muted>
+      <Muted>{t('library.contentLimitCount', { count: form.content.length, limit: 50000 })}</Muted>
+      <Muted>{t('library.languageEstimate', { japanese: letters.length ? Math.round(japanese * 100 / letters.length) : 0, vietnamese: letters.length ? Math.round(vietnamese * 100 / letters.length) : 0 })}</Muted>
+      <Muted>{t('library.suggestion', { type: t(japanese ? 'library.documentTypes.vocabulary' : 'library.documentTypes.lesson'), level: levelHint || t('library.noLevel') })}</Muted>
+      <Muted>{t('library.copyrightNotice')}</Muted>
       {imported && <Muted>{mobile('phase1.library.importPreview')}</Muted>}
       {importedPage.isError && <ErrorNotice message={getErrorMessage(importedPage.error, i18n)} />}
       {save.isError && <ErrorNotice message={uncertain ? mobile('phase1.library.saveUncertain') : (save.error as Error)?.message === 'permission-denied' ? mobile('phase1.library.permissionDenied') : libraryLimitError(save.error) ? t('library.limitError') : getErrorMessage(save.error, i18n)} />}

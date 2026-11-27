@@ -47,6 +47,46 @@ def payload(kanji='土',final=False):
             'final':final,'attempt_id':str(uuid.uuid4())}
 
 
+@pytest.mark.parametrize('profile', ['very_easy', 'easy', 'standard', 'strict', 'very_strict'])
+def test_five_profiles_persist_scores_and_explain_weights(context, profile):
+    from app.core.kanji_writing_config import PROFILES, SCORE_WEIGHTS, PASS_SCORE
+    client, db, users, current = context
+    body = {**payload(final=True), 'strictness': profile}
+    response = client.post('/api/kanji-writing/evaluate', json=body)
+    assert response.status_code == 200
+    data = response.json()
+    assert data['strictness'] == profile and data['thresholds'] == PROFILES[profile]
+    assert data['passed'] and data['overall_score'] == 100
+    assert data['score_weights'] == SCORE_WEIGHTS and data['pass_score'] == PASS_SCORE
+    assert sum(data['score_weights'].values()) == pytest.approx(1)
+    stored = db.query(KanjiWritingAttempt).filter_by(attempt_key=body['attempt_id']).one()
+    assert stored.result['score_weights'] == data['score_weights']
+    assert client.post('/api/kanji-writing/evaluate', json=body).json() == data
+    assert db.query(KanjiWritingAttempt).count() == 1
+
+
+def test_new_profiles_preserve_old_thresholds_and_have_ordered_tolerance():
+    from app.core.kanji_writing_config import PROFILES
+    assert PROFILES['easy'] == {'distance': .20, 'endpoint': .32, 'length_ratio': .35, 'order_margin': .035}
+    assert PROFILES['standard'] == {'distance': .16, 'endpoint': .26, 'length_ratio': .42, 'order_margin': .025}
+    assert PROFILES['strict'] == {'distance': .10, 'endpoint': .17, 'length_ratio': .60, 'order_margin': .020}
+    profiles = list(PROFILES.values())
+    for loose, strict in zip(profiles, profiles[1:]):
+        assert loose['distance'] > strict['distance']
+        assert loose['endpoint'] > strict['endpoint']
+        assert loose['length_ratio'] < strict['length_ratio']
+    raw = templates()['土']['raw']
+    invalid = {**payload(), 'strictness': 'unknown'}
+    from app.api.kanji_writing import WritingRequest
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        WritingRequest(**invalid)
+    for profile in PROFILES:
+        score = evaluate([list(reversed(raw[0])), *raw[1:]], raw, strictness=profile)
+        assert score['scores']['direction'] < 100
+        assert score['scores']['order'] == 100
+
+
 def test_parser_relative_smooth_cubic_and_uniform_character_transform():
     a=svg_points('M 1,2 c 1,0 2,0 3,0 s 2,0 3,0')
     assert a[0]==(1,2) and a[-1]==(7,2)
@@ -222,7 +262,8 @@ def test_profiles_persist_and_cannot_reuse_attempt_id_with_different_thresholds(
     result=client.post('/api/kanji-writing/evaluate',json=body)
     assert result.status_code==200 and result.json()['strictness']=='strict'
     row=db.query(KanjiWritingAttempt).one()
-    assert row.result['version']=='stroke-rules-v2' and row.result['scores']==result.json()['scores']
+    from app.core.kanji_writing_config import VERSION
+    assert row.result['version']==VERSION and row.result['scores']==result.json()['scores']
     body['strictness']='easy'
     assert client.post('/api/kanji-writing/evaluate',json=body).status_code==409
     body['strictness']='unknown'

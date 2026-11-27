@@ -12,6 +12,7 @@ import { documentPermissions, safeHttpUrl, scopeLabelKey } from '../features/lib
 import { getErrorMessage } from '../utils/getErrorMessage'
 import { formatTimestamp } from '../utils/date'
 import { AppText, Badge, Button, Card, ErrorNotice, Loading, Muted, Screen, Title, styles } from '../components/ui'
+import { KanjiText } from '../components/KanjiLookup'
 
 export function LibraryDetailScreen() {
   const { id: parameter } = useLocalSearchParams<{ id: string }>()
@@ -50,6 +51,6 @@ export function LibraryDetailScreen() {
       {removal.isError && <ErrorNotice message={mobile('phase1.library.deleteFailed')} retry={() => void query.refetch()} />}
       {query.isError && <ErrorNotice message={getErrorMessage(query.error, i18n)} retry={() => void query.refetch()} />}
     </View>}
-    renderItem={({ item }) => <Card><AppText selectable style={{ lineHeight: 28 }}>{item}</AppText></Card>}
+    renderItem={({ item }) => <Card><AppText selectable style={{ lineHeight: 28 }}><KanjiText text={item} /></AppText></Card>}
   /></View>
 }

@@ -4,29 +4,50 @@ import unicodedata
 
 
 def _fold(text: str) -> str:
-    return ''.join(c for c in unicodedata.normalize('NFD', text.lower()) if not unicodedata.combining(c)).replace('đ', 'd')
+    return unicodedata.normalize('NFC',''.join(c for c in unicodedata.normalize('NFD', text.lower())
+        if not unicodedata.combining(c) or c in '\u3099\u309a')).replace('đ', 'd')
+
+
+def unquoted_instructions(question: str) -> str:
+    text=question
+    for pattern in (r'「[^」]*」',r'『[^』]*』',r'“[^”]*”',r'"[^"]*"',
+                    r"(?<!\w)'[^']*'(?!\w)",r'\([^)]*\)',r'（[^）]*）',r'\[[^]]*\]'):
+        text=re.sub(pattern,' ',text,flags=re.S)
+    return text.strip()
+
+
+# Function words, not Japanese-study jargon. A technical Latin noun alone never
+# constitutes English prose. Vietnamese words protect unaccented/mixed questions.
+ENGLISH_WORDS=set('a an the is are am was were be been being do does did have has had can could would should will may might must i me my mine we us our you your he she it they them their this that these those what how why when where which who whose whom and or but if then because so as for from to of in on at with without about into than not no yes please explain describe define compare translate show tell give help understand learn study use used means mean meaning example sentence word want like need know'.split())
+VIETNAMESE_WORDS=set('toi minh ban chung chungta anh chi em mot nhung cac nay do kia gi nao sao khi dau bao nhieu la cua co khong chua roi se dang da duoc cho voi ve va hay hoac nhung neu thi vi nen tu sang trong ngoai tren duoi dung hoc tieng nhat ngu phap mau cau cach doc nghia giai thich dich phan biet khac nhau muon can giup the nao them nua truoc sau hom nay mai nhe voi a oi'.split())
 
 
 def detect_chat_language(question: str, fallback: str | None = None) -> str:
-    # Quoted material is often the sentence being translated, not the language
-    # in which the learner is giving instructions.
-    instructions = re.sub(r'[「『"“\'].*?[」』"”\']', ' ', question, flags=re.DOTALL)
+    instructions = unquoted_instructions(question)
     folded = _fold(instructions)
-    vi = re.findall(r'\b(?:toi|ban|nghia|dich|tieng|cau|giai|thich|khac|nhau|gi|chao|minh|muon|hoc|ngu|phap)\b', folded)
-    en = re.findall(r'\b(?:what|does|mean|explain|translate|hello|please|difference|between|how|why|english|vietnamese|japanese|sentence|want|learn)\b', folded)
-    if len(vi) > len(en):
-        return 'vi'
-    if en:
-        return 'en'
-    if instructions.lower() != _fold(instructions) and re.search(r'[a-zA-Z]', instructions):
-        return 'vi'
-    if re.search(r'\b[a-zA-Z]{3,}\b', instructions):
-        return 'en'
-    return fallback if fallback in ('vi', 'en') else 'vi'
+    default=fallback if fallback in ('vi','en') else 'vi'
+    requests=[]
+    pattern=r'\b(?:tra loi|giai thich|noi|viet|answer|reply|respond|explain)(?:\s+[a-z]+){0,3}?\s+(?:bang\s+(?:tieng\s+)?|in\s+)(anh|viet|english|vietnamese)\b'
+    for match in re.finditer(pattern,folded):
+        prefix=folded[max(0,match.start()-18):match.start()]
+        if re.search(r'khong(?: can)?\s*$|dung\s*$|do not\s*$|don.t\s*$',prefix):continue
+        requests.append('en' if match[1] in ('anh','english') else 'vi')
+    if re.search(r'英語で(?:説明|答|返事)',instructions):requests.append('en')
+    if re.search(r'ベトナム語で(?:説明|答|返事)',instructions):requests.append('vi')
+    if requests:return requests[-1]
+    words=re.findall(r'[a-z]+',folded)
+    vi=sum(w in VIETNAMESE_WORDS and w not in ENGLISH_WORDS for w in words)
+    en=sum(w in ENGLISH_WORDS for w in words)
+    if vi>=2 or re.search(r'[àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ]',instructions,re.I):return default
+    if re.fullmatch(r'(?:hello|hi|hey|good morning|good afternoon|good evening|thank you|thanks)[!?.\s]*',folded):return 'en'
+    imperative=re.match(r'^(?:please\s+)?(?:explain|describe|define|compare|translate|show|tell|give|help|analy[sz]e)\b',folded)
+    clause=re.match(r'^(?:(?:hello|hi|hey)[,!.\s]+)?(?:what|how|why|when|where|which|who|can|could|would|do|does|is|are|i|we|you|it|the|this|that)\b',folded)
+    if vi==0 and ((imperative and len(words)>=2 and en>=1) or (clause and len(words)>=3 and en>=2 and en/len(words)>=.3)):return 'en'
+    return default
 
 
 def needs_history(question: str) -> bool:
-    return bool(re.search(r'câu (?:trên|trước|đó)|giải thích thêm|ví dụ (?:khác|thêm)|tiếp tục|như trên|(?:mẫu|chữ|trợ từ) (?:vừa rồi|trên)|hai trợ từ trên|\b(?:previous|above|that|it|more|continue|follow.up)\b', question, re.IGNORECASE))
+    return bool(re.search(r'cau (?:tren|truoc|do)|giai thich (?:them|lai)|vi du (?:khac|them)|tiep tuc|nhu tren|(?:mau|chu|tro tu) (?:vua roi|tren|do)|hai tro tu tren|dang phu dinh|vi du ay|ngan hon|\b(?:previous|above|that|it|more|continue|follow.up)\b|その|先ほど|もう一つ', _fold(question), re.IGNORECASE))
 
 
 def is_chitchat_query(question: str) -> bool:
@@ -48,21 +69,18 @@ def is_chitchat_query(question: str) -> bool:
 
 def chitchat_direct_answer(question: str, language: str = 'vi') -> str | None:
     folded = _fold(question.strip().lower())
+    folded=re.sub(r'^(?:please\s+)?(?:answer|reply|respond)\s+in\s+(?:english|vietnamese)[.:;\s]+','',folded)
+    folded=re.sub(r'[.!?;\s]*(?:hay\s+)?tra loi bang (?:tieng )?(?:viet|anh)[.!?\s]*$','',folded)
+    if re.search(r'nghia|la gi|what does|meaning|cach doc|furigana',folded) and re.search(r'\bhello\b',folded):return None
     if re.fullmatch(r'(?:こんにちは|こんばんは|おはようございます)[!！。\s]*',question.strip()) or re.match(r'^(?:good morning|good afternoon|good evening)\b',folded):
         return 'Hello! I am SenpaiAI. What would you like to learn about Japanese today?' if language=='en' else 'Chào bạn! Tôi là SenpaiAI. Hôm nay bạn muốn học gì về tiếng Nhật?'
-    if re.search(r'^(?:xin\s+)?chao(?:\s+(?:ban|senpai|ai|ad|em|anh|chi))?\s*[!?.]*$', folded) or re.search(r'^(?:hello|hi|hey)\b', folded):
+    if re.search(r'^(?:xin\s+)?chao(?:\s+(?:ban|senpaiai|senpai|ai|ad|em|anh|chi))?\s*[!?.]*$', folded) or re.search(r'^(?:hello|hi|hey)\b', folded):
         return 'Hello! I am SenpaiAI, your Japanese learning assistant. How can I help you today?' if language=='en' else 'Chào bạn! Tôi là SenpaiAI, trợ lý hỗ trợ học tiếng Nhật. Bạn muốn luyện ngữ pháp, từ vựng hay dịch câu hôm nay?'
 
     if re.search(r'^(?:ban|senpai)\s+(?:la\s+ai|ten\s+gi|la\s+gi)\b', folded) or re.search(r'^(?:who\s+are\s+you|what\s+is\s+your\s+name)\b', folded):
         if language == 'en':
-            return (
-                "I am **SenpaiAI**, your dedicated AI Japanese tutor built on standard JLPT curriculum and verified learning knowledge. "
-                "I'm here to help you master Japanese vocabulary, Kanji, grammar, and reading comprehension!"
-            )
-        return (
-            "Tôi là **SenpaiAI**, trợ lý AI đồng hành học tiếng Nhật được xây dựng dựa trên giáo trình chuẩn JLPT (N5 ~ N1) và thư viện học liệu chuyên sâu. "
-            "Tôi luôn sẵn sàng giải đáp thắc mắc về ngữ pháp, từ vựng, chữ Hán và luyện thi tiếng Nhật cho bạn!"
-        )
+            return 'I am SenpaiAI, a Japanese-learning assistant. What word or grammar pattern would you like to study?'
+        return 'Tôi là SenpaiAI, trợ lý học tiếng Nhật. Bạn muốn học từ hay mẫu ngữ pháp nào?'
 
     if re.search(r'^(?:cam\s+on|thank\s+you|thanks|arigato|arigatou)\b', folded):
         if language == 'en':
@@ -113,7 +131,8 @@ def answer_needs_revision(answer: str, language: str, question: str = '') -> boo
         vi_prose = len(re.findall(r'\b(?:cua|ban|toi|nghia|dich|cau|chu|ngu|danh|dau|nguoi|hoc|mot|nay|khong|trong|voi|duoc|muon|thanh)\b', words)) >= 4
         foreign = en_prose and not vi_prose if language == 'vi' else vi_prose and not en_prose
         if foreign:
-            if target and target != language and not allowed_translation:
+            foreign_language='en' if language=='vi' else 'vi'
+            if target == foreign_language and not allowed_translation:
                 allowed_translation = True
                 continue
             return True
@@ -123,10 +142,13 @@ def answer_needs_revision(answer: str, language: str, question: str = '') -> boo
     folded = _fold(plain)
     vi = len(re.findall(r'\b(?:la|cua|ban|toi|nghia|dich|cau|chu|ngu|de|danh|dau|nguoi|hoc|mot|nay|khong|trong|voi|duoc|gi|hom|muon|thanh)\b', folded))
     en = len(re.findall(r'\b(?:the|is|are|this|that|you|your|can|cannot|meaning|means|sentence|explanation|subject|topic|object|translate|translation|because|therefore|which|would)\b', folded))
+    words=re.findall(r'[a-z]+',folded)
+    english=sum(w in ENGLISH_WORDS or w in ('answer','plain') for w in words)
+    vietnamese=sum(w in VIETNAMESE_WORDS and w not in ENGLISH_WORDS for w in words)
     if not re.search(r'[a-zA-ZÀ-ỹ]', plain):
         if allowed_translation or target=='ja' and re.search(r'[ぁ-んァ-ヶ一-龯]',answer):
             return False
         return True
     if re.search(r'cannot (?:access|answer)|can.t (?:access|answer)|không thể truy cập.*từ điển', plain, re.IGNORECASE):
         return True
-    return (en >= 4 and en > vi) if language == 'vi' else (vi >= 4 and vi > en)
+    return (en >= 4 and en > vi or english>=2 and vietnamese==0) if language == 'vi' else (vi >= 4 and vi > en)

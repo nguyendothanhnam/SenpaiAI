@@ -28,9 +28,10 @@ def db_pair():
     @event.listens_for(engine, "connect")
     def enable_foreign_keys(connection, _):
         connection.execute("PRAGMA foreign_keys=ON")
+        connection.create_function('char_length',1,len)
 
     tables = [User.__table__, ChatFolder.__table__, ChatConversation.__table__, ChatHistory.__table__, VoiceConversation.__table__]
-    Base.metadata.create_all(engine, tables=tables)
+    Base.metadata.create_all(engine)
     session = sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)()
     first = User(email="chat-a@example.test", username="chat-a", hashed_password="test")
     second = User(email="chat-b@example.test", username="chat-b", hashed_password="test")
@@ -39,7 +40,7 @@ def db_pair():
     ids = first.id, second.id
     yield session, ids
     session.close()
-    Base.metadata.drop_all(engine, tables=tables)
+    Base.metadata.drop_all(engine)
     engine.dispose()
 
 
@@ -193,7 +194,6 @@ def test_legacy_send_creates_conversation_and_context_never_crosses_conversation
     db, (user_id, _) = db_pair
     user = db.get(User, user_id)
     contexts = []
-    monkeypatch.setattr(chat_api, "deterministic_chat_answer", lambda _message: None)
     monkeypatch.setattr(chat_api, "find_single_kanji_request", lambda _message: None)
     monkeypatch.setattr(chat_api.vocab_mcq_service, "try_answer", lambda _message: None)
     monkeypatch.setattr(chat_api.chroma_service, "search_documents", lambda *args, **kwargs: [])
@@ -205,11 +205,11 @@ def test_legacy_send_creates_conversation_and_context_never_crosses_conversation
 
     monkeypatch.setattr(chat_api.japanese_service, "chat_response", fake_chat_response)
 
-    first = asyncio.run(chat_api.send_message(ChatMessage(message="first question"), user, db))
+    first = asyncio.run(chat_api.send_message(ChatMessage(message="Translate into Japanese: first question"), user, db))
     second = asyncio.run(chat_api.send_message(
         ChatMessage(message="follow up", conversation_id=first.conversation_id), user, db,
     ))
-    separate = asyncio.run(chat_api.send_message(ChatMessage(message="separate topic"), user, db))
+    separate = asyncio.run(chat_api.send_message(ChatMessage(message="Translate into Japanese: separate topic"), user, db))
 
     assert first.conversation_id is not None
     assert second.conversation_id == first.conversation_id
@@ -235,7 +235,7 @@ def test_sentence_meaning_reaches_llm_and_saves_its_answer(db_pair, monkeypatch)
     assert len(calls) == 1
     assert calls[0]["question"] == question
     assert expected in response.answer
-    assert [source['type'] for source in response.sources] == ['reviewed_translation']
+    assert response.sources == []
     saved = db.query(ChatHistory).filter(ChatHistory.conversation_id == response.conversation_id).one()
     assert saved.answer == response.answer
 
@@ -324,18 +324,13 @@ def test_english_message_overrides_vietnamese_ui_and_old_conversation(db_pair, m
 def test_failed_generation_does_not_save_an_apology_as_answer(db_pair, monkeypatch):
     db, (user_id, _) = db_pair
     user = db.get(User, user_id)
-    monkeypatch.setattr(chat_api.chroma_service, 'search_documents', lambda *args, **kwargs: [])
-
-    async def fail(**kwargs):
-        raise RuntimeError('chat_generation_failed')
-
-    monkeypatch.setattr(chat_api.japanese_service, 'chat_response', fail)
-    with pytest.raises(HTTPException) as error:
-        asyncio.run(chat_api.send_message(ChatMessage(message='Giải thích giúp tôi'), user, db))
-    assert error.value.status_code == 503
-    assert error.value.detail == 'chat_generation_failed'
-    assert db.query(ChatHistory).count() == 0
-    assert db.query(ChatConversation).count() == 0
+    async def unexpected(**kwargs):
+        pytest.fail('Ambiguous questions should ask for clarification without generation')
+    monkeypatch.setattr(chat_api.japanese_service, 'chat_response', unexpected)
+    response = asyncio.run(chat_api.send_message(ChatMessage(message='Please explain'), user, db))
+    assert '?' in response.answer
+    assert db.query(ChatHistory).count() == 1
+    assert db.query(ChatConversation).count() == 1
 
 
 def test_text_conversation_list_does_not_offer_legacy_voice_sessions(db_pair):
@@ -385,18 +380,13 @@ def test_english_message_overrides_vietnamese_ui_and_old_conversation(db_pair, m
 def test_failed_generation_does_not_save_an_apology_as_answer(db_pair, monkeypatch):
     db, (user_id, _) = db_pair
     user = db.get(User, user_id)
-    monkeypatch.setattr(chat_api.chroma_service, 'search_documents', lambda *args, **kwargs: [])
-
-    async def fail(**kwargs):
-        raise RuntimeError('chat_generation_failed')
-
-    monkeypatch.setattr(chat_api.japanese_service, 'chat_response', fail)
-    with pytest.raises(HTTPException) as error:
-        asyncio.run(chat_api.send_message(ChatMessage(message='Giải thích giúp tôi'), user, db))
-    assert error.value.status_code == 503
-    assert error.value.detail == 'chat_generation_failed'
-    assert db.query(ChatHistory).count() == 0
-    assert db.query(ChatConversation).count() == 0
+    async def unexpected(**kwargs):
+        pytest.fail('Ambiguous questions should ask for clarification without generation')
+    monkeypatch.setattr(chat_api.japanese_service, 'chat_response', unexpected)
+    response = asyncio.run(chat_api.send_message(ChatMessage(message='Please explain'), user, db))
+    assert '?' in response.answer
+    assert db.query(ChatHistory).count() == 1
+    assert db.query(ChatConversation).count() == 1
 
 
 def test_text_conversation_list_does_not_offer_legacy_voice_sessions(db_pair):

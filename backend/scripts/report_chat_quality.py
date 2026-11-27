@@ -10,7 +10,7 @@ from app.services.chat_evaluation import grade,summarize,RUBRIC_VERSION
 def regrade(report,cases):
     if report['rubric_version']!=RUBRIC_VERSION:
         report.setdefault('initial_rubric_version',report['rubric_version'])
-        report['grading_revision_note']='Reading checks now require a marked kana/romaji guide rather than arbitrary Latin prose. Both phases regraded from saved raw answers; no response regenerated.'
+        report['grading_revision_note']='Saved answers regraded uniformly with the current rubric: explanation language and Japanese translation presence are separate; unintended Chinese variants are checked. No answer regenerated; input files are read-only.'
         for run in report['runs']:
             run.setdefault('initial_summary',run['summary'])
             for row in run['rows']:row['checks']=grade(cases[row['id']],row['answer'],row['sources'],row['error'])
@@ -37,12 +37,18 @@ if __name__=='__main__':
     import hashlib
     if hashlib.sha256(args.dataset.read_bytes()).hexdigest()!=before['dataset_sha256']:raise SystemExit('Dataset changed after generation')
     cases={c['id']:c for c in json.loads(args.dataset.read_text(encoding='utf-8'))['cases']}
-    for path,report in ((args.baseline,before),(args.after,after)):
-        regrade(report,cases);path.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    for report in (before,after):
+        if not report.get('finished_at'):
+            raise SystemExit('Cannot compare: evaluation has not finished')
+        for run in report['runs']:
+            ids=[row['id'] for row in run['rows']]
+            if len(ids)!=len(cases) or set(ids)!=set(cases):
+                raise SystemExit('Cannot compare: incomplete or duplicated evaluation cases')
+        regrade(report,cases)
     old={(r['mode'],r['model']):r for r in before['runs']}
     lines=['# Báo cáo chất lượng chat — trước và sau','',f'Bộ câu hỏi: {len(cases)} ca; rubric `{RUBRIC_VERSION}`. Cùng checksum bộ câu hỏi và học liệu.',
         '', '**Điểm dưới đây là điểm kiểm tra tự động, không phải độ chính xác tiếng Nhật.** Nội dung dùng từ khóa; cần rà tay ngữ pháp, cách đọc, bản dịch và quan hệ giữa nguồn với nhận định.',
-        '', 'Đã sửa lỗi bộ chấm cách đọc: không coi văn bản Latin thông thường là phiên âm. Cả hai lượt được chấm lại cùng rubric từ câu trả lời thô đã lưu; tóm tắt rubric ban đầu vẫn giữ trong JSON.',
+        '', 'Cả hai lượt được chấm bằng cùng rubric từ câu trả lời thô đã lưu; không sinh lại đáp án, không ghi đè JSON đầu vào. Đúng ngôn ngữ giải thích khác với việc có bản dịch Nhật theo yêu cầu.',
         '', '| Chế độ | Điểm trước → sau | Đạt mọi kiểm tra | Đạt từ khóa nội dung | Lỗi xử lý | Trung bình giây trước → sau | p95 giây trước → sau |',
         '| --- | --- | --- | --- | --- | --- | --- |']
     for run in after['runs']:
@@ -57,6 +63,14 @@ if __name__=='__main__':
         '', 'Chỉ có một mô hình sinh văn bản được cài, nên chưa có cơ sở xếp hạng giữa nhiều mô hình. Không tải model mới, không đổi mặc định. `--models available` sẽ đo cùng corpus cho tất cả mô hình sinh văn bản hiện được Ollama liệt kê ở lần chạy sau.',
         '', 'Đây là pipeline kết hợp tra cứu và AI, không phải benchmark mô hình thuần. Tra cứu trực tiếp và từ chối khi thiếu căn cứ làm giảm số lượt gọi model. Thời gian là một lượt đo local, có ảnh hưởng tải máy/cache/khởi động; chưa phải benchmark tải hay SLA. Dữ liệu thử trong SQLite riêng; catalog ứng dụng chỉ đọc.',
         '', 'Các câu không qua tiêu chí được liệt kê dưới đây cùng đáp án tham chiếu kỹ thuật và câu trả lời sau sửa. Mọi ca vẫn cần người biết tiếng Nhật rà; một câu qua từ khóa vẫn có thể sai ngữ nghĩa. Câu trả lời trước sửa nằm trong baseline.json.']
+    for run in after['runs']:
+        lines+=['',f"## Phiếu rà tay — {run['model'] or 'Không AI'}",'',
+            '| Mã ca | Nhóm | Đúng nội dung (đúng/sai/chưa rõ) | Ghi chú người rà |',
+            '| --- | --- | --- | --- |']
+        for row in run['rows']:
+            review=row.get('manual_review',{})
+            notes=str(review.get('notes','')).replace('|','\\|').replace('\n',' ')
+            lines.append(f"| {row['id']} | {row['group']} | {review.get('correctness','pending')} | {notes} |")
     for run in after['runs']:
         lines+=['',f"## Ca cần rà — {run['model'] or 'Không AI'}"]
         for row in run['rows']:

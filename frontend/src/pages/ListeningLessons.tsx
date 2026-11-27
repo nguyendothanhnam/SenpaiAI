@@ -8,6 +8,7 @@ import { libraryAPI, listeningAPI } from '../services/api'
 import { localizeListeningLesson } from '../utils/listeningLocale'
 import { useAuth } from '../services/auth'
 import { placementDefault } from '../utils/placementDefaults'
+import VideoLessonCreator from '../components/listening/VideoLessonCreator'
 
 export default function ListeningLessons() {
   const { t } = useTranslation('common')
@@ -24,7 +25,7 @@ export default function ListeningLessons() {
   const [documentId, setDocumentId] = useState<number | ''>('')
   const [draft, setDraft] = useState<any>(null)
   const queryClient = useQueryClient()
-  const query = useQuery(['listening-lessons', level, topic, search, source, page], () => listeningAPI.getLessons({ jlpt_level: level || undefined, topic: topic || undefined, search: search.trim() || undefined, source: source || undefined, limit: 12, offset: page * 12 }).then(({ data }) => data), { keepPreviousData: true, retry: 1 })
+  const query = useQuery(['listening-lessons', user?.id ?? null, level, topic, search, source, page], () => listeningAPI.getLessons({ jlpt_level: level || undefined, topic: topic || undefined, search: search.trim() || undefined, source: source || undefined, limit: 12, offset: page * 12 }).then(({ data }) => data), { retry: 1 })
   const documentsQuery = useQuery(['listening-library-documents', documentSearch, level], () => libraryAPI.getDocuments({ jlpt_level: level || undefined, sort: 'alphabetical', limit: 50 }).then(({ data }) => data), { enabled: createOpen })
   const documents = (documentsQuery.data?.items || []).filter((document: any) => !documentSearch.trim() || document.title.toLocaleLowerCase().includes(documentSearch.trim().toLocaleLowerCase()))
   const draftMutation = useMutation(() => listeningAPI.createFromLibraryDraft({ document_id: Number(documentId), topic: topic || undefined }).then(({ data }) => data), {
@@ -41,6 +42,7 @@ export default function ListeningLessons() {
   return <section className="space-y-6 text-[color:var(--text)]">
     <header className="flex flex-wrap items-center gap-4"><span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]"><Headphones className="h-7 w-7" /></span><div><h1 className="text-3xl font-bold">{t('listening.title')}</h1><p className="mt-1 text-sm text-[color:var(--text-muted)]">{t('listening.subtitle')}</p></div></header>
     <div className="flex flex-wrap items-center justify-between gap-3"><select aria-label={t('listening.source')} value={source} onChange={(event) => { setSource(event.target.value); setPage(0) }} className="input"><option value="">{t('listening.allLessons')}</option><option value="library">{t('listening.myLibraryLessons')}</option></select><button type="button" onClick={() => { setCreateOpen((value) => !value); setDraft(null) }} className="btn btn-primary">{t('listening.createFromLibrary')}</button></div>
+    <VideoLessonCreator />
     {createOpen && <section className="theme-card space-y-4 rounded-2xl p-4 sm:p-5">
       <h2 className="text-lg font-bold">{t('listening.createFromLibrary')}</h2>
       <div className="grid gap-3 sm:grid-cols-2"><label className="space-y-1 text-sm font-semibold">{t('listening.documentSearch')}<input className="input w-full" value={documentSearch} onChange={(event) => setDocumentSearch(event.target.value)} placeholder={t('listening.documentSearchPlaceholder')} /></label><label className="space-y-1 text-sm font-semibold">{t('listening.document')}<select className="input w-full" value={documentId} onChange={(event) => { setDocumentId(event.target.value ? Number(event.target.value) : ''); setDraft(null) }}><option value="">{t('listening.chooseDocument')}</option>{documents.map((document: any) => <option key={document.id} value={document.id}>{document.title} · {document.jlpt_level || '—'}</option>)}</select></label></div>

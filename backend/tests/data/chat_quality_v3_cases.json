@@ -1,0 +1,1578 @@
+{
+  "version": "chat-quality-v3",
+  "description": "96 real learner questions; mandatory keyword checks are proxies and all answers need manual semantic review. Runtime must never import this file.",
+  "cases": [
+    {
+      "id": "v3_grammar_1",
+      "group": "grammar",
+      "question": "Giải thích mẫu ～ながら khi làm hai việc cùng lúc.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ながら"
+        ],
+        [
+          "đồng thời"
+        ]
+      ],
+      "reference": "ながら; đồng thời",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_2",
+      "group": "grammar",
+      "question": "Cách dùng ～てしまう để nói việc đã làm xong hoặc tiếc nuối?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "てしまう"
+        ],
+        [
+          "tiếc"
+        ]
+      ],
+      "reference": "てしまう; tiếc",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_3",
+      "group": "grammar",
+      "question": "Mẫu ～そうです khi nhận xét vẻ ngoài khác lời đồn thế nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "そう"
+        ],
+        [
+          "vẻ"
+        ]
+      ],
+      "reference": "そう; vẻ",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_4",
+      "group": "grammar",
+      "question": "Tôi dùng ～つもりです để nói dự định được không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "つもり"
+        ],
+        [
+          "dự định"
+        ]
+      ],
+      "reference": "つもり; dự định",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_5",
+      "group": "grammar",
+      "question": "Dạy mẫu ～のに khi kết quả trái mong đợi.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "のに"
+        ],
+        [
+          "nhưng"
+        ]
+      ],
+      "reference": "のに; nhưng",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_6",
+      "group": "grammar",
+      "question": "Giải thích ～ています trong câu 本を読んでいます。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ています"
+        ],
+        [
+          "đang"
+        ]
+      ],
+      "reference": "ています; đang",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_7",
+      "group": "grammar",
+      "question": "Mẫu ～たことがあります nói kinh nghiệm thế nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ことが"
+        ],
+        [
+          "từng"
+        ]
+      ],
+      "reference": "ことが; từng",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_grammar_8",
+      "group": "grammar",
+      "question": "～なくてもいい nghĩa là không bắt buộc phải làm phải không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "なくても"
+        ],
+        [
+          "không"
+        ]
+      ],
+      "reference": "なくても; không",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_1",
+      "group": "comparison",
+      "question": "So sánh ～てもいい và ～てはいけない bằng ví dụ ngắn.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "てもいい"
+        ],
+        [
+          "てはいけ"
+        ]
+      ],
+      "reference": "てもいい; てはいけ",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_2",
+      "group": "comparison",
+      "question": "Phân biệt ～ています và ～ました khi kể một việc.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ています"
+        ],
+        [
+          "ました"
+        ]
+      ],
+      "reference": "ています; ました",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_3",
+      "group": "comparison",
+      "question": "So sánh ～とき và ～ながら khi mô tả thời gian.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "とき"
+        ],
+        [
+          "ながら"
+        ]
+      ],
+      "reference": "とき; ながら",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_4",
+      "group": "comparison",
+      "question": "So sánh に và で trong thư viện, có cách đọc.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "に"
+        ],
+        [
+          "で"
+        ]
+      ],
+      "reference": "に; で",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_5",
+      "group": "comparison",
+      "question": "Phân biệt は với が khi trả lời câu hỏi ai là sinh viên.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "は"
+        ],
+        [
+          "が"
+        ]
+      ],
+      "reference": "は; が",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_6",
+      "group": "comparison",
+      "question": "So sánh から và ので, có phải một cái luôn khách quan không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "から"
+        ],
+        [
+          "ので"
+        ]
+      ],
+      "reference": "から; ので",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_7",
+      "group": "comparison",
+      "question": "Phân biệt に và へ khi nói đi đến Tokyo.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "に"
+        ],
+        [
+          "へ"
+        ]
+      ],
+      "reference": "に; へ",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_comparison_8",
+      "group": "comparison",
+      "question": "So sánh より và ほど trong câu phủ định.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "より"
+        ],
+        [
+          "ほど"
+        ]
+      ],
+      "reference": "より; ほど",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_1",
+      "group": "vocabulary",
+      "question": "Tra từ 学校, cho cách đọc và nghĩa.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "学校"
+        ],
+        [
+          "trường"
+        ]
+      ],
+      "reference": "学校; trường",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_2",
+      "group": "vocabulary",
+      "question": "Từ 図書館 nghĩa là gì và đọc thế nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "図書館"
+        ],
+        [
+          "thư viện"
+        ]
+      ],
+      "reference": "図書館; thư viện",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_3",
+      "group": "vocabulary",
+      "question": "Giải thích động từ 食べる.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "食べる"
+        ],
+        [
+          "ăn"
+        ]
+      ],
+      "reference": "食べる; ăn",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_4",
+      "group": "vocabulary",
+      "question": "Tra nghĩa của 飲む và cách đọc.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "飲む"
+        ],
+        [
+          "uống"
+        ]
+      ],
+      "reference": "飲む; uống",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_5",
+      "group": "vocabulary",
+      "question": "約束 là gì trong từ vựng tiếng Nhật?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "約束"
+        ],
+        [
+          "hẹn"
+        ]
+      ],
+      "reference": "約束; hẹn",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_6",
+      "group": "vocabulary",
+      "question": "勉強 có cách đọc và nghĩa nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "勉強"
+        ],
+        [
+          "học"
+        ]
+      ],
+      "reference": "勉強; học",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_7",
+      "group": "vocabulary",
+      "question": "Từ 電車 đọc thế nào và nghĩa là gì?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "電車"
+        ],
+        [
+          "tàu"
+        ]
+      ],
+      "reference": "電車; tàu",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_vocabulary_8",
+      "group": "vocabulary",
+      "question": "家族 nghĩa là gì, cho phiên âm kana.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "家族"
+        ],
+        [
+          "gia đình"
+        ]
+      ],
+      "reference": "家族; gia đình",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_1",
+      "group": "kanji",
+      "question": "Tra kanji 学: nghĩa và âm đọc.",
+      "ui_language": "en",
+      "language": "en",
+      "required": [
+        [
+          "学"
+        ],
+        [
+          "study",
+          "learning"
+        ]
+      ],
+      "reference": "学; học",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_2",
+      "group": "kanji",
+      "question": "Tra chữ 語 và số nét.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "語"
+        ],
+        [
+          "ngôn"
+        ]
+      ],
+      "reference": "語; ngôn",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_3",
+      "group": "kanji",
+      "question": "Kanji 聞 có cách đọc nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "聞"
+        ],
+        [
+          "nghe"
+        ]
+      ],
+      "reference": "聞; nghe",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_4",
+      "group": "kanji",
+      "question": "Tra chữ 休 trong từ điển.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "休"
+        ],
+        [
+          "nghỉ"
+        ]
+      ],
+      "reference": "休; nghỉ",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_5",
+      "group": "kanji",
+      "question": "Kanji 明 có ý nghĩa gì?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "明"
+        ],
+        [
+          "sáng"
+        ]
+      ],
+      "reference": "明; sáng",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_6",
+      "group": "kanji",
+      "question": "Tra chữ 月: nghĩa và cách đọc.",
+      "ui_language": "en",
+      "language": "en",
+      "required": [
+        [
+          "月"
+        ],
+        [
+          "month",
+          "moon"
+        ]
+      ],
+      "reference": "月; tháng",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_7",
+      "group": "kanji",
+      "question": "Kanji 時 có nghĩa và số nét nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "時"
+        ],
+        [
+          "thời"
+        ]
+      ],
+      "reference": "時; thời",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_kanji_8",
+      "group": "kanji",
+      "question": "Tra chữ 森 và cách đọc.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "森"
+        ],
+        [
+          "rừng"
+        ]
+      ],
+      "reference": "森; rừng",
+      "max_words": 200,
+      "reading": true
+    },
+    {
+      "id": "v3_ja_vi_1",
+      "group": "ja_vi",
+      "question": "Dịch sang tiếng Việt: 明日は図書館で勉強します。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "thư viện"
+        ],
+        [
+          "học"
+        ]
+      ],
+      "reference": "thư viện; học",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_2",
+      "group": "ja_vi",
+      "question": "Dịch sang tiếng Việt: 私はコーヒーを飲みません。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "không"
+        ],
+        [
+          "cà phê"
+        ]
+      ],
+      "reference": "không; cà phê",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_3",
+      "group": "ja_vi",
+      "question": "Dịch câu này sang tiếng Việt: この本はとても面白いです。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "sách"
+        ],
+        [
+          "thú vị"
+        ]
+      ],
+      "reference": "sách; thú vị",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_4",
+      "group": "ja_vi",
+      "question": "Dịch Nhật-Việt: 友達と映画を見ました。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "bạn"
+        ],
+        [
+          "phim"
+        ]
+      ],
+      "reference": "bạn; phim",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_5",
+      "group": "ja_vi",
+      "question": "Dịch sang tiếng Việt: ここで写真を撮ってもいいですか。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ảnh"
+        ],
+        [
+          "được"
+        ]
+      ],
+      "reference": "ảnh; được",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_6",
+      "group": "ja_vi",
+      "question": "Dịch sang tiếng Việt: 日本へ行ったことがあります。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "Nhật"
+        ],
+        [
+          "từng"
+        ]
+      ],
+      "reference": "Nhật; từng",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_7",
+      "group": "ja_vi",
+      "question": "Dịch sang tiếng Việt: 雨が降っているので、家にいます。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "mưa"
+        ],
+        [
+          "nhà"
+        ]
+      ],
+      "reference": "mưa; nhà",
+      "max_words": 200
+    },
+    {
+      "id": "v3_ja_vi_8",
+      "group": "ja_vi",
+      "question": "Dịch câu 今日は何をしましたか sang tiếng Việt.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "hôm nay"
+        ],
+        [
+          "gì"
+        ]
+      ],
+      "reference": "hôm nay; gì",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_1",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Ngày mai tôi đi học.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "明日"
+        ],
+        [
+          "学校"
+        ]
+      ],
+      "reference": "明日; 学校",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_2",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Tôi không uống cà phê.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "コーヒー"
+        ],
+        [
+          "ません"
+        ]
+      ],
+      "reference": "コーヒー; ません",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_3",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Quyển sách này thú vị.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "本"
+        ],
+        [
+          "面白"
+        ]
+      ],
+      "reference": "本; 面白",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_4",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Tôi đã xem phim với bạn.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "友達"
+        ],
+        [
+          "映画"
+        ]
+      ],
+      "reference": "友達; 映画",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_5",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Tôi có thể chụp ảnh ở đây không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "写真"
+        ],
+        [
+          "いい"
+        ]
+      ],
+      "reference": "写真; いい",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_6",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Tôi đã từng đến Nhật.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "日本"
+        ],
+        [
+          "ことが"
+        ]
+      ],
+      "reference": "日本; ことが",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_7",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Vì trời mưa nên tôi ở nhà.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "雨"
+        ],
+        [
+          "家"
+        ]
+      ],
+      "reference": "雨; 家",
+      "max_words": 200
+    },
+    {
+      "id": "v3_vi_ja_8",
+      "group": "vi_ja",
+      "question": "Dịch sang tiếng Nhật: Tôi là sinh viên.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "私"
+        ],
+        [
+          "学生"
+        ]
+      ],
+      "reference": "私; 学生",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_1",
+      "group": "analysis",
+      "question": "Phân tích các trợ từ trong 私は毎日学校へ行きます。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "は"
+        ],
+        [
+          "へ"
+        ]
+      ],
+      "reference": "は; へ",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_2",
+      "group": "analysis",
+      "question": "Phân tích câu 図書館で本を読んでいます。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "で"
+        ],
+        [
+          "ています"
+        ]
+      ],
+      "reference": "で; ています",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_3",
+      "group": "analysis",
+      "question": "Phân tích ngữ pháp trong 日本へ行ったことがあります。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ことが"
+        ],
+        [
+          "trải nghiệm"
+        ]
+      ],
+      "reference": "ことが; trải nghiệm",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_4",
+      "group": "analysis",
+      "question": "Phân tích mẫu câu 日本語を勉強しながら音楽を聞きます。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ながら"
+        ],
+        [
+          "đồng thời"
+        ]
+      ],
+      "reference": "ながら; đồng thời",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_5",
+      "group": "analysis",
+      "question": "Phân tích câu この部屋でタバコを吸ってはいけません。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "てはいけ"
+        ],
+        [
+          "không"
+        ]
+      ],
+      "reference": "てはいけ; không",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_6",
+      "group": "analysis",
+      "question": "Phân tích câu 明日は早く起きなければなりません。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "なければ"
+        ],
+        [
+          "phải"
+        ]
+      ],
+      "reference": "なければ; phải",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_7",
+      "group": "analysis",
+      "question": "Giải thích các thành phần của 私の好きな食べ物は寿司です。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "好き"
+        ],
+        [
+          "な"
+        ]
+      ],
+      "reference": "好き; な",
+      "max_words": 200
+    },
+    {
+      "id": "v3_analysis_8",
+      "group": "analysis",
+      "question": "Phân tích câu 新しい漢字を覚えられるようになりました。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "られる"
+        ],
+        [
+          "khả năng"
+        ]
+      ],
+      "reference": "られる; khả năng",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_1",
+      "group": "culture",
+      "question": "Vì sao người Nhật cúi chào khi gặp nhau?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "chào"
+        ]
+      ],
+      "reference": "chào",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_2",
+      "group": "culture",
+      "question": "Tại sao thường cởi giày khi vào nhà ở Nhật?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "giày"
+        ]
+      ],
+      "reference": "giày",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_3",
+      "group": "culture",
+      "question": "いただきます được dùng lúc nào?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ăn"
+        ]
+      ],
+      "reference": "ăn",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_4",
+      "group": "culture",
+      "question": "Có phải mọi người Nhật đều phải cúi chào cùng một góc không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "không"
+        ]
+      ],
+      "reference": "không",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_5",
+      "group": "culture",
+      "question": "Tôi cần lưu ý gì về phân loại rác ở Nhật?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "rác"
+        ]
+      ],
+      "reference": "rác",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_6",
+      "group": "culture",
+      "question": "Khi đi tàu ở Nhật có nên nói điện thoại không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tàu"
+        ]
+      ],
+      "reference": "tàu",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_7",
+      "group": "culture",
+      "question": "Trà đạo Nhật Bản có phải chỉ là uống trà không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "trà"
+        ]
+      ],
+      "reference": "trà",
+      "max_words": 200
+    },
+    {
+      "id": "v3_culture_8",
+      "group": "culture",
+      "question": "Có một quy tắc keigo áp dụng cho mọi công ty Nhật không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ngữ cảnh"
+        ]
+      ],
+      "reference": "ngữ cảnh",
+      "max_words": 200
+    },
+    {
+      "id": "v3_greeting_1",
+      "group": "greeting",
+      "question": "Xin chào SenpaiAI!",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "chào"
+        ]
+      ],
+      "reference": "chào",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_2",
+      "group": "greeting",
+      "question": "Cảm ơn bạn đã giúp tôi học tiếng Nhật.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "Không có gì"
+        ]
+      ],
+      "reference": "Không có gì",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_3",
+      "group": "greeting",
+      "question": "Tạm biệt, hẹn buổi học sau.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "Hẹn"
+        ]
+      ],
+      "reference": "Hẹn",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_4",
+      "group": "greeting",
+      "question": "こんにちは",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "Chào"
+        ]
+      ],
+      "reference": "Chào",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_5",
+      "group": "greeting",
+      "question": "こんばんは furigana",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "Chào"
+        ]
+      ],
+      "reference": "Chào",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_6",
+      "group": "greeting",
+      "question": "Hello, how are you today?",
+      "ui_language": "vi",
+      "language": "en",
+      "required": [
+        [
+          "Hello"
+        ]
+      ],
+      "reference": "Hello",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_7",
+      "group": "greeting",
+      "question": "Please answer in English. Chào bạn!",
+      "ui_language": "vi",
+      "language": "en",
+      "required": [
+        [
+          "Hello"
+        ]
+      ],
+      "reference": "Hello",
+      "max_words": 65
+    },
+    {
+      "id": "v3_greeting_8",
+      "group": "greeting",
+      "question": "Xin chào. Hãy trả lời bằng tiếng Việt.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "Chào"
+        ]
+      ],
+      "reference": "Chào",
+      "max_words": 65
+    },
+    {
+      "id": "v3_off_topic_1",
+      "group": "off_topic",
+      "question": "Hãy dự đoán giá Bitcoin tuần sau.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_2",
+      "group": "off_topic",
+      "question": "Giải phương trình bậc hai này giúp tôi.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_3",
+      "group": "off_topic",
+      "question": "Viết mã điều khiển máy giặt bằng C++.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_4",
+      "group": "off_topic",
+      "question": "Đội nào sẽ vô địch bóng đá thế giới?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_5",
+      "group": "off_topic",
+      "question": "Cho tôi phác đồ thuốc chữa đau ngực.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_6",
+      "group": "off_topic",
+      "question": "Nấu phở bò thế nào để ngon?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_7",
+      "group": "off_topic",
+      "question": "Hãy tư vấn đầu tư chứng khoán cho tôi.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_off_topic_8",
+      "group": "off_topic",
+      "question": "Dự báo thời tiết Hà Nội ngày mai.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "tiếng Nhật"
+        ]
+      ],
+      "reference": "tiếng Nhật",
+      "max_words": 55
+    },
+    {
+      "id": "v3_mixed_language_1",
+      "group": "mixed_language",
+      "question": "この漢字に furigana を付けて説明してください。",
+      "ui_language": "en",
+      "language": "en",
+      "required": [
+        [
+          "reading",
+          "sentence"
+        ]
+      ],
+      "reference": "cách đọc",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_2",
+      "group": "mixed_language",
+      "question": "JLPT N3 の勉強方法を教えてください。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "N3"
+        ]
+      ],
+      "reference": "N3",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_3",
+      "group": "mixed_language",
+      "question": "この文の keigo は正しいですか。",
+      "ui_language": "en",
+      "language": "en",
+      "required": [
+        [
+          "sentence",
+          "context"
+        ]
+      ],
+      "reference": "câu",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_4",
+      "group": "mixed_language",
+      "question": "te-form の使い方を説明してください。",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "thể"
+        ]
+      ],
+      "reference": "thể",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_5",
+      "group": "mixed_language",
+      "question": "furigana la gi trong tieng Nhat?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "furigana"
+        ]
+      ],
+      "reference": "furigana",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_6",
+      "group": "mixed_language",
+      "question": "toi muon hoc keigo cho phong van N3",
+      "ui_language": "en",
+      "language": "en",
+      "required": [
+        [
+          "keigo"
+        ]
+      ],
+      "reference": "keigo",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_7",
+      "group": "mixed_language",
+      "question": "cho minh cach dung te-form voi",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "thể"
+        ]
+      ],
+      "reference": "thể",
+      "max_words": 200
+    },
+    {
+      "id": "v3_mixed_language_8",
+      "group": "mixed_language",
+      "question": "\"Please explain in English\" chỉ là câu trích dẫn, hãy giải thích từ furigana.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "furigana"
+        ]
+      ],
+      "reference": "furigana",
+      "max_words": 200
+    },
+    {
+      "id": "v3_follow_up_1",
+      "group": "follow_up",
+      "question": "Cho một ví dụ khác của mẫu vừa rồi.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ながら"
+        ]
+      ],
+      "reference": "ながら",
+      "max_words": 200,
+      "history": [
+        "Giải thích mẫu ～ながら."
+      ]
+    },
+    {
+      "id": "v3_follow_up_2",
+      "group": "follow_up",
+      "question": "Giai thich them cau tren bang ngon ngu giao dien.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ています"
+        ]
+      ],
+      "reference": "ています",
+      "max_words": 200,
+      "history": [
+        "Phân tích câu 本を読んでいます。"
+      ]
+    },
+    {
+      "id": "v3_follow_up_3",
+      "group": "follow_up",
+      "question": "Cho mẫu đó ở dạng phủ định.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ません"
+        ]
+      ],
+      "reference": "ません",
+      "max_words": 200,
+      "history": [
+        "Dạy câu コーヒーを飲みます。"
+      ]
+    },
+    {
+      "id": "v3_follow_up_4",
+      "group": "follow_up",
+      "question": "Cach doc cua chu vua roi la gi?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "がく"
+        ]
+      ],
+      "reference": "がく",
+      "max_words": 200,
+      "history": [
+        "Tra kanji 学."
+      ]
+    },
+    {
+      "id": "v3_follow_up_5",
+      "group": "follow_up",
+      "question": "Nếu thay địa điểm thì chọn trợ từ nào trong hai trợ từ trên?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "で"
+        ]
+      ],
+      "reference": "で",
+      "max_words": 200,
+      "history": [
+        "So sánh に và で chỉ địa điểm."
+      ]
+    },
+    {
+      "id": "v3_follow_up_6",
+      "group": "follow_up",
+      "question": "Ví dụ ấy có thể dùng khi nói với giáo viên không?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "lịch sự"
+        ]
+      ],
+      "reference": "lịch sự",
+      "max_words": 200,
+      "history": [
+        "Giải thích mẫu ～てください."
+      ]
+    },
+    {
+      "id": "v3_follow_up_7",
+      "group": "follow_up",
+      "question": "Hãy giải thích lại ngắn hơn.",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "ことが"
+        ]
+      ],
+      "reference": "ことが",
+      "max_words": 200,
+      "history": [
+        "Giải thích ～たことがあります."
+      ]
+    },
+    {
+      "id": "v3_follow_up_8",
+      "group": "follow_up",
+      "question": "Còn chữ đó trong từ nào khác?",
+      "ui_language": "vi",
+      "language": "vi",
+      "required": [
+        [
+          "語"
+        ]
+      ],
+      "reference": "語",
+      "max_words": 200,
+      "history": [
+        "Tra kanji 語."
+      ]
+    }
+  ]
+}

@@ -224,7 +224,7 @@ def test_export_reset_and_account_deletion_include_new_placement_data(context):
     client, db, user, _, app = context
     from app.api.auth import router as auth_router
     # Only this isolated test database receives the unrelated account tables.
-    names = ('minigame_learning_events', 'user_kanji_notes', 'chat_answer_feedback', 'kanji_writing_attempts', 'kanji_writing_reports', 'weekly_learning_goals', 'internship_profiles', 'internship_sessions', 'vocabulary', 'exercise_history', 'exercise_deliveries', 'chat_folders', 'chat_conversations', 'chat_history', 'voice_conversations', 'learning_sessions',
+    names = ('flashcard_assessments', 'flashcard_decks', 'flashcard_cards', 'flashcard_progress', 'flashcard_sessions', 'flashcard_transfers', 'minigame_learning_events', 'user_kanji_notes', 'chat_answer_feedback', 'kanji_writing_attempts', 'kanji_writing_reports', 'weekly_learning_goals', 'internship_profiles', 'internship_sessions', 'vocabulary', 'exercise_history', 'exercise_deliveries', 'chat_folders', 'chat_conversations', 'chat_history', 'voice_conversations', 'learning_sessions',
              'grammar_rules', 'grammar_questions', 'grammar_practice_attempts', 'listening_attempts',
              'daily_tasks', 'daily_task_items', 'user_game_profiles', 'point_transactions', 'user_unlocked_items',
              'study_item_stats', 'reminder_settings', 'notifications', 'push_subscriptions')
