@@ -108,34 +108,34 @@ export const OfferLetterModal: React.FC<OfferLetterModalProps> = ({
                 <div className="grid grid-cols-4 gap-2 text-center text-xs">
                   <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30">
                     <span className="text-amber-400 block text-[10px] font-bold">Kỹ thuật (技術)</span>
-                    <span className="font-extrabold text-amber-300 text-sm">{offerLetter.scores_breakdown.technical}</span>
+                    <span className="font-extrabold text-amber-300 text-xs sm:text-sm">{offerLetter.scores_breakdown.technical}/100</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80">
                     <span className="text-slate-400 block text-[10px]">Kính ngữ (敬語)</span>
-                    <span className="font-bold text-white text-sm">{offerLetter.scores_breakdown.keigo}</span>
+                    <span className="font-bold text-white text-xs sm:text-sm">{offerLetter.scores_breakdown.keigo}/100</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80">
                     <span className="text-slate-400 block text-[10px]">Tác phong (マナー)</span>
-                    <span className="font-bold text-white text-sm">{offerLetter.scores_breakdown.manner}</span>
+                    <span className="font-bold text-white text-xs sm:text-sm">{offerLetter.scores_breakdown.manner}/100</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/30">
                     <span className="text-sky-300 block text-[10px] font-bold">Khớp CV (整合)</span>
-                    <span className="font-extrabold text-sky-200 text-sm">{offerLetter.scores_breakdown.cv_alignment ?? 85}</span>
+                    <span className="font-extrabold text-sky-200 text-xs sm:text-sm">{offerLetter.scores_breakdown.cv_alignment ?? 85}/100</span>
                   </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-3 gap-2 text-center text-xs">
                   <div className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80">
                     <span className="text-slate-400 block text-[11px]">Ngữ pháp</span>
-                    <span className="font-bold text-white text-sm">{offerLetter.scores_breakdown.grammar}</span>
+                    <span className="font-bold text-white text-xs sm:text-sm">{offerLetter.scores_breakdown.grammar}/100</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80">
                     <span className="text-slate-400 block text-[11px]">Kính ngữ (Keigo)</span>
-                    <span className="font-bold text-white text-sm">{offerLetter.scores_breakdown.keigo}</span>
+                    <span className="font-bold text-white text-xs sm:text-sm">{offerLetter.scores_breakdown.keigo}/100</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/80">
                     <span className="text-slate-400 block text-[11px]">Văn hóa (Manner)</span>
-                    <span className="font-bold text-white text-sm">{offerLetter.scores_breakdown.manner}</span>
+                    <span className="font-bold text-white text-xs sm:text-sm">{offerLetter.scores_breakdown.manner}/100</span>
                   </div>
                 </div>
               )}

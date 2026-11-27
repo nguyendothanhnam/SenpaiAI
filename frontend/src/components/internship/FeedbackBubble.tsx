@@ -123,12 +123,12 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
           {scores && (
             <div className="flex items-center gap-2 shrink-0 text-[11px] font-mono">
               {hasTechnical && typeof scores.technical === 'number' && (
-                <span className="text-amber-400 font-bold">技術: {scores.technical}</span>
+                <span className="text-amber-400 font-bold">技術: {scores.technical}/100</span>
               )}
-              <span className="text-slate-300">敬語: {scores.keigo}</span>
-              <span className="text-slate-300">マナー: {scores.manner}</span>
+              <span className="text-slate-300">敬語: {scores.keigo}/100</span>
+              <span className="text-slate-300">マナー: {scores.manner}/100</span>
               {hasTechnical && typeof scores.cv_alignment === 'number' && (
-                <span className="text-sky-300">CV: {scores.cv_alignment}</span>
+                <span className="text-sky-300">CV: {scores.cv_alignment}/100</span>
               )}
             </div>
           )}
@@ -157,30 +157,30 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
               {hasTechnical && typeof scores.technical === 'number' && (
                 <div className="flex flex-col items-center justify-center p-2 rounded bg-amber-500/10 border border-amber-500/30">
                   <span className="text-[9px] font-bold text-amber-400 uppercase tracking-tight">Kỹ thuật (技術)</span>
-                  <span className="text-base font-mono font-black text-amber-300">{scores.technical}</span>
+                  <span className="text-sm font-mono font-black text-amber-300">{scores.technical}/100</span>
                 </div>
               )}
 
               <div className="flex flex-col items-center justify-center p-2 rounded bg-slate-900/60 border border-slate-800">
                 <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">Kính ngữ (敬語)</span>
-                <span className="text-base font-mono font-bold text-slate-100">{scores.keigo}</span>
+                <span className="text-sm font-mono font-bold text-slate-100">{scores.keigo}/100</span>
               </div>
 
               <div className="flex flex-col items-center justify-center p-2 rounded bg-slate-900/60 border border-slate-800">
                 <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">Tác phong (マナー)</span>
-                <span className="text-base font-mono font-bold text-slate-100">{scores.manner}</span>
+                <span className="text-sm font-mono font-bold text-slate-100">{scores.manner}/100</span>
               </div>
 
               {hasTechnical && typeof scores.cv_alignment === 'number' ? (
                 <div className="flex flex-col items-center justify-center p-2 rounded bg-sky-500/10 border border-sky-500/30">
                   <span className="text-[9px] font-bold text-sky-400 uppercase tracking-tight">Khớp CV (整合)</span>
-                  <span className="text-base font-mono font-black text-sky-300">{scores.cv_alignment}</span>
+                  <span className="text-sm font-mono font-black text-sky-300">{scores.cv_alignment}/100</span>
                 </div>
               ) : (
                 !hasTechnical && (
                   <div className="flex flex-col items-center justify-center p-2 rounded bg-slate-900/60 border border-slate-800">
                     <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">Ngữ pháp (文法)</span>
-                    <span className="text-base font-mono font-bold text-slate-100">{scores.grammar}</span>
+                    <span className="text-sm font-mono font-bold text-slate-100">{scores.grammar}/100</span>
                   </div>
                 )
               )}

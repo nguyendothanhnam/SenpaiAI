@@ -95,7 +95,9 @@ export const CVUploadModal: React.FC<CVUploadModalProps> = ({
       setParsedCv(res.data.parsed_cv)
       toast.success(`Đã đọc file ${file.name} và phân tích CV thành công!`)
     } catch (err: any) {
-      toast.error(err.response?.data?.detail || 'Không thể trích xuất nội dung file.')
+      console.warn('Backend upload error:', err)
+      const detail = err.response?.data?.detail || 'Không thể trích xuất nội dung từ file CV. Vui lòng chuyển sang tab "Dán văn bản CV" để nhập trực tiếp.'
+      toast.error(detail)
     } finally {
       setIsParsing(false)
     }
@@ -152,22 +154,20 @@ export const CVUploadModal: React.FC<CVUploadModalProps> = ({
               <button
                 type="button"
                 onClick={() => setActiveTab('text')}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                  activeTab === 'text'
+                className={`px-3 py-1.5 rounded-lg font-medium transition-all ${activeTab === 'text'
                     ? 'bg-amber-500 text-slate-950 font-bold shadow'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 Dán văn bản CV
               </button>
               <button
                 type="button"
                 onClick={() => setActiveTab('file')}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                  activeTab === 'file'
+                className={`px-3 py-1.5 rounded-lg font-medium transition-all ${activeTab === 'file'
                     ? 'bg-amber-500 text-slate-950 font-bold shadow'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 Tải file (.pdf, .docx, .txt)
               </button>

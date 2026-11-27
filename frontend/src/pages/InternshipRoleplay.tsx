@@ -230,6 +230,9 @@ export default function InternshipRoleplay() {
       const voices = window.speechSynthesis.getVoices()
       const jaVoice = voices.find((v) => v.lang.startsWith('ja') || v.name.includes('Japanese'))
       if (jaVoice) utterance.voice = jaVoice
+      utterance.onstart = () => {
+        setIsSpeaking(true)
+      }
       utterance.onend = () => {
         setIsSpeaking(false)
         delete (window as any).__senpaiDialogueSpeech
@@ -448,6 +451,8 @@ export default function InternshipRoleplay() {
                     messageJa={currentTurnData.message_ja}
                     messageVi={currentTurnData.message_vi}
                     focus={currentTurnData.focus}
+                    isSpeaking={isSpeaking}
+                    onReplayAudio={handleReplayBossAudio}
                     onSpeakingChange={setIsSpeaking}
                     onClose={() => setIsDialogueCollapsed(true)}
                   />
@@ -604,11 +609,11 @@ export default function InternshipRoleplay() {
             <div className="grid grid-cols-2 gap-3 text-center text-xs">
               <div className="space-y-1 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3">
                 <span className="block leading-5 text-[color:var(--text-muted)]">Điểm Kính ngữ</span>
-                <span className="block text-lg font-bold text-[color:var(--primary)]">{profile?.keigo_score_avg || 0}</span>
+                <span className="block text-lg font-bold text-[color:var(--primary)]">{profile?.keigo_score_avg || 0}/100</span>
               </div>
               <div className="space-y-1 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3">
                 <span className="block leading-5 text-[color:var(--text-muted)]">Điểm Tác phong</span>
-                <span className="block text-lg font-bold text-[color:var(--primary)]">{profile?.manner_score_avg || 0}</span>
+                <span className="block text-lg font-bold text-[color:var(--primary)]">{profile?.manner_score_avg || 0}/100</span>
               </div>
             </div>
           </div>

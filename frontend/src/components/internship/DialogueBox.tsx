@@ -7,6 +7,8 @@ export interface DialogueBoxProps {
   messageJa: string
   messageVi: string
   focus?: string
+  isSpeaking?: boolean
+  onReplayAudio?: () => void
   onSpeakingChange?: (speaking: boolean) => void
   onClose?: () => void
   docked?: boolean
@@ -26,10 +28,13 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   messageJa,
   messageVi,
   focus,
+  isSpeaking,
+  onReplayAudio,
   onSpeakingChange,
 }) => {
   const [showVi, setShowVi] = useState(false)
   const [isPlayingAudio, setIsPlayingAudio] = useState(false)
+  const activePlaying = isSpeaking ?? isPlayingAudio
 
   const updatePlayingState = useCallback(
     (playing: boolean) => {
@@ -75,7 +80,11 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   }, [messageJa, updatePlayingState])
 
   const handlePlayAudio = () => {
-    if (isPlayingAudio) {
+    if (onReplayAudio) {
+      onReplayAudio()
+      return
+    }
+    if (activePlaying) {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel()
       updatePlayingState(false)
     } else {
@@ -86,6 +95,8 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
   // Auto-speak when question loads or changes
   useEffect(() => {
     setShowVi(false)
+    if (onReplayAudio) return
+
     updatePlayingState(false)
 
     const timer = setTimeout(() => {
@@ -100,7 +111,7 @@ export const DialogueBox: React.FC<DialogueBoxProps> = ({
       delete (window as any).__dialogueUtterance
       updatePlayingState(false)
     }
-  }, [messageJa, speakJapanese, updatePlayingState])
+  }, [messageJa, onReplayAudio, speakJapanese, updatePlayingState])
 
   return (
     <div className="w-full bg-slate-950/85 backdrop-blur-md border border-slate-800 rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 shadow-2xl text-slate-100 transition-all select-text font-sans">

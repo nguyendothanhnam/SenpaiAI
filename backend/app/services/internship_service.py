@@ -13,7 +13,8 @@ from .rewards_service import award_points
 from .cv_service import (
     index_cv_into_rag,
     generate_technical_questions_from_cv,
-    evaluate_turn_with_ai_rag
+    evaluate_turn_with_ai_rag,
+    evaluate_keigo_nuance
 )
 
 logger = logging.getLogger(__name__)
@@ -272,9 +273,9 @@ async def evaluate_turn_with_ai(
             
         data = json.loads(clean_json)
         return {
-            "grammar_score": max(50, min(100, int(data.get("grammar_score", 80)))),
-            "keigo_score": max(50, min(100, int(data.get("keigo_score", 80)))),
-            "manner_score": max(50, min(100, int(data.get("manner_score", 80)))),
+            "grammar_score": max(0, min(100, int(data.get("grammar_score", 80)))),
+            "keigo_score": max(0, min(100, int(data.get("keigo_score", 80)))),
+            "manner_score": max(0, min(100, int(data.get("manner_score", 80)))),
             "corrected_sentence": data.get("corrected_sentence", user_text),
             "advice_vi": data.get("advice_vi", "Phát biểu rõ ràng và tự tin."),
             "npc_reaction": data.get("npc_reaction", "happy"),
@@ -288,23 +289,39 @@ async def evaluate_turn_with_ai(
 
 def generate_heuristic_evaluation(user_text: str, question_ja: str) -> Dict[str, Any]:
     """Smart fallback if LLM is unavailable."""
-    has_desu_masu = "です" in user_text or "ます" in user_text
-    has_keigo = any(w in user_text for w in ["申します", "存じます", "参りました", "いたし", "恐縮", "お世話"])
-    has_watakushi = "私" in user_text or "わたくし" in user_text or "わたし" in user_text
+    clean_text = user_text.strip()
+    keigo_eval = evaluate_keigo_nuance(clean_text)
+    keigo = keigo_eval["score"]
+    has_desu_masu = keigo_eval["has_teineigo"]
+    has_watakushi = "私" in clean_text or "わたくし" in clean_text or "わたし" in clean_text
     
-    grammar = 85 if has_desu_masu else 70
-    keigo = 92 if has_keigo else (80 if has_desu_masu else 60)
-    manner = 88 if has_watakushi else 78
-    
-    advice = "Câu trả lời tốt. Hãy chú ý sử dụng thể lịch sự (です/ます) hoặc khiêm nhường ngữ khi nói về bản thân trước cấp trên."
-    if has_keigo:
-        advice = "Sử dụng kính ngữ rất tự nhiên và đúng chuẩn văn hóa công sở Nhật Bản!"
+    if len(clean_text) < 5 or keigo <= 20:
+        return {
+            "grammar_score": min(40, keigo + 10),
+            "keigo_score": keigo,
+            "manner_score": 30,
+            "corrected_sentence": "はい、承知いたしました。よろしくお願いいたします。",
+            "advice_vi": (
+                f"{keigo_eval['feedback']}\n\n"
+                "👔 Tác phong (マナー): Câu trả lời quá ngắn hoặc chưa hoàn chỉnh. Hãy diễn đạt câu đầy đủ với chủ ngữ, vị ngữ và thể lịch sự (です/ます)."
+            ),
+            "npc_reaction": "strict",
+            "npc_followup_ja": "恐れ入りますが、もう少し詳しくお話しいただけますでしょうか。",
+            "npc_followup_vi": "Xin lỗi, bạn có thể nói rõ hơn một chút được không?"
+        }
+
+    grammar = 85 if has_desu_masu else 55
+    manner = 88 if has_watakushi else 75
+    advice = (
+        f"{keigo_eval['feedback']}\n\n"
+        "👔 Tác phong (マナー): Phát biểu rõ ràng, chú ý xưng hô chuẩn mực khi giao tiếp với cấp trên."
+    )
         
     return {
         "grammar_score": grammar,
         "keigo_score": keigo,
         "manner_score": manner,
-        "corrected_sentence": user_text if has_desu_masu else f"{user_text}です。",
+        "corrected_sentence": clean_text if has_desu_masu else f"{clean_text}です。",
         "advice_vi": advice,
         "npc_reaction": "happy" if (grammar + keigo + manner) // 3 >= 80 else "thinking",
         "npc_followup_ja": "ありがとうございます。よく分かりました。",

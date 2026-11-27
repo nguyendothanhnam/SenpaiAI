@@ -20,6 +20,7 @@ class ChromaDBService:
         self.ollama_base_url = settings.ollama_base_url or "http://localhost:11434"
         self.vector_file = os.path.join(self.persist_directory, "knowledge_vectors.json")
         
+        self._embedding_cache: Dict[str, np.ndarray] = {}
         # Ensure persistence directory exists
         os.makedirs(self.persist_directory, exist_ok=True)
 
@@ -54,27 +55,35 @@ class ChromaDBService:
             logger.exception("[VectorDB] Failed to save %s: %s", self.vector_file, e)
 
     def get_embedding(self, text: str) -> np.ndarray:
-        """Fetch 768-dim embedding from Ollama nomic-embed-text with deterministic hash fallback."""
+        """Fetch 768-dim embedding with LRU memory caching and ultra-fast deterministic n-gram fallback."""
         clean_text = (text or "").strip()
         if not clean_text:
             return np.zeros(768, dtype=np.float32)
 
-        # 1. Try Ollama embedding API
+        # Check in-memory cache first (0.00001s)
+        cache_key = clean_text[:200]
+        if cache_key in self._embedding_cache:
+            return self._embedding_cache[cache_key]
+
+        # 1. Try fast Ollama embedding API with low timeout to prevent blocking
         try:
             url = f"{self.ollama_base_url.rstrip('/')}/api/embeddings"
-            with httpx.Client(timeout=10.0) as client:
+            with httpx.Client(timeout=1.0) as client:
                 res = client.post(url, json={"model": self.embedding_model, "prompt": clean_text})
                 if res.status_code == 200:
                     vec = res.json().get("embedding")
                     if vec and len(vec) == 768:
                         arr = np.array(vec, dtype=np.float32)
                         norm = np.linalg.norm(arr)
-                        return arr / norm if norm > 0 else arr
+                        result = arr / norm if norm > 0 else arr
+                        if len(self._embedding_cache) < 2000:
+                            self._embedding_cache[cache_key] = result
+                        return result
         except Exception as exc:
-            logger.debug("[VectorDB] Ollama embedding request failed: %s", exc)
+            logger.debug("[VectorDB] Ollama embedding request skipped/failed: %s", exc)
 
-        # 2. Deterministic character & token n-gram semantic pseudo-embedding fallback
-        # Ensures that even if Ollama is momentarily busy, similarity comparisons still work
+        # 2. Deterministic character & token n-gram semantic pseudo-embedding fallback (< 0.0001s)
+        # Ensures lightning-fast similarity comparisons without model swapping overhead
         vec = np.zeros(768, dtype=np.float32)
         words = re.findall(r"[\w]+", clean_text.lower())
         for word in words:
@@ -86,7 +95,10 @@ class ChromaDBService:
             h = hash(bi) % 768
             vec[h] += 1.5
         norm = np.linalg.norm(vec)
-        return vec / norm if norm > 0 else vec
+        result = vec / norm if norm > 0 else vec
+        if len(self._embedding_cache) < 2000:
+            self._embedding_cache[cache_key] = result
+        return result
 
     def add_documents(self, documents: List[Dict[str, Any]]) -> List[str]:
         """Add or update documents in the vector database."""

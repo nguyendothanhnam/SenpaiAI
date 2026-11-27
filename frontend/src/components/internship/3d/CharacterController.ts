@@ -10,7 +10,7 @@ export interface CharacterJoints {
   head: THREE.Group
   leftEye: THREE.Mesh
   rightEye: THREE.Mesh
-  mouth: THREE.Mesh
+  mouth: THREE.Mesh | THREE.Group
   leftArm: THREE.Group
   rightArm: THREE.Group
   leftForearm: THREE.Group
@@ -24,6 +24,7 @@ export class CharacterController {
   private stateProgress = 0
   private stateDuration = 0
   private isOneShot = false
+  private isSpeaking = false
   private elapsedTime = 0
 
   // Blinking timer
@@ -92,9 +93,10 @@ export class CharacterController {
   }
 
   public setSpeaking(speaking: boolean): void {
-    if (speaking && this.currentState !== 'talking') {
+    this.isSpeaking = speaking
+    if (speaking) {
       this.play('talking')
-    } else if (!speaking && this.currentState === 'talking') {
+    } else if (this.currentState === 'talking') {
       this.play('idle')
     }
   }
@@ -143,7 +145,7 @@ export class CharacterController {
       this.stateProgress += dt
       if (this.stateProgress >= this.stateDuration) {
         this.isOneShot = false
-        this.play('idle')
+        this.play(this.isSpeaking ? 'talking' : 'idle')
       }
     }
 
@@ -180,6 +182,8 @@ export class CharacterController {
     let headRotY = 0
     let headRotZ = 0
     let mouthScaleY = 0.2
+    let mouthScaleX = 1.0
+    let mouthPosY = -0.07
     let leftArmRotX = 0.5
     let rightArmRotX = 0.5
     let leftForearmRotX = 0.8
@@ -194,11 +198,19 @@ export class CharacterController {
     headRotY += headMicroSway
 
     // --- TALKING STATE: Mouth movement & expressive business gesturing ---
-    const talkW = this.currentWeights.talking
+    const talkW = Math.max(this.currentWeights.talking, this.isSpeaking ? 1.0 : 0.0)
     if (talkW > 0.001) {
-      // Natural speech rhythm with modulated pauses
-      const speechPhase = Math.sin(this.elapsedTime * 14.0) * Math.cos(this.elapsedTime * 4.0)
-      mouthScaleY += Math.max(0, speechPhase) * 1.4 * talkW
+      // Natural speech rhythm with dynamic vowel opening and consonant closures (~3-5 syllables/sec)
+      const speech1 = Math.sin(this.elapsedTime * 14.0)
+      const speech2 = Math.cos(this.elapsedTime * 8.0)
+      const speech3 = Math.sin(this.elapsedTime * 20.0)
+      const openAmount = Math.max(0, speech1 * 0.55 + speech2 * 0.35 + speech3 * 0.15)
+      const curvedOpen = Math.pow(openAmount, 1.2)
+
+      mouthScaleY = 0.2 + curvedOpen * 2.2 * talkW
+      mouthScaleX = 1.0 + Math.sin(this.elapsedTime * 6.5) * 0.15 * talkW
+      mouthPosY = -0.07 - ((mouthScaleY - 0.2) * 0.007 * talkW)
+
       headRotX += Math.sin(this.elapsedTime * 6.5) * 0.035 * talkW
       headRotY += Math.cos(this.elapsedTime * 3.2) * 0.04 * talkW
 
@@ -253,7 +265,8 @@ export class CharacterController {
       const safePleased = Number.isFinite(pleasedT) ? pleasedT : 0
       headRotX += -safePleased * 0.08 * pleasedW // slight chin lift
       headRotZ += Math.sin(this.elapsedTime * 2.0) * 0.03 * pleasedW
-      mouthScaleY += 0.4 * safePleased * pleasedW
+      mouthScaleX += 0.3 * safePleased * pleasedW // smile wider
+      mouthScaleY += 0.3 * safePleased * pleasedW
     }
 
     // --- THINKING STATE: Pensive consideration tilt ---
@@ -278,7 +291,12 @@ export class CharacterController {
     head.rotation.y = Number.isFinite(headRotY) ? headRotY : 0
     head.rotation.z = Number.isFinite(headRotZ) ? headRotZ : 0
 
-    mouth.scale.y = Number.isFinite(mouthScaleY) ? Math.max(0.01, mouthScaleY) : 0.2
+    mouth.scale.set(
+      Number.isFinite(mouthScaleX) ? Math.max(0.1, mouthScaleX) : 1.0,
+      Number.isFinite(mouthScaleY) ? Math.max(0.01, mouthScaleY) : 0.2,
+      1.0
+    )
+    mouth.position.y = Number.isFinite(mouthPosY) ? mouthPosY : -0.07
 
     leftArm.rotation.x = Number.isFinite(leftArmRotX) ? leftArmRotX : 0.5
     rightArm.rotation.x = Number.isFinite(rightArmRotX) ? rightArmRotX : 0.5

@@ -130,12 +130,15 @@ async def parse_cv_text(payload: ParseCVTextRequest):
 
 @router.post("/cv/upload")
 async def upload_and_parse_cv(file: UploadFile = File(...)):
-    """Uploads a CV file (.pdf, .docx, .txt), extracts text, and parses structured candidate profile."""
+    """Uploads a CV file (.pdf, .docx, .txt), extracts real text, and parses structured candidate profile."""
     try:
         content = await file.read()
         extracted_text = cv_service.extract_cv_text_from_file(content, file.filename or "cv.txt")
-        if not extracted_text or len(extracted_text.strip()) < 10:
-            raise HTTPException(status_code=400, detail="Không thể trích xuất nội dung văn bản từ file CV.")
+        if not extracted_text or len(extracted_text.strip()) < 15:
+            raise HTTPException(
+                status_code=400,
+                detail="File CV không có đủ nội dung văn bản. Vui lòng chuyển sang tab 'Dán văn bản CV' để nhập trực tiếp."
+            )
             
         parsed = await cv_service.parse_candidate_cv(extracted_text)
         return {
@@ -143,10 +146,13 @@ async def upload_and_parse_cv(file: UploadFile = File(...)):
             "raw_cv_text": extracted_text,
             "parsed_cv": parsed
         }
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
     except HTTPException:
         raise
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"File CV processing failed: {str(exc)}")
+        logger.error("[CV Upload] Error processing CV: %s", exc)
+        raise HTTPException(status_code=500, detail=f"Lỗi khi đọc file CV: {str(exc)}")
 
 
 @router.post("/interview/start-with-cv")

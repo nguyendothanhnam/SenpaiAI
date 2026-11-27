@@ -1931,10 +1931,40 @@ export class SceneManager {
       head.add(glassesGroup)
     }
 
-    // Mouth
-    const mouthMat = new THREE.MeshBasicMaterial({ color: isFemale ? 0xf43f5e : 0x881337 })
-    const mouth = new THREE.Mesh(new THREE.BoxGeometry(isFemale ? 0.07 : 0.08, 0.025, 0.01), mouthMat)
+    // Expressive 3D Mouth (Dark oral cavity + Clean white teeth row + Upper/Lower Lips)
+    const mouth = new THREE.Group()
     mouth.position.set(0, -0.07, headDepth / 2 + 0.002)
+
+    const mouthWidth = isFemale ? 0.07 : 0.08
+    const mouthBaseH = 0.026
+
+    // 1. Dark Oral Cavity (Revealed when mouth opens while speaking)
+    const cavityMat = new THREE.MeshBasicMaterial({ color: 0x180509 })
+    const mouthCavity = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth * 0.9, mouthBaseH * 0.95, 0.008), cavityMat)
+    mouthCavity.position.set(0, 0, 0)
+    mouthCavity.frustumCulled = false
+    mouth.add(mouthCavity)
+
+    // 2. Upper Teeth Accent (Clean white row visible when open)
+    const teethMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
+    const mouthTeeth = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth * 0.65, mouthBaseH * 0.28, 0.009), teethMat)
+    mouthTeeth.position.set(0, mouthBaseH * 0.22, 0.001)
+    mouthTeeth.frustumCulled = false
+    mouth.add(mouthTeeth)
+
+    // 3. Upper Lip (Polite lip contour)
+    const lipMat = new THREE.MeshBasicMaterial({ color: isFemale ? 0xf43f5e : 0x991b1b })
+    const upperLip = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth, mouthBaseH * 0.28, 0.01), lipMat)
+    upperLip.position.set(0, mouthBaseH * 0.38, 0.002)
+    upperLip.frustumCulled = false
+    mouth.add(upperLip)
+
+    // 4. Lower Lip
+    const lowerLip = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth * 0.85, mouthBaseH * 0.26, 0.01), lipMat)
+    lowerLip.position.set(0, -mouthBaseH * 0.38, 0.002)
+    lowerLip.frustumCulled = false
+    mouth.add(lowerLip)
+
     head.add(mouth)
 
     // Arms & Forearms
