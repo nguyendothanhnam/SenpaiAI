@@ -31,8 +31,14 @@
       "error": "The notification schedule was not updated successfully."
     },
     "copy": {
-      "daily_task": { "title": "Today’s task is waiting", "body": "Take a few minutes to study Japanese and complete your daily task." },
-      "streak_risk": { "title": "Keep your study streak!", "body": "Complete today’s task to keep your study streak going." }
+      "daily_task": {
+        "title": "Today’s task is waiting",
+        "body": "Take a few minutes to study Japanese and complete your daily task."
+      },
+      "streak_risk": {
+        "title": "Keep your study streak!",
+        "body": "Complete today’s task to keep your study streak going."
+      }
     }
   },
   "reminders": {
@@ -43,12 +49,29 @@
     "timezone": "Time zone (IANA)",
     "timezoneHelp": "For example: Asia/Ho_Chi_Minh or America/New_York. Reminder settings follow this zone, independently of your device.",
     "days": "Reminder days",
-    "weekdays": { "0": "Monday", "1": "Tuesday", "2": "Wednesday", "3": "Thursday", "4": "Friday", "5": "Saturday", "6": "Sunday" },
+    "weekdays": {
+      "0": "Monday",
+      "1": "Tuesday",
+      "2": "Wednesday",
+      "3": "Thursday",
+      "4": "Friday",
+      "5": "Saturday",
+      "6": "Sunday"
+    },
     "types": "Reminder types",
     "kinds": {
-      "daily_task": { "title": "Daily task", "description": "Remind me when today’s task is unfinished." },
-      "streak_risk": { "title": "Keep my study streak", "description": "An evening reminder when my study streak is at risk." },
-      "review_due": { "title": "Review content", "description": "Suggest reviewing items I often answer incorrectly. Shown in the notification center." }
+      "daily_task": {
+        "title": "Daily task",
+        "description": "Remind me when today’s task is unfinished."
+      },
+      "streak_risk": {
+        "title": "Keep my study streak",
+        "description": "An evening reminder when my study streak is at risk."
+      },
+      "review_due": {
+        "title": "Review content",
+        "description": "Suggest reviewing items I often answer incorrectly. Shown in the notification center."
+      }
     },
     "quietStart": "Quiet hours start (HH:MM)",
     "quietEnd": "Quiet hours end (HH:MM)",
@@ -80,7 +103,15 @@
     "badgeError": "!",
     "badgeMax": "99+",
     "unknownTime": "Time unavailable",
-    "relative": { "now": "Just now", "minutes_one": "{{count}} minute ago", "minutes_other": "{{count}} minutes ago", "hours_one": "{{count}} hour ago", "hours_other": "{{count}} hours ago", "days_one": "{{count}} day ago", "days_other": "{{count}} days ago" }
+    "relative": {
+      "now": "Just now",
+      "minutes_one": "{{count}} minute ago",
+      "minutes_other": "{{count}} minutes ago",
+      "hours_one": "{{count}} hour ago",
+      "hours_other": "{{count}} hours ago",
+      "days_one": "{{count}} day ago",
+      "days_other": "{{count}} days ago"
+    }
   },
   "shop": {
     "imageUnavailable": "Could not load the preview image. Reload the app and try again.",
@@ -414,7 +445,7 @@
     "mixedPartialNotice": "The server returned fewer questions than requested. Keep using the valid questions in this session; the source has switched to the bank for your next session.",
     "aiFallback": "AI questions could not be created: the route or generation service may be unavailable, or no valid content was produced. Switched to the question bank. Tap Start to use it; your previous session is preserved.",
     "kanji": "Kanji",
-    "kanjiHint": "Explore characters, stroke order and practice quizzes.",
+    "kanjiHint": "Explore and practice kanji.",
     "openKanji": "Open Kanji",
     "searchKanji": "Search characters, meanings or readings",
     "kanjiQuiz": "Kanji quiz",
@@ -425,7 +456,6 @@
     "details": "View details",
     "onReading": "On reading",
     "kunReading": "Kun reading",
-    "strokeOrder": "Stroke order",
     "examples": "Examples",
     "strokesUnsupported": "Stroke order is not yet supported for this character.",
     "strokeDiagram": "Stroke order diagram for {{kanji}}",
@@ -513,9 +543,15 @@
       "empty": "No games support this level yet.",
       "record": "Best",
       "japanese": {
-        "falling": "漢字ドロップ", "shiritori": "しりとり", "cipher": "かな暗号",
-        "memory": "かなメモリー", "battle": "ことばバトル", "workshop": "熟語工房",
-        "wordsearch": "ことば探し", "ninja": "ことば忍者", "missing": "漢字の欠けた一画"
+        "falling": "漢字ドロップ",
+        "shiritori": "しりとり",
+        "cipher": "かな暗号",
+        "memory": "かなメモリー",
+        "battle": "ことばバトル",
+        "workshop": "熟語工房",
+        "wordsearch": "ことば探し",
+        "ninja": "ことば忍者",
+        "missing": "漢字の欠けた一画"
       }
     },
     "preparing": "Preparing the complete round…",
@@ -546,6 +582,64 @@
       "recipes": "Discovered recipes ({{count}})",
       "emptyRecipes": "No recipes discovered yet.",
       "reducedNinja": "Reduced motion: the slash trail is disabled. Target flight remains essential to play."
+    }
+  },
+  "personalExport": {
+    "confirm": "This export contains personal information. Store and share it only where you trust. Choose a format and confirm the download.",
+    "format": "Export format",
+    "json": "JSON — full data",
+    "zip": "ZIP — CSV, JSON and guide",
+    "html": "HTML — printable learning report / PDF",
+    "limits": "Server limits: 50 MiB JSON, 100,000 rows per table, 2 MiB per row. Files disclose omissions. Device-only data is exported separately.",
+    "preparing": "Preparing / downloading file…",
+    "download": "Confirm and download",
+    "close": "Close",
+    "done": "File downloaded. Open the HTML report in a browser to print or save as PDF.",
+    "error": "Unable to create, download or share the file. Check your connection, free space and sign-in, then retry.",
+    "truncated": "The export was truncated by size limits. Check metadata.warnings in data.json.",
+    "share": "Share / save file",
+    "bytes": "Size: {{count}} bytes",
+    "local": "Export device data",
+    "localHint": "Locally created study sets, game progress and local reminder settings are exported as a separate file, available offline.",
+    "tables": {
+      "users": "Users",
+      "weekly_learning_goals": "Weekly learning goals",
+      "chat_folders": "Chat folders",
+      "chat_conversations": "Chat conversations",
+      "chat_history": "Chat history",
+      "voice_conversations": "Voice conversations",
+      "chat_answer_feedback": "Chat answer feedback",
+      "learning_sessions": "Learning sessions",
+      "daily_tasks": "Daily tasks",
+      "daily_task_items": "Daily task items",
+      "study_item_stats": "Study item stats",
+      "user_game_profiles": "User game profiles",
+      "point_transactions": "Point transactions",
+      "user_unlocked_items": "User unlocked items",
+      "grammar_practice_attempts": "Grammar practice attempts",
+      "listening_attempts": "Listening attempts",
+      "placement_attempts": "Placement attempts",
+      "placement_attempt_items": "Placement attempt items",
+      "exercise_history": "Exercise history",
+      "exercise_deliveries": "Exercise deliveries",
+      "flashcard_decks": "Flashcard decks",
+      "flashcard_cards": "Flashcard cards",
+      "flashcard_progress": "Flashcard progress",
+      "flashcard_sessions": "Flashcard sessions",
+      "flashcard_assessments": "Flashcard assessments",
+      "flashcard_transfers": "Flashcard transfers",
+      "reminder_settings": "Reminder settings",
+      "notifications": "Notifications",
+      "user_kanji_notes": "User kanji notes",
+      "kanji_writing_attempts": "Kanji writing attempts",
+      "kanji_writing_reports": "Kanji writing reports",
+      "minigame_learning_events": "Minigame learning events",
+      "internship_profiles": "Internship profiles",
+      "internship_sessions": "Internship sessions",
+      "listening_lessons": "Listening lessons",
+      "grammar_questions": "Grammar questions",
+      "documents": "Personal documents",
+      "grammar_lesson_progress": "Grammar lesson progress"
     }
   }
 }

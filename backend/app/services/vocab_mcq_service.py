@@ -115,6 +115,8 @@ def lookup_vocab(target: str) -> Optional[VocabEntry]:
 
 
 def option_matches_entry(option: McqOption, entry: VocabEntry) -> bool:
+    if normalize_kana(option.text.strip()) in (normalize_kana(entry.kanji),normalize_kana(entry.kana)):
+        return True
     normalized_option = normalize_text(option.text)
     return any(normalize_text(term) in normalized_option for term in [*entry.vi, *entry.en])
 

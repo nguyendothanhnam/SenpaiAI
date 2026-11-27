@@ -1,12 +1,14 @@
-import { useCallback, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import type { ReactNode, MouseEvent } from 'react'
 import { useLocation } from 'react-router-dom'
 import KanjiLookupDialog from './KanjiLookupDialog'
 
 function kanjiCharacters(text: string) { return [...new Set(Array.from(text).filter(c => /\p{Script=Han}/u.test(c)))].slice(0, 40) }
+const LookupContext = createContext<((value: string) => void) | null>(null)
+export const useKanjiLookup = () => useContext(LookupContext)
 export default function KanjiLookupScope({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
-  const enabled = /^\/(?:daily|grammar\/practice|games|quiz|flashcard|listening|kanji)(?:\/|$)/.test(pathname)
+  const enabled = /^\/(?:chat|library|placement|daily|grammar|games|quiz|flashcard|listening|kanji)(?:\/|$)/.test(pathname)
   return enabled ? <Lookup key={pathname}>{children}</Lookup> : <>{children}</>
 }
 function Lookup({ children }: { children: ReactNode }) {
@@ -15,6 +17,7 @@ function Lookup({ children }: { children: ReactNode }) {
   const pause = () => window.dispatchEvent(new Event('kanji-lookup-open'))
   const open = (value: string) => { pause(); setKanji(value) }
   const click = (event: MouseEvent<HTMLDivElement>) => {
+    if (window.getSelection()?.toString()) return
     const element = event.target instanceof Element ? event.target : null
     if (!element || element.closest('[data-kanji-lookup-blocked="true"],[data-kanji-tools],input,textarea,select,[contenteditable=true],button,a,[role=button],svg')) return
     const doc = document as Document & { caretRangeFromPoint?: (x: number, y: number) => Range | null; caretPositionFromPoint?: (x: number, y: number) => { offsetNode: Node; offset: number } | null }
@@ -33,7 +36,7 @@ function Lookup({ children }: { children: ReactNode }) {
     }
     if (hit) { event.preventDefault(); event.stopPropagation(); open(hit) }
   }
-  return <div onClickCapture={click}>
+  return <LookupContext.Provider value={open}><div onClickCapture={click}>
     {children}{kanji && <KanjiLookupDialog key={kanji} kanji={kanji} onClose={close} />}
-  </div>
+  </div></LookupContext.Provider>
 }

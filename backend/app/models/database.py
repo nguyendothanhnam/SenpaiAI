@@ -20,6 +20,91 @@ import uuid
 from ..core.database import Base
 
 
+class FlashcardDeck(Base):
+    __tablename__ = 'flashcard_decks'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    title = Column(String(160), nullable=False)
+    description = Column(String(2000), nullable=False, default='')
+    jlpt_level = Column(String(2), nullable=True)
+    topic = Column(String(100), nullable=False, default='')
+    is_private = Column(Boolean, nullable=False, default=True, server_default='true')
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (Index('ix_flashcard_decks_owner_time', 'user_id', 'updated_at'), {'sqlite_autoincrement': True})
+
+
+class FlashcardCard(Base):
+    __tablename__ = 'flashcard_cards'
+    id = Column(Integer, primary_key=True)
+    deck_id = Column(Integer, ForeignKey('flashcard_decks.id', ondelete='CASCADE'), nullable=False, index=True)
+    position = Column(Integer, nullable=False)
+    front = Column(String(1000), nullable=False)
+    back = Column(String(2000), nullable=False)
+    reading = Column(String(500), nullable=False, default='')
+    note = Column(String(2000), nullable=False, default='')
+    fingerprint = Column(String(64), nullable=False)
+    __table_args__ = (UniqueConstraint('deck_id', 'fingerprint', name='uq_flashcard_content'), {'sqlite_autoincrement': True})
+
+
+class FlashcardProgress(Base):
+    __tablename__ = 'flashcard_progress'
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    card_id = Column(Integer, ForeignKey('flashcard_cards.id', ondelete='CASCADE'), primary_key=True)
+    state = Column(String(12), nullable=False, default='new')
+    stage = Column(Integer, nullable=False, default=0)
+    due_at = Column(DateTime(timezone=True), nullable=True)
+    correct = Column(Integer, nullable=False, default=0)
+    wrong = Column(Integer, nullable=False, default=0)
+    last_reviewed_at = Column(DateTime(timezone=True), nullable=True)
+    starred = Column(Boolean, nullable=False, default=False)
+    __table_args__ = (Index('ix_flashcard_progress_owner_due', 'user_id', 'due_at'),)
+
+
+class FlashcardSession(Base):
+    __tablename__ = 'flashcard_sessions'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    request_key = Column(String(64), nullable=False)
+    payload_hash = Column(String(64), nullable=False)
+    mode = Column(String(20), nullable=False)
+    card_count = Column(Integer, nullable=False)
+    correct = Column(Integer, nullable=False)
+    wrong = Column(Integer, nullable=False)
+    duration_seconds = Column(Integer, nullable=False)
+    results = Column(JSON, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id', 'request_key', name='uq_flashcard_session_request'),
+                      Index('ix_flashcard_sessions_owner_time', 'user_id', 'created_at'))
+
+
+class FlashcardTransfer(Base):
+    __tablename__ = 'flashcard_transfers'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    source_key = Column(String(64), nullable=False)
+    deck_id = Column(Integer, ForeignKey('flashcard_decks.id', ondelete='SET NULL'), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id', 'source_key', name='uq_flashcard_transfer'),)
+
+
+class FlashcardAssessment(Base):
+    __tablename__ = 'flashcard_assessments'
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    deck_id = Column(Integer, ForeignKey('flashcard_decks.id', ondelete='CASCADE'), nullable=False)
+    request_key = Column(String(64), nullable=False)
+    payload_hash = Column(String(64), nullable=False)
+    mode = Column(String(12), nullable=False)
+    status = Column(String(12), nullable=False, default='active')
+    questions = Column(JSON, nullable=False)
+    result = Column(JSON, nullable=True)
+    submission_hash = Column(String(64), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id', 'request_key', name='uq_flashcard_assessment_request'),
+        Index('ix_flashcard_assessment_owner_time', 'user_id', 'created_at'))
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -520,6 +605,10 @@ class ListeningLesson(Base):
     is_published = Column(Boolean, nullable=False, default=False, server_default="false")
     created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     source_document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True, index=True)
+    video_url = Column(String(500), nullable=True)
+    video_provider = Column(String(20), nullable=True)
+    video_id = Column(String(64), nullable=True)
+    source_note = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
@@ -544,6 +633,8 @@ class Document(Base):
     __tablename__ = "documents"
 
     id = Column(Integer, primary_key=True, index=True)
+    # Legacy/shared documents remain unowned; only authenticated creation sets this.
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     title = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     document_type = Column(String, nullable=False)  # "grammar", "vocabulary", "lesson", "example"
@@ -570,6 +661,33 @@ class GrammarRule(Base):
     jlpt_level = Column(String, nullable=False)
     difficulty_score = Column(Float, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class GrammarLesson(Base):
+    __tablename__ = 'grammar_lessons'
+    id = Column(Integer, primary_key=True)
+    source_key = Column(String(160), nullable=False, unique=True)
+    grammar_rule_id = Column(Integer, ForeignKey('grammar_rules.id', ondelete='RESTRICT'), nullable=False, unique=True)
+    jlpt_level = Column(String(2), nullable=False, index=True)
+    sort_order = Column(Integer, nullable=False)
+    formation = Column(Text, nullable=False)
+    meaning = Column(Text, nullable=False)
+    usage_notes = Column(Text, nullable=False, default='')
+    examples = Column(JSON, nullable=False, default=list)
+    common_errors = Column(JSON, nullable=False, default=list)
+    comparisons = Column(JSON, nullable=False, default=list)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    grammar_rule = relationship('GrammarRule')
+
+
+class GrammarLessonProgress(Base):
+    __tablename__ = 'grammar_lesson_progress'
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    lesson_id = Column(Integer, ForeignKey('grammar_lessons.id', ondelete='CASCADE'), primary_key=True)
+    status = Column(String(16), nullable=False, default='studied', server_default='studied')
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    __table_args__ = (CheckConstraint("status IN ('studied', 'mastered')", name='ck_grammar_lesson_progress_status'),)
 
 
 class GrammarQuestion(Base):

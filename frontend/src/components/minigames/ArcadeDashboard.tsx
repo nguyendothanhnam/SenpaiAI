@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
-import { appGameDay,dailyChallenge,LEVELS,playerLevel,playStreak,cosmetics,kanjiFor,wordsFor,type Level,type GameLearningEvent,GAMES,availability } from '../../../../shared-games'
+import { appGameDay,dailyChallenge,LEVELS,playerLevel,playStreak,kanjiFor,wordsFor,type Level,type GameLearningEvent,GAMES,availability } from '../../../../shared-games'
 import { useAuth } from '../../services/auth'
-import { loadArcade,queueLearning,chooseCosmetic } from '../../features/minigames/learningStorage'
+import { loadArcade,queueLearning } from '../../features/minigames/learningStorage'
 import { minigameLearningAPI,syncArcade,type GameReviewItem } from '../../services/minigameLearning'
 import { learningAPI } from '../../services/learning'
 import './minigames.css'
@@ -41,7 +41,6 @@ export default function ArcadeDashboard(){
     <div className="flex flex-wrap items-center justify-between gap-4"><div><h2 className="text-xl font-extrabold">{t('arcadeLearning.title')}</h2><p className="mt-2 font-semibold text-[color:var(--primary)]">{t('arcadeLearning.player',{level:playerLevel(progress.xp).level,xp:progress.xp})}</p><p className="text-sm">{t('arcadeLearning.streak',{count:playStreak(progress.days,today)})}</p></div><button className="mg-btn" onClick={()=>setShowReview(v=>!v)} aria-expanded={showReview}>{t('arcadeLearning.review')}</button></div>
     <p className="text-xs text-[color:var(--text-muted)]">{t('arcadeLearning.separateXp')}</p>
     <div className="flex flex-wrap gap-2">{progress.badges.map(b=><span key={b} className="rounded-full bg-[color:var(--accent)] px-3 py-2 text-xs font-bold text-[color:var(--primary)]">{t(`arcadeLearning.badges.${b}`)}</span>)}</div>
-    <label className="flex flex-wrap items-center gap-3 text-sm">{t('arcadeLearning.cosmetic')}<select className="input min-h-[44px]" value={progress.cosmetic} onChange={e=>{if(!chooseCosmetic(user!.id,e.target.value))setLocal({...local,error:true})}}>{cosmetics(progress).map(c=><option key={c} value={c}>{t(`arcadeLearning.cosmetics.${c}`)}</option>)}</select><span className={`arcade-avatar arcade-avatar-${progress.cosmetic}`} aria-label={t(`arcadeLearning.cosmetics.${progress.cosmetic}`)}>✧</span></label>
     {daily&&<div className="rounded-2xl bg-[color:var(--accent)] p-4"><h3 className="font-bold">{t('arcadeLearning.modes.daily')} · {today}</h3><p className="my-2 text-sm">{t('arcadeLearning.dailyRules',{game:t(`minigames.games.${daily.game}.name`),level:daily.level,seconds:45})}</p>{progress.dailyWins.includes(today)&&<p>{t('arcadeLearning.dailyDone')}</p>}<Link className="mg-btn" to={`/games/${daily.game}?level=${daily.level}&challenge=${today}`}>{t('arcadeLearning.openDaily')}</Link></div>}
     <div><h3 className="font-bold">{t(weak?'arcadeLearning.weakSuggestion':'arcadeLearning.practiceSuggestion',{skill:weak?t(`learning.skills.${weak}`):''})}</h3><div className="mt-2 flex flex-wrap gap-2">{suggested.map(g=><Link className="mg-btn" key={g} to={`/games/${g}?level=${level}`}>{t(`minigames.games.${g}.name`)}</Link>)}</div></div>
     {(syncError||local.error||local.store.outbox.length>0)&&<p role="status" className="text-sm">{t(local.error?'arcadeLearning.localError':'arcadeLearning.pending',{count:local.store.outbox.length})} <button className="underline" onClick={()=>{void syncArcade(user!.id).then(()=>{setSyncError(false);setLocal(loadArcade(user!.id));void review.refetch()}).catch(()=>setSyncError(true))}}>{t('arcadeLearning.sync')}</button></p>}

@@ -1,0 +1,268 @@
+{
+  "default_unchanged": "gemma:2b",
+  "hardware": {
+    "physical_total_bytes": 16866672640,
+    "physical_available_bytes": 1142448128
+  },
+  "measurements": [
+    {
+      "model": "gemma:2b",
+      "context": 2048,
+      "output_limit": 350,
+      "iteration": 0,
+      "seconds": 2.9,
+      "memory_before": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1142398976
+      },
+      "memory_after": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1192103936
+      },
+      "resident": [
+        {
+          "name": "gemma:2b",
+          "model": "gemma:2b",
+          "size": 1829702204,
+          "digest": "b50d6c999e592ae4f79acae23b4feaefbdfceaa7cd366df2610e3072c052a160",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma",
+            "families": [
+              "gemma"
+            ],
+            "parameter_size": "3B",
+            "quantization_level": "Q4_0"
+          },
+          "expires_at": "2026-11-24T19:43:06.5045763+07:00",
+          "size_vram": 1829702204,
+          "context_length": 2048,
+          "runner": "llamacpp"
+        }
+      ],
+      "prompt_eval_count": 688,
+      "eval_count": 22,
+      "done_reason": "stop",
+      "load_duration": 42796400,
+      "total_duration": 837140600,
+      "answer": "The potential form of the verb is the dictionary-form verb + ことができる. This form expresses ability."
+    },
+    {
+      "model": "gemma:2b",
+      "context": 2048,
+      "output_limit": 350,
+      "iteration": 1,
+      "seconds": 2.78,
+      "memory_before": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1185325056
+      },
+      "memory_after": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1117646848
+      },
+      "resident": [
+        {
+          "name": "gemma:2b",
+          "model": "gemma:2b",
+          "size": 1829702204,
+          "digest": "b50d6c999e592ae4f79acae23b4feaefbdfceaa7cd366df2610e3072c052a160",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma",
+            "families": [
+              "gemma"
+            ],
+            "parameter_size": "3B",
+            "quantization_level": "Q4_0"
+          },
+          "expires_at": "2026-11-24T19:43:11.3319258+07:00",
+          "size_vram": 1829702204,
+          "context_length": 2048,
+          "runner": "llamacpp"
+        }
+      ],
+      "prompt_eval_count": 688,
+      "eval_count": 22,
+      "done_reason": "stop",
+      "load_duration": 34582300,
+      "total_duration": 730246200,
+      "answer": "The potential form of the verb is the dictionary-form verb + ことができる. This form expresses ability."
+    },
+    {
+      "model": "gemma:2b",
+      "context": 4096,
+      "output_limit": 640,
+      "iteration": 0,
+      "seconds": 9.898,
+      "memory_before": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1257832448
+      },
+      "memory_after": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1424273408
+      },
+      "resident": [
+        {
+          "name": "gemma:2b",
+          "model": "gemma:2b",
+          "size": 1869548092,
+          "digest": "b50d6c999e592ae4f79acae23b4feaefbdfceaa7cd366df2610e3072c052a160",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma",
+            "families": [
+              "gemma"
+            ],
+            "parameter_size": "3B",
+            "quantization_level": "Q4_0"
+          },
+          "expires_at": "2026-11-24T19:43:23.2747123+07:00",
+          "size_vram": 1869548092,
+          "context_length": 4096,
+          "runner": "llamacpp"
+        }
+      ],
+      "prompt_eval_count": 688,
+      "eval_count": 22,
+      "done_reason": "stop",
+      "load_duration": 7240149000,
+      "total_duration": 7847074500,
+      "answer": "The potential form of the verb is the dictionary-form verb + ことができる. This form expresses ability."
+    },
+    {
+      "model": "gemma:2b",
+      "context": 4096,
+      "output_limit": 640,
+      "iteration": 1,
+      "seconds": 2.646,
+      "memory_before": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1544544256
+      },
+      "memory_after": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1534640128
+      },
+      "resident": [
+        {
+          "name": "gemma:2b",
+          "model": "gemma:2b",
+          "size": 1869548092,
+          "digest": "b50d6c999e592ae4f79acae23b4feaefbdfceaa7cd366df2610e3072c052a160",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma",
+            "families": [
+              "gemma"
+            ],
+            "parameter_size": "3B",
+            "quantization_level": "Q4_0"
+          },
+          "expires_at": "2026-11-24T19:43:27.9922501+07:00",
+          "size_vram": 1869548092,
+          "context_length": 4096,
+          "runner": "llamacpp"
+        }
+      ],
+      "prompt_eval_count": 688,
+      "eval_count": 22,
+      "done_reason": "stop",
+      "load_duration": 53483700,
+      "total_duration": 565357900,
+      "answer": "The potential form of the verb is the dictionary-form verb + ことができる. This form expresses ability."
+    },
+    {
+      "model": "gemma:2b",
+      "context": 8192,
+      "output_limit": 640,
+      "iteration": 0,
+      "seconds": 9.349,
+      "memory_before": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1470730240
+      },
+      "memory_after": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1526755328
+      },
+      "resident": [
+        {
+          "name": "gemma:2b",
+          "model": "gemma:2b",
+          "size": 2075089960,
+          "digest": "b50d6c999e592ae4f79acae23b4feaefbdfceaa7cd366df2610e3072c052a160",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma",
+            "families": [
+              "gemma"
+            ],
+            "parameter_size": "3B",
+            "quantization_level": "Q4_0"
+          },
+          "expires_at": "2026-11-24T19:43:39.4186669+07:00",
+          "size_vram": 2075089960,
+          "context_length": 8192,
+          "runner": "llamacpp"
+        }
+      ],
+      "prompt_eval_count": 688,
+      "eval_count": 22,
+      "done_reason": "stop",
+      "load_duration": 6615830100,
+      "total_duration": 7268900700,
+      "answer": "The potential form of the verb is the dictionary-form verb + ことができる. This form expresses ability."
+    },
+    {
+      "model": "gemma:2b",
+      "context": 8192,
+      "output_limit": 640,
+      "iteration": 1,
+      "seconds": 2.574,
+      "memory_before": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1561169920
+      },
+      "memory_after": {
+        "physical_total_bytes": 16866672640,
+        "physical_available_bytes": 1585778688
+      },
+      "resident": [
+        {
+          "name": "gemma:2b",
+          "model": "gemma:2b",
+          "size": 2075089960,
+          "digest": "b50d6c999e592ae4f79acae23b4feaefbdfceaa7cd366df2610e3072c052a160",
+          "details": {
+            "parent_model": "",
+            "format": "gguf",
+            "family": "gemma",
+            "families": [
+              "gemma"
+            ],
+            "parameter_size": "3B",
+            "quantization_level": "Q4_0"
+          },
+          "expires_at": "2026-11-24T19:43:44.084886+07:00",
+          "size_vram": 2075089960,
+          "context_length": 8192,
+          "runner": "llamacpp"
+        }
+      ],
+      "prompt_eval_count": 688,
+      "eval_count": 22,
+      "done_reason": "stop",
+      "load_duration": 66651700,
+      "total_duration": 509636700,
+      "answer": "The potential form of the verb is the dictionary-form verb + ことができる. This form expresses ability."
+    }
+  ],
+  "limits": "Two controlled prompt repetitions per setting; local warm/cold and concurrent machine load affect time. Ollama resident allocation is not peak process RSS."
+}

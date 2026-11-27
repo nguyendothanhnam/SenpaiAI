@@ -32,7 +32,7 @@ def context():
         'chat_folders', 'chat_conversations', 'chat_history', 'voice_conversations', 'listening_lessons', 'listening_attempts',
         'reminder_settings', 'notifications', 'push_subscriptions',
         'placement_attempts', 'placement_stimuli', 'placement_questions', 'placement_attempt_items',
-        'weekly_learning_goals', 'internship_profiles', 'internship_sessions', 'kanji_writing_attempts', 'kanji_writing_reports', 'chat_answer_feedback', 'user_kanji_notes', 'minigame_learning_events')
+        'flashcard_assessments', 'flashcard_decks', 'flashcard_cards', 'flashcard_progress', 'flashcard_sessions', 'flashcard_transfers', 'weekly_learning_goals', 'internship_profiles', 'internship_sessions', 'kanji_writing_attempts', 'kanji_writing_reports', 'chat_answer_feedback', 'user_kanji_notes', 'minigame_learning_events')
     Base.metadata.create_all(engine, tables=[Base.metadata.tables[name] for name in names])
     db = sessionmaker(bind=engine, autoflush=False)()
     user = User(email='selection@example.test', username='selection', hashed_password='test', current_jlpt_level='N5')

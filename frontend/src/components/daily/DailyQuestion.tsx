@@ -7,6 +7,7 @@ import QuestionTrueFalse from '../grammar/QuestionTrueFalse'
 import QuestionReorder from '../grammar/QuestionReorder'
 import QuestionConjugation from '../grammar/QuestionConjugation'
 import FeedbackPanel from '../grammar/FeedbackPanel'
+import { AnswerExplanation } from '../questions/AnswerExplanation'
 
 interface Props {
   item: DailyTaskItem
@@ -38,6 +39,7 @@ export default function DailyQuestion({ item, index, total, busy, result, onAnsw
     accepted_answers: [],
     explanation_vi: result.explanation,
     examples: result.examples || [],
+    explanation_details: result.explanation_details,
   } : null
   const answerText = (answer: unknown) => Array.isArray(answer) ? answer.join('') : typeof answer === 'boolean' ? (answer ? t('shared.correct') : t('shared.incorrect')) : String(answer ?? '—')
 
@@ -76,7 +78,7 @@ export default function DailyQuestion({ item, index, total, busy, result, onAnsw
 
     {feedback && item.item_type === 'flashcard' ? <section aria-live="polite" className="mt-6 rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 sm:p-5">
       <h3 className="font-bold text-[color:var(--text)]">{feedback.is_correct ? t('daily.rememberedFeedback') : t('daily.reviewFeedback')}</h3>
-      {feedback.explanation_vi && <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">{feedback.explanation_vi}</p>}
+      {feedback.explanation_details ? <AnswerExplanation details={feedback.explanation_details} incorrect={!feedback.is_correct} /> : feedback.explanation_vi && <p className="mt-2 text-sm leading-relaxed text-[color:var(--text-muted)]">{feedback.explanation_vi}</p>}
     </section> : feedback && <>
       <FeedbackPanel result={feedback} />
       <p className="mt-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-4 py-3 text-sm text-[color:var(--text-muted)]">{t('daily.answer')}: <strong className="text-[color:var(--text)]">{answerText(result?.correct_answer)}</strong></p>

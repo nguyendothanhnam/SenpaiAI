@@ -1,0 +1,35 @@
+.learning-trend { --trend-blue:#3b82f6; --trend-bar:#93c5fd; --trend-green:#059669; --trend-axis:#cbd5e1; color:var(--text); display:grid; gap:1rem; background:color-mix(in srgb,var(--card) 96%,transparent); border-radius:1.25rem; padding:1rem; min-width:0; }
+.dark .learning-trend { --trend-blue:#60a5fa; --trend-bar:#1e40af; --trend-green:#34d399; --trend-axis:#64748b; }
+.learning-trend .trend-header { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 1rem; }
+.learning-trend .trend-legend { display: flex; flex: 1 1 400px; flex-wrap: wrap; gap: .5rem 1.5rem; color: var(--text-muted); font-size: .875rem; }
+.learning-trend .trend-legend > span { display: inline-flex; align-items: center; gap: .5rem; }
+.learning-trend .trend-swatch { width:1rem; height:1rem; border-radius:3px; border:1px solid var(--trend-blue); background:var(--trend-bar); }
+.learning-trend .trend-line-key { width:1.5rem; border-top:3px solid var(--trend-green); }
+.learning-trend .trend-line-key.gap { border-top:2px dashed var(--trend-green); opacity:.65; }
+.learning-trend .trend-scroll { overflow-x: auto; overscroll-behavior-inline: contain; }
+.learning-trend svg { width:100%; min-width:740px; display:block; font:inherit; }
+.learning-trend svg text { font-family: inherit; font-size: 14px; }
+.learning-trend .trend-grid { stroke:var(--trend-axis); stroke-dasharray:4 4; opacity:.4; }
+.learning-trend .trend-axis { stroke:var(--trend-axis); }
+.learning-trend .trend-bar { fill:var(--trend-bar); stroke:var(--trend-blue); }
+.learning-trend .trend-value { fill: var(--text); font-weight: 700; }
+.learning-trend .trend-date, .learning-trend .trend-tick { fill: var(--text-muted); }
+.learning-trend .trend-axis-title { fill:var(--text-muted); font-weight:650; }
+.learning-trend .trend-accuracy { stroke:var(--trend-green); }
+.learning-trend .trend-accuracy-value { fill:color-mix(in srgb,var(--trend-green) 75%,var(--text)); font-weight:700; }
+.learning-trend .trend-point { fill:var(--trend-green); stroke:var(--card); stroke-width:3; }
+.learning-trend .trend-crosshair { stroke: var(--text-muted); stroke-dasharray: 3 4; pointer-events: none; }
+.learning-trend .trend-hit { fill: transparent; cursor: crosshair; outline: none; }
+.learning-trend .trend-hit:focus-visible { stroke: var(--primary); stroke-width: 2; }
+.learning-trend .trend-data-toggle { display:inline-flex; align-items:center; gap:.5rem; min-height:44px; border:1px solid var(--border); border-radius:.85rem; padding:.5rem 1rem; cursor:pointer; background:var(--accent); color:var(--text); font-size:.875rem; font-weight:600; }
+.learning-trend .trend-data-toggle:focus-visible { outline:2px solid var(--primary); outline-offset:3px; }
+.learning-trend .trend-table { overflow-x:auto; border:1px solid var(--border); border-radius:1rem; }
+.learning-trend .trend-table[hidden] { display:none; }
+.learning-trend .trend-tooltip { pointer-events:none; }
+.learning-trend .trend-tooltip rect { fill:#0f172a; stroke:#64748b; filter:drop-shadow(0 4px 6px rgb(0 0 0 / 15%)); }
+.learning-trend .trend-tooltip text { fill:#f8fafc; font-size:14px; }
+.learning-trend .trend-tooltip-title { font-weight:700; }
+.learning-trend .trend-count-guide { stroke:var(--trend-blue); }
+.learning-trend .trend-accuracy-guide { stroke:var(--trend-green); }
+.learning-trend table th, .learning-trend table td { padding: .65rem; border-bottom: 1px solid var(--border); }
+@media (min-width: 768px) { .learning-trend .trend-scroll-hint { display: none; } }

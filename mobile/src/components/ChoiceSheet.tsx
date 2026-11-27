@@ -5,12 +5,12 @@ import { useTheme } from '../theme/ThemeProvider'
 import { AppText, Button } from './ui'
 
 export interface Choice { value: string; label: string; disabled?: boolean }
-export function ChoiceSheet({ title, value, options, visible, onClose, onSelect }: {
-  title: string; value: string; options: Choice[]; visible: boolean; onClose: () => void; onSelect: (value: string) => void
+export function ChoiceSheet({ title, value, options, visible, onClose, onSelect, animationType = 'slide' }: {
+  title: string; value: string; options: Choice[]; visible: boolean; onClose: () => void; onSelect: (value: string) => void; animationType?: 'slide' | 'none'
 }) {
   const { colors } = useTheme()
   const { t } = useTranslation('mobile')
-  return <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+  return <Modal visible={visible} transparent animationType={animationType} onRequestClose={onClose}>
     <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.scrim }}>
       <Pressable style={{ flex: 1 }} accessibilityRole="button" accessibilityLabel={t('phase1.library.closePicker')} onPress={onClose} />
       <SafeAreaView edges={['bottom']} style={{ backgroundColor: colors.card, borderTopLeftRadius: 24, borderTopRightRadius: 24, maxHeight: '80%', padding: 20 }} accessibilityViewIsModal>

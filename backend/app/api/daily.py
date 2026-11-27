@@ -11,6 +11,7 @@ from ..core.database import get_db
 from ..core.timezone import app_today
 from ..models.database import DailyTask, DailyTaskItem, User
 from ..services.exercise_selection import record_answer
+from ..services.answer_explanations import explain_daily
 from ..services.daily_task_service import (
     DailyTaskError,
     ensure_daily_history,
@@ -54,6 +55,7 @@ def _read_task(db: Session, task: DailyTask) -> dict[str, Any]:
                 "correct_answer": None if item.item_type == "flashcard" else key.get("correct_answer"),
                 "explanation": key.get("explanation", ""),
                 "examples": key.get("examples", []),
+                "explanation_details": explain_daily(db, item, item.user_answer, item.is_correct),
             })
         result_items.append(record)
     response = {
@@ -145,6 +147,7 @@ def answer_item(item_id: int, payload: AnswerRequest, current_user: User = Depen
         "correct_answer": None if item.item_type == "flashcard" else key.get("correct_answer"),
         "explanation": key.get("explanation", ""),
         "all_answered": unanswered == 0,
+        "explanation_details": explain_daily(db, item, payload.answer, is_correct),
     }
     if key.get("examples"):
         response["examples"] = key["examples"]

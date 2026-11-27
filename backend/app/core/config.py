@@ -37,6 +37,9 @@ class Settings(BaseSettings):
     chat_context_max_chars: int = 6000
     chat_messages_page_size: int = 30
     chat_messages_page_max_size: int = 100
+    # Keep existing resource defaults; larger settings are opt-in after profiling.
+    chat_ollama_context: int = 2048
+    chat_output_tokens: int = 350
 
     # Application calendar and development-only reward tools
     app_timezone: str = "Asia/Ho_Chi_Minh"

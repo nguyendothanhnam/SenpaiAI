@@ -95,7 +95,7 @@ def compare(stroke, template, thresholds=None):
     u = (stroke[-1][0]-stroke[0][0], stroke[-1][1]-stroke[0][1])
     v = (template[-1][0]-template[0][0], template[-1][1]-template[0][1])
     cosine = (u[0]*v[0]+u[1]*v[1])/max(math.hypot(*u)*math.hypot(*v),1e-12)
-    backward = reverse + .006 < forward and reversed_endpoints + .006 < endpoints and cosine < -.25
+    backward = reverse + cfg.DIRECTION_REVERSE_MARGIN < forward and reversed_endpoints + cfg.DIRECTION_REVERSE_MARGIN < endpoints and cosine < cfg.DIRECTION_COSINE_LIMIT
     return {'distance': min(forward,reverse), 'forward': forward, 'reverse': reverse,
             'endpoints': min(endpoints,reversed_endpoints), 'length_ratio': ratio, 'backward': backward,
             'matches': min(forward,reverse) <= thresholds['distance'] and min(endpoints,reversed_endpoints) <= thresholds['endpoint'] and ratio >= thresholds['length_ratio']}
@@ -139,40 +139,126 @@ def assignment(costs):
     return result
 
 
+def ordered_alignment(costs, expected_count):
+    """Minimum-cost monotonic correspondence with exactly the observed count gap.
+
+    Skip only the longer side, so malformed shapes remain shape errors rather
+    than being silently discarded as an arbitrary number of extra/missing lines.
+    """
+    n, m = len(costs), expected_count
+    values = [[float('inf')] * (m + 1) for _ in range(n + 1)]
+    steps = {}
+    values[0][0] = 0.
+    for i in range(n + 1):
+        for j in range(m + 1):
+            if i and j:
+                values[i][j] = values[i-1][j-1] + costs[i-1][j-1]
+                steps[i, j] = 'match'
+            if n < m and j and values[i][j-1] < values[i][j]:
+                values[i][j] = values[i][j-1]; steps[i, j] = 'missing'
+            if n > m and i and values[i-1][j] < values[i][j]:
+                values[i][j] = values[i-1][j]; steps[i, j] = 'extra'
+    result, i, j = {}, n, m
+    while i or j:
+        step = steps[i, j]
+        if step == 'match':
+            result[i-1] = j-1; i -= 1; j -= 1
+        elif step == 'missing':
+            j -= 1
+        else:
+            i -= 1
+    return result
+
+
+def gap_alignment(matrix, costs, expected_count, thresholds):
+    """Prefer an ordered gap hypothesis; allow reordering only on strong evidence."""
+    ordered = ordered_alignment(costs, expected_count)
+    padded = [row + [0.] * max(0, len(costs)-expected_count) for row in costs]
+    free = {i: j for i, j in enumerate(assignment(padded)) if j < expected_count}
+    proof = cfg.GAP_ORDER_PROOF
+    def identified(i):
+        j = free[i]
+        value = matrix[i][j]
+        return (i in ordered and value['matches']
+            and value['distance'] <= thresholds['distance'] * proof['distance_ratio']
+            and value['endpoints'] <= thresholds['endpoint'] * proof['endpoint_ratio']
+            and value['length_ratio'] >= proof['length_ratio']
+            and costs[i][j] + thresholds['order_margin'] * proof['margin_multiplier'] < costs[i][ordered[i]])
+    errors = set()
+    pairs = sorted(free.items())
+    for position, (i, target) in enumerate(pairs):
+        for other, other_target in pairs[position+1:]:
+            if target > other_target and identified(i) and identified(other):
+                errors.update((i, other))
+    return (free, errors) if errors else (ordered, set())
+
+
 def evaluate(strokes, reference, final=True, strictness='standard'):
     """Prefix normalization is provisional; a final character always uses one full bbox."""
     user = normalize(strokes)
     expected = normalize(reference if final else reference[:max(1,len(strokes))])
     thresholds = cfg.PROFILES[strictness]
-    matrix = [[compare(s,t,thresholds) for t in expected] for s in user[:len(expected)]]
-    costs = [[m['distance']+.15*m['endpoints']+.025*(1-m['length_ratio']) for m in row] for row in matrix]
-    mapping = assignment(costs)
+    matrix = [[compare(s,t,thresholds) for t in expected] for s in user]
+    costs = [[m['distance']+cfg.MATCH_ENDPOINT_WEIGHT*m['endpoints']+cfg.MATCH_LENGTH_WEIGHT*(1-m['length_ratio']) for m in row] for row in matrix]
+    has_gap = final and len(user) != len(expected)
+    if has_gap:
+        aligned, gap_order_errors = gap_alignment(matrix, costs, len(expected), thresholds)
+        order_positions = dict(zip(sorted(aligned), sorted(aligned.values())))
+    else:
+        mapping = assignment(costs[:len(expected)])
+        aligned = {i: i for i in range(min(len(user), len(expected)))}
     rows = []
     for i, stroke in enumerate(user):
-        if i >= len(expected):
+        if i not in aligned:
             rows.append({'index':i+1,'status':'extra','expected_index':None,'matched_index':None,'metrics':None}); continue
-        metrics = matrix[i][i]
-        best_index = mapping[i]; best = matrix[i][best_index]
-        order_error = best_index != i and best['matches'] and costs[i][best_index]+thresholds['order_margin'] < costs[i][i]
-        actual = best_index if order_error else i
-        metrics = best if order_error else metrics
+        if has_gap:
+            actual = aligned[i]
+            order_error = i in gap_order_errors
+            expected_index = order_positions[i] if order_error else actual
+            metrics = matrix[i][actual]
+        else:
+            metrics = matrix[i][i]
+            best_index = mapping[i]; best = matrix[i][best_index]
+            order_error = best_index != i and best['matches'] and costs[i][best_index]+thresholds['order_margin'] < costs[i][i]
+            actual = best_index if order_error else i
+            expected_index = i
+            metrics = best if order_error else metrics
         # A bad shape is NOT evidence of bad order or reversed direction.
-        direction_error = metrics['backward'] and metrics['distance'] <= thresholds['distance']*1.5 and metrics['length_ratio'] >= .3
+        evidence = metrics['distance'] <= thresholds['distance']*cfg.DIRECTION_EVIDENCE_DISTANCE_FACTOR and metrics['length_ratio'] >= cfg.DIRECTION_EVIDENCE_LENGTH_RATIO
+        direction_error = metrics['backward'] and evidence
         status = 'wrong_order' if order_error else 'wrong_direction' if direction_error else 'correct' if metrics['matches'] else 'wrong_shape'
-        rows.append({'index':i+1,'status':status,'expected_index':i+1,'matched_index':actual+1 if actual is not None else None,
+        rows.append({'index':i+1,'status':status,'expected_index':expected_index+1,'matched_index':actual+1 if actual is not None else None,
                      'order_error':order_error,'direction_error':direction_error,
+                     'order_assessed':bool(evidence or order_error), 'direction_assessed':bool(evidence),
                      'metrics':{key:round(val,4) if isinstance(val,float) else val for key,val in metrics.items()}})
     if final:
-        for i in range(len(user),len(expected)):
-            rows.append({'index':i+1,'status':'missing','expected_index':i+1,'matched_index':None,'metrics':None})
+        missing = sorted(set(range(len(expected))) - set(aligned.values()))
+        for offset, target in enumerate(missing, start=1):
+            # Keep row IDs unique and outside actual user traces. expected_index
+            # identifies the template gap, including gaps at the start or middle.
+            rows.append({'index':len(user)+offset,'status':'missing','expected_index':target+1,'matched_index':None,'metrics':None})
     denominator = max(len(reference),len(user),1)
     present = [r for r in rows if r['metrics']]
+    shape_total = 0.0
+    for row in rows:
+        if not row['metrics']:
+            row['criterion_scores'] = {'order': None, 'direction': None, 'shape': 0 if row['status'] == 'missing' else None}
+            continue
+        metrics = row['metrics']
+        shape = max(0,1-max(0,metrics['distance']-cfg.SHAPE_DISTANCE_TOLERANCE)/(thresholds['distance']*cfg.SHAPE_DISTANCE_MULTIPLIER)) * min(1,metrics['length_ratio']/thresholds['length_ratio'])
+        shape_total += 100*shape
+        row['criterion_scores'] = {'order': (0 if row['order_error'] else 100) if row['order_assessed'] else None,
+                                   'direction': (0 if row['direction_error'] else 100) if row['direction_assessed'] else None,
+                                   'shape': round(100*shape)}
+    order_rows = [r for r in present if r['order_assessed']]
+    direction_rows = [r for r in present if r['direction_assessed']]
     scores = {
-        'order':round(100*sum(not r['order_error'] for r in present)/max(1,len(present))),
-        'direction':round(100*sum(not r['direction_error'] for r in present)/max(1,len(present))),
-        'shape':round(100*sum(max(0,1-max(0,r['metrics']['distance']-.025)/(thresholds['distance']*2)) * min(1,r['metrics']['length_ratio']/thresholds['length_ratio']) for r in present)/denominator),
-        'completeness':round(100*max(0,1-abs(len(user)-len(reference))/max(1,len(reference))))}
-    overall = round(scores['order']*.2+scores['direction']*.2+scores['shape']*.4+scores['completeness']*.2)
-    return {'version':cfg.VERSION,'strictness':strictness,'thresholds':dict(thresholds),'provisional':not final,'strokes':rows,'scores':scores,'overall_score':overall,
+        'order':round(100*sum(not r['order_error'] for r in order_rows)/max(1,len(order_rows))),
+        'direction':round(100*sum(not r['direction_error'] for r in direction_rows)/max(1,len(direction_rows))),
+        'shape':round(shape_total/denominator),
+        'completeness':round(100*max(0,1-(sum(r['status']=='missing' for r in rows)+sum(r['status']=='extra' for r in rows))/max(1,len(reference))))}
+    overall = round(sum(scores[key]*weight for key,weight in cfg.SCORE_WEIGHTS.items()))
+    return {'version':cfg.VERSION,'strictness':strictness,'thresholds':dict(thresholds),'score_weights':dict(cfg.SCORE_WEIGHTS),'pass_score':cfg.PASS_SCORE,'provisional':not final,'strokes':rows,'scores':scores,'overall_score':overall,
             'passed':bool(final and overall>=cfg.PASS_SCORE and len(user)==len(reference) and all(r['status']=='correct' for r in rows)),
+            'evidence_counts': {'order':len(order_rows), 'direction':len(direction_rows), 'matched':len(present)},
             'expected_count':len(reference),'actual_count':len(user)}

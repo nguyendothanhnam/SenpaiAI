@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, useId } from 'react'
 import type { PointerEvent } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
-import { kanjiWritingAPI } from '../../services/kanjiWriting'
+import { kanjiWritingAPI, WRITING_STRICTNESS } from '../../services/kanjiWriting'
 import type { WritingPoint, WritingResult, WritingStrictness } from '../../services/kanjiWriting'
 import { useAuth } from '../../services/auth'
 import WritingCharacterPicker from './WritingCharacterPicker'
@@ -21,7 +21,7 @@ export default function KanjiWriting({ initialKanji = '月' }: { initialKanji?: 
   const [kanji, setKanji] = useState(()=>readPreference(user?.id)?.kanji||initialKanji)
   const [level,setLevel]=useState(()=>readPreference(user?.id)?.level||'N5')
   const [reviewIndex,setReviewIndex]=useState<number|null>(null),[reviewKey,setReviewKey]=useState(0)
-  const referenceRef=useRef<HTMLElement>(null),activeLine=useRef<SVGPolylineElement>(null),arrowId=useId().replace(/:/g,'')
+  const drawingRef=useRef<SVGSVGElement>(null),activeLine=useRef<SVGPolylineElement>(null),arrowId=useId().replace(/:/g,'')
   const [test, setTest] = useState(false), [hint, setHint] = useState(false)
   const [strokes, setStrokes] = useState<WritingPoint[][]>([]), [active, setActive] = useState<WritingPoint[]>([])
   const [result, setResult] = useState<WritingResult | null>(null), [error, setError] = useState(false)
@@ -33,6 +33,7 @@ export default function KanjiWriting({ initialKanji = '月' }: { initialKanji?: 
   const activeRef = useRef<WritingPoint[]>([]), pointer = useRef<number | null>(null)
   const revision = useRef(0), attempt = useRef(crypto.randomUUID()), start = useRef(Date.now())
   const supported = useQuery(['kanjiWritingSupported'], kanjiWritingAPI.supported, { staleTime: 3600000 })
+  const rules = useQuery(['kanjiWritingRules'], kanjiWritingAPI.rules, { staleTime: 3600000, retry: false })
   const dictionary=useQuery(['kanjiWritingDictionary'],kanjiWritingAPI.dictionary,{staleTime:3600000,retry:false})
   const history=useQuery(['kanjiWritingProgress',user?.id],kanjiWritingAPI.progress,{enabled:!!user,retry:false})
   const characters=useMemo(()=>{
@@ -104,18 +105,24 @@ export default function KanjiWriting({ initialKanji = '月' }: { initialKanji?: 
   const hideHints=test&&!result?.saved
   const row=result?.strokes.find(r=>r.index===reviewIndex)
   const overlay=row&&template.data&&!hideHints?buildOverlay(strokes,template.data.strokes,row,result?.provisional):null
-  const reviewStroke=(index:number)=>{setReviewIndex(index);setReviewKey(v=>v+1);referenceRef.current?.scrollIntoView({block:'nearest',behavior:'auto'})}
+  const reviewStroke=(index:number)=>{setReviewIndex(index);setReviewKey(v=>v+1);drawingRef.current?.scrollIntoView({block:'nearest',behavior:'auto'})}
   return <section className="space-y-4" aria-labelledby="writing-title">
     <div className="theme-card space-y-3 p-4"><div className="flex flex-wrap items-center justify-between gap-3"><h2 id="writing-title" className="text-xl font-bold">{t('writing.title')}</h2>
-      <div className="flex flex-wrap items-center gap-4"><label className="flex min-h-[44px] items-center gap-2"><input type="checkbox" checked={test} onChange={e=>{reset();setTest(e.target.checked);setStrictness(e.target.checked?'strict':'standard')}} />{t('writing.testMode')}</label><label>{t('writing.strictnessLabel')} <select className="input min-h-[44px]" value={strictness} disabled={pending&&locked} onChange={e=>{reset();setStrictness(e.target.value as WritingStrictness)}}>{(['easy','standard','strict'] as const).map(value=><option key={value} value={value}>{t(`writing.strictness.${value}`)}</option>)}</select></label></div></div><details className="text-sm text-[color:var(--text-muted)]"><summary className="cursor-pointer">{t('writingUI.instructions')}</summary><p className="mt-2">{t('writing.description')}</p><p className="mt-2">{t('writing.estimate')}</p><p className="mt-2">{t('writing.strictnessHelp')}</p></details>
+      <div className="flex flex-wrap items-center gap-4"><label className="flex min-h-[44px] items-center gap-2"><input type="checkbox" checked={test} onChange={e=>{reset();setTest(e.target.checked);setStrictness(e.target.checked?'strict':'standard')}} />{t('writing.testMode')}</label><label>{t('writing.strictnessLabel')} <select className="input min-h-[44px]" value={strictness} disabled={pending&&locked} onChange={e=>{reset();setStrictness(e.target.value as WritingStrictness)}}>{WRITING_STRICTNESS.map(value=><option key={value} value={value}>{t(`writing.strictness.${value}`)}</option>)}</select></label></div></div><div className="writing-strictness-description"><span>{t('writing.strictnessPosition',{current:WRITING_STRICTNESS.indexOf(strictness)+1,total:WRITING_STRICTNESS.length})}</span><p>{t(`writing.profileHelp.${strictness}`)}</p></div><details className="text-sm text-[color:var(--text-muted)]"><summary className="cursor-pointer">{t('writingUI.instructions')}</summary><p className="mt-2">{t('writing.description')}</p><p className="mt-2">{t('writing.estimate')}</p><p className="mt-2">{t('writing.strictnessHelp')}</p></details>
     </div>
-    <WritingCharacterPicker items={characters} history={history.data?.items} kanji={kanji} level={level} onLevel={value=>{setLevel(value);savePreference(user?.id,kanji,value)}} onSelect={selectCharacter} disabled={!!active.length||pending}/>
+    <details className="theme-card p-4 text-sm"><summary className="cursor-pointer font-semibold">{t('writingRules.title')}</summary>
+      {rules.data?.weights && rules.data?.profiles ? <div className="space-y-2 pt-3"><p>{t('writingRules.version',{version:rules.data.version})}</p><ul>{Object.entries(rules.data.weights).map(([key,value])=><li key={key}>{t(`writing.criteria.${key}`)}: {Math.round(value*100)}%</li>)}</ul>
+        <p>{t('writingRules.pass',{score:rules.data.pass_score})}</p><p>{t('writingRules.method')}</p><p>{t('writingRules.uncertain')}</p><p>{t('writingRules.modes')}</p>
+        <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr><th>{t('writing.strictnessLabel')}</th><th>{t('writingRules.distance')}</th><th>{t('writingRules.endpoint')}</th><th>{t('writingRules.length')}</th><th>{t('writingRules.margin')}</th></tr></thead><tbody>{Object.entries(rules.data.profiles).map(([key,value])=><tr key={key}><th>{t(`writing.strictness.${key}`)}</th><td>{value.distance}</td><td>{value.endpoint}</td><td>{value.length_ratio}</td><td>{value.order_margin}</td></tr>)}</tbody></table></div>
+      </div> : <p role="status" className="pt-3">{rules.isError ? t('writingRules.unavailable') : t('writing.loading')}</p>}
+    </details>
+    <WritingCharacterPicker key={user?.id??'guest'} items={characters} history={history.data?.items} kanji={kanji} level={level} onLevel={value=>{setLevel(value);savePreference(user?.id,kanji,value)}} onSelect={selectCharacter} disabled={!!active.length||pending}/>
     {(dictionary.isError||history.isError)&&<p role="status" className="text-sm">{t(dictionary.isError?'writingUI.dictionaryError':'writingUI.historyError')} <button type="button" className="underline" onClick={()=>{void dictionary.refetch();void history.refetch()}}>{t('writing.retry')}</button></p>}
     {supported.isError && <p role="alert">{t('writing.catalogError')} <button className="underline" onClick={()=>supported.refetch()}>{t('writing.retry')}</button></p>}
-    {template.isLoading ? <p role="status">{t('writing.loading')}</p> : template.isError || !template.data ? <div role="alert" className="theme-card p-5">{t('writing.unavailable')} <button className="underline" onClick={()=>template.refetch()}>{t('writing.retry')}</button></div> : <div className="writing-workspace"><aside ref={referenceRef} className="theme-card writing-information min-w-0 space-y-3 p-4"><WritingCharacterInfo kanji={kanji} entry={characters.find(c=>c.kanji===kanji)} template={template.data} hideHints={hideHints}>{hideHints?<p className="rounded-xl border border-[color:var(--border)] p-4 text-sm">{t('writingUI.testReferenceHidden')}</p>:<WritingReference kanji={kanji} strokes={template.data.strokes} highlight={row?.expected_index??undefined} playKey={reviewKey}/>}</WritingCharacterInfo><p className="text-xs"><a className="underline" href={template.data.source_url} target="_blank" rel="noreferrer">{template.data.source}</a>{' \u00b7 '}{template.data.license}</p></aside>
+    {template.isLoading ? <p role="status">{t('writing.loading')}</p> : template.isError || !template.data ? <div role="alert" className="theme-card p-5">{t('writing.unavailable')} <button className="underline" onClick={()=>template.refetch()}>{t('writing.retry')}</button></div> : <div className="writing-workspace"><aside className="theme-card writing-information min-w-0 space-y-3 p-4"><WritingCharacterInfo kanji={kanji} entry={characters.find(c=>c.kanji===kanji)} template={template.data} hideHints={hideHints}>{hideHints?<p className="rounded-xl border border-[color:var(--border)] p-4 text-sm">{t('writingUI.testReferenceHidden')}</p>:<WritingReference kanji={kanji} strokes={template.data.strokes} highlight={row?.status==='extra'?0:row?.expected_index??undefined} playKey={reviewKey}/>}</WritingCharacterInfo><p className="text-xs"><a className="underline" href={template.data.source_url} target="_blank" rel="noreferrer">{template.data.source}</a>{' \u00b7 '}{template.data.license}</p></aside>
       <div className="theme-card min-w-0 space-y-3 p-4"><p className="font-semibold">{t('writing.count',{current:strokes.length,total:template.data.stroke_count})}</p><p className="text-sm">{t(test?'writing.testInstruction':'writing.drawInstruction')}</p>
         {result&&<WritingScores result={result}/>}
-        <svg viewBox="0 0 100 100" className="writing-board mx-auto block aspect-square w-full max-w-[460px] rounded-xl border bg-[color:var(--bg-elevated)]" role="img" aria-label={t('writing.canvas',{kanji})}
+        <svg ref={drawingRef} viewBox="0 0 100 100" className="writing-board mx-auto block aspect-square w-full max-w-[460px] rounded-xl border bg-[color:var(--bg-elevated)]" role="img" aria-label={t('writing.canvas',{kanji})}
           onPointerDown={e=>{if(locked || pointer.current!==null || strokes.length>=40 || e.button!==0)return; e.preventDefault(); setReviewIndex(null); pointer.current=e.pointerId; e.currentTarget.setPointerCapture(e.pointerId); activeRef.current=[point(e)];setActive(activeRef.current)}}
           onPointerMove={e=>{if(pointer.current!==e.pointerId || activeRef.current.length>=1999)return;activeRef.current.push(point(e));activeLine.current?.setAttribute('points',pointsText(activeRef.current))}}
           onPointerUp={e=>finish(e)} onPointerCancel={e=>finish(e,true)} onLostPointerCapture={e=>{if(pointer.current===e.pointerId){pointer.current=null;activeRef.current=[];setActive([])}}}>
@@ -128,7 +135,7 @@ export default function KanjiWriting({ initialKanji = '月' }: { initialKanji?: 
           <polyline ref={activeLine} points={pointsText(active)} fill="none" stroke="var(--text)" strokeWidth="1.5" strokeLinecap="round" />
           {overlay&&<g pointerEvents="none"><defs><marker id={`writing-arrow-${arrowId}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10" fill="var(--primary)"/></marker><marker id={`user-arrow-${arrowId}`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0L10 5L0 10" fill="var(--text)"/></marker></defs>
             {template.data.strokes.map((s,i)=><polyline key={i} points={polylinePoints(displayPoints(s))} fill="none" stroke="var(--border)" strokeWidth=".6"/>)}
-            <polyline key={reviewKey} className="writing-hint" pathLength="100" points={polylinePoints(overlay.template)} fill="none" stroke="var(--primary)" strokeWidth="1.8" markerEnd={`url(#writing-arrow-${arrowId})`}/>
+            {overlay.template.length>0&&<polyline key={reviewKey} className="writing-hint" pathLength="100" points={polylinePoints(overlay.template)} fill="none" stroke="var(--primary)" strokeWidth="1.8" markerEnd={`url(#writing-arrow-${arrowId})`}/>}
             <polyline points={polylinePoints(overlay.user)} fill="none" stroke="var(--text)" strokeWidth="1" strokeDasharray="2 1" markerEnd={`url(#user-arrow-${arrowId})`}/>
             {overlay.template[0]&&<text x={overlay.template[0].x} y={Math.max(4,overlay.template[0].y-2)} fill="var(--primary)" fontSize="4">{row?.expected_index}</text>}
             {overlay.user[0]&&<text x={overlay.user[0].x} y={Math.min(98,overlay.user[0].y+5)} fill="var(--text)" fontSize="4">{row?.index}</text>}

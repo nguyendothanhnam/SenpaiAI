@@ -10,7 +10,7 @@ from ..core.config import settings
 from ..core import learning_progress_config as policy
 from ..models.database import (User, WeeklyLearningGoal, GrammarPracticeAttempt, GrammarRule, GrammarQuestion,
     DailyTask, DailyTaskItem, ListeningAttempt, ListeningLesson, ChatHistory, VoiceConversation,
-    InternshipSession, PlacementAttempt, StudyItemStat, ExerciseHistory, LearningSession, Vocabulary, KanjiWritingAttempt, MinigameLearningEvent)
+    InternshipSession, PlacementAttempt, StudyItemStat, ExerciseHistory, LearningSession, Vocabulary, KanjiWritingAttempt, MinigameLearningEvent, FlashcardSession)
 from .kanji_dictionary_service import kanji_dictionary_service
 
 
@@ -214,6 +214,11 @@ class LearningSnapshot:
             key=(row.source_type,row.source_id)
             if key not in game_due or row.id>game_due[key].id:game_due[key]=row
 
+        flashcards = self.rows(db.query(FlashcardSession).filter_by(user_id=uid), FlashcardSession.created_at, 'flashcard_sessions')
+        for row in flashcards:
+            # User-authored cards count as study activity, never verified JLPT skill evidence.
+            self.activities.append(Activity(utc(row.created_at), 'flashcard', str(row.id),
+                bounded_number(row.duration_seconds, maximum=14400), True))
         sessions = self.rows(db.query(LearningSession).filter_by(user_id=uid), LearningSession.created_at, 'learning_sessions')
         for row in sessions:
             if row.completed_at and row.session_type != 'speaking':

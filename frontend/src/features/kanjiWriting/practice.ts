@@ -1,4 +1,25 @@
-import type { WritingDictionaryEntry, WritingHistory, WritingPoint, WritingStroke } from '../../services/kanjiWriting'
+import type { WritingDictionaryEntry, WritingHistory, WritingPoint, WritingStroke, WritingResult } from '../../services/kanjiWriting'
+
+export function writingScoreSummary(result: WritingResult) {
+  const errors = { wrong_order: 0, wrong_direction: 0, wrong_shape: 0, extra: 0, missing: 0 }
+  for (const row of result.strokes) {
+    if (row.order_error || row.status === 'wrong_order') errors.wrong_order++
+    if (row.direction_error || row.status === 'wrong_direction') errors.wrong_direction++
+    if (row.status === 'wrong_shape') errors.wrong_shape++
+    if (row.status === 'extra') errors.extra++
+    if (row.status === 'missing') errors.missing++
+  }
+  const weights = result.score_weights || { order: .2, direction: .2, shape: .4, completeness: .2 }
+  return { errors, weights, passScore: result.pass_score ?? 80 }
+}
+
+/** Same per-stroke shape formula as the server; a diagnostic, not a new grade. */
+export function strokeShapeScore(row: WritingStroke, result: WritingResult): number | null {
+  if (row.criterion_scores) return row.criterion_scores.shape
+  if (!row.metrics || !result.thresholds) return null
+  const score = Math.max(0, 1 - Math.max(0, row.metrics.distance - .025) / (result.thresholds.distance * 2)) * Math.min(1, row.metrics.length_ratio / result.thresholds.length_ratio)
+  return Math.round(score * 100)
+}
 
 export const WRITING_LEVELS = ['N5','N4','N3','N2','N1'] as const
 export interface PracticeCharacter extends WritingDictionaryEntry { level: string; stroke_count: number }
@@ -6,7 +27,16 @@ export function writingStatus(history?: WritingHistory): 'unseen'|'learning'|'ma
   if(!history?.attempts)return 'unseen'
   return history.passed_count>=2&&history.last_passed?'mastered':'learning'
 }
-const searchable=(text:string)=>text.normalize('NFKC').normalize('NFD').replace(/\p{M}/gu,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLocaleLowerCase().replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60))
+const searchable=(text:string)=>text.normalize('NFKC').normalize('NFD')
+  .replace(/\p{M}/gu,mark=>mark==='\u3099'||mark==='\u309a'?mark:'').normalize('NFC')
+  .replace(/đ/g,'d').replace(/Đ/g,'D').toLocaleLowerCase()
+  .replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60))
+export function gridNavigationIndex(key:string,index:number,count:number,columns:number){
+  if(index<0||!count)return -1
+  const width=Math.max(1,columns)
+  const step=key==='ArrowRight'?1:key==='ArrowLeft'?-1:key==='ArrowDown'?width:key==='ArrowUp'?-width:0
+  return key==='Home'?0:key==='End'?count-1:step?Math.max(0,Math.min(count-1,index+step)):-1
+}
 export function filterCharacters(items:PracticeCharacter[],level:string,query:string){
   const needles=searchable(query.trim()).split(/\s+/).filter(Boolean)
   return items.filter(item=>item.level===level&&needles.every(n=>searchable([item.kanji,item.meaning_vi,item.meaning_en,...item.onyomi||[],...item.kunyomi||[]].join(' ')).includes(n)))
@@ -57,7 +87,8 @@ export function buildOverlay(strokes:WritingPoint[][],reference:WritingPoint[][]
   const user=normalizeWriting(strokes)
   // The server normalizes only the reference prefix for provisional feedback.
   const target=provisional?normalizeWriting(reference.slice(0,Math.max(1,strokes.length))):reference
-  return {user:displayPoints(user[row.index-1]||[]),template:displayPoints(target[(row.expected_index??row.index)-1]||[])}
+  const expected=row.status==='extra'||row.expected_index===null?[]:target[(row.expected_index??row.index)-1]||[]
+  return {user:displayPoints(user[row.index-1]||[]),template:displayPoints(expected)}
 }
 export function strokeDetail(row:WritingStroke,overlay:ReturnType<typeof buildOverlay>):string{
   if(row.status!=='wrong_shape')return `writing.status.${row.status}`

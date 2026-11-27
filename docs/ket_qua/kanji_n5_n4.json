@@ -1,0 +1,2979 @@
+{
+  "date": "2026-11-25",
+  "branch": "mobile",
+  "scope": "N5/N4 dictionary audit and missing KanjiVG JSON records only; no runtime/model/API/N3 modifications.",
+  "before": {
+    "levels": {
+      "N5": {
+        "total": 79,
+        "core_metadata_complete": 79,
+        "with_complete_example": 39,
+        "all_fields_complete": 39,
+        "json_stroke_records": 11,
+        "local_svg_records": 79,
+        "effective_stroke_records": 79,
+        "core_metadata_percent": 100.0,
+        "all_fields_percent": 49.37
+      },
+      "N4": {
+        "total": 166,
+        "core_metadata_complete": 166,
+        "with_complete_example": 6,
+        "all_fields_complete": 6,
+        "json_stroke_records": 0,
+        "local_svg_records": 166,
+        "effective_stroke_records": 166,
+        "core_metadata_percent": 100.0,
+        "all_fields_percent": 3.61
+      },
+      "N3": {
+        "total": 367,
+        "core_metadata_complete": 367,
+        "with_complete_example": 367,
+        "all_fields_complete": 367,
+        "json_stroke_records": 367,
+        "local_svg_records": 367,
+        "effective_stroke_records": 367,
+        "core_metadata_percent": 100.0,
+        "all_fields_percent": 100.0
+      }
+    },
+    "dictionary_sha256": "e2f2c9cc933e2d442262856d967d947a42d8513f010bbb98ec3bd6c618c3bc3e",
+    "strokes_sha256": "faaa326bf5b32fa4eeac4914e1fbc4f012111fbebce12a10c486a1aac79cc511",
+    "n3_dictionary_fingerprint": "28e5bf5ff465177647727078e63e6bdbfa635eea16072bc58e520cd606b875f4",
+    "n3_strokes_fingerprint": "f9306243795c446239a712cfdedb429d40300209610427883e17fa86df28e3f8"
+  },
+  "after": {
+    "levels": {
+      "N5": {
+        "total": 79,
+        "core_metadata_complete": 79,
+        "with_complete_example": 39,
+        "all_fields_complete": 39,
+        "json_stroke_records": 79,
+        "local_svg_records": 79,
+        "effective_stroke_records": 79,
+        "core_metadata_percent": 100.0,
+        "all_fields_percent": 49.37
+      },
+      "N4": {
+        "total": 166,
+        "core_metadata_complete": 166,
+        "with_complete_example": 6,
+        "all_fields_complete": 6,
+        "json_stroke_records": 166,
+        "local_svg_records": 166,
+        "effective_stroke_records": 166,
+        "core_metadata_percent": 100.0,
+        "all_fields_percent": 3.61
+      },
+      "N3": {
+        "total": 367,
+        "core_metadata_complete": 367,
+        "with_complete_example": 367,
+        "all_fields_complete": 367,
+        "json_stroke_records": 367,
+        "local_svg_records": 367,
+        "effective_stroke_records": 367,
+        "core_metadata_percent": 100.0,
+        "all_fields_percent": 100.0
+      }
+    },
+    "missing_content": [
+      {
+        "kanji": "一",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "một",
+        "examples": []
+      },
+      {
+        "kanji": "十",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mười",
+        "examples": []
+      },
+      {
+        "kanji": "二",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "hai",
+        "examples": []
+      },
+      {
+        "kanji": "長",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "dài, trưởng",
+        "examples": []
+      },
+      {
+        "kanji": "出",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ra, xuất hiện",
+        "examples": []
+      },
+      {
+        "kanji": "三",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ba",
+        "examples": []
+      },
+      {
+        "kanji": "後",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sau, phía sau",
+        "examples": []
+      },
+      {
+        "kanji": "前",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trước, phía trước",
+        "examples": []
+      },
+      {
+        "kanji": "五",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "năm (số)",
+        "examples": []
+      },
+      {
+        "kanji": "間",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "khoảng, ở giữa",
+        "examples": []
+      },
+      {
+        "kanji": "東",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phía đông",
+        "examples": []
+      },
+      {
+        "kanji": "四",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bốn",
+        "examples": []
+      },
+      {
+        "kanji": "今",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bây giờ",
+        "examples": []
+      },
+      {
+        "kanji": "九",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chín",
+        "examples": []
+      },
+      {
+        "kanji": "入",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "vào",
+        "examples": []
+      },
+      {
+        "kanji": "高",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cao, đắt",
+        "examples": []
+      },
+      {
+        "kanji": "円",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "yên, hình tròn",
+        "examples": []
+      },
+      {
+        "kanji": "外",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ngoài",
+        "examples": []
+      },
+      {
+        "kanji": "八",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tám",
+        "examples": []
+      },
+      {
+        "kanji": "六",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sáu",
+        "examples": []
+      },
+      {
+        "kanji": "気",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "khí, tinh thần",
+        "examples": []
+      },
+      {
+        "kanji": "七",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bảy",
+        "examples": []
+      },
+      {
+        "kanji": "北",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phía bắc",
+        "examples": []
+      },
+      {
+        "kanji": "午",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "buổi trưa",
+        "examples": []
+      },
+      {
+        "kanji": "百",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "một trăm",
+        "examples": []
+      },
+      {
+        "kanji": "千",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "một nghìn",
+        "examples": []
+      },
+      {
+        "kanji": "西",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phía tây",
+        "examples": []
+      },
+      {
+        "kanji": "校",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trường học",
+        "examples": []
+      },
+      {
+        "kanji": "語",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "language",
+        "examples": []
+      },
+      {
+        "kanji": "何",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cái gì",
+        "examples": []
+      },
+      {
+        "kanji": "南",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phía nam",
+        "examples": []
+      },
+      {
+        "kanji": "万",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mười nghìn",
+        "examples": []
+      },
+      {
+        "kanji": "毎",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mỗi",
+        "examples": []
+      },
+      {
+        "kanji": "白",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trắng",
+        "examples": []
+      },
+      {
+        "kanji": "天",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trời",
+        "examples": []
+      },
+      {
+        "kanji": "母",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mẹ",
+        "examples": []
+      },
+      {
+        "kanji": "右",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bên phải",
+        "examples": []
+      },
+      {
+        "kanji": "左",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bên trái",
+        "examples": []
+      },
+      {
+        "kanji": "父",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cha",
+        "examples": []
+      },
+      {
+        "kanji": "雨",
+        "jlpt": "N5",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mưa",
+        "examples": []
+      },
+      {
+        "kanji": "同",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cùng, giống nhau",
+        "examples": []
+      },
+      {
+        "kanji": "事",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "việc, sự việc",
+        "examples": []
+      },
+      {
+        "kanji": "自",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tự mình",
+        "examples": []
+      },
+      {
+        "kanji": "発",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phát ra, khởi hành",
+        "examples": []
+      },
+      {
+        "kanji": "者",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "người",
+        "examples": []
+      },
+      {
+        "kanji": "地",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đất, địa điểm",
+        "examples": []
+      },
+      {
+        "kanji": "業",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nghề, công việc",
+        "examples": []
+      },
+      {
+        "kanji": "方",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phương hướng, cách",
+        "examples": []
+      },
+      {
+        "kanji": "新",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mới",
+        "examples": []
+      },
+      {
+        "kanji": "場",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nơi, địa điểm",
+        "examples": []
+      },
+      {
+        "kanji": "員",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thành viên, nhân viên",
+        "examples": []
+      },
+      {
+        "kanji": "立",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đứng, lập nên",
+        "examples": []
+      },
+      {
+        "kanji": "開",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mở",
+        "examples": []
+      },
+      {
+        "kanji": "手",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tay",
+        "examples": []
+      },
+      {
+        "kanji": "力",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sức mạnh",
+        "examples": []
+      },
+      {
+        "kanji": "問",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "hỏi, câu hỏi",
+        "examples": []
+      },
+      {
+        "kanji": "代",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thay thế, thời đại",
+        "examples": []
+      },
+      {
+        "kanji": "明",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sáng, rõ ràng",
+        "examples": []
+      },
+      {
+        "kanji": "動",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chuyển động",
+        "examples": []
+      },
+      {
+        "kanji": "京",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "kinh đô",
+        "examples": []
+      },
+      {
+        "kanji": "目",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "eye",
+        "examples": []
+      },
+      {
+        "kanji": "通",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đi qua, thông suốt",
+        "examples": []
+      },
+      {
+        "kanji": "言",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nói, lời nói",
+        "examples": []
+      },
+      {
+        "kanji": "理",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "lý lẽ, nguyên lý",
+        "examples": []
+      },
+      {
+        "kanji": "体",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cơ thể",
+        "examples": []
+      },
+      {
+        "kanji": "主",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chủ, chính",
+        "examples": []
+      },
+      {
+        "kanji": "題",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đề tài, câu hỏi",
+        "examples": []
+      },
+      {
+        "kanji": "意",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ý nghĩ, ý định",
+        "examples": []
+      },
+      {
+        "kanji": "不",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "không, bất",
+        "examples": []
+      },
+      {
+        "kanji": "作",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "làm, tạo ra",
+        "examples": []
+      },
+      {
+        "kanji": "用",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "use",
+        "examples": []
+      },
+      {
+        "kanji": "度",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mức độ, lần",
+        "examples": []
+      },
+      {
+        "kanji": "強",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mạnh",
+        "examples": []
+      },
+      {
+        "kanji": "公",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "công cộng",
+        "examples": []
+      },
+      {
+        "kanji": "持",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cầm, giữ",
+        "examples": []
+      },
+      {
+        "kanji": "野",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đồng nội, hoang dã",
+        "examples": []
+      },
+      {
+        "kanji": "以",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "lấy làm, kể từ",
+        "examples": []
+      },
+      {
+        "kanji": "思",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nghĩ",
+        "examples": []
+      },
+      {
+        "kanji": "家",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nhà, gia đình",
+        "examples": []
+      },
+      {
+        "kanji": "世",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thế giới, thế hệ",
+        "examples": []
+      },
+      {
+        "kanji": "多",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nhiều",
+        "examples": []
+      },
+      {
+        "kanji": "正",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đúng, chính xác",
+        "examples": []
+      },
+      {
+        "kanji": "安",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "yên ổn, rẻ",
+        "examples": []
+      },
+      {
+        "kanji": "院",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "viện, cơ sở",
+        "examples": []
+      },
+      {
+        "kanji": "心",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tim, tấm lòng",
+        "examples": []
+      },
+      {
+        "kanji": "界",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thế giới, ranh giới",
+        "examples": []
+      },
+      {
+        "kanji": "教",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "dạy",
+        "examples": []
+      },
+      {
+        "kanji": "文",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "văn, câu văn",
+        "examples": []
+      },
+      {
+        "kanji": "元",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "gốc, ban đầu",
+        "examples": []
+      },
+      {
+        "kanji": "重",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nặng, chồng lên",
+        "examples": []
+      },
+      {
+        "kanji": "近",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "gần",
+        "examples": []
+      },
+      {
+        "kanji": "考",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "suy nghĩ, xem xét",
+        "examples": []
+      },
+      {
+        "kanji": "画",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tranh, nét vẽ",
+        "examples": []
+      },
+      {
+        "kanji": "海",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "biển",
+        "examples": []
+      },
+      {
+        "kanji": "売",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bán",
+        "examples": []
+      },
+      {
+        "kanji": "知",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "biết",
+        "examples": []
+      },
+      {
+        "kanji": "道",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đường, đạo",
+        "examples": []
+      },
+      {
+        "kanji": "集",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tập hợp",
+        "examples": []
+      },
+      {
+        "kanji": "別",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "khác, chia tay",
+        "examples": []
+      },
+      {
+        "kanji": "物",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "vật, đồ vật",
+        "examples": []
+      },
+      {
+        "kanji": "使",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sử dụng",
+        "examples": []
+      },
+      {
+        "kanji": "品",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "hàng hóa, phẩm chất",
+        "examples": []
+      },
+      {
+        "kanji": "計",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tính toán, đo",
+        "examples": []
+      },
+      {
+        "kanji": "死",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chết",
+        "examples": []
+      },
+      {
+        "kanji": "特",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đặc biệt",
+        "examples": []
+      },
+      {
+        "kanji": "私",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tôi, riêng tư",
+        "examples": []
+      },
+      {
+        "kanji": "始",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bắt đầu",
+        "examples": []
+      },
+      {
+        "kanji": "朝",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "buổi sáng",
+        "examples": []
+      },
+      {
+        "kanji": "運",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "vận chuyển, vận may",
+        "examples": []
+      },
+      {
+        "kanji": "終",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "kết thúc",
+        "examples": []
+      },
+      {
+        "kanji": "台",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bệ, đài",
+        "examples": []
+      },
+      {
+        "kanji": "広",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "rộng",
+        "examples": []
+      },
+      {
+        "kanji": "住",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sống, cư trú",
+        "examples": []
+      },
+      {
+        "kanji": "真",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thật, chân thực",
+        "examples": []
+      },
+      {
+        "kanji": "有",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "có, tồn tại",
+        "examples": []
+      },
+      {
+        "kanji": "口",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "miệng",
+        "examples": []
+      },
+      {
+        "kanji": "少",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ít",
+        "examples": []
+      },
+      {
+        "kanji": "町",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thị trấn, phố",
+        "examples": []
+      },
+      {
+        "kanji": "料",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nguyên liệu, phí",
+        "examples": []
+      },
+      {
+        "kanji": "工",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "công việc, kỹ thuật",
+        "examples": []
+      },
+      {
+        "kanji": "建",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "xây dựng",
+        "examples": []
+      },
+      {
+        "kanji": "空",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trời, trống rỗng",
+        "examples": []
+      },
+      {
+        "kanji": "急",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "gấp, vội",
+        "examples": []
+      },
+      {
+        "kanji": "止",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "dừng",
+        "examples": []
+      },
+      {
+        "kanji": "送",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "gửi, tiễn",
+        "examples": []
+      },
+      {
+        "kanji": "切",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cắt",
+        "examples": []
+      },
+      {
+        "kanji": "転",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "xoay, chuyển",
+        "examples": []
+      },
+      {
+        "kanji": "研",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mài, nghiên cứu",
+        "examples": []
+      },
+      {
+        "kanji": "足",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chân, đủ",
+        "examples": []
+      },
+      {
+        "kanji": "究",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nghiên cứu, tìm hiểu đến cùng",
+        "examples": []
+      },
+      {
+        "kanji": "楽",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "vui, âm nhạc",
+        "examples": []
+      },
+      {
+        "kanji": "起",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thức dậy, xảy ra",
+        "examples": []
+      },
+      {
+        "kanji": "着",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mặc, đến nơi",
+        "examples": []
+      },
+      {
+        "kanji": "店",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cửa hàng",
+        "examples": []
+      },
+      {
+        "kanji": "病",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bệnh",
+        "examples": []
+      },
+      {
+        "kanji": "質",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chất lượng, bản chất",
+        "examples": []
+      },
+      {
+        "kanji": "待",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chờ",
+        "examples": []
+      },
+      {
+        "kanji": "試",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thử, thi",
+        "examples": []
+      },
+      {
+        "kanji": "族",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "gia tộc, nhóm",
+        "examples": []
+      },
+      {
+        "kanji": "銀",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bạc",
+        "examples": []
+      },
+      {
+        "kanji": "早",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sớm",
+        "examples": []
+      },
+      {
+        "kanji": "映",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chiếu, phản chiếu",
+        "examples": []
+      },
+      {
+        "kanji": "親",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cha mẹ, thân thiết",
+        "examples": []
+      },
+      {
+        "kanji": "験",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "kiểm nghiệm, kinh nghiệm",
+        "examples": []
+      },
+      {
+        "kanji": "英",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "Anh, ưu tú",
+        "examples": []
+      },
+      {
+        "kanji": "医",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "y, bác sĩ",
+        "examples": []
+      },
+      {
+        "kanji": "仕",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phục vụ, làm việc",
+        "examples": []
+      },
+      {
+        "kanji": "去",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "rời đi, quá khứ",
+        "examples": []
+      },
+      {
+        "kanji": "味",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "vị, hương vị",
+        "examples": []
+      },
+      {
+        "kanji": "写",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chép, chụp",
+        "examples": []
+      },
+      {
+        "kanji": "字",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chữ",
+        "examples": []
+      },
+      {
+        "kanji": "答",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trả lời",
+        "examples": []
+      },
+      {
+        "kanji": "夜",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đêm",
+        "examples": []
+      },
+      {
+        "kanji": "音",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "âm thanh",
+        "examples": []
+      },
+      {
+        "kanji": "注",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "rót, chú ý",
+        "examples": []
+      },
+      {
+        "kanji": "帰",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trở về",
+        "examples": []
+      },
+      {
+        "kanji": "古",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cũ, cổ",
+        "examples": []
+      },
+      {
+        "kanji": "歌",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bài hát, hát",
+        "examples": []
+      },
+      {
+        "kanji": "悪",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "xấu, ác",
+        "examples": []
+      },
+      {
+        "kanji": "図",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "hình, sơ đồ",
+        "examples": []
+      },
+      {
+        "kanji": "週",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tuần",
+        "examples": []
+      },
+      {
+        "kanji": "室",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "phòng",
+        "examples": []
+      },
+      {
+        "kanji": "歩",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đi bộ, bước",
+        "examples": []
+      },
+      {
+        "kanji": "風",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "gió, phong cách",
+        "examples": []
+      },
+      {
+        "kanji": "紙",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "giấy",
+        "examples": []
+      },
+      {
+        "kanji": "黒",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đen",
+        "examples": []
+      },
+      {
+        "kanji": "花",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "hoa",
+        "examples": []
+      },
+      {
+        "kanji": "春",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mùa xuân",
+        "examples": []
+      },
+      {
+        "kanji": "赤",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đỏ",
+        "examples": []
+      },
+      {
+        "kanji": "青",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "xanh lam, xanh lục",
+        "examples": []
+      },
+      {
+        "kanji": "館",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "tòa nhà, quán",
+        "examples": []
+      },
+      {
+        "kanji": "屋",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "nhà, cửa hàng",
+        "examples": []
+      },
+      {
+        "kanji": "色",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "màu sắc",
+        "examples": []
+      },
+      {
+        "kanji": "走",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chạy",
+        "examples": []
+      },
+      {
+        "kanji": "秋",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mùa thu",
+        "examples": []
+      },
+      {
+        "kanji": "夏",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mùa hè",
+        "examples": []
+      },
+      {
+        "kanji": "習",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "học, luyện tập",
+        "examples": []
+      },
+      {
+        "kanji": "洋",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "đại dương, phương Tây",
+        "examples": []
+      },
+      {
+        "kanji": "旅",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "du lịch, chuyến đi",
+        "examples": []
+      },
+      {
+        "kanji": "服",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "quần áo",
+        "examples": []
+      },
+      {
+        "kanji": "夕",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chiều tối",
+        "examples": []
+      },
+      {
+        "kanji": "借",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mượn",
+        "examples": []
+      },
+      {
+        "kanji": "曜",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ngày trong tuần",
+        "examples": []
+      },
+      {
+        "kanji": "肉",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "thịt",
+        "examples": []
+      },
+      {
+        "kanji": "貸",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cho mượn",
+        "examples": []
+      },
+      {
+        "kanji": "堂",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "sảnh, tòa nhà",
+        "examples": []
+      },
+      {
+        "kanji": "鳥",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chim",
+        "examples": []
+      },
+      {
+        "kanji": "飯",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cơm, bữa ăn",
+        "examples": []
+      },
+      {
+        "kanji": "勉",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cố gắng, siêng năng",
+        "examples": []
+      },
+      {
+        "kanji": "冬",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "mùa đông",
+        "examples": []
+      },
+      {
+        "kanji": "昼",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "ban ngày, buổi trưa",
+        "examples": []
+      },
+      {
+        "kanji": "茶",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "trà",
+        "examples": []
+      },
+      {
+        "kanji": "弟",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "em trai",
+        "examples": []
+      },
+      {
+        "kanji": "牛",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "bò",
+        "examples": []
+      },
+      {
+        "kanji": "魚",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "cá",
+        "examples": []
+      },
+      {
+        "kanji": "兄",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "anh trai",
+        "examples": []
+      },
+      {
+        "kanji": "犬",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chó",
+        "examples": []
+      },
+      {
+        "kanji": "妹",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "em gái",
+        "examples": []
+      },
+      {
+        "kanji": "姉",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "chị gái",
+        "examples": []
+      },
+      {
+        "kanji": "漢",
+        "jlpt": "N4",
+        "missing": [
+          "examples"
+        ],
+        "current_meaning_vi": "Hán, Trung Hoa",
+        "examples": []
+      }
+    ],
+    "examples_needing_human_review": [
+      {
+        "kanji": "日",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "今日は日曜日です。",
+            "reading": "きょう は にちようび です",
+            "meaning": "ngày, mặt trời"
+          }
+        ]
+      },
+      {
+        "kanji": "国",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "日本はきれいな国です。",
+            "reading": "にほん は きれいな くに です",
+            "meaning": "đất nước"
+          }
+        ]
+      },
+      {
+        "kanji": "人",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "あの人は私の友だちです。",
+            "reading": "あの ひと は わたし の ともだち です",
+            "meaning": "người"
+          }
+        ]
+      },
+      {
+        "kanji": "年",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "来年日本へ行きたいです。",
+            "reading": "らいねん にほん へ いきたい です",
+            "meaning": "năm"
+          }
+        ]
+      },
+      {
+        "kanji": "大",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "この部屋は大きいです。",
+            "reading": "この へや は おおきい です",
+            "meaning": "to, lớn"
+          }
+        ]
+      },
+      {
+        "kanji": "本",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "本を二冊買いました。",
+            "reading": "ほん を にさつ かいました",
+            "meaning": "sách, gốc"
+          }
+        ]
+      },
+      {
+        "kanji": "中",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "箱の中に手紙があります。",
+            "reading": "はこ の なか に てがみ が あります",
+            "meaning": "trong, ở giữa"
+          }
+        ]
+      },
+      {
+        "kanji": "時",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "七時に起きます。",
+            "reading": "しちじ に おきます",
+            "meaning": "giờ, thời gian"
+          }
+        ]
+      },
+      {
+        "kanji": "行",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "毎朝学校へ行きます。",
+            "reading": "まいあさ がっこう へ いきます",
+            "meaning": "đi"
+          }
+        ]
+      },
+      {
+        "kanji": "見",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "テレビでニュースを見ます。",
+            "reading": "てれび で にゅーす を みます",
+            "meaning": "xem, nhìn"
+          }
+        ]
+      },
+      {
+        "kanji": "月",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "来月東京へ行きます。",
+            "reading": "らいげつ とうきょう へ いきます",
+            "meaning": "tháng, mặt trăng"
+          }
+        ]
+      },
+      {
+        "kanji": "生",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "日本で生まれました。",
+            "reading": "にほん で うまれました",
+            "meaning": "sống, sinh ra"
+          }
+        ]
+      },
+      {
+        "kanji": "上",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "机の上に本があります。",
+            "reading": "つくえ の うえ に ほん が あります",
+            "meaning": "trên, lên"
+          }
+        ]
+      },
+      {
+        "kanji": "金",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "金曜日は仕事が早く終わります。",
+            "reading": "きんようび は しごと が はやく おわります",
+            "meaning": "tiền, vàng"
+          }
+        ]
+      },
+      {
+        "kanji": "学",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "毎日日本語を学びます。",
+            "reading": "まいにち にほんご を まなびます",
+            "meaning": "học"
+          }
+        ]
+      },
+      {
+        "kanji": "子",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "子どもはもう寝ました。",
+            "reading": "こども は もう ねました",
+            "meaning": "trẻ em, con"
+          }
+        ]
+      },
+      {
+        "kanji": "下",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "かばんは椅子の下です。",
+            "reading": "かばん は いす の した です",
+            "meaning": "dưới, xuống"
+          }
+        ]
+      },
+      {
+        "kanji": "来",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "友だちが家に来ます。",
+            "reading": "ともだち が いえ に きます",
+            "meaning": "đến"
+          }
+        ]
+      },
+      {
+        "kanji": "小",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "小さい犬が好きです。",
+            "reading": "ちいさい いぬ が すき です",
+            "meaning": "nhỏ"
+          }
+        ]
+      },
+      {
+        "kanji": "山",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "山の上は涼しいです。",
+            "reading": "やま の うえ は すずしい です",
+            "meaning": "núi"
+          }
+        ]
+      },
+      {
+        "kanji": "話",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "日本語で話してください。",
+            "reading": "にほんご で はなして ください",
+            "meaning": "nói chuyện"
+          }
+        ]
+      },
+      {
+        "kanji": "女",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "女の人は駅で待っています。",
+            "reading": "おんな の ひと は えき で まって います",
+            "meaning": "nữ, phụ nữ"
+          }
+        ]
+      },
+      {
+        "kanji": "書",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "宿題をノートに書きます。",
+            "reading": "しゅくだい を のーと に かきます",
+            "meaning": "viết"
+          }
+        ]
+      },
+      {
+        "kanji": "先",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "先にご飯を食べます。",
+            "reading": "さき に ごはん を たべます",
+            "meaning": "trước, trước tiên"
+          }
+        ]
+      },
+      {
+        "kanji": "名",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "名前をここに書いてください。",
+            "reading": "なまえ を ここ に かいて ください",
+            "meaning": "tên"
+          }
+        ]
+      },
+      {
+        "kanji": "川",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "この川はきれいです。",
+            "reading": "この かわ は きれい です",
+            "meaning": "sông"
+          }
+        ]
+      },
+      {
+        "kanji": "水",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "水を一杯ください。",
+            "reading": "みず を いっぱい ください",
+            "meaning": "nước"
+          }
+        ]
+      },
+      {
+        "kanji": "半",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "一時半に帰ります。",
+            "reading": "いちじ はん に かえります",
+            "meaning": "một nửa"
+          }
+        ]
+      },
+      {
+        "kanji": "男",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "男の子は公園で遊んでいます。",
+            "reading": "おとこ の こ は こうえん で あそんで います",
+            "meaning": "nam, đàn ông"
+          }
+        ]
+      },
+      {
+        "kanji": "電",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "電車で学校に通います。",
+            "reading": "でんしゃ で がっこう に かよいます",
+            "meaning": "điện"
+          }
+        ]
+      },
+      {
+        "kanji": "土",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "庭に花の土を入れます。",
+            "reading": "にわ に はな の つち を いれます",
+            "meaning": "đất"
+          }
+        ]
+      },
+      {
+        "kanji": "木",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "公園に大きい木があります。",
+            "reading": "こうえん に おおきい き が あります",
+            "meaning": "cây, gỗ"
+          }
+        ]
+      },
+      {
+        "kanji": "聞",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "先生の話をよく聞きます。",
+            "reading": "せんせい の はなし を よく ききます",
+            "meaning": "nghe, hỏi"
+          }
+        ]
+      },
+      {
+        "kanji": "食",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "毎朝パンを食べます。",
+            "reading": "まいあさ ぱん を たべます",
+            "meaning": "ăn"
+          }
+        ]
+      },
+      {
+        "kanji": "車",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "車で会社へ行きます。",
+            "reading": "くるま で かいしゃ へ いきます",
+            "meaning": "xe"
+          }
+        ]
+      },
+      {
+        "kanji": "火",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "火曜日にテストがあります。",
+            "reading": "かようび に てすと が あります",
+            "meaning": "lửa"
+          }
+        ]
+      },
+      {
+        "kanji": "読",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "毎晩本を読みます。",
+            "reading": "まいばん ほん を よみます",
+            "meaning": "đọc"
+          }
+        ]
+      },
+      {
+        "kanji": "友",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "友だちと映画を見ます。",
+            "reading": "ともだち と えいが を みます",
+            "meaning": "bạn"
+          }
+        ]
+      },
+      {
+        "kanji": "休",
+        "jlpt": "N5",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "日曜日は家で休みます。",
+            "reading": "にちようび は いえ で やすみます",
+            "meaning": "nghỉ"
+          }
+        ]
+      },
+      {
+        "kanji": "会",
+        "jlpt": "N4",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "明日先生に会います。",
+            "reading": "あした せんせい に あいます",
+            "meaning": "gặp"
+          }
+        ]
+      },
+      {
+        "kanji": "社",
+        "jlpt": "N4",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "兄は会社で働いています。",
+            "reading": "あに は かいしゃ で はたらいて います",
+            "meaning": "công ty, đền"
+          }
+        ]
+      },
+      {
+        "kanji": "田",
+        "jlpt": "N4",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "田中さんは先生です。",
+            "reading": "たなか さん は せんせい です",
+            "meaning": "ruộng"
+          }
+        ]
+      },
+      {
+        "kanji": "買",
+        "jlpt": "N4",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "スーパーで野菜を買います。",
+            "reading": "すーぱー で やさい を かいます",
+            "meaning": "mua"
+          }
+        ]
+      },
+      {
+        "kanji": "駅",
+        "jlpt": "N4",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "駅で友だちに会いました。",
+            "reading": "えき で ともだち に あいました",
+            "meaning": "ga"
+          }
+        ]
+      },
+      {
+        "kanji": "飲",
+        "jlpt": "N4",
+        "reason": "Example meaning repeats the character gloss; sentence translation needs human review.",
+        "examples": [
+          {
+            "word": "水をたくさん飲んでください。",
+            "reading": "みず を たくさん のんで ください",
+            "meaning": "uống"
+          }
+        ]
+      }
+    ],
+    "stroke_count_mismatches": [],
+    "n3_dictionary_fingerprint": "28e5bf5ff465177647727078e63e6bdbfa635eea16072bc58e520cd606b875f4",
+    "n3_strokes_fingerprint": "f9306243795c446239a712cfdedb429d40300209610427883e17fa86df28e3f8",
+    "completeness_definition": "Nonempty Vietnamese meaning, at least one On/Kun reading, positive stroke count; all_fields also requires an example word, reading and Vietnamese meaning. Populated fields do not prove semantic correctness.",
+    "merge": {
+      "added_characters": [
+        "一",
+        "七",
+        "万",
+        "三",
+        "上",
+        "下",
+        "不",
+        "世",
+        "中",
+        "主",
+        "九",
+        "事",
+        "二",
+        "五",
+        "京",
+        "今",
+        "仕",
+        "代",
+        "以",
+        "休",
+        "会",
+        "住",
+        "体",
+        "何",
+        "作",
+        "使",
+        "借",
+        "元",
+        "兄",
+        "入",
+        "八",
+        "公",
+        "六",
+        "円",
+        "写",
+        "冬",
+        "出",
+        "切",
+        "別",
+        "前",
+        "力",
+        "勉",
+        "動",
+        "北",
+        "医",
+        "十",
+        "千",
+        "午",
+        "半",
+        "南",
+        "去",
+        "友",
+        "口",
+        "古",
+        "台",
+        "右",
+        "同",
+        "名",
+        "味",
+        "品",
+        "員",
+        "問",
+        "四",
+        "図",
+        "国",
+        "土",
+        "地",
+        "堂",
+        "場",
+        "売",
+        "夏",
+        "夕",
+        "外",
+        "多",
+        "夜",
+        "天",
+        "女",
+        "妹",
+        "姉",
+        "始",
+        "子",
+        "字",
+        "安",
+        "室",
+        "家",
+        "少",
+        "屋",
+        "山",
+        "川",
+        "工",
+        "左",
+        "帰",
+        "年",
+        "広",
+        "店",
+        "度",
+        "建",
+        "弟",
+        "強",
+        "待",
+        "後",
+        "心",
+        "思",
+        "急",
+        "悪",
+        "意",
+        "手",
+        "持",
+        "教",
+        "文",
+        "料",
+        "新",
+        "方",
+        "旅",
+        "族",
+        "早",
+        "明",
+        "映",
+        "春",
+        "昼",
+        "時",
+        "曜",
+        "書",
+        "有",
+        "服",
+        "朝",
+        "本",
+        "来",
+        "東",
+        "校",
+        "業",
+        "楽",
+        "歌",
+        "止",
+        "正",
+        "歩",
+        "死",
+        "母",
+        "毎",
+        "気",
+        "注",
+        "洋",
+        "海",
+        "漢",
+        "父",
+        "牛",
+        "物",
+        "特",
+        "犬",
+        "理",
+        "用",
+        "田",
+        "男",
+        "町",
+        "画",
+        "界",
+        "病",
+        "発",
+        "白",
+        "百",
+        "目",
+        "真",
+        "着",
+        "知",
+        "研",
+        "社",
+        "私",
+        "秋",
+        "究",
+        "空",
+        "立",
+        "答",
+        "紙",
+        "終",
+        "習",
+        "考",
+        "者",
+        "聞",
+        "肉",
+        "自",
+        "色",
+        "花",
+        "英",
+        "茶",
+        "行",
+        "西",
+        "見",
+        "親",
+        "言",
+        "計",
+        "試",
+        "話",
+        "語",
+        "読",
+        "買",
+        "貸",
+        "質",
+        "赤",
+        "走",
+        "起",
+        "足",
+        "車",
+        "転",
+        "近",
+        "送",
+        "通",
+        "週",
+        "運",
+        "道",
+        "重",
+        "野",
+        "金",
+        "銀",
+        "長",
+        "開",
+        "間",
+        "院",
+        "集",
+        "雨",
+        "電",
+        "青",
+        "音",
+        "題",
+        "風",
+        "食",
+        "飯",
+        "飲",
+        "館",
+        "駅",
+        "験",
+        "高",
+        "魚",
+        "鳥",
+        "黒"
+      ],
+      "applied": true,
+      "backup": "E:\\AI\\DACN\\backend\\app\\data\\kanjivg_strokes.json.bak-20261125T110128428602Z"
+    },
+    "dictionary_sha256": "e2f2c9cc933e2d442262856d967d947a42d8513f010bbb98ec3bd6c618c3bc3e",
+    "strokes_sha256": "b493b4b98d08d1cd3a9e9b929cb2987d04bdedb05c860e414c3c864145bd761d"
+  },
+  "repair": {
+    "preview_changed_entries": 0,
+    "applied_changed_entries": 0,
+    "rerun_changed_entries": 0,
+    "dictionary_bytes_unchanged": true,
+    "existing_validator_before": {
+      "total_entries": 612,
+      "valid_entries": 612,
+      "missing_metadata": 0,
+      "duplicates": 0
+    },
+    "existing_validator_after": {
+      "total_entries": 612,
+      "valid_entries": 612,
+      "missing_metadata": 0,
+      "duplicates": 0
+    }
+  },
+  "official_kanjivg": {
+    "repository": "https://github.com/KanjiVG/kanjivg",
+    "commit": "9d7220dfca09107dca2e0b0e45f90f696185e3c3",
+    "commit_date": "2026-11-18T00:55:10Z",
+    "download_date": "2026-11-25",
+    "archive_url": "https://codeload.github.com/KanjiVG/kanjivg/zip/9d7220dfca09107dca2e0b0e45f90f696185e3c3",
+    "archive_sha256": "d72cc091482dce754e57e074eb0755d0f056f2bfae22369c20805c06fbf42ba2",
+    "selected_svg_sha256": {
+      "日": "e2b461dad3b8c2a7bb1a5b9318e83d90f44d9f62d903d4a27e5992e6469773b1",
+      "一": "3dd10544e685a2e06184ca52ac2df5d881d4b92b566b94ada976f48d9e3625e4",
+      "国": "20a5b306d0a2684fe593681caeffd62e312d863c7f4d9d4c4a65a7cbf284e5f0",
+      "人": "0022556d593c1edf00e707f9c0bca1f1b6a531cf0a3a95ccade8931c31b4148d",
+      "年": "b001e2335b27a552f46597258d9647d91d5c1566d9b2cb9e90fad8f34ab47a48",
+      "大": "f0c66786a7c60ef02d7309ff90b4580c3ed0034dc629cedd0f4e2e5c06549eac",
+      "十": "3a949bec637d519d51c89d2720cc4db11d7e645f4573b93aee8ecf0e316e9daa",
+      "二": "1c7d7dc8debe863606adc2669eac3daf0adc17b10442bd3d370a0c2697dc52a7",
+      "本": "5b8f91858d37c8b97c9c81e8e1f60d039af2110492d65bc58af156e0a8215528",
+      "中": "535eced72b855b9c9a9b9817c438ca2c14f82352b83e137080e2e645cd3cf282",
+      "長": "c9e0ad6d0c686f443d739de74b68b3c799c7361a6087e0157eea162769c3f918",
+      "出": "c6cb016234623dcd9432384bc924023f406cb35df2e520e0eb877dc3035958f2",
+      "三": "0dbc281bfc51519d2f720e2c105708f4a522951c90209854352a7d2ce221cc85",
+      "時": "60cf47d21e23a15ac8f9c83603e1789be9a3a4e37371f8f5290b0f170973ec6d",
+      "行": "d2b00d9b528cf08c7c9060a58f26ddb153e02f47dd5af763cd3e1b9ee0a42974",
+      "見": "eecab39e4cb65d1711d3e1e431dcc427e9fee9cafea8af259defe1568ea3c3a9",
+      "月": "c577d9e0fb74f01e63ebfa111c1f29834808d375391e32c2a7e0ee8592ae5524",
+      "後": "0e020bd9a1c567fcaa257fab34653fab47e5178e92365741dfe572279ea0bead",
+      "前": "a01c5bb3a33046d85bb73147ecaa0eb06e9281636643e775846412593d1175a9",
+      "生": "fc70c42a1aae5583dfd13c497b8d271b4a7c494b106f8e6b5543cbc54441bb05",
+      "五": "54867e1083d44b300f1e9d15731da6872100b1d6740ad0c6598be9d5e166bb4f",
+      "間": "150c46920c85cea9b2537bdb6ac4241c778bd11be2a04e59e80729ccdb58bdfd",
+      "上": "cb85f5459cc82cbc900c3fee78a1a419b4b910cbd9816da2d1424419de3cabd2",
+      "東": "aaa70bcb9f9bf30a391d2db7375f71e8e76e705cc3846b29125d3de2a271eef7",
+      "四": "07c7af14bb2bb4c13c14800985cdcf155d400b87a75e5bb198d0b574612c08b0",
+      "今": "c2fbf55f7fe19213cc77b37ef74eef697871286851b155e9e0df5fac0d06aa1f",
+      "金": "cc6324e83b4a751cb04050ca604571141e6ec3612ad83bbe2f05ef01864876e4",
+      "九": "97db699c444567dcf88a886b8b6f58cf254f6880a9592d7404b04049dc6d8cf6",
+      "入": "8643a6c320d581a984a9b1a4eaa7e70f6b83eb24186dbec72ad2aef581166c2b",
+      "学": "57ef5295a6f44d63fa45a33654bfd4be0b53a9d3a7204e86531ed9fb47af8a65",
+      "高": "df40e38dfaae0205dff69c2af404851a9b5d4806528453d481aa0b17099c5107",
+      "円": "ebb1cbfc799c651ddeca0f1c63c4de383a725b6a5f1b9546fbf62b5826926a31",
+      "子": "02136167c108ed7e455e2708e01cd0ea4b89f69235cc95aac32bb0573cc0a509",
+      "外": "e0c7247af84ffa5198c97258a63fdec6c097530ea7698525452eee8c9bad5bc2",
+      "八": "e40349b20ec3cec35690079ea3cf065d69eceed283eb53c064a7714d1acc4109",
+      "六": "ed25f8296125b2d214d839f42ea344f5ae20b0aa1f770af2e57f625a22c5b4e1",
+      "下": "93c13f7be9580adf48424c6578ac58e466e9f16bca819514a07224ff4e749603",
+      "来": "f08da7f5b75d490dd33a0970563cfe9028e467f7335e773ea826762a9822e702",
+      "気": "4f1c90f7afbe76df62a58561155f35eea077f53b45d3914d04e368ffa2044702",
+      "小": "152a9d3087c441df1dbdc21bf4b1e81938f51cd3a8215b03827d079db18abf09",
+      "七": "244906b59477278c19d376a10eab20c3b0894b3c990717dee0016a0efc22e30c",
+      "山": "c6ad6253f1fcea28fd991af0e23c2ffe95858d073a03ea46354dc39516ad7aa7",
+      "話": "2a4556d82072466aa35680e76752beb9273c62f615699606465ee459044c0494",
+      "女": "79adc4f6cd011ebb732b87163f2dbaf093e520f5a7349398bd4fe7f0716d0b89",
+      "北": "8b17232253e1a6f62d29893809676314bbe9d731a9a8b6cca0075066b3530eba",
+      "午": "1a95d745d17f7c723f9aa78e53c411b5b6a5cd4f22f51130a389e5e5f50fea66",
+      "百": "41acf79d8c26d02c8db6079c1078bc3a629389516b4910bd60b724be98f6e0ac",
+      "書": "4b771a57c822da59aae610b765b66c71b878e93bf84750bda5e82e7ef0491b9f",
+      "先": "09bcc04c66b2ad589dc19bfdbb256da81bd8b04d86fc206cf515b784b5d5914b",
+      "名": "95574ac3cdfacbde4eca7627564ea855b6cd5fa4acc87a4d6260aa7448372bf9",
+      "川": "316788cc05f0516017c55e9bfa1d61b20e3fd5689f9e48e1f372cba212ae4bc5",
+      "千": "2fe3ac7cf3f0223fb23a273fd43e38ddccbdc286cdc556fa97eaf4db3cc8c287",
+      "水": "17025cc265555ea3172b361fee740e58f178c7ed61fb7d1c7124175358f2d41e",
+      "半": "097f245bdc2aec70b684b196b6cb16b9f0f4f0bbcec8aa5a6ea09a9a74fb5173",
+      "男": "d817d29345fa070ce0d17e0533f8bb0b472a87c7053c46898f99e2875a220d50",
+      "西": "db0df9726b81202a040f3c8e550528b19336fd34f75820c58010fe985274193c",
+      "電": "ae00c7f1dd52a61d40f507f257bf400fc21aabcd52675a83d412930feebab92f",
+      "校": "b3a22720ca44fe8389062bd550cf4a83b8cc6847948a44f5d7c63c1bba86f4ea",
+      "語": "d6cfb91c7a71ca3886ec59ba01ba48b975973e1256cfbfc1769b75b44d2dfd8c",
+      "土": "6f0d45e15f06fe5e9a0748d852d3c5a3c88b26852e1afc04c721424cd6547ea7",
+      "木": "8ad9a1fa18fe9d0910db9686e7b05f11784650b46aec4795ac67696cc5197acd",
+      "聞": "57845cec420c337f86522e2b4a7284a5cd8c10796254f7f161d0a6453fc413df",
+      "食": "9ee066677123fa15fcdc3591525c1da90f9a14aaee57d4a56d31c9fb3270a94c",
+      "車": "1b9d847cf86b897afd0bf64a73e9b7447784ef1f7a39e253dca61b0f6ad7aac5",
+      "何": "c4cb0c8ff921fed54ea1e05a328a734822db7783ba28aa50770369e8251b713b",
+      "南": "bafb63f54269f2f69a83aaa2cdb4e57a697bc6091048c6d0ce751bb5414c6947",
+      "万": "f039e44492dcebcf243dad793a9c78e649e1851edff06e7125445629dca1ff98",
+      "毎": "8c7eeef5307f7a675c3f6510b6609d94741751b2d18d6de2cd1935ec962524f4",
+      "白": "8f6de4d8ca1c7811afc753446676b07ec7c6a0f71e4c31c185d748f0d9bcccb1",
+      "天": "20f9589bc78b152cedb87c7c6cd331a467563705ee884294e0aff2aeea418458",
+      "母": "346eedcb7b96c79f7e62feb3736a26173c5c54682a16cd8aee5d7cd21d6dbb5a",
+      "火": "ad5412383753877b4428557883ccc19b6c70b1128a06168d49ad20e31ed645a2",
+      "右": "0f188c7909e6e7dfc21d92879e758c59cbfad3423442cf199006dd42f106f46f",
+      "読": "f4969a80b133b1112eae12993b6dc3b7a70a43d6db07c233c902dafaf19c2593",
+      "友": "09bead7c8b7d5c9f448f22acfadeb4e0b759d00f8b9bafdcc2c0b5ea6559265c",
+      "左": "bb3e586c365b459adebfdfbdec655aad8625811d8f375471087609836fa9405b",
+      "休": "be956019696c26e090b62cc30f9eeece24cc6134bbc4282ca6d7754a1d3c73c1",
+      "父": "39f573b54ccee3d93e392f862835453160d730504f92021c7a4ca8d6afb7476b",
+      "雨": "040a7401a82f5408f63dbd0cdab266b8229940768a22f628d35dbe736f0235a0",
+      "会": "9736942c2647fa9d4f926d56a82eab813165a2e64c32820f566513a00a70e2fc",
+      "同": "08be9b98414c8211184bd0f514780b3dae9e18099d467c1b6178926c0d41ca2e",
+      "事": "b6de1e49618c815234fceef5f84be8d16b42cb65d1a874726d9715022836b774",
+      "自": "ac161a62094277640b9dd24ec0c1f6e4d261c92708f4c81eca17651efd1774bc",
+      "社": "6546de28b743a423685292e19810a3de7df1dfef40f4161a6c2647e9befb3cf9",
+      "発": "941a3681b68349d60ce6caf5190448de343b0e0bf2309b044b8d03d1d0b76064",
+      "者": "bccf1fa1ac637367e3977128c31f576f566c575328fe9749ee24e5e0af4ceb04",
+      "地": "6be3bf63f420c707564bab1899c9435ce80df10b7bb51062829a45fdb8aa744e",
+      "業": "a3fac89c9e878e9c4c26ff710f10480157ed7c320b65d5fe9940c07211a23581",
+      "方": "40c9fd1fbf7be044b070cb71c1ea3346a3376ee57dcd5fc2ef0ca0f509df5bab",
+      "新": "0d3756e07992db131f74953b4f66159b9a0949d5853b12d0de28680a6ba3b60e",
+      "場": "a962b951a431e3090aa6a216b3fbee41eb7e0e75b059256ff77b6e970c96aea1",
+      "員": "aba06bb5aed8395ef176416200dde2fe360b556aae53b452c8e2501a3b61b945",
+      "立": "8340ea8711a57002db3dc3dd04d4d64bf3e7e93d9119c1d95565fbf38fb533c2",
+      "開": "d6629be86e03fd326004d1a07f316c7db1a346bf6a0689816039cd91ddfa1f12",
+      "手": "820e19f791de9706c6415d58c35a8e6f65504e25030fdf090367bb217d902c96",
+      "力": "07845a7eac68561725ab6809db657712e03d16ff9d9167f1ee2955f843e46604",
+      "問": "ecd6c690c55d80063cb022b1942f805789a5a1e3ff7979cdb5d8e21307e234ec",
+      "代": "6b6ee3128425e9d6ee9329f941b2af884968b7dc90d3b36cc232b00784fea263",
+      "明": "e1e9ab7d4f47c182b4efb1a1a8a61d93cf746f6059501d9bfac7d341b184c2b1",
+      "動": "79b850d575a751c4d81dbafcbe817959bf4e60954697ac6b78ac21cb293c8264",
+      "京": "362a4202bec59bd0a4889e8d5f132ef26d1389052b416d168a189306af8c8813",
+      "目": "bc6761841e02e02698b3dd7dfa203fe2754f2859f67dfe50160ae9fdeb9bd39c",
+      "通": "7a3131ee562b0dd45cc7fdb67f459893be5903ca332c5af49725cca8658874b6",
+      "言": "f513df57cb749bf94273bae6ced3eb14aa2bee3b674c4d07d83436b25a451f9c",
+      "理": "f804679ed50089ddfafadfbca654a6b194253ef17db8e827cdd275039a984cef",
+      "体": "4cc244e39dbf1e87b26a41c95123f91123146b15fdba5006e2945216e79c902a",
+      "田": "a8c1dcb2c170383928bb9748ecd837dbcd0636d12d2e5d5f2f035755e1762d14",
+      "主": "561341d011b3c2bdd624bbe29ac33ed936b2b6f11f150a1321ad0167289659ea",
+      "題": "786e4e10cea55cfdf409e7f0b143e7323d706aa939eb8c6675a038b914aede7c",
+      "意": "4e7375cfe52348e2a990d509c78f3365bc6ca0c757e0aa01b82c129a7f769412",
+      "不": "7ecc3ad426895d475259387af52c2d35ae2a1fecaf9a1b9cb082219cb5f430c2",
+      "作": "1ad2ec20c7b38c608c887b15bfcad9a2528b5b265e52f54e5b2a6a9b0489f769",
+      "用": "e2ccbf34344aeee276f761a4cc9ddc17e9e130556834ac97b4c91e05f893444b",
+      "度": "f761e1aaa2c48d25d0ad399bf6775cd7348a1a79953ef21391655b9cf3939375",
+      "強": "c6af24f7600ae60f676fb0ac76766fcf068973fc7600b5a75c28ce7b8f46c4e0",
+      "公": "03d84e8a58682e64d7afd7d4883de5cb2d59b8c7705b64f16b0ea735bb631e0c",
+      "持": "5b603a2df64d2749c7cc53aad7323425f9786a1afd0cfcd58152e64fb5123980",
+      "野": "849fde5b34b6f03f741c9e17414bc2d56cfda5d03493c0cbaa67da2f437278e9",
+      "以": "ccfe8885d1f1343651ac4be5addeeb7b661ab6184029fb9ddedf32962b5bcf21",
+      "思": "fb848f8214527a4b46082707b98ef0f5beb4a04b9c36161091840c06c7c1950e",
+      "家": "79bafc1906d57df8159392978a4433dd848bfc2cb85895422bd45a5cb71f7545",
+      "世": "0c73c5162696ec4d0ee0cc59d46b746c530023a7b5eea55b04e644c2657288de",
+      "多": "f19d04500c08f4f4fa5722dc772ad3a1c0b6eb83799ed8fedfdb689d23779df5",
+      "正": "0ec3a6e96361b0b0db81c4108d9c2d558586cd0670247530781205f1b9bbe77e",
+      "安": "2dff2e544150fad00e69b90ab25fa02e65324fb0ac31e40e1fd11bfcba8a4e4a",
+      "院": "018631e4f64246b5e40fc764762d0b67b4a5f8927e597faff449184dd68a5361",
+      "心": "7e06cc5f69fa75df1b5ce6790883a4b19b9a2964d68552d5c9eb1c511919dc84",
+      "界": "b926dd4b804479ba1d37dc095a9db76d28a4e5f3271145e94144a97a9c1770fa",
+      "教": "ab2a7bbc05b7f360a3da715013455aefa6159a805b2ad0354847175634338e4f",
+      "文": "74b878d1bc745809fc934c844cb133d45033f2dbfc830a6ae93add652d8846c6",
+      "元": "2bde17eeea4ccfd52b4c4e82d2541d77079cdb7c2a037f56d365c60337a458cb",
+      "重": "3297224b234e7565384fad12a9839b21ce767df5e7907c4b968fce9bae06d32f",
+      "近": "bcc4f0dc752289d42ffc49d12cf03df1f21c761df7fcf088f0e3a33075f5a3e5",
+      "考": "168ab450b5bcfb5b179e426458021789ad1e1b585b2a1ba82891c706d33e87cf",
+      "画": "98cde14d87526eb240debd2eee89796a9dcb7f56be107cc917463dfa7fbf9342",
+      "海": "86800497691d6d66e7009be9acf574ad65b20fa915e102df8453c2b12c7af31c",
+      "売": "69874b80d9e6211394ed923e74f89d49d0df74272d8d07b86765cf4b83766175",
+      "知": "6bf0fac36e4ac08fbf03bb1a341792d1a4600e4dd05434e078212b811d6d76af",
+      "道": "826fd1adbf301491c5c726fedb4d3dec4089760dd40a6824c83403f0c4b86418",
+      "集": "6a8bdff0ff079f5873767aff7a7512ac13f097d53e69f7d3e13ec7f67fafeee0",
+      "別": "ee1d9b8b0071de73d6feb7a58ec09cfcb777c025aa64239e29533bcf61c7a4dd",
+      "物": "b2b2f030cb11f15b16a6b152d811ff1cad1348f82cb32a7768f37dbbc99f879c",
+      "使": "b8cb4df515c6257c1a43810d09acfa8dd0797dd353bba9ae8c9fb94759a46c33",
+      "品": "cff55162576da9e9c76cf9abd2eaba5b5313421d7a27c99a421dfb6e7b182f15",
+      "計": "88308401083ee34ff85589bd571d52df5576d8b444fa9bedf959c081f7413922",
+      "死": "934c3c2726ce8a72994dca62b9f46bde64facbb0ef004da169965d8a35713282",
+      "特": "055cde169114d3916b85580affe8d9d73f93a775a80915af904b9380141e4946",
+      "私": "be68dfcd8e44131172176ab53f2923ff297eebb5b4290892cf55fc54fb2828c2",
+      "始": "c31cbcf53c5f1130e55f621879c752e93122989ceb27af64d960f0c4f6b621a1",
+      "朝": "d689b0a41246dd43af760b1040c1a1c12169a89c7b5dae341c86e0c3e9351b53",
+      "運": "b6f4c2f0f67f4fd10631390bd1e2960cf248d4e26bf2933b03dfc0520409c0ff",
+      "終": "7c5bc18d7fb832e1cbc00a79dfce2f3f8928688ef31ab39feea84637acbd1bfb",
+      "台": "c86194fb445fb591ef40a67dfe76c4fa09caaf13125d1911c91332d9f4b4fd0a",
+      "広": "9bf2162c4c26889bb5ae598f616f6ee6703fee06a7b95d5a4855c7dd829307ba",
+      "住": "d8d64e79830d95d1a09bd3bfffbcf08c31899b0ba99d815fb55b2332742d28ed",
+      "真": "cf8ffd6d1999bcf21c38ebc44e0edbd4bf69b928093a53f0b363ec2ec39a52ef",
+      "有": "6d5e8d3a95b531bded8c2dc2c1e1255e8796248d56dcc61e5326121081eceb72",
+      "口": "4b0e8e8dde56d671ea38c2ea68a1aa57c301b127ee9c65151914858881b5c929",
+      "少": "11b32e43f7f04a8848e8d2ac02d2f5bcd35219471fbade388e7606a50abcda61",
+      "町": "72b974aa29d61cfdb76abfffb22e35eb4a8d242e47c9e9954c7da7cf40cb17f3",
+      "料": "8bd0b188515b38bc084659c35da0de63a17dd525dc837497cc66015139390a3c",
+      "工": "20962223837ef8cb29c502af08890a46b03b4c05f4eaf0fcb22f646131cc3eae",
+      "建": "7e05f0ac6b2c9d159adfc157b6dc9ebf6d57ebeb7c1c1484a1e67d0582bf433b",
+      "空": "c2613d7b8db35b9ad053b9708dd6888af9abe2bbe3ce09dd5ceca322fd6d8b21",
+      "急": "9aa0d0498fdbb592be8c632b5ca4afe5356a2011e6090ab492f73c3abd118e4e",
+      "止": "6bd16b9c02e70602513d28fe2692f4f936916fde7054f7d0fd060118ecf197e4",
+      "送": "35a793164043c5461b43aeb0c0a026b37b314b759e59d8449ae8b82f5c37ebfd",
+      "切": "fa1771d6350694c6dd7f216287d18bc2c6d7525c49332b9de5d73d08c425304b",
+      "転": "574dbe90712aaa7419bc0ddd5692f46fce74d9ec887cb7ac93c21e1652c41f84",
+      "研": "c9da2503dab203db59c70e9acaaa955cd60ffd9e92508c44f9a9e2e22d7daac6",
+      "足": "db49d20e4112092b60262b50398fe3280aba23222f3ef5132c068f588f072f08",
+      "究": "f88b92cc9b4602892987ca8f78370a6835cde938e4b3c5aa29eeffb652a26215",
+      "楽": "3609c90ff0f26f143df3576d1bc4751b627a1674e904a7e0385e2f420ad49ae8",
+      "起": "4a63a1c2792f5ebf798d4912320112d6477362a88929f54c2137fbbc111f3286",
+      "着": "be83b46eada56c8ae9aa9253a510c1f24da241c5d3309f7880de4cb43a820a62",
+      "店": "86de6ccfd4c835a9840cfd5816cf4ba318266bce0a064a24bb8b9d310909d6a1",
+      "病": "1d556e128e02dc8940dc3aa7550405dba23ea2e3412ae7ead3b07a31cb857519",
+      "質": "f2eadf3e2fca19e2cffe98b31333f2b400fb03e4e1f397510cc8240cb60e8c68",
+      "待": "b033007c9f9419bf0ed047bd6d2241623951894401fda2ce2d63981a1cd6cde4",
+      "試": "079f198e6be6251b5022229cd7c590f2cf2c4e798085bad91774fc64a9ad9556",
+      "族": "1fa7f6414c7b0c3a9236f0b5b34ffd40a9ce3d7623180c59282a158854f26b0d",
+      "銀": "c5f7a23102c2785a03ec78bce44dc3d10ed8ba6f36c2ae1e06bcb45a451db6ae",
+      "早": "99752be82384cff050b13096f9e4633018749bcf757e4350b2f1bdca93055cf5",
+      "映": "5ed36e6da7584a5febd583797e4f6c8e8ec0dba9a5c8ac524234b96a707dbef2",
+      "親": "224f2680b122a583e9eeedc68f30083eff6b4db2422a6d1b4b143ff799bb604c",
+      "験": "e877ee46680238644e29712fba7294bb5c1ca9d529316235f0577a4ddb77319f",
+      "英": "a4b76c39c962b04ad53809168c19b4de7e8726849d239614f574125599187743",
+      "医": "63d666d8020ffae4224763658bb2bc3bce978618381df812d75970b0fcb4e04f",
+      "仕": "d26b28b31f810ab6d4342f953de386f14d9090e0f8dc49a3f49bdd7d48f7a61a",
+      "去": "845b5184a8fd19f59732b47a4f37e4fdbd86bd663b51916db1b732d68d42accb",
+      "味": "dd630c954ba6f8f980cd234b4d81fe6c919ceff28b2088e09f6d1d3106170ca8",
+      "写": "9ece6b94ed7b659a4fda77c0da5263ebdaf58d6ce4cefb223aca7292219f9e81",
+      "字": "a1142bba30e88b181fd2e84615d739a28d522e0b4cc1282cd4b72cd69c67255b",
+      "答": "3e02e5aa61a4a71fa5496b77a6ac981453d46b13d553778e46a765c4cdee50ec",
+      "夜": "fc1291925c603e8b18be06e8e29db64fb3f3f24aee2d4dd9283c399aa23b6913",
+      "音": "0c85bed00e828deb6531351d78d9e110ec4e2ebf30e8bf6ccfc5f433538127ce",
+      "注": "92a9040b68e3bba8cea8cbc869370fc62f19f69b23300f6ff7463b4ad2d48743",
+      "帰": "1f9b8d1092fccccd4a7e7e3012e185c8aa6578ca1e5dee46831a0bf4850bbe31",
+      "古": "a1233d4a91d3dc925bbc6976ae47a91dc414af80e1b36a8d53655b6391286aff",
+      "歌": "b967e47fe09040e4b13c6e4536c5f80edf128dd7023ef89fca7c557b742ddb34",
+      "買": "a8668adf6c3b9980249db2868131c4b8d4b563cb550266485d7c2fd30ee94cd8",
+      "悪": "474d5df9d244de814a21c13cfb49d0541527834f31c15f069e01f95729cca0e6",
+      "図": "4c438aa58a7d0bd135f80853585e346c672c019f6f9ce8f66632eea52de7ac15",
+      "週": "239b728acba4be8a77ce022a771a0ccd60fd83aee115e1bf8f8cb4b6bfb1deaf",
+      "室": "81d43ae2369bc9efeb6bb5bbbf79db7dc5e95c4b5b74ec0b03e2f0fe5ecd5dba",
+      "歩": "07c3e2c5d1ec1d702d08a5dda191fa2892970c09a239ffb764ded81d1922d3ec",
+      "風": "02478eab2942f4c015140219004583c2d742e07a5ca3b3df9e70e9136af01e9a",
+      "紙": "a2bcccb9ef66784f8ce9bfc499c19e122f5697fe4191334d536078b7d70863ff",
+      "黒": "441bf7cb833ca862b3e42e32bb6001882aa74a46110bb5fc529e6a6cff473ac5",
+      "花": "b5bf5496057c317fd2abb7954fe60abd194e5dbea2bd7a614db5290106aa129d",
+      "春": "ccfcb1078454ec788cc446799ef9ac94df23967135511338920e24869cc3c77d",
+      "赤": "66a4d91976150acacc40b465554433504c3ddc8c795e24a84971c64b9aef6359",
+      "青": "d6b31f3d99989165e7bab430da299b594835a53b254c41725b5d7fb640c1540d",
+      "館": "bac064af3aed543d3ce70838e20fc3586dc56f781ab9d000d928fd40fb497edd",
+      "屋": "5d92b151a2a1356ecd98877db6ae713b9354fd78442368aa041c15ecc09a6d86",
+      "色": "ccc1b9aaf45541b65fe016709172b019a35171ccb79b6cff37534487c05688bc",
+      "走": "31cd8d2c00b9a9c7d21e9de8557bbfc06f3ee4954bef872ffd049b63fef637ff",
+      "秋": "23babbf0a3a699a3cd39a7430114dd8719ef39ba1080c76047f9dc2a3deb20be",
+      "夏": "53f07682d2f3f38ce50e29760cbd89d19e5c9d1972e7ffee1b1fda344504372e",
+      "習": "9a3c1ab0cd36afd7330f7363e8cee1ee14015d9097bd1caf798039833408d131",
+      "駅": "a3eec84d7f07d22db7b6f81725ddb52d1a1395b8fb25d5a93d910ed83731e559",
+      "洋": "56f8558a94a7fa9f72e68e8448f55e03823531dd45bc26b527c9abcb0ee364f5",
+      "旅": "7ffb39a1836c331148e0801330bfbe069596563c71cc8b93ad547731be8721ee",
+      "服": "ad9b2835cd6b5606187a69f89a72f50ace23f4f0f2fa2b317c61ae0d8b85776e",
+      "夕": "220b9fdf16598009b3beec395ca85a954a700e09698b2193d953763f81b97b50",
+      "借": "cc0e0e7ec6ad894609eaa3e78c62857dac73c00cff07b51d576d1348006a1f44",
+      "曜": "23c11790523d53b5bf192850decedb73402fba0741ad71a21480eb83494d17e1",
+      "飲": "4dbcf59b66110fd64acd3ed596e261885f3d008ee93714d62b390da38e6c5e11",
+      "肉": "97e10574206a6ddee37fe46a80382569de611adf91d43e035d453598e66c5e9b",
+      "貸": "f29caef8f740536bb19ec080aa16f0b45bb0398c5cf9435129f367eff33155ae",
+      "堂": "f865df9c5f3468562b4499eadc0f8519a79934d9688028a75c2ecb005c8c8919",
+      "鳥": "7d9ec15c1367f8d385df4fd8395df4372d859c339242593fd9aa68a79d5ae761",
+      "飯": "c5e6577e0776cc7343654d28f6822a96ea1724f37aa7e0078f9808c25a05dbf2",
+      "勉": "9dc827e3415a3145c4205836b2ae2dd8d44c3e116ae67a02172365726a2e7de5",
+      "冬": "c40db54f4aa34c53bf1df279048f56680c269676bae9aa5f11c349af6d6a0e59",
+      "昼": "677d7fe1b78148c6ee177254e41ac602b5f938f864262055d88af2b278fc0ddd",
+      "茶": "20f9c461667b64c8c19ff4dd6d00543dfffeb7051f65cdb14c14cb70e5c57048",
+      "弟": "f65d13c1a640ef27155f2cab3108d0cffb672d171f8fbe004d0f44e7a4154639",
+      "牛": "b0b114c1cea342fb6d0c663afcb1bb18b12ca0c9091d1c86483b41fe3c0b433f",
+      "魚": "0a7a54a98df30902bbda2e46da145c9a55aa23faf9b3227781f10fec57bbf77a",
+      "兄": "08a0fbcfe9853c79ab57298f7967b24d19d3f8daebc595c44242a2165ba51cca",
+      "犬": "6a4dd08801e607b00e49905db253159c25c064445668d4463f49fe937dd616a7",
+      "妹": "c0974a91b53c6fa0b1d8ca9b20861639785d5a3844cbfad7532dfaf685cb2157",
+      "姉": "444a38c2c0b5388974a34ade760c365417e7866ab477e97eaab5cf11eb71a757",
+      "漢": "bd1cab9725913bff5a13e44707a8cebba3d81ff6b45a210bf868eb718d51ddbf"
+    }
+  },
+  "preservation": {
+    "existing_record_count": 378,
+    "added_record_count": 234,
+    "all_existing_records_unchanged": true,
+    "n3_dictionary_unchanged": true,
+    "n3_stroke_records_unchanged": true,
+    "rerun_added_record_count": 0,
+    "rerun_bytes_unchanged": true,
+    "local_svg_checkout_commit_unchanged": "1957802840a6f059d1e27dcb5755722955cc7dbb"
+  },
+  "backups": {
+    "dictionary": "tmp/kanji-n5-n4-20261125/before_dictionary.json",
+    "strokes": "backend/app/data/kanjivg_strokes.json.bak-20261125T110128428602Z",
+    "strokes_backup_matches_before_snapshot": true
+  },
+  "limits": [
+    "Completeness checks populated fields, not semantic correctness. All 45 populated N5/N4 examples repeat the character gloss and require human review.",
+    "200 characters lack complete examples: provide a Japanese example word/sentence, reading, and Vietnamese meaning/translation. No examples or meanings were generated.",
+    "At least one On/Kun reading is required. A legitimately absent reading class is not invented.",
+    "SVG files already cover all N5/N4 locally; JSON coverage improved from 11/0 to 79/166 for deployment without that checkout."
+  ],
+  "checks": {
+    "full_pytest_passed": 417,
+    "full_pytest_subtests_passed": 6,
+    "full_pytest_warnings": 26,
+    "related_pytest_passed": 40,
+    "new_data_test_cases": 17,
+    "frontend_build_exit_code": 0,
+    "dictionary_validator_exit_code": 0,
+    "n5_n4_stroke_count_discrepancies": 0,
+    "real_device_visual_verification": "not performed",
+    "human_semantic_review": "pending"
+  }
+}

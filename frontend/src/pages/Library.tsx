@@ -1,5 +1,6 @@
-import { confirmDialog } from '../features/dialogs/queue'
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import DocumentFormModal from '../components/library/DocumentFormModal'
+import { KanjiText } from '../components/kanji/KanjiText'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -10,21 +11,17 @@ import {
   BookOpen,
   Brain,
   Calendar,
-  Copy,
   Database,
   ExternalLink,
-  Eye,
   FilePlus2,
   Layers3,
   Library as LibraryIcon,
-  Loader2,
   Headphones,
   Paperclip,
   Pencil,
   Search,
   Tags,
   Trash2,
-  UploadCloud,
   X,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -95,40 +92,6 @@ const SORT_LABELS = {
   alphabetical: 'library.sortOptions.alphabetical',
 } as const
 
-const emptyForm = {
-  title: '',
-  document_type: 'grammar',
-  jlpt_level: '',
-  tags: '',
-  source_url: '',
-  content: '',
-}
-
-type DocumentForm = typeof emptyForm
-
-function parseTags(tags: string) {
-  return tags
-    .split(',')
-    .map((tag) => tag.trim())
-    .filter(Boolean)
-}
-
-function validateDocument(form: DocumentForm, t: ReturnType<typeof useTranslation>['t']) {
-  const errors: Partial<Record<keyof DocumentForm, string>> = {}
-  if (!form.title.trim()) errors.title = t('library.validation.titleRequired')
-  if (!form.document_type.trim()) errors.document_type = t('library.validation.typeRequired')
-  if (!form.content.trim()) errors.content = t('library.validation.contentRequired')
-  if (form.source_url.trim()) {
-    const raw = form.source_url.trim()
-    if (/^(javascript|vbscript|data):/i.test(raw)) {
-      errors.source_url = t('library.validation.sourceUrlInvalid')
-    } else if (raw.includes('://') && !['http:', 'https:'].includes(raw.split('://')[0].toLowerCase() + ':')) {
-      errors.source_url = t('library.validation.sourceUrlInvalid')
-    }
-  }
-  return { success: Object.keys(errors).length === 0, errors }
-}
-
 function documentTypeLabel(type: string, t: ReturnType<typeof useTranslation>['t']) {
   const key = DOCUMENT_TYPE_LABELS[type as keyof typeof DOCUMENT_TYPE_LABELS]
   return key ? t(key) : type
@@ -136,17 +99,6 @@ function documentTypeLabel(type: string, t: ReturnType<typeof useTranslation>['t
 
 function sortLabel(sort: keyof typeof SORT_LABELS, t: ReturnType<typeof useTranslation>['t']) {
   return t(SORT_LABELS[sort])
-}
-
-function buildPayload(form: DocumentForm) {
-  return {
-    title: form.title.trim(),
-    document_type: form.document_type.trim(),
-    jlpt_level: form.jlpt_level || null,
-    tags: parseTags(form.tags),
-    source_url: form.source_url.trim() || null,
-    content: form.content.trim(),
-  }
 }
 
 function libraryGenerationErrorKey(error: any, t: ReturnType<typeof useTranslation>['t']) {
@@ -236,248 +188,6 @@ function Modal({ children, onClose, wide = false }: { children: ReactNode; onClo
   )
 }
 
-function DocumentFormModal({
-  categories,
-  initial,
-  saving,
-  onClose,
-  onSubmit,
-  allowSystemScope,
-  t,
-}: {
-  categories?: Categories
-  initial?: LibraryDocument | null
-  saving: boolean
-  onClose: () => void
-  onSubmit: Function
-  allowSystemScope: boolean
-  t: ReturnType<typeof useTranslation>['t']
-}) {
-  const [form, setForm] = useState<DocumentForm>(
-    initial
-      ? {
-          title: initial.title,
-          document_type: initial.document_type,
-          jlpt_level: initial.jlpt_level || '',
-          tags: initial.tags?.join(', ') || '',
-          source_url: initial.source_url || '',
-          content: initial.content,
-        }
-      : emptyForm
-  )
-  const [errors, setErrors] = useState<Partial<Record<keyof DocumentForm, string>>>({})
-  const [scope, setScope] = useState<'personal' | 'system'>(initial?.scope === 'system' ? 'system' : 'personal')
-  const [fetchError, setFetchError] = useState('')
-  const [showPromptTemplate, setShowPromptTemplate] = useState(false)
-  const [preview, setPreview] = useState(false)
-  const types = categories?.document_types?.length ? categories.document_types : fallbackTypes
-  const levels = categories?.jlpt_levels?.length ? categories.jlpt_levels : fallbackJlpt
-  const promptOutline = t(`library.promptOutlines.${form.document_type}`, { defaultValue: t('library.promptOutlines.default') })
-  const promptText = t('library.promptText', {
-    type: documentTypeLabel(form.document_type, t),
-    level: form.jlpt_level || t('library.promptAnyLevel'),
-    outline: promptOutline,
-  })
-  const fetchUrlMutation = useMutation((url: string) => libraryAPI.fetchUrl(url), {
-    onSuccess: (response) => {
-      const data = response.data as { title: string; content: string; source_url: string }
-      setForm((current) => ({
-        ...current,
-        title: current.title.trim() ? current.title : data.title,
-        content: data.content,
-      }))
-      setErrors((current) => ({ ...current, source_url: undefined, content: undefined, title: undefined }))
-      setFetchError('')
-      toast.success(t('library.pageContentFetched'))
-    },
-    onError: () => {
-      const message = t('library.fetchUrlError')
-      setFetchError(message)
-      toast.error(message)
-    },
-  })
-
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [parsingFile, setParsingFile] = useState(false)
-  const parseFileMutation = useMutation((file: File) => libraryAPI.parseFile(file), {
-    onMutate: () => setParsingFile(true),
-    onSuccess: (response) => {
-      setParsingFile(false)
-      const data = response.data as { title: string; content: string; file_name: string }
-      setForm((current) => ({
-        ...current,
-        title: current.title.trim() ? current.title : data.title,
-        content: data.content,
-        source_url: current.source_url.trim() ? current.source_url : data.file_name,
-      }))
-      setErrors((current) => ({ ...current, content: undefined, title: undefined, source_url: undefined }))
-      setFetchError('')
-      toast.success(t('library.fileParsedSuccess', { defaultValue: 'Trích xuất file thành công!' }))
-    },
-    onError: (err: any) => {
-      setParsingFile(false)
-      const detail = err?.response?.data?.detail || 'Không thể trích xuất nội dung file.'
-      toast.error(detail)
-    },
-  })
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (form.content.trim() && !await confirmDialog(t('library.replaceContentConfirm'), { tone: 'warning' })) {
-      e.target.value = ''
-      return
-    }
-    parseFileMutation.mutate(file)
-    e.target.value = ''
-  }
-
-  const submit = (event: FormEvent) => {
-    event.preventDefault()
-    if (saving || fetchUrlMutation.isLoading || parseFileMutation.isLoading) return
-    const result = validateDocument(form, t)
-    setErrors(result.errors)
-    if (!result.success) {
-      const firstError = Object.values(result.errors)[0]
-      if (firstError) toast.error(firstError)
-      return
-    }
-    onSubmit(initial ? buildPayload(form) : { ...buildPayload(form), scope })
-  }
-
-  const fetchFromUrl = async () => {
-    const sourceUrl = form.source_url.trim()
-    setFetchError('')
-    if (!sourceUrl) {
-      setErrors((current) => ({ ...current, source_url: t('library.validation.urlRequired') }))
-      return
-    }
-    if (!sourceUrl.startsWith('http://') && !sourceUrl.startsWith('https://')) {
-      setErrors((current) => ({ ...current, source_url: t('library.validation.sourceUrlInvalid') }))
-      return
-    }
-    if (form.content.trim() && !await confirmDialog(t('library.replaceContentConfirm'), { tone: 'warning' })) return
-    fetchUrlMutation.mutate(sourceUrl)
-  }
-
-  const copyPromptTemplate = async () => {
-    try {
-      await navigator.clipboard.writeText(promptText)
-      toast.success(t('library.promptCopied'))
-    } catch {
-      toast.error(t('library.promptCopyError'))
-    }
-  }
-
-  const updateField = (name: keyof DocumentForm, value: string) => {
-    setForm(current => ({ ...current, [name]: value }))
-    setErrors(current => ({ ...current, [name]: undefined }))
-    if (name === 'source_url') setFetchError('')
-  }
-  const ready = Boolean(form.title.trim() && form.content.trim())
-  const close = () => { if (!saving) onClose() }
-
-  return (
-    <Modal wide onClose={close}>
-      <form noValidate onSubmit={submit} onKeyDown={event => { if ((event.ctrlKey || event.metaKey) && event.key === 'Enter') { event.preventDefault(); event.currentTarget.requestSubmit() } }} className="flex max-h-[90dvh] flex-col">
-        <header className="shrink-0 border-b border-[color:var(--border)] px-5 py-5 pr-16 sm:px-6 sm:pr-16">
-          <div className="flex items-center gap-3">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]"><FilePlus2 className="h-5 w-5" /></span>
-            <div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--primary)]">{initial ? t('library.editDocument') : t('library.addNewDocument')}</p>
-              <h2 className="mt-1 text-xl font-bold">{initial ? t('library.editDocument') : t('library.createDocument')}</h2></div>
-          </div>
-          <p className="mt-3 text-sm text-[color:var(--text-muted)]">{t('library.editorHint')}</p>
-        </header>
-
-        <div className="grid min-h-0 flex-1 gap-6 overflow-y-auto p-5 sm:p-6 lg:grid-cols-[minmax(260px,.85fr)_minmax(0,1.3fr)]">
-          <fieldset disabled={saving} className="min-w-0 space-y-4">
-            <legend className="mb-3 text-xs font-bold uppercase tracking-wider text-[color:var(--text-muted)]">{t('library.documentInformation')}</legend>
-            {!initial && <label className="block space-y-1.5">
-              <span className="text-sm font-semibold">{t('library.scope.label')}</span>
-              <select value={scope} onChange={event => setScope(event.target.value as 'personal' | 'system')} className="input h-11 rounded-xl">
-                <option value="personal">{t('library.badge.personal')}</option>
-                {allowSystemScope && <option value="system">{t('library.badge.system')}</option>}
-              </select>
-              <span className="block rounded-xl bg-[color:var(--accent)] px-3 py-2 text-xs leading-5 text-[color:var(--text-muted)]">{scope === 'personal' ? t('library.privateNote') : t('library.systemScopeNote')}</span>
-            </label>}
-            <label className="block space-y-1.5">
-              <span className="text-sm font-semibold">{t('library.fields.title')} <span className="text-[color:var(--primary)]">*</span></span>
-              <input autoFocus required value={form.title} onChange={event => updateField('title', event.target.value)} placeholder={t('library.titlePlaceholder')} aria-invalid={Boolean(errors.title)} className="input h-11 rounded-xl" />
-              {errors.title && <span role="alert" className="text-xs text-red-600">{errors.title}</span>}
-            </label>
-            <label className="block space-y-1.5">
-              <span className="text-sm font-semibold">{t('library.fields.documentType')} *</span>
-              <select value={form.document_type} onChange={event => updateField('document_type', event.target.value)} className="input h-11 rounded-xl">{types.map(type => <option key={type} value={type}>{documentTypeLabel(type, t)}</option>)}</select>
-            </label>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-              <label className="block space-y-1.5"><span className="text-sm font-semibold">{t('library.fields.jlptLevel')}</span>
-                <select value={form.jlpt_level} onChange={event => updateField('jlpt_level', event.target.value)} className="input h-11 rounded-xl"><option value="">{t('library.noLevel')}</option>{levels.map(level => <option key={level} value={level}>{level}</option>)}</select>
-              </label>
-              <label className="block space-y-1.5"><span className="text-sm font-semibold">{t('library.fields.tags')}</span>
-                <input value={form.tags} onChange={event => updateField('tags', event.target.value)} placeholder={t('library.tagsPlaceholder')} className="input h-11 rounded-xl" />
-              </label>
-            </div>
-            <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.docx,.doc,.txt,.md"
-                className="hidden"
-                onChange={handleFileUpload}
-              />
-              <span className="flex items-center gap-2 text-sm font-semibold">
-                <UploadCloud className="h-4 w-4 text-[color:var(--primary)]" />
-                {t('library.fields.uploadFile', { defaultValue: 'Tải file tài liệu (PDF / Word / TXT)' })}
-              </span>
-              <p className="mt-1 text-xs leading-5 text-[color:var(--text-muted)]">
-                {t('library.uploadFileHint', { defaultValue: 'Hỗ trợ .pdf, .docx, .doc, .txt, .md. Trích xuất tự động văn bản.' })}
-              </p>
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={parsingFile || saving}
-                className="btn btn-outline mt-3 min-h-10 w-full gap-2 rounded-xl px-3 text-[color:var(--primary)]"
-              >
-                {parsingFile ? <Loader2 className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
-                {parsingFile ? 'Đang trích xuất văn bản...' : 'Chọn file từ máy tính'}
-              </button>
-            </div>
-
-            <div className="rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4">
-              <label className="block space-y-1.5"><span className="flex items-center gap-2 text-sm font-semibold"><ExternalLink className="h-4 w-4 text-[color:var(--primary)]" />{t('library.fields.sourceUrl')}</span>
-                <input type="text" value={form.source_url} onChange={event => updateField('source_url', event.target.value)} placeholder="https://… hoặc tên file tài liệu" disabled={fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.source_url)} className="input h-11 rounded-xl" />
-              </label>
-              <p className="mt-2 text-xs leading-5 text-[color:var(--text-muted)]">{t('library.urlImportHint')}</p>
-              <button type="button" onClick={fetchFromUrl} disabled={fetchUrlMutation.isLoading || !form.source_url.trim()} className="btn btn-outline mt-3 min-h-10 w-full gap-2 rounded-xl px-3 text-[color:var(--primary)]">{fetchUrlMutation.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ExternalLink className="h-4 w-4" />}{fetchUrlMutation.isLoading ? t('library.fetching') : t('library.fetchFromUrl')}</button>
-              {(errors.source_url || fetchError) && <p role="alert" className="mt-2 text-xs text-red-600">{errors.source_url || fetchError}</p>}
-            </div>
-          </fieldset>
-
-          <section className="flex min-h-[320px] min-w-0 flex-col">
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-              <label htmlFor="library-document-content" className="text-sm font-semibold">{t('library.fields.content')} *</label>
-              <div className="flex rounded-xl bg-[color:var(--accent)] p-1">
-                <button type="button" onClick={() => setPreview(false)} aria-pressed={!preview} className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold ${!preview ? 'bg-[color:var(--card)] text-[color:var(--primary)] shadow-sm' : 'text-[color:var(--text-muted)]'}`}><Pencil className="h-3.5 w-3.5" />{t('library.writeContent')}</button>
-                <button type="button" onClick={() => setPreview(true)} aria-pressed={preview} className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold ${preview ? 'bg-[color:var(--card)] text-[color:var(--primary)] shadow-sm' : 'text-[color:var(--text-muted)]'}`}><Eye className="h-3.5 w-3.5" />{t('library.previewContent')}</button>
-              </div>
-            </div>
-            {preview ? <div className="min-h-[280px] flex-1 whitespace-pre-wrap break-words rounded-2xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-4 text-sm leading-7">{form.content || <span className="text-[color:var(--text-muted)]">{t('library.previewEmpty')}</span>}</div> :
-              <textarea id="library-document-content" required value={form.content} onChange={event => updateField('content', event.target.value)} disabled={saving || fetchUrlMutation.isLoading} aria-invalid={Boolean(errors.content)} placeholder={t('library.contentPlaceholder')} className="input !h-auto min-h-[280px] flex-1 resize-y rounded-2xl p-4 library-text leading-7 lg:min-h-[380px]" />}
-            <div className="mt-2 flex items-center justify-between gap-2 text-xs text-[color:var(--text-muted)]"><span>{t('library.contentCharacterCount', { count: form.content.length })}</span>{errors.content && <span role="alert" className="text-red-600">{errors.content}</span>}</div>
-            {!initial && <button type="button" aria-expanded={showPromptTemplate} onClick={() => setShowPromptTemplate(value => !value)} className="mt-4 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-dashed border-[color:var(--border)] px-3 text-xs font-semibold text-[color:var(--primary)] hover:bg-[color:var(--accent)]"><Copy className="h-3.5 w-3.5" />{t('library.promptTemplate')}</button>}
-            {showPromptTemplate && <div className="mt-3 space-y-2 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3"><p className="text-xs text-[color:var(--text-muted)]">{t('library.promptTemplateHelp')}</p><textarea readOnly value={promptText} rows={6} className="input !h-auto text-xs leading-5" aria-label={t('library.promptTemplate')} /><button type="button" onClick={() => void copyPromptTemplate()} className="btn btn-outline btn-sm gap-1.5"><Copy className="h-3.5 w-3.5" />{t('library.copyPrompt')}</button></div>}
-          </section>
-        </div>
-
-        <footer className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-5 py-4 sm:px-6">
-          <div><p className="text-xs font-semibold text-[color:var(--text-muted)]">{ready ? t('library.readyToSave') : t('library.requiredFieldsHint')}</p><p className="mt-1 hidden text-[10px] text-[color:var(--text-muted)] sm:block">{t('library.saveShortcut')}</p></div>
-          <div className="flex gap-2"><button type="button" onClick={close} disabled={saving} className="btn btn-outline min-h-11 rounded-xl px-5">{t('library.cancel')}</button>
-            <button type="submit" disabled={saving || fetchUrlMutation.isLoading} className="btn btn-primary min-h-11 gap-2 rounded-xl px-5 font-semibold">{saving && <Loader2 className="h-4 w-4 animate-spin" />}{saving ? t('library.saving') : initial ? t('library.saveChanges') : t('library.addDocument')}</button></div>
-        </footer>
-      </form>
-    </Modal>
-  )
-}
 
 export default function Library() {
   const { t } = useTranslation('common')
@@ -1025,7 +735,7 @@ export default function Library() {
               <p className="mt-4 text-xs font-semibold text-[color:var(--text-muted)]">{t('library.created', { date: formatDate(selectedView.created_at) })}</p>
               <p className="mt-1 text-xs font-semibold text-[color:var(--text-muted)]">{selectedView.updated_at ? t('library.updated', { date: formatDate(selectedView.updated_at) }) : t('library.notUpdated')}</p>
               <div className="mt-5 rounded-2xl bg-[color:var(--bg-elevated)] p-4">
-                <p className="whitespace-pre-wrap library-text break-words text-sm leading-7 text-[color:var(--text)]">{selectedView.content}</p>
+                <p className="whitespace-pre-wrap library-text break-words text-sm leading-7 text-[color:var(--text)]"><KanjiText text={selectedView.content} /></p>
               </div>
               <div className="mt-6 flex flex-wrap justify-end gap-3">
                 <button type="button" onClick={() => setSelected(null)} className="btn btn-outline rounded-xl border-[color:var(--border)] px-4">

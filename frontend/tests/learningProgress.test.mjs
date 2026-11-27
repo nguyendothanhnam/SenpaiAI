@@ -22,7 +22,7 @@ function load(path, modules) {
  const source=readFileSync(new URL(path,import.meta.url),'utf8')
  const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true},fileName:path}).outputText
  const exports={}
- vm.runInNewContext(compiled,{exports,require:name=>{if(name==='react/jsx-runtime')return jsxRuntime;if(name==='react')return React;assert.ok(name in modules,name);return modules[name]}})
+ vm.runInNewContext(compiled,{exports,require:name=>{if(name==='react/jsx-runtime')return jsxRuntime;if(name==='react')return React;if(name.endsWith('.css'))return {};if(name==='../../features/learning/trend')return load('../src/features/learning/trend.ts',{});assert.ok(name in modules,name);return modules[name]}})
  return exports
 }
 function render(language='vi',data=model(),failed=false) {
@@ -75,8 +75,29 @@ test('rings clamp invalid/over-target values and trends retain gaps for missing 
  assert.match(renderToStaticMarkup(React.createElement(GoalRing,{value:125,label:'goal',detail:'detail'})),/aria-valuenow="100"/)
  const html=renderToStaticMarkup(React.createElement(LearningTrend,{points:[{start:'2026-11-01',lessons:1,accuracy:80},{start:'2026-11-08',lessons:0,accuracy:null},{start:'2026-11-15',lessons:2,accuracy:90}]}))
  assert.match(html,/<svg/)
- assert.match(html,/d="M30,58  M570,44"/)
+ assert.match(html,/stroke-dasharray="5 5"/)
+ assert.equal((html.match(/class="trend-point"/g)||[]).length,2)
+ assert.match(html,/learning.chartLessonsAxis/)
+ assert.match(html,/learning.chartAccuracyAxis/)
  assert.doesNotMatch(html,/NaN|Infinity/)
+})
+
+test('trend scale covers actual counts, bridges only missing weeks, and preserves zero accuracy',()=>{
+ const {trendGeometry}=load('../src/features/learning/trend.ts',{})
+ const points=[22,85,null,85,0,45,0].map((accuracy,i)=>({start:`2026-11-${String(i+1).padStart(2,'0')}`,lessons:i===6?16:1,accuracy}))
+ const chart=trendGeometry(points)
+ assert.equal(chart.ceiling,20)
+ assert.equal(chart.ticks.map(tick=>tick.lessons).join(','),'0,5,10,15,20')
+ assert.equal(chart.segments.filter(segment=>segment.gap).length,1)
+ assert.equal(chart.rows[2].accuracyY,null)
+ assert.equal(chart.rows[4].accuracyY,chart.bottom)
+ assert.equal(chart.rows[6].barY,chart.bottom-(chart.bottom-chart.top)*.8)
+ assert.ok(chart.rows[0].x-chart.barWidth/2>chart.left)
+ assert.ok(chart.rows.at(-1).x+chart.barWidth/2<chart.right)
+ assert.equal(trendGeometry([]).ceiling,20)
+ assert.equal(trendGeometry([{...points[0],lessons:0}]).rows[0].x,500)
+ assert.equal(chart.rows[0].x-chart.left,chart.right-chart.rows.at(-1).x)
+ assert.match(chart.rows.at(-1).barPath,/Q/)
 })
 test('reusable API keeps all endpoints owned and goal saving separate from JLPT changes',async()=>{
  const calls=[]

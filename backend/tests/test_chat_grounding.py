@@ -29,7 +29,7 @@ def test_ollama_chat_uses_one_low_temperature_generation(monkeypatch):
 
     def generate(prompt, system_prompt, **kwargs):
         calls.append((prompt, system_prompt, kwargs))
-        return "**Output:**\n\nHôm nay bạn đã làm gì?"
+        return "Hôm nay bạn đã làm gì?"
 
     monkeypatch.setattr(service, "_call_ollama", generate)
     response = asyncio.run(service.chat_response("今日は何をしましたか。 có nghĩa là gì", "Tài liệu", "N4"))

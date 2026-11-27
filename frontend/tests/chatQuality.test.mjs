@@ -22,6 +22,7 @@ test('actual answer bubble uses translated source labels, hides internal/unsafe 
  for(const language of ['vi','en']){
  const translation=translations(language);const enabled=[]
  const modules={'react':React,'react/jsx-runtime':jsxRuntime,'react-router-dom':{Link:({to,children,...props})=>React.createElement('a',{href:to,...props},children)},'lucide-react':new Proxy({},{get:()=>()=>null}),'react-hot-toast':{default:{error(){}},__esModule:true},'react-i18next':{useTranslation:()=>translation},'../../utils/helpers':{formatRelativeTime:()=>''},'../../services/auth':{useAuth:()=>({user:{id:7}})},'../../services/chatFeedback':{chatFeedbackAPI:{}},'react-query':{useQuery:(key,fn,options)=>{enabled.push(options.enabled);return{}},useQueryClient:()=>({setQueryData(){}}),useMutation:()=>({reset(){}})}}
+ modules['../kanji/KanjiText']={KanjiText:({text})=>text}
  modules['./ChatAnswer']=load('../src/components/chat/ChatAnswer.tsx',modules)
  modules['./ChatAnswerFeedback']=load('../src/components/chat/ChatAnswerFeedback.tsx',modules)
  const Bubble=load('../src/components/chat/ChatMessageBubble.tsx',modules).default

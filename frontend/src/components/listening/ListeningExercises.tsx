@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { listeningAPI, type ListeningAttemptResult, type ListeningExerciseMode } from '../../services/api'
 import { getErrorMessage } from '../../utils/getErrorMessage'
 import { formatRelativeTime } from '../../utils/helpers'
+import { useAuth } from '../../services/auth'
 
 const modes: Array<{ id: ListeningExerciseMode; icon: typeof PenLine }> = [
   { id: 'dictation', icon: PenLine }, { id: 'cloze', icon: ListChecks }, { id: 'comprehension', icon: CheckCircle2 },
@@ -19,16 +20,17 @@ export default function ListeningExercises({ lessonId, audioReady, onPlaySegment
   active?: boolean
 }) {
   const { t, i18n } = useTranslation('common')
+  const { user } = useAuth()
   const language = i18n.resolvedLanguage === 'en' ? 'en' : 'vi'
   const [mode, setMode] = useState<ListeningExerciseMode>('dictation')
   const [drafts, setDrafts] = useState<Drafts>({})
   const [results, setResults] = useState<Partial<Record<ListeningExerciseMode, ListeningAttemptResult>>>({})
   const started = useRef<Partial<Record<ListeningExerciseMode, number>>>({})
   const queryClient = useQueryClient()
-  const query = useQuery(['listening-exercises', lessonId], () => listeningAPI.getExercises(lessonId).then(({ data }) => data), { enabled: active, retry: 1, refetchOnWindowFocus: false })
-  const history = useQuery(['listening-attempts', lessonId], () => listeningAPI.getAttempts(lessonId).then(({ data }) => data), { enabled: active, retry: 1, refetchOnWindowFocus: false })
+  const query = useQuery(['listening-exercises', lessonId, user?.id ?? null], () => listeningAPI.getExercises(lessonId).then(({ data }) => data), { enabled: active, retry: 1, refetchOnWindowFocus: false })
+  const history = useQuery(['listening-attempts', lessonId, user?.id ?? null], () => listeningAPI.getAttempts(lessonId).then(({ data }) => data), { enabled: active, retry: 1, refetchOnWindowFocus: false })
 
-  useEffect(() => { setDrafts({}); setResults({}); started.current = {} }, [query.data?.revision])
+  useEffect(() => { setDrafts({}); setResults({}); started.current = {} }, [query.data?.revision, user?.id])
   const questions = (query.data?.questions || []).filter(question => question.mode === mode)
   const answers = drafts[mode] || {}
   const result = results[mode]

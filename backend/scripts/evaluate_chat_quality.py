@@ -25,6 +25,17 @@ from app.api import chat as pipeline
 from app.services.chat_evaluation import grade,summarize,RUBRIC_VERSION
 
 
+def memory_snapshot():
+    try:
+        with urllib.request.urlopen(settings.ollama_base_url.rstrip('/')+'/api/ps',timeout=3) as response:
+            data=json.load(response)
+        return [{'model':r.get('name') or r.get('model'),'size_bytes':r.get('size'),
+                 'vram_bytes':r.get('size_vram'),'context_length':r.get('context_length')}
+                for r in data.get('models',[])]
+    except Exception as exc:
+        return {'unavailable':type(exc).__name__}
+
+
 def catalog_snapshot(path):
     if path.is_file():return json.loads(path.read_text(encoding='utf-8'))
     result={}
@@ -72,6 +83,20 @@ async def run(args):
     if any(m not in ('ai','offline') for m in modes):raise SystemExit('Modes must be ai,offline')
     service=pipeline.japanese_service.service
     original_model=service.model;original_call=service._call_ollama
+    import ollama
+    original_chat,original_generate=ollama.chat,ollama.generate
+    metrics=[];candidates=[]
+    def capture(payload,options=None):
+        get=lambda key:payload.get(key) if hasattr(payload,'get') else getattr(payload,key,None)
+        metrics.append({key:get(key) for key in ('prompt_eval_count','eval_count','done_reason','total_duration','load_duration','prompt_eval_duration','eval_duration')}|
+                       {'options':options or {},'memory':memory_snapshot()})
+    def measured_chat(*pos,**kwargs):
+        result=original_chat(*pos,**kwargs);capture(result,kwargs.get('options'));return result
+    def measured_generate(*pos,**kwargs):
+        result=original_generate(*pos,**kwargs);capture(result,kwargs.get('options'));return result
+    ollama.chat,ollama.generate=measured_chat,measured_generate
+    original_hook=getattr(service,'_metrics_hook',None)
+    service._metrics_hook=lambda record:metrics.append(record)
     report={'phase':args.phase,'rubric_version':RUBRIC_VERSION,'dataset_sha256':hashlib.sha256(raw).hexdigest(),
         'catalog_sha256':hashlib.sha256(json.dumps(snapshot,sort_keys=True,ensure_ascii=True).encode()).hexdigest(),
         'configured_default':settings.ollama_model,'provider':settings.llm_provider,'available_models':models,
@@ -90,7 +115,7 @@ async def run(args):
                 def generation(*pos,**kwargs):
                     calls[0]+=1
                     if mode=='offline':raise RuntimeError('evaluation_ai_disabled')
-                    return original_call(*pos,**kwargs)
+                    answer=original_call(*pos,**kwargs);candidates.append(answer);return answer
                 service._call_ollama=generation
                 current={'mode':mode,'model':model if mode=='ai' else None,
                     'model_listed':model in [r['name'] for r in models], 'rows':[]};report['runs'].append(current)
@@ -99,25 +124,31 @@ async def run(args):
                     setup_start=time.perf_counter()
                     for prior in case.get('history',[]):
                         try:
-                            prior_response=await pipeline.send_message(ChatMessage(message=prior,response_language=case.get('language','vi'),conversation_id=conversation),user,db)
+                            user.ui_language=case.get('ui_language',case.get('language','vi'))
+                            prior_response=await pipeline.send_message(ChatMessage(message=prior,response_language=case.get('response_language',user.ui_language),conversation_id=conversation),user,db)
                             conversation=prior_response.conversation_id
                         except Exception as exc:
                             db.rollback();setup_error=str(getattr(exc,'detail',type(exc).__name__))
                     setup_seconds=time.perf_counter()-setup_start
-                    start=time.perf_counter();count_before=calls[0];answer='';sources=[];error=None
+                    start=time.perf_counter();count_before=calls[0];metric_start=len(metrics);candidate_start=len(candidates);answer='';sources=[];error=None
                     try:
-                        result=await pipeline.send_message(ChatMessage(message=case['question'],response_language=case.get('language','vi'),conversation_id=conversation),user,db)
+                        user.ui_language=case.get('ui_language',case.get('language','vi'))
+                        result=await pipeline.send_message(ChatMessage(message=case['question'],response_language=case.get('response_language',user.ui_language),conversation_id=conversation),user,db)
                         answer=result.answer;sources=result.sources or []
                     except Exception as exc:
                         db.rollback();error=str(getattr(exc,'detail',type(exc).__name__))
                     row={'id':case['id'],'group':case['group'],'question':case['question'],'answer':answer,'sources':sources,
                         'error':error,'setup_error':setup_error,'seconds':round(time.perf_counter()-start,3),'setup_seconds':round(setup_seconds,3),
-                        'generation_calls':calls[0]-count_before,'checks':grade(case,answer,sources,error),'reference':case['reference'],'manual_review':'pending'}
+                        'generation_calls':calls[0]-count_before,'generation_metrics':metrics[metric_start:],
+                        'candidate_answers':candidates[candidate_start:],
+                        'checks':grade(case,answer,sources,error),'reference':case['reference'],'manual_review':{'correctness':'pending','notes':''}}
                     current['rows'].append(row);current['summary']=summarize(current['rows']);save()
-                    print(f"{args.phase} {mode} {model} {case['id']} score={sum(row['checks'].values())}/7 t={row['seconds']}s",flush=True)
+                    print(f"{args.phase} {mode} {model} {case['id']} score={sum(row['checks'].values())}/{len(row['checks'])} t={row['seconds']}s",flush=True)
                 current['total_generation_calls']=calls[0]
                 db.close();engine.dispose();save()
     finally:
+        ollama.chat,ollama.generate=original_chat,original_generate
+        service._metrics_hook=original_hook
         service.model=original_model;service._call_ollama=original_call
         report['finished_at']=datetime.now(timezone.utc).isoformat();save()
 

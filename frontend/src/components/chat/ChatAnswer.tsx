@@ -1,12 +1,13 @@
 import { Fragment } from 'react'
+import { KanjiText } from '../kanji/KanjiText'
 
 function highlight(text: string, term: string) {
   const query = term.trim()
-  if (!query) return text
+  if (!query) return <KanjiText text={text} />
   const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
   return text.split(new RegExp(`(${escaped})`, 'ig')).map((part, index) => part.toLocaleLowerCase() === query.toLocaleLowerCase()
-    ? <mark key={index} className="rounded bg-[color:var(--accent)] px-0.5 text-[color:var(--primary)]">{part}</mark>
-    : <Fragment key={index}>{part}</Fragment>)
+    ? <mark key={index} className="rounded bg-[color:var(--accent)] px-0.5 text-[color:var(--primary)]"><KanjiText text={part} /></mark>
+    : <Fragment key={index}><KanjiText text={part} /></Fragment>)
 }
 
 function inline(text: string, searchTerm: string) {

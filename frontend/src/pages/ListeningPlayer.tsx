@@ -7,9 +7,13 @@ import toast from 'react-hot-toast'
 import { listeningAPI } from '../services/api'
 import { localizeListeningLesson, localizeListeningSegment } from '../utils/listeningLocale'
 import ListeningExercises from '../components/listening/ListeningExercises'
+import { KanjiText } from '../components/kanji/KanjiText'
+import VideoLessonPlayer from '../components/listening/VideoLessonPlayer'
+import { useAuth } from '../services/auth'
 
 export default function ListeningPlayer() {
   const { t, i18n } = useTranslation('common')
+  const { user } = useAuth()
   const { id: rawId } = useParams<{ id: string }>()
   const id = Number(rawId)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -28,7 +32,7 @@ export default function ListeningPlayer() {
   const [loopB, setLoopB] = useState<number | null>(null)
   const [activity, setActivity] = useState<'listen' | 'exercises'>('listen')
   const clipEnd = useRef<number | null>(null)
-  const lessonQuery = useQuery(['listening-lesson', id], () => listeningAPI.getLesson(id).then(({ data }) => data), { enabled: Number.isFinite(id) && id > 0, retry: 1 })
+  const lessonQuery = useQuery(['listening-lesson', user?.id ?? null, id], () => listeningAPI.getLesson(id).then(({ data }) => data), { enabled: Number.isFinite(id) && id > 0, retry: 1 })
   const lesson = lessonQuery.data
   const displayLesson = lesson ? localizeListeningLesson(lesson, t) : null
   const audioObjectUrl = useRef('')
@@ -62,7 +66,7 @@ export default function ListeningPlayer() {
   }
 
   useEffect(() => {
-    if (lesson) void loadAudio()
+    if (lesson && lesson.source !== 'video') void loadAudio()
     return () => {
       audioRequestId.current += 1
       if (audioObjectUrl.current) URL.revokeObjectURL(audioObjectUrl.current)
@@ -160,6 +164,7 @@ export default function ListeningPlayer() {
 
   if (lessonQuery.isLoading) return <div className="theme-card p-10 text-center">{t('listening.playerLoading')}</div>
   if (!lesson) return <div className="theme-card space-y-3 p-8 text-center"><p>{t('listening.notFound')}</p><Link to="/listening" className="btn btn-outline inline-flex">{t('listening.backToList')}</Link></div>
+  if (lesson.source === 'video') return <VideoLessonPlayer key={lesson.id} lesson={lesson} />
 
   return <section className="space-y-5 text-[color:var(--text)]">
     <Link to="/listening" className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--primary)]"><ArrowLeft className="h-4 w-4" />{t('listening.backToList')}</Link>
@@ -197,7 +202,7 @@ export default function ListeningPlayer() {
     {activity === 'listen' && <>
     <div className="space-y-3">{segments.map((segment, index) => <article key={segment.idx} className={`theme-card p-4 transition ${index === activeIndex ? 'border-[color:var(--primary)] ring-2 ring-[color:var(--primary)]' : ''}`}>
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><span className="text-xs font-semibold text-[color:var(--text-muted)]">{t('listening.sentence', { number: index + 1 })}</span><div className="flex gap-2"><button type="button" onClick={() => setLoopA(index)} className={`rounded-lg px-2 py-1 text-xs ${loopA === index ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'bg-[color:var(--accent)]'}`}>{t('listening.loopFromA')}</button><button type="button" onClick={() => setLoopB(index)} className={`rounded-lg px-2 py-1 text-xs ${loopB === index ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'bg-[color:var(--accent)]'}`}>{t('listening.toB')}</button><button type="button" onClick={() => seekTo(index)} className="rounded-lg bg-[color:var(--accent)] px-2 py-1 text-xs text-[color:var(--primary)]">{t('listening.listenSentence')}</button></div></div>
-      {showJapanese && <button type="button" onClick={() => seekTo(index)} className="listening-japanese block text-left text-lg">{showFurigana && segment.tokens?.length ? segment.tokens.map((token, tokenIndex) => <span key={`${tokenIndex}-${token.text}`}>{token.reading && token.reading !== token.text ? <ruby>{token.text}<rt className="text-xs text-[color:var(--text-muted)]">{token.reading}</rt></ruby> : token.text}</span>) : segment.ja}</button>}
+      {showJapanese && <div onClick={() => seekTo(index)} className="listening-japanese block cursor-pointer text-left text-lg">{showFurigana && segment.tokens?.length ? segment.tokens.map((token, tokenIndex) => <span key={`${tokenIndex}-${token.text}`}>{token.reading && token.reading !== token.text ? <ruby><KanjiText text={token.text} /><rt className="text-xs text-[color:var(--text-muted)]">{token.reading}</rt></ruby> : <KanjiText text={token.text} />}</span>) : <KanjiText text={segment.ja} />}</div>}
       {showVietnamese && <p className="mt-1 text-sm text-[color:var(--text-muted)]">{localizeListeningSegment(segment.vi, i18n.resolvedLanguage || i18n.language, t)}</p>}
     </article>)}</div>
     </>}

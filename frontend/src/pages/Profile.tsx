@@ -25,6 +25,7 @@ import { useRewardsMe } from '../services/rewards'
 import { useTranslation } from 'react-i18next'
 import { getErrorMessage } from '../utils/getErrorMessage'
 import ActivityCalendar from '../components/profile/ActivityCalendar'
+import PersonalExport from '../components/profile/PersonalExport'
 import { appCalendarDate } from '../utils/profileCalendar'
 
 interface ProfileFormData {
@@ -343,9 +344,7 @@ export default function Profile() {
               <h3 className="card-title text-[color:var(--primary)]">{t('quickActions')}</h3>
             </div>
             <div className="card-content space-y-2">
-              <button className="w-full btn btn-outline btn-sm border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold transition-colors">
-                {t('export')}
-              </button>
+              <PersonalExport />
               <button className="w-full btn btn-outline btn-sm border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold transition-colors">
                 {t('reset')}
               </button>
