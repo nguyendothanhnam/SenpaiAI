@@ -17,6 +17,7 @@ import { useAuth } from '../services/auth'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { grammarPracticeAPI, libraryAPI } from '../services/api'
+import ExerciseSelectionNotice from '../components/ExerciseSelectionNotice'
 import type {
   GrammarAnswerResult, GrammarPattern, GrammarPracticeMode,
   GrammarPracticeQuestion, GrammarQuestionType, GrammarSessionResult, JlptLevel,
@@ -48,7 +49,7 @@ export default function GrammarPractice() {
   const { t: tGrammar } = useTranslation('grammarStatus')
   const [level, setLevel] = useState<JlptLevel>(requestedLevel || (user?.current_jlpt_level as JlptLevel) || 'N5')
   const [isAutomaticFallback, setIsAutomaticFallback] = useState(false)
-  const [ruleId, setRuleId] = useState<number | null>(null)
+  const [ruleId, setRuleId] = useState<number | null>(() => { const value = Number(new URLSearchParams(location.search).get('rule')); return Number.isSafeInteger(value) && value > 0 ? value : null })
   const [questionTypes, setQuestionTypes] = useState<GrammarQuestionType[]>(['fill_blank', 'reorder', 'true_false', 'conjugation'])
   const [count, setCount] = useState<Count>(5)
   const [mode, setMode] = useState<GrammarPracticeMode>('bank')
@@ -94,8 +95,8 @@ export default function GrammarPractice() {
   const patterns = useMemo(() => patternsByLevel[effectiveLevel] || [], [patternsByLevel, effectiveLevel])
 
   useEffect(() => {
-    if (ruleId !== null && !patterns.some((pattern) => pattern.id === ruleId)) setRuleId(null)
-  }, [patterns, ruleId])
+    if (patternsQuery.isSuccess && ruleId !== null && !patterns.some((pattern) => pattern.id === ruleId)) setRuleId(null)
+  }, [patterns, ruleId, patternsQuery.isSuccess])
 
   useEffect(() => {
     if (patternsQuery.isError) toast.error('Không tải được mẫu ngữ pháp. Kiểm tra kết nối rồi thử tải lại trang.')
@@ -138,6 +139,14 @@ export default function GrammarPractice() {
   )
 
   useEffect(() => {
+    const lessonPractice = (location.state as any)?.lessonPractice
+    if (!startedLibraryPractice.current && lessonPractice?.question_ids?.length) {
+      startedLibraryPractice.current = true
+      startMutation.mutate({ jlpt_level: lessonPractice.jlpt_level, grammar_rule_id: lessonPractice.grammar_rule_id,
+        question_types: lessonPractice.question_types, count: 5, mode: 'bank', question_ids: lessonPractice.question_ids })
+      navigate(location.pathname, { replace: true, state: null })
+      return
+    }
     const libraryPractice = (location.state as any)?.libraryPractice
     if (startedLibraryPractice.current || !libraryPractice?.question_ids?.length) return
     startedLibraryPractice.current = true
@@ -328,6 +337,7 @@ export default function GrammarPractice() {
       </>}
 
       {screen === 'session' && currentQuestion && <>
+        <ExerciseSelectionNotice selections={questions.map(question => question.selection)} />
         <section className="theme-card rounded-3xl p-4 shadow-[var(--shadow-card)] sm:p-6">
           <div className="mb-5 flex items-center justify-between gap-3">
             <div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-bold text-[color:var(--primary)]">{currentQuestion.jlpt_level}</span><span className="text-sm font-semibold text-[color:var(--text-muted)]">{currentQuestion.grammar_rule?.rule_name || 'Luyện tổng hợp'}</span></div><p className="mt-2 text-xs text-[color:var(--text-muted)]">{currentQuestion.question_type === 'fill_blank' ? 'Điền vào chỗ trống' : currentQuestion.question_type === 'reorder' ? 'Sắp xếp câu' : currentQuestion.question_type === 'true_false' ? 'Đúng hay sai' : 'Chia động từ'}</p></div>

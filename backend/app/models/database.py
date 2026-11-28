@@ -22,6 +22,91 @@ import uuid
 from ..core.database import Base
 
 
+class FlashcardDeck(Base):
+    __tablename__ = 'flashcard_decks'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    title = Column(String(160), nullable=False)
+    description = Column(String(2000), nullable=False, default='')
+    jlpt_level = Column(String(2), nullable=True)
+    topic = Column(String(100), nullable=False, default='')
+    is_private = Column(Boolean, nullable=False, default=True, server_default='true')
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (Index('ix_flashcard_decks_owner_time', 'user_id', 'updated_at'), {'sqlite_autoincrement': True})
+
+
+class FlashcardCard(Base):
+    __tablename__ = 'flashcard_cards'
+    id = Column(Integer, primary_key=True)
+    deck_id = Column(Integer, ForeignKey('flashcard_decks.id', ondelete='CASCADE'), nullable=False, index=True)
+    position = Column(Integer, nullable=False)
+    front = Column(String(1000), nullable=False)
+    back = Column(String(2000), nullable=False)
+    reading = Column(String(500), nullable=False, default='')
+    note = Column(String(2000), nullable=False, default='')
+    fingerprint = Column(String(64), nullable=False)
+    __table_args__ = (UniqueConstraint('deck_id', 'fingerprint', name='uq_flashcard_content'), {'sqlite_autoincrement': True})
+
+
+class FlashcardProgress(Base):
+    __tablename__ = 'flashcard_progress'
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    card_id = Column(Integer, ForeignKey('flashcard_cards.id', ondelete='CASCADE'), primary_key=True)
+    state = Column(String(12), nullable=False, default='new')
+    stage = Column(Integer, nullable=False, default=0)
+    due_at = Column(DateTime(timezone=True), nullable=True)
+    correct = Column(Integer, nullable=False, default=0)
+    wrong = Column(Integer, nullable=False, default=0)
+    last_reviewed_at = Column(DateTime(timezone=True), nullable=True)
+    starred = Column(Boolean, nullable=False, default=False)
+    __table_args__ = (Index('ix_flashcard_progress_owner_due', 'user_id', 'due_at'),)
+
+
+class FlashcardSession(Base):
+    __tablename__ = 'flashcard_sessions'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    request_key = Column(String(64), nullable=False)
+    payload_hash = Column(String(64), nullable=False)
+    mode = Column(String(20), nullable=False)
+    card_count = Column(Integer, nullable=False)
+    correct = Column(Integer, nullable=False)
+    wrong = Column(Integer, nullable=False)
+    duration_seconds = Column(Integer, nullable=False)
+    results = Column(JSON, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id', 'request_key', name='uq_flashcard_session_request'),
+                      Index('ix_flashcard_sessions_owner_time', 'user_id', 'created_at'))
+
+
+class FlashcardTransfer(Base):
+    __tablename__ = 'flashcard_transfers'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    source_key = Column(String(64), nullable=False)
+    deck_id = Column(Integer, ForeignKey('flashcard_decks.id', ondelete='SET NULL'), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id', 'source_key', name='uq_flashcard_transfer'),)
+
+
+class FlashcardAssessment(Base):
+    __tablename__ = 'flashcard_assessments'
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    deck_id = Column(Integer, ForeignKey('flashcard_decks.id', ondelete='CASCADE'), nullable=False)
+    request_key = Column(String(64), nullable=False)
+    payload_hash = Column(String(64), nullable=False)
+    mode = Column(String(12), nullable=False)
+    status = Column(String(12), nullable=False, default='active')
+    questions = Column(JSON, nullable=False)
+    result = Column(JSON, nullable=True)
+    submission_hash = Column(String(64), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id', 'request_key', name='uq_flashcard_assessment_request'),
+        Index('ix_flashcard_assessment_owner_time', 'user_id', 'created_at'))
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -35,6 +120,7 @@ class User(Base):
 
     # User preferences
     current_jlpt_level = Column(String, default="N5")  # N5, N4, N3, N2, N1
+    placement_override = Column(JSON, nullable=True)
     learning_goals = Column(JSON, default=list)
     exercise_points = Column(Integer, default=0, server_default="0", nullable=False)
     ui_language = Column(String(2), nullable=True)
@@ -44,6 +130,143 @@ class User(Base):
     learning_sessions = relationship("LearningSession", back_populates="user")
     chat_folders = relationship("ChatFolder", back_populates="user")
     chat_conversations = relationship("ChatConversation", back_populates="user")
+
+
+class WeeklyLearningGoal(Base):
+    __tablename__ = "weekly_learning_goals"
+    __table_args__ = (
+        CheckConstraint("study_days BETWEEN 1 AND 7", name="ck_weekly_learning_goal_days"),
+        CheckConstraint("lessons BETWEEN 1 AND 100", name="ck_weekly_learning_goal_lessons"),
+    )
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    study_days = Column(Integer, nullable=False, default=4, server_default="4")
+    lessons = Column(Integer, nullable=False, default=10, server_default="10")
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+
+
+class ExerciseHistory(Base):
+    __tablename__ = "exercise_history"
+    __table_args__ = (
+        UniqueConstraint("user_id", "source_type", "source_id", name="uq_exercise_history_source"),
+        Index("ix_exercise_history_user_fingerprint", "user_id", "fingerprint"),
+        Index("ix_exercise_history_user_last_served", "user_id", "last_served_at"),
+    )
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    source_type = Column(String(32), nullable=False)
+    source_id = Column(String(160), nullable=False)
+    fingerprint = Column(String(64), nullable=False)
+    normalized_content = Column(Text, nullable=False)
+    jlpt_level = Column(String(2), nullable=False)
+    skill = Column(String(24), nullable=False)
+    served_count = Column(Integer, nullable=False, default=0, server_default="0")
+    last_served_at = Column(DateTime(timezone=True), nullable=False)
+    last_result = Column(Boolean, nullable=True)
+    last_answered_at = Column(DateTime(timezone=True), nullable=True)
+    correct_streak = Column(Integer, nullable=False, default=0, server_default="0")
+    due_at = Column(DateTime(timezone=True), nullable=True)
+    last_context = Column(String(32), nullable=False)
+
+
+class ExerciseDelivery(Base):
+    __tablename__ = "exercise_deliveries"
+    __table_args__ = (
+        UniqueConstraint("user_id", "context", "context_ref", "source_type", "source_id", name="uq_exercise_delivery_ref"),
+        Index("ix_exercise_deliveries_user_context", "user_id", "context", "context_ref"),
+        Index("ix_exercise_deliveries_history", "history_id"),
+    )
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    history_id = Column(Integer, ForeignKey("exercise_history.id", ondelete="CASCADE"), nullable=False)
+    source_type = Column(String(32), nullable=False)
+    source_id = Column(String(160), nullable=False)
+    context = Column(String(32), nullable=False)
+    context_ref = Column(String(160), nullable=False)
+    served_at = Column(DateTime(timezone=True), nullable=False)
+    answered_at = Column(DateTime(timezone=True), nullable=True)
+    result = Column(Boolean, nullable=True)
+
+
+class PlacementAttempt(Base):
+    __tablename__ = "placement_attempts"
+    __table_args__ = (Index("ix_placement_attempts_user_created", "user_id", "created_at"),)
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    status = Column(String(20), nullable=False, default="in_progress")
+    language = Column(String(2), nullable=False)
+    bank = Column(JSON, nullable=False)
+    questions = Column(JSON, nullable=False, default=list)
+    answers = Column(JSON, nullable=False, default=list)
+    available_levels = Column(JSON, nullable=False)
+    target_level = Column(String(2), nullable=False, default="N5")
+    skill_scores = Column(JSON, nullable=True)
+    recommended_level = Column(String(2), nullable=True)
+    result = Column(JSON, nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+    confirmed_at = Column(DateTime(timezone=True), nullable=True)
+    assessment_mode = Column(String(24), nullable=False, default="legacy", server_default="legacy")
+    selected_level = Column(String(2), nullable=True)
+    estimated_level = Column(String(2), nullable=True)
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+    total_score = Column(Float, nullable=True)
+    scoring_version = Column(String(30), nullable=False, default="legacy-v1", server_default="legacy-v1")
+    estimation_version = Column(String(30), nullable=False, default="legacy-v1", server_default="legacy-v1")
+    revision = Column(Integer, nullable=False, default=0, server_default="0")
+
+
+class PlacementStimulus(Base):
+    __tablename__ = "placement_stimuli"
+    __table_args__ = (UniqueConstraint("source_key", "version", name="uq_placement_stimulus_version"),)
+    id = Column(Integer, primary_key=True)
+    source_key = Column(String(160), nullable=False)
+    version = Column(Integer, nullable=False, default=1)
+    kind = Column(String(12), nullable=False)
+    content = Column(JSON, nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+class PlacementQuestionBank(Base):
+    __tablename__ = "placement_questions"
+    __table_args__ = (
+        UniqueConstraint("source_key", "version", name="uq_placement_question_version"),
+        Index("ix_placement_question_published", "publication_status", "level", "skill"),
+    )
+    id = Column(Integer, primary_key=True)
+    source_key = Column(String(160), nullable=False)
+    version = Column(Integer, nullable=False, default=1)
+    level = Column(String(2), nullable=False)
+    skill = Column(String(12), nullable=False)
+    question_type = Column(String(20), nullable=False, default="mcq")
+    payload = Column(JSON, nullable=False)
+    answer_key = Column(JSON, nullable=False)
+    explanation = Column(JSON, nullable=False)
+    difficulty = Column(Integer, nullable=False)
+    source = Column(JSON, nullable=False)
+    publication_status = Column(String(16), nullable=False, default="draft")
+    is_demo = Column(Boolean, nullable=False, default=True)
+    stimulus_id = Column(Integer, ForeignKey("placement_stimuli.id"), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
+class PlacementAttemptItem(Base):
+    __tablename__ = "placement_attempt_items"
+    __table_args__ = (
+        UniqueConstraint("attempt_id", "source_key", name="uq_placement_attempt_source"),
+        UniqueConstraint("attempt_id", "position", name="uq_placement_attempt_position"),
+    )
+    id = Column(Integer, primary_key=True)
+    attempt_id = Column(Integer, ForeignKey("placement_attempts.id", ondelete="CASCADE"), nullable=False, index=True)
+    question_id = Column(Integer, ForeignKey("placement_questions.id"), nullable=True)
+    source_key = Column(String(160), nullable=False)
+    position = Column(Integer, nullable=False)
+    snapshot = Column(JSON, nullable=False)
+    user_answer = Column(JSON, nullable=True)
+    is_correct = Column(Boolean, nullable=True)
+    revision = Column(Integer, nullable=False, default=0, server_default="0")
+    answered_at = Column(DateTime(timezone=True), nullable=True)
 
 
 class UserGameProfile(Base):
@@ -258,6 +481,86 @@ class ChatHistory(Base):
     user = relationship("User", back_populates="chat_history")
 
 
+class MinigameLearningEvent(Base):
+    __tablename__ = 'minigame_learning_events'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    event_key = Column(String(180), nullable=False)
+    game = Column(String(20), nullable=False)
+    source_type = Column(String(12), nullable=False)
+    source_id = Column(String(80), nullable=False)
+    action = Column(String(12), nullable=False)
+    answer = Column(String(120), nullable=False, default='')
+    jlpt_level = Column(String(2), nullable=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (UniqueConstraint('user_id','event_key',name='uq_minigame_learning_event'),
+        Index('ix_minigame_learning_user_time','user_id','created_at'),
+        Index('ix_minigame_learning_source','user_id','source_type','source_id'))
+
+
+class UserKanjiNote(Base):
+    __tablename__ = 'user_kanji_notes'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    kanji = Column(String(1), nullable=False)
+    sino_vietnamese = Column(String(80), nullable=False, default='')
+    meaning_vi = Column(String(2000), nullable=False, default='')
+    mnemonic = Column(String(2000), nullable=False, default='')
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    __table_args__ = (UniqueConstraint('user_id','kanji',name='uq_user_kanji_note'),)
+
+
+class ChatAnswerFeedback(Base):
+    __tablename__ = 'chat_answer_feedback'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    conversation_id = Column(Uuid(as_uuid=True), ForeignKey('chat_conversations.id', ondelete='CASCADE'), nullable=True)
+    chat_history_id = Column(Integer, ForeignKey('chat_history.id', ondelete='CASCADE'), nullable=False)
+    rating = Column(String(12), nullable=False)
+    comment = Column(String(1000), nullable=False, default='')
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    __table_args__ = (
+        UniqueConstraint('user_id', 'chat_history_id', name='uq_chat_answer_feedback_owner'),
+        CheckConstraint("rating IN ('helpful', 'incorrect')", name='ck_chat_answer_feedback_rating'),
+        Index('ix_chat_answer_feedback_user_time', 'user_id', 'updated_at'),
+    )
+
+
+class KanjiWritingAttempt(Base):
+    __tablename__ = "kanji_writing_attempts"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    attempt_key = Column(String(36), nullable=False)
+    kanji = Column(String(1), nullable=False)
+    jlpt_level = Column(String(2), nullable=False)
+    mode = Column(String(12), nullable=False)
+    result = Column(JSON, nullable=False)
+    elapsed_seconds = Column(Integer, nullable=False, default=0)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (
+        UniqueConstraint('user_id', 'attempt_key', name='uq_kanji_writing_attempt_key'),
+        Index('ix_kanji_writing_user_time', 'user_id', 'created_at'),
+    )
+
+
+class KanjiWritingReport(Base):
+    __tablename__ = "kanji_writing_reports"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    report_key = Column(String(36), nullable=False)
+    attempt_key = Column(String(36), nullable=False)
+    kanji = Column(String(1), nullable=False)
+    strokes = Column(JSON, nullable=False)
+    result = Column(JSON, nullable=False)
+    comment = Column(String(2000), nullable=False, default='')
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    __table_args__ = (
+        UniqueConstraint('user_id', 'report_key', name='uq_kanji_writing_report_key'),
+        Index('ix_kanji_writing_report_user_time', 'user_id', 'created_at'),
+    )
+
+
 class LearningSession(Base):
     __tablename__ = "learning_sessions"
 
@@ -304,6 +607,10 @@ class ListeningLesson(Base):
     is_published = Column(Boolean, nullable=False, default=False, server_default="false")
     created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     source_document_id = Column(Integer, ForeignKey("documents.id", ondelete="SET NULL"), nullable=True, index=True)
+    video_url = Column(String(500), nullable=True)
+    video_provider = Column(String(20), nullable=True)
+    video_id = Column(String(64), nullable=True)
+    source_note = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
@@ -328,6 +635,8 @@ class Document(Base):
     __tablename__ = "documents"
 
     id = Column(Integer, primary_key=True, index=True)
+    # Legacy/shared documents remain unowned; only authenticated creation sets this.
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     title = Column(String, nullable=False)
     content = Column(Text, nullable=False)
     document_type = Column(String, nullable=False)  # "grammar", "vocabulary", "lesson", "example"
@@ -354,6 +663,33 @@ class GrammarRule(Base):
     jlpt_level = Column(String, nullable=False)
     difficulty_score = Column(Float, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class GrammarLesson(Base):
+    __tablename__ = 'grammar_lessons'
+    id = Column(Integer, primary_key=True)
+    source_key = Column(String(160), nullable=False, unique=True)
+    grammar_rule_id = Column(Integer, ForeignKey('grammar_rules.id', ondelete='RESTRICT'), nullable=False, unique=True)
+    jlpt_level = Column(String(2), nullable=False, index=True)
+    sort_order = Column(Integer, nullable=False)
+    formation = Column(Text, nullable=False)
+    meaning = Column(Text, nullable=False)
+    usage_notes = Column(Text, nullable=False, default='')
+    examples = Column(JSON, nullable=False, default=list)
+    common_errors = Column(JSON, nullable=False, default=list)
+    comparisons = Column(JSON, nullable=False, default=list)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    grammar_rule = relationship('GrammarRule')
+
+
+class GrammarLessonProgress(Base):
+    __tablename__ = 'grammar_lesson_progress'
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    lesson_id = Column(Integer, ForeignKey('grammar_lessons.id', ondelete='CASCADE'), primary_key=True)
+    status = Column(String(16), nullable=False, default='studied', server_default='studied')
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    __table_args__ = (CheckConstraint("status IN ('studied', 'mastered')", name='ck_grammar_lesson_progress_status'),)
 
 
 class GrammarQuestion(Base):

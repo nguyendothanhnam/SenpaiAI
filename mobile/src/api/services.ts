@@ -3,6 +3,7 @@ import { createApiClient } from './client'
 import { apiConfiguration } from '../config/env'
 import { secureToken } from '../storage/secureToken'
 import { Session } from '../auth/session'
+import { localReminderLifecycle } from '../features/reminders/LocalReminderController'
 import type { DailyAnswerResult, DailyCompletion, DailyHistory, DailyOverview, DocumentPayload, Language, LibraryCategories, LibraryDocument, LibraryFilters, LibraryPage, LibraryStats, Rewards, User } from './types'
 
 // React Query's default logger dumps Axios config, which may contain a bearer token.
@@ -29,6 +30,7 @@ export const api = createApiClient({
 })
 
 export const session = new Session(api, secureToken, async () => {
+  await localReminderLifecycle.clear()
   await queryClient.cancelQueries()
   queryClient.clear()
 })
@@ -45,7 +47,14 @@ export const dailyAPI = {
     return { ...response.data, server_now_ms: Number.isFinite(serverTime) ? serverTime : undefined, received_at_ms: performance.now() }
   },
   answer: (itemId: number, answer: unknown, time_spent_ms: number) => api.post<DailyAnswerResult>(`/daily/items/${itemId}/answer`, { answer, time_spent_ms }).then(({ data }) => data),
-  complete: () => api.post<DailyCompletion>('/daily/complete').then(({ data }) => data),
+  complete: async () => {
+    const userId = session.getSnapshot().user?.id
+    const { data } = await api.post<DailyCompletion>('/daily/complete')
+    // The task is already complete on the server: a local OS failure must never
+    // turn it into a failed submission or invite a duplicate completion POST.
+    if (userId) await localReminderLifecycle.complete(userId, data.streak).catch(() => undefined)
+    return data
+  },
   history: (days = 7) => api.get<DailyHistory[]>('/daily/history', { params: { days } }).then(({ data }) => data),
 }
 

@@ -1,0 +1,68 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Listening UI review fixture</title></head>
+<body class="theme-shell"><div id="root"></div>
+<script type="module">
+import React from 'react'
+import {createRoot} from 'react-dom/client'
+import {MemoryRouter, Routes, Route, useNavigate} from 'react-router-dom'
+import {QueryClient, QueryClientProvider} from 'react-query'
+import '/src/index.css'
+import i18n from '/src/i18n/index.ts'
+import {themes} from '/src/themes/themes.ts'
+import {AuthProvider} from '/src/services/auth.tsx'
+import {api} from '/src/services/api.ts'
+import Lessons from '/src/pages/ListeningLessons.tsx'
+import Player from '/src/pages/ListeningPlayer.tsx'
+
+window.theme=(name='classic',mode='light')=>{
+ document.documentElement.classList.toggle('dark',mode==='dark')
+ document.documentElement.dataset.theme=name
+ for(const[key,value] of Object.entries(themes[name].palettes[mode]))document.documentElement.style.setProperty('--'+key.replace(/[A-Z]/g,c=>'-'+c.toLowerCase()),value)
+ document.body.style.backgroundImage='linear-gradient(color-mix(in srgb,var(--bg) 30%,transparent),color-mix(in srgb,var(--bg) 30%,transparent)),url(/themes/background4.webp)'
+ document.body.style.backgroundSize='cover'; document.body.style.backgroundAttachment='fixed'
+}
+window.theme(); window.language=language=>i18n.changeLanguage(language); await i18n.changeLanguage('vi')
+localStorage.setItem('access_token','listening-preview-only')
+const segments=[{idx:0,start_ms:0,end_ms:2000,ja:'今日はいい天気ですね。',vi:'Hôm nay trời đẹp nhỉ.',tokens:[{text:'今日',reading:'きょう'},{text:'はいい天気ですね。'}]},{idx:1,start_ms:2000,end_ms:4000,ja:'いっしょに公園へ行きましょう。',vi:'Cùng đi công viên nhé.',tokens:[{text:'いっしょに'},{text:'公園',reading:'こうえん'},{text:'へ行きましょう。'}]},{idx:2,start_ms:4000,end_ms:6000,ja:'いいですね。駅の前で会いましょう。',vi:'Hay đấy. Gặp nhau trước ga nhé.'}]
+const levels=['N5','N4','N3','N2','N1']
+const lessons=Array.from({length:24},(_,index)=>({id:index+1,title:index===0?'Một ngày cuối tuần':index===1?'Học tiếng Nhật qua video':index===2?'Hội thoại từ tài liệu Library':`Hội thoại tiếng Nhật ${index+1}`,jlpt_level:index<3?'N5':levels[index%5],topic:index%2?'hoc_tap':'doi_song',description:'Một cuộc trò chuyện ngắn bằng tiếng Nhật để luyện nghe và đọc cùng bản dịch.',source:index===1?'video':index===2?'library':'seed',duration_ms:6000,segments,video_id:index===1?'M7lc1UVf-VE':null,video_provider:index===1?'youtube':null,video_url:index===1?'https://www.youtube.com/watch?v=M7lc1UVf-VE':null,source_note:'Fixture content only'}))
+const documents=[{id:91,title:'Hội thoại đời sống — 週末の予定',jlpt_level:'N5',content:'週末に何をしますか。友達と公園へ行きます。天気がよければ、一緒に散歩しましょう。\nCùng trao đổi về kế hoạch cuối tuần.'},{id:92,title:'Từ vựng mua sắm',jlpt_level:'N5',content:'これはいくらですか。買い物の会話を練習しましょう。'},{id:93,title:'Thảo luận công việc',jlpt_level:'N3',content:'会議の準備について話し合いましょう。'}]
+window.fixtureCalls=[]; window.youtubeCalls=[]; window.fixtureFailures={}
+function wav(){const samples=48000,bytes=new ArrayBuffer(44+samples*2),view=new DataView(bytes);const str=(offset,s)=>[...s].forEach((c,n)=>view.setUint8(offset+n,c.charCodeAt(0)));str(0,'RIFF');view.setUint32(4,36+samples*2,true);str(8,'WAVE');str(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,1,true);view.setUint32(24,8000,true);view.setUint32(28,16000,true);view.setUint16(32,2,true);view.setUint16(34,16,true);str(36,'data');view.setUint32(40,samples*2,true);return new Blob([bytes],{type:'audio/wav'})}
+api.defaults.adapter=async config=>{
+ const url=config.url,method=config.method,body=typeof config.data==='string'?JSON.parse(config.data):config.data,params=config.params||{}
+ window.fixtureCalls.push({url,method,body,params})
+ if(window.fixtureFailures[url]){window.fixtureFailures[url]=false;throw {response:{status:503,data:{detail:'fixture_failure'}},config}}
+ let data
+ if(url==='/auth/me')data={id:99981,username:'Preview',email:'preview@example.test',current_jlpt_level:'N5',learning_goals:[]}
+ else if(url==='/listening/lessons'){const list=lessons.filter(row=>(!params.jlpt_level||row.jlpt_level===params.jlpt_level)&&(!params.topic||row.topic===params.topic)&&(!params.source||row.source===params.source)&&(!params.search||`${row.title} ${row.description}`.toLowerCase().includes(params.search.toLowerCase())));data={items:list.slice(params.offset||0,(params.offset||0)+(params.limit||12)),total:list.length,limit:12,offset:params.offset||0}}
+ else if(url==='/library/documents')data={items:documents.filter(doc=>!params.jlpt_level||doc.jlpt_level===params.jlpt_level),total:documents.length}
+ else if(url==='/listening/video/parse')data={segments:segments.slice(0,2).map(row=>({start_ms:row.start_ms,end_ms:row.end_ms,ja:row.ja,vi:''}))}
+ else if(url==='/listening/video/lessons'){data={id:200,...body,source:'video'};lessons.push({...data,duration_ms:body.segments.at(-1).end_ms})}
+ else if(url==='/listening/lessons/from-library')data={title:'Hội thoại từ tài liệu đã chọn',description:'Bản nháp để chỉnh sửa',jlpt_level:'N5',topic:'doi_song',segments:segments.map(row=>({ja:row.ja,vi:row.vi}))}
+ else if(url==='/listening/lessons/from-library/save'){data={id:201,...body,source:'library',duration_ms:0};lessons.push(data)}
+ else if(url?.endsWith('/audio'))data=wav()
+ else if(url?.endsWith('/exercises'))data={questions:[],revision:'fixture'}
+ else if(url?.endsWith('/attempts'))data={items:[]}
+ else if(/^\/listening\/lessons\/\d+$/.test(url))data=lessons.find(row=>row.id===Number(url.split('/').at(-1)))
+ else data={items:[]}
+ await new Promise(resolve=>setTimeout(resolve,15))
+ return {data,status:200,statusText:'OK',headers:{},config}
+}
+window.YT={Player:class{
+ constructor(element,options){this.options=options;this.time=0;this.rate=1;this.playing=false;this.last=performance.now();const frame=document.createElement('iframe');frame.title='YouTube fixture';frame.src='about:blank';element.replaceChildren(frame);queueMicrotask(()=>options.events.onReady())}
+ update(){const now=performance.now();if(this.playing)this.time+=(now-this.last)/1000*this.rate;this.last=now;return this.time}
+ getCurrentTime(){return this.update()}
+ getDuration(){return 6}
+ getAvailablePlaybackRates(){return [.75,1,1.25]}
+ getPlaybackRate(){return this.rate}
+ setPlaybackRate(value){this.update();this.rate=value;window.youtubeCalls.push(['rate',value]);this.options.events.onPlaybackRateChange()}
+ seekTo(value){this.time=value;this.last=performance.now();window.youtubeCalls.push(['seek',value])}
+ playVideo(){this.last=performance.now();this.playing=true;window.youtubeCalls.push(['play']);this.options.events.onStateChange({data:1})}
+ pauseVideo(){this.update();this.playing=false;window.youtubeCalls.push(['pause']);this.options.events.onStateChange({data:2})}
+ destroy(){window.youtubeCalls.push(['destroy'])}
+}}
+const query=new QueryClient({defaultOptions:{queries:{retry:false},mutations:{retry:false}}})
+function Nav(){window.go=useNavigate();return null}
+createRoot(document.getElementById('root')).render(React.createElement(QueryClientProvider,{client:query},React.createElement(MemoryRouter,{initialEntries:['/listening']},React.createElement(AuthProvider,null,React.createElement(Nav),React.createElement(Routes,null,React.createElement(Route,{path:'/listening',element:React.createElement(Lessons)}),React.createElement(Route,{path:'/listening/:id',element:React.createElement(Player)}))))))
+</script></body></html>

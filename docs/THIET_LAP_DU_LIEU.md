@@ -28,7 +28,7 @@ python scripts/setup_data.py --groups index --external
 
 ## Kiểm kê đầy đủ script và migration
 
-`--inventory` đọc AST, không thực thi các script, liệt kê mọi file Python trong `backend/scripts`, `scripts` và `backend/populate_data.py`, các cờ CLI thật, chuỗi migration và các launcher. Hiện có 18 script Python kể cả hai lệnh mới; 14 revision nối tiếp từ 0001 đến 0014. Đây là nguồn kiểm kê tự cập nhật khi thêm script.
+`--inventory` đọc AST, không thực thi các script, liệt kê mọi file Python trong `backend/scripts`, `scripts` và `backend/populate_data.py`, các cờ CLI thật, chuỗi migration và các launcher. Sau khi merge develop ngày 28/11/2026, chuỗi có 29 revision từ 0001 đến 0029; revision 0014 thuộc placement, OpenJLPT là 0029. Số script hiện tại lấy từ kết quả kiểm kê. Đây là nguồn kiểm kê tự cập nhật khi thêm script.
 
 | Script hiện có | Phụ thuộc, tác động và khả năng chạy lại |
 | --- | --- |
@@ -49,7 +49,7 @@ python scripts/setup_data.py --groups index --external
 | `scripts/validate_kanjivg_coverage.py` | Rà soát độ phủ nét, không sửa nguồn |
 | `setup_data.py`, `data_status.py` | Orchestrator cộng thêm và kiểm tra chỉ đọc; PowerShell chuyển nguyên cờ/exit code |
 
-Migration: 0001 lõi; 0002 kanji/vocab/liên kết và `pg_trgm`; 0003 description; 0004 điểm bài tập; 0005 grammar; 0006 rewards; 0007 daily; 0008 reminders; 0009 voice conversations; 0010 listening; 0011 ngôn ngữ; 0012 nội dung sinh từ library; 0013 chat conversations; **0014 OpenJLPT**. 0002 cần PostgreSQL và quyền tạo extension. Các migration cũ không được coi là tùy ý chạy riêng nhiều lần; runner để Alembic quản lý revision.
+Migration: 0001 lõi; 0002 kanji/vocab/liên kết và `pg_trgm`; 0003 description; 0004 điểm bài tập; 0005 grammar; 0006 rewards; 0007 daily; 0008 reminders; 0009 voice conversations; 0010 listening; 0011 ngôn ngữ; 0012 nội dung sinh từ library; 0013 chat conversations; **0014–0028 placement, learning, flashcard, grammar và listening từ develop; 0029 OpenJLPT**. 0002 cần PostgreSQL và quyền tạo extension. Các migration cũ không được coi là tùy ý chạy riêng nhiều lần; runner để Alembic quản lý revision.
 
 `database/init.sql` chỉ khởi tạo role/type/extension, không thay migration. Compose hiện có command backend tự tải mô hình rồi gọi `populate_data.py` cũ; không dùng command đó làm quy trình seed lặp lại. `setup-ollama.*` có tải mô hình, không được runner gọi. `start.*` chỉ là launcher ứng dụng.
 
@@ -69,7 +69,7 @@ Migration: 0001 lõi; 0002 kanji/vocab/liên kết và `pg_trgm`; 0003 descripti
 | `backend/models/`, model Ollama/Whisper, venv, node_modules | Cục bộ/volume/bỏ qua, không tự tải hoặc cài thêm bởi runner |
 | `tmp/`, log, bản build | Artifact chạy thử, không phải nguồn dữ liệu dùng chung |
 
-Không đổi `.gitignore` trong lượt này. Không chép DB, `.env`, token, index hoặc âm thanh cá nhân vào Git. Học liệu dùng chung cần được rà soát, ghi nguồn/giấy phép và commit qua file nguồn; cache lớn có thể phân phối bằng artifact có manifest. Mã OpenJLPT/0014 đang đi cùng checkout develop phải được đưa vào cùng thay đổi trước khi thành viên khác clone.
+Không đổi `.gitignore` trong lượt này. Không chép DB, `.env`, token, index hoặc âm thanh cá nhân vào Git. Học liệu dùng chung cần được rà soát, ghi nguồn/giấy phép và commit qua file nguồn; cache lớn có thể phân phối bằng artifact có manifest. Mã OpenJLPT/0029 đang đi cùng checkout feature/openjlpt-dictionary phải được đưa vào cùng thay đổi trước khi thành viên khác clone.
 
 Chỉ mục setup chỉ nhận embedding thật 768 chiều từ `nomic-embed-text`; xác minh số hữu hạn/khác zero, gắn provenance, ghi file tạm rồi replace nguyên tử, giữ mọi record ngoài tài liệu nguồn và tạo một backup trước lần sửa đầu. Không gọi fallback hash của runtime. Nếu file bị tiến trình khác thay đổi trong lúc chạy, dừng thay vì đè. **Dừng backend khi dựng chỉ mục, sau đó bật lại**. Runtime fallback hiện có không bị đổi; nếu Ollama tắt khi truy vấn, chất lượng tìm kiếm vẫn có giới hạn như trước.
 
@@ -88,9 +88,9 @@ Chỉ mục setup chỉ nhận embedding thật 768 chiều từ `nomic-embed-te
 | WAV / embedding thật | 0 | 0 | 0 | 0 | 0 | 0 |
 | Từ trong catalog minigame | 0 | 0 | 367 | 0 | 0 | 367 |
 
-Toàn chuỗi migration chạy từ rỗng tới 0014. Hai lượt Python đầu exit 0; lượt hai tạo thêm **0** kanji, **0** từ, **0** tài liệu, **0** rule/câu grammar và **0** bài nghe. Đã chạy lại bằng PowerShell: thiết lập exit 0, chỉ kiểm tra exit 2; JSON kiểm tra PowerShell/Python giống nhau. Đã đối chiếu revision và số hàng users/documents/vocabulary/grammar của DB ứng dụng trước/sau, không đổi. Giữ lại DB thử để rà soát, không tự drop.
+Phép thử lịch sử trước khi merge develop chạy chuỗi cũ từ rỗng tới 0014 (OpenJLPT). Sau merge, OpenJLPT là 0029; kết quả lịch sử này không xác nhận việc nâng cấp toàn chuỗi mới. Hai lượt Python đầu exit 0; lượt hai tạo thêm **0** kanji, **0** từ, **0** tài liệu, **0** rule/câu grammar và **0** bài nghe. Đã chạy lại bằng PowerShell: thiết lập exit 0, chỉ kiểm tra exit 2; JSON kiểm tra PowerShell/Python giống nhau. Đã đối chiếu revision và số hàng users/documents/vocabulary/grammar của DB ứng dụng trước/sau, không đổi. Giữ lại DB thử để rà soát, không tự drop.
 
-Kết luận chủ ý là **PARTIAL**, không phải “tất cả sẵn sàng”:
+Kết luận của phép thử lịch sử là **PARTIAL**, không phải “tất cả sẵn sàng”. Các nhận xét bên dưới mô tả checkout trước khi merge develop. Sau merge ngày 28/11/2026, mã và migration placement đã có; dữ liệu nét N4 trong JSON đã đủ 166 mục. Placement vẫn cần kiểm tra ngân hàng câu hỏi riêng, runner không tự nhập. Kho từ minigame N5/N4 vẫn thiếu.
 
 - Develop chưa có mã/migration/bank placement; không dùng 98 câu mẫu grammar để tuyên bố có bài placement. Nếu bảng placement tồn tại nhưng chỉ có `is_demo`, checker ghi `demo_only`, không sẵn sàng cho kiểm tra thật.
 - N4 và phần lớn N5 chưa có nét trong JSON commit; checker phân biệt số trong Git và SVG cục bộ. Cần nhập KanjiVG chính thức có rà soát, không tạo nét giả.

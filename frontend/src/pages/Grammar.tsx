@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { KanjiText } from '../components/kanji/KanjiText'
 import { useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -243,14 +244,14 @@ export default function Grammar() {
                             </div>
                             <div className="flex-1">
                               <h4 className="text-sm font-semibold text-[color:var(--primary)] mb-1">
-                                {point.pattern}
+                                <KanjiText text={point.pattern} />
                               </h4>
                               <p className="text-sm text-[color:var(--text)] mb-2">
-                                {point.explanation}
+                                <KanjiText text={point.explanation} />
                               </p>
                               {point.example && (
                                 <div className="p-2 bg-[color:var(--card)] border border-[color:var(--border)] rounded-lg text-sm japanese-text text-[color:var(--text)]">
-                                  {point.example}
+                                  <KanjiText text={point.example} />
                                 </div>
                               )}
                             </div>

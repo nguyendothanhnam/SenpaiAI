@@ -4,25 +4,25 @@ import {
   Maximize2,
   Minimize2,
   Eye,
-  Navigation,
+  EyeOff,
   UserCheck,
   Footprints,
-  HelpCircle,
   X,
-  Building,
   Volume2,
-  Layers,
-  Sparkles,
-  Award,
   CheckCircle2,
   ShieldCheck,
   DoorOpen,
   User,
   RotateCcw,
+  Sliders,
+  FileText,
+  Award,
+  Building,
 } from 'lucide-react'
 import { SceneManager } from './3d/SceneManager'
 import { eventBridge } from './3d/EventBridge'
 import { etiquetteAudio } from './3d/EtiquetteAudio'
+import { InterviewDocumentModal } from './InterviewDocumentModal'
 import type { QualityLevel } from './3d/QualityManager'
 import type { CameraView } from './3d/CameraRig'
 
@@ -86,14 +86,17 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   const [viewMode, setViewMode] = useState<CameraView>('pov')
   const [stance, setStance] = useState<'sitting' | 'standing'>('sitting')
   const [qualityLevel, setQualityLevel] = useState<QualityLevel>('medium')
-  const [showControlsGuide, setShowControlsGuide] = useState<boolean>(false)
   const [hasWebGLError, setHasWebGLError] = useState<boolean>(false)
   const [isNativeFs, setIsNativeFs] = useState(false)
 
-  // Japanese Etiquette Protocol State
-  const [etiquetteStage, setEtiquetteStage] = useState<EtiquetteStage>(
-    currentTurn === 1 ? 'dress_check' : 'sitting_interview'
-  )
+  // Executive Minimalist HUD States
+  const [isUiHidden, setIsUiHidden] = useState<boolean>(false)
+  const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false)
+  const [showEtiquetteMenu, setShowEtiquetteMenu] = useState<boolean>(false)
+  const [showDocModal, setShowDocModal] = useState<boolean>(false)
+
+  // Japanese Etiquette Protocol State - Always starts with dress_check so user experiences all steps before and after
+  const [etiquetteStage, setEtiquetteStage] = useState<EtiquetteStage>('dress_check')
   const [candidateGender, setCandidateGender] = useState<'male' | 'female'>('male')
   const [showEtiquetteCard, setShowEtiquetteCard] = useState<boolean>(true)
   const [isKnocking, setIsKnocking] = useState<boolean>(false)
@@ -138,10 +141,13 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     etiquetteAudio.speakJapanese('本日の面接は以上となります。結果は後日ご連絡いたします。お疲れ様でした。')
   }, [handleViewChange])
 
-  // Notify parent whenever etiquette stage changes
+  // Notify parent & Scene Manager whenever etiquette stage changes
   useEffect(() => {
     if (onEtiquetteStageChange) {
       onEtiquetteStageChange(etiquetteStage)
+    }
+    if (sceneManagerRef.current && 'setEtiquetteStage' in sceneManagerRef.current) {
+      ;(sceneManagerRef.current as any).setEtiquetteStage(etiquetteStage)
     }
   }, [etiquetteStage, onEtiquetteStageChange])
 
@@ -273,6 +279,11 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
       setIsNativeFs(true)
     }
   }
+
+  useEffect(() => {
+    sceneManagerRef.current?.setCandidateGender(candidateGender)
+    if (etiquetteStage === 'dress_check') handleViewChange('candidate_preview')
+  }, [candidateGender, etiquetteStage, handleViewChange])
 
   // --- ETIQUETTE PROTOCOL WORKFLOW STEPS ---
 
@@ -455,6 +466,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
   // Jump straight to seated interview view
   const handleSkipToInterview = useCallback(() => {
     setEtiquetteStage('sitting_interview')
+    sceneManagerRef.current?.setCandidateGender(candidateGender)
     sceneManagerRef.current?.setDoorOpen(false)
     sceneManagerRef.current?.setCandidateStance('seated')
     setTimeout(() => {
@@ -464,7 +476,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
     setShowEtiquetteCard(false)
     onDistanceChangeRef.current?.(2.1, true)
     onSitDownRequestRef.current?.()
-  }, [handleViewChange])
+  }, [candidateGender, handleViewChange])
 
   // Listen to external skip_to_interview events (e.g. from Parent HUD banner)
   useEffect(() => {
@@ -530,205 +542,282 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
 
   // --- FULL 3D INTERACTIVE VIEW ---
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden select-none bg-slate-950">
+    <div className="absolute inset-0 z-0 overflow-hidden select-none bg-slate-950 font-sans">
       {/* 3D WebGL Canvas Container */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
-      {/* Top Left HUD: Company & Interviewer Badges */}
-      <div className="absolute top-4 left-4 sm:left-6 z-20 pointer-events-auto flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          {/* Company Badge */}
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-lg">
-            <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-xs font-bold text-slate-100 tracking-wide">{companyName}</span>
-          </div>
-
-          {/* Turn Badge */}
-          <div className="px-3 py-1.5 rounded-full bg-amber-500/20 backdrop-blur-md border border-amber-500/40 text-amber-300 text-xs font-bold shadow-lg">
-            Lượt {currentTurn} / {maxTurns}
-          </div>
-
-          {/* Etiquette Score Badge */}
-          {etiquetteScore > 0 && (
-            <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-bold shadow-lg">
-              <Award className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Tác phong: +{etiquetteScore}đ</span>
-            </div>
-          )}
+      {/* When UI is hidden, only show unhide toggle at top-right */}
+      {isUiHidden ? (
+        <div className="absolute top-4 right-4 sm:right-6 z-30 pointer-events-auto">
+          <button
+            type="button"
+            onClick={() => setIsUiHidden(false)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 text-xs shadow-xl transition-all"
+            title="Hiện lại toàn bộ thanh điều khiển"
+          >
+            <Eye className="w-3.5 h-3.5 text-slate-300" />
+            <span>Hiện giao diện</span>
+          </button>
         </div>
+      ) : (
+        <>
+          {/* Top Left HUD: Company & Interviewer Badges */}
+          <div className="absolute top-4 left-4 sm:left-6 z-20 pointer-events-auto flex flex-col gap-2 font-sans">
+            <div className="flex items-center gap-2">
+              {/* Company Badge */}
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-md border border-slate-700/80 shadow-lg">
+                <div className="w-2 h-2 rounded-full bg-slate-400" />
+                <span className="text-xs font-semibold text-slate-200 tracking-wide">{companyName || '株式会社ネクステック'}</span>
+              </div>
 
-        {/* Interviewer Status Badge */}
-        <div className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 text-xs shadow-lg w-fit">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-500 to-orange-400 flex items-center justify-center text-white font-bold text-[11px]">
-            {npcName.slice(0, 1)}
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-slate-100 leading-tight">{npcName}</span>
-            <span className="text-[10px] text-slate-400">{npcTitle}</span>
-          </div>
-          {isSpeaking && (
-            <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold ml-1 animate-pulse">
-              <Volume2 className="w-3.5 h-3.5" />
-              <span>Đang nói...</span>
+              {/* Turn Badge */}
+              <div className="px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-md border border-slate-700/80 text-slate-300 text-xs font-mono shadow-lg">
+                Tiến độ: Câu {currentTurn}/{maxTurns}
+              </div>
+
+              {/* Etiquette Score Badge */}
+              {etiquetteScore > 0 && (
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/95 border border-slate-700/80 text-slate-300 text-xs font-mono shadow-lg">
+                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Tác phong: {etiquetteScore}/100</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Top Center: Japanese Etiquette Tracker Pill */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
-        <button
-          type="button"
-          onClick={() => setShowEtiquetteCard((prev) => !prev)}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md border border-amber-500/50 text-amber-300 text-xs font-bold shadow-xl transition-all"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin" style={{ animationDuration: '6s' }} />
-          <span>
-            {etiquetteStage === 'dress_check' && 'Nghi thức 1: Trang phục (身だしなみ)'}
-            {(etiquetteStage === 'outside_door' || etiquetteStage === 'knocking') && 'Nghi thức 2: Gõ cửa (3 tiếng)'}
-            {etiquetteStage === 'door_opened' && 'Nghi thức 2: Bước vào phòng'}
-            {etiquetteStage === 'standing_chair' && 'Nghi thức 3: Cúi chào 30–45°'}
-            {etiquetteStage === 'waiting_sit' && 'Nghi thức 4: Đợi mời ngồi'}
-            {etiquetteStage === 'sitting_interview' && 'Nghi thức 4: An tọa phỏng vấn'}
-            {etiquetteStage === 'exit_standing' && 'Nghi thức 5: Cúi đầu cảm ơn'}
-            {etiquetteStage === 'exit_door' && 'Nghi thức 6: Cúi chào trước khi rời'}
-            {etiquetteStage === 'etiquette_mastered' && 'Hoàn thành nghi thức 100%!'}
-          </span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400">
-            {showEtiquetteCard ? 'Ẩn' : 'Mở thẻ'}
-          </span>
-        </button>
-      </div>
+            {/* Interviewer Status Badge */}
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-md border border-slate-700/80 text-xs shadow-lg w-fit">
+              <span className="font-medium text-slate-200">{npcName}</span>
+              <span className="text-[11px] text-slate-400 font-mono">({npcTitle})</span>
+              {isSpeaking && (
+                <div className="flex items-center gap-1 text-[10px] text-sky-400 ml-1.5 font-mono">
+                  <Volume2 className="w-3 h-3 animate-pulse" />
+                  <span>Đang phát biểu</span>
+                </div>
+              )}
+            </div>
+          </div>
 
-      {/* Top Right HUD: Camera Views, Quality Settings, Native Fullscreen, Exit */}
-      <div className="absolute top-4 right-4 sm:right-6 z-20 pointer-events-auto flex items-center gap-2">
-        {/* Quality Level Selector */}
-        <div className="hidden sm:flex items-center p-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-lg text-xs">
-          {(['low', 'medium', 'high'] as QualityLevel[]).map((level) => (
+          {/* Top Right Executive HUD Controls */}
+          <div className="absolute top-4 right-4 sm:right-6 z-20 pointer-events-auto flex items-center gap-2">
+            {/* Document Viewer Button */}
             <button
-              key={level}
               type="button"
-              onClick={() => handleQualityChange(level)}
-              className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
-                qualityLevel === level
-                  ? 'bg-amber-500 text-white font-bold shadow-sm'
-                  : 'text-slate-400 hover:text-white'
-              }`}
+              onClick={() => setShowDocModal(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900/95 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white text-xs shadow-lg transition-all"
+              title="Mở hồ sơ đánh giá phỏng vấn trên bàn (Biên bản)"
             >
-              {level === 'low' ? 'Thấp' : level === 'medium' ? 'Vừa' : 'Cao'}
+              <FileText className="w-3.5 h-3.5 text-slate-400" />
+              <span className="hidden sm:inline">Biên bản</span>
             </button>
-          ))}
-        </div>
 
-        {/* Camera View Selector */}
-        <div className="flex items-center p-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/80 shadow-lg text-xs">
-          <button
-            type="button"
-            onClick={() => handleViewChange('pov')}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
-              viewMode === 'pov'
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-sm'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Eye className="w-3.5 h-3.5" />
-            <span>POV</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleViewChange('close')}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
-              viewMode === 'close'
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-sm'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Navigation className="w-3.5 h-3.5" />
-            <span>Cận cảnh</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => handleViewChange('isometric')}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-medium transition-all ${
-              viewMode === 'isometric'
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold shadow-sm'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Toàn cảnh</span>
-          </button>
-        </div>
+            {/* Cultural Etiquette Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowEtiquetteMenu(!showEtiquetteMenu)
+                  setShowSettingsMenu(false)
+                }}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs shadow-lg transition-all border ${
+                  showEtiquetteMenu
+                    ? 'bg-slate-800 text-white border-slate-600'
+                    : 'bg-slate-900/95 hover:bg-slate-800 border-slate-700/80 text-slate-300 hover:text-white'
+                }`}
+                title="Các thao tác nghi thức văn hóa Nhật Bản"
+              >
+                <UserCheck className="w-3.5 h-3.5 text-slate-400" />
+                <span>Nghi thức</span>
+              </button>
 
-        {/* Native Fullscreen */}
-        <button
-          type="button"
-          onClick={handleToggleFs}
-          title="Toàn màn hình"
-          className="p-2 rounded-xl bg-slate-900/85 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white shadow-lg transition-all"
-        >
-          {isNativeFs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-        </button>
+              {showEtiquetteMenu && (
+                <div className="absolute right-0 mt-1.5 w-60 rounded-xl bg-slate-900/98 border border-slate-700 shadow-2xl p-2 text-xs space-y-1 z-30 font-sans">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleTriggerBow()
+                      setShowEtiquetteMenu(false)
+                    }}
+                    className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white flex items-center justify-between"
+                  >
+                    <span>🙇 Cúi chào 30–45°</span>
+                    <span className="text-[10px] text-slate-400 font-mono">失礼いたします</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleTriggerNod()
+                      setShowEtiquetteMenu(false)
+                    }}
+                    className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white flex items-center justify-between"
+                  >
+                    <span>👍 Gật đầu lắng nghe</span>
+                    <span className="text-[10px] text-slate-400 font-mono">相槌</span>
+                  </button>
+                  {stance === 'standing' ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleSitDown()
+                        setShowEtiquetteMenu(false)
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white flex items-center justify-between"
+                    >
+                      <span>🪑 Ngồi vào bàn phỏng vấn</span>
+                      <span className="text-[10px] text-slate-400 font-mono">着席</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleStandUp()
+                        setShowEtiquetteMenu(false)
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white flex items-center justify-between"
+                    >
+                      <span>🚶 Đứng dậy cạnh ghế</span>
+                      <span className="text-[10px] text-slate-400 font-mono">起立</span>
+                    </button>
+                  )}
+                  {etiquetteStage === 'sitting_interview' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleStartExitProtocol()
+                        setShowEtiquetteMenu(false)
+                      }}
+                      className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-800 text-slate-200 hover:text-white flex items-center justify-between border-t border-slate-800 pt-1.5"
+                    >
+                      <span>🚪 Bắt đầu chào ra về</span>
+                      <span className="text-[10px] text-slate-400 font-mono">退室</span>
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleRestartEtiquette()
+                      setShowEtiquetteMenu(false)
+                    }}
+                    className="w-full text-left px-2.5 py-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-between border-t border-slate-800 pt-1.5"
+                  >
+                    <span>🔄 Làm lại từ bước 1</span>
+                    <RotateCcw className="w-3 h-3 text-slate-500" />
+                  </button>
+                </div>
+              )}
+            </div>
 
-        {/* Exit Button */}
-        {onExit && (
-          <button
-            type="button"
-            onClick={onExit}
-            title="Thoát phòng phỏng vấn"
-            className="p-2 rounded-xl bg-red-950/80 hover:bg-red-900 border border-red-500/40 text-red-300 hover:text-white shadow-lg transition-all"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
-      </div>
+            {/* Settings Dropdown (Camera Angles, Engine, Quality) */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSettingsMenu(!showSettingsMenu)
+                  setShowEtiquetteMenu(false)
+                }}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs shadow-lg transition-all border ${
+                  showSettingsMenu
+                    ? 'bg-slate-800 text-white border-slate-600'
+                    : 'bg-slate-900/95 hover:bg-slate-800 border-slate-700/80 text-slate-300 hover:text-white'
+                }`}
+                title="Cài đặt góc máy và chế độ hiển thị"
+              >
+                <Sliders className="w-3.5 h-3.5 text-slate-400" />
+                <span>Cài đặt</span>
+              </button>
 
-      {/* Middle Right Quick Manner Actions: Cúi chào (Ojigi) & Gật đầu */}
-      <div className="absolute right-4 sm:right-6 top-20 z-20 pointer-events-auto flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={handleTriggerBow}
-          title="Thực hiện nghi thức cúi chào chuẩn Nhật Bản (Ojigi)"
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 text-amber-300 text-xs font-bold shadow-xl transition-all active:scale-95"
-        >
-          <span>🙇</span>
-          <span>Cúi chào (お辞儀)</span>
-        </button>
+              {showSettingsMenu && (
+                <div className="absolute right-0 mt-1.5 w-64 rounded-xl bg-slate-900/98 border border-slate-700 shadow-2xl p-3 text-xs space-y-3 z-30 font-sans">
+                  {/* Camera Angles */}
+                  <div>
+                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
+                      Góc máy quan sát
+                    </span>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {[
+                        { id: 'pov', label: 'POV Nhìn thẳng' },
+                        { id: 'ots', label: 'Qua vai (OTS)' },
+                        { id: 'wide', label: 'Toàn cảnh phòng' },
+                        { id: 'desk', label: 'Cận bàn tài liệu' },
+                      ].map((cam) => (
+                        <button
+                          key={cam.id}
+                          type="button"
+                          onClick={() => {
+                            handleViewChange(cam.id as any)
+                            setShowSettingsMenu(false)
+                          }}
+                          className={`px-2 py-1.5 rounded text-[11px] text-left transition-colors border ${
+                            viewMode === cam.id
+                              ? 'bg-slate-800 text-white border-slate-600 font-semibold'
+                              : 'text-slate-400 hover:text-white border-transparent hover:bg-slate-800/60'
+                          }`}
+                        >
+                          {cam.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
-        <button
-          type="button"
-          onClick={handleTriggerNod}
-          title="Gật đầu biểu thị đồng tình và lắng nghe"
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 text-xs font-medium shadow-xl transition-all active:scale-95"
-        >
-          <span>👍</span>
-          <span>Gật đầu (頷く)</span>
-        </button>
+                  {/* Quality Level */}
+                  <div className="border-t border-slate-800 pt-2">
+                    <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
+                      Chất lượng
+                    </span>
+                    <div className="grid grid-cols-3 gap-1">
+                      {(['low', 'medium', 'high'] as QualityLevel[]).map((level) => (
+                        <button
+                          key={level}
+                          type="button"
+                          onClick={() => handleQualityChange(level)}
+                          className={`py-1 rounded text-[11px] text-center transition-colors border ${
+                            qualityLevel === level
+                              ? 'bg-slate-800 text-white border-slate-600 font-semibold'
+                              : 'text-slate-400 hover:text-white border-transparent hover:bg-slate-800/60'
+                          }`}
+                        >
+                          {level === 'low' ? 'Thấp' : level === 'medium' ? 'Vừa' : 'Cao'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
-        {etiquetteStage === 'sitting_interview' && (
-          <button
-            type="button"
-            onClick={handleStartExitProtocol}
-            title="Thực hiện nghi thức kết thúc và chào ra về"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-950/90 hover:bg-indigo-900 border border-indigo-500/40 text-indigo-300 text-xs font-bold shadow-xl transition-all active:scale-95"
-          >
-            <DoorOpen className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Nghi thức ra về</span>
-          </button>
-        )}
+            {/* Hide UI Toggle Button */}
+            <button
+              type="button"
+              onClick={() => setIsUiHidden(true)}
+              title="Ẩn giao diện để quan sát trọn vẹn phòng phỏng vấn"
+              className="p-2 rounded-lg bg-slate-900/95 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white shadow-lg transition-all"
+            >
+              <EyeOff className="w-3.5 h-3.5" />
+            </button>
 
-        {!showEtiquetteCard && etiquetteStage !== 'sitting_interview' && (
-          <button
-            type="button"
-            onClick={() => setShowEtiquetteCard(true)}
-            title="Mở lại bảng hướng dẫn nghi thức"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-950/90 hover:bg-amber-900 border border-amber-500/50 text-amber-300 text-xs font-bold shadow-xl transition-all active:scale-95"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-            <span>Mở bảng nghi thức</span>
-          </button>
-        )}
-      </div>
+            {/* Native Fullscreen */}
+            <button
+              type="button"
+              onClick={handleToggleFs}
+              title="Toàn màn hình"
+              className="p-2 rounded-lg bg-slate-900/95 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white shadow-lg transition-all"
+            >
+              {isNativeFs ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            </button>
+
+            {/* Exit Button */}
+            {onExit && (
+              <button
+                type="button"
+                onClick={onExit}
+                title="Thoát phòng phỏng vấn"
+                className="p-2 rounded-lg bg-slate-900/95 hover:bg-red-950/80 border border-slate-700/80 hover:border-red-500/40 text-slate-300 hover:text-red-300 shadow-lg transition-all"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </>
+      )}
 
       {/* ========================================================================= */}
       {/* JAPANESE INTERVIEW ETIQUETTE CONTROLLER CARD (MODAL / OVERLAY)            */}
@@ -737,7 +826,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         <motion.div
           drag
           dragMomentum={false}
-          className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 z-30 pointer-events-auto w-[92%] max-w-lg cursor-move"
+          className={`absolute z-30 pointer-events-auto w-[92%] max-w-lg ${etiquetteStage === 'dress_check' ? 'bottom-20 right-4 max-h-[50dvh] overflow-y-auto lg:bottom-auto lg:top-24 lg:max-h-[calc(100dvh-10rem)] lg:max-w-sm' : 'top-16 sm:top-20 left-1/2 -translate-x-1/2 cursor-move'}`}
         >
           {/* STAGE 1: DRESS CODE CHECKLIST MODAL */}
           {etiquetteStage === 'dress_check' && (
@@ -767,6 +856,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
               <div className="grid grid-cols-2 gap-2 p-1 rounded-2xl bg-slate-800/80 border border-slate-700/60">
                 <button
                   type="button"
+                  aria-pressed={candidateGender === 'male'}
                   onClick={() => setCandidateGender('male')}
                   className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
                     candidateGender === 'male'
@@ -779,6 +869,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
                 </button>
                 <button
                   type="button"
+                  aria-pressed={candidateGender === 'female'}
                   onClick={() => setCandidateGender('female')}
                   className={`flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
                     candidateGender === 'female'
@@ -792,6 +883,7 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
               </div>
 
               {/* Attire Specification Checklist */}
+              <p className="text-xs leading-relaxed text-slate-200">Đang xem ứng viên {candidateGender === 'female' ? 'nữ' : 'nam'} trong cảnh 3D. Khi ngồi vào bàn, chọn góc “Ứng viên” để xem lại; POV là góc nhìn qua mắt bạn.</p>
               <div className="p-3.5 rounded-2xl bg-slate-800/50 border border-slate-700/50 space-y-2 text-xs">
                 {candidateGender === 'male' ? (
                   <>
@@ -1274,58 +1366,14 @@ export const InterviewRoom3D: React.FC<InterviewRoom3DProps> = ({
         </motion.div>
       )}
 
-      {/* Controls Guide Floater (Can be dismissed) */}
-      {showControlsGuide && (
-        <div className="hidden sm:block absolute top-20 left-4 sm:left-6 z-20 pointer-events-auto max-w-[280px] p-3.5 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-700/80 text-slate-300 shadow-2xl">
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
-            <span className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>Tương tác 3D</span>
-            </span>
-            <button
-              type="button"
-              onClick={() => setShowControlsGuide(false)}
-              className="text-slate-400 hover:text-white"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-          <div className="space-y-1.5 text-[11px] leading-relaxed text-slate-300">
-            <p>
-              🖱️ <strong>Kéo chuột / Chạm xoay</strong>: Điều chỉnh góc nhìn linh hoạt.
-            </p>
-            <p>
-              🔍 <strong>Cuộn chuột</strong>: Thu phóng gần / xa người phỏng vấn.
-            </p>
-            <p>
-              🎭 <strong>Hành động</strong>: Nhấn nút <em>Cúi chào</em> để thể hiện phong cách phỏng vấn chuẩn Nhật.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Bottom-Left Stance Control (Sitting / Standing View) */}
-      <div className="absolute bottom-6 left-4 sm:left-6 z-20 pointer-events-auto flex items-center gap-2">
-        {stance === 'sitting' ? (
-          <button
-            type="button"
-            onClick={handleStandUp}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold shadow-xl transition-all"
-          >
-            <Footprints className="w-3.5 h-3.5 text-amber-400" />
-            <span>Toàn cảnh phòng</span>
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleSitDown}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold shadow-xl shadow-orange-500/20 transition-all"
-          >
-            <UserCheck className="w-3.5 h-3.5" />
-            <span>Ngồi vào bàn phỏng vấn</span>
-          </button>
-        )}
-      </div>
+      {/* Official Japanese Evaluation Record Modal */}
+      <InterviewDocumentModal
+        isOpen={showDocModal}
+        onClose={() => setShowDocModal(false)}
+        companyName={companyName}
+        npcName={npcName}
+        npcTitle={npcTitle}
+      />
     </div>
   )
 }

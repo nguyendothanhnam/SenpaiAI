@@ -2,15 +2,17 @@ import { Tabs } from 'expo-router/js-tabs'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '../../src/theme/ThemeProvider'
+import { NotificationBell } from '../../src/components/NotificationBell'
 
-export const unstable_settings = { initialRouteName: 'daily' }
+export const unstable_settings = { anchor: 'daily' }
 
 export default function TabLayout() {
   const { t } = useTranslation('nav')
   const { t: mobile } = useTranslation('mobile')
   const { colors } = useTheme()
-  return <Tabs screenOptions={{
+  return <Tabs backBehavior="initialRoute" screenOptions={{
     headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text,
+    headerRight: () => <NotificationBell />,
     tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
     tabBarActiveTintColor: colors.primary, tabBarInactiveTintColor: colors.textMuted,
     tabBarHideOnKeyboard: true,

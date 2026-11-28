@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { useAuth } from './services/auth'
 import Layout from './components/Layout'
+import Placement from './pages/Placement'
+import PlacementGate from './components/placement/PlacementGate'
 import Login from './pages/Login'
 import Chat from './pages/Chat'
 import Grammar from './pages/Grammar'
@@ -18,15 +20,18 @@ import QuizPlay from './pages/QuizPlay.jsx'
 import Flashcard from './pages/Flashcard.jsx'
 import FlashcardManual from './pages/FlashcardManual.jsx'
 import FlashcardPlay from './pages/FlashcardPlay.jsx'
+import FlashcardPage from './features/flashcards/Flashcards'
 import Analytics from './pages/Analytics.jsx'
 import Settings from './pages/Settings'
 import GrammarPractice from './pages/GrammarPractice'
+import GrammarLessons from './pages/GrammarLessons'
 import ThemeShop from './pages/ThemeShop'
 import DailyChallenge from './pages/DailyChallenge'
 import RemindersSettings from './pages/RemindersSettings'
 import ListeningLessons from './pages/ListeningLessons'
 import ListeningPlayer from './pages/ListeningPlayer'
 import InternshipRoleplay from './pages/InternshipRoleplay'
+import KanjiLookupScope from './components/kanji/KanjiLookupScope'
 
 function App() {
   const { user, isLoading } = useAuth()
@@ -49,13 +54,16 @@ function App() {
   }
 
   return (
-    <Layout>
+    <PlacementGate><Layout><KanjiLookupScope>
       <Routes>
+        <Route path="/placement" element={<Placement />} />
         <Route path="/" element={<Navigate to="/chat" replace />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/chat/:conversationId" element={<Chat />} />
         <Route path="/grammar" element={<Grammar />} />
         <Route path="/grammar/practice" element={<GrammarPractice />} />
+        <Route path="/grammar/lessons" element={<GrammarLessons />} />
+        <Route path="/grammar/lessons/:lessonId" element={<GrammarLessons />} />
         <Route path="/library" element={<Library />} />
         <Route path="/games" element={<GameHub />} />
         <Route path="/games/kanji" element={<Navigate to="/kanji?mode=study" replace />} />
@@ -67,6 +75,10 @@ function App() {
         <Route path="/flashcard" element={<Flashcard />} />
         <Route path="/flashcard/manual" element={<FlashcardManual />} />
         <Route path="/flashcard/play" element={<FlashcardPlay />} />
+        <Route path="/flashcard/learn" element={<FlashcardPage view="learn" />} />
+        <Route path="/flashcard/test" element={<FlashcardPage view="test" />} />
+        <Route path="/flashcard/stats" element={<FlashcardPage view="stats" />} />
+        <Route path="/flashcard/:deckId" element={<FlashcardPage view="detail" />} />
         <Route path="/kanji" element={<Kanji />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/analytics" element={<Analytics />} />
@@ -80,7 +92,7 @@ function App() {
         <Route path="/internship" element={<Navigate to="/interview" replace />} />
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
-    </Layout>
+    </KanjiLookupScope></Layout></PlacementGate>
   )
 }
 

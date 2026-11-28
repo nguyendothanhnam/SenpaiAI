@@ -1,5 +1,41 @@
 # SenpaiAI Mobile — Giai đoạn 0 đến 4
 
+## Kiểm tra trình độ JLPT đầu vào (27/11/2026)
+
+Vào **Cá nhân → Trình độ tiếng Nhật → Làm lại bài kiểm tra**. Sau khi đăng ký, có lời mời làm bài và nút bỏ qua. Hỗ trợ hai chế độ như web, đọc/nghe và các dạng câu hỏi của phiên cũ, lịch sử, tiếp tục lần làm dở và xác nhận kết quả riêng trước khi cập nhật hồ sơ. Mobile chỉ cho tiến về trước theo yêu cầu; đáp án, chấm điểm, thời hạn và kết luận đều do backend quyết định. Mở lại app tìm lần làm dở; trở về từ nền phải đồng bộ phiên trước khi trả lời. Kết quả N5 mẫu không xác lập trình độ thật.
+
+Thêm `expo-audio ~58.0.12` bằng `npx expo install expo-audio` tại `mobile`; gói giải nén 1.345.808 byte (~1,28 MiB), chưa phải dung lượng APK/IPA tăng thêm. Module có trong Expo Go; chỉ phát audio có xác thực, không xin micro và không phát nền. Dependency `expo-asset` đã có được npm đưa lên cấp gốc và cập nhật bản vá khi giải quyết peer dependency. Không sửa web/API backend.
+
+Kiểm tra: typecheck, lint, **175 test**, khóa dịch web/mobile, luồng HTTP bài thi thật và export Android/iOS đã đạt. Tài khoản kiểm thử đã xóa. Chưa kiểm chứng thao tác/âm thanh trên điện thoại thật; `frontend i18n:lint` còn lỗi chữ chưa dịch có sẵn ngoài phạm vi này. Export tạo bundle tại `dist`, không phải phát hành App Store/Google Play/EAS Update.
+
+Xem [báo cáo API, file thay đổi, kết quả thật, giới hạn, checklist Android/iPhone và quyết định cần chốt](docs/PLACEMENT.md).
+
+## Nhắc học — Phần B (19/11/2026)
+
+Đã bổ sung thông báo **cục bộ trên thiết bị** cho Android/iPhone. Vào **Cá nhân → Cài đặt → Cài đặt nhắc học**: bật nhắc hoặc chọn **Cho phép nhắc trên thiết bị này**, cấp quyền rồi Lưu cài đặt. App không xin quyền khi mở; nếu bị từ chối hoặc kênh Android bị chặn, màn hình hướng dẫn mở cài đặt hệ thống. Cài đặt server và lựa chọn cho phép trên từng thiết bị/tài khoản được xử lý riêng.
+
+Lịch gồm các thông báo một lần cho **hôm nay và 6 ngày tiếp theo**, theo múi giờ IANA đã lưu: nhiệm vụ hằng ngày ở giờ đã chọn, giữ chuỗi từ 2 ngày vào 21:00 hoặc giờ chính nếu muộn hơn. Tôn trọng ngày, loại, giờ yên lặng, tạm hoãn và giới hạn; nếu hai loại trùng thời điểm thì chỉ giữ nhắc nhiệm vụ. Sổ lượt đến hạn ngăn gửi lại khi dựng lịch. Hoàn thành nhiệm vụ hủy cả hai nhắc hôm đó, giữ lịch các ngày sau; đăng xuất, hết phiên, tắt nhắc đã lưu và xóa tài khoản đều đi qua luồng hủy. Chạm mở Hằng ngày; khi app đang mở chỉ hiện thẻ gọn trong 7 giây. Nội dung theo vi/en đang chọn. Nhắc ôn lại vẫn chỉ trong trung tâm thông báo.
+
+Giữ `expo-notifications ~58.1.9` đã cài bằng Expo ở Phần A, thêm config plugin chính thức; không thêm dependency hoặc native module tùy chỉnh, không sửa web/API backend, không token/Web Push/server push. [Expo SDK 58](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/) hỗ trợ thông báo cục bộ trong Expo Go trên cả Android và iPhone. **Bản development cũ cần build/cài lại** để nhận module/plugin; EAS development profile đã có trong dự án. Không tự build hoặc phát hành APK/IPA trong lần này.
+
+Đã đạt **typecheck, lint, 136 test mobile (19 test mới Phần B), khóa dịch web/mobile và export Android/iOS**. Backend theo `.env` vẫn không kết nối được, kể cả ngoài sandbox; chưa kiểm thử HTTP live hoặc thao tác trên điện thoại thật. Export xác nhận bundle, không xác nhận quyền/hẹn giờ native trên thiết bị.
+
+**Giới hạn giao thông báo:** app chỉ hẹn các thời điểm ngoài giờ yên lặng và kiểm tra lại khi hiển thị foreground. Khi app tắt, hệ điều hành quản lý việc hiển thị, có thể giao trễ do tiết kiệm pin/Focus; Expo không cho JavaScript chặn lại thông báo đã trễ vào giờ yên lặng. Không thể cam kết giờ giao tuyệt đối với các ràng buộc hiện tại. Thay đổi từ web/thiết bị khác chỉ được nhận khi app đồng bộ; không mở lại app quá 7 ngày sẽ hết lịch đã hẹn.
+
+Xem [kiến trúc, kết quả kiểm tra, giới hạn và checklist riêng Android/iPhone](docs/LOCAL_REMINDERS.md). Báo cáo Phần A dưới đây được giữ làm lịch sử triển khai.
+
+## Nhắc học — Phần A (19/11/2026)
+
+Chuông có số chưa đọc ở đầu các tab chính và Cá nhân. Trung tâm thông báo hỗ trợ đánh dấu từng thông báo/tất cả, xóa, kéo làm mới, tải thêm và mở màn hình tương ứng. Vào **Cá nhân → Cài đặt → Cài đặt nhắc học**, hoặc mở từ trung tâm thông báo, để chỉnh giờ/ngày/loại nhắc, giờ yên lặng, giới hạn và múi giờ; gợi ý giờ chỉ điền vào biểu mẫu khi người dùng chọn và cần nhấn Lưu để xác nhận. Dùng bản dịch vi/en chung, theme sáng/tối và vùng an toàn hiện có.
+
+Đã cài `expo-notifications ~58.1.9` bằng `npx expo install expo-notifications`, tương thích Expo SDK 58. [Tài liệu Expo SDK 58](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/) xác nhận **thông báo cục bộ dùng được trong Expo Go trên Android và iPhone**; hạn chế Android từ SDK 53 là thông báo từ xa. Expo Go phải tương thích SDK. APK development cũ cần build/cài lại khi bắt đầu dùng module mới; có thể dùng development build nếu Expo Go không tương thích SDK hoặc cần kiểm tra cấu hình native riêng.
+
+**Tại thời điểm kết thúc Phần A:** chưa xin quyền, tạo kênh, lập lịch hay xử lý chạm thông báo hệ thống; nay đã bổ sung ở Phần B phía trên. Không Web Push, không đăng ký token/push từ server; không sửa web/backend. Nhắc ôn lại vẫn là thông báo server trong trung tâm thông báo. Quy tắc ngày theo server: thứ Hai = 0, Chủ nhật = 6 (web hiện có lỗi dịch chỉ số ngày). API chỉ trả tối đa 100 thông báo mới nhất, không hỗ trợ cursor/offset.
+
+Trước khi sửa: typecheck, lint, 107 test, khóa dịch đạt; export Android/iOS đạt. Sau khi sửa: **typecheck, lint, 117 test, khóa dịch web/mobile và export Android/iOS đạt**. Export là kiểm tra bundle, chưa phát hành cửa hàng. Kiểm tra backend theo `.env` thất bại cả ngoài sandbox; chưa xác nhận lại luồng HTTP các giai đoạn trước và API nhắc học với backend live. Chưa kiểm chứng trên thiết bị thật.
+
+Xem [báo cáo Phần A, API, bảng ánh xạ đường dẫn và checklist riêng Android/iPhone](docs/REMINDERS.md). Test lịch 7 ngày, DST, hủy thông báo cục bộ và thử quyền hệ thống dành cho Phần B.
+
 ## Minigame đợt 2 trên Expo
 
 Mỗi thẻ có nút **Cách chơi** với mục tiêu, ba bước và mẹo riêng dùng chung bản dịch vi/en với web. Trong ván, nút dấu hỏi tạm dừng rồi mở hướng dẫn. Hộp xác nhận thoát minigame dùng modal theo theme, có lựa chọn ở lại rõ ràng; đóng hướng dẫn/xác nhận không tự tiếp tục ván.

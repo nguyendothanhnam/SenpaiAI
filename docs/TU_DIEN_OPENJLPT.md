@@ -19,9 +19,9 @@ Giữ bảng `vocabulary`, cột `meaning` bắt buộc cho nghĩa Việt, ràng
 - `reviewed` dùng được làm nghĩa/đáp án. `automatic` hiển thị riêng trong API chi tiết với nhãn chưa duyệt; adapter chấm bài vẫn dùng Anh, tránh dùng dịch AI làm đáp án. `missing` dùng Anh. Khóa dịch/nhãn dùng namespace `common.dictionaryData` chung vi/en.
 - Nghĩa Anh có nguồn OpenJLPT; nghĩa Việt có nguồn `legacy`/`local_ai` riêng, không nhận là nghĩa do OpenJLPT cung cấp. Ví dụ giữ nguồn/giấy phép Tatoeba; mã JMdict không bị dùng thay mã ổn định OpenJLPT.
 
-Migration **0014 nối 0013 của develop**: kiểm tra cột/chỉ mục trước khi thêm, điền chỉ mục tìm kiếm cho bản cũ, chạy upgrade lại an toàn. Downgrade có kiểm tra và **từ chối khi còn dữ liệu Anh/nguồn/bản dịch mới**, tránh làm mất dữ liệu; chỉ chạy lại downgrade an toàn khi không có dữ liệu mới cần bảo toàn. Không sửa migration cũ.
+Migration **0029 nối 0028 của develop**: kiểm tra cột/chỉ mục trước khi thêm, điền chỉ mục tìm kiếm cho bản cũ, chạy upgrade lại an toàn. Downgrade có kiểm tra và **từ chối khi còn dữ liệu Anh/nguồn/bản dịch mới**, tránh làm mất dữ liệu; chỉ chạy lại downgrade an toàn khi không có dữ liệu mới cần bảo toàn.
 
-**Không áp dụng lên DB vận hành của mobile.** Hai nhánh có lịch sử migration khác nhau; không ép DB về `0013` hoặc chạy migration này như thể nó nối tiếp nhánh mobile. Khi triển khai/gộp nhánh cần chọn đúng DB và head. Chuỗi migration cũ `0001` dùng `DEFAULT now()` của PostgreSQL nên lệnh upgrade nguyên chuỗi trên SQLite thử nghiệm thất bại; đã giữ nguyên mã cũ. Migration mới được kiểm thử thật bằng Alembic Operations trên schema cũ, upgrade/downgrade lặp lại và trường hợp từ chối mất dữ liệu. Chưa chạy PostgreSQL vận hành.
+**Sau khi merge develop ngày 28/11/2026:** migration OpenJLPT đổi từ `0014` thành `0029`, nối sau `0028`; revision `0014` thuộc placement. DB đã chạy chuỗi develop đến `0028` dùng `alembic upgrade head` để thêm dictionary. DB từng chạy `0014` của feature cũ có revision trùng tên nhưng schema khác: cần sao lưu và đối chiếu schema/lịch sử trước khi chuyển; không tự stamp hoặc ép về `0013`. Lượt merge này không chạy migration lên DB ứng dụng. Chuỗi migration cũ `0001` dùng `DEFAULT now()` của PostgreSQL nên lệnh upgrade nguyên chuỗi trên SQLite thử nghiệm thất bại; đã giữ nguyên mã cũ. Migration mới được kiểm thử thật bằng Alembic Operations trên schema cũ, upgrade/downgrade lặp lại và trường hợp từ chối mất dữ liệu. Chưa chạy PostgreSQL vận hành.
 
 ## Nhập dữ liệu
 
@@ -94,7 +94,7 @@ Chưa kiểm chứng PostgreSQL vận hành, AI thật, thiết bị thật ho�
 
 ## File thay đổi và quyết định còn lại
 
-- Model/migration/config: `backend/app/models/database.py`, thêm `models/dictionary.py`, `core/config.py`, `alembic/versions/0014_openjlpt_dictionary.py`.
+- Model/migration/config: `backend/app/models/database.py`, thêm `models/dictionary.py`, `core/config.py`, `alembic/versions/0029_openjlpt_dictionary.py`.
 - API/service: thêm `api/dictionary.py`, `services/dictionary_service.py`, `services/openjlpt_import.py`, `services/vocabulary_text.py`; sửa `main.py`, `api/kanji.py`, `repositories/learning_content.py`, `services/daily_task_service.py`, `services/library_service.py`.
 - Tool/test: thêm `scripts/import_openjlpt.py`, `scripts/report_vocabulary.py`, `tests/test_openjlpt_dictionary.py`, `tests/data/openjlpt_sample.json`.
 - Ghi công: `README.md`, `.gitignore`, Settings web/mobile, `frontend/src/i18n/locales/{vi,en}/common.json`, tài liệu này và `docs/ket_qua/openjlpt.json`.

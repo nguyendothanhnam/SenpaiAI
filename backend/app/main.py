@@ -7,8 +7,9 @@ import os
 import logging
 
 from .core.config import settings
-from .core.database import engine, Base
-from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening, internship
+from .core.database import engine, Base, SessionLocal
+from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, grammar_lessons, rewards, daily, reminders, notifications, push, listening, internship
+from .api import placement, learning, kanji_writing, chat_feedback, kanji_notes, minigame_learning, flashcards
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
 from .api import dictionary
@@ -26,7 +27,18 @@ async def lifespan(app: FastAPI):
     # Startup
     from .services.data_health import warn_data_state
     warn_data_state(engine, logger, settings)  # Advisory only; never migrates or seeds at application startup.
-    Base.metadata.create_all(bind=engine)
+    # Placement schema evolves through Alembic, including existing attempt columns.
+    Base.metadata.create_all(bind=engine, tables=[table for table in Base.metadata.sorted_tables if not table.name.startswith(("placement_", "exercise_", "weekly_learning_", "kanji_writing_", "chat_answer_feedback", "user_kanji_notes", "minigame_learning_", "flashcard_"))])
+    if settings.seed_bundled_grammar:
+        from .services.bundled_grammar import sync_bundled_grammar
+        with SessionLocal() as db:
+            try:
+                grammar_report = sync_bundled_grammar(db)
+                db.commit()
+            except Exception:
+                db.rollback()
+                raise
+        logger.info('[Grammar lessons] bundled sources: %s', grammar_report)
     dictionary_report = kanji_dictionary_service.validate()
     logger.info("[Dictionary] total entries: %s", dictionary_report["total_entries"])
     logger.info("[Dictionary] valid entries: %s", dictionary_report["valid_entries"])
@@ -70,6 +82,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition", "X-Export-Summary", "X-Export-Truncated"],
 )
 
 # Add trusted host middleware
@@ -80,9 +93,23 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router)
+app.include_router(flashcards.router)
+app.include_router(flashcards.router, prefix="/api")
+app.include_router(learning.router)
+app.include_router(learning.router, prefix="/api")
+app.include_router(kanji_writing.router)
+app.include_router(kanji_writing.router, prefix="/api")
+app.include_router(placement.router)
+app.include_router(placement.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(chat.router)
 app.include_router(chat.router, prefix="/api")
+app.include_router(chat_feedback.router)
+app.include_router(chat_feedback.router, prefix="/api")
+app.include_router(kanji_notes.router)
+app.include_router(kanji_notes.router, prefix="/api")
+app.include_router(minigame_learning.router)
+app.include_router(minigame_learning.router, prefix="/api")
 app.include_router(chat_conversations.router)
 app.include_router(chat_conversations.router, prefix="/api")
 app.include_router(analysis.router)
@@ -97,6 +124,8 @@ app.include_router(dictionary.router)
 app.include_router(dictionary.router, prefix="/api")
 app.include_router(grammar_practice.router)
 app.include_router(grammar_practice.router, prefix="/api")
+app.include_router(grammar_lessons.router)
+app.include_router(grammar_lessons.router, prefix="/api")
 app.include_router(rewards.router)
 app.include_router(rewards.router, prefix="/api")
 app.include_router(daily.router)

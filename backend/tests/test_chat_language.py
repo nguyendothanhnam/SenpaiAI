@@ -8,18 +8,18 @@ from app.services.ollama_service import OllamaJapaneseLearningService
 
 
 @pytest.mark.parametrize(('question', 'fallback', 'expected'), [
-    ('今日は何をしましたか。 có nghĩa là gì', 'en', 'vi'),
+    ('今日は何をしましたか。 có nghĩa là gì', 'en', 'en'),
     ('What does 今日は何をしましたか mean?', 'vi', 'en'),
     ('Explain the difference between は and が.', 'vi', 'en'),
-    ('Hãy giải thích sự khác nhau giữa は và が.', 'en', 'vi'),
-    ('"I want to learn Japanese" dịch sang tiếng Việt', 'en', 'vi'),
+    ('Hãy giải thích sự khác nhau giữa は và が.', 'en', 'en'),
+    ('"I want to learn Japanese" dịch sang tiếng Việt', 'en', 'en'),
     ('Please translate "Tôi là sinh viên" into English.', 'vi', 'en'),
     ('こんにちは', 'en', 'en'),
     ('こんにちは', 'vi', 'vi'),
-    ('dich cau nay giup toi', 'en', 'vi'),
+    ('dich cau nay giup toi', 'en', 'en'),
     ('Good morning', 'vi', 'en'),
 ])
-def test_question_language_wins_over_interface_language(question, fallback, expected):
+def test_ui_default_and_explicit_or_english_sentence_policy(question, fallback, expected):
     assert detect_chat_language(question, fallback) == expected
 
 
@@ -45,8 +45,7 @@ def test_reviewed_answers_and_cleaning_follow_language():
     assert 'marks the subject' in answer
     assert 'chủ đề' not in answer
     answer = finalize_chat_answer('What does 今日は何をしましたか mean?', 'I cannot access dictionaries.', 'en')
-    assert 'What did you do today?' in answer
-    assert 'cannot' not in answer
+    assert 'What did you do today?' not in answer  # no sentence-specific repair in runtime
 
 
 def test_translation_never_uses_unrelated_library_sources():
@@ -68,14 +67,14 @@ def test_wrong_language_is_retried_with_current_question_only(monkeypatch):
     assert result['answer'].startswith('Bạn có thể')
     assert len(calls) == 2
     assert 'OLD WRONG ANSWER' not in calls[1][0]
-    assert 'Vietnamese' in calls[1][1]
+    assert 'tiếng Việt' in calls[1][1]
 
 
-def test_persistent_generation_failure_is_an_error_not_a_chat_answer(monkeypatch):
+def test_persistent_invalid_generation_returns_safe_answer(monkeypatch):
     service = OllamaJapaneseLearningService()
     monkeypatch.setattr(service, '_call_ollama', lambda *args, **kwargs: 'The AI cannot access dictionaries to answer your question.')
-    with pytest.raises(RuntimeError, match='chat_generation_failed'):
-        asyncio.run(service.chat_response('Giải thích giúp tôi', response_language='vi'))
+    result=asyncio.run(service.chat_response('Giải thích giúp tôi', response_language='vi'))
+    assert 'chưa có đủ căn cứ' in result['answer']
 
 
 def test_quality_check_allows_explanations_and_detects_mixed_language():

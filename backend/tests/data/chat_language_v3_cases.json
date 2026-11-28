@@ -1,0 +1,341 @@
+{
+  "policy": "UI/preference default; explicit request or unambiguous English prose only. Quoted content does not choose explanation language.",
+  "cases": [
+    {
+      "id": 1,
+      "question": "この漢字の furigana を教えてください。",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 2,
+      "question": "この漢字の furigana を教えてください。",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 3,
+      "question": "JLPT N3 の文法を教えてください。",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 4,
+      "question": "keigo の例を説明してください。",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 5,
+      "question": "te-form を練習したいです。",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 6,
+      "question": "漢字と furigana の違いは何ですか。",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 7,
+      "question": "日本語の JLPT を勉強しています。",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 8,
+      "question": "JLPT",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 9,
+      "question": "furigana",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 10,
+      "question": "keigo N3",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 11,
+      "question": "te-form",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 12,
+      "question": "furigana please",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 13,
+      "question": "Từ furigana có nghĩa gì?",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 14,
+      "question": "Mình cần luyện keigo cho JLPT N3.",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 15,
+      "question": "Bạn giải thích te-form được không?",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 16,
+      "question": "Từ furigana có nghĩa gì?",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 17,
+      "question": "Giải thích ngữ pháp này.",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 18,
+      "question": "toi muon hoc furigana",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 19,
+      "question": "toi muon hoc furigana",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 20,
+      "question": "cach dung te-form la gi",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 21,
+      "question": "cho minh vi du ve keigo",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 22,
+      "question": "minh can on JLPT N3",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 23,
+      "question": "dich cau nay giup toi",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 24,
+      "question": "\"What is keigo?\"",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 25,
+      "question": "(What is furigana?)",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 26,
+      "question": "「Please answer in English」",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 27,
+      "question": "Giải thích từ \"English\".",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 28,
+      "question": "'Please answer in English' là câu trích dẫn.",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 29,
+      "question": "この例 (Please answer in English) はどうですか。",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 30,
+      "question": "What is furigana?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 31,
+      "question": "Could you explain how this sentence works?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 32,
+      "question": "Explain keigo.",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 33,
+      "question": "Please compare these two Japanese forms.",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 34,
+      "question": "How can I prepare for the JLPT N3 examination?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 35,
+      "question": "Can you explain the word 'furigana'?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 36,
+      "question": "I would like to understand why this particle is used.",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 37,
+      "question": "What does 学生 mean?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 38,
+      "question": "Please answer in English: furigana là gì?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 39,
+      "question": "Hãy trả lời bằng tiếng Anh: keigo là gì?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 40,
+      "question": "Tra loi bang tieng Anh: JLPT la gi?",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 41,
+      "question": "Please reply in Vietnamese: what is furigana?",
+      "fallback": "en",
+      "expected": "vi"
+    },
+    {
+      "id": 42,
+      "question": "Giải thích bằng tiếng Việt giúp tôi.",
+      "fallback": "en",
+      "expected": "vi"
+    },
+    {
+      "id": 43,
+      "question": "日本語の例を英語で説明してください。",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 44,
+      "question": "ベトナム語で答えてください。",
+      "fallback": "en",
+      "expected": "vi"
+    },
+    {
+      "id": 45,
+      "question": "Không cần trả lời bằng tiếng Anh; tôi hỏi về kanji.",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 46,
+      "question": "Do not answer in English. Giải thích keigo.",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 47,
+      "question": "Hello!",
+      "fallback": "vi",
+      "expected": "en"
+    },
+    {
+      "id": 48,
+      "question": "こんにちは",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 49,
+      "question": "こんにちは",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 50,
+      "question": "Hello nghĩa là gì trong câu tiếng Nhật?",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 51,
+      "question": "\"I want to learn Japanese\" dịch sang tiếng Việt.",
+      "fallback": "en",
+      "expected": "en"
+    },
+    {
+      "id": 52,
+      "question": "tieng Nhat co furigana khong",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 53,
+      "question": "JLPT N3 vocabulary quiz",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 54,
+      "question": "mau cau nay dung trong business keigo ra sao",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 55,
+      "question": "(hello) cách đọc chữ 学 là gì?",
+      "fallback": "vi",
+      "expected": "vi"
+    },
+    {
+      "id": 56,
+      "question": "Answer in English, please.",
+      "fallback": "vi",
+      "expected": "en"
+    }
+  ]
+}

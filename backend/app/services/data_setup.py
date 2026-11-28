@@ -167,7 +167,7 @@ def run_step(name,engine,settings,args):
         data=read_json(path)
         if not data.get('kanji') or not data.get('words'):raise ValueError('Static minigame catalog is empty')
         return {'kanji':len(data['kanji']),'words':len(data['words']),'action':'validated committed catalog; no rewrite'}
-    if name=='placement':raise Skipped('Placement code, migration and bank are absent on develop. Do not fabricate a bank or certify grammar examples as placement questions.')
+    if name=='placement':raise Skipped('Import and review the placement question bank separately; data setup does not seed it or certify grammar examples as placement questions.')
     from sqlalchemy.orm import Session
     with Session(engine) as db:
         if name=='kanji':return seed_kanji(db)

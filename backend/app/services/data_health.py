@@ -90,7 +90,7 @@ def diagnostic(engine,vector_dir,media_dir,quick=False):
             if table_name in names:
                 sections['placement']=grouped(connection,table_name) if table_name=='placement_questions' else {'total':0}
         if 'placement_questions' not in names:
-            sections['placement']={'total':0,'ready':False,'status':'not_in_branch','message':'develop has no placement question bank/migration; do not equate grammar examples with a validated placement test','command':'git log --all -- backend/scripts/import_placement_questions.py'}
+            sections['placement']={'total':0,'ready':False,'status':'missing','message':'Placement schema is missing; apply Alembic migrations, then import and review the placement bank separately','command':'alembic upgrade head'}
         else:
             table=sa.Table('placement_questions',sa.MetaData(),autoload_with=connection)
             demo=connection.scalar(sa.select(sa.func.count()).select_from(table).where(table.c.is_demo.is_(True))) if 'is_demo' in table.c else None

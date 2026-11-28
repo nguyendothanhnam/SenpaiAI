@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from datetime import timedelta, datetime
 
@@ -123,6 +123,11 @@ async def update_current_user(
                 detail="User not found"
             )
 
+        # Retain the existing request field for older clients, but only a
+        # confirmed placement attempt may change the stored JLPT level.
+        if user_update.current_jlpt_level is not None and user_update.current_jlpt_level != db_user.current_jlpt_level:
+            raise HTTPException(status_code=403, detail="jlpt_level_requires_placement")
+
         # Update user fields
         if user_update.username is not None:
             # Check if username is already taken
@@ -136,9 +141,6 @@ async def update_current_user(
                     detail="Username already taken"
                 )
             db_user.username = user_update.username
-
-        if user_update.current_jlpt_level is not None:
-            db_user.current_jlpt_level = user_update.current_jlpt_level
 
         if user_update.learning_goals is not None:
             db_user.learning_goals = user_update.learning_goals
@@ -161,13 +163,38 @@ async def update_current_user(
         )
 
 
+@router.get("/me/export/download")
+def download_personal_data(
+        format: str = Query("json", pattern="^(json|zip)$"),
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)):
+    from ..services.personal_export import build_archive
+    return build_archive(db, current_user, format)
+
+
+@router.get("/me/export/report")
+def personal_learning_report(
+        language: str = Query("vi", pattern="^(vi|en)$"),
+        current_user: User = Depends(get_current_active_user),
+        db: Session = Depends(get_db)):
+    from fastapi.responses import Response
+    from ..services.personal_export import report_html, export_day
+    return Response(report_html(db, current_user, language), media_type="text/html",
+                    headers={"Cache-Control": "no-store", "Content-Disposition": f'attachment; filename="senpaiai-{export_day()}.html"',
+                             "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'", "X-Content-Type-Options": "nosniff"})
+
+
 @router.get("/me/export")
 async def export_user_data(
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
 ):
     """Export all user learning data."""
-    from ..models.database import ChatConversation, ChatFolder, ChatHistory, LearningSession, VoiceConversation
+    from ..models.database import ChatConversation, ChatFolder, ChatHistory, LearningSession, VoiceConversation, KanjiWritingAttempt, KanjiWritingReport, ChatAnswerFeedback, UserKanjiNote, MinigameLearningEvent
+    from ..services.placement_profile import profile_summary
+    from ..services.exercise_selection import export_history
+    from ..services.learning_history import LearningSnapshot
+    from ..services.learning_progress import export_progress
 
     try:
         # Get chat history
@@ -205,8 +232,26 @@ async def export_user_data(
         from ..models.database import ReminderSettings
         reminder_settings = db.query(ReminderSettings).filter(ReminderSettings.user_id == current_user.id).first()
 
+        from ..services.flashcards import export_data as export_flashcards
         # Format data for export
         export_data = {
+            "flashcards": export_flashcards(db, current_user.id),
+            "learning_progress": export_progress(LearningSnapshot(db, current_user)),
+            "minigame_learning_events": [{"event_id":row.event_key,"game":row.game,"source_type":row.source_type,"source_id":row.source_id,"action":row.action,"answer":row.answer,"level":row.jlpt_level,"created_at":row.created_at.isoformat()}
+                for row in db.query(MinigameLearningEvent).filter_by(user_id=current_user.id).order_by(MinigameLearningEvent.id).all()],
+            "kanji_notes": [{"kanji":row.kanji,"sino_vietnamese":row.sino_vietnamese,"meaning_vi":row.meaning_vi,"mnemonic":row.mnemonic,"updated_at":row.updated_at.isoformat()}
+                for row in db.query(UserKanjiNote).filter_by(user_id=current_user.id).order_by(UserKanjiNote.kanji).all()],
+            "chat_answer_feedback": [{"message_id":row.chat_history_id,"conversation_id":str(row.conversation_id) if row.conversation_id else None,
+                "rating":row.rating,"comment":row.comment,"created_at":row.created_at.isoformat(),"updated_at":row.updated_at.isoformat()}
+                for row in db.query(ChatAnswerFeedback).filter_by(user_id=current_user.id).order_by(ChatAnswerFeedback.id).all()],
+            "kanji_writing_reports": [{"report_id":row.report_key,"attempt_id":row.attempt_key,"kanji":row.kanji,"strokes":row.strokes,"result":row.result,"comment":row.comment,"created_at":row.created_at.isoformat()}
+                for row in db.query(KanjiWritingReport).filter_by(user_id=current_user.id).order_by(KanjiWritingReport.id).all()],
+            "kanji_writing_attempts": [{"attempt_id": row.attempt_key, "kanji": row.kanji,
+                "level": row.jlpt_level, "mode": row.mode, "result": row.result,
+                "elapsed_seconds": row.elapsed_seconds, "created_at": row.created_at.isoformat()}
+                for row in db.query(KanjiWritingAttempt).filter_by(user_id=current_user.id).order_by(KanjiWritingAttempt.created_at).all()],
+            "exercise_history": export_history(db, current_user.id),
+            "placement": profile_summary(db, current_user),
             "user_profile": {
                 "username": current_user.username,
                 "email": current_user.email,
@@ -334,9 +379,17 @@ async def reset_user_progress(
         db: Session = Depends(get_db)
 ):
     """Reset user's learning progress (chat history, learning sessions)."""
-    from ..models.database import ChatConversation, ChatHistory, LearningSession, GrammarPracticeAttempt, VoiceConversation
+    from ..models.database import ChatConversation, ChatHistory, LearningSession, GrammarPracticeAttempt, VoiceConversation, KanjiWritingAttempt, KanjiWritingReport, ChatAnswerFeedback, MinigameLearningEvent
+    from ..services.exercise_selection import clear_history
 
     try:
+        clear_history(db, current_user.id)
+        from ..services.flashcards import clear_data
+        clear_data(db, current_user.id)
+        db.query(KanjiWritingReport).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(KanjiWritingAttempt).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(MinigameLearningEvent).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(ChatAnswerFeedback).filter_by(user_id=current_user.id).delete(synchronize_session=False)
         # Delete chat history
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
         db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
@@ -357,9 +410,9 @@ async def reset_user_progress(
 
         return {
             "message": "Progress reset successfully",
-            "reset_items": ["chat_history", "chat_conversations", "voice_conversations", "learning_sessions", "grammar_practice_attempts"],
+            "reset_items": ["chat_history", "chat_conversations", "voice_conversations", "learning_sessions", "grammar_practice_attempts", "exercise_history", "kanji_writing_attempts", "kanji_writing_reports", "chat_answer_feedback", "minigame_learning_events", "flashcard_progress", "flashcard_sessions", "flashcard_assessments"],
             "preserved_chat_items": ["chat_folders"],
-            "preserved_items": ["rewards", "daily_tasks", "study_item_stats", "reminder_settings", "push_subscriptions"],
+            "preserved_items": ["rewards", "daily_tasks", "study_item_stats", "reminder_settings", "push_subscriptions", "flashcard_decks", "flashcard_cards", "flashcard_transfers"],
             "preserved_reason": "Giữ điểm, nhiệm vụ và thống kê học để tránh làm lại nhằm nhận điểm lần nữa.",
         }
 
@@ -377,12 +430,21 @@ async def delete_current_user(
         db: Session = Depends(get_db)
 ):
     """Delete current user account."""
+    from ..services.exercise_selection import clear_history
     try:
+        clear_history(db, current_user.id)
+        from ..services.flashcards import clear_data
+        clear_data(db, current_user.id, decks=True)
         from ..models.database import (ChatConversation, ChatFolder, ChatHistory, LearningSession, GrammarPracticeAttempt, PointTransaction, VoiceConversation, ListeningAttempt,
                                        UserGameProfile, UserUnlockedItem, DailyTask, DailyTaskItem, StudyItemStat,
-                                       ReminderSettings, Notification, PushSubscription)
+                                       ReminderSettings, Notification, PushSubscription, PlacementAttempt, PlacementAttemptItem, WeeklyLearningGoal, KanjiWritingAttempt, KanjiWritingReport, ChatAnswerFeedback, UserKanjiNote, MinigameLearningEvent)
 
         # Delete related data first
+        db.query(MinigameLearningEvent).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(UserKanjiNote).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(ChatAnswerFeedback).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(KanjiWritingReport).filter_by(user_id=current_user.id).delete(synchronize_session=False)
+        db.query(KanjiWritingAttempt).filter_by(user_id=current_user.id).delete(synchronize_session=False)
         db.query(ChatHistory).filter(ChatHistory.user_id == current_user.id).delete()
         db.query(VoiceConversation).filter(VoiceConversation.user_id == current_user.id).delete(synchronize_session=False)
         db.query(ChatConversation).filter(ChatConversation.user_id == current_user.id).delete(synchronize_session=False)
@@ -403,7 +465,12 @@ async def delete_current_user(
         db.query(PushSubscription).filter(PushSubscription.user_id == current_user.id).delete(synchronize_session=False)
         db.query(ReminderSettings).filter(ReminderSettings.user_id == current_user.id).delete(synchronize_session=False)
 
+        placement_ids = db.query(PlacementAttempt.id).filter(PlacementAttempt.user_id == current_user.id)
+        db.query(PlacementAttemptItem).filter(PlacementAttemptItem.attempt_id.in_(placement_ids)).delete(synchronize_session=False)
+        db.query(PlacementAttempt).filter(PlacementAttempt.user_id == current_user.id).delete(synchronize_session=False)
+
         # Delete user
+        db.query(WeeklyLearningGoal).filter_by(user_id=current_user.id).delete(synchronize_session=False)
         db.delete(current_user)
         db.commit()
 

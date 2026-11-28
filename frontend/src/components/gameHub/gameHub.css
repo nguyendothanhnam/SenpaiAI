@@ -1,7 +1,7 @@
-.game-hub .gh-hero { background: linear-gradient(115deg, #0f5132, #147a5e 58%, #1d9a78); box-shadow: 0 16px 40px -25px #0f5132a0; }
+.game-hub .gh-hero { background: linear-gradient(115deg, var(--card), color-mix(in srgb, var(--primary) 18%, var(--card))); border: 1px solid var(--border); box-shadow: 0 16px 40px -25px color-mix(in srgb, var(--primary) 35%, transparent); }
 .game-hub .gh-glass { background: color-mix(in srgb, var(--card) 85%, transparent); border: 1px solid color-mix(in srgb, var(--border) 75%, transparent); backdrop-filter: blur(12px); box-shadow: 0 5px 24px -18px #153e3038; }
 .game-hub .gh-bamboo { background: linear-gradient(to bottom, transparent, var(--bg) 95%), url('/themes/background4.webp') center top / cover; opacity: .12; }
-.game-hub .gh-game-card:hover { border-color: #147a5e80; box-shadow: 0 14px 32px -22px #0f513270; }
+.game-hub .gh-game-card:hover { border-color: var(--primary); box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--primary) 35%, transparent); }
 .game-hub .gh-tone-mint { --visual: #ddf3e9; --ink: #146a52; }
 .game-hub .gh-tone-cream { --visual: #fff0cb; --ink: #956216; }
 .game-hub .gh-tone-peach { --visual: #ffe5e1; --ink: #b45551; }
@@ -34,3 +34,5 @@
   .game-hub .gh-scene .gh-float, .game-hub .gh-orbit-kana, .game-hub .gh-shadow { display: none; }
 }
 @media (max-width: 480px) { .game-hub .gh-hero h1 { font-size: 26px; } }
+
+.game-hub .gh-hero-accent { margin-top: .15em; color: color-mix(in srgb, var(--primary) 80%, var(--text)); }

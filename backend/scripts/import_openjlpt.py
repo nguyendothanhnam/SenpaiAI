@@ -79,7 +79,7 @@ def main():
     with SessionLocal() as db:
         columns = {c['name'] for c in inspect(db.get_bind()).get_columns('vocabulary')}
         if not {'meaning_en', 'meaning_vi_status', 'source_id', 'search_text'} <= columns:
-            raise SystemExit('Apply the develop Alembic migration 0014 before importing; no rows were written.')
+            raise SystemExit('Apply Alembic migration 0029 (OpenJLPT) before importing; no rows were written.')
         report = import_entries(db, rows, f"{meta['version']}@{manifest['commit']}", dry_run=not args.write,
                                 batch_size=args.batch_size, upstream=meta.get('sources', {}))
         if args.write:

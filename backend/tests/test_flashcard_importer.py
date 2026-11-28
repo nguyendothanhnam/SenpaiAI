@@ -28,3 +28,8 @@ def test_flashcard_import_requires_front_and_back():
         parse_flashcard_dataframe(df)
 
     assert "Missing required columns: front, back" in str(error.value)
+
+
+def test_flashcard_optional_reading_and_note_preserve_old_contract():
+    row = parse_flashcard_dataframe(pd.DataFrame([{'word': '犬', 'meaning': 'chó', 'kana': 'いぬ', 'example': '犬がいる。'}]))[0]
+    assert row == {'front': '犬', 'back': 'chó', 'reading': 'いぬ', 'note': '犬がいる。'}

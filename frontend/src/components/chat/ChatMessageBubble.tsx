@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import type { ChatMessageEntry } from '../../services/api'
 import { formatRelativeTime } from '../../utils/helpers'
 import ChatAnswer from './ChatAnswer'
+import ChatAnswerFeedback from './ChatAnswerFeedback'
 
 interface Props {
   message: ChatMessageEntry
@@ -27,7 +28,8 @@ function isInternalSource(source: NonNullable<ChatMessageEntry['sources']>[numbe
   const type = (source.type || '').toLowerCase()
   const title = (source.title || '').toLowerCase()
   return type === 'deterministic_chat' || type.includes('internal') || type.includes('system_rule') ||
-    title.includes('intent rules') || title.includes('internal rules') || title.includes('system rules')
+    title.includes('intent rules') || title.includes('internal rules') || title.includes('system rules') ||
+    Boolean(source.url && (typeof source.url !== 'string' || !(source.url.startsWith('https://') || source.url.startsWith('http://') || source.url.startsWith('/') && !source.url.startsWith('//'))))
 }
 
 export default function ChatMessageBubble({ message, searchTerm = '', deleting = false, onDelete }: Props) {
@@ -44,7 +46,7 @@ export default function ChatMessageBubble({ message, searchTerm = '', deleting =
     } catch { toast.error(t('chat.copyError')) }
   }
 
-  return <article className="group space-y-6 animate-fadeIn">
+  return <article className="group space-y-6 animate-fadeIn motion-reduce:animate-none">
     <div className="ml-auto flex max-w-[92%] justify-end sm:max-w-[85%]">
       <div className="min-w-0">
         <div className="rounded-2xl rounded-tr-sm bg-[color:var(--accent)] px-5 py-3.5">
@@ -80,9 +82,6 @@ export default function ChatMessageBubble({ message, searchTerm = '', deleting =
               {sources.map((source, index) => {
                 const sType = String(source.type || '').toLowerCase()
                 const sLevel = source.jlpt_level ? String(source.jlpt_level) : null
-                const sRelevance = typeof source.relevance === 'number' && source.relevance > 0
-                  ? Math.round(source.relevance * 100)
-                  : null
                 const isHttp = Boolean(source.url && /^https?:\/\//i.test(source.url))
                 const linkHref = isHttp
                   ? source.url!
@@ -98,11 +97,9 @@ export default function ChatMessageBubble({ message, searchTerm = '', deleting =
                   ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20'
                   : 'bg-primary/10 text-primary border-primary/20'
 
-                const typeLabel = sType === 'kanji' ? 'Hán tự'
-                  : sType === 'vocabulary' ? 'Từ vựng'
-                  : sType === 'grammar' ? 'Ngữ pháp'
-                  : sType === 'conversation' ? 'Hội thoại'
-                  : sType || 'Học liệu'
+                const typeLabel = t(`chatQuality.sourceTypes.${sType === 'kanji' || sType === 'kanji_dictionary' ? 'kanji'
+                  : sType === 'vocabulary' ? 'vocabulary' : sType === 'grammar' || sType === 'grammar_rule' ? 'grammar'
+                  : sType === 'culture' ? 'culture' : 'reference'}`)
 
                 const content = (
                   <>
@@ -117,11 +114,6 @@ export default function ChatMessageBubble({ message, searchTerm = '', deleting =
                     <span className="max-w-[200px] truncate sm:max-w-[280px]">
                       {source.title || source.url}
                     </span>
-                    {sRelevance !== null && (
-                      <span className="text-[10px] opacity-75">
-                        ({sRelevance}%)
-                      </span>
-                    )}
                     {isHttp ? (
                       <ExternalLink className="h-3 w-3 shrink-0 opacity-70" />
                     ) : (
@@ -158,6 +150,7 @@ export default function ChatMessageBubble({ message, searchTerm = '', deleting =
           </div>}
 
         </div>
+        <ChatAnswerFeedback messageId={message.id} />
         <div className="mt-3 flex min-h-9 flex-wrap items-center gap-1 text-[color:var(--text-muted)]">
           <button type="button" onClick={() => void copyAnswer()} className="rounded-lg p-2 transition hover:bg-[color:var(--accent)] hover:text-[color:var(--primary)]" title={t(copied ? 'chat.copied' : 'chat.copyAnswer')} aria-label={t(copied ? 'chat.copied' : 'chat.copyAnswer')}>{copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}</button>
           {confirmingDelete ? <div role="group" aria-label={t('chat.confirmDeleteMessage')} className="flex flex-wrap items-center gap-2 rounded-lg bg-[color:var(--accent)] px-3 py-1.5 text-xs"><span>{t('chat.confirmDeleteMessage')}</span><button type="button" onClick={() => onDelete(message.id)} disabled={deleting} className="font-semibold text-red-600 disabled:opacity-50">{deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : t('chat.deleteMessage')}</button><button type="button" onClick={() => setConfirmingDelete(false)} disabled={deleting} className="underline underline-offset-2">{t('chat.cancel')}</button></div> : <button type="button" onClick={() => setConfirmingDelete(true)} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-2 text-xs transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30" aria-label={t('chat.deleteMessage')} title={t('chat.deleteMessage')}><Trash2 className="h-3.5 w-3.5" /><span>{t('chat.deleteMessage')}</span></button>}

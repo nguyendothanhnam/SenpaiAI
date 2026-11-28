@@ -10,7 +10,7 @@ export interface CharacterJoints {
   head: THREE.Group
   leftEye: THREE.Mesh
   rightEye: THREE.Mesh
-  mouth: THREE.Mesh
+  mouth: THREE.Mesh | THREE.Group
   leftArm: THREE.Group
   rightArm: THREE.Group
   leftForearm: THREE.Group
@@ -24,6 +24,7 @@ export class CharacterController {
   private stateProgress = 0
   private stateDuration = 0
   private isOneShot = false
+  private isSpeaking = false
   private elapsedTime = 0
 
   // Blinking timer
@@ -51,6 +52,12 @@ export class CharacterController {
 
   constructor(joints: CharacterJoints) {
     this.joints = joints
+    // Prevent any frustum culling on joints or head meshes
+    this.joints.root.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.frustumCulled = false
+      }
+    })
   }
 
   public play(state: NPCAnimationState, duration?: number): void {
@@ -78,14 +85,18 @@ export class CharacterController {
       this.stateDuration = duration || 2.2
     } else {
       this.isOneShot = false
-      this.stateDuration = 0
+      // Do not reset stateDuration to 0; retain minimum positive value so ongoing crossfades never divide by zero
+      if (!this.stateDuration || this.stateDuration <= 0) {
+        this.stateDuration = 1.0
+      }
     }
   }
 
   public setSpeaking(speaking: boolean): void {
-    if (speaking && this.currentState !== 'talking') {
+    this.isSpeaking = speaking
+    if (speaking) {
       this.play('talking')
-    } else if (!speaking && this.currentState === 'talking') {
+    } else if (this.currentState === 'talking') {
       this.play('idle')
     }
   }
@@ -134,7 +145,7 @@ export class CharacterController {
       this.stateProgress += dt
       if (this.stateProgress >= this.stateDuration) {
         this.isOneShot = false
-        this.play('idle')
+        this.play(this.isSpeaking ? 'talking' : 'idle')
       }
     }
 
@@ -171,6 +182,7 @@ export class CharacterController {
     let headRotY = 0
     let headRotZ = 0
     let mouthScaleY = 0.2
+    let mouthScaleX = 1.0
     let leftArmRotX = 0.5
     let rightArmRotX = 0.5
     let leftForearmRotX = 0.8
@@ -185,11 +197,18 @@ export class CharacterController {
     headRotY += headMicroSway
 
     // --- TALKING STATE: Mouth movement & expressive business gesturing ---
-    const talkW = this.currentWeights.talking
+    const talkW = Math.max(this.currentWeights.talking, this.isSpeaking ? 1.0 : 0.0)
     if (talkW > 0.001) {
-      // Natural speech rhythm with modulated pauses
-      const speechPhase = Math.sin(this.elapsedTime * 14.0) * Math.cos(this.elapsedTime * 4.0)
-      mouthScaleY += Math.max(0, speechPhase) * 1.4 * talkW
+      // Natural speech rhythm with dynamic vowel opening and consonant closures (~3-5 syllables/sec)
+      const speech1 = Math.sin(this.elapsedTime * 14.0)
+      const speech2 = Math.cos(this.elapsedTime * 8.0)
+      const speech3 = Math.sin(this.elapsedTime * 20.0)
+      const openAmount = Math.max(0, speech1 * 0.55 + speech2 * 0.35 + speech3 * 0.15)
+      const curvedOpen = Math.pow(openAmount, 1.2)
+
+      mouthScaleY = 0.2 + curvedOpen * 2.2 * talkW
+      mouthScaleX = 1.0 + Math.sin(this.elapsedTime * 6.5) * 0.15 * talkW
+
       headRotX += Math.sin(this.elapsedTime * 6.5) * 0.035 * talkW
       headRotY += Math.cos(this.elapsedTime * 3.2) * 0.04 * talkW
 
@@ -201,16 +220,19 @@ export class CharacterController {
     // --- NOD STATE: Affirmative agreement nod ---
     const nodW = this.currentWeights.nod
     if (nodW > 0.001) {
-      const nodT = (this.stateProgress / (this.stateDuration || 1.4)) * Math.PI * 2.0
-      const nodMotion = Math.sin(nodT * 2.0) * (1.0 - this.stateProgress / this.stateDuration)
-      headRotX += Math.max(0, nodMotion) * 0.28 * nodW
-      neckRotX += Math.max(0, nodMotion) * 0.12 * nodW
+      const duration = this.stateDuration > 0 ? this.stateDuration : 1.4
+      const nodT = (this.stateProgress / duration) * Math.PI * 2.0
+      const nodMotion = Math.sin(nodT * 2.0) * (1.0 - Math.min(this.stateProgress / duration, 1.0))
+      const safeNod = Number.isFinite(nodMotion) ? Math.max(0, nodMotion) : 0
+      headRotX += safeNod * 0.28 * nodW
+      neckRotX += safeNod * 0.12 * nodW
     }
 
     // --- BOW (OJIGI) STATE: Formal Japanese Bow ---
     const bowW = this.currentWeights.bow
     if (bowW > 0.001) {
-      const progress = Math.min(this.stateProgress / (this.stateDuration || 2.0), 1.0)
+      const duration = this.stateDuration > 0 ? this.stateDuration : 2.0
+      const progress = Math.min(this.stateProgress / duration, 1.0)
       // Bell-shaped bow curve: down smoothly, hold briefly, return politely
       let bowFactor = 0
       if (progress < 0.4) {
@@ -224,48 +246,58 @@ export class CharacterController {
         bowFactor = 1.0 - THREE.MathUtils.smoothstep(progress, 0.65, 1.0)
       }
 
-      torsoRotX += bowFactor * 0.48 * bowW // 28-30 degrees polite Ojigi
-      neckRotX += bowFactor * 0.15 * bowW
-      headRotX += bowFactor * 0.12 * bowW
+      const safeBow = Number.isFinite(bowFactor) ? bowFactor : 0
+      torsoRotX += safeBow * 0.48 * bowW // 28-30 degrees polite Ojigi
+      neckRotX += safeBow * 0.15 * bowW
+      headRotX += safeBow * 0.12 * bowW
       // Hands placed firmly on desk during bow
-      leftForearmRotX += bowFactor * 0.2 * bowW
-      rightForearmRotX += bowFactor * 0.2 * bowW
+      leftForearmRotX += safeBow * 0.2 * bowW
+      rightForearmRotX += safeBow * 0.2 * bowW
     }
 
     // --- PLEASED STATE: Warm approving smile and nod ---
     const pleasedW = this.currentWeights.pleased
     if (pleasedW > 0.001) {
-      const pleasedT = Math.sin((this.stateProgress / (this.stateDuration || 1.8)) * Math.PI)
-      headRotX += -pleasedT * 0.08 * pleasedW // slight chin lift
+      const duration = this.stateDuration > 0 ? this.stateDuration : 1.8
+      const pleasedT = Math.sin((this.stateProgress / duration) * Math.PI)
+      const safePleased = Number.isFinite(pleasedT) ? pleasedT : 0
+      headRotX += -safePleased * 0.08 * pleasedW // slight chin lift
       headRotZ += Math.sin(this.elapsedTime * 2.0) * 0.03 * pleasedW
-      mouthScaleY += 0.4 * pleasedT * pleasedW
+      mouthScaleX += 0.3 * safePleased * pleasedW // smile wider
+      mouthScaleY += 0.3 * safePleased * pleasedW
     }
 
     // --- THINKING STATE: Pensive consideration tilt ---
     const thinkW = this.currentWeights.thinking
     if (thinkW > 0.001) {
-      const thinkT = Math.sin((this.stateProgress / (this.stateDuration || 2.2)) * Math.PI)
-      headRotZ += 0.12 * thinkT * thinkW // tilt to side
-      headRotY += -0.09 * thinkT * thinkW
-      neckRotX += 0.06 * thinkT * thinkW
-      rightForearmRotX += 0.25 * thinkT * thinkW
+      const duration = this.stateDuration > 0 ? this.stateDuration : 2.2
+      const thinkT = Math.sin((this.stateProgress / duration) * Math.PI)
+      const safeThink = Number.isFinite(thinkT) ? thinkT : 0
+      headRotZ += 0.12 * safeThink * thinkW // tilt to side
+      headRotY += -0.09 * safeThink * thinkW
+      neckRotX += 0.06 * safeThink * thinkW
+      rightForearmRotX += 0.25 * safeThink * thinkW
     }
 
-    // 5. Apply rotations smoothly
-    torso.rotation.x = torsoRotX
-    torso.rotation.y = torsoRotY
+    // 5. Apply rotations smoothly with strict NaN guard to prevent disappearing head
+    torso.rotation.x = Number.isFinite(torsoRotX) ? torsoRotX : 0
+    torso.rotation.y = Number.isFinite(torsoRotY) ? torsoRotY : 0
 
-    neck.rotation.x = neckRotX
+    neck.rotation.x = Number.isFinite(neckRotX) ? neckRotX : 0
 
-    head.rotation.x = headRotX
-    head.rotation.y = headRotY
-    head.rotation.z = headRotZ
+    head.rotation.x = Number.isFinite(headRotX) ? headRotX : 0
+    head.rotation.y = Number.isFinite(headRotY) ? headRotY : 0
+    head.rotation.z = Number.isFinite(headRotZ) ? headRotZ : 0
 
-    mouth.scale.y = mouthScaleY
+    mouth.scale.set(
+      THREE.MathUtils.damp(mouth.scale.x, Number.isFinite(mouthScaleX) ? Math.max(0.1, mouthScaleX) : 1.0, 28, dt),
+      THREE.MathUtils.damp(mouth.scale.y, Number.isFinite(mouthScaleY) ? Math.max(0.01, mouthScaleY) : 0.2, 28, dt),
+      1.0
+    )
 
-    leftArm.rotation.x = leftArmRotX
-    rightArm.rotation.x = rightArmRotX
-    leftForearm.rotation.x = leftForearmRotX
-    rightForearm.rotation.x = rightForearmRotX
+    leftArm.rotation.x = Number.isFinite(leftArmRotX) ? leftArmRotX : 0.5
+    rightArm.rotation.x = Number.isFinite(rightArmRotX) ? rightArmRotX : 0.5
+    leftForearm.rotation.x = Number.isFinite(leftForearmRotX) ? leftForearmRotX : 0.8
+    rightForearm.rotation.x = Number.isFinite(rightForearmRotX) ? rightForearmRotX : 0.8
   }
 }

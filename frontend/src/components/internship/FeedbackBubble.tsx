@@ -2,23 +2,28 @@ import React, { useState } from 'react'
 import { motion, useDragControls } from 'framer-motion'
 import {
   CheckCircle2,
-  Award,
+  FileText,
   MessageSquare,
   X,
   Minus,
   Maximize2,
   GripHorizontal,
-  Sparkles,
+  Info,
+  Code2,
 } from 'lucide-react'
 
 export interface FeedbackBubbleProps {
   userResponse: string
-  correctedSentence?: string
+  correctedSentence?: string | null
   adviceVi?: string
+  technicalAdviceVi?: string
   scores?: {
     grammar: number
     keigo: number
     manner: number
+    technical?: number
+    cv_alignment?: number
+    overall?: number
   } | null
   onClose?: () => void
 }
@@ -27,14 +32,23 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
   userResponse,
   correctedSentence,
   adviceVi,
+  technicalAdviceVi,
   scores,
   onClose,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const dragControls = useDragControls()
 
-  const avgScore = scores
-    ? Math.round((scores.grammar + scores.keigo + scores.manner) / 3)
+  const hasTechnical = scores && typeof scores.technical === 'number'
+  const avgScore = typeof scores?.overall === 'number' ? Number(scores.overall.toFixed(1)) : scores
+    ? hasTechnical
+      ? Math.round(
+          (scores.technical! * 0.4) +
+          (scores.keigo * 0.25) +
+          (scores.manner * 0.2) +
+          ((scores.cv_alignment ?? 80) * 0.15)
+        )
+      : Math.round((scores.grammar + scores.keigo + scores.manner) / 3)
     : null
 
   return (
@@ -44,32 +58,34 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
       dragControls={dragControls}
       dragMomentum={false}
       dragElastic={0.06}
-      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+      initial={{ opacity: 0, scale: 0.98, y: -6 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className="w-full max-w-sm sm:max-w-md flex flex-col rounded-3xl border-2 border-slate-700/90 bg-slate-950/95 backdrop-blur-2xl shadow-2xl text-white overflow-hidden transition-shadow hover:shadow-amber-500/10 pointer-events-auto"
+      exit={{ opacity: 0, scale: 0.98 }}
+      className="w-full max-w-sm sm:max-w-md flex flex-col rounded-xl border border-slate-700/90 bg-slate-950/95 backdrop-blur-2xl shadow-2xl text-slate-100 overflow-hidden pointer-events-auto font-sans"
     >
-      {/* 1. Draggable Top Header Bar */}
+      {/* 1. Header Bar: Formal Executive Style */}
       <div
         onPointerDown={(e) => dragControls.start(e)}
-        className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 cursor-move select-none"
-        title="Nhấp giữ để kéo di chuyển hộp thoại"
+        className="flex items-center justify-between px-3.5 py-2 bg-slate-900/95 border-b border-slate-800 cursor-move select-none"
+        title="Nhấp giữ để định vị cửa sổ đánh giá"
       >
         <div className="flex items-center gap-2">
-          <GripHorizontal className="w-4 h-4 text-slate-400 hover:text-amber-400 transition-colors" />
+          <GripHorizontal className="w-3.5 h-3.5 text-slate-500 hover:text-slate-300 transition-colors" />
           <div className="flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-xs font-bold text-amber-300">Đánh giá câu trả lời</span>
+            <FileText className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-xs font-semibold text-slate-200 tracking-wide">
+              【面接評価記録】 Biên bản đánh giá phản hồi
+            </span>
             {avgScore !== null && (
-              <span className="px-1.5 py-0.2 rounded-md bg-amber-500/20 text-amber-300 text-[10px] font-black border border-amber-500/30">
-                {avgScore}đ
+              <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 text-[10px] font-mono border border-slate-700">
+                {avgScore}/100
               </span>
             )}
           </div>
         </div>
 
         {/* Window Controls: Minimize / Expand & Close */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           <button
             type="button"
             onClick={(e) => {
@@ -77,7 +93,7 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
               setIsCollapsed(!isCollapsed)
             }}
             title={isCollapsed ? 'Mở rộng chi tiết' : 'Thu gọn'}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           >
             {isCollapsed ? <Maximize2 className="w-3.5 h-3.5" /> : <Minus className="w-3.5 h-3.5" />}
           </button>
@@ -89,8 +105,8 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
                 e.stopPropagation()
                 onClose()
               }}
-              title="Đóng hộp đánh giá"
-              className="p-1 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
+              title="Đóng biên bản"
+              className="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -100,78 +116,111 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
 
       {/* 2. Compact Collapsed Bar Mode */}
       {isCollapsed ? (
-        <div className="p-3 bg-slate-950 flex items-center justify-between gap-3 text-xs">
+        <div className="px-3.5 py-2.5 bg-slate-950 flex items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2 truncate">
-            <span className="text-slate-400 shrink-0">Bạn đáp:</span>
-            <span className="text-white font-semibold truncate">{userResponse}</span>
+            <span className="text-slate-400 shrink-0 font-medium">Câu đáp:</span>
+            <span className="text-slate-200 font-normal truncate">{userResponse}</span>
           </div>
           {scores && (
-            <div className="flex items-center gap-2 shrink-0 text-[11px] font-bold">
-              <span className="text-blue-300">{scores.grammar}p</span>
-              <span className="text-purple-300">{scores.keigo}p</span>
-              <span className="text-amber-300">{scores.manner}p</span>
+            <div className="flex items-center gap-2 shrink-0 text-[11px] font-mono">
+              {hasTechnical && typeof scores.technical === 'number' && (
+                <span className="text-amber-400 font-bold">技術: {scores.technical}/100</span>
+              )}
+              <span className="text-slate-300">敬語: {scores.keigo}/100</span>
+              <span className="text-slate-300">マナー: {scores.manner}/100</span>
+              {hasTechnical && typeof scores.cv_alignment === 'number' && (
+                <span className="text-sky-300">CV: {scores.cv_alignment}/100</span>
+              )}
             </div>
           )}
         </div>
       ) : (
         /* 3. Full Expanded Card Body */
-        <div className="p-4 sm:p-5 flex flex-col gap-3 select-text max-h-[45vh] overflow-y-auto">
+        <div className="p-4 flex flex-col gap-3 select-text max-h-[50vh] overflow-y-auto">
           {/* User Response Row */}
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 mt-0.5">
-              <MessageSquare className="w-4 h-4" />
+          <div className="flex items-start gap-2.5">
+            <div className="w-7 h-7 rounded bg-slate-800 text-slate-300 border border-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+              <MessageSquare className="w-3.5 h-3.5" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-0.5">
-                Câu trả lời của bạn:
+              <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-0.5">
+                Nội dung ứng viên đã trả lời:
               </div>
-              <div className="text-sm sm:text-base font-bold text-white drop-shadow break-words">
-                {userResponse}
+              <div className="text-sm text-slate-100 font-serif leading-relaxed break-words">
+                「{userResponse}」
               </div>
             </div>
           </div>
 
-          {/* AI Performance Scores */}
+          {/* Business & Technical Evaluation Metrics */}
           {scores && (
-            <div className="grid grid-cols-3 gap-2 py-2 border-y border-slate-800">
-              <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-blue-500/20 border border-blue-400/40">
-                <span className="text-[11px] font-bold text-blue-300">Ngữ pháp</span>
-                <span className="text-base sm:text-xl font-black text-white">{scores.grammar}</span>
+            <div className={`grid ${hasTechnical ? 'grid-cols-4' : 'grid-cols-3'} gap-2 py-2 border-y border-slate-800/80`}>
+              {hasTechnical && typeof scores.technical === 'number' && (
+                <div className="flex flex-col items-center justify-center p-2 rounded bg-amber-500/10 border border-amber-500/30">
+                  <span className="text-[9px] font-bold text-amber-400 uppercase tracking-tight">Kỹ thuật (技術)</span>
+                  <span className="text-sm font-mono font-black text-amber-300">{scores.technical}/100</span>
+                </div>
+              )}
+
+              <div className="flex flex-col items-center justify-center p-2 rounded bg-slate-900/60 border border-slate-800">
+                <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">Kính ngữ (敬語)</span>
+                <span className="text-sm font-mono font-bold text-slate-100">{scores.keigo}/100</span>
               </div>
 
-              <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-purple-500/20 border border-purple-400/40">
-                <span className="text-[11px] font-bold text-purple-300">Kính ngữ (Keigo)</span>
-                <span className="text-base sm:text-xl font-black text-white">{scores.keigo}</span>
+              <div className="flex flex-col items-center justify-center p-2 rounded bg-slate-900/60 border border-slate-800">
+                <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">Tác phong (マナー)</span>
+                <span className="text-sm font-mono font-bold text-slate-100">{scores.manner}/100</span>
               </div>
 
-              <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-amber-500/20 border border-amber-400/40">
-                <span className="text-[11px] font-bold text-amber-300">Tác phong (Manner)</span>
-                <span className="text-base sm:text-xl font-black text-white">{scores.manner}</span>
-              </div>
+              {hasTechnical && typeof scores.cv_alignment === 'number' ? (
+                <div className="flex flex-col items-center justify-center p-2 rounded bg-sky-500/10 border border-sky-500/30">
+                  <span className="text-[9px] font-bold text-sky-400 uppercase tracking-tight">Khớp CV (整合)</span>
+                  <span className="text-sm font-mono font-black text-sky-300">{scores.cv_alignment}/100</span>
+                </div>
+              ) : (
+                !hasTechnical && (
+                  <div className="flex flex-col items-center justify-center p-2 rounded bg-slate-900/60 border border-slate-800">
+                    <span className="text-[9px] font-medium text-slate-400 uppercase tracking-tight">Ngữ pháp (文法)</span>
+                    <span className="text-sm font-mono font-bold text-slate-100">{scores.grammar}/100</span>
+                  </div>
+                )
+              )}
             </div>
           )}
 
-          {/* AI Correction & Business Advice */}
-          <div className="space-y-2 text-xs sm:text-sm">
+          {/* AI Correction & Technical / Business Advice */}
+          <div className="space-y-2 text-xs">
             {correctedSentence && (
-              <div className="p-3 rounded-2xl bg-emerald-500/20 border border-emerald-400/40">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-300 mb-1">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Gợi ý diễn đạt tự nhiên hơn:</span>
+              <div className="p-3 rounded bg-slate-900/70 border border-slate-700/60">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-300 mb-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Câu tiếng Nhật gợi ý</span>
                 </div>
-                <p className="font-bold text-white leading-relaxed">
-                  {correctedSentence}
+                <p className="font-serif text-emerald-200/95 leading-relaxed pl-5">
+                  「{correctedSentence}」
+                </p>
+              </div>
+            )}
+
+            {technicalAdviceVi && (
+              <div className="p-3 rounded bg-amber-950/40 border border-amber-600/40">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber-300 mb-1">
+                  <Code2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Nhận xét chuyên môn Kỹ thuật (RAG Grounded):</span>
+                </div>
+                <p className="text-amber-100/90 leading-relaxed font-sans pl-5">
+                  {technicalAdviceVi}
                 </p>
               </div>
             )}
 
             {adviceVi && (
-              <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-400/40">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300 mb-1">
-                  <Award className="w-4 h-4" />
-                  <span>Nhận xét văn hóa công sở Nhật Bản:</span>
+              <div className="p-3 rounded bg-slate-900/70 border border-slate-700/60">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-300 mb-1">
+                  <Info className="w-3.5 h-3.5 text-sky-400" />
+                  <span>Nhận xét và cách cải thiện</span>
                 </div>
-                <p className="text-slate-100 leading-relaxed font-medium">
+                <p className="whitespace-pre-line text-slate-300 leading-relaxed font-sans pl-5">
                   {adviceVi}
                 </p>
               </div>

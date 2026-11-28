@@ -6,6 +6,8 @@ SenpaiAI là một nền tảng học tiếng Nhật toàn diện được hỗ 
 
 ## 🏗️ Kiến trúc hệ thống
 
+Flashcard trên nhánh `mobile` có bộ thẻ riêng theo tài khoản, thẻ lật, Learn, Test và thống kê trên web/Expo; bộ cục bộ cũ được giữ và chỉ chuyển khi xác nhận. Trước khi chạy backend mới, từ thư mục `backend` chạy `venv/Scripts/python.exe -m alembic upgrade head` (Windows; hiện tại tới 0025). API `/game/flashcard/*` cũ vẫn được giữ. Expo dùng `expo-speech` cho giọng thiết bị, không tải mô hình. Thiết kế, giới hạn, kết quả kiểm tra và checklist: [docs/FLASHCARDS.md](docs/FLASHCARDS.md).
+
 - **Frontend**: React + Vite + TypeScript + TailwindCSS
 - **Backend**: Python FastAPI + LangChain (LLM + RAG)
 - **Database**: PostgreSQL (users, history, lessons, documents)
@@ -155,6 +157,12 @@ alembic upgrade head
 # Populate sample data
 python populate_data.py
 ```
+
+### Dữ liệu Học ngữ pháp dùng chung cho nhóm
+
+Repo kèm **904 bài N5–N1** từ Hanabira và OpenJLPT, gồm **139 bài N3**, cùng phiên bản nguồn, checksum và giấy phép. Sau khi pull, cấu hình `backend/.env` tới database SenpaiAI riêng, chạy `python -m alembic upgrade head` từ `backend` rồi khởi động backend: dữ liệu được nhập tự động từ file trong repo, không cần tải GitHub hoặc nhận database của thành viên khác.
+
+Để kiểm tra bộ nguồn: `python -m scripts.seed_grammar_lessons --check`; để nhập chủ động: `python -m scripts.seed_grammar_lessons`. Chạy lại giữ ID bài học và tiến độ, không tạo trùng. Nội dung nguồn hiện là tiếng Anh, giao diện vẫn vi/en. Xem [hướng dẫn pull/khởi tạo, kiểm tra và file thay đổi](backend/GRAMMAR_SOURCES.md), cùng [ghi công và giấy phép dữ liệu](backend/app/data/grammar_sources/README.md). `SEED_BUNDLED_GRAMMAR=false` tắt đồng bộ tự động nếu cần quản lý nhập riêng.
 
 ## 📚 Tính năng chính
 

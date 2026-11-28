@@ -47,8 +47,9 @@ def test_health_does_not_create_files_or_modify_schema(db,tmp_path):
     assert not (tmp_path/'vectors').exists()
     assert set(sa.inspect(db.bind).get_table_names())==before
     assert state['migration']['current']==[]
-    assert state['sections']['placement']['status']=='not_in_branch'
-    assert state['sections']['strokes']['by_level']['N4']==0
+    assert state['sections']['placement']['status']=='requires_bank_review'
+    assert not state['sections']['placement']['ready']
+    assert state['sections']['strokes']['by_level']['N4']==166
     assert state['sections']['minigames']['missing_word_levels']==['N5','N4']
     assert state['sections']['index']['verified_real_embeddings']==0
 
@@ -97,7 +98,10 @@ def test_index_failure_does_not_replace_existing_file(db,tmp_path,monkeypatch):
 
 def test_inventory_covers_every_script_and_migration():
     report=health.inventory()
-    assert len(report['migrations'])==14
+    assert report['heads']==['0029']
+    assert len(report['migrations'])==29
+    assert report['migrations'][-1]['parent']=='0028'
+    assert next(row for row in report['migrations'] if row['revision']=='0014')['file']=='0014_placement.py'
     assert any(row['path']=='backend/populate_data.py' and row['repeatability']=='unsafe_to_repeat' for row in report['scripts'])
     assert len(report['scripts'])==len(list((health.BACKEND/'scripts').glob('*.py')))+len(list((health.PROJECT/'scripts').glob('*.py')))+1
 
@@ -139,10 +143,12 @@ def test_check_only_never_calls_setup_even_with_network_flags(monkeypatch):
     assert calls==['check']
 
 
-def test_demo_only_placement_is_never_ready(db,tmp_path):
-    with db.bind.begin() as connection:
+def test_demo_only_placement_is_never_ready(tmp_path):
+    engine=sa.create_engine('sqlite://')
+    with engine.begin() as connection:
         connection.execute(sa.text('CREATE TABLE placement_questions(id INTEGER PRIMARY KEY, jlpt_level TEXT, is_demo BOOLEAN)'))
         connection.execute(sa.text("INSERT INTO placement_questions VALUES (1,'N5',1)"))
-    state=health.diagnostic(db.bind,tmp_path/'vectors',tmp_path/'audio')
+    state=health.diagnostic(engine,tmp_path/'vectors',tmp_path/'audio')
     assert state['sections']['placement']['status']=='demo_only'
     assert not state['sections']['placement']['ready']
+    engine.dispose()

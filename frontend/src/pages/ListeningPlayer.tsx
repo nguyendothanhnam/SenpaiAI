@@ -7,9 +7,15 @@ import toast from 'react-hot-toast'
 import { listeningAPI } from '../services/api'
 import { localizeListeningLesson, localizeListeningSegment } from '../utils/listeningLocale'
 import ListeningExercises from '../components/listening/ListeningExercises'
+import { KanjiText } from '../components/kanji/KanjiText'
+import VideoLessonPlayer from '../components/listening/VideoLessonPlayer'
+import { useAuth } from '../services/auth'
+import { ListeningToggle, ListeningTranscriptRow } from '../components/listening/ListeningUI'
+import { listeningTimestamp } from '../utils/listeningPresentation'
 
 export default function ListeningPlayer() {
   const { t, i18n } = useTranslation('common')
+  const { user } = useAuth()
   const { id: rawId } = useParams<{ id: string }>()
   const id = Number(rawId)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -28,7 +34,7 @@ export default function ListeningPlayer() {
   const [loopB, setLoopB] = useState<number | null>(null)
   const [activity, setActivity] = useState<'listen' | 'exercises'>('listen')
   const clipEnd = useRef<number | null>(null)
-  const lessonQuery = useQuery(['listening-lesson', id], () => listeningAPI.getLesson(id).then(({ data }) => data), { enabled: Number.isFinite(id) && id > 0, retry: 1 })
+  const lessonQuery = useQuery(['listening-lesson', user?.id ?? null, id], () => listeningAPI.getLesson(id).then(({ data }) => data), { enabled: Number.isFinite(id) && id > 0, retry: 1 })
   const lesson = lessonQuery.data
   const displayLesson = lesson ? localizeListeningLesson(lesson, t) : null
   const audioObjectUrl = useRef('')
@@ -62,7 +68,7 @@ export default function ListeningPlayer() {
   }
 
   useEffect(() => {
-    if (lesson) void loadAudio()
+    if (lesson && lesson.source !== 'video') void loadAudio()
     return () => {
       audioRequestId.current += 1
       if (audioObjectUrl.current) URL.revokeObjectURL(audioObjectUrl.current)
@@ -73,7 +79,7 @@ export default function ListeningPlayer() {
 
   const segments = useMemo(() => lesson?.segments ?? [], [lesson?.segments])
   const audioDuration = duration || (lesson?.duration_ms || 0) / 1000
-  const formatTime = (time: number) => `${Math.floor(time / 60)}:${String(Math.floor(time % 60)).padStart(2, '0')}`
+  const formatTime = listeningTimestamp
   const activeIndex = useMemo(() => {
     const index = segments.findIndex((segment) => currentTime * 1000 >= (segment.start_ms ?? 0) && currentTime * 1000 < (segment.end_ms ?? Number.MAX_SAFE_INTEGER))
     return index < 0 ? 0 : index
@@ -158,17 +164,18 @@ export default function ListeningPlayer() {
     }
   }, [speed, loopA, loopB, currentTime, activeIndex, segments])
 
-  if (lessonQuery.isLoading) return <div className="theme-card p-10 text-center">{t('listening.playerLoading')}</div>
-  if (!lesson) return <div className="theme-card space-y-3 p-8 text-center"><p>{t('listening.notFound')}</p><Link to="/listening" className="btn btn-outline inline-flex">{t('listening.backToList')}</Link></div>
+  if (lessonQuery.isLoading) return <div className="listening-module mx-auto max-w-5xl px-4 py-6"><div role="status" className="listening-glass p-10 text-center">{t('listening.playerLoading')}</div></div>
+  if (!lesson) return <div className="listening-module mx-auto max-w-5xl px-4 py-6"><div className="listening-glass space-y-3 p-8 text-center"><p>{t('listening.notFound')}</p><Link to="/listening" className="listening-secondary">{t('listening.backToList')}</Link></div></div>
+  if (lesson.source === 'video') return <VideoLessonPlayer key={lesson.id} lesson={lesson} />
 
-  return <section className="space-y-5 text-[color:var(--text)]">
-    <Link to="/listening" className="inline-flex items-center gap-2 text-sm font-medium text-[color:var(--primary)]"><ArrowLeft className="h-4 w-4" />{t('listening.backToList')}</Link>
-    <header><div className="flex flex-wrap items-center gap-2"><span className="rounded-full bg-[color:var(--accent)] px-3 py-1 text-xs font-bold text-[color:var(--primary)]">{lesson.jlpt_level}</span><span className="text-sm text-[color:var(--text-muted)]">{displayLesson?.topic}</span></div><h1 className="listening-japanese mt-2 text-3xl font-bold">{displayLesson?.title}</h1><p className="mt-2 text-[color:var(--text-muted)]">{displayLesson?.description}</p></header>
-    <div className="inline-flex flex-wrap gap-1 rounded-2xl border border-[color:var(--border)] bg-[color:var(--card)] p-1" role="group" aria-label={t('listening.exercises.chooseActivity')}>
-      <button type="button" onClick={() => setActivity('listen')} aria-pressed={activity === 'listen'} className={`min-h-10 rounded-xl px-5 text-sm font-semibold transition ${activity === 'listen' ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'text-[color:var(--text-muted)] hover:bg-[color:var(--accent)]'}`}>{t('listening.exercises.listenRead')}</button>
-      <button type="button" onClick={() => setActivity('exercises')} aria-pressed={activity === 'exercises'} className={`min-h-10 rounded-xl px-5 text-sm font-semibold transition ${activity === 'exercises' ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'text-[color:var(--text-muted)] hover:bg-[color:var(--accent)]'}`}>{t('listening.exercises.title')}</button>
+  return <section className="listening-module mx-auto max-w-5xl space-y-5 px-4 py-6">
+    <header className="listening-glass space-y-4 p-5 sm:p-6"><div className="flex flex-wrap items-center justify-between gap-3"><Link to="/listening" className="listening-secondary"><ArrowLeft className="h-4 w-4" aria-hidden="true" />{t('listening.backToList')}</Link>{activity === 'listen' && <div className="flex flex-wrap gap-2"><ListeningToggle checked={showFurigana} onChange={setShowFurigana}>{t('listening.ui.furiganaToggle')}</ListeningToggle><ListeningToggle checked={showVietnamese} onChange={setShowVietnamese}>{t(i18n.resolvedLanguage?.toLowerCase().startsWith('en') ? 'listening.ui.englishToggle' : 'listening.ui.vietnameseToggle')}</ListeningToggle></div>}</div>
+      <div className="flex items-start gap-3"><span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--listening-accent-text)]"><Headphones className="h-6 w-6" aria-hidden="true" /></span><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="listening-badge">{lesson.jlpt_level}</span><span className="text-xs text-[color:var(--text-muted)]">{displayLesson?.topic}</span></div><h1 className="listening-japanese mt-2 break-words text-xl font-bold sm:text-2xl">{displayLesson?.title}</h1><p className="mt-1 text-sm leading-6 text-[color:var(--text-muted)]">{displayLesson?.description}</p></div></div></header>
+    <div className="listening-glass inline-flex flex-wrap gap-1 p-1" role="group" aria-label={t('listening.exercises.chooseActivity')}>
+      <button type="button" onClick={() => setActivity('listen')} aria-pressed={activity === 'listen'} className={`listening-tab ${activity === 'listen' ? 'is-active' : ''}`}>{t('listening.exercises.listenRead')}</button>
+      <button type="button" onClick={() => setActivity('exercises')} aria-pressed={activity === 'exercises'} className={`listening-tab ${activity === 'exercises' ? 'is-active' : ''}`}>{t('listening.exercises.title')}</button>
     </div>
-    <section className="theme-card overflow-hidden rounded-3xl border border-[color:var(--border)] shadow-[var(--shadow-card)]" aria-label={t('listening.audioSectionTitle')}>
+    <section className="listening-glass overflow-hidden" aria-label={t('listening.audioSectionTitle')}>
       <audio ref={audioRef} src={audioUrl || undefined} preload="metadata" onLoadedMetadata={() => setDuration(audioRef.current?.duration || 0)} onDurationChange={() => setDuration(audioRef.current?.duration || 0)} onError={() => { if (audioUrl) { setAudioError('listening.audioFileError'); setPlaying(false); toast.error(t('listening.audioFileError')) } }} />
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[color:var(--border)] bg-[color:var(--bg-elevated)] px-5 py-4 sm:px-6">
         <div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--primary)]"><Headphones className="h-5 w-5" /></span><div><h2 className="font-bold">{t('listening.audioSectionTitle')}</h2><p className="text-xs text-[color:var(--text-muted)]">{t('listening.generatedAudio')}</p></div></div>
@@ -185,8 +192,8 @@ export default function ListeningPlayer() {
         <div className="space-y-2"><input aria-label={t('listening.audioProgress')} type="range" min={0} max={audioDuration || 1} step="0.1" value={Math.min(currentTime, audioDuration || 0)} onChange={(event) => { if (audioRef.current) audioRef.current.currentTime = Number(event.target.value) }} disabled={!audioUrl} className="h-2 w-full cursor-pointer accent-[color:var(--primary)] disabled:cursor-not-allowed" /><div className="flex justify-between text-xs font-medium tabular-nums text-[color:var(--text-muted)]"><span>{formatTime(currentTime)}</span><span>{formatTime(audioDuration)}</span></div></div>
         {activity === 'listen' && <>
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--border)] pt-4">
-          <div className="flex flex-wrap gap-2">{[[showJapanese, setShowJapanese, t('listening.japanese')], [showFurigana, setShowFurigana, 'Furigana'], [showVietnamese, setShowVietnamese, i18n.resolvedLanguage?.toLowerCase().startsWith('en') ? t('listening.englishTranslation') : t('listening.vietnamese')]].map(([checked, setter, label]) => <label key={String(label)} className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition ${checked ? 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--primary)]' : 'border-[color:var(--border)] text-[color:var(--text-muted)]'}`}><input type="checkbox" checked={checked as boolean} onChange={(event) => (setter as (value: boolean) => void)(event.target.checked)} className="accent-[color:var(--primary)]" />{label as string}</label>)}</div>
-          <div className="flex items-center gap-2"><button type="button" onClick={() => setRepeatSegment((value) => !value)} aria-pressed={repeatSegment} className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition ${repeatSegment ? 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--primary)]' : 'border-[color:var(--border)] text-[color:var(--text-muted)] hover:bg-[color:var(--bg-elevated)]'}`}><Repeat1 className="h-4 w-4" />{t('listening.repeatSentence')}</button><label className="flex items-center gap-2 text-xs font-semibold text-[color:var(--text-muted)]">{t('listening.speed')}<select className="input w-[4.5rem] px-2 py-2 text-sm" value={speed} onChange={(event) => setSpeed(Number(event.target.value))}>{[0.75, 1, 1.25].map((value) => <option key={value} value={value}>{value}x</option>)}</select></label></div>
+          <ListeningToggle checked={showJapanese} onChange={setShowJapanese}>{t('listening.japanese')}</ListeningToggle>
+          <div className="flex flex-wrap items-center gap-2"><ListeningToggle checked={repeatSegment} onChange={setRepeatSegment}><Repeat1 className="h-4 w-4" aria-hidden="true" />{t('listening.repeatSentence')}</ListeningToggle><label className="flex items-center gap-2 text-xs font-semibold text-[color:var(--text-muted)]">{t('listening.speed')}<select className="listening-input w-24" value={speed} onChange={(event) => setSpeed(Number(event.target.value))}>{[0.75, 1, 1.25].map((value) => <option key={value} value={value}>{value}x</option>)}</select></label></div>
         </div>
         </>}
         {activity === 'exercises' && <label className="flex items-center justify-end gap-2 text-xs font-semibold text-[color:var(--text-muted)]">{t('listening.speed')}<select value={speed} onChange={event => setSpeed(Number(event.target.value))} className="input w-24 rounded-xl">{[0.75, 1, 1.25].map(value => <option key={value} value={value}>{value}x</option>)}</select></label>}
@@ -195,11 +202,10 @@ export default function ListeningPlayer() {
     </section>
     <div hidden={activity !== 'exercises'}><ListeningExercises key={id} active={activity === 'exercises'} lessonId={id} audioReady={Boolean(audioUrl) && !audioLoading && !audioError && segments.every(segment => (segment.end_ms ?? 0) > (segment.start_ms ?? 0))} onPlaySegment={index => seekTo(index, true)} /></div>
     {activity === 'listen' && <>
-    <div className="space-y-3">{segments.map((segment, index) => <article key={segment.idx} className={`theme-card p-4 transition ${index === activeIndex ? 'border-[color:var(--primary)] ring-2 ring-[color:var(--primary)]' : ''}`}>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2"><span className="text-xs font-semibold text-[color:var(--text-muted)]">{t('listening.sentence', { number: index + 1 })}</span><div className="flex gap-2"><button type="button" onClick={() => setLoopA(index)} className={`rounded-lg px-2 py-1 text-xs ${loopA === index ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'bg-[color:var(--accent)]'}`}>{t('listening.loopFromA')}</button><button type="button" onClick={() => setLoopB(index)} className={`rounded-lg px-2 py-1 text-xs ${loopB === index ? 'bg-[color:var(--primary)] text-[color:var(--primary-contrast)]' : 'bg-[color:var(--accent)]'}`}>{t('listening.toB')}</button><button type="button" onClick={() => seekTo(index)} className="rounded-lg bg-[color:var(--accent)] px-2 py-1 text-xs text-[color:var(--primary)]">{t('listening.listenSentence')}</button></div></div>
-      {showJapanese && <button type="button" onClick={() => seekTo(index)} className="listening-japanese block text-left text-lg">{showFurigana && segment.tokens?.length ? segment.tokens.map((token, tokenIndex) => <span key={`${tokenIndex}-${token.text}`}>{token.reading && token.reading !== token.text ? <ruby>{token.text}<rt className="text-xs text-[color:var(--text-muted)]">{token.reading}</rt></ruby> : token.text}</span>) : segment.ja}</button>}
-      {showVietnamese && <p className="mt-1 text-sm text-[color:var(--text-muted)]">{localizeListeningSegment(segment.vi, i18n.resolvedLanguage || i18n.language, t)}</p>}
-    </article>)}</div>
+    <section className="listening-glass space-y-4 p-4 sm:p-6"><header><h2 className="text-base font-bold">{t('listening.ui.transcript')}</h2><p className="mt-1 text-sm leading-6 text-[color:var(--text-muted)]">{t('listening.ui.transcriptHint')}</p></header><div className="space-y-3">{segments.map((segment, index) => <ListeningTranscriptRow key={segment.idx} number={index + 1} startMs={segment.start_ms ?? 0} active={index === activeIndex} disabled={!audioUrl || audioLoading} onReplay={() => seekTo(index)} controls={<><button type="button" onClick={() => setLoopA(index)} aria-pressed={loopA === index} className={`listening-toggle !min-h-9 !px-2.5 !text-xs ${loopA === index ? 'is-active' : ''}`}>{t('listening.loopFromA')}</button><button type="button" onClick={() => setLoopB(index)} aria-pressed={loopB === index} className={`listening-toggle !min-h-9 !px-2.5 !text-xs ${loopB === index ? 'is-active' : ''}`}>{t('listening.toB')}</button></>}>
+      {showJapanese && <div lang="ja" className="listening-japanese break-words text-left text-lg leading-9">{showFurigana && segment.tokens?.length ? segment.tokens.map((token, tokenIndex) => <span key={`${tokenIndex}-${token.text}`}>{token.reading && token.reading !== token.text ? <ruby><KanjiText text={token.text} /><rt className="text-xs text-[color:var(--text-muted)]">{token.reading}</rt></ruby> : <KanjiText text={token.text} />}</span>) : <KanjiText text={segment.ja} />}</div>}
+      {showVietnamese && <p className="text-sm leading-7 text-[color:var(--text-muted)]">{localizeListeningSegment(segment.vi, i18n.resolvedLanguage || i18n.language, t)}</p>}
+    </ListeningTranscriptRow>)}</div></section>
     </>}
   </section>
 }

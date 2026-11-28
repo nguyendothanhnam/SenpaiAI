@@ -244,7 +244,7 @@ def test_invalid_ai_output_is_never_cached(db, monkeypatch, text):
 
 
 def test_migration_upgrade_downgrade_repeat_and_protect_new_data():
-    path = Path(__file__).resolve().parents[1] / 'alembic/versions/0014_openjlpt_dictionary.py'
+    path = Path(__file__).resolve().parents[1] / 'alembic/versions/0029_openjlpt_dictionary.py'
     spec = importlib.util.spec_from_file_location('openjlpt_migration', path)
     migration = importlib.util.module_from_spec(spec); spec.loader.exec_module(migration)
     engine = sa.create_engine('sqlite://')

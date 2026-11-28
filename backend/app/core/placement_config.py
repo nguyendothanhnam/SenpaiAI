@@ -1,0 +1,19 @@
+"""Internal pilot rules; these are not JLPT passing marks or calibrated IRT."""
+LEVELS = ("N5", "N4", "N3", "N2", "N1")
+SKILLS = ("vocab", "kanji", "grammar", "reading", "listening")
+MIN_QUESTIONS = 20
+MAX_QUESTIONS = 30
+FIXED_PER_SKILL = 6
+MIN_BANK_PER_SKILL = 6
+TIME_LIMIT_SECONDS = 1800
+PROMOTE_STREAK = 3
+DEMOTE_STREAK = 2
+MIN_EVIDENCE_PER_SKILL = 3
+ADAPTIVE_TOTAL_MIN = 70
+ADAPTIVE_SKILL_MIN = 60
+CONFIRM_TOTAL_MIN = 60
+CONFIRM_SKILL_MIN = 50
+HIGH_TOTAL_MIN = 85
+HIGH_SKILL_MIN = 70
+SCORING_VERSION = "balanced-skills-v2"
+ESTIMATION_VERSION = "rule-based-v2"

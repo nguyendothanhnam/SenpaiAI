@@ -1,4 +1,5 @@
 import { BellRing, Lock, Moon, Monitor, Sun } from 'lucide-react'
+import { PlacementEntry } from '../components/placement/PlacementEntry'
 import toast from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -20,6 +21,7 @@ export default function Settings() {
   const locked = () => { toast(s('lockedMessage')); navigate('/shop') }
 
   return <section className="mx-auto max-w-4xl space-y-8 text-[color:var(--text)]">
+    <PlacementEntry />
     <header><h1 className="font-heading text-3xl font-bold">{s('title')}</h1><p className="mt-2 text-sm text-[color:var(--text-muted)]">{s('description')}</p></header>
     <section className="theme-card space-y-3 p-6"><h2 className="text-lg font-semibold">{c('dictionaryData.creditsTitle')}</h2><p>{c('dictionaryData.credits')}</p><p className="text-sm text-[color:var(--text-muted)]">{c('dictionaryData.communityLevels')}</p><p className="text-sm text-[color:var(--text-muted)]">{c('dictionaryData.englishFallback')}</p><p className="text-sm text-[color:var(--text-muted)]">{c('dictionaryData.automaticMeaning')}</p><div className="flex flex-wrap gap-4"><a className="underline" href="https://github.com/evanclan/OpenJLPT" target="_blank" rel="noreferrer">{c('dictionaryData.sourceLink')}</a><a className="underline" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">{c('dictionaryData.licenseLink')}</a></div></section>
     <Link to="/settings/reminders" className="theme-card flex items-center justify-between gap-4 p-5 transition hover:border-[color:var(--primary)]"><span><span className="block font-semibold">Cài đặt nhắc học</span><span className="mt-1 block text-sm text-[color:var(--text-muted)]">Chọn giờ, ngày và loại thông báo học tập.</span></span><BellRing className="h-5 w-5 shrink-0 text-[color:var(--primary)]" /></Link>

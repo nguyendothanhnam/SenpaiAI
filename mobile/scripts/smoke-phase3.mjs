@@ -26,7 +26,9 @@ try {
     assert.equal(quiz.status, 200); assert.equal(quiz.data.items.length, 5); assert.ok(quiz.data.items.every(q => q.options.includes(q.correct_answer)))
   }
   console.log('PASS live kanji levels/list/search/pagination/detail/stroke data/quiz contracts')
-  const update = await request('/auth/me', 'PUT', { username: `edited_${suffix}`, current_jlpt_level: 'N4', learning_goals: ['JLPT N3'], ui_language: 'en' })
+  const denied = await request('/auth/me', 'PUT', { current_jlpt_level: 'N4' })
+  assert.equal(denied.status, 403); assert.equal(denied.data.detail, 'jlpt_level_requires_placement')
+  const update = await request('/auth/me', 'PUT', { username: `edited_${suffix}`, learning_goals: ['JLPT N3'], ui_language: 'en' })
   assert.equal(update.status, 200); assert.equal(update.data.ui_language, 'en')
   const rewards = await request('/rewards/me'); assert.equal(rewards.status, 200)
   const shop = await request('/rewards/shop'); assert.equal(shop.status, 200)

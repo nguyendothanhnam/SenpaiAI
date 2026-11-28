@@ -76,6 +76,8 @@ public
 .storybook-out
 
 # Temporary folders
+/backend/ml/models/full_dictionary/
+/backend/ml/models/backups/
 tmp/
 temp/
 

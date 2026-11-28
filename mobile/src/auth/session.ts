@@ -6,12 +6,16 @@ export interface SessionSnapshot {
   status: 'loading' | 'anonymous' | 'authenticated' | 'offline' | 'storage-error'
   user: User | null
   expired: boolean
+  placementInvite?: boolean
 }
 
 export class Session {
   private snapshot: SessionSnapshot = { status: 'loading', user: null, expired: false }
   private listeners = new Set<() => void>()
   private generation = 0
+  private inviteAfterRegistration = false
+
+  dismissPlacementInvite = () => this.emit({ ...this.snapshot, placementInvite: false })
 
   constructor(private api: AxiosInstance, private storage: TokenStorage, private clearPrivateData: () => Promise<void>) {}
 
@@ -39,7 +43,7 @@ export class Session {
     if (!token) { this.emit({ status: 'anonymous', user: null, expired: false }); return }
     try {
       const { data } = await this.api.get<User>('/auth/me')
-      if (generation === this.generation) this.emit({ status: 'authenticated', user: data, expired: false })
+      if (generation === this.generation) { this.emit({ status: 'authenticated', user: data, expired: false, placementInvite: this.inviteAfterRegistration }); this.inviteAfterRegistration = false }
     } catch {
       // A 401 is handled centrally; a lost connection keeps the secure token for retry.
       if (generation === this.generation) this.emit({ status: 'offline', user: null, expired: false })
@@ -59,7 +63,7 @@ export class Session {
     await this.clearPrivateData()
     try {
       const response = await this.api.get<User>('/auth/me')
-      if (generation === this.generation) this.emit({ status: 'authenticated', user: response.data, expired: false })
+      if (generation === this.generation) { this.emit({ status: 'authenticated', user: response.data, expired: false, placementInvite: this.inviteAfterRegistration }); this.inviteAfterRegistration = false }
     } catch (error) {
       if (generation === this.generation) this.emit({ status: 'offline', user: null, expired: false })
       throw error
@@ -68,11 +72,13 @@ export class Session {
 
   register = async (email: string, username: string, password: string, onRegistered?: () => void) => {
     await this.api.post('/auth/register', { email, username, password })
+    this.inviteAfterRegistration = true
     onRegistered?.()
     await this.login(email, password)
   }
 
   logout = async () => {
+    this.inviteAfterRegistration = false
     ++this.generation
     try {
       await this.storage.remove()
@@ -86,6 +92,7 @@ export class Session {
   expire = async (rejectedToken: string) => {
     // An old request must never sign out a newer login.
     if (await this.storage.get() !== rejectedToken) return
+    this.inviteAfterRegistration = false
     ++this.generation
     try {
       await this.storage.remove()

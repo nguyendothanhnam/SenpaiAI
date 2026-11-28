@@ -20,7 +20,8 @@ const config: ExpoConfig = {
   userInterfaceStyle: 'automatic',
   platforms: ['android', 'ios'],
   plugins: [
-    'expo-router', 'expo-secure-store', 'expo-localization', 'expo-status-bar', 'expo-font',
+    ['expo-audio', { microphonePermission: false, recordAudioAndroid: false, enableBackgroundRecording: false, enableBackgroundPlayback: false }],
+    'expo-router', 'expo-secure-store', 'expo-localization', 'expo-status-bar', 'expo-font', 'expo-notifications', 'expo-sharing',
     ['expo-build-properties', { android: { usesCleartextTraffic: process.env.SENPAIAI_DEV_BUILD === '1' || (process.env.EXPO_PUBLIC_API_URL?.startsWith('http://') ?? false) } }],
   ],
   ios: {

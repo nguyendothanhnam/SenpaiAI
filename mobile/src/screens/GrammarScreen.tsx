@@ -1,5 +1,6 @@
 import { KeyboardInput as TextInput, KeyboardFlatList as FlatList, KeyboardLayout } from '../components/KeyboardLayout'
 import { useEffect, useRef, useState } from 'react'
+import { ExerciseSelectionNotice } from '../components/ExerciseSelectionNotice'
 import { View } from 'react-native'
 import { router, usePreventRemove } from 'expo-router'
 import { Alert } from 'react-native'
@@ -12,6 +13,7 @@ import { nearestLevel } from '../features/phase2/logic'
 import { GrammarSubmission, uncertainAnswerError } from '../features/phase2/grammarSubmission'
 import { mixedNeedsBank, shouldUseBank } from '../features/phase2/grammarFallback'
 import { QuestionCard } from '../components/questions/QuestionCard'
+import { KanjiText } from '../components/KanjiLookup'
 import { AppText, Button, Card, ErrorNotice, Muted, Progress, Screen, Title, styles } from '../components/ui'
 import { SkeletonList } from '../components/SkeletonList'
 import { useTheme } from '../theme/ThemeProvider'
@@ -86,6 +88,8 @@ export function GrammarScreen() {
   const q = session?.questions[index]
   if (session && !result) return <Screen>
     <Title>{t('phase2.grammar')}</Title><Progress current={index} total={session.questions.length} />
+    <ExerciseSelectionNotice selections={session.questions.map(question => question.selection)} />
+    {q && <Muted>{q.jlpt_level}</Muted>}
     {session.message && <Muted>{t('phase2.partialSession', { count: session.questions.length })}</Muted>}
     {partialGenerationNotice && <Card accessibilityLiveRegion="polite"><AppText>{t('phase3.mixedPartialNotice')}</AppText></Card>}
     {q && <QuestionCard key={`${session.session_id}:${q.id}`} item={{ id: q.id, position: index, item_type: 'grammar', question_type: q.question_type, payload: q, answered: !!feedback }} index={index} total={session.questions.length} busy={busy || uncertain} result={feedback ? { ...feedback, explanation: feedback.explanation_vi, all_answered: index === session.questions.length - 1 } : undefined} onAnswer={(answer, time) => void run(async () => {
@@ -112,7 +116,7 @@ export function GrammarScreen() {
       <Button title={i18n.t(busy ? 'analysis.analyzing' : 'analysis.analyze', { ns: 'grammar' })} disabled={busy || !text.trim()} onPress={() => void run(async () => { setAnalysis(undefined); const data = await grammarAPI.analyze(text.trim(), language); if (alive.current) { setAnalysis(data); setAnalysisLanguage(language) } })} />
       {analysis && analysisLanguage === language && <><Card><Title>{analysis.jlpt_level}</Title><AppText>{i18n.t('analysis.difficulty', { ns: 'grammar' })} {analysis.difficulty_score}/10</AppText>{analysis.analysis_note && <AppText selectable>{analysis.analysis_note}</AppText>}<AppText selectable>{analysis.sentence_meaning || analysis.translation}</AppText></Card>
       {analysis.vocabulary?.map((v, n) => <Card key={`v${n}`}><AppText selectable>{v.term} {v.jlpt_level}</AppText><AppText selectable>{v.meaning}</AppText></Card>)}
-      {(analysis.grammar_patterns?.length ? analysis.grammar_patterns : analysis.grammar_points || []).map((p, n) => <Card key={`g${n}`}><AppText selectable style={{ fontWeight: '700' }}>{p.pattern}</AppText><AppText selectable>{p.explanation}</AppText><AppText selectable>{p.example}</AppText></Card>)}
+      {(analysis.grammar_patterns?.length ? analysis.grammar_patterns : analysis.grammar_points || []).map((p, n) => <Card key={`g${n}`}><AppText selectable style={{ fontWeight: '700' }}><KanjiText text={p.pattern} /></AppText><AppText selectable><KanjiText text={p.explanation} /></AppText><AppText selectable><KanjiText text={p.example || ''} /></AppText></Card>)}
       {analysis.suggestions?.map((s, n) => <AppText selectable key={`s${n}`}>{s}</AppText>)}</>}
     </> : <><Title>{t('phase2.setup')}</Title>{patterns.isLoading && <SkeletonList />}{patterns.isError && <ErrorNotice message={getErrorMessage(patterns.error, i18n)} retry={() => void patterns.refetch()} />}
       {effective && effective !== level && <Muted>{i18n.t('fallbackNotice', { ns: 'grammarStatus', requested: level, selected: effective })}</Muted>}

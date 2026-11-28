@@ -16,6 +16,7 @@ from ..models import schemas
 from ..models.database import Document
 from .vector_db import chroma_service
 from .library_localization import matching_sources
+from .library_extract import MAX_FILE_BYTES, MAX_TEXT, clean_text, decode_text, error, fetch_public
 
 
 DEFAULT_TYPES = ["vocabulary", "kanji", "grammar", "conversation", "lesson", "culture", "example"]
@@ -56,9 +57,10 @@ class LibraryService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document not found")
         return document
 
-    def create_document(self, db: Session, payload: schemas.DocumentCreate) -> Document:
+    def create_document(self, db: Session, payload: schemas.DocumentCreate, *, user_id: int | None = None) -> Document:
         self._validate_payload(payload.title, payload.content, payload.document_type, payload.jlpt_level)
         document = Document(
+            user_id=user_id,
             title=payload.title.strip(),
             content=payload.content.strip(),
             document_type=payload.document_type.strip(),
@@ -282,30 +284,13 @@ class LibraryService:
         if parsed_url.scheme not in {"http", "https"} or not parsed_url.netloc:
             raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Only http:// and https:// URLs are supported")
 
-        try:
-            response = requests.get(
-                source_url,
-                timeout=FETCH_TIMEOUT_SECONDS,
-                headers={
-                    "User-Agent": "DACS-LibraryFetcher/1.0 (+https://localhost)",
-                    "Accept": "text/html,application/xhtml+xml,text/plain;q=0.8,*/*;q=0.2",
-                },
-            )
-            response.raise_for_status()
-        except requests.RequestException as exc:
-            logger.warning("[Library] failed to fetch URL %s: %s", source_url, exc)
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not read that URL. Check the address and try again.") from exc
-
-        content_type = response.headers.get("content-type", "").lower()
-        if content_type and "html" not in content_type and "text/plain" not in content_type:
-            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, detail="URL must return a readable HTML or text page")
-
-        title, content = self._extract_readable_text(response.text, source_url)
-        if len(content) > MAX_FETCHED_CONTENT_LENGTH:
-            content = content[:MAX_FETCHED_CONTENT_LENGTH].rsplit(" ", 1)[0].strip()
+        html, final_url = fetch_public(source_url)
+        title, content = self._extract_readable_text(html, final_url)
+        if len(content) > MAX_TEXT:
+            error("library_content_too_long", 413)
 
         if not content or len(content) < 80:
-            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="No readable page content was found at that URL")
+            raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="library_url_empty")
 
         return {
             "title": title or parsed_url.netloc,
@@ -315,6 +300,8 @@ class LibraryService:
 
     def extract_file_content(self, filename: str, file_bytes: bytes) -> tuple[str, str]:
         """Extract title and text content from uploaded file (.pdf, .docx, .doc, .txt, .md)."""
+        if len(file_bytes) > MAX_FILE_BYTES:
+            error("library_file_too_large", 413)
         suffix = Path(filename).suffix.lower()
         title = Path(filename).stem.replace("_", " ").strip()
         content = ""
@@ -351,40 +338,23 @@ class LibraryService:
                         if row_text:
                             paragraphs.append(row_text)
                 content = "\n\n".join(paragraphs)
-            except Exception as exc:
-                try:
-                    text_decoded = file_bytes.decode("utf-8", errors="ignore")
-                    matches = re.findall(r"[\w\s\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff.,!?-]{4,}", text_decoded)
-                    content = "\n".join(m.strip() for m in matches if len(m.strip()) > 10)
-                except Exception:
-                    logger.warning(f"Failed to parse DOC/DOCX {filename}: {exc}")
-                    raise HTTPException(
-                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                        detail=f"Không thể đọc file Word: {str(exc)}",
-                    )
+            except Exception:
+                error("library_word_invalid")
 
         elif suffix in [".txt", ".md", ".csv", ".json"]:
-            for encoding in ["utf-8", "utf-8-sig", "shift_jis", "cp932", "latin-1"]:
-                try:
-                    content = file_bytes.decode(encoding)
-                    break
-                except UnicodeDecodeError:
-                    continue
+            content = decode_text(file_bytes)
+
         else:
             raise HTTPException(
                 status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                 detail=f"Định dạng file '{suffix}' không được hỗ trợ. Vui lòng tải lên PDF, DOC, DOCX, TXT, hoặc MD.",
             )
 
-        content = content.strip()
-        if len(content) > MAX_FETCHED_CONTENT_LENGTH:
-            content = content[:MAX_FETCHED_CONTENT_LENGTH].rsplit(" ", 1)[0].strip()
-
+        content = clean_text(content)
+        if len(content) > MAX_TEXT:
+            error("library_content_too_long", 413)
         if not content:
-            raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="File không có nội dung văn bản có thể đọc được.",
-            )
+            error("library_pdf_scanned" if suffix == ".pdf" else "library_file_empty")
 
         return title, content
 
@@ -499,7 +469,7 @@ class LibraryService:
 
         best_text = ""
         for candidate in candidates:
-            text = self._clean_text(candidate.get_text(" ", strip=True))
+            text = clean_text(candidate.get_text("\n", strip=True))
             if len(text) > len(best_text):
                 best_text = text
 

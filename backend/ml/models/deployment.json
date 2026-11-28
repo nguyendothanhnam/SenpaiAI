@@ -1,0 +1,21 @@
+{
+  "classes": 612,
+  "by_level": {
+    "N5": 79,
+    "N4": 166,
+    "N3": 367
+  },
+  "sha256": {
+    "kanji_model.pt": "f0fe80e7f50d0367e01c78cb3f977d36a5cfdcd9e1920328e7748fe0ea1f1605",
+    "label_map.json": "dfea5bee6bbaa408d545b92d994227000c2909f615bf08fb77eb213192910dbb"
+  },
+  "changed": true,
+  "installed_at": "2026-11-21T11:09:03.675666+00:00",
+  "source_dir": "E:\\AI\\DACN\\backend\\ml\\models\\full_dictionary",
+  "backup_dir": "E:\\AI\\DACN\\backend\\ml\\models\\backups\\20261121T110903-ba60eed8",
+  "previous_sha256": {
+    "kanji_model.pt": "57bde58d7d205621b676a957b43c9f980b76c536de221a17b1bb8a18ac2adcce",
+    "label_map.json": "755bea3c72ea3c5da20ebfacbab0137c58d5ee563dcba24fff9df2a72b165561"
+  },
+  "accuracy_note": "Class coverage is not handwriting accuracy; see the accompanying evaluation report."
+}

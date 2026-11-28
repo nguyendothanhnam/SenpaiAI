@@ -35,6 +35,7 @@ export interface DailyOverview {
 
 export interface Example { ja: string; vi?: string; en?: string }
 export interface DailyPayload {
+  selection?: { requested_level: string; actual_level: string; fallback: boolean; review_mode: boolean; cooldown_relaxed: boolean }
   prompt?: string; statement?: string; options?: string[]; tokens?: string[]
   base_form?: string; target_form?: string; kanji?: string; word?: string; reading?: string
   level?: string; jlpt_level?: string; meaning?: string
@@ -42,13 +43,14 @@ export interface DailyPayload {
 export interface DailyItem {
   id: number; position: number; item_type: 'grammar' | 'kanji' | 'vocab' | 'flashcard'
   question_type: string; payload: DailyPayload; answered: boolean
-  user_answer?: unknown; is_correct?: boolean | null; correct_answer?: unknown; explanation?: string; examples?: Example[]
+  user_answer?: unknown; is_correct?: boolean | null; correct_answer?: unknown; explanation?: string; examples?: Example[]; explanation_details?: ExplanationDetails
 }
 export interface RewardBreakdown {
   base_points: number; correct_points: number; perfect_bonus: number
   streak_bonus: number; streak_milestone_bonus: number; total_points: number
 }
-export interface DailyAnswerResult { is_correct: boolean; correct_answer: unknown; explanation: string; examples?: Example[]; all_answered: boolean }
+export interface ExplanationDetails { reason?: string | null; wrong_choice?: Array<{character?: string; word?: string; reading?: string; meaning?: string; onyomi?: string[]; kunyomi?: string[]}> | null; kanji?: {character?: string; meaning?: string; onyomi?: string[]; kunyomi?: string[]} | null; vocabulary?: {word?: string; reading?: string; meaning?: string} | null; grammar_rule?: {name?: string; pattern?: string; usage?: string} | null; examples?: Array<{ja?: string; vi?: string; word?: string; reading?: string; meaning?: string}>; link?: string | null }
+export interface DailyAnswerResult { is_correct: boolean; correct_answer: unknown; explanation: string; examples?: Example[]; all_answered: boolean; explanation_details?: ExplanationDetails }
 export interface DailyCompletion { points_awarded: number; breakdown: RewardBreakdown; streak: number; balance: number }
 export interface DailyHistory { date: string; points_awarded: number; streak: number; correct_count: number; total_items: number }
 

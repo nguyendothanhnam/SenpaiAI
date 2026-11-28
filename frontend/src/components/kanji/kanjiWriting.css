@@ -1,0 +1,38 @@
+.writing-board { touch-action: none; user-select: none; }
+.writing-workspace { display:grid; gap:1rem; align-items:start; }
+.writing-workspace .writing-board { width:min(100%,340px,46vh); }
+.writing-reference-board { display:block; width:min(100%,260px,36vh); aspect-ratio:1; margin:.5rem auto 0; border:1px solid var(--border); border-radius:.75rem; background:var(--bg-elevated); }
+.writing-character-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); gap:.5rem; height:224px; overflow-y:auto; overscroll-behavior:contain; align-content:start; padding:.25rem; scrollbar-gutter:stable; }
+.writing-character { display:grid; gap:.25rem; justify-items:center; padding:.5rem .25rem; min-height:76px; border:1px solid var(--border); border-radius:.75rem; background:var(--bg-elevated); color:var(--text); }
+.writing-character[aria-pressed=true],.writing-level[aria-selected=true] { border-color:var(--primary); background:var(--accent); color:var(--primary); box-shadow:inset 0 0 0 1px var(--primary); }
+.writing-character:focus-visible,.writing-level:focus-visible,.writing-chip:focus-visible { outline:3px solid var(--primary); outline-offset:2px; }
+.writing-level,.writing-chip { min-height:44px; min-width:44px; padding:.4rem .75rem; border:1px solid var(--border); border-radius:.6rem; background:var(--bg-elevated); color:var(--text); }
+.writing-chip { font-size:1.4rem; }
+.writing-state { line-height:1.3; text-align:center; }
+.writing-feedback-list { display:grid; gap:.5rem; max-height:250px; overflow:auto; overscroll-behavior:contain; padding:.15rem; }
+.writing-score { display:block; width:100%; height:6px; margin-top:.3rem; accent-color:var(--primary); }
+.writing-score::-webkit-progress-bar { background:var(--border); border-radius:1rem; }
+.writing-score::-webkit-progress-value { background:var(--primary); border-radius:1rem; }
+.writing-score::-moz-progress-bar { background:var(--primary); border-radius:1rem; }
+.writing-scorecard { display:grid; gap:1rem; border:1px solid var(--border); border-radius:1.25rem; padding:1rem; background:var(--bg-elevated); }
+.writing-score-heading { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.writing-total { display:flex; align-items:baseline; flex-shrink:0; gap:.25rem; }
+.writing-total strong { font-size:2.6rem; letter-spacing:-.05em; line-height:1; }
+.writing-total span { font-size:.8rem; color:var(--text-muted); }
+.writing-criteria { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; }
+.writing-criteria > div { background:var(--card); border:1px solid var(--border); border-radius:1rem; padding:.8rem; }
+.writing-error-counts { display:flex; flex-wrap:wrap; gap:.5rem; }
+.writing-error-counts span,.writing-stroke-metric { padding:.4rem .7rem; border-radius:.75rem; background:var(--accent); font-size:.8rem; }
+.writing-pass-explanation { padding:.8rem; border-radius:.85rem; border:1px solid var(--primary); font-size:.85rem; line-height:1.5; }
+.writing-strictness-description { display:flex; gap:.75rem; align-items:start; padding:.8rem; background:var(--accent); border-radius:.85rem; font-size:.85rem; line-height:1.5; }
+.writing-strictness-description span { flex-shrink:0; font-weight:700; padding:.1rem .4rem; border-radius:.4rem; background:var(--card); }
+@media(max-width:420px){.writing-criteria { grid-template-columns:1fr; }.writing-total strong { font-size:2rem; }}
+@media (min-width:1024px) { .writing-workspace { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } }
+@media (min-width:1024px) and (min-height:700px) {
+  .writing-information { position:sticky; top:5rem; max-height:calc(100dvh - 6rem); overflow-y:auto; scrollbar-gutter:stable; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .writing-hint { stroke-dasharray: 100; animation: writing-next-stroke 1.4s ease-out; }
+  .writing-reference-stroke { stroke-dasharray:100; animation:writing-next-stroke .6s ease-out both; }
+}
+@keyframes writing-next-stroke { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }

@@ -7,7 +7,7 @@ export type QuestionType = typeof questionTypes[number]
 export interface Pattern { id: number; rule_name: string; japanese_pattern: string; meaning: string; question_counts: Record<QuestionType, number> }
 export interface GrammarQuestion extends DailyPayload { id: number; question_type: QuestionType; jlpt_level: Level; prompt: string; grammar_rule: { id: number; rule_name: string } | null }
 export interface GrammarSession { session_id: number; questions: GrammarQuestion[]; message?: string | null }
-export interface GrammarAnswer { is_correct: boolean; correct_answer: unknown; explanation_vi: string; examples: Example[] }
+export interface GrammarAnswer { is_correct: boolean; correct_answer: unknown; explanation_vi: string; examples: Example[]; explanation_details?: import('./types').ExplanationDetails }
 export interface RuleScore { grammar_rule_id: number | null; rule_name?: string | null; questions: number; correct: number }
 export interface GrammarResult { score: number; total: number; duration_seconds: number; by_rule: RuleScore[]; wrong_question_ids: number[] }
 export interface Stat { total: number; correct: number; accuracy: number; rule_name?: string; grammar_rule_id?: number }

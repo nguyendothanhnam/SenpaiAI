@@ -8,10 +8,14 @@ from sqlalchemy.orm import Session, joinedload
 
 from ..core.auth import get_current_active_user
 from ..core.database import get_db
+from ..services.answer_explanations import explain_grammar
 from ..models.database import Document, GrammarPracticeAttempt, GrammarQuestion, GrammarRule, LearningSession, User
 from ..services.grammar_practice_service import (
     QUESTION_TYPES, grade_answer, is_duplicate_question, parse_generated_questions, public_question,
 )
+from ..services.exercise_selection import record_answer, record_served, select_for_user
+from ..services.exercise_content import grammar_content, similar_content
+from ..services.exercise_catalog import lock_question_bank
 
 router = APIRouter(prefix="/grammar-practice", tags=["grammar practice"])
 LEVELS = {"N5", "N4", "N3", "N2", "N1"}
@@ -60,6 +64,7 @@ def _accessible_document(db: Session, document_id: int) -> Document:
 
 
 async def _ai_questions(db: Session, user_id: int, level: str, rule: GrammarRule, kind: str, count: int) -> Dict[str, int]:
+    db.query(User.id).filter_by(id=user_id).with_for_update().one()
     recent = datetime.now(timezone.utc) - timedelta(hours=1)
     used = db.query(func.count(GrammarQuestion.id)).filter(
         GrammarQuestion.source == "ai", GrammarQuestion.created_by_user_id == user_id,
@@ -74,14 +79,17 @@ async def _ai_questions(db: Session, user_id: int, level: str, rule: GrammarRule
     except Exception as exc:
         return {"requested": count, "saved": 0, "rejected": count, "error": str(exc)}
     parsed, rejected = parse_generated_questions(raw, level, kind)
-    existing = db.query(GrammarQuestion.prompt, GrammarQuestion.question_type).all()
-    existing_keys = [(prompt, qtype) for prompt, qtype in existing]
+    lock_question_bank(db)
+    existing_questions = db.query(GrammarQuestion).all()
+    existing_keys = [(question.prompt, question.question_type) for question in existing_questions]
+    existing_content = [grammar_content(question) for question in existing_questions]
     saved = 0
     for candidate in parsed:
         if candidate.jlpt_level != level or candidate.question_type != kind:
             rejected += 1
             continue
-        if is_duplicate_question(candidate.prompt, kind, existing_keys):
+        content = grammar_content(candidate)
+        if is_duplicate_question(candidate.prompt, kind, existing_keys) or any(similar_content(content, old) for old in existing_content):
             rejected += 1
             continue
         obj = GrammarQuestion(
@@ -93,6 +101,7 @@ async def _ai_questions(db: Session, user_id: int, level: str, rule: GrammarRule
         )
         db.add(obj)
         existing_keys.append((candidate.prompt, kind))
+        existing_content.append(content)
         saved += 1
     db.flush()
     return {"requested": count, "saved": saved, "rejected": rejected + max(0, allowed - saved - rejected), "limited": allowed < count}
@@ -123,51 +132,35 @@ async def create_session(body: SessionRequest, current_user: User = Depends(get_
         raise HTTPException(422, "Unsupported question type")
     if body.grammar_rule_id is not None and not db.query(GrammarRule.id).filter(GrammarRule.id == body.grammar_rule_id, GrammarRule.jlpt_level == body.jlpt_level).first():
         raise HTTPException(404, "Grammar pattern not found")
-    query = db.query(GrammarQuestion).options(joinedload(GrammarQuestion.grammar_rule)).filter(
-        GrammarQuestion.is_active.is_(True), GrammarQuestion.jlpt_level == body.jlpt_level,
-        GrammarQuestion.question_type.in_(body.question_types),
-    )
-    if body.grammar_rule_id is not None:
-        query = query.filter(GrammarQuestion.grammar_rule_id == body.grammar_rule_id)
-    if body.question_ids is not None:
-        query = query.filter(GrammarQuestion.id.in_(body.question_ids))
-    bank = query.all()
-    attempted_rows = db.query(GrammarPracticeAttempt.question_id, GrammarPracticeAttempt.is_correct).filter(
-        GrammarPracticeAttempt.user_id == current_user.id,
-        GrammarPracticeAttempt.question_id.in_([q.id for q in bank] or [-1]),
-    ).order_by(GrammarPracticeAttempt.created_at.desc(), GrammarPracticeAttempt.id.desc()).all()
-    latest_attempt = {}
-    for qid, correct in attempted_rows:
-        latest_attempt.setdefault(qid, correct)
-    wrong = {qid for qid, correct in latest_attempt.items() if not correct}
-    unseen = {q.id for q in bank} - set(latest_attempt)
-    bank.sort(key=lambda q: (q.id not in unseen, q.id not in wrong))
-    selected = [] if body.mode == "ai" else bank[:body.count]
+    constraints = {"question_types": body.question_types, "grammar_rule_id": body.grammar_rule_id,
+                   "question_ids": body.question_ids}
+    if body.mode == "ai":
+        constraints["ai_user_id"] = current_user.id
+    selection = select_for_user(db, current_user.id, body.jlpt_level, "grammar", body.count, "grammar", constraints)
+    selected = [item.value for item in selection.items]
     messages = []
-    if body.mode in {"ai", "mixed"} and (body.mode == "ai" or len(selected) < body.count):
+    if body.mode in {"ai", "mixed"} and body.question_ids is None and (body.mode == "ai" or len(selected) < body.count or selection.review_keys):
         rules = ([db.query(GrammarRule).filter(GrammarRule.id == body.grammar_rule_id).first()]
                  if body.grammar_rule_id else db.query(GrammarRule).filter(GrammarRule.jlpt_level == body.jlpt_level).all())
         rules = [rule for rule in rules if rule]
         if rules:
+            generated = 0
+            target = body.count if body.mode == "ai" else max(0, body.count - sum(item.key not in selection.review_keys for item in selection.items))
             for kind_index, kind in enumerate(body.question_types):
-                while len(selected) < body.count:
-                    missing = body.count - len(selected)
+                while generated < target:
+                    missing = target - generated
                     rule = rules[kind_index % len(rules)]
                     result = await _ai_questions(db, current_user.id, body.jlpt_level, rule, kind, min(5, missing))
-                    if result["saved"]:
-                        extra = db.query(GrammarQuestion).options(joinedload(GrammarQuestion.grammar_rule)).filter(
-                            GrammarQuestion.created_by_user_id == current_user.id,
-                            GrammarQuestion.source == "ai", GrammarQuestion.grammar_rule_id == rule.id,
-                            GrammarQuestion.question_type == kind, GrammarQuestion.id.notin_([q.id for q in selected] or [-1]),
-                        ).order_by(GrammarQuestion.id.desc()).limit(result["saved"]).all()
-                        selected.extend(extra)
+                    generated += result["saved"]
                     if result.get("error") or result.get("limited"):
                         messages.append(result.get("error") or "Đã chạm giới hạn sinh câu AI theo giờ.")
                         break
                     if result["saved"] == 0:
                         break
-                if len(selected) >= body.count:
+                if generated >= target:
                     break
+        selection = select_for_user(db, current_user.id, body.jlpt_level, "grammar", body.count, "grammar", constraints)
+        selected = [item.value for item in selection.items]
     if len(selected) < body.count:
         messages.append(f"Ngân hàng hiện có {len(selected)}/{body.count} câu phù hợp.")
     if not selected:
@@ -175,12 +168,17 @@ async def create_session(body: SessionRequest, current_user: User = Depends(get_
     selected_ids = ",".join(str(question.id) for question in selected)
     session = LearningSession(user_id=current_user.id, session_type="grammar", topic=f"grammar_practice:{selected_ids}", difficulty_level=body.jlpt_level, questions_answered=0, correct_answers=0)
     db.add(session)
+    db.flush()
+    record_served(db, current_user.id, selection, "grammar", str(session.id))
+    response = {"session_id": session.id, "questions": [{**public_question(item.value, item.value.grammar_rule),
+            "selection": selection.metadata(item)} for item in selection.items], "message": " ".join(messages) or None}
     db.commit()
-    return {"session_id": session.id, "questions": [public_question(q, q.grammar_rule) for q in selected], "message": " ".join(messages) or None}
+    return response
 
 
 def _owned_session(db: Session, session_id: int, user_id: int) -> LearningSession:
-    session = db.query(LearningSession).filter(LearningSession.id == session_id, LearningSession.user_id == user_id, LearningSession.session_type == "grammar").first()
+    db.query(User.id).filter_by(id=user_id).with_for_update().one()
+    session = db.query(LearningSession).filter(LearningSession.id == session_id, LearningSession.user_id == user_id, LearningSession.session_type == "grammar").with_for_update().first()
     if not session:
         raise HTTPException(404, "Grammar practice session not found")
     return session
@@ -199,8 +197,7 @@ async def answer_question(session_id: int, body: AnswerRequest, current_user: Us
     question = db.query(GrammarQuestion).options(joinedload(GrammarQuestion.grammar_rule)).filter(GrammarQuestion.id == body.question_id, GrammarQuestion.is_active.is_(True)).first()
     if not question:
         raise HTTPException(404, "Question not found")
-    if question.jlpt_level != session.difficulty_level:
-        raise HTTPException(404, "Question is not part of this session")
+    # Membership is the server-persisted ID list; fallback questions retain their real level.
     is_correct = grade_answer(question.question_type, body.answer, question.correct_answer, question.accepted_answers)
     attempt = GrammarPracticeAttempt(
         user_id=current_user.id, learning_session_id=session.id, question_id=question.id,
@@ -211,10 +208,11 @@ async def answer_question(session_id: int, body: AnswerRequest, current_user: Us
     db.add(attempt)
     session.questions_answered = (session.questions_answered or 0) + 1
     session.correct_answers = (session.correct_answers or 0) + int(is_correct)
+    record_answer(db, current_user.id, "grammar", str(question.id), "grammar", str(session.id), is_correct)
     db.commit()
     return {"is_correct": is_correct, "correct_answer": question.correct_answer,
             "accepted_answers": question.accepted_answers or [], "explanation_vi": question.explanation_vi,
-            "examples": question.examples or []}
+            "examples": question.examples or [], "explanation_details": explain_grammar(question, body.answer, is_correct)}
 
 
 @router.post("/sessions/{session_id}/finish")
@@ -288,6 +286,7 @@ async def generate_questions(body: GenerateRequest, current_user: User = Depends
 
 @router.post("/from-library")
 async def generate_questions_from_library(body: LibraryGenerateRequest, current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    db.query(User.id).filter_by(id=current_user.id).with_for_update().one()
     _validate_level(body.jlpt_level)
     if body.question_type not in QUESTION_TYPES:
         raise HTTPException(422, "Unsupported question_type")
@@ -307,13 +306,17 @@ async def generate_questions_from_library(body: LibraryGenerateRequest, current_
     from ..services.grammar_practice_service import generate_raw_questions_from_document
     raw = await generate_raw_questions_from_document(level, body.question_type, allowed, document.content[:24000])
     parsed, rejected = parse_generated_questions(raw, level, body.question_type)
-    existing = [(prompt, kind) for prompt, kind in db.query(GrammarQuestion.prompt, GrammarQuestion.question_type).all()]
+    lock_question_bank(db)
+    existing_questions = db.query(GrammarQuestion).all()
+    existing = [(question.prompt, question.question_type) for question in existing_questions]
+    existing_content = [grammar_content(question) for question in existing_questions]
     saved_ids = []
     for candidate in parsed:
         if candidate.jlpt_level != level or candidate.question_type != body.question_type:
             rejected += 1
             continue
-        if is_duplicate_question(candidate.prompt, body.question_type, existing):
+        content = grammar_content(candidate)
+        if is_duplicate_question(candidate.prompt, body.question_type, existing) or any(similar_content(content, old) for old in existing_content):
             rejected += 1
             continue
         question = GrammarQuestion(
@@ -327,6 +330,7 @@ async def generate_questions_from_library(body: LibraryGenerateRequest, current_
         db.flush()
         saved_ids.append(question.id)
         existing.append((candidate.prompt, body.question_type))
+        existing_content.append(content)
     rejected += max(0, allowed - len(saved_ids) - rejected)
     db.commit()
     return {"requested": body.count, "saved": len(saved_ids), "rejected": rejected,

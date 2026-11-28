@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { PlacementEntry } from '../components/placement/PlacementEntry'
+import PlacementProfileSummary from '../components/placement/PlacementProfileSummary'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from 'react-query'
 import { 
@@ -21,25 +24,24 @@ import { useQuery } from 'react-query'
 import { useRewardsMe } from '../services/rewards'
 import { useTranslation } from 'react-i18next'
 import { getErrorMessage } from '../utils/getErrorMessage'
+import ActivityCalendar from '../components/profile/ActivityCalendar'
+import PersonalExport from '../components/profile/PersonalExport'
+import { appCalendarDate } from '../utils/profileCalendar'
 
 interface ProfileFormData {
   username: string
-  current_jlpt_level: string
   learning_goals: string[]
 }
-
-const JLPT_LEVELS = ['N5', 'N4', 'N3', 'N2', 'N1']
 
 export default function Profile() {
   const { t } = useTranslation('profile')
   const { t: c } = useTranslation('common')
   const { user } = useAuth()
   const { data: rewardProfile } = useRewardsMe(user?.id)
-  const { data: historyResult } = useQuery(['daily', 'history', user?.id, 30], async () => {
+  const { data: historyResult, isLoading: historyLoading, isError: historyError, refetch: refetchHistory } = useQuery(['daily', 'history', user?.id, 30], async () => {
     const response = await dailyAPI.getHistory(30)
     const serverInstant = response.headers.date ? new Date(response.headers.date) : null
-    const parts = serverInstant ? new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(serverInstant) : []
-    const serverDate = parts.length ? `${parts.find((part) => part.type === 'year')?.value}-${parts.find((part) => part.type === 'month')?.value}-${parts.find((part) => part.type === 'day')?.value}` : null
+    const serverDate = serverInstant ? appCalendarDate(serverInstant) : undefined
     return { entries: response.data, serverDate }
   }, { enabled: Boolean(user?.id), retry: 1 })
   const dailyHistory = historyResult?.entries || []
@@ -49,7 +51,6 @@ export default function Profile() {
   const form = useForm<ProfileFormData>({
     defaultValues: {
       username: user?.username || '',
-      current_jlpt_level: user?.current_jlpt_level || 'N5',
       learning_goals: user?.learning_goals || [],
     }
   })
@@ -89,17 +90,14 @@ export default function Profile() {
     form.setValue('learning_goals', currentGoals.filter((_, i) => i !== index))
   }
 
-  const calendarEnd = historyResult?.serverDate || rewardProfile?.last_completed_date || dailyHistory[0]?.date
-  const calendarDates = calendarEnd ? Array.from({ length: 30 }, (_, index) => {
-    const [year, month, day] = calendarEnd.split('-').map(Number)
-    const date = new Date(Date.UTC(year, month - 1, day))
-    date.setUTCDate(date.getUTCDate() - 29 + index)
-    return date.toISOString().slice(0, 10)
-  }) : []
-  const historyMap = new Map(dailyHistory.map((entry) => [entry.date, entry]))
+  const calendarEnd = historyResult?.serverDate || appCalendarDate()
 
   return (
     <div className="space-y-6">
+      <PlacementEntry />
+      <PlacementProfileSummary />
+      <Link to="/analytics" className="theme-card flex min-h-[56px] items-center justify-between gap-3 rounded-2xl p-5 font-semibold text-[color:var(--primary)] focus-visible:ring-2 focus-visible:ring-[color:var(--primary)] motion-reduce:transition-none"><span>{c('learning.title')}</span><span aria-hidden="true">→</span></Link>
+      <p className="text-sm text-[color:var(--text-muted)]">{t('pointsExplanation')}</p>
       <section className="theme-card rounded-3xl p-5 shadow-[var(--shadow-card)] sm:p-7">
         <div className="flex items-start gap-3">
           <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)]"><Trophy className="h-5 w-5 text-[color:var(--primary)]" /></div>
@@ -112,10 +110,7 @@ export default function Profile() {
         </div>
         <div className="mt-6">
           <h3 className="mb-3 text-sm font-bold text-[color:var(--text)]">{t('calendar')}</h3>
-          {calendarDates.length ? <div className="grid grid-cols-6 gap-2 sm:grid-cols-10">{calendarDates.map((date) => {
-            const entry = historyMap.get(date)
-            return <div key={date} title={`${date}${entry ? ` · ${entry.points_awarded} điểm` : ''}`} className={`grid aspect-square place-items-center rounded-xl border text-[10px] font-semibold sm:text-xs ${entry ? 'border-[color:var(--primary)] bg-[color:var(--accent)] text-[color:var(--primary)]' : 'border-[color:var(--border)] bg-[color:var(--bg-elevated)] text-[color:var(--text-muted)]'}`}><span>{Number(date.slice(-2))}</span>{entry && <Flame className="h-3 w-3" />}</div>
-          })}</div> : <p className="rounded-xl bg-[color:var(--bg-elevated)] p-4 text-sm text-[color:var(--text-muted)]">{t('calendarEmpty')}</p>}
+          {historyLoading ? <p role="status" className="text-sm text-[color:var(--text-muted)]">{t('calendarLoading')}</p> : historyError ? <div role="alert" className="space-y-3 text-sm text-[color:var(--text-muted)]"><p>{t('calendarError')}</p><button type="button" className="min-h-[44px] font-semibold text-[color:var(--primary)] underline" onClick={() => void refetchHistory()}>{t('calendarRetry')}</button></div> : <ActivityCalendar endDate={calendarEnd} history={dailyHistory} />}
         </div>
       </section>
       {/* Header */}
@@ -184,24 +179,11 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label htmlFor="current_jlpt_level" className="block text-sm font-semibold text-[color:var(--text)] mb-2">
+                  <p className="block text-sm font-semibold text-[color:var(--text)] mb-2">
                     {t('currentLevel')}
-                  </label>
-                  <select
-                    {...form.register('current_jlpt_level', { required: 'levelRequired' })}
-                    className="input w-full border-[color:var(--border)] focus:ring-[color:var(--primary)] bg-[color:var(--accent)]"
-                  >
-                    {JLPT_LEVELS.map((level) => (
-                      <option key={level} value={level}>
-                        {level} - {t(`jlptDescriptions.${level}`)}
-                      </option>
-                    ))}
-                  </select>
-                  {form.formState.errors.current_jlpt_level && (
-                    <p className="mt-1 text-sm text-red-600 font-medium">
-                      {t(form.formState.errors.current_jlpt_level.message || '')}
-                    </p>
-                  )}
+                  </p>
+                  <p className="rounded-xl border border-[color:var(--border)] bg-[color:var(--accent)] p-3">{user?.current_jlpt_level}</p>
+                  <p className="mt-2 text-sm text-[color:var(--text-muted)]">{t('levelFromPlacement')}</p>
                 </div>
 
                 <div>
@@ -362,9 +344,7 @@ export default function Profile() {
               <h3 className="card-title text-[color:var(--primary)]">{t('quickActions')}</h3>
             </div>
             <div className="card-content space-y-2">
-              <button className="w-full btn btn-outline btn-sm border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold transition-colors">
-                {t('export')}
-              </button>
+              <PersonalExport />
               <button className="w-full btn btn-outline btn-sm border-[color:var(--border)] text-[color:var(--primary)] hover:bg-[color:var(--accent)] font-semibold transition-colors">
                 {t('reset')}
               </button>

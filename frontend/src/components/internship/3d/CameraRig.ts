@@ -5,8 +5,13 @@ export type CameraView =
   | 'door_outside'
   | 'door_enter'
   | 'candidate_standing'
+  | 'candidate_preview'
+  | 'candidate'
   | 'pov'
   | 'close'
+  | 'ots'
+  | 'wide'
+  | 'desk'
   | 'isometric'
   | 'exit_bow'
 
@@ -43,6 +48,16 @@ export class CameraRig {
       target: new THREE.Vector3(0.15, 1.25, 0.2),
       fov: 48,
     },
+    candidate_preview: {
+      position: new THREE.Vector3(1.8, 1.4, 4.05),
+      target: new THREE.Vector3(0, 0.8, 4.5),
+      fov: 48,
+    },
+    candidate: {
+      position: new THREE.Vector3(1.75, 1.5, -0.1),
+      target: new THREE.Vector3(0, 1.08, 1.1),
+      fov: 48,
+    },
     pov: {
       position: new THREE.Vector3(0, 1.36, 1.15), // Seated candidate eye level at table looking directly at NPC
       target: new THREE.Vector3(0, 1.28, -0.9),
@@ -57,6 +72,21 @@ export class CameraRig {
       position: new THREE.Vector3(2.8, 2.5, 2.9), // Wide cinematic isometric room overview
       target: new THREE.Vector3(0, 0.95, 0.1),
       fov: 46,
+    },
+    wide: {
+      position: new THREE.Vector3(0, 1.45, 3.2),
+      target: new THREE.Vector3(0, 1.1, -1.0),
+      fov: 58,
+    },
+    ots: {
+      position: new THREE.Vector3(-0.4, 1.25, 2.3),
+      target: new THREE.Vector3(0.1, 1.15, -0.6),
+      fov: 46,
+    },
+    desk: {
+      position: new THREE.Vector3(0.2, 1.05, 1.5),
+      target: new THREE.Vector3(0, 0.74, 1.1),
+      fov: 42,
     },
     exit_bow: {
       position: new THREE.Vector3(0.75, 1.55, 2.1), // In-room view looking back at candidate bowing politely at door

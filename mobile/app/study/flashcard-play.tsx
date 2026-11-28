@@ -1,1 +1,2 @@
-export { FlashcardPlayScreen as default } from '../../src/screens/study/FlashcardPlayScreen'
+import { CloudFlashcardsScreen } from '../../src/screens/study/CloudFlashcardsScreen'
+export default function Page() { return <CloudFlashcardsScreen view="flip" /> }

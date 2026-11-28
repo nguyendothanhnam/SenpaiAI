@@ -1,14 +1,14 @@
 import uuid
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from ..core.auth import get_current_active_user
 from ..core.database import get_db
 from ..models.database import InternshipProfile, InternshipSession, User
-from ..services import internship_service
+from ..services import cv_service, internship_service
 from ..services.internship_data import INDUSTRIES
 
 router = APIRouter(prefix="/internship", tags=["Internship"])
@@ -17,6 +17,16 @@ router = APIRouter(prefix="/internship", tags=["Internship"])
 class StartInterviewRequest(BaseModel):
     industry_id: str = Field(default="it", description="ID của ngành nghề (it, hospitality, kaigo, engineering, manufacturing, business)")
     target_level: Optional[int] = Field(default=1, ge=1, le=5)
+
+
+class StartInterviewWithCVRequest(BaseModel):
+    industry_id: str = Field(default="it", description="ID của ngành nghề")
+    cv_text: str = Field(min_length=10, description="Nội dung văn bản CV của ứng viên")
+    parsed_cv: Optional[Dict[str, Any]] = None
+
+
+class ParseCVTextRequest(BaseModel):
+    cv_text: str = Field(min_length=10, description="Nội dung văn bản CV")
 
 
 class StartWorkplaceRequest(BaseModel):
@@ -105,6 +115,70 @@ def start_interview(
     return session_data
 
 
+@router.post("/cv/parse-text")
+async def parse_cv_text(payload: ParseCVTextRequest):
+    """Parses raw text of candidate CV using AI & returns extracted profile."""
+    try:
+        parsed = await cv_service.parse_candidate_cv(payload.cv_text)
+        return {
+            "raw_cv_text": payload.cv_text,
+            "parsed_cv": parsed
+        }
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"CV parsing failed: {str(exc)}")
+
+
+@router.post("/cv/upload")
+async def upload_and_parse_cv(file: UploadFile = File(...)):
+    """Uploads a CV file (.pdf, .docx, .txt), extracts real text, and parses structured candidate profile."""
+    try:
+        content = await file.read()
+        extracted_text = cv_service.extract_cv_text_from_file(content, file.filename or "cv.txt")
+        if not extracted_text or len(extracted_text.strip()) < 15:
+            raise HTTPException(
+                status_code=400,
+                detail="File CV không có đủ nội dung văn bản. Vui lòng chuyển sang tab 'Dán văn bản CV' để nhập trực tiếp."
+            )
+            
+        parsed = await cv_service.parse_candidate_cv(extracted_text)
+        return {
+            "filename": file.filename,
+            "raw_cv_text": extracted_text,
+            "parsed_cv": parsed
+        }
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("[CV Upload] Error processing CV: %s", exc)
+        raise HTTPException(status_code=500, detail=f"Lỗi khi đọc file CV: {str(exc)}")
+
+
+@router.post("/interview/start-with-cv")
+async def start_interview_with_cv(
+    payload: StartInterviewWithCVRequest,
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db)
+):
+    """Indexes CV into RAG, generates 4 tailored technical interview questions, and launches the session."""
+    try:
+        parsed = payload.parsed_cv
+        if not parsed:
+            parsed = await cv_service.parse_candidate_cv(payload.cv_text)
+            
+        session_data = await internship_service.start_interview_session_with_cv(
+            db=db,
+            user_id=current_user.id,
+            parsed_cv=parsed,
+            raw_cv_text=payload.cv_text,
+            industry_id=payload.industry_id
+        )
+        return session_data
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Không thể khởi tạo phỏng vấn kỹ thuật theo CV: {str(exc)}")
+
+
 @router.post("/workplace/start")
 def start_workplace_scenario(
     payload: StartWorkplaceRequest,
@@ -135,6 +209,8 @@ async def answer_session_turn(
             user_response=payload.user_response
         )
         return session_data
+    except internship_service.InterviewEvaluationUnavailable:
+        raise HTTPException(status_code=503, detail="interview_evaluation_unavailable")
     except ValueError as val_err:
         raise HTTPException(status_code=400, detail=str(val_err))
     except Exception as exc:
