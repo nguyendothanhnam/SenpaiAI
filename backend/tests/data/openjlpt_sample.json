@@ -1,0 +1,509 @@
+{
+  "provenance": {
+    "repository": "https://github.com/evanclan/OpenJLPT",
+    "commit": "0d1d3410bec90bd4098a7c72de820543cb4f707c",
+    "version": "0.3.0",
+    "license": "CC-BY-SA-4.0",
+    "attribution": "OpenJLPT, Jonathan Waller, JMdict/KANJIDIC2 (EDRDG), Tatoeba (examples CC BY 2.0 FR)"
+  },
+  "entries": [
+    {
+      "id": "ada066edfd",
+      "word": "会う",
+      "reading": "あう",
+      "romaji": "au",
+      "meanings": [
+        "to meet"
+      ],
+      "level": "N5",
+      "pos": [
+        "v5u",
+        "vi"
+      ],
+      "jmdict_id": 1198180,
+      "examples": [
+        {
+          "ja": "もうスミスさんに会われましたね。",
+          "furigana": "もうスミスさんに{会|あ}われましたね。",
+          "en": "You've met Mr. Smith already, haven't you?",
+          "tatoeba_id": 194412
+        },
+        {
+          "ja": "じゃあパーティーで会いましょう。",
+          "furigana": "じゃあパーティーで{会|あ}いましょう。",
+          "en": "See you at the party.",
+          "tatoeba_id": 215904
+        }
+      ]
+    },
+    {
+      "id": "ebec658463",
+      "word": "青",
+      "reading": "あお",
+      "romaji": "ao",
+      "meanings": [
+        "blue"
+      ],
+      "level": "N5",
+      "pos": [
+        "n",
+        "adj-no"
+      ],
+      "jmdict_id": 1381380,
+      "examples": [
+        {
+          "ja": "信号が青に変わったわよ。",
+          "furigana": "{信号|しんごう}が{青|あお}に{変|か}わったわよ。",
+          "en": "The traffic light turned green.",
+          "tatoeba_id": 145720
+        },
+        {
+          "ja": "夏の通学服は白と青のチェックです。",
+          "en": "My summer school dress is blue and white checkered.",
+          "tatoeba_id": 187219
+        }
+      ]
+    },
+    {
+      "id": "fc3bc1e6f1",
+      "word": "開く",
+      "reading": "あく",
+      "romaji": "aku",
+      "meanings": [
+        "to open",
+        "to become open"
+      ],
+      "level": "N5",
+      "pos": [
+        "v5k",
+        "vi"
+      ],
+      "jmdict_id": 1586270,
+      "examples": [
+        {
+          "ja": "ぐいと押すとドアは開いた。",
+          "furigana": "ぐいと{押|お}すとドアは{開|あ}いた。",
+          "en": "The door yielded to a strong push.",
+          "tatoeba_id": 225720
+        },
+        {
+          "ja": "ドアはどうしても開かなかった。",
+          "furigana": "ドアはどうしても{開|あ}かなかった。",
+          "en": "The door would not open.",
+          "tatoeba_id": 201844
+        }
+      ]
+    },
+    {
+      "id": "115ec83476",
+      "word": "明日",
+      "reading": "あした",
+      "romaji": "ashita",
+      "meanings": [
+        "tomorrow"
+      ],
+      "level": "N5",
+      "pos": [
+        "n",
+        "adv"
+      ],
+      "jmdict_id": 1584660,
+      "other_forms": [
+        "あした"
+      ],
+      "examples": [
+        {
+          "ja": "あしたは一日中ひまです。",
+          "furigana": "あしたは{一日中|いちにちじゅう}ひまです。",
+          "en": "I'll be free all day tomorrow.",
+          "tatoeba_id": 234469
+        },
+        {
+          "ja": "明日はピクニックに行くつもりだ。",
+          "en": "I am going on a picnic tomorrow.",
+          "tatoeba_id": 80466
+        }
+      ]
+    },
+    {
+      "id": "dd8ac16bd2",
+      "word": "学校",
+      "reading": "がっこう",
+      "romaji": "gakkou",
+      "meanings": [
+        "school"
+      ],
+      "level": "N5",
+      "pos": [
+        "n"
+      ],
+      "jmdict_id": 1206730,
+      "examples": [
+        {
+          "ja": "この学校はたくさんの生徒がいます。",
+          "furigana": "この{学校|がっこう}はたくさんの{生徒|せいと}がいます。",
+          "en": "This school has many students.",
+          "tatoeba_id": 222600
+        },
+        {
+          "ja": "学校を出たあと、どうするつもり？",
+          "furigana": "{学校|がっこう}を{出|で}たあと、どうするつもり？",
+          "en": "What are you going to do after you leave school?",
+          "tatoeba_id": 184354
+        }
+      ]
+    },
+    {
+      "id": "86f67e2dc3",
+      "word": "食べる",
+      "reading": "たべる",
+      "romaji": "taberu",
+      "meanings": [
+        "to eat"
+      ],
+      "level": "N5",
+      "pos": [
+        "v1",
+        "vt"
+      ],
+      "jmdict_id": 1358280,
+      "examples": [
+        {
+          "ja": "ちょうど食べたかったものでした。",
+          "furigana": "ちょうど{食|た}べたかったものでした。",
+          "en": "That hit the spot.",
+          "tatoeba_id": 202896
+        },
+        {
+          "ja": "食べながら読んではいけません。",
+          "furigana": "{食|た}べながら{読|よ}んではいけません。",
+          "en": "You must not read while eating.",
+          "tatoeba_id": 145934
+        }
+      ]
+    },
+    {
+      "id": "cbbfc8cad6",
+      "word": "猫",
+      "reading": "ねこ",
+      "romaji": "neko",
+      "meanings": [
+        "cat"
+      ],
+      "level": "N5",
+      "pos": [
+        "n"
+      ],
+      "jmdict_id": 1467640,
+      "examples": [
+        {
+          "ja": "猫はにゃーにゃーいいつづけた。",
+          "furigana": "{猫|ねこ}はにゃーにゃーいいつづけた。",
+          "en": "The cat continued to mew.",
+          "tatoeba_id": 121967
+        },
+        {
+          "ja": "猫がソファーでねむっている。",
+          "furigana": "{猫|ねこ}がソファーでねむっている。",
+          "en": "The cat is sleeping on the sofa.",
+          "tatoeba_id": 122010
+        }
+      ]
+    },
+    {
+      "id": "54e1f7a772",
+      "word": "合う",
+      "reading": "あう",
+      "romaji": "au",
+      "meanings": [
+        "to match"
+      ],
+      "level": "N4",
+      "pos": [
+        "v5u",
+        "vi"
+      ],
+      "jmdict_id": 1284430,
+      "examples": [
+        {
+          "ja": "このチョッキは前が合わない。",
+          "furigana": "このチョッキは{前|#1392580}が{合|あ}わない。",
+          "en": "This waistcoat won't meet at the front.",
+          "tatoeba_id": 223559
+        },
+        {
+          "ja": "この白いコートはあなたによく合うでしょう。",
+          "furigana": "この{白|しろ}いコートはあなたによく{合|あ}うでしょう。",
+          "en": "This white coat will look very nice on you.",
+          "tatoeba_id": 220206
+        }
+      ]
+    },
+    {
+      "id": "91f0d5ac9e",
+      "word": "空く",
+      "reading": "あく",
+      "romaji": "aku",
+      "meanings": [
+        "to open",
+        "to become empty"
+      ],
+      "level": "N4",
+      "pos": [
+        "v5k",
+        "vi"
+      ],
+      "jmdict_id": 1586270,
+      "examples": [
+        {
+          "ja": "放課後は空いてますか？",
+          "furigana": "{放課後|ほうかご}は{空|あ}いてますか？",
+          "en": "Are you free after school?",
+          "tatoeba_id": 82709
+        },
+        {
+          "ja": "いつも何曜日なら空いていますか？",
+          "en": "What day are you usually free?",
+          "tatoeba_id": 74746
+        }
+      ]
+    },
+    {
+      "id": "4c3461199c",
+      "word": "明日",
+      "reading": "あす",
+      "romaji": "asu",
+      "meanings": [
+        "tomorrow"
+      ],
+      "level": "N4",
+      "pos": [
+        "n",
+        "adv"
+      ],
+      "jmdict_id": 1584660,
+      "examples": [
+        {
+          "ja": "あしたは一日中ひまです。",
+          "furigana": "あしたは{一日中|いちにちじゅう}ひまです。",
+          "en": "I'll be free all day tomorrow.",
+          "tatoeba_id": 234469
+        },
+        {
+          "ja": "明日は雨天ではなかろうかと思う。",
+          "en": "I'm afraid it will be rainy tomorrow.",
+          "tatoeba_id": 80447
+        }
+      ]
+    },
+    {
+      "id": "dddceb65a5",
+      "word": "開く",
+      "reading": "ひらく",
+      "romaji": "hiraku",
+      "meanings": [
+        "to open an event"
+      ],
+      "level": "N4",
+      "pos": [
+        "v5k",
+        "vi",
+        "vt"
+      ],
+      "jmdict_id": 1202440,
+      "examples": [
+        {
+          "ja": "庭のバラの木のつぼみが少しずつ開き始める。",
+          "furigana": "{庭|にわ}のバラの{木|き}のつぼみが{少|すこ}しずつ{開|ひら}き{始|はじ}める。",
+          "en": "Little by little, the buds on the rosebush in my garden begin to open.",
+          "tatoeba_id": 125506
+        },
+        {
+          "ja": "パーティーを開いたらどうですか。",
+          "furigana": "パーティーを{開|ひら}いたらどうですか。",
+          "en": "Why don't you have a party?",
+          "tatoeba_id": 198428
+        }
+      ]
+    },
+    {
+      "id": "5b1dbc60e6",
+      "word": "遭う",
+      "reading": "あう",
+      "romaji": "au",
+      "meanings": [
+        "to meet",
+        "to encounter (undesirable nuance)"
+      ],
+      "level": "N2",
+      "pos": [
+        "v5u",
+        "vi"
+      ],
+      "jmdict_id": 1198180,
+      "examples": [
+        {
+          "ja": "駅へ行く途中でにわか雨に遭った。",
+          "en": "I was caught in a shower on my way to the station.",
+          "tatoeba_id": 188876
+        },
+        {
+          "ja": "前に彼にあったのを覚えている。",
+          "furigana": "{前|#1392580}に{彼|かれ}にあったのを{覚|おぼ}えている。",
+          "en": "I remember seeing him before.",
+          "tatoeba_id": 140993
+        }
+      ]
+    },
+    {
+      "id": "0812660ad4",
+      "word": "悪",
+      "reading": "あく",
+      "romaji": "aku",
+      "meanings": [
+        "evil",
+        "wickedness"
+      ],
+      "level": "N1",
+      "pos": [
+        "n"
+      ],
+      "jmdict_id": 1151230,
+      "examples": [
+        {
+          "ja": "彼は人種差別を悪だと決めつけた。",
+          "furigana": "{彼|かれ}は{人種差別|じんしゅさべつ}を{悪|あく}だと{決|き}めつけた。",
+          "en": "He condemned racial discrimination as evil.",
+          "tatoeba_id": 103552
+        },
+        {
+          "ja": "競争それ自体は善でも悪でもない。",
+          "furigana": "{競争|きょうそう}それ{自体|じたい}は{善|ぜん}でも{悪|あく}でもない。",
+          "en": "Competition is neither good nor evil in itself.",
+          "tatoeba_id": 181522
+        }
+      ]
+    },
+    {
+      "id": "4fff6d0441",
+      "word": "あ",
+      "reading": "あ",
+      "romaji": "a",
+      "meanings": [
+        "Ah"
+      ],
+      "level": "N4",
+      "pos": [
+        "int"
+      ],
+      "jmdict_id": 2394370,
+      "examples": [
+        {
+          "ja": "あ！まずい！ガソリンが切れてきた。",
+          "furigana": "あ！まずい！ガソリンが{切|き}れてきた。",
+          "en": "Oh, no! We're running out of gas.",
+          "tatoeba_id": 234772
+        },
+        {
+          "ja": "あ、上書きしちゃった。",
+          "furigana": "あ、{上書|うわが}きしちゃった。",
+          "en": "Uh oh, I saved over it.",
+          "tatoeba_id": 234770
+        }
+      ]
+    },
+    {
+      "id": "c3b1f16454",
+      "word": "愛",
+      "reading": "あい",
+      "romaji": "ai",
+      "meanings": [
+        "love"
+      ],
+      "level": "N3",
+      "pos": [
+        "n",
+        "n-suf"
+      ],
+      "jmdict_id": 1150410,
+      "examples": [
+        {
+          "ja": "愛とは夢にまで彼女を見ることだ。",
+          "furigana": "{愛|あい}とは{夢|ゆめ}にまで{彼女|かのじょ}を{見|み}ることだ。",
+          "en": "Love is seeing her in your dreams.",
+          "tatoeba_id": 191561
+        },
+        {
+          "ja": "彼への愛はもう冷めてしまった。",
+          "furigana": "{彼|かれ}への{愛|あい}はもう{冷|さ}めてしまった。",
+          "en": "My love for him has already cooled.",
+          "tatoeba_id": 98814
+        }
+      ]
+    },
+    {
+      "id": "42c4654587",
+      "word": "あいかわらず",
+      "reading": "あいかわらず",
+      "romaji": "aikawarazu",
+      "meanings": [
+        "as ever",
+        "as usual",
+        "the same"
+      ],
+      "level": "N2",
+      "pos": [
+        "adv",
+        "adj-no"
+      ],
+      "jmdict_id": 1401310,
+      "other_forms": [
+        "相変わらず"
+      ],
+      "examples": [
+        {
+          "ja": "君は相変わらず健康そうに見える。",
+          "furigana": "{君|きみ}は{相変|あいか}わらず{健康|けんこう}そうに{見|み}える。",
+          "en": "You look as healthy as ever.",
+          "tatoeba_id": 177085
+        },
+        {
+          "ja": "彼は相変わらず忙しいようである。",
+          "furigana": "{彼|かれ}は{相変|あいか}わらず{忙|いそが}しいようである。",
+          "en": "He seems as busy as ever.",
+          "tatoeba_id": 102825
+        }
+      ]
+    },
+    {
+      "id": "1cf257772e",
+      "word": "嗚呼",
+      "reading": "ああ",
+      "romaji": "aa",
+      "meanings": [
+        "Ah!",
+        "Oh!",
+        "Alas!"
+      ],
+      "level": "N1",
+      "pos": [
+        "int"
+      ],
+      "jmdict_id": 1565440,
+      "examples": [
+        {
+          "ja": "ああ、もしかして名前を呼ばれるのが恥ずかしいって？",
+          "furigana": "ああ、もしかして{名前|なまえ}を{呼|よ}ばれるのが{恥|は}ずかしいって？",
+          "en": "Ah, could it be you're embarrassed to be called by your first name?",
+          "tatoeba_id": 76927
+        },
+        {
+          "ja": "ああ飛行機が離陸する。",
+          "furigana": "ああ{飛行機|ひこうき}が{離陸|りりく}する。",
+          "en": "Look! There's a plane taking off.",
+          "tatoeba_id": 234697
+        }
+      ]
+    }
+  ]
+}

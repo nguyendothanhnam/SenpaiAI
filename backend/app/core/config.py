@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from pydantic import Field
 from typing import Optional
 from pathlib import Path
 import os
@@ -28,6 +29,9 @@ class Settings(BaseSettings):
     
     # Rate Limiting
     rate_limit_per_minute: int = 60
+    dictionary_ai_translation_enabled: bool = False
+    dictionary_translation_per_minute: int = Field(5, ge=1, le=60)
+    dictionary_translation_cooldown_seconds: int = Field(60, ge=1, le=86400)
 
     # Chat conversations and folders.
     chat_max_folders: int = 30

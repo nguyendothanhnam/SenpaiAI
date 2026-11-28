@@ -97,30 +97,8 @@ class VocabularyRepository:
         limit: int,
         offset: int,
     ) -> tuple[list[Vocabulary], int]:
-        query = db.query(Vocabulary)
-
-        if jlpt_level:
-            query = query.filter(Vocabulary.jlpt_level == jlpt_level)
-
-        if search:
-            pattern = f"%{search}%"
-            query = query.filter(
-                or_(
-                    Vocabulary.japanese_word.ilike(pattern),
-                    Vocabulary.reading.ilike(pattern),
-                    Vocabulary.meaning.ilike(pattern),
-                )
-            )
-
-        total = query.count()
-        items = (
-            query.options(joinedload(Vocabulary.kanji_links).joinedload(VocabularyKanji.kanji))
-            .order_by(Vocabulary.jlpt_level.asc(), Vocabulary.japanese_word.asc())
-            .offset(offset)
-            .limit(limit)
-            .all()
-        )
-        return items, total
+        from ..services.dictionary_service import search_rows
+        return search_rows(db, search or '', jlpt_level, limit=limit, offset=offset)
 
     def get_by_word_reading(self, db: Session, word: str, reading: str) -> Optional[Vocabulary]:
         return (

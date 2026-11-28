@@ -1,0 +1,2 @@
+# Pinned grammar sources are verified by byte count and SHA-256.
+backend/app/data/grammar_sources/** -text

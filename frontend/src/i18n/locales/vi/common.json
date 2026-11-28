@@ -1,4 +1,13 @@
 {
+  "dictionaryData": {
+    "creditsTitle": "Nguồn dữ liệu từ vựng",
+    "credits": "Có dữ liệu OpenJLPT (CC BY-SA 4.0), sử dụng danh sách Jonathan Waller, JMdict/KANJIDIC2 (EDRDG) và ví dụ Tatoeba (CC BY 2.0 FR).",
+    "communityLevels": "Cấp N5–N1 dựa trên danh sách cộng đồng, chỉ là ước tính, không phải danh sách JLPT chính thức.",
+    "englishFallback": "Nhãn [EN]: chưa có nghĩa Việt đã duyệt, đang hiển thị nghĩa tiếng Anh.",
+    "automaticMeaning": "Dịch tự động bằng AI, chưa kiểm duyệt; không dùng làm đáp án chấm bài.",
+    "sourceLink": "Nguồn OpenJLPT",
+    "licenseLink": "Giấy phép CC BY-SA 4.0"
+  },
   "flashcardsStudy": {
     "learn": "Học thích ứng",
     "test": "Kiểm tra",

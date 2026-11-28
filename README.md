@@ -16,6 +16,71 @@ Flashcard trên nhánh `mobile` có bộ thẻ riêng theo tài khoản, thẻ l
 
 ## 🚀 Hướng dẫn chạy nhanh
 
+### Thành viên mới — nhánh develop
+
+Quy trình dữ liệu có thể chạy lại; không cần nhận bản sao CSDL hay `.env` từ máy thành viên khác. **Dùng CSDL riêng cho develop**, không trỏ vào DB đang dùng trên nhánh `mobile`: hai nhánh có migration khác nhau. Bảng kiểm kê, giới hạn dữ liệu và kết quả chạy thử: [Thiết lập dữ liệu](docs/THIET_LAP_DU_LIEU.md).
+
+1. Clone đúng nhánh và tạo môi trường (Windows PowerShell; Python 3.11, PostgreSQL có quyền tạo `pg_trgm`; Node theo `mobile/package.json`):
+
+```powershell
+git clone --branch develop <URL_KHO_SENPAIAI> SenpaiAI
+cd SenpaiAI
+python -m venv backend/venv
+.\backend\venv\Scripts\python.exe -m pip install -r backend/requirements.txt
+if (-not (Test-Path backend/.env)) { Copy-Item backend/env.example backend/.env }
+if (-not (Test-Path frontend/.env)) { Copy-Item frontend/env.example frontend/.env }
+if (-not (Test-Path mobile/.env)) { Copy-Item mobile/.env.example mobile/.env }
+```
+
+Sửa **tệp cục bộ** `backend/.env`: `DATABASE_URL` tới DB develop mới/rỗng (ví dụ tên `senpai_develop_dev`, tạo trước bằng PostgreSQL/pgAdmin), `SECRET_KEY` riêng, endpoint Ollama/VOICEVOX nếu dùng. Mật khẩu phải khớp PostgreSQL thực tế; không dựa vào mặc định cũ trong lớp Settings. Không commit bí mật. Không xóa DB đang dùng hoặc tự `alembic stamp` để vượt lỗi revision.
+
+2. Thiết lập dữ liệu bằng một lệnh, rồi kiểm tra:
+
+```powershell
+.\backend\scripts\setup_data.ps1 -Download -External
+.\backend\scripts\setup_data.ps1 -CheckOnly
+```
+
+Nếu PowerShell chặn script, chỉ bỏ chặn cho lệnh hiện tại: `powershell -NoProfile -ExecutionPolicy Bypass -File backend/scripts/setup_data.ps1 -Download -External`. Python tương đương: từ `backend`, `venv/Scripts/python.exe scripts/setup_data.py --download --external`; kiểm tra bằng `venv/Scripts/python.exe scripts/data_status.py`. `SKIP` phải đọc lý do; mã kiểm tra 2 nghĩa là còn thiếu dữ liệu/tính năng, không phải mọi thứ đã sẵn sàng. Không tải mô hình tự động; không dùng hash embedding hoặc WAV giả để lấp chỗ thiếu.
+
+3. Chạy backend **sau migration/seed**, trong terminal riêng:
+
+```powershell
+cd backend
+.\venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Thử `http://localhost:8000/health` và `/docs`. Dừng backend trước khi dựng lại nhóm index rồi khởi động lại để nạp index vào bộ nhớ. Startup có cảnh báo thiếu migration/dữ liệu, không tự nạp hoặc chặn ứng dụng.
+
+4. Chạy web và Expo trong hai terminal từ gốc repo:
+
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
+
+```powershell
+cd mobile
+npm ci
+npm run start:clean
+```
+
+Web dùng URL API trong `frontend/.env`. Với điện thoại thật, đặt `mobile/.env` thành dòng thuần `EXPO_PUBLIC_API_URL=http://<IP_LAN_MAY_BACKEND>:8000/api` (thay IP thật, không dùng cú pháp link Markdown hay `http\://`). Hai thiết bị cùng mạng; backend lắng nghe `0.0.0.0`; thêm IP thật vào `ALLOWED_HOSTS` cục bộ nếu cần. Android giả lập dùng `10.0.2.2`, điện thoại thật không dùng `localhost`. Đổi `.env` Expo thì khởi động lại Metro với cache sạch.
+
+**Docker khác local:** PostgreSQL/index/audio nằm trong volume của từng máy, không đi cùng Git. Có thể tạo project Docker riêng bằng `docker compose -p senpai-develop up -d postgres`, build image backend rồi chạy command được kiểm soát:
+
+```powershell
+docker compose -p senpai-develop build backend
+docker compose -p senpai-develop run --rm --no-deps -v "${PWD}/shared-games:/shared-games:ro" backend python scripts/setup_data.py --download --external
+docker compose -p senpai-develop run --rm --no-deps -v "${PWD}/shared-games:/shared-games:ro" backend python scripts/data_status.py
+docker compose -p senpai-develop run --rm --no-deps --service-ports backend uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Compose cấp `DATABASE_URL` trong container; nếu dùng DB tên riêng thì phải override biến này nhất quán cho cả setup/check/backend. Mạng nội bộ dùng hostname `postgres`, `ollama`, `voicevox`, không phải localhost của máy host. Nhóm index/audio chỉ chạy khi các service/mô hình đã có; `--no-deps` không tự kéo chúng. Nếu cổng 5432/8000 đang dùng, chọn cổng/project/override riêng; không xóa volume để chữa xung đột. Lệnh backend mặc định trong Compose cũ tự pull mô hình và chạy `populate_data.py` chưa an toàn chạy lặp, nên quy trình này override command thay vì dùng mù quáng. Quy trình Docker sạch chưa được chạy kiểm chứng trong lượt triển khai này.
+
+**Lỗi thường gặp:** lỗi kết nối DB → kiểm tra dịch vụ, user/mật khẩu và `DATABASE_URL`; thiếu quyền `pg_trgm` → nhờ quản trị cấp quyền extension; revision không khớp → kiểm tra nhánh/DB, không stamp/drop tự động; OpenJLPT cache thiếu → chạy với `-Download`; thiếu model embedding → chuẩn bị `nomic-embed-text` riêng rồi chạy `--groups index --external`; không có audio → bật VOICEVOX rồi chạy nhóm audio; có tài liệu nhưng tìm kiếm trống → kiểm tra index và restart backend; HTTP 400 từ điện thoại → kiểm tra IP/TrustedHost, không phải seed dữ liệu. Develop hiện chưa có placement, thiếu một phần nét N5/N4 và kho từ minigame N5/N4: xem báo cáo, không coi seed thành công là đã đủ mọi nội dung.
+
 ### Yêu cầu hệ thống
 - Docker & Docker Compose
 - Python 3.11+
@@ -23,6 +88,8 @@ Flashcard trên nhánh `mobile` có bộ thẻ riêng theo tài khoản, thẻ l
 - **Ollama** (cho LLM miễn phí) hoặc OpenAI API key
 
 ### Chạy toàn bộ hệ thống
+
+Đây là cách khởi động cũ để tham khảo. Thành viên mới dùng mục **Thành viên mới — nhánh develop** phía trên: command Compose cũ có tự tải mô hình và gọi bộ nạp mẫu chưa an toàn khi chạy lặp. Không dùng cách cũ để thay cho quy trình dữ liệu mới.
 
 1. **Clone và setup**:
 ```bash
@@ -241,6 +308,12 @@ Nếu gặp vấn đề, vui lòng tạo issue trên GitHub hoặc liên hệ qu
 ---
 
 **SenpaiAI** - Học tiếng Nhật thông minh với AI! 🎌✨
+
+## OpenJLPT vocabulary attribution
+
+Contains data from [OpenJLPT](https://github.com/evanclan/OpenJLPT) **0.3.0**, pinned at commit `0d1d3410bec90bd4098a7c72de820543cb4f707c`, under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Upstream sources include Jonathan Waller's JLPT lists (level assignments and English glosses), JMdict/KANJIDIC2 (EDRDG; verification, identifiers and metadata) and Tatoeba examples (CC BY 2.0 FR). Tatoeba sentence IDs/source links and per-meaning provenance are retained. Downloaded NOTICE/LICENSE files accompany the local dataset; derived vocabulary data retains its attribution and share-alike licence.
+
+N5–N1 assignments are **community estimates, not official JLPT vocabulary lists**. The imported vocabulary has English meanings; existing Vietnamese meanings are preserved. `[EN]` marks the English fallback. Optional single-word AI translations are disabled by default and labelled unreviewed; there is no bulk translation. See [Vietnamese design/import/API report](docs/TU_DIEN_OPENJLPT.md).
 
 ## Kanji data attribution
 

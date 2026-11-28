@@ -12,6 +12,7 @@ from .api import auth, chat, chat_conversations, analysis, library, game, kanji,
 from .api import placement, learning, kanji_writing, chat_feedback, kanji_notes, minigame_learning, flashcards
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
+from .api import dictionary
 
 try:
     from ml.kanji_recognizer import get_model_info
@@ -24,6 +25,8 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    from .services.data_health import warn_data_state
+    warn_data_state(engine, logger, settings)  # Advisory only; never migrates or seeds at application startup.
     # Placement schema evolves through Alembic, including existing attempt columns.
     Base.metadata.create_all(bind=engine, tables=[table for table in Base.metadata.sorted_tables if not table.name.startswith(("placement_", "exercise_", "weekly_learning_", "kanji_writing_", "chat_answer_feedback", "user_kanji_notes", "minigame_learning_", "flashcard_"))])
     if settings.seed_bundled_grammar:
@@ -117,6 +120,8 @@ app.include_router(game.router)
 app.include_router(game.router, prefix="/api")
 app.include_router(kanji.router)
 app.include_router(kanji.router, prefix="/api")
+app.include_router(dictionary.router)
+app.include_router(dictionary.router, prefix="/api")
 app.include_router(grammar_practice.router)
 app.include_router(grammar_practice.router, prefix="/api")
 app.include_router(grammar_lessons.router)

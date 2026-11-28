@@ -1,4 +1,13 @@
 {
+  "dictionaryData": {
+    "creditsTitle": "Vocabulary data sources",
+    "credits": "Contains OpenJLPT data (CC BY-SA 4.0), using Jonathan Waller's lists, JMdict/KANJIDIC2 (EDRDG) and Tatoeba examples (CC BY 2.0 FR).",
+    "communityLevels": "N5–N1 levels are community estimates, not official JLPT vocabulary lists.",
+    "englishFallback": "[EN] means no reviewed Vietnamese meaning is available; the English meaning is shown.",
+    "automaticMeaning": "AI translation, not reviewed; never used as a grading answer.",
+    "sourceLink": "OpenJLPT source",
+    "licenseLink": "CC BY-SA 4.0 license"
+  },
   "flashcardsStudy": {
     "learn": "Adaptive learning",
     "test": "Test",
