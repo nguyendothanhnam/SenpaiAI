@@ -13,12 +13,9 @@ export function createCandidateAppearance(parts: {
   const femaleHair = new THREE.Group()
   femaleHair.name = 'Candidate_FemaleHair'
 
-  const hairMat = (hair as any).material || new THREE.MeshStandardMaterial({
+  const hairMat = new THREE.MeshStandardMaterial({
     color: 0x0f172a,
     roughness: 0.9,
-    polygonOffset: true,
-    polygonOffsetFactor: -1.0,
-    polygonOffsetUnits: -1.0,
   })
 
   // Female rear bun & back hair positioned proud of head back plane (-0.12)
@@ -30,11 +27,11 @@ export function createCandidateAppearance(parts: {
   bun.position.set(0, 0.11, -0.21)
   bun.castShadow = true
 
-  const fringe = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.065, 0.03), hairMat)
-  fringe.position.set(0, 0.105, 0.128)
-  fringe.castShadow = true
+  const crown = new THREE.Mesh(new THREE.BoxGeometry(0.284, 0.08, 0.28), hairMat)
+  crown.position.set(0, 0.142, 0.005)
+  crown.castShadow = true
 
-  femaleHair.add(back, bun, fringe)
+  femaleHair.add(back, bun, crown)
   femaleHair.traverse((child) => {
     if (child instanceof THREE.Mesh) {
       child.frustumCulled = false

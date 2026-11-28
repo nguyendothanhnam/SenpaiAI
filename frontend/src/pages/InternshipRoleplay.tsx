@@ -170,7 +170,7 @@ export default function InternshipRoleplay() {
 
   // Submit Answer Turn Mutation
   const handleAnswerTurn = async (userText: string) => {
-    if (!currentSession) return
+    if (!currentSession || isAnswering) return false
     setIsAnswering(true)
     try {
       const res = await internshipAPI.submitTurnAnswer(currentSession.id, userText)
@@ -193,8 +193,12 @@ export default function InternshipRoleplay() {
         queryClient.invalidateQueries(['internshipProfile'])
         queryClient.invalidateQueries(['rewardsMe'])
       }
+      return true
     } catch (err: any) {
-      toast.error('Có lỗi khi xử lý câu trả lời.')
+      toast.error(err.response?.status === 503
+        ? 'Chưa thể chấm câu này. Câu trả lời vẫn được giữ để bạn gửi lại.'
+        : 'Có lỗi khi xử lý câu trả lời.')
+      return false
     } finally {
       setIsAnswering(false)
     }

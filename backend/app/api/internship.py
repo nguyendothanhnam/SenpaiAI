@@ -209,6 +209,8 @@ async def answer_session_turn(
             user_response=payload.user_response
         )
         return session_data
+    except internship_service.InterviewEvaluationUnavailable:
+        raise HTTPException(status_code=503, detail="interview_evaluation_unavailable")
     except ValueError as val_err:
         raise HTTPException(status_code=400, detail=str(val_err))
     except Exception as exc:

@@ -4,7 +4,7 @@ import { Send, Mic, MicOff, Lightbulb, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 interface PlayerControlProps {
-  onSubmit: (text: string) => void
+  onSubmit: (text: string) => Promise<boolean>
   disabled?: boolean
   isLoading?: boolean
   hints?: string[]
@@ -24,8 +24,11 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
 }) => {
   const [inputText, setInputText] = useState('')
   const [isRecording, setIsRecording] = useState(false)
+  const [isStopping, setIsStopping] = useState(false)
   const [showHints, setShowHints] = useState(false)
   const recognitionRef = useRef<any>(null)
+  const keepListeningRef = useRef(false)
+  const submittingRef = useRef(false)
 
   // Initialize Speech Recognition for Japanese STT
   useEffect(() => {
@@ -34,33 +37,43 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
 
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition()
-      recognition.continuous = false
+      recognition.continuous = true
       recognition.interimResults = false
       recognition.lang = 'ja-JP'
 
-      recognition.onstart = () => {
-        setIsRecording(true)
-      }
-
       recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript
+        const segments: string[] = []
+        for (let index = event.resultIndex; index < event.results.length; index++) {
+          const result = event.results[index]
+          if (result.isFinal) segments.push(result[0].transcript.trim())
+        }
+        const transcript = segments.filter(Boolean).join(' ')
         if (transcript) {
           setInputText((prev) => (prev ? `${prev} ${transcript}` : transcript))
-          toast.success('Đã nhận diện giọng nói tiếng Nhật')
         }
-        setIsRecording(false)
       }
 
       recognition.onerror = (err: any) => {
+        if (err.error === 'no-speech') return
+        keepListeningRef.current = false
         console.warn('Speech recognition error:', err)
-        setIsRecording(false)
-        if (err.error !== 'no-speech') {
+        if (err.error !== 'aborted') {
           toast.error('Không thể nhận diện giọng nói hoặc chưa cấp quyền micro.')
         }
       }
 
       recognition.onend = () => {
+        if (keepListeningRef.current) {
+          try {
+            recognition.start()
+            return
+          } catch {
+            keepListeningRef.current = false
+            toast.error('Micro đã ngắt. Bạn có thể bật lại để nói tiếp.')
+          }
+        }
         setIsRecording(false)
+        setIsStopping(false)
       }
 
       recognitionRef.current = recognition
@@ -68,7 +81,12 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
 
     return () => {
       if (recognitionRef.current) {
+        keepListeningRef.current = false
+        recognitionRef.current.onend = null
+        recognitionRef.current.onresult = null
+        recognitionRef.current.onerror = null
         recognitionRef.current.abort()
+        recognitionRef.current = null
       }
     }
   }, [])
@@ -79,29 +97,39 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
       return
     }
 
-    if (isRecording) {
+    if (isStopping) return
+    if (keepListeningRef.current) {
+      keepListeningRef.current = false
+      setIsStopping(true)
       recognitionRef.current.stop()
-      setIsRecording(false)
     } else {
       try {
+        keepListeningRef.current = true
         recognitionRef.current.start()
+        setIsRecording(true)
       } catch {
-        recognitionRef.current.abort()
-        setTimeout(() => recognitionRef.current?.start(), 150)
+        keepListeningRef.current = false
+        toast.error('Không thể bật micro. Hãy thử lại.')
       }
     }
   }
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = inputText.trim()
-    if (!trimmed || disabled || isLoading) return
-    onSubmit(trimmed)
-    setInputText('')
-    setShowHints(false)
+    if (!trimmed || disabled || isLoading || isRecording || isStopping || submittingRef.current) return
+    submittingRef.current = true
+    try {
+      if (await onSubmit(trimmed)) {
+        setInputText('')
+        setShowHints(false)
+      }
+    } finally {
+      submittingRef.current = false
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault()
       handleSend()
     }
@@ -156,8 +184,10 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
         <button
           type="button"
           onClick={handleToggleRecord}
-          disabled={disabled || isLoading}
-          title={isRecording ? 'Dừng thu âm' : 'Nói tiếng Nhật (Voice Speech-to-Text)'}
+          disabled={isStopping || (!isRecording && (disabled || isLoading))}
+          aria-pressed={isRecording && !isStopping}
+          aria-label={isRecording ? 'Dừng thu âm' : 'Bắt đầu thu âm tiếng Nhật'}
+          title={isStopping ? 'Đang hoàn tất nhận diện' : isRecording ? 'Dừng thu âm' : 'Bắt đầu thu âm tiếng Nhật'}
           className={`p-2 rounded-lg transition-colors shrink-0 text-xs ${
             isRecording
               ? 'bg-rose-700 text-white animate-pulse'
@@ -203,7 +233,9 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
         <button
           type="button"
           onClick={handleSend}
-          disabled={disabled || isLoading || !inputText.trim()}
+          disabled={disabled || isLoading || isRecording || isStopping || !inputText.trim()}
+          aria-label={isLoading ? 'Đang chấm câu trả lời' : 'Gửi câu trả lời'}
+          aria-busy={isLoading}
           title="Gửi câu trả lời"
           className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-slate-800 text-slate-100 border border-slate-600 font-medium transition-colors shrink-0"
         >
@@ -214,6 +246,7 @@ export const PlayerControl: React.FC<PlayerControlProps> = ({
           )}
         </button>
       </div>
+      {isLoading && <p role="status" className="px-2 text-xs text-slate-300">Đã gửi. Đang chấm câu trả lời…</p>}
     </div>
   )
 }

@@ -533,7 +533,7 @@ export interface TurnData {
   hints?: string[]
   user_response?: string | null
   feedback?: {
-    corrected_sentence: string
+    corrected_sentence: string | null
     advice_vi: string
     technical_advice_vi?: string
   } | null

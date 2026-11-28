@@ -147,9 +147,15 @@ class JapaneseLearningService:
                 "response_time": time.time() - start_time
             }
 
-    async def voice_completion(self, system_prompt: str, prompt: str) -> str:
+    async def voice_completion(self, system_prompt: str, prompt: str, *, response_schema: Optional[Dict[str, Any]] = None, output_tokens: int = 360) -> str:
         """Run a purpose-built voice conversation prompt without changing regular chat."""
         if self.provider == "ollama":
+            if response_schema is not None:
+                return await asyncio.to_thread(
+                    self.service._call_ollama, prompt, system_prompt,
+                    temperature=0, num_predict=output_tokens, max_retries=0,
+                    response_format=response_schema, keep_alive="15m",
+                )
             return await asyncio.to_thread(self.service._call_ollama, prompt, system_prompt)
         messages = [SystemMessage(content=system_prompt), HumanMessage(content=prompt)]
         response = await self.llm.agenerate([messages])

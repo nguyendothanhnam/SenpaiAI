@@ -1580,8 +1580,13 @@ export class SceneManager {
     this.candidateNeck.position.set(0, 0.52, 0)
     this.candidateTorso.add(this.candidateNeck)
 
+    const candidateNeckMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.058, 0.066, 0.08, 12), handMat)
+    candidateNeckMesh.position.y = 0.024
+    this.candidateNeck.add(candidateNeckMesh)
+
     this.candidateHead = new THREE.Group()
-    this.candidateHead.position.set(0, 0.12, 0)
+    // Keep the head above the jacket even as it tilts during a bow.
+    this.candidateHead.position.set(0, 0.185, 0)
     this.candidateNeck.add(this.candidateHead)
 
     const headMesh = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.3, 0.24), handMat)
@@ -1589,27 +1594,23 @@ export class SceneManager {
     headMesh.frustumCulled = false
     this.candidateHead.add(headMesh)
 
-    // Hair material with polygonOffset to completely prevent co-planar Z-fighting and shadow acne
     const hairMat = new THREE.MeshStandardMaterial({
       color: 0x0f172a,
       roughness: 0.9,
-      polygonOffset: true,
-      polygonOffsetFactor: -1.0,
-      polygonOffsetUnits: -1.0,
     })
 
     const hairGroup = new THREE.Group()
     hairGroup.name = 'Candidate_MaleHair'
 
-    // 1. Crown / Top Hair (covers crown and slightly overhangs front)
-    const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.282, 0.12, 0.27), hairMat)
-    hairTop.position.set(0, 0.155, 0.005)
+    // Use one front surface for the crown and fringe so their lower edges cannot overlap.
+    const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.282, 0.127, 0.276), hairMat)
+    hairTop.position.set(0, 0.1515, 0.007)
     hairTop.castShadow = true
     hairGroup.add(hairTop)
 
     // 2. Back Hair (covers entire rear occipital down to nape, eliminating bare skin & z-fighting)
     // Head back is at z = -0.12. Back hair is at z = -0.135 with depth 0.05 (z extends to -0.16)
-    const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.22, 0.05), hairMat)
+    const hairBack = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.23, 0.05), hairMat)
     hairBack.position.set(0, 0.04, -0.135)
     hairBack.castShadow = true
     hairGroup.add(hairBack)
@@ -1624,12 +1625,6 @@ export class SceneManager {
     rightSide.position.set(0.136, 0.05, -0.02)
     rightSide.castShadow = true
     hairGroup.add(rightSide)
-
-    // 4. Front bangs / fringe
-    const hairBangs = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.05, 0.03), hairMat)
-    hairBangs.position.set(0, 0.115, 0.128)
-    hairBangs.castShadow = true
-    hairGroup.add(hairBangs)
 
     hairGroup.traverse((child) => {
       if (child instanceof THREE.Mesh) {
@@ -1833,12 +1828,14 @@ export class SceneManager {
       new THREE.CylinderGeometry(isFemale ? 0.065 : 0.08, isFemale ? 0.075 : 0.09, 0.12, 16),
       new THREE.MeshStandardMaterial({ color: 0xfed7aa, roughness: 0.5 })
     )
-    neckMesh.position.y = 0.06
+    neckMesh.position.y = 0.048
     neck.add(neckMesh)
 
     // Head
     const head = new THREE.Group()
-    head.position.set(0, 0.14, 0)
+    // The jacket and face have the same front depth in the IT avatar.
+    // Leave vertical clearance while the head nods and the chest breathes.
+    head.position.set(0, 0.23, 0)
     neck.add(head)
 
     // Face mesh
@@ -1931,37 +1928,36 @@ export class SceneManager {
       head.add(glassesGroup)
     }
 
-    // Expressive 3D Mouth (Dark oral cavity + Clean white teeth row + Upper/Lower Lips)
+    // Keep the animated mouth layers in front of the face at distinct depths.
     const mouth = new THREE.Group()
-    mouth.position.set(0, -0.07, headDepth / 2 + 0.002)
+    mouth.position.set(0, -0.07, headDepth / 2 + 0.004)
 
     const mouthWidth = isFemale ? 0.07 : 0.08
     const mouthBaseH = 0.026
 
     // 1. Dark Oral Cavity (Revealed when mouth opens while speaking)
     const cavityMat = new THREE.MeshBasicMaterial({ color: 0x180509 })
-    const mouthCavity = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth * 0.9, mouthBaseH * 0.95, 0.008), cavityMat)
-    mouthCavity.position.set(0, 0, 0)
+    const mouthCavity = new THREE.Mesh(new THREE.PlaneGeometry(mouthWidth * 0.9, mouthBaseH * 0.95), cavityMat)
     mouthCavity.frustumCulled = false
     mouth.add(mouthCavity)
 
     // 2. Upper Teeth Accent (Clean white row visible when open)
     const teethMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc })
-    const mouthTeeth = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth * 0.65, mouthBaseH * 0.28, 0.009), teethMat)
-    mouthTeeth.position.set(0, mouthBaseH * 0.22, 0.001)
+    const mouthTeeth = new THREE.Mesh(new THREE.PlaneGeometry(mouthWidth * 0.65, mouthBaseH * 0.28), teethMat)
+    mouthTeeth.position.set(0, mouthBaseH * 0.22, 0.002)
     mouthTeeth.frustumCulled = false
     mouth.add(mouthTeeth)
 
     // 3. Upper Lip (Polite lip contour)
     const lipMat = new THREE.MeshBasicMaterial({ color: isFemale ? 0xf43f5e : 0x991b1b })
-    const upperLip = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth, mouthBaseH * 0.28, 0.01), lipMat)
-    upperLip.position.set(0, mouthBaseH * 0.38, 0.002)
+    const upperLip = new THREE.Mesh(new THREE.PlaneGeometry(mouthWidth, mouthBaseH * 0.28), lipMat)
+    upperLip.position.set(0, mouthBaseH * 0.38, 0.004)
     upperLip.frustumCulled = false
     mouth.add(upperLip)
 
     // 4. Lower Lip
-    const lowerLip = new THREE.Mesh(new THREE.BoxGeometry(mouthWidth * 0.85, mouthBaseH * 0.26, 0.01), lipMat)
-    lowerLip.position.set(0, -mouthBaseH * 0.38, 0.002)
+    const lowerLip = new THREE.Mesh(new THREE.PlaneGeometry(mouthWidth * 0.85, mouthBaseH * 0.26), lipMat)
+    lowerLip.position.set(0, -mouthBaseH * 0.38, 0.004)
     lowerLip.frustumCulled = false
     mouth.add(lowerLip)
 

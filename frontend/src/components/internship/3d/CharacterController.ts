@@ -183,7 +183,6 @@ export class CharacterController {
     let headRotZ = 0
     let mouthScaleY = 0.2
     let mouthScaleX = 1.0
-    let mouthPosY = -0.07
     let leftArmRotX = 0.5
     let rightArmRotX = 0.5
     let leftForearmRotX = 0.8
@@ -209,7 +208,6 @@ export class CharacterController {
 
       mouthScaleY = 0.2 + curvedOpen * 2.2 * talkW
       mouthScaleX = 1.0 + Math.sin(this.elapsedTime * 6.5) * 0.15 * talkW
-      mouthPosY = -0.07 - ((mouthScaleY - 0.2) * 0.007 * talkW)
 
       headRotX += Math.sin(this.elapsedTime * 6.5) * 0.035 * talkW
       headRotY += Math.cos(this.elapsedTime * 3.2) * 0.04 * talkW
@@ -292,11 +290,10 @@ export class CharacterController {
     head.rotation.z = Number.isFinite(headRotZ) ? headRotZ : 0
 
     mouth.scale.set(
-      Number.isFinite(mouthScaleX) ? Math.max(0.1, mouthScaleX) : 1.0,
-      Number.isFinite(mouthScaleY) ? Math.max(0.01, mouthScaleY) : 0.2,
+      THREE.MathUtils.damp(mouth.scale.x, Number.isFinite(mouthScaleX) ? Math.max(0.1, mouthScaleX) : 1.0, 28, dt),
+      THREE.MathUtils.damp(mouth.scale.y, Number.isFinite(mouthScaleY) ? Math.max(0.01, mouthScaleY) : 0.2, 28, dt),
       1.0
     )
-    mouth.position.y = Number.isFinite(mouthPosY) ? mouthPosY : -0.07
 
     leftArm.rotation.x = Number.isFinite(leftArmRotX) ? leftArmRotX : 0.5
     rightArm.rotation.x = Number.isFinite(rightArmRotX) ? rightArmRotX : 0.5

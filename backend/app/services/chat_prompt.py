@@ -57,6 +57,7 @@ def task_prompt(question: str, language: str) -> str:
         'translation':'Put the suggested translation first. Preserve tense, negation and politeness. Add a short reading/meaning note. Do not translate an earlier turn unless asked.',
         'analysis':'Quote the current sentence, explain only identified words/forms, then meaning if supported. Clearly distinguish partial analysis from a verified full translation.',
         'culture':'Use relevant material; avoid stereotypes and universal claims. Local/current rules require a current official source.',
+        'conversation':'Choose a short exchange from the reference that fits the situation. Give the Japanese lines and their meanings.',
         'general':'Answer the learner question briefly; ask for clarification if it is underspecified.',
         'unclear':'Ask one short clarifying question.',
         'exercise':'Use only supplied question-bank items; include the task and checked answer separately. If no item is available, ask what form to practice.',

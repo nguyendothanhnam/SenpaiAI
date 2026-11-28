@@ -14,7 +14,7 @@ import {
 
 export interface FeedbackBubbleProps {
   userResponse: string
-  correctedSentence?: string
+  correctedSentence?: string | null
   adviceVi?: string
   technicalAdviceVi?: string
   scores?: {
@@ -23,6 +23,7 @@ export interface FeedbackBubbleProps {
     manner: number
     technical?: number
     cv_alignment?: number
+    overall?: number
   } | null
   onClose?: () => void
 }
@@ -39,7 +40,7 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
   const dragControls = useDragControls()
 
   const hasTechnical = scores && typeof scores.technical === 'number'
-  const avgScore = scores
+  const avgScore = typeof scores?.overall === 'number' ? Number(scores.overall.toFixed(1)) : scores
     ? hasTechnical
       ? Math.round(
           (scores.technical! * 0.4) +
@@ -193,7 +194,7 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
               <div className="p-3 rounded bg-slate-900/70 border border-slate-700/60">
                 <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-300 mb-1">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Câu trả lời tiếng Nhật mẫu chuẩn kỹ sư:</span>
+                  <span>Câu tiếng Nhật gợi ý</span>
                 </div>
                 <p className="font-serif text-emerald-200/95 leading-relaxed pl-5">
                   「{correctedSentence}」
@@ -217,9 +218,9 @@ export const FeedbackBubble: React.FC<FeedbackBubbleProps> = ({
               <div className="p-3 rounded bg-slate-900/70 border border-slate-700/60">
                 <div className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-300 mb-1">
                   <Info className="w-3.5 h-3.5 text-sky-400" />
-                  <span>Nhận xét tác phong công sở &amp; Kính ngữ:</span>
+                  <span>Nhận xét và cách cải thiện</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed font-sans pl-5">
+                <p className="whitespace-pre-line text-slate-300 leading-relaxed font-sans pl-5">
                   {adviceVi}
                 </p>
               </div>

@@ -58,7 +58,8 @@ class OllamaJapaneseLearningService:
         max_retries: int = 1,
         temperature: Optional[float] = None,
         num_predict: int = 350,
-        response_format: Any = None
+        response_format: Any = None,
+        keep_alive: Optional[str] = None,
     ) -> str:
         """Call Ollama API directly with fast execution options."""
         if CHAT_CALL.get():
@@ -87,6 +88,7 @@ class OllamaJapaneseLearningService:
                             'model': self.model, 'messages': messages, 'stream': False,
                             'format': response_format,
                             'options': chat_options,
+                            **({'keep_alive': keep_alive} if keep_alive else {}),
                         })
                         structured.raise_for_status()
                         payload = structured.json()

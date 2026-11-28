@@ -155,20 +155,21 @@ class ChromaDBService:
         self,
         query: str,
         n_results: int = 5,
-        filter_dict: Optional[Dict[str, Any]] = None
+        filter_dict: Optional[Dict[str, Any]] = None,
+        document_types: Optional[frozenset[str]] = None,
+        document_ids: Optional[set[str]] = None,
     ) -> List[Dict[str, Any]]:
         """Search for relevant documents using semantic similarity with optional metadata filters."""
         if not self.records or not query.strip():
             return []
 
-        query_vec = self.get_embedding(query.strip())
-        query_norm = np.linalg.norm(query_vec)
-        if query_norm == 0:
-            return []
-
         candidate_records = []
         for rec in self.records.values():
             meta = rec.get("metadata", {})
+            if document_types is not None and meta.get("document_type") not in document_types:
+                continue
+            if document_ids is not None and str(meta.get("document_id")) not in document_ids:
+                continue
 
             # Filter checks
             if filter_dict:
@@ -183,6 +184,11 @@ class ChromaDBService:
             candidate_records.append(rec)
 
         if not candidate_records:
+            return []
+
+        query_vec = self.get_embedding(query.strip())
+        query_norm = np.linalg.norm(query_vec)
+        if query_norm == 0:
             return []
 
         # Vectorized cosine similarity computation
