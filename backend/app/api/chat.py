@@ -9,7 +9,7 @@ import uuid
 from ..core.database import get_db
 from ..core.config import settings
 from ..core.auth import get_current_active_user
-from ..models.database import User, ChatHistory, ChatConversation, VoiceConversation
+from ..models.database import User, ChatHistory, ChatConversation, Document, VoiceConversation
 from ..models.schemas import (
     ChatMessage, 
     ChatResponse, 
@@ -21,7 +21,7 @@ from ..services import vocab_mcq_service
 from ..services.kanji_dictionary_service import kanji_dictionary_service
 from ..services.vector_db import chroma_service
 from ..services.chat_conversations import build_recent_chat_context, normalize_title
-from ..services.chat_grounding import reviewed_reference, relevant_chat_documents, finalize_chat_answer, clean_chat_answer
+from ..services.chat_grounding import CHAT_DOCUMENT_TYPES, reviewed_reference, relevant_chat_documents, finalize_chat_answer, clean_chat_answer
 from ..services.chat_language import (
     detect_chat_language,
     needs_history,
@@ -131,7 +131,7 @@ def build_kanji_answer(entry: dict, language: str = 'vi') -> str:
 async def send_message(message: ChatMessage,
     current_user: User = Depends(get_current_active_user), db: Session = Depends(get_db)):
     """Resolve language and intent, retrieve checked evidence, generate and validate."""
-    from ..services.chat_quality import clarification,localized_sources
+    from ..services.chat_quality import clarification
     try:
         start=time.time()
         conversation=_prepare_text_conversation(db,current_user,message)
@@ -170,15 +170,26 @@ async def send_message(message: ChatMessage,
         if not context:context,sources,fallback=library_knowledge(db,focus,language)
         if not context and kind!='translation':
             level=message.jlpt_level or current_user.current_jlpt_level
-            results=chroma_service.search_documents(focus,n_results=3,filter_dict={'jlpt_level':level} if level else None)
-            rows=relevant_chat_documents(results,focus)
-            if not rows and level:rows=relevant_chat_documents(chroma_service.search_documents(focus,n_results=3,filter_dict=None),focus)
-            rows=[r for r in rows if public_source({'type':r.get('source',{}).get('document_type',''),
-                'title':r.get('source',{}).get('title',''),'url':r.get('source',{}).get('source_url','')})]
+            public_ids = {str(doc_id) for (doc_id,) in db.query(Document.id).filter(
+                Document.user_id.is_(None), Document.document_type.in_(CHAT_DOCUMENT_TYPES),
+            )}
+            for filters in ([{'jlpt_level': level}, None] if level else [None]):
+                results = chroma_service.search_documents(
+                    focus, n_results=12, filter_dict=filters, document_types=CHAT_DOCUMENT_TYPES, document_ids=public_ids,
+                )
+                rows = relevant_chat_documents([
+                    r for r in results if r.get('content', '').strip()
+                    and public_source({'type': r.get('source', {}).get('document_type', ''),
+                        'title': r.get('source', {}).get('title', ''),
+                        'url': r.get('source', {}).get('source_url', '')})
+                ], focus)
+                if rows:
+                    break
             context='\n\n'.join(r.get('content','') for r in rows)
             sources=[{'id':r.get('source',{}).get('id'),'title':r.get('source',{}).get('title',''),
                 'type':r.get('source',{}).get('document_type','lesson'),
                 'url':r.get('source',{}).get('source_url') or f"/library?doc_id={r.get('source',{}).get('id')}",
+                'jlpt_level':r.get('source',{}).get('jlpt_level'),
                 'relevance':r.get('similarity_score',0)}for r in rows]
         if not context and kind!='translation':
             return _grounded_reply(db,conversation,current_user,message,uncertainty(language),[],start)
@@ -189,11 +200,14 @@ async def send_message(message: ChatMessage,
             answer=finalize_chat_answer(message.message,generated['answer'],language)
         except RuntimeError:
             answer=fallback or uncertainty(language)
-        if violations(message.message,answer,language,context):answer=fallback or uncertainty(language)
+        if answer == uncertainty(language) or violations(message.message,answer,language,context):
+            answer = fallback or uncertainty(language)
+        if answer == uncertainty(language):
+            sources = []
         if kind=='translation' and not sources:
             prefix='**Bản dịch gợi ý, chưa đối chiếu học liệu:**' if language=='vi' else '**Suggested translation, not checked against reference material:**'
             answer=prefix+'\n\n'+answer
-        return _grounded_reply(db,conversation,current_user,message,answer,localized_sources(sources,language),start)
+        return _grounded_reply(db,conversation,current_user,message,answer,sources,start)
     except HTTPException:
         db.rollback();raise
     except Exception as exc:

@@ -9,7 +9,7 @@ INTERNAL_LABEL=re.compile(r'(?im)^\s*(?:\*\*)?(?:Intent|Task|Output|Classificati
 
 def public_source(source):
     kind=str(source.get('type','')).lower();title=str(source.get('title','')).lower()
-    if any(word in kind for word in INTERNAL_SOURCE_TERMS) or any(word in title for word in ('internal rules','intent rules','system rules')):
+    if kind.startswith('candidate_cv') or any(word in kind for word in INTERNAL_SOURCE_TERMS) or any(word in title for word in ('internal rules','intent rules','system rules')):
         return False
     url=source.get('url') or ''
     return not url or isinstance(url,str) and (url.startswith(('https://','http://')) or url.startswith('/') and not url.startswith('//'))
@@ -21,6 +21,7 @@ def question_kind(question):
     if re.search(r'phan biet|so sanh|khac nhau|difference|compare|khi nao dung.+va|違い|使い分け',q,re.I):return 'comparison'
     if re.search(r'\bdich\b|\btranslate\b|translation|翻訳|訳して',q,re.I) or (re.search(r'nghia la gi|\bmean\b',q,re.I) and re.search(r'[ぁ-んァ-ヶ一-龯ー]{8,}',q)):return 'translation'
     if re.search(r'\bkanji\b|漢字|chu han|tra chu',q,re.I):return 'kanji'
+    if re.search(r'\bhoi thoai\b|\bhoc giao tiep\b|\bconversation\b|\bdialogue\b|会話',q,re.I):return 'conversation'
     if re.search(r'bai tap|trac nghiem|luyen tap|quiz|exercise|practice|練習|A[.)].+B[.)]',q,re.I):return 'exercise'
     if re.search(r'ngu phap|cau truc|mau|grammar|cach dung|dien ta|文法|使い方|[～〜]',q,re.I):return 'grammar'
     if re.search(r'\btu\b|tu vung|vocabulary|\bword\b|doc the nao|cach doc|furigana|読み方',q,re.I):return 'vocabulary'

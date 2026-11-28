@@ -5,7 +5,8 @@ from ..models.database import GrammarRule,GrammarQuestion,Vocabulary,Document
 from .kanji_dictionary_service import kanji_dictionary_service
 from .grammar_grounded import grounded_patterns
 from .chat_quality import question_kind
-from .chat_language import _fold
+from .chat_language import ENGLISH_WORDS, VIETNAMESE_WORDS, _fold
+from .chat_grounding import CHAT_DOCUMENT_TYPES, GENERIC_QUERY_STOPWORDS
 from . import vocab_mcq_service
 
 
@@ -135,7 +136,12 @@ def local_knowledge(db,question,language):
         if points:
             heading='Các cấu trúc nhận diện trong câu' if language=='vi' else 'Identified structures in the sentence'
             if kind=='grammar':heading='Cấu trúc và cách dùng đã đối chiếu'if language=='vi'else'Formula and checked usage'
-            note='Chỉ xác minh các thành phần dưới đây; chưa xác minh bản dịch toàn câu.' if language=='vi' else 'Only these forms are identified; a full sentence translation has not been verified.'
+            if kind == 'analysis':
+                note = ('Chỉ xác minh các thành phần dưới đây; chưa xác minh bản dịch toàn câu.'
+                        if language == 'vi' else 'Only these forms are identified; a full sentence translation has not been verified.')
+            else:
+                note = ('Chưa có ví dụ đã đối chiếu cho mẫu này trong kho hiện tại.'
+                        if language == 'vi' else 'No checked example is available for this form in the current catalog.')
             answer=f'**{heading}:**\n\n'+ '\n'.join(f"- {p['pattern']}: {p['explanation']}" for p in points)+'\n\n'+note
             sources=[{'title':f"Ngữ pháp: {p['pattern']}",'type':'grammar_reference','url':'/grammar','relevance':1.0} for p in points[:3]]
             return answer,sources,answer
@@ -143,24 +149,43 @@ def local_knowledge(db,question,language):
 
 
 def library_knowledge(db,question,language):
-    """Exact anchors before vector search; never use similarity alone as proof."""
-    if question_kind(question) not in ('culture','grammar','vocabulary','comparison','exercise'):
+    """Find passages with Japanese anchors or substantial topic-word overlap."""
+    kind = question_kind(question)
+    if kind not in ('culture', 'grammar', 'vocabulary', 'comparison', 'exercise', 'conversation'):
         return '',[],None
     anchors=re.findall(r'[ぁ-んァ-ヶ一-龯ー]{2,}',question)
     anchors += [word for word in ('cui chao','giay','いただきます','tra dao','phan loai rac','di tau','furigana','keigo','jlpt','the te') if word in _fold(question)]
-    if not anchors:return '',[],None
+    stopwords = ({_fold(word) for word in GENERIC_QUERY_STOPWORDS} | ENGLISH_WORDS | VIETNAMESE_WORDS
+                 | {'conversation', 'dialogue', 'hoi', 'thoai', 'di', 'tai'})
+    terms = set(re.findall(r'[a-z]{2,}', _fold(question))) - stopwords
+    if not anchors and len(terms) < 2:
+        return '', [], None
     candidates=[]
-    for row in db.query(Document).order_by(Document.id).limit(300).all():
-        if row.document_type not in ('grammar','vocabulary','culture','lesson','example'):continue
-        text=row.title+'\n'+row.content
-        if not any(_fold(anchor) in _fold(text) for anchor in anchors):continue
-        if question_kind(question)=='comparison' and not all(_fold(anchor) in _fold(text) for anchor in anchors):continue
-        paragraphs=re.split(r'\n\s*\n',row.content)
-        selected=[p for p in paragraphs if any(_fold(a) in _fold(p) for a in anchors)]
-        if not selected:continue
-        excerpt='\n\n'.join(selected).encode('utf8')[:1200].decode('utf8',errors='ignore')
-        candidates.append((sum(a.lower() in text.lower() for a in anchors),row,excerpt))
+    rows = db.query(Document).filter(
+        Document.user_id.is_(None), Document.document_type.in_(CHAT_DOCUMENT_TYPES),
+    ).order_by(Document.id).limit(300)
+    for row in rows:
+        title = _fold(row.title)
+        text = _fold(row.title + '\n' + row.content)
+        anchor_hits = sum(_fold(anchor) in text for anchor in anchors)
+        if anchors and (not anchor_hits or kind == 'comparison' and anchor_hits != len(anchors)):
+            continue
+        title_hits = len(terms.intersection(re.findall(r'[a-z]{2,}', title)))
+        topic_hits = len(terms.intersection(re.findall(r'[a-z]{2,}', text)))
+        if not anchors and (topic_hits < 2 or topic_hits * 3 < len(terms) * 2):
+            continue
+        paragraphs = re.split(r'\n\s*\n', row.content)
+        def passage_score(paragraph):
+            folded = _fold(paragraph)
+            return sum(_fold(anchor) in folded for anchor in anchors) * 3 + len(
+                terms.intersection(re.findall(r'[a-z]{2,}', folded))
+            )
+        selected = sorted(paragraphs, key=passage_score, reverse=True)
+        excerpt = '\n\n'.join(p for p in selected[:2] if passage_score(p) or title_hits)[:1000].strip()
+        if excerpt:
+            candidates.append(((anchor_hits, title_hits, topic_hits, kind == 'conversation' and row.document_type == kind), row, excerpt))
     if not candidates:return '',[],None
     _,row,excerpt=max(candidates,key=lambda item:(item[0],-item[1].id))
-    answer='**Đoạn học liệu liên quan:**\n\n'+excerpt+'\n\nĐây là nội dung tra cứu trong thư viện; các quy định có thể khác theo tình huống hoặc địa phương.'
-    return excerpt,[{'id':row.id,'title':row.title,'type':row.document_type,'url':row.source_url or f'/library?doc_id={row.id}','relevance':1.0}],answer if language=='vi' else None
+    answer='**Đoạn học liệu liên quan**\n\n'+excerpt
+    return excerpt,[{'id':row.id,'title':row.title,'type':row.document_type,'url':row.source_url or f'/library?doc_id={row.id}',
+                    'jlpt_level':row.jlpt_level,'relevance':1.0}],answer if language=='vi' else None

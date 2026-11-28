@@ -13,7 +13,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 from app.core.database import Base,get_db
 from app.core.auth import get_current_active_user
-from app.models.database import User,ChatConversation,ChatHistory,ChatAnswerFeedback,GrammarRule
+from app.models.database import User,ChatConversation,ChatHistory,ChatAnswerFeedback,GrammarRule,Document
+from app.models.schemas import ChatMessage
 from app.api import chat_feedback,chat
 from app.services.chat_evaluation import grade,folded
 from app.services.chat_quality import violations,public_source,question_kind
@@ -128,6 +129,43 @@ def test_missing_grammar_evidence_abstains_without_calling_model(context,monkeyp
     monkeypatch.setattr(chat.japanese_service,'chat_response',unexpected)
     result=asyncio.run(chat.send_message(__import__('app.models.schemas',fromlist=['ChatMessage']).ChatMessage(message='Giải thích mẫu ぬぽらです.'),users[0],db))
     assert 'chưa' in result.answer and not result.sources
+
+
+def test_conversation_uses_library_when_model_cannot_answer(context, monkeypatch):
+    _, db, users, _, _ = context
+    doc = Document(title='Chào hỏi tại công ty', document_type='conversation',
+                   content='Chào hỏi đồng nghiệp tại công ty.\nはじめまして。→ Rất hân hạnh được gặp bạn.')
+    private = Document(user_id=users[1].id, title='Chào hỏi tại công ty', document_type='conversation',
+                       content='Private draft about chào hỏi tại công ty.')
+    db.add_all([private, doc])
+    db.commit()
+
+    async def unavailable(**kwargs):
+        assert 'はじめまして' in kwargs['context']
+        assert 'Private draft' not in kwargs['context']
+        return {'answer': chat.uncertainty('vi')}
+
+    monkeypatch.setattr(chat.japanese_service, 'chat_response', unavailable)
+    result = asyncio.run(chat.send_message(ChatMessage(message='Mẫu hội thoại chào hỏi tại công ty'), users[0], db))
+    assert 'はじめまして' in result.answer
+    assert [source['id'] for source in result.sources] == [doc.id]
+
+
+def test_candidate_cv_is_excluded_before_vector_ranking(monkeypatch):
+    from app.services.chat_grounding import CHAT_DOCUMENT_TYPES
+    from app.services.vector_db import ChromaDBService
+
+    store = ChromaDBService.__new__(ChromaDBService)
+    store.records = {
+        'cv': {'metadata': {'document_type': 'candidate_cv_raw', 'document_id': '1'}, 'vector': [1, 0]},
+        'private': {'metadata': {'document_type': 'lesson', 'document_id': '2'}, 'vector': [1, 0]},
+        'lesson': {'metadata': {'document_type': 'lesson', 'document_id': '3'}, 'vector': [.8, .6]},
+    }
+    monkeypatch.setattr(store, 'get_embedding', lambda _: [1, 0])
+    results = store.search_documents('question', n_results=1, document_types=CHAT_DOCUMENT_TYPES,
+                                     document_ids={'1', '3'})
+    assert [row['source']['id'] for row in results] == ['3']
+    assert not public_source({'type': 'candidate_cv_raw', 'title': 'CV'})
 
 
 def test_feedback_migration_repeat_and_preserve_rows():

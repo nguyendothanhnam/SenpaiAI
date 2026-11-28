@@ -3,6 +3,7 @@ import re
 from .chat_language import is_translation_question, is_chitchat_query
 
 MIN_CHAT_RELEVANCE = 0.68
+CHAT_DOCUMENT_TYPES = frozenset({'grammar', 'vocabulary', 'kanji', 'conversation', 'culture', 'lesson', 'example'})
 
 PARTICLE_COMPARISON = """**Phân biệt trợ từ は (wa) và が (ga):**
 

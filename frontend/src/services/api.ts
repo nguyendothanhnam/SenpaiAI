@@ -529,16 +529,20 @@ export interface TurnData {
   message_ja: string
   message_vi: string
   focus?: string
+  expected_criteria?: string
   hints?: string[]
   user_response?: string | null
   feedback?: {
-    corrected_sentence: string
+    corrected_sentence: string | null
     advice_vi: string
+    technical_advice_vi?: string
   } | null
   scores?: {
     grammar: number
     keigo: number
     manner: number
+    technical?: number
+    cv_alignment?: number
   } | null
 }
 
@@ -555,12 +559,32 @@ export interface OfferLetter {
     grammar: number
     keigo: number
     manner: number
+    technical?: number
+    cv_alignment?: number
   }
   monthly_stipend_exp: number
   points_reward: number
   hanko_seal_text: string
   date: string
   ceo_message: string
+  is_cv_interview?: boolean
+}
+
+export interface ParsedCVProfile {
+  candidate_name: string
+  target_role: string
+  experience_years: string
+  technical_skills: string[]
+  japanese_level: string
+  key_projects: Array<{
+    name: string
+    tech_stack: string[]
+    description: string
+    responsibilities: string
+    challenges_solved: string
+  }>
+  highlights: string
+  raw_text_length?: number
 }
 
 export interface InternshipSession {
@@ -603,6 +627,17 @@ export const internshipAPI = {
   getHandbook: () => api.get<BusinessHandbookItem[]>('/internship/handbook'),
   startInterview: (industry_id = 'it', target_level = 1) =>
     api.post<InternshipSession>('/internship/interview/start', { industry_id, target_level }),
+  parseCVText: (cv_text: string) =>
+    api.post<{ raw_cv_text: string; parsed_cv: ParsedCVProfile }>('/internship/cv/parse-text', { cv_text }),
+  uploadCVFile: (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post<{ filename: string; raw_cv_text: string; parsed_cv: ParsedCVProfile }>('/internship/cv/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+  },
+  startInterviewWithCV: (industry_id = 'it', cv_text: string, parsed_cv?: ParsedCVProfile) =>
+    api.post<InternshipSession>('/internship/interview/start-with-cv', { industry_id, cv_text, parsed_cv }),
   startWorkplace: (industry_id: string, scenario_id: string) =>
     api.post<InternshipSession>('/internship/workplace/start', { industry_id, scenario_id }),
   submitTurnAnswer: (session_id: string, user_response: string) =>
