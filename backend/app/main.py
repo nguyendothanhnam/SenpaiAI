@@ -7,7 +7,7 @@ import os
 import logging
 
 from .core.config import settings
-from .core.database import engine, Base
+from .core.database import engine, Base, SessionLocal
 from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, grammar_lessons, rewards, daily, reminders, notifications, push, listening, internship
 from .api import placement, learning, kanji_writing, chat_feedback, kanji_notes, minigame_learning, flashcards
 from .services.kanji_dictionary_service import kanji_dictionary_service
@@ -26,6 +26,16 @@ async def lifespan(app: FastAPI):
     # Startup
     # Placement schema evolves through Alembic, including existing attempt columns.
     Base.metadata.create_all(bind=engine, tables=[table for table in Base.metadata.sorted_tables if not table.name.startswith(("placement_", "exercise_", "weekly_learning_", "kanji_writing_", "chat_answer_feedback", "user_kanji_notes", "minigame_learning_", "flashcard_"))])
+    if settings.seed_bundled_grammar:
+        from .services.bundled_grammar import sync_bundled_grammar
+        with SessionLocal() as db:
+            try:
+                grammar_report = sync_bundled_grammar(db)
+                db.commit()
+            except Exception:
+                db.rollback()
+                raise
+        logger.info('[Grammar lessons] bundled sources: %s', grammar_report)
     dictionary_report = kanji_dictionary_service.validate()
     logger.info("[Dictionary] total entries: %s", dictionary_report["total_entries"])
     logger.info("[Dictionary] valid entries: %s", dictionary_report["valid_entries"])

@@ -20,6 +20,7 @@ import { AccountThemeBridge } from '../src/components/AccountThemeBridge'
 import { NotificationProvider } from '../src/features/reminders/NotificationProvider'
 import { LocalReminderProvider } from '../src/features/reminders/LocalReminderProvider'
 import { KanjiLookupProvider } from '../src/components/KanjiLookup'
+import { PlacementInvitation } from '../src/components/placement/PlacementInvitation'
 
 export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
   return <SafeAreaProvider><I18nextProvider i18n={i18n}><ThemeProvider><ThemeBackdrop><ErrorScreen retry={() => void retry()} /></ThemeBackdrop></ThemeProvider></I18nextProvider></SafeAreaProvider>
@@ -46,6 +47,7 @@ function Navigation() {
       <Stack.Screen name="index" />
       <Stack.Protected guard={status === 'anonymous'}><Stack.Screen name="(auth)" /></Stack.Protected>
       <Stack.Protected guard={status === 'authenticated'}>
+        <Stack.Screen name="placement" options={{ headerShown: true, title: i18n.t('title', { ns: 'placement' }), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />
         <Stack.Screen name="(tabs)" />
         {['notifications', 'reminder-settings'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: name === 'notifications' ? i18n.t('notifications.title') : t('reminders.title'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
         {['games/index', 'games/[game]'].map(name => <Stack.Screen key={name} name={name} options={{ headerShown: true, title: i18n.t('minigames.title'), headerStyle: { backgroundColor: colors.card }, headerTintColor: colors.text }} />)}
@@ -58,6 +60,7 @@ function Navigation() {
       </Stack.Protected>
       <Stack.Screen name="+not-found" />
     </Stack>
+    <PlacementInvitation />
   </>
 }
 

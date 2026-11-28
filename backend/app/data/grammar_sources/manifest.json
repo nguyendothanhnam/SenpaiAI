@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "sources": {
+    "hanabira": {
+      "name": "Hanabira",
+      "repository": "tristcoil/hanabira.org-japanese-content",
+      "revision": "1462bb37f0eb229fea58a18eb4855428bdbffa25",
+      "url": "https://hanabira.org",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "files": {
+        "n5.json": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/grammar_json/grammar_ja_N5_full_alphabetical_0001.json",
+          "sha256": "ea9d6d8821d615b9f49b0695987a433da0d61cb7fded2c03f6b965e37179c84b",
+          "bytes": 179611,
+          "level": "N5",
+          "count": 136
+        },
+        "n4.json": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/grammar_json/grammar_ja_N4_full_alphabetical_0001.json",
+          "sha256": "550eb4a2e33d0327d33314d0fb125d381c11707768e51169d56f7affa8474625",
+          "bytes": 172030,
+          "level": "N4",
+          "count": 124
+        },
+        "n3.json": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/grammar_json/grammar_ja_N3_full_alphabetical_0001.json",
+          "sha256": "0a3b606050f9b9f9c945dec80e1ca8a2da1777addcfb2506483df98338b07487",
+          "bytes": 196588,
+          "level": "N3",
+          "count": 132
+        },
+        "n2.json": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/grammar_json/grammar_ja_N2_full_alphabetical_0001.json",
+          "sha256": "55a4f7ea6ca172f35a4f5894b6c6b21182522818f5c728fcbd27b428b5a150cb",
+          "bytes": 300563,
+          "level": "N2",
+          "count": 191
+        },
+        "n1.json": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/grammar_json/grammar_ja_N1_full_alphabetical_0001.json",
+          "sha256": "09c60b090bbf265830f82569d538621c7a7c6d3a10fc178727ca606b4e8a590a",
+          "bytes": 370544,
+          "level": "N1",
+          "count": 245
+        },
+        "LICENSE": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/LICENSE",
+          "sha256": "f2328e6117d53ef0d6df841b905852826ce733f8e6d9e422c64f375d18cfe63d",
+          "bytes": 247
+        },
+        "README.upstream.md": {
+          "url": "https://raw.githubusercontent.com/tristcoil/hanabira.org-japanese-content/1462bb37f0eb229fea58a18eb4855428bdbffa25/README.md",
+          "sha256": "2b84ee9bc660b7a243b9083f9ca5fd86fef5ee8acce661235804fc781c4eafec",
+          "bytes": 1596
+        }
+      }
+    },
+    "openjlpt": {
+      "name": "OpenJLPT v0.2.0",
+      "repository": "evanclan/OpenJLPT",
+      "revision": "c42fd9fa3777bfc1775446f7c418d549dfd6e4cf",
+      "url": "https://github.com/evanclan/OpenJLPT/releases/tag/v0.2.0",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "files": {
+        "n5.json": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/data/json/grammar/n5.json",
+          "sha256": "f82cb9883e5634dae96775bdaf6aa881fec1c00e85a3f8c1874159e25ae09fd3",
+          "bytes": 9116,
+          "level": "N5",
+          "count": 20
+        },
+        "n4.json": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/data/json/grammar/n4.json",
+          "sha256": "9d54afff0315f72069e4d1e31e0b77d2508b6c67204bf4a8da6fdc1aaf0ed01a",
+          "bytes": 9622,
+          "level": "N4",
+          "count": 20
+        },
+        "n3.json": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/data/json/grammar/n3.json",
+          "sha256": "22090a0af74e627f2dfeed03b0eea1adaeea1aa1417d62f1ecefd47a7fcdc4ea",
+          "bytes": 10133,
+          "level": "N3",
+          "count": 20
+        },
+        "n2.json": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/data/json/grammar/n2.json",
+          "sha256": "6ec87ae58551e2b78427b2251c9d4b998e136e780a1a8a2ab1e676c33d77cf91",
+          "bytes": 10309,
+          "level": "N2",
+          "count": 20
+        },
+        "n1.json": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/data/json/grammar/n1.json",
+          "sha256": "9171baa5bf61901858714f973c0aad8214d937ff6a05cab87a03e89211d32d93",
+          "bytes": 10466,
+          "level": "N1",
+          "count": 20
+        },
+        "LICENSE": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/LICENSE",
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5",
+          "bytes": 20138
+        },
+        "NOTICE.md": {
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/c42fd9fa3777bfc1775446f7c418d549dfd6e4cf/NOTICE.md",
+          "sha256": "f33440f1aa08f655b00243d25273333b3cb444e676f53a186f57956fddf95a70",
+          "bytes": 2416
+        }
+      }
+    }
+  }
+}

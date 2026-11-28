@@ -7,6 +7,7 @@ from ..core.auth import get_current_active_user
 from ..core.database import get_db
 from ..models.database import GrammarLesson, GrammarLessonProgress, GrammarQuestion, User
 from ..services.grammar_practice_service import public_question
+from ..services.bundled_grammar import lesson_sources
 
 router = APIRouter(prefix='/grammar-lessons', tags=['grammar lessons'])
 Level = Literal['N5', 'N4', 'N3', 'N2', 'N1']
@@ -49,7 +50,7 @@ def detail(lesson_id: int, user: User = Depends(get_current_active_user), db: Se
         seen.add(key); questions.append(question)
         if len(questions) == 3:
             break
-    return {**lesson_data(lesson, progress), 'formation': lesson.formation, 'meaning': lesson.meaning,
+    return {**lesson_data(lesson, progress), **lesson_sources(lesson.source_key), 'formation': lesson.formation, 'meaning': lesson.meaning,
             'usage_notes': lesson.usage_notes, 'examples': lesson.examples, 'common_errors': lesson.common_errors,
             'comparisons': lesson.comparisons, 'quick_questions': [public_question(q, q.grammar_rule) for q in questions]}
 

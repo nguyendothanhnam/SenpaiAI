@@ -15,7 +15,7 @@ function render(language, data, id) {
     react:{useState:value=>[value,()=>{}]}, 'react/jsx-runtime':jsx,
     'react-router-dom':{Link:({to,children})=>React.createElement('a',{href:to},children),useParams:()=>({lessonId:id})},
     'react-query':{useQuery:key=>key[0]==='grammarLesson'?{data}:key[0]==='grammarLessonNext'?{data:null}:{data:data ? [data] : []},useMutation:()=>({mutate(){}}),useQueryClient:()=>({invalidateQueries(){}})},
-    'react-i18next':{useTranslation:()=>({t:(key, options)=>{assert.ok(i18n.exists(key),key);return i18n.t(key,options)}})},
+    'react-i18next':{useTranslation:()=>({i18n,t:(key, options)=>{assert.ok(i18n.exists(key),key);return i18n.t(key,options)}})},
     '../services/api':{api:{}}, '../services/auth':{useAuth:()=>({user:{id:1,current_jlpt_level:'N5'}})},
     '../components/layout/GrammarTabs':{default:()=>null}, '../components/kanji/KanjiText':{KanjiText:({text})=>text},
   }
@@ -38,4 +38,19 @@ test('lesson displays supplied ruby, missing fields and filtered practice link',
     assert.match(html,lang==='vi'?/Chưa có nội dung/:/No content available/)
     assert.match(html,lang==='vi'?/Bắt đầu kiểm tra nhanh/:/Start quick check/)
   }
+})
+
+test('source lessons retain English examples, romanization and license links in both UI languages',()=>{
+  const lesson={id:8,grammar_rule_id:5,title:'〜ことだ',pattern:'〜ことだ',jlpt_level:'N3',status:'not_started',formation:'Verb + ことだ',meaning:'should',usage_notes:'Original English notes',examples:[{ja:'毎日復習することだ。',en:'You should review every day.',romaji:'Mainichi fukushuu suru koto da.'}],common_errors:[],comparisons:[],quick_questions:[],content_language:'en',sources:[{name:'OpenJLPT v0.2.0',url:'https://github.com/evanclan/OpenJLPT/releases/tag/v0.2.0',license:'CC BY-SA 4.0',license_url:'https://creativecommons.org/licenses/by-sa/4.0/',notice_url:'https://github.com/evanclan/OpenJLPT/blob/v0.2.0/NOTICE.md'}]}
+  for(const lang of ['vi','en']){
+    const html=render(lang,lesson,'8')
+    assert.match(html,/You should review every day\./)
+    assert.match(html,/Mainichi fukushuu suru koto da\./)
+    assert.match(html,/https:\/\/creativecommons.org\/licenses\/by-sa\/4.0\//)
+    assert.match(html,/NOTICE.md/)
+    assert.match(html,lang==='vi'?/giải thích và bản dịch ví dụ tiếng Anh/:/English explanations/)
+  }
+  const translated={...lesson,examples:[{ja:'毎日復習することだ。',vi:'Nên ôn tập hằng ngày.',en:'You should review every day.'}]}
+  assert.match(render('vi',translated,'8'),/Nên ôn tập hằng ngày\./)
+  assert.match(render('en',translated,'8'),/You should review every day\./)
 })
