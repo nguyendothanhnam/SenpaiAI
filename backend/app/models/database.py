@@ -7,6 +7,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    BigInteger,
     JSON,
     Boolean,
     String,
@@ -15,6 +16,7 @@ from sqlalchemy import (
     UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
+from sqlalchemy import event
 from sqlalchemy.sql import func
 import uuid
 from ..core.database import Base
@@ -466,6 +468,9 @@ class Vocabulary(Base):
     __table_args__ = (
         UniqueConstraint("japanese_word", "reading", name="uq_vocabulary_word_reading"),
         CheckConstraint("jlpt_level IN ('N5', 'N4', 'N3', 'N2', 'N1')", name="ck_vocabulary_jlpt_level"),
+        Index("uq_vocabulary_source_id", "source", "source_id", unique=True),
+        Index("ix_vocabulary_level_pos", "jlpt_level", "part_of_speech"),
+        Index("ix_vocabulary_romaji", "romaji"),
     )
 
     id = Column(Integer, primary_key=True, index=True)
@@ -473,6 +478,16 @@ class Vocabulary(Base):
     reading = Column(String, nullable=False, index=True)  # Hiragana/Katakana reading
     romaji = Column(String)
     meaning = Column(Text, nullable=False)
+    meaning_en = Column(Text)
+    meaning_vi_status = Column(String(12), nullable=False, default="reviewed", server_default="reviewed")
+    meaning_vi_source = Column(String(80), nullable=False, default="legacy", server_default="legacy")
+    source = Column(String(40))
+    source_id = Column(String(100))
+    jmdict_id = Column(BigInteger, index=True)
+    dataset_version = Column(String(120))
+    source_metadata = Column(JSON, default=dict)
+    search_text = Column(Text, nullable=False, default="", server_default="")
+    translation_attempted_at = Column(DateTime(timezone=True))
     part_of_speech = Column(String)  # noun, verb, adjective, etc.
     jlpt_level = Column(String, nullable=False, index=True)
     example_sentences = Column(JSON, default=list)
@@ -485,6 +500,13 @@ class Vocabulary(Base):
         cascade="all, delete-orphan",
         order_by="VocabularyKanji.position_in_word",
     )
+
+
+@event.listens_for(Vocabulary, "before_insert")
+@event.listens_for(Vocabulary, "before_update")
+def _index_vocabulary(_mapper, _connection, row):
+    from ..services.vocabulary_text import search_text
+    row.search_text = search_text(row)
 
 
 class VocabularyKanji(Base):

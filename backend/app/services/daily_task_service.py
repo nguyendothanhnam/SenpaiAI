@@ -240,43 +240,47 @@ def _kanji_candidates(db: Session, user_id: int, level: str, yesterday: set[tupl
 
 
 def _vocab_candidates(db: Session, user_id: int, level: str, yesterday: set[tuple[str, str]]):
+    from .vocabulary_text import display_meaning
     rows = db.query(Vocabulary).filter(Vocabulary.jlpt_level == level).all()
     weights = _wrong_counts(db, user_id, "vocab")
-    meanings = list(dict.fromkeys(row.meaning.strip() for row in rows if row.meaning and row.meaning.strip()))
+    meanings = list(dict.fromkeys(display_meaning(row) for row in rows if display_meaning(row)))
     candidates = []
     for row in rows:
         source_id = str(row.id)
-        if ("vocab-source", source_id) in yesterday or not row.meaning:
+        meaning = display_meaning(row)
+        if ("vocab-source", source_id) in yesterday or not meaning:
             continue
-        distractors = [meaning for meaning in meanings if meaning != row.meaning.strip()]
+        distractors = [other for other in meanings if other != meaning]
         if len(distractors) < 3:
             continue
-        options = random.sample(distractors, 3) + [row.meaning.strip()]
+        options = random.sample(distractors, 3) + [meaning]
         random.shuffle(options)
         candidates.append({
             "item_type": "vocab", "source_id": source_id, "question_type": "vocab_meaning",
             "payload": {"prompt": f"{row.japanese_word}（{row.reading}）có nghĩa là gì?", "word": row.japanese_word,
                         "reading": row.reading, "options": options, "jlpt_level": level, "level": row.jlpt_level},
-            "answer_key": {"correct_answer": row.meaning.strip(),
-                           "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {row.meaning.strip()}."},
+            "answer_key": {"correct_answer": meaning,
+                           "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {meaning}."},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("vocab", source_id),
         })
     return candidates
 
 
 def _flashcard_candidates(db: Session, user_id: int, level: str, yesterday: set[tuple[str, str]]):
+    from .vocabulary_text import display_meaning
     rows = db.query(Vocabulary).filter(Vocabulary.jlpt_level == level).all()
     weights = _wrong_counts(db, user_id, "vocab")
     candidates = []
     for row in rows:
         source_id = str(row.id)
-        if ("vocab-source", source_id) in yesterday or not row.meaning:
+        meaning = display_meaning(row)
+        if ("vocab-source", source_id) in yesterday or not meaning:
             continue
         candidates.append({
             "item_type": "flashcard", "source_id": source_id, "question_type": "self_recall",
             "payload": {"prompt": "Bạn còn nhớ nghĩa của từ này không?", "word": row.japanese_word, "reading": row.reading,
                         "jlpt_level": level, "level": row.jlpt_level},
-            "answer_key": {"correct_answer": "Đã nhớ", "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {row.meaning.strip()}.",
+            "answer_key": {"correct_answer": "Đã nhớ", "explanation": f"{row.japanese_word}（{row.reading}）có nghĩa là {meaning}.",
                            "stats_item_type": "vocab"},
             "weight": 1 + 3 * weights.get(source_id, 0), "unique_key": ("flashcard", source_id),
         })

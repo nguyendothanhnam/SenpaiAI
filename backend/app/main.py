@@ -11,6 +11,7 @@ from .core.database import engine, Base
 from .api import auth, chat, chat_conversations, analysis, library, game, kanji, grammar_practice, rewards, daily, reminders, notifications, push, listening, internship
 from .services.kanji_dictionary_service import kanji_dictionary_service
 from .services.reminder_scheduler import start_reminder_scheduler, stop_reminder_scheduler
+from .api import dictionary
 
 try:
     from ml.kanji_recognizer import get_model_info
@@ -23,6 +24,8 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
+    from .services.data_health import warn_data_state
+    warn_data_state(engine, logger, settings)  # Advisory only; never migrates or seeds at application startup.
     Base.metadata.create_all(bind=engine)
     dictionary_report = kanji_dictionary_service.validate()
     logger.info("[Dictionary] total entries: %s", dictionary_report["total_entries"])
@@ -90,6 +93,8 @@ app.include_router(game.router)
 app.include_router(game.router, prefix="/api")
 app.include_router(kanji.router)
 app.include_router(kanji.router, prefix="/api")
+app.include_router(dictionary.router)
+app.include_router(dictionary.router, prefix="/api")
 app.include_router(grammar_practice.router)
 app.include_router(grammar_practice.router, prefix="/api")
 app.include_router(rewards.router)

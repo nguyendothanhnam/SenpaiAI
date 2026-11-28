@@ -12,6 +12,7 @@ from ..services.kanji_dictionary_service import kanji_dictionary_service
 from ..services import kanjivg_service
 from ..services.learning_content import learning_content_service
 from ml.kanji_recognizer import get_model_info
+from ..services.vocabulary_text import display_meaning
 
 router = APIRouter(tags=["kanji-vocabulary"])
 
@@ -22,7 +23,7 @@ def vocabulary_to_schema(vocabulary: VocabularyModel) -> schemas.Vocabulary:
         word=vocabulary.japanese_word,
         reading=vocabulary.reading,
         romaji=vocabulary.romaji,
-        meaning_vi=vocabulary.meaning,
+        meaning_vi=display_meaning(vocabulary),
         jlpt_level=vocabulary.jlpt_level,
         part_of_speech=vocabulary.part_of_speech,
         example_sentences=vocabulary.example_sentences or [],

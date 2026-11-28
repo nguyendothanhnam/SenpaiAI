@@ -1,0 +1,352 @@
+{
+  "date": "2026-11-25",
+  "branch": "develop",
+  "worktree": "tmp/openjlpt-develop",
+  "base_commit": "3a75700e3f",
+  "dataset": {
+    "name": "OpenJLPT",
+    "version": "0.3.0",
+    "commit": "0d1d3410bec90bd4098a7c72de820543cb4f707c",
+    "license": "CC-BY-SA-4.0",
+    "manifest": {
+      "repository": "https://github.com/evanclan/OpenJLPT",
+      "commit": "0d1d3410bec90bd4098a7c72de820543cb4f707c",
+      "files": {
+        "data/json/meta.json": {
+          "bytes": 951,
+          "sha256": "9d4cc0f17ed9ad6c3a1a10fdae19472f898f7b2a690c9962049657e49e2b64d2",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/data/json/meta.json"
+        },
+        "schema/vocab.schema.json": {
+          "bytes": 3956,
+          "sha256": "3ce36ce54d7182d1615f1b727d0ce38101ff3229f9f976c560abb5f77f296162",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/schema/vocab.schema.json"
+        },
+        "NOTICE.md": {
+          "bytes": 3456,
+          "sha256": "a2e6f45517bb1a1c047628991832244916888a4ced3aa26adeafb89705588557",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/NOTICE.md"
+        },
+        "LICENSE": {
+          "bytes": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/LICENSE"
+        },
+        "README.md": {
+          "bytes": 17371,
+          "sha256": "b4a1b576311b240c1cfd274a567fae0cc7a16ef130b4664fb7d8b22fa29bb637",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/README.md"
+        },
+        "data/json/vocab/n5.json": {
+          "bytes": 488242,
+          "sha256": "cbb221c9a3a92108fcd02fb088d9afacc70bc8c96570d5730425de0a49dad5f3",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/data/json/vocab/n5.json"
+        },
+        "data/json/vocab/n4.json": {
+          "bytes": 483651,
+          "sha256": "b38512a6dc1e06a3615f377b3e58184c4a85b6f769c2e3f58f2a4ef0e1810927",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/data/json/vocab/n4.json"
+        },
+        "data/json/vocab/n3.json": {
+          "bytes": 1306060,
+          "sha256": "17ca6bcbba9d212c3c9d38c38cecc2adef0fd8718cb7157bb48dd9d3a1724948",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/data/json/vocab/n3.json"
+        },
+        "data/json/vocab/n2.json": {
+          "bytes": 1306964,
+          "sha256": "4c7053d1b61f71ca4004252cafdf89439c65531900e7bab6c53078802acf3c5b",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/data/json/vocab/n2.json"
+        },
+        "data/json/vocab/n1.json": {
+          "bytes": 2156886,
+          "sha256": "09325eb676ec26044e9019afb5ddd460a394a0d8cb51b0b34d30d03124c131ff",
+          "url": "https://raw.githubusercontent.com/evanclan/OpenJLPT/0d1d3410bec90bd4098a7c72de820543cb4f707c/data/json/vocab/n1.json"
+        }
+      },
+      "downloaded_bytes": 5787675
+    }
+  },
+  "import": {
+    "preview": {
+      "N5": {
+        "added": 674,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N4": {
+        "added": 630,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N3": {
+        "added": 1659,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N2": {
+        "added": 1778,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N1": {
+        "added": 3070,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "unknown": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      }
+    },
+    "applied": {
+      "N5": {
+        "added": 674,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N4": {
+        "added": 630,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N3": {
+        "added": 1659,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N2": {
+        "added": 1778,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "N1": {
+        "added": 3070,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      },
+      "unknown": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      }
+    },
+    "rerun": {
+      "N5": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 674,
+        "invalid": 0
+      },
+      "N4": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 630,
+        "invalid": 0
+      },
+      "N3": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 1659,
+        "invalid": 0
+      },
+      "N2": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 1778,
+        "invalid": 0
+      },
+      "N1": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 3070,
+        "invalid": 0
+      },
+      "unknown": {
+        "added": 0,
+        "updated": 0,
+        "skipped": 0,
+        "invalid": 0
+      }
+    }
+  },
+  "inventory_and_benchmark": {
+    "dialect": "sqlite",
+    "total": 7811,
+    "levels": {
+      "N5": {
+        "total": 674,
+        "reviewed_vi": 0,
+        "automatic_vi": 0,
+        "english": 674,
+        "with_examples": 664,
+        "with_furigana": 600,
+        "with_jmdict_id": 674,
+        "usable_grading_meanings": 674,
+        "distinct_grading_meanings": 634,
+        "unique_matching_words": 674
+      },
+      "N4": {
+        "total": 630,
+        "reviewed_vi": 0,
+        "automatic_vi": 0,
+        "english": 630,
+        "with_examples": 624,
+        "with_furigana": 600,
+        "with_jmdict_id": 630,
+        "usable_grading_meanings": 630,
+        "distinct_grading_meanings": 614,
+        "unique_matching_words": 630
+      },
+      "N3": {
+        "total": 1659,
+        "reviewed_vi": 0,
+        "automatic_vi": 0,
+        "english": 1659,
+        "with_examples": 1624,
+        "with_furigana": 1541,
+        "with_jmdict_id": 1659,
+        "usable_grading_meanings": 1659,
+        "distinct_grading_meanings": 1646,
+        "unique_matching_words": 1659
+      },
+      "N2": {
+        "total": 1778,
+        "reviewed_vi": 0,
+        "automatic_vi": 0,
+        "english": 1778,
+        "with_examples": 1663,
+        "with_furigana": 1400,
+        "with_jmdict_id": 1773,
+        "usable_grading_meanings": 1778,
+        "distinct_grading_meanings": 1746,
+        "unique_matching_words": 1778
+      },
+      "N1": {
+        "total": 3070,
+        "reviewed_vi": 0,
+        "automatic_vi": 0,
+        "english": 3070,
+        "with_examples": 2670,
+        "with_furigana": 2125,
+        "with_jmdict_id": 3064,
+        "usable_grading_meanings": 3070,
+        "distinct_grading_meanings": 3038,
+        "unique_matching_words": 3070
+      }
+    },
+    "benchmarks": [
+      {
+        "query": "食べる",
+        "total": 1,
+        "page_size": 1,
+        "mean_ms": 36.067,
+        "p95_ms": 45.584
+      },
+      {
+        "query": "たべる",
+        "total": 1,
+        "page_size": 1,
+        "mean_ms": 30.994,
+        "p95_ms": 47.625
+      },
+      {
+        "query": "taberu",
+        "total": 1,
+        "page_size": 1,
+        "mean_ms": 40.506,
+        "p95_ms": 52.332
+      },
+      {
+        "query": "school",
+        "total": 32,
+        "page_size": 32,
+        "mean_ms": 40.474,
+        "p95_ms": 49.112
+      },
+      {
+        "query": "truong hoc",
+        "total": 0,
+        "page_size": 0,
+        "mean_ms": 44.833,
+        "p95_ms": 86.095
+      },
+      {
+        "query": "開く",
+        "total": 2,
+        "page_size": 2,
+        "mean_ms": 57.359,
+        "p95_ms": 88.746
+      },
+      {
+        "query": "xyz-no-match",
+        "total": 0,
+        "page_size": 0,
+        "mean_ms": 55.794,
+        "p95_ms": 114.013
+      }
+    ],
+    "limits": [
+      "Single-process local measurements, SQL + serialization, not HTTP/network/load/SLA.",
+      "Imported source is English; existing Vietnamese is retained when present. No bulk AI translation.",
+      "Substring accent-insensitive search scans the normalized text; level/POS and exact-identity/source lookups have indexes. Reassess PostgreSQL trigram indexing if the corpus grows substantially."
+    ]
+  },
+  "database": {
+    "kind": "isolated SQLite validation catalog",
+    "path": "backend/downloads/openjlpt/catalog.sqlite3",
+    "size_bytes": 15642624,
+    "production_migrated": false,
+    "full_legacy_sqlite_migration": "0001 DEFAULT now() is PostgreSQL-specific; unchanged. New migration tested independently against old vocabulary schema."
+  },
+  "checks": {
+    "new_tests": 25,
+    "related_passed": 62,
+    "related_subtests_passed": 4,
+    "full_backend_passed": 224,
+    "full_backend_failed": 8,
+    "full_backend_subtests_passed": 6,
+    "failed_tests": [
+      "tests/test_chat_conversations.py::test_particle_question_uses_reviewed_context_without_second_analysis",
+      "tests/test_chat_grounding.py::test_unrelated_retrieval_is_excluded",
+      "tests/test_chat_grounding.py::test_reviewed_reference_is_only_used_for_particle_comparison",
+      "tests/test_chat_grounding.py::test_ollama_chat_uses_one_low_temperature_generation",
+      "tests/test_chat_grounding.py::test_incorrect_particle_answer_uses_cited_reviewed_explanation",
+      "tests/test_chat_language.py::test_translation_never_uses_unrelated_library_sources",
+      "tests/test_chat_language.py::test_wrong_language_is_retried_with_current_question_only",
+      "tests/test_chat_language.py::test_persistent_generation_failure_is_an_error_not_a_chat_answer"
+    ],
+    "same_eight_fail_on_original_develop_app": true,
+    "web_tests_passed": 14,
+    "frontend_build_exit": 0,
+    "web_and_mobile_i18n": "passed",
+    "changed_settings_lint": "passed",
+    "mobile_typecheck": "pre-existing TS2353: KanjiDrawingCanvas.tsx:45 touchAction not in ViewStyle; file unchanged"
+  },
+  "installed": {
+    "new_libraries": [],
+    "model_downloads": [],
+    "other_dataset_downloads": [],
+    "downloaded_bytes": 5787675,
+    "ai_bulk_translations": 0,
+    "real_ai_translation_calls": 0
+  },
+  "limits": [
+    "Levels are community estimates, not official JLPT lists.",
+    "All imported Vietnamese meanings are missing; existing Vietnamese preservation is verified in tests, not by importing into the live database.",
+    "Translation is OFF by default; per-user quota is per worker, DB word cooldown is shared.",
+    "Full PostgreSQL deployment, real local-model translation and physical-device UI are not verified."
+  ]
+}

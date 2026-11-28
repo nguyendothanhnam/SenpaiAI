@@ -247,17 +247,21 @@ class LibraryService:
 
     def vocabulary_matching_pairs(self, db: Session, jlpt_level: Optional[str] = None, count: int = 6) -> list[dict]:
         from ..models.database import Vocabulary
+        from .vocabulary_text import display_meaning
 
         query = db.query(Vocabulary)
         if jlpt_level and jlpt_level.lower() != "all":
             query = query.filter(Vocabulary.jlpt_level == jlpt_level.upper())
         rows = query.limit(200).all()
         pairs = []
+        seen_words, seen_meanings = set(), set()
         for row in rows:
             word = row.japanese_word
-            meaning = row.meaning
-            if not word or not meaning:
+            meaning = display_meaning(row)
+            if not word or not meaning or word in seen_words or meaning in seen_meanings:
                 continue
+            seen_words.add(word)
+            seen_meanings.add(meaning)
             reading = row.reading or ""
             pairs.append(
                 {
