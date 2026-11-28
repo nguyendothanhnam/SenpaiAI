@@ -1,5 +1,15 @@
 # SenpaiAI Mobile — Giai đoạn 0 đến 4
 
+## Kiểm tra trình độ JLPT đầu vào (27/11/2026)
+
+Vào **Cá nhân → Trình độ tiếng Nhật → Làm lại bài kiểm tra**. Sau khi đăng ký, có lời mời làm bài và nút bỏ qua. Hỗ trợ hai chế độ như web, đọc/nghe và các dạng câu hỏi của phiên cũ, lịch sử, tiếp tục lần làm dở và xác nhận kết quả riêng trước khi cập nhật hồ sơ. Mobile chỉ cho tiến về trước theo yêu cầu; đáp án, chấm điểm, thời hạn và kết luận đều do backend quyết định. Mở lại app tìm lần làm dở; trở về từ nền phải đồng bộ phiên trước khi trả lời. Kết quả N5 mẫu không xác lập trình độ thật.
+
+Thêm `expo-audio ~58.0.12` bằng `npx expo install expo-audio` tại `mobile`; gói giải nén 1.345.808 byte (~1,28 MiB), chưa phải dung lượng APK/IPA tăng thêm. Module có trong Expo Go; chỉ phát audio có xác thực, không xin micro và không phát nền. Dependency `expo-asset` đã có được npm đưa lên cấp gốc và cập nhật bản vá khi giải quyết peer dependency. Không sửa web/API backend.
+
+Kiểm tra: typecheck, lint, **175 test**, khóa dịch web/mobile, luồng HTTP bài thi thật và export Android/iOS đã đạt. Tài khoản kiểm thử đã xóa. Chưa kiểm chứng thao tác/âm thanh trên điện thoại thật; `frontend i18n:lint` còn lỗi chữ chưa dịch có sẵn ngoài phạm vi này. Export tạo bundle tại `dist`, không phải phát hành App Store/Google Play/EAS Update.
+
+Xem [báo cáo API, file thay đổi, kết quả thật, giới hạn, checklist Android/iPhone và quyết định cần chốt](docs/PLACEMENT.md).
+
 ## Nhắc học — Phần B (19/11/2026)
 
 Đã bổ sung thông báo **cục bộ trên thiết bị** cho Android/iPhone. Vào **Cá nhân → Cài đặt → Cài đặt nhắc học**: bật nhắc hoặc chọn **Cho phép nhắc trên thiết bị này**, cấp quyền rồi Lưu cài đặt. App không xin quyền khi mở; nếu bị từ chối hoặc kênh Android bị chặn, màn hình hướng dẫn mở cài đặt hệ thống. Cài đặt server và lựa chọn cho phép trên từng thiết bị/tài khoản được xử lý riêng.

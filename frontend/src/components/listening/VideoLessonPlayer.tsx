@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { KanjiText } from '../kanji/KanjiText'
 import ListeningExercises from './ListeningExercises'
 import type { ListeningLesson } from '../../services/api'
+import { ArrowLeft, Headphones, Pause, Play, Repeat1 } from 'lucide-react'
+import { ListeningToggle, ListeningTranscriptRow } from './ListeningUI'
+import { listeningTimestamp } from '../../utils/listeningPresentation'
 
-type Player = { destroy(): void; seekTo(time:number, allow:boolean):void; playVideo():void; pauseVideo():void; getCurrentTime():number; getAvailablePlaybackRates():number[]; setPlaybackRate(rate:number):void; getPlaybackRate():number }
+type Player = { destroy(): void; seekTo(time:number, allow:boolean):void; playVideo():void; pauseVideo():void; getCurrentTime():number; getDuration():number; getAvailablePlaybackRates():number[]; setPlaybackRate(rate:number):void; getPlaybackRate():number }
 type Youtube = { Player: new (element: HTMLElement, options: object) => Player }
 declare global { interface Window { YT?: Youtube; onYouTubeIframeAPIReady?: () => void } }
 let youtubeLoader: Promise<Youtube> | undefined
@@ -27,6 +30,7 @@ export default function VideoLessonPlayer({ lesson }: { lesson: ListeningLesson 
   const { t } = useTranslation('common')
   const container = useRef<HTMLDivElement>(null), player = useRef<Player | null>(null), generated = useId().replace(/:/g,'')
   const [ready,setReady] = useState(false), [failed,setFailed] = useState(false), [current,setCurrent] = useState(0)
+  const [playing, setPlaying] = useState(false), [videoDuration, setVideoDuration] = useState(0)
   const [activity,setActivity] = useState<'listen'|'exercises'>('listen'), [showJa,setShowJa] = useState(true), [showVi,setShowVi] = useState(true), [furigana,setFurigana] = useState(true)
   const [repeat,setRepeat] = useState(false), [loopA,setLoopA] = useState<number|null>(null), [loopB,setLoopB] = useState<number|null>(null), [rates,setRates] = useState<number[]>([1]), [rate,setRate] = useState(1)
   const repeatRef = useRef({repeat,loopA,loopB}); repeatRef.current = {repeat,loopA,loopB}
@@ -40,9 +44,10 @@ export default function VideoLessonPlayer({ lesson }: { lesson: ListeningLesson 
     void loadYoutube().then(YT => {
       if (cancelled || !container.current) return
       player.current = new YT.Player(container.current, {videoId:lesson.video_id, playerVars:{origin:window.location.origin, playsinline:1}, events:{
-        onReady: () => { if (cancelled) return; setReady(true); setRates(player.current?.getAvailablePlaybackRates() || [1]) },
+        onReady: () => { if (cancelled) return; setReady(true); setRates(player.current?.getAvailablePlaybackRates() || [1]); setVideoDuration(player.current?.getDuration?.() || 0) },
         onError: () => { if (!cancelled) setFailed(true) },
         onPlaybackRateChange: () => { if (!cancelled) setRate(player.current?.getPlaybackRate() || 1) },
+        onStateChange: (event: { data: number }) => { if (!cancelled) { setPlaying(event.data === 1); setVideoDuration(player.current?.getDuration?.() || 0) } },
       }})
       timer = window.setInterval(() => {
         const instance = player.current
@@ -58,15 +63,25 @@ export default function VideoLessonPlayer({ lesson }: { lesson: ListeningLesson 
     return () => { cancelled = true; window.clearInterval(timer); player.current?.destroy(); player.current = null }
   }, [lesson.video_id, lesson.video_provider, segments])
   const seek = (index:number, sentenceOnly=false) => { const item=segments[index]; if(!ready || !item) return; clipEnd.current = sentenceOnly ? (item.end_ms ?? 0)/1000 : null; setCurrent((item.start_ms ?? 0)/1000); player.current?.seekTo((item.start_ms ?? 0)/1000,true); player.current?.playVideo() }
-  return <section className="space-y-4 text-[color:var(--text)]"><Link to="/listening" className="underline text-[color:var(--primary)]">{t('listening.backToList')}</Link><h1 className="text-2xl font-bold">{lesson.title}</h1>
-    <p>{t('videoLesson.rights')}</p>{lesson.video_url && <a href={lesson.video_url} target="_blank" rel="noreferrer" className="underline text-[color:var(--primary)]">{t('videoLesson.source')}</a>}{lesson.source_note && <p className="whitespace-pre-wrap break-words">{lesson.source_note}</p>}
-    <div className="mx-auto w-full max-w-3xl" style={{minHeight:200}}><div id={`youtube-${generated}`} ref={container} className="aspect-video min-h-[200px] w-full" /></div>
-    {failed && <p role="alert">{t('videoLesson.playerError')}</p>}{!ready && !failed && <p role="status">{t('videoLesson.playerLoading')}</p>}
-    <div className="flex flex-wrap gap-3"><button className="btn btn-outline" onClick={()=>setActivity('listen')}>{t('listening.exercises.listenRead')}</button><button className="btn btn-outline" onClick={()=>setActivity('exercises')}>{t('listening.exercises.title')}</button><label>{t('listening.speed')} <select className="input" value={rate} disabled={!ready} onChange={e=>player.current?.setPlaybackRate(Number(e.target.value))}>{rates.map(v=><option value={v} key={v}>{v}x</option>)}</select></label></div>
+  const timelineDuration = videoDuration || lesson.duration_ms / 1000
+  return <section className="listening-module mx-auto max-w-5xl space-y-5 px-4 py-6">
+    <header className="listening-glass space-y-4 p-5 sm:p-6"><div className="flex flex-wrap items-center justify-between gap-3"><Link to="/listening" className="listening-secondary"><ArrowLeft className="h-4 w-4" aria-hidden="true" />{t('listening.backToList')}</Link>{activity === 'listen' && <div className="flex flex-wrap gap-2"><ListeningToggle checked={furigana} onChange={setFurigana}>{t('listening.ui.furiganaToggle')}</ListeningToggle><ListeningToggle checked={showVi} onChange={setShowVi}>{t('listening.ui.vietnameseToggle')}</ListeningToggle></div>}</div><div className="flex items-start gap-3"><span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[color:var(--accent)] text-[color:var(--listening-accent-text)]"><Headphones className="h-6 w-6" aria-hidden="true" /></span><div className="min-w-0"><div className="flex flex-wrap gap-2"><span className="listening-badge">{lesson.jlpt_level}</span><span className="listening-badge">{t('listening.ui.sources.video')}</span></div><h1 className="mt-2 break-words text-xl font-bold leading-8 sm:text-2xl">{lesson.title}</h1></div></div></header>
+    <div className="listening-glass inline-flex flex-wrap gap-1 p-1" role="group" aria-label={t('listening.exercises.chooseActivity')}><button type="button" className={`listening-tab ${activity === 'listen' ? 'is-active' : ''}`} aria-pressed={activity === 'listen'} onClick={()=>setActivity('listen')}>{t('listening.exercises.listenRead')}</button><button type="button" className={`listening-tab ${activity === 'exercises' ? 'is-active' : ''}`} aria-pressed={activity === 'exercises'} onClick={()=>setActivity('exercises')}>{t('listening.exercises.title')}</button></div>
+    <section className="listening-glass space-y-4 p-4 sm:p-6" aria-label={t('listening.audioSectionTitle')}>
+      <div className="listening-player-frame relative mx-auto aspect-video min-h-[200px] w-full max-w-3xl overflow-hidden rounded-xl bg-slate-950"><div id={`youtube-${generated}`} ref={container} className="aspect-video min-h-[200px] w-full" /></div>
+      {failed && <p role="alert" className="listening-notice">{t('videoLesson.playerError')}</p>}{!ready && !failed && <p role="status" className="listening-notice">{t('videoLesson.playerLoading')}</p>}
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[color:var(--border)] bg-[color:var(--bg-elevated)] p-3 sm:gap-4">
+        <button type="button" className="listening-action !h-12 !w-12 !rounded-full !p-0" disabled={!ready || failed} aria-label={t(playing ? 'listening.pause' : 'listening.play')} onClick={() => { if (playing) player.current?.pauseVideo(); else player.current?.playVideo() }}>{playing ? <Pause className="h-5 w-5" /> : <Play className="ml-0.5 h-5 w-5" />}</button>
+        <div className="min-w-0 flex-1 space-y-1.5"><input aria-label={t('listening.audioProgress')} type="range" min={0} max={timelineDuration || 1} step="0.1" value={Math.min(current, timelineDuration || 0)} disabled={!ready || failed} className="w-full cursor-pointer accent-[color:var(--primary)]" onChange={event => { const value = Number(event.target.value); player.current?.seekTo(value, true); setCurrent(value) }} /><div className="flex justify-between text-xs tabular-nums text-[color:var(--text-muted)]"><span>{listeningTimestamp(current)}</span><span>{listeningTimestamp(timelineDuration)}</span></div></div>
+        <label className="flex items-center gap-2 text-xs font-semibold text-[color:var(--text-muted)]">{t('listening.speed')}<select className="listening-input w-24" value={rate} disabled={!ready} onChange={e=>player.current?.setPlaybackRate(Number(e.target.value))}>{rates.map(v=><option value={v} key={v}>{v}x</option>)}</select></label>
+      </div>
+      {activity === 'listen' && <div className="flex flex-wrap gap-2"><ListeningToggle checked={showJa} onChange={setShowJa}>{t('listening.japanese')}</ListeningToggle><ListeningToggle checked={repeat} onChange={setRepeat}><Repeat1 className="h-4 w-4" aria-hidden="true" />{t('listening.repeatSentence')}</ListeningToggle></div>}
+      <p className="listening-notice">{t('videoLesson.rights')}</p><div className="flex flex-wrap items-center gap-3">{lesson.video_url && <a href={lesson.video_url} target="_blank" rel="noreferrer" className="listening-secondary">{t('videoLesson.source')}</a>}{lesson.source_note && <p className="min-w-0 whitespace-pre-wrap break-words text-sm text-[color:var(--text-muted)]">{lesson.source_note}</p>}</div>
+    </section>
     <div hidden={activity !== 'exercises'}><ListeningExercises lessonId={lesson.id} active={activity==='exercises'} audioReady={ready && !failed} onPlaySegment={index=>seek(index,true)} /></div>
-    {activity==='listen' && <><div className="flex flex-wrap gap-3"><label><input type="checkbox" checked={showJa} onChange={e=>setShowJa(e.target.checked)}/> {t('listening.japanese')}</label><label><input type="checkbox" checked={furigana} onChange={e=>setFurigana(e.target.checked)}/> {t('videoLesson.furigana')}</label><label><input type="checkbox" checked={showVi} onChange={e=>setShowVi(e.target.checked)}/> {t('listening.vietnamese')}</label><label><input type="checkbox" checked={repeat} onChange={e=>setRepeat(e.target.checked)}/> {t('listening.repeatSentence')}</label></div>
-      {segments.map((segment,index)=><article key={index} className={`theme-card space-y-2 p-4 ${index===active?'ring-2 ring-[color:var(--primary)]':''}`}><div className="flex flex-wrap gap-2"><button type="button" className="btn btn-outline" disabled={!ready} onClick={()=>seek(index)}>{t('listening.listenSentence')} {index+1}</button><button type="button" className="btn btn-outline" onClick={()=>setLoopA(loopA===index?null:index)} aria-pressed={loopA===index}>{t('listening.loopFromA')}</button><button type="button" className="btn btn-outline" onClick={()=>setLoopB(loopB===index?null:index)} aria-pressed={loopB===index}>{t('listening.toB')}</button></div>
-        {showJa && <p lang="ja" className="text-lg">{furigana && segment.tokens?.length ? segment.tokens.map((token,n)=>token.reading && token.reading!==token.text?<ruby key={n}><KanjiText text={token.text}/><rt>{token.reading}</rt></ruby>:<KanjiText key={n} text={token.text}/>):<KanjiText text={segment.ja}/>}</p>}{showVi && segment.vi && <p>{segment.vi}</p>}</article>)}
-    </>}
+    {activity==='listen' && <section className="listening-glass space-y-4 p-4 sm:p-6"><header><h2 className="text-base font-bold">{t('listening.ui.transcript')}</h2><p className="mt-1 text-sm leading-6 text-[color:var(--text-muted)]">{t('listening.ui.transcriptHint')}</p></header><div className="space-y-3">
+      {segments.map((segment,index)=><ListeningTranscriptRow key={index} number={index+1} startMs={segment.start_ms ?? 0} active={index === active} disabled={!ready || failed} onReplay={()=>seek(index)} controls={<><button type="button" className={`listening-toggle !min-h-9 !px-2.5 !text-xs ${loopA === index ? 'is-active' : ''}`} onClick={()=>setLoopA(loopA===index?null:index)} aria-pressed={loopA===index}>{t('listening.loopFromA')}</button><button type="button" className={`listening-toggle !min-h-9 !px-2.5 !text-xs ${loopB === index ? 'is-active' : ''}`} onClick={()=>setLoopB(loopB===index?null:index)} aria-pressed={loopB===index}>{t('listening.toB')}</button></>}>
+        {showJa && <p lang="ja" className="listening-japanese break-words text-lg leading-9">{furigana && segment.tokens?.length ? segment.tokens.map((token,n)=>token.reading && token.reading!==token.text?<ruby key={n}><KanjiText text={token.text}/><rt className="text-xs text-[color:var(--text-muted)]">{token.reading}</rt></ruby>:<KanjiText key={n} text={token.text}/>):<KanjiText text={segment.ja}/>}</p>}{showVi && segment.vi && <p className="text-sm leading-7 text-[color:var(--text-muted)]">{segment.vi}</p>}</ListeningTranscriptRow>)}
+    </div></section>}
   </section>
 }

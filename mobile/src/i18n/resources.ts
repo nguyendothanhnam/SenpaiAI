@@ -22,8 +22,10 @@ import kanjiStatusEn from '../../../frontend/src/i18n/locales/en/kanji-status.js
 import kanjiUiEn from '../../../frontend/src/i18n/locales/en/kanji-ui.json'
 import mobileVi from './locales/vi.json'
 import mobileEn from './locales/en.json'
+import placementVi from '../../../frontend/src/i18n/locales/vi/placement.json'
+import placementEn from '../../../frontend/src/i18n/locales/en/placement.json'
 
 export const resources = {
-  vi: { common: commonVi, nav: navVi, auth: authVi, profile: profileVi, settings: settingsVi, errors: errorsVi, grammar: grammarVi, dailyStatus: dailyStatusVi, grammarStatus: grammarStatusVi, kanjiStatus: kanjiStatusVi, kanjiUi: kanjiUiVi, mobile: mobileVi },
-  en: { common: commonEn, nav: navEn, auth: authEn, profile: profileEn, settings: settingsEn, errors: errorsEn, grammar: grammarEn, dailyStatus: dailyStatusEn, grammarStatus: grammarStatusEn, kanjiStatus: kanjiStatusEn, kanjiUi: kanjiUiEn, mobile: mobileEn },
+  vi: { placement: placementVi, common: commonVi, nav: navVi, auth: authVi, profile: profileVi, settings: settingsVi, errors: errorsVi, grammar: grammarVi, dailyStatus: dailyStatusVi, grammarStatus: grammarStatusVi, kanjiStatus: kanjiStatusVi, kanjiUi: kanjiUiVi, mobile: mobileVi },
+  en: { placement: placementEn, common: commonEn, nav: navEn, auth: authEn, profile: profileEn, settings: settingsEn, errors: errorsEn, grammar: grammarEn, dailyStatus: dailyStatusEn, grammarStatus: grammarStatusEn, kanjiStatus: kanjiStatusEn, kanjiUi: kanjiUiEn, mobile: mobileEn },
 }

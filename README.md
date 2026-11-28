@@ -91,6 +91,12 @@ alembic upgrade head
 python populate_data.py
 ```
 
+### Dữ liệu Học ngữ pháp dùng chung cho nhóm
+
+Repo kèm **904 bài N5–N1** từ Hanabira và OpenJLPT, gồm **139 bài N3**, cùng phiên bản nguồn, checksum và giấy phép. Sau khi pull, cấu hình `backend/.env` tới database SenpaiAI riêng, chạy `python -m alembic upgrade head` từ `backend` rồi khởi động backend: dữ liệu được nhập tự động từ file trong repo, không cần tải GitHub hoặc nhận database của thành viên khác.
+
+Để kiểm tra bộ nguồn: `python -m scripts.seed_grammar_lessons --check`; để nhập chủ động: `python -m scripts.seed_grammar_lessons`. Chạy lại giữ ID bài học và tiến độ, không tạo trùng. Nội dung nguồn hiện là tiếng Anh, giao diện vẫn vi/en. Xem [hướng dẫn pull/khởi tạo, kiểm tra và file thay đổi](backend/GRAMMAR_SOURCES.md), cùng [ghi công và giấy phép dữ liệu](backend/app/data/grammar_sources/README.md). `SEED_BUNDLED_GRAMMAR=false` tắt đồng bộ tự động nếu cần quản lý nhập riêng.
+
 ## 📚 Tính năng chính
 
 ### Tính năng cốt lõi

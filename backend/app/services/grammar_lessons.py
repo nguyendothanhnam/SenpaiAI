@@ -1,6 +1,6 @@
 """Validated, repeatable imports of supplied lesson content."""
 from typing import Literal
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from sqlalchemy.orm import Session
 from ..models.database import GrammarLesson, GrammarRule
 
@@ -14,13 +14,21 @@ class ExampleToken(BaseModel):
 class LessonExample(BaseModel):
     model_config = ConfigDict(extra='forbid')
     ja: str = Field(min_length=1, max_length=2000)
-    vi: str = Field(min_length=1, max_length=2000)
+    vi: str = Field(default='', max_length=2000)
+    en: str = Field(default='', max_length=2000)
+    romaji: str = Field(default='', max_length=4000)
     tokens: list[ExampleToken] = Field(default_factory=list, max_length=200)
 
     @field_validator('tokens')
     @classmethod
     def bounded_tokens(cls, value):
         return value
+
+    @model_validator(mode='after')
+    def has_translation(self):
+        if not self.vi.strip() and not self.en.strip():
+            raise ValueError('An example needs a Vietnamese or English translation')
+        return self
 
 
 class LessonInput(BaseModel):

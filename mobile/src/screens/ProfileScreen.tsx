@@ -14,6 +14,7 @@ import { formatServerDate } from '../utils/date'
 import { AppText, Button, Card, ErrorNotice, Muted, Title, styles } from '../components/ui'
 import { SkeletonList } from '../components/SkeletonList'
 import { getErrorMessage } from '../utils/getErrorMessage'
+import { PlacementProfile } from '../components/placement/PlacementProfile'
 
 export function ProfileScreen() {
   const { user, logout } = useAuth(); const { t, i18n } = useTranslation('profile'); const { t: mobile } = useTranslation('mobile'); const { colors } = useTheme();
@@ -35,6 +36,7 @@ export function ProfileScreen() {
     </> : <><Title>{current.username}</Title><AppText>{t('currentLevel')}: {current.current_jlpt_level}</AppText><AppText>{i18n.t('rewardPoints', { ns: 'nav' })}: {rewards.data?.points_balance ?? '—'}</AppText>{current.learning_goals.map((g, n) => <AppText selectable key={n}>{g}</AppText>)}<Muted>{t('memberSince')}: {new Date(current.created_at).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'vi-VN')}</Muted><Button secondary title={mobile('phase3.editProfile')} onPress={() => { setUsername(current.username); setTarget(current.learning_goals.find(g => /^JLPT N[1-5]$/.test(g))?.slice(-2) || ''); setGoals(current.learning_goals.filter(g => !/^JLPT N[1-5]$/.test(g)).join('\n')); setInvalid(false); setEditing(true); save.reset() }} /></>}</Card>}
     <Card><Title>{t('rewards')}</Title><Muted>{t('pointsExplanation')}</Muted>{rewards.isLoading && <SkeletonList count={1} />}{rewards.isError && <ErrorNotice message={getErrorMessage(rewards.error, i18n)} retry={() => void rewards.refetch()} />}{rewards.data && <><AppText>{t('pointsBalance')}: {rewards.data.points_balance}</AppText><AppText>{t('currentStreak')}: {rewards.data.current_streak}</AppText><AppText>{t('longestStreak')}: {rewards.data.longest_streak}</AppText></>}</Card>
     <Button secondary title={i18n.t('themeShop', { ns: 'settings' })} onPress={() => router.push('/theme-shop')} /><Button secondary title={i18n.t('settings', { ns: 'nav' })} onPress={() => router.push('/(tabs)/personal/settings')} /><Button secondary title={i18n.t('signOut', { ns: 'nav' })} onPress={() => void logout()} />
+    <PlacementProfile />
     <Title>{mobile('phase3.recentHistory')}</Title>{history.isError && <ErrorNotice message={getErrorMessage(history.error, i18n)} retry={() => void history.refetch()} />}{history.isLoading && <SkeletonList count={1} />}{history.data?.length === 0 && <Muted>{t('calendarEmpty')}</Muted>}
   </View>} renderItem={({ item }) => <Card style={{ marginTop: 10 }}><AppText>{formatServerDate(item.date, i18n.language)}</AppText><AppText>{mobile('phase3.historyRow', { correct: item.correct_count, total: item.total_items, points: item.points_awarded })}</AppText></Card>} /></KeyboardLayout>
 }
